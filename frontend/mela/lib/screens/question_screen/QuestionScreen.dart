@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mela/models/QuestionFamilly/AQuestion.dart';
 import 'package:mela/screens/question_screen/widgets/AppBarText.dart';
+import 'package:mela/screens/question_screen/widgets/ExitDialog.dart';
 import 'package:mela/screens/question_screen/widgets/SingleQuestionView.dart';
 
 import '../../constants/global.dart';
@@ -122,7 +123,7 @@ class _QuestionScreenState extends State<QuestionScreen>{
       floatingActionButton: Container(
         width: 220,
         height: 45,
-        margin: EdgeInsets.fromLTRB(
+        margin: const EdgeInsets.fromLTRB(
             0,
             0,
             19,
@@ -168,8 +169,28 @@ class _QuestionScreenState extends State<QuestionScreen>{
   }
 
   void _backButtonPressed() {
+    Overlay.of(context).insert(
+      OverlayEntry(builder: (context)=> Stack(
+        children: [
+          Container(
+            color: Colors.black.withOpacity(0.53),
+          ),
+          Positioned(
+            bottom: 34,
+            left: 19,
+            right: 19,
+            child: ExitDialog(onConfirm: confirmLeaving),
+          )
+        ],
+      )
+
+      )
+    );
   }
 
   void _questionListButtonPressed() {
+  }
+
+  void confirmLeaving() {
   }
 }
