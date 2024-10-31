@@ -163,6 +163,7 @@ class __FormContentState extends State<_FormContent> {
             ButtonLoginOrSignUp(
                 textButton: "Đăng nhập",
                 onPressed: () {
+              
                   if (_formKey.currentState?.validate() ?? false) {
                     /// navigate to home screen
                   }
