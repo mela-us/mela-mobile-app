@@ -4,9 +4,9 @@ import 'package:mela/screens/signup_login_screen/widgets/third_party_button.dart
 
 import '../../constants/global.dart';
 
-class SignUpScreen extends StatelessWidget {
-  void Function() onChangeToLogin;
-  SignUpScreen({super.key, required this.onChangeToLogin}) ;
+class LoginScreen extends StatelessWidget {
+  void Function() onChangeToSignUp;
+  LoginScreen({super.key,required this.onChangeToSignUp});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class SignUpScreen extends StatelessWidget {
                 vertical: 30,
                 horizontal: 20,
               ),
-              child: _FormContent(onChangeToLogin: onChangeToLogin,),
+              child: _FormContent(onChangeToSignUp: onChangeToSignUp),
             ),
           ),
         ),
@@ -32,8 +32,8 @@ class SignUpScreen extends StatelessWidget {
 }
 
 class _FormContent extends StatefulWidget {
-  void Function() onChangeToLogin;
-  _FormContent({Key? key, required this.onChangeToLogin}) : super(key: key);
+  void Function() onChangeToSignUp;
+  _FormContent({Key? key, required this.onChangeToSignUp}) : super(key: key);
 
   @override
   State<_FormContent> createState() => __FormContentState();
@@ -41,8 +41,6 @@ class _FormContent extends StatefulWidget {
 
 class __FormContentState extends State<_FormContent> {
   bool _isPasswordVisible = false;
-  bool _rememberMe = false;
-  bool _isAccepted = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -59,7 +57,7 @@ class __FormContentState extends State<_FormContent> {
           children: [
             //Title and Subtitle
             Text(
-              "Đăng ký tài khoản",
+              "Đăng nhập",
               style: TextStyle(
                   fontSize: 24,
                   fontFamily: 'Asap',
@@ -68,7 +66,7 @@ class __FormContentState extends State<_FormContent> {
             ),
             const SizedBox(height: 5),
             Text(
-              "Tạo tài khoản để bắt đầu hành trình học tập với Mela",
+              "Đăng nhập để tiếp tục hành trình của bạn",
               style: Global.subTitle.copyWith(fontSize: 12),
             ),
             const SizedBox(height: 35),
@@ -92,7 +90,7 @@ class __FormContentState extends State<_FormContent> {
               },
               decoration: InputDecoration(
                 labelText: 'Email',
-                hintText: 'Nhập địa chỉ Email',
+                hintText: 'Nhập địa chỉ email',
                 prefixIcon: Icon(
                   Icons.email_outlined,
                   size: 25,
@@ -115,7 +113,7 @@ class __FormContentState extends State<_FormContent> {
                 }
 
                 if (value.length < 6) {
-                  return 'Mật khẩu ít nhất 6 kí tự';
+                  return 'Mật khẩu phải có ít nhất 6 kí tự';
                 }
                 return null;
               },
@@ -148,34 +146,22 @@ class __FormContentState extends State<_FormContent> {
 
             //Accept Terms and Conditions
             GestureDetector(
-              onTap: () => setState(() => _isAccepted = !_isAccepted),
+              onTap: () {},
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    width: 18,
-                    height: 18,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: _isAccepted ? Colors.green : Colors.transparent,
-                      border: Border.all(
-                        color: _isAccepted ? Colors.green : Colors.grey,
-                        width: 2,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 6),
-                  Expanded(
-                    child: Text('Chấp nhận các Điều khoản và Điều kiện',
-                        style: Global.normalText),
+                  Text(
+                    "Quên mật khẩu?",
+                    style: Global.normalText,
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 30),
+            SizedBox(height: 30),
 
             //Button Login
             ButtonLoginOrSignUp(
-                textButton: "Đăng ký",
+                textButton: "Đăng nhập",
                 onPressed: () {
                   if (_formKey.currentState?.validate() ?? false) {
                     /// navigate to home screen
@@ -207,18 +193,18 @@ class __FormContentState extends State<_FormContent> {
             ),
             const SizedBox(height: 30),
 
-            //Return login
+            //Return sign up
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Đã có Tài khoản?", style: Global.subTitle),
+                Text("Chưa có Tài khoản?", style: Global.subTitle),
                 const SizedBox(
                   width: 4,
                 ),
                 GestureDetector(
-                  onTap: widget.onChangeToLogin,
+                  onTap: widget.onChangeToSignUp,
                   child: Text(
-                    "ĐĂNG NHẬP",
+                    "ĐĂNG KÝ",
                     style: Global.subTitle.copyWith(
                       color: Global.buttonYesColor1,
                       decoration: TextDecoration.underline,
@@ -233,3 +219,5 @@ class __FormContentState extends State<_FormContent> {
     );
   }
 }
+
+
