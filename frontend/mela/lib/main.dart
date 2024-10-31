@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mela/screens/question_screen/QuestionScreen.dart';
 
 import 'constants/global.dart';
+import 'screens/signup_screen/signup_screen.dart';
 
 void main() {
   runApp(const MainApp());
@@ -18,7 +19,7 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: QuestionScreen(questions: Global.questions), // Test screen put here.
+      home: SignUpScreen(), // Test screen put here.
     );
     throw UnimplementedError();
   }

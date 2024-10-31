@@ -25,6 +25,7 @@ flutter:
     - lib/assets/icons/clock.png
     - lib/assets/icons/select_list.png
     - lib/assets/images/exit_image.png
+    - lib/assets/icons/
   fonts:
   - family: Asap
     fonts:
