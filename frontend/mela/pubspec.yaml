@@ -26,6 +26,8 @@ flutter:
     - lib/assets/icons/select_list.png
     - lib/assets/images/exit_image.png
     - lib/assets/icons/
+    - lib/assets/images/
+    - lib/assets/images/topics/
   fonts:
   - family: Asap
     fonts:
