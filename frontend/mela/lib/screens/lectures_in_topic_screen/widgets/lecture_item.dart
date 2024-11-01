@@ -92,7 +92,7 @@ class LectureItem extends StatelessWidget {
                     value: lecture
                         .progress, // Set progress value here (from 0.0 to 1.0)
                     strokeWidth: 3,
-                    color: Colors.blueAccent,
+                    color: Global.buttonYesColor1,
                     backgroundColor: Colors.grey[200],
                   ),
                 ),

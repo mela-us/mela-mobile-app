@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mela/screens/courses_screen/courses_screen.dart';
 import 'package:mela/screens/signup_login_screen/widgets/login_or_sign_up_button.dart';
 import 'package:mela/screens/signup_login_screen/widgets/third_party_button.dart';
 
@@ -6,7 +7,7 @@ import '../../constants/global.dart';
 
 class LoginScreen extends StatelessWidget {
   void Function() onChangeToSignUp;
-  LoginScreen({super.key,required this.onChangeToSignUp});
+  LoginScreen({super.key, required this.onChangeToSignUp});
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +165,8 @@ class __FormContentState extends State<_FormContent> {
                 textButton: "Đăng nhập",
                 onPressed: () {
                   if (_formKey.currentState?.validate() ?? false) {
-                    /// navigate to home screen
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => CoursesScreen()));
                   }
                 }),
             const SizedBox(height: 16),
@@ -219,5 +221,3 @@ class __FormContentState extends State<_FormContent> {
     );
   }
 }
-
-

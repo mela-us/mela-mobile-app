@@ -3,6 +3,7 @@ import 'package:mela/screens/signup_login_screen/widgets/login_or_sign_up_button
 import 'package:mela/screens/signup_login_screen/widgets/third_party_button.dart';
 
 import '../../constants/global.dart';
+import '../courses_screen/courses_screen.dart';
 
 class SignUpScreen extends StatelessWidget {
   void Function() onChangeToLogin;
@@ -178,7 +179,8 @@ class __FormContentState extends State<_FormContent> {
                 textButton: "Đăng ký",
                 onPressed: () {
                   if (_formKey.currentState?.validate() ?? false) {
-                    /// navigate to home screen
+                     Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => CoursesScreen()));
                   }
                 }),
             const SizedBox(height: 16),

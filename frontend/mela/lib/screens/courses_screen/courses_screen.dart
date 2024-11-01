@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mela/screens/courses_screen/widgets/cover_image_widget.dart';
 import '../../constants/global.dart';
-import 'widgets/lecture_item.dart';
+import '../lectures_in_topic_screen/widgets/lecture_item.dart';
 import 'widgets/topic_item.dart';
 
 class CoursesScreen extends StatefulWidget {
@@ -50,7 +50,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
                 const CoverImageWidget(),
                 const SizedBox(height: 15),
 
-                //Topics List
+                //Topics Grid
                 GridView.builder(
                   padding: EdgeInsets.zero,
                   physics: const NeverScrollableScrollPhysics(),

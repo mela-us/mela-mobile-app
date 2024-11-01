@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mela/screens/lectures_in_topic_screen/all_lectures_in_topic_screen.dart';
 
 import '../../../models/topic.dart';
 
@@ -9,7 +10,13 @@ class TopicItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => AllLecturesInTopicScreen(currentTopic: topic),
+          ),
+        );
+      },
       child: Container(
         width: double.infinity,
         height: double.infinity,

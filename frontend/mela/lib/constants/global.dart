@@ -14,12 +14,14 @@ class Global {
   static Color backgroundTextFormColor = const Color(0xFFFFFFFF);
   static Color textColorInBackground1 = const Color(0xFF202244);
   static Color textColorInBackground2 = const Color(0xFF545454);
+  static TextStyle heading = TextStyle(fontFamily: 'Asap',fontSize: 21,fontWeight: FontWeight.bold,color: textColorInBackground1);
   static TextStyle subTitle=TextStyle(fontFamily: 'Mulish',fontSize: 14,fontWeight: FontWeight.bold,color: textColorInBackground2);
   static TextStyle normalText=TextStyle(fontFamily: 'Mulish',fontSize: 13,fontWeight: FontWeight.bold,color: textColorInBackground2);
   static Color buttonYesColor1 = const Color(0xFF0961F5);
   static Color buttonYesColor2 = const Color(0xFFFFFFFF);
 
   //Courses screen
+  static Color guideTextColor = const Color(0xFFB4BDC4);
   static List<Topic> getTopics(){
     return [
       Topic(topicId: 0, topicName: "Số học", imageTopicPath: "lib/assets/images/topics/sohoc.png"),
@@ -35,6 +37,19 @@ class Global {
       Lecture(lectureId: 0, levelId: 0, topicId: 0, lectureName: "Lý thuyết đồng dư", lectureDescription: "Mô tả bài học chi tiết", lectureContent: "Nội dung bài học"),
       Lecture(lectureId: 2, levelId: 0, topicId: 0, lectureName: "Hàm Euler, hàm số học", lectureDescription: "Mô tả bài học", lectureContent: "Nội dung bài học"),
       Lecture(lectureId: 5, levelId: 0, topicId: 0, lectureName: "Lý thuyết chia hết", lectureDescription: "Mô tả bài học", lectureContent: "Nội dung bài học"),
+    ];
+  }
+    static List<Lecture> getLecturesInTopicAndLevel(levelId, topicId){
+    return [
+      Lecture(lectureId: 0, levelId: 0, topicId: 0, lectureName: "Lý thuyết đồng dư", lectureDescription: "Mô tả bài học chi tiết", lectureContent: "Nội dung bài học"),
+      Lecture(lectureId: 1, levelId: 0, topicId: 0, lectureName: "Hàm Euler, hàm số học", lectureDescription: "Mô tả bài học", lectureContent: "Nội dung bài học"),
+      Lecture(lectureId: 2, levelId: 0, topicId: 0, lectureName: "Lý thuyết chia hết", lectureDescription: "Mô tả bài học", lectureContent: "Nội dung bài học"),
+       Lecture(lectureId: 3, levelId: 0, topicId: 0, lectureName: "Lý thuyết đồng dư", lectureDescription: "Mô tả bài học chi tiết", lectureContent: "Nội dung bài học"),
+      Lecture(lectureId: 4, levelId: 0, topicId: 0, lectureName: "Hàm Euler, hàm số học", lectureDescription: "Mô tả bài học", lectureContent: "Nội dung bài học"),
+      Lecture(lectureId: 5, levelId: 0, topicId: 0, lectureName: "Lý thuyết chia hết", lectureDescription: "Mô tả bài học", lectureContent: "Nội dung bài học"),
+       Lecture(lectureId: 6, levelId: 0, topicId: 0, lectureName: "Lý thuyết đồng dư", lectureDescription: "Mô tả bài học chi tiết", lectureContent: "Nội dung bài học"),
+      Lecture(lectureId: 7, levelId: 0, topicId: 0, lectureName: "Hàm Euler, hàm số học", lectureDescription: "Mô tả bài học", lectureContent: "Nội dung bài học"),
+      Lecture(lectureId: 8, levelId: 0, topicId: 0, lectureName: "Lý thuyết chia hết", lectureDescription: "Mô tả bài học", lectureContent: "Nội dung bài học"),
     ];
   }
 
