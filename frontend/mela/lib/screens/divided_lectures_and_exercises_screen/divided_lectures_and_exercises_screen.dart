@@ -33,16 +33,19 @@ class _DividedLecturesAndExercisesScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorsStandards.AppBackgroundColor,
       appBar:
           //AppBar
           AppBar(
         title: TextStandard.Heading(widget.currentLecture.lectureName,
-                      ColorsStandards.textColorInBackground1),
+            ColorsStandards.textColorInBackground1),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
           color: Colors.black,
         ),
       ),
@@ -114,4 +117,3 @@ class _DividedLecturesAndExercisesScreenState
     );
   }
 }
-

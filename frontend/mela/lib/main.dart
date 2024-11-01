@@ -19,7 +19,7 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: DividedLecturesAndExercisesScreen(currentLecture:  Lecture(lectureId: 0, levelId: 0, topicId: 0, lectureName: "Lý thuyết đồng dư", lectureDescription: "Mô tả bài học chi tiết", lectureContent: "Nội dung bài học"),), // Test screen put here.
+      home: LoginOrSignupScreen(),// Test screen put here.
     );
     throw UnimplementedError();
   }
