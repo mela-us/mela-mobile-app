@@ -1,0 +1,13 @@
+        **TEXT STYLE DOCUMENTATION**
+- Heading: Asap Bold 21
+- SubHeading: Mulish SemiBold 18
+- Title: Asap SemiBold 20
+- SubTitle: Mulish Bold 14
+- Normal: Mulish Bold 13
+- Content: Mulish Regular 14
+- MiniCaption: Mulish Bold 11
+- Button: Asap SemiBold 18
+-----
+- Call TextStandard.YourStyle(YourText, YourColor), it will return a Text object.
+- Example: TextStandard.Heading('Hello', Colors.black)
+- 
