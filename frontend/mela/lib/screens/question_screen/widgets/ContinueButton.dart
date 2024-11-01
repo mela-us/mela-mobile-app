@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mela/themes/default/text_styles.dart';
 
@@ -9,14 +8,14 @@ class ContinueButton extends StatelessWidget{
       width: double.infinity,
       // padding: EdgeInsets.symmetric(vertical: 15),
       decoration: BoxDecoration(
-        color: Color(0xFF0961F5),
+        color: const Color(0xFF0961F5),
         borderRadius: BorderRadius.circular(30),
       ),
       child: Stack(
         alignment: Alignment.center,
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 19),
+            padding: const EdgeInsets.symmetric(vertical: 19),
             //
             child: TextStandard.Button('Luyện tập tiếp', Colors.white),
           ),
@@ -25,11 +24,11 @@ class ContinueButton extends StatelessWidget{
               child: Container(
                 height: 48,
                 width: 48,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.white,
                 ),
-                child: Padding(
+                child: const Padding(
                   padding: EdgeInsets.all(0),
                   child: Icon(
                     Icons.arrow_forward,

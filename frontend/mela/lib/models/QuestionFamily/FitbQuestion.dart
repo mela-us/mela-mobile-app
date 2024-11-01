@@ -16,4 +16,14 @@ class FitbQuestion extends AQuestion{
     // TODO: implement isCorrect
     throw UnimplementedError();
   }
+
+  @override
+  int choiceSize() {
+    return 0;
+  }
+
+  @override
+  List<String>? getChoiceList() {
+    return null;
+  }
 }

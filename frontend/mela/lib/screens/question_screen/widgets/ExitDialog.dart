@@ -38,7 +38,7 @@ class ExitDialog extends StatelessWidget{
             //   ],
             // ),
             Padding(
-              padding: EdgeInsets.only(top: 25),
+              padding: const EdgeInsets.only(top: 25),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -54,11 +54,9 @@ class ExitDialog extends StatelessWidget{
               ),
             ),
             SizedBox(height: 27.15),
-            //,
-
             TextStandard.Heading('Xác nhận thoát!', Color(0xFF202244),),
             SizedBox(height: 17),
-            Padding(
+            const Padding(
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 54),
               child: Text(
                 textAlign: TextAlign.center,
@@ -71,15 +69,15 @@ class ExitDialog extends StatelessWidget{
                 ),
               ),
             ),
-            SizedBox(height: 18),
+            const SizedBox(height: 18),
             Padding(
-                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                 child: GestureDetector(
                   onTap: () => onStaying(true) ,
                   child: ContinueButton(),
                 )
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             GestureDetector(
               onTap: () => onStaying(false),
               //,

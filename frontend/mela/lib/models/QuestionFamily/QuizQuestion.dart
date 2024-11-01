@@ -23,9 +23,19 @@ class QuizQuestion extends AQuestion{
 
   void buildMap(){
     for (String choice in quizChoice){
-      this.choiceMap.addAll({
+      choiceMap.addAll({
         String.fromCharCode(quizChoice.indexOf(choice) + 65): choice
       });
     }
+  }
+
+  @override
+  int choiceSize() {
+    return quizChoice.length;
+  }
+
+  @override
+  List<String>? getChoiceList() {
+    return quizChoice;
   }
 }
