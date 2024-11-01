@@ -21,7 +21,7 @@ class ButtonLoginOrSignUp extends StatelessWidget {
           ),
           padding: const EdgeInsets.symmetric(horizontal: 8),
         ),
-        onPressed: () {},
+        onPressed: onPressed,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

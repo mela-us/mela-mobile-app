@@ -178,6 +178,16 @@ class __FormContentState extends State<_FormContent> {
             ButtonLoginOrSignUp(
                 textButton: "Đăng ký",
                 onPressed: () {
+                  if(!_isAccepted){
+                    print("Chưa chấp nhận điều khoản");
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Vui lòng chấp nhận điều khoản và điều kiện'),
+                        duration: const Duration(seconds: 1, milliseconds: 500),
+                      ),
+                    );
+                    return;
+                  }
                   if (_formKey.currentState?.validate() ?? false) {
                      Navigator.push(context,
                         MaterialPageRoute(builder: (context) => CoursesScreen()));
