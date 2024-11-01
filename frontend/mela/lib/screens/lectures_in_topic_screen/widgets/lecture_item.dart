@@ -1,65 +1,9 @@
-// import 'package:flutter/material.dart';
-// import 'package:mela/models/lecture.dart';
-
-// import '../../../constants/global.dart';
-
-// class LectureItem extends StatelessWidget {
-//   final Lecture lecture;
-
-//   const LectureItem({
-//     super.key,
-//     required this.lecture,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-//       child: Container(
-//         padding: const EdgeInsets.all(16),
-//         decoration: BoxDecoration(
-//           color: Global.buttonYesColor2, // Replace with your desired background color
-//           borderRadius: BorderRadius.circular(10),
-//         ),
-//         child: Row(
-//           children: [
-//             CircleAvatar(
-//               backgroundColor: Colors.white,
-//               child: Text(
-//                 lecture.lectureId.toString(),
-//                 style: Global.normalText,
-//               ),
-//             ),
-//             const SizedBox(width: 16),
-//             Expanded(
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Text(
-//                     lecture.lectureName,
-//                     style: Global.subTitle,
-//                   ),
-//                   const SizedBox(height: 8),
-//                   Text(
-//                     lecture.lectureDescription,
-//                     style: Global.normalText,
-//                   ),
-//                 ],
-//               ),
-//             ),
-//             const SizedBox(width: 16),
-//             const Icon(Icons.play_arrow), // Replace with your desired icon
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:mela/models/lecture.dart';
+import 'package:mela/themes/default/text_styles.dart';
 
 import '../../../constants/global.dart';
+import '../../../themes/default/colors_standards.dart';
 
 class LectureItem extends StatelessWidget {
   final Lecture lecture;
@@ -76,7 +20,7 @@ class LectureItem extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Global.buttonYesColor2,
+          color: ColorsStandards.buttonYesColor2,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
@@ -92,49 +36,44 @@ class LectureItem extends StatelessWidget {
                     value: lecture
                         .progress, // Set progress value here (from 0.0 to 1.0)
                     strokeWidth: 3,
-                    color: Global.buttonYesColor1,
+                    color: ColorsStandards.buttonYesColor1,
                     backgroundColor: Colors.grey[200],
                   ),
                 ),
                 CircleAvatar(
                   backgroundColor: Colors.white,
                   radius: 16,
-                  child: Text(
-                    lecture.lectureId.toString(),
-                    style: Global.normalText,
-                  ),
+                  child: TextStandard.Normal(lecture.lectureId.toString(),
+                      ColorsStandards.textColorInBackground2),
                 ),
               ],
             ),
             const SizedBox(width: 16),
+            //Title and description of the lecture
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    lecture.lectureName,
-                    style: Global.subTitle,
-                  ),
+                  TextStandard.SubTitle(lecture.lectureName,
+                      ColorsStandards.textColorInBackground1),
                   const SizedBox(height: 8),
-                  Text(
-                    lecture.lectureDescription,
-                    style: Global.normalText,
-                  ),
+                  TextStandard.Normal(lecture.lectureDescription,
+                      ColorsStandards.textColorInBackground2),
                 ],
               ),
             ),
             const SizedBox(width: 16),
-            
+
             //Button to play the lecture
             Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Global.buttonYesColor1,
+                  color: ColorsStandards.buttonYesColor1,
                 ),
                 child: Icon(
                   Icons.play_arrow,
                   size: 20,
-                  color: Global.buttonYesColor2,
+                  color: ColorsStandards.buttonYesColor2,
                 )), // Play icon
           ],
         ),

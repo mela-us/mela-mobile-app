@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants/global.dart';
+import '../../../themes/default/colors_standards.dart';
+
 
 class CoverImageWidget extends StatelessWidget {
   const CoverImageWidget({super.key});
@@ -25,7 +27,7 @@ class CoverImageWidget extends StatelessWidget {
           child: Column(
             children: [
               Image.asset(
-                'lib/assets/images/cover.png',
+                'assets/images/cover.png',
                 width: 384,
                 height: 257,
                 fit: BoxFit.cover,
@@ -42,7 +44,7 @@ class CoverImageWidget extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                backgroundColor: Global.buttonYesColor1,
+                backgroundColor: ColorsStandards.buttonYesColor1,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),

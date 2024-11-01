@@ -1,35 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:mela/models/QuestionFamilly/AQuestion.dart';
 import 'package:mela/models/QuestionFamilly/FitbQuestion.dart';
+import 'package:mela/themes/default/colors_standards.dart';
 
 import '../models/lecture.dart';
 import '../models/topic.dart';
 
 class Global {
-  static Color AppBackgroundColor = const Color(0xFFF5F9FF);
-  static Color AppBarContentColor = const Color(0xFF202244);
+
   static double PracticeLeftPadding = 15;
   static double PracticeRightPadding = 34;
   //Login/sign up screen
-  static Color backgroundTextFormColor = const Color(0xFFFFFFFF);
-  static Color textColorInBackground1 = const Color(0xFF202244);
-  static Color textColorInBackground2 = const Color(0xFF545454);
-  static TextStyle heading = TextStyle(fontFamily: 'Asap',fontSize: 21,fontWeight: FontWeight.bold,color: textColorInBackground1);
-  static TextStyle subTitle=TextStyle(fontFamily: 'Mulish',fontSize: 14,fontWeight: FontWeight.bold,color: textColorInBackground2);
-  static TextStyle normalText=TextStyle(fontFamily: 'Mulish',fontSize: 13,fontWeight: FontWeight.bold,color: textColorInBackground2);
-  static Color buttonYesColor1 = const Color(0xFF0961F5);
-  static Color buttonYesColor2 = const Color(0xFFFFFFFF);
+
+  // static TextStyle heading = TextStyle(fontFamily: 'Asap',fontSize: 21,fontWeight: FontWeight.bold,color: ColorsStandards.textColorInBackground1);
+  // static TextStyle subTitle=TextStyle(fontFamily: 'Mulish',fontSize: 14,fontWeight: FontWeight.bold,color: ColorsStandards.textColorInBackground2);
+  // static TextStyle normalText=TextStyle(fontFamily: 'Mulish',fontSize: 13,fontWeight: FontWeight.bold,color: ColorsStandards.textColorInBackground2);
+
 
   //Courses screen
-  static Color guideTextColor = const Color(0xFFB4BDC4);
+
   static List<Topic> getTopics(){
     return [
-      Topic(topicId: 0, topicName: "Số học", imageTopicPath: "lib/assets/images/topics/sohoc.png"),
-      Topic(topicId: 0, topicName: "Đại số", imageTopicPath: "lib/assets/images/topics/daiso.png"),
-      Topic(topicId: 0, topicName: "Hình học", imageTopicPath: "lib/assets/images/topics/hinhhoc.png"),
-      Topic(topicId: 0, topicName: "Xác suất và thống kê", imageTopicPath: "lib/assets/images/topics/xstk.png"),
-      Topic(topicId: 0, topicName: "Tổ hợp", imageTopicPath: "lib/assets/images/topics/tohop.png"),
-      Topic(topicId: 0, topicName: "Tư duy", imageTopicPath: "lib/assets/images/topics/tuduy.png"),
+      Topic(topicId: 0, topicName: "Số học", imageTopicPath: "assets/images/topics/sohoc.png"),
+      Topic(topicId: 0, topicName: "Đại số", imageTopicPath: "assets/images/topics/daiso.png"),
+      Topic(topicId: 0, topicName: "Hình học", imageTopicPath: "assets/images/topics/hinhhoc.png"),
+      Topic(topicId: 0, topicName: "Xác suất và thống kê", imageTopicPath: "assets/images/topics/xstk.png"),
+      Topic(topicId: 0, topicName: "Tổ hợp", imageTopicPath: "assets/images/topics/tohop.png"),
+      Topic(topicId: 0, topicName: "Tư duy", imageTopicPath: "assets/images/topics/tuduy.png"),
     ];
   }
   static List<Lecture> getLecturesIsLearning(){

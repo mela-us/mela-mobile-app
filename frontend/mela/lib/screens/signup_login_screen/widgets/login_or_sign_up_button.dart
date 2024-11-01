@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../../constants/global.dart';
+import '../../../themes/default/colors_standards.dart';
 
 class ButtonLoginOrSignUp extends StatelessWidget {
   final String textButton;
@@ -15,7 +14,7 @@ class ButtonLoginOrSignUp extends StatelessWidget {
       height: 60,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Global.buttonYesColor1,
+          backgroundColor: ColorsStandards.buttonYesColor1,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
@@ -33,7 +32,7 @@ class ButtonLoginOrSignUp extends StatelessWidget {
                       fontSize: 18,
                       fontFamily: 'Asap',
                       fontWeight: FontWeight.bold,
-                      color: Global.buttonYesColor2),
+                      color: ColorsStandards.buttonYesColor2),
                 ),
               ),
             ),
@@ -41,12 +40,12 @@ class ButtonLoginOrSignUp extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: Global.buttonYesColor2,
+                color: ColorsStandards.buttonYesColor2,
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 Icons.arrow_forward,
-                color: Global.buttonYesColor1,
+                color: ColorsStandards.buttonYesColor1,
               ),
             )
           ],

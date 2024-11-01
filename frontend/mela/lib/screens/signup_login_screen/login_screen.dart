@@ -4,6 +4,8 @@ import 'package:mela/screens/signup_login_screen/widgets/login_or_sign_up_button
 import 'package:mela/screens/signup_login_screen/widgets/third_party_button.dart';
 
 import '../../constants/global.dart';
+import '../../themes/default/colors_standards.dart';
+import '../../themes/default/text_styles.dart';
 
 class LoginScreen extends StatelessWidget {
   void Function() onChangeToSignUp;
@@ -27,7 +29,7 @@ class LoginScreen extends StatelessWidget {
           ),
         ),
       ),
-      backgroundColor: Global.AppBackgroundColor,
+      backgroundColor: ColorsStandards.AppBackgroundColor,
     );
   }
 }
@@ -57,19 +59,11 @@ class __FormContentState extends State<_FormContent> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //Title and Subtitle
-            Text(
-              "Đăng nhập",
-              style: TextStyle(
-                  fontSize: 24,
-                  fontFamily: 'Asap',
-                  fontWeight: FontWeight.bold,
-                  color: Global.textColorInBackground1),
-            ),
+            TextStandard.BigTitle(
+                "Đăng nhập", ColorsStandards.textColorInBackground1),
             const SizedBox(height: 5),
-            Text(
-              "Đăng nhập để tiếp tục hành trình của bạn",
-              style: Global.subTitle.copyWith(fontSize: 12),
-            ),
+            TextStandard.SubTitle("Đăng nhập để tiếp tục hành trình của bạn",
+                ColorsStandards.textColorInBackground2),
             const SizedBox(height: 35),
 
             //Email TextField
@@ -95,12 +89,12 @@ class __FormContentState extends State<_FormContent> {
                 prefixIcon: Icon(
                   Icons.email_outlined,
                   size: 25,
-                  color: Global.textColorInBackground2,
+                  color: ColorsStandards.textColorInBackground2,
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                fillColor: Global.backgroundTextFormColor,
+                fillColor: ColorsStandards.backgroundTextFormColor,
                 filled: true,
               ),
             ),
@@ -125,12 +119,12 @@ class __FormContentState extends State<_FormContent> {
                   prefixIcon: Icon(
                     Icons.lock_outline_rounded,
                     size: 25,
-                    color: Global.textColorInBackground2,
+                    color: ColorsStandards.textColorInBackground2,
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  fillColor: Global.backgroundTextFormColor,
+                  fillColor: ColorsStandards.backgroundTextFormColor,
                   filled: true,
                   suffixIcon: IconButton(
                     icon: Icon(_isPasswordVisible
@@ -151,10 +145,8 @@ class __FormContentState extends State<_FormContent> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    "Quên mật khẩu?",
-                    style: Global.normalText,
-                  ),
+                  TextStandard.Normal(
+                      "Quên mật khẩu?", ColorsStandards.textColorInBackground2),
                 ],
               ),
             ),
@@ -164,20 +156,19 @@ class __FormContentState extends State<_FormContent> {
             ButtonLoginOrSignUp(
                 textButton: "Đăng nhập",
                 onPressed: () {
-              
                   if (_formKey.currentState?.validate() ?? false) {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => CoursesScreen()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CoursesScreen()));
                   }
                 }),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "Hoặc tiếp tục với",
-                  style: Global.normalText,
-                ),
+                TextStandard.Normal("Hoặc tiếp tục với",
+                    ColorsStandards.textColorInBackground2),
               ],
             ),
             const SizedBox(height: 16),
@@ -186,11 +177,10 @@ class __FormContentState extends State<_FormContent> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ThirdPartyButton(
-                    pathLogo: "lib/assets/icons/google_icon.png",
-                    onPressed: () {}),
+                    pathLogo: "assets/icons/google_icon.png", onPressed: () {}),
                 const SizedBox(width: 20),
                 ThirdPartyButton(
-                    pathLogo: "lib/assets/icons/facebook_icon.png",
+                    pathLogo: "assets/icons/facebook_icon.png",
                     onPressed: () {}),
               ],
             ),
@@ -200,18 +190,17 @@ class __FormContentState extends State<_FormContent> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Chưa có Tài khoản?", style: Global.subTitle),
+                TextStandard.SubTitle("Chưa có tài khoản",
+                    ColorsStandards.textColorInBackground2),
                 const SizedBox(
                   width: 4,
                 ),
                 GestureDetector(
                   onTap: widget.onChangeToSignUp,
-                  child: Text(
+                  child: TextStandard.SubTitle(
                     "ĐĂNG KÝ",
-                    style: Global.subTitle.copyWith(
-                      color: Global.buttonYesColor1,
-                      decoration: TextDecoration.underline,
-                    ),
+                    ColorsStandards.buttonYesColor1,
+                    decoration: TextDecoration.underline,
                   ),
                 )
               ],

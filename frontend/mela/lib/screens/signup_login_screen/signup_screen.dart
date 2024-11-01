@@ -3,11 +3,13 @@ import 'package:mela/screens/signup_login_screen/widgets/login_or_sign_up_button
 import 'package:mela/screens/signup_login_screen/widgets/third_party_button.dart';
 
 import '../../constants/global.dart';
+import '../../themes/default/text_styles.dart';
 import '../courses_screen/courses_screen.dart';
+import '../../themes/default/colors_standards.dart';
 
 class SignUpScreen extends StatelessWidget {
   void Function() onChangeToLogin;
-  SignUpScreen({super.key, required this.onChangeToLogin}) ;
+  SignUpScreen({super.key, required this.onChangeToLogin});
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +24,14 @@ class SignUpScreen extends StatelessWidget {
                 vertical: 30,
                 horizontal: 20,
               ),
-              child: _FormContent(onChangeToLogin: onChangeToLogin,),
+              child: _FormContent(
+                onChangeToLogin: onChangeToLogin,
+              ),
             ),
           ),
         ),
       ),
-      backgroundColor: Global.AppBackgroundColor,
+      backgroundColor: ColorsStandards.AppBackgroundColor,
     );
   }
 }
@@ -59,19 +63,12 @@ class __FormContentState extends State<_FormContent> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //Title and Subtitle
-            Text(
-              "Đăng ký tài khoản",
-              style: TextStyle(
-                  fontSize: 24,
-                  fontFamily: 'Asap',
-                  fontWeight: FontWeight.bold,
-                  color: Global.textColorInBackground1),
-            ),
+            TextStandard.BigTitle(
+                "Đăng kí tài khoản", ColorsStandards.textColorInBackground1),
             const SizedBox(height: 5),
-            Text(
-              "Tạo tài khoản để bắt đầu hành trình học tập với Mela",
-              style: Global.subTitle.copyWith(fontSize: 12),
-            ),
+            TextStandard.SubTitle(
+                "Tạo tài khoản để bắt đầu hành trình học tập với Mela",
+                ColorsStandards.textColorInBackground2),
             const SizedBox(height: 35),
 
             //Email TextField
@@ -97,12 +94,12 @@ class __FormContentState extends State<_FormContent> {
                 prefixIcon: Icon(
                   Icons.email_outlined,
                   size: 25,
-                  color: Global.textColorInBackground2,
+                  color: ColorsStandards.textColorInBackground2,
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                fillColor: Global.backgroundTextFormColor,
+                fillColor: ColorsStandards.backgroundTextFormColor,
                 filled: true,
               ),
             ),
@@ -127,12 +124,12 @@ class __FormContentState extends State<_FormContent> {
                   prefixIcon: Icon(
                     Icons.lock_outline_rounded,
                     size: 25,
-                    color: Global.textColorInBackground2,
+                    color: ColorsStandards.textColorInBackground2,
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  fillColor: Global.backgroundTextFormColor,
+                  fillColor: ColorsStandards.backgroundTextFormColor,
                   filled: true,
                   suffixIcon: IconButton(
                     icon: Icon(_isPasswordVisible
@@ -166,8 +163,9 @@ class __FormContentState extends State<_FormContent> {
                   ),
                   SizedBox(width: 6),
                   Expanded(
-                    child: Text('Chấp nhận các Điều khoản và Điều kiện',
-                        style: Global.normalText),
+                    child: TextStandard.Normal(
+                        "Chấp nhận các Điều khoản và Điều kiện",
+                        ColorsStandards.textColorInBackground2),
                   ),
                 ],
               ),
@@ -178,29 +176,30 @@ class __FormContentState extends State<_FormContent> {
             ButtonLoginOrSignUp(
                 textButton: "Đăng ký",
                 onPressed: () {
-                  if(!_isAccepted){
+                  if (!_isAccepted) {
                     print("Chưa chấp nhận điều khoản");
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('Vui lòng chấp nhận điều khoản và điều kiện'),
+                        content:
+                            Text('Vui lòng chấp nhận điều khoản và điều kiện'),
                         duration: const Duration(seconds: 1, milliseconds: 500),
                       ),
                     );
                     return;
                   }
                   if (_formKey.currentState?.validate() ?? false) {
-                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => CoursesScreen()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CoursesScreen()));
                   }
                 }),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "Hoặc tiếp tục với",
-                  style: Global.normalText,
-                ),
+                TextStandard.Normal("Hoặc tiếp tục với",
+                    ColorsStandards.textColorInBackground2),
               ],
             ),
             const SizedBox(height: 16),
@@ -209,11 +208,10 @@ class __FormContentState extends State<_FormContent> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ThirdPartyButton(
-                    pathLogo: "lib/assets/icons/google_icon.png",
-                    onPressed: () {}),
+                    pathLogo: "assets/icons/google_icon.png", onPressed: () {}),
                 const SizedBox(width: 20),
                 ThirdPartyButton(
-                    pathLogo: "lib/assets/icons/facebook_icon.png",
+                    pathLogo: "assets/icons/facebook_icon.png",
                     onPressed: () {}),
               ],
             ),
@@ -223,18 +221,17 @@ class __FormContentState extends State<_FormContent> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Đã có Tài khoản?", style: Global.subTitle),
+                TextStandard.SubTitle(
+                    "Đã có tài khoản", ColorsStandards.textColorInBackground2),
                 const SizedBox(
                   width: 4,
                 ),
                 GestureDetector(
                   onTap: widget.onChangeToLogin,
-                  child: Text(
+                  child: TextStandard.SubTitle(
                     "ĐĂNG NHẬP",
-                    style: Global.subTitle.copyWith(
-                      color: Global.buttonYesColor1,
-                      decoration: TextDecoration.underline,
-                    ),
+                    ColorsStandards.buttonYesColor1,
+                    decoration: TextDecoration.underline,
                   ),
                 )
               ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants/global.dart';
+import '../../../themes/default/colors_standards.dart';
 
 class ThirdPartyButton extends StatelessWidget {
   final String pathLogo;
@@ -17,7 +18,7 @@ class ThirdPartyButton extends StatelessWidget {
         height: 48,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Global.buttonYesColor2,
+          color: ColorsStandards.buttonYesColor2,
         ),
         child: Center(
           child: Image.asset(
