@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mela/models/QuestionFamilly/AQuestion.dart';
 import 'package:mela/models/QuestionFamilly/FitbQuestion.dart';
+import 'package:mela/models/exercise.dart';
 import 'package:mela/themes/default/colors_standards.dart';
 
 import '../models/lecture.dart';
@@ -49,7 +50,13 @@ class Global {
       Lecture(lectureId: 8, levelId: 0, topicId: 0, lectureName: "Lý thuyết chia hết", lectureDescription: "Mô tả bài học", lectureContent: "Nội dung bài học"),
     ];
   }
-
+  static List<Exercise> getExercisesInLecture(lectureId){
+    return [
+      Exercise(exerciseId: 0, lectureId: 0, exerciseName: "Bài tập 1", ),
+      Exercise(exerciseId: 1, lectureId: 0, exerciseName: "Bài tập 2", ),
+      Exercise(exerciseId: 2, lectureId: 0, exerciseName: "Bài tập 3",),
+    ];
+  }
 
 
   static List<AQuestion> questions = [
