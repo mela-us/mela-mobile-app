@@ -25,7 +25,7 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: CoursesScreen(), // Test screen put here.
+      home: LoginOrSignupScreen(), // Test screen put here.
     );
     throw UnimplementedError();
   }

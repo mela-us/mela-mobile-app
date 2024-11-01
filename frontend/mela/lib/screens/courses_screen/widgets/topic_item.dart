@@ -39,7 +39,7 @@ class TopicItem extends StatelessWidget {
 
             //Name topic
             SizedBox(
-              width: 65,
+              width: 75,
               child: Text(
                 topic.topicName,
                 textAlign: TextAlign.center,
