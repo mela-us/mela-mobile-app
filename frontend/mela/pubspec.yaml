@@ -17,3 +17,22 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/fonts/
+  fonts:
+    - family: Asap
+      fonts:
+        - asset: assets/fonts/Asap/Asap-Bold.ttf
+        - asset: assets/fonts/Asap/Asap-ExtraBold.ttf
+        - asset: assets/fonts/Asap/Asap-Regular.ttf
+        - asset: assets/fonts/Asap/Asap-SemiBold.ttf
+
+    - family: Mulish
+      fonts:
+        - asset: assets/fonts/Mulish/Mulish-Bold.ttf
+        - asset: assets/fonts/Mulish/Mulish-ExtraBold.ttf
+        - asset: assets/fonts/Mulish/Mulish-Regular.ttf
+        - asset: assets/fonts/Mulish/Mulish-SemiBold.ttf
+
+
+
