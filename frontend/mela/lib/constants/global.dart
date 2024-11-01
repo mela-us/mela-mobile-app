@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mela/models/QuestionFamilly/AQuestion.dart';
-import 'package:mela/models/QuestionFamilly/FitbQuestion.dart';
+import 'package:mela/models/QuestionFamily/AQuestion.dart';
+import 'package:mela/models/QuestionFamily/FitbQuestion.dart';
 
 class Global {
   static Color AppBackgroundColor = const Color(0xFFF5F9FF);

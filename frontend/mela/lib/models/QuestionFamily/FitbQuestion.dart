@@ -1,4 +1,4 @@
-import 'package:mela/models/QuestionFamilly/AQuestion.dart';
+import 'package:mela/models/QuestionFamily/AQuestion.dart';
 
 class FitbQuestion extends AQuestion{
   FitbQuestion({

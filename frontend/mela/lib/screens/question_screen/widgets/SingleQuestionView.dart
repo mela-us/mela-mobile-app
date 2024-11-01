@@ -1,12 +1,16 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mela/constants/global.dart';
-import 'package:mela/models/QuestionFamilly/AQuestion.dart';
-import 'package:mela/models/QuestionFamilly/QuizQuestion.dart';
+import 'package:mela/models/QuestionFamily/AQuestion.dart';
+import 'package:mela/models/QuestionFamily/QuizQuestion.dart';
+import 'package:mela/themes/default/text_styles.dart';
 
 class SingleQuestionView extends StatefulWidget{
   final AQuestion question;
   final int qNumber;
+
 
   const SingleQuestionView({
     super.key,
@@ -21,6 +25,7 @@ class SingleQuestionView extends StatefulWidget{
 class _SingleQuestionState extends State<SingleQuestionView>{
   late AQuestion _question;
   late int _qNumber;
+  late List<String> _answer;
 
   @override
   void initState() {
@@ -77,24 +82,15 @@ class _SingleQuestionState extends State<SingleQuestionView>{
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    'Câu $_qNumber:',
-                    textAlign: TextAlign.left,
-                    style: const TextStyle(
-                      color: Color(0xFFFF6B00),
-                      fontFamily: 'Mulish',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                    ),
+                  TextStandard.SubTitle(
+                      'Câu $_qNumber:',
+                      Color(0xFFFF6B00)
                   ),
                   SizedBox(height: 3.0),
-                  Text(
-                    _question.questionContent,
-                    style: const TextStyle(
-                      color: Color(0xFF393939),
-                      fontSize: 14,
-                      fontFamily: 'Mulish',
-                    ),
+                  //,Color(0xFF393939)
+                  TextStandard.Content(
+                      _question.questionContent,
+                      Color(0xFF393939)
                   )
                 ],
               ),
@@ -104,18 +100,15 @@ class _SingleQuestionState extends State<SingleQuestionView>{
         SizedBox(height: 27),
         Padding(
           padding: EdgeInsets.only(left: 30),
-          child: Text(
-              _question is QuizQuestion?
-                  'Hãy chọn đáp án chính xác nhất':
-                  'Hãy điền đáp án chính xác nhất',
-            style: const TextStyle(
-              color: Color(0xFF545454),
-              fontFamily: 'Mulish',
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-            ),
+          child: _question is QuizQuestion
+              ? TextStandard.SubTitle(
+                'Hãy chọn đáp án chính xác nhất',
+                Color(0xFF545454)
+              ): TextStandard.SubTitle(
+                'Hãy điền đáp án chính xác nhất',
+                Color(0xFF545454)
+            )
           ),
-        ),
 
         SizedBox(height: 17),
 
@@ -176,16 +169,10 @@ class _SingleQuestionState extends State<SingleQuestionView>{
               children: [
                 TextButton(
                     onPressed: _continueButtonPressed,
-                    child: const Text(
-                      'Tiếp theo',
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                        color: Color(0xFF545454),
-                        fontFamily: 'Mulish',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                    ),
+                    child: TextStandard.SubTitle(
+                        'Tiếp theo',
+                        Color(0xFF545454)
+                    )
                 )
               ],
             )

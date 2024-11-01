@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:mela/models/QuestionFamilly/AQuestion.dart';
+import 'package:mela/models/QuestionFamily/AQuestion.dart';
 
 class QuizQuestion extends AQuestion{
   QuizQuestion({

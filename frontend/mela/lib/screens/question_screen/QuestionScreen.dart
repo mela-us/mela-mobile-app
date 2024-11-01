@@ -2,12 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mela/models/QuestionFamilly/AQuestion.dart';
+import 'package:mela/constants/assets_path.dart';
+import 'package:mela/models/QuestionFamily/AQuestion.dart';
 import 'package:mela/screens/question_screen/widgets/AppBarText.dart';
 import 'package:mela/screens/question_screen/widgets/ExitDialog.dart';
 import 'package:mela/screens/question_screen/widgets/SingleQuestionView.dart';
 
 import '../../constants/global.dart';
+import '../../themes/default/text_styles.dart';
 
 class QuestionScreen extends StatefulWidget{
   final List<AQuestion> questions;
@@ -20,9 +22,12 @@ class QuestionScreen extends StatefulWidget{
 
 class _QuestionScreenState extends State<QuestionScreen>{
   late List<AQuestion> _questions;
+  late List<String> _answers;
   late Timer _timer;
   late AQuestion _currentQuestion;
   Duration _elapsedTime = Duration.zero;
+
+  late OverlayEntry overlayEntry;
 
   @override
   void initState() {
@@ -31,6 +36,9 @@ class _QuestionScreenState extends State<QuestionScreen>{
     _questions = widget.questions;
     _currentQuestion = _questions.first;
     _startTimer();
+    exitDialogOverlay(context);
+
+    _answers = List.filled(_questions.length, '');
   }
 
   @override
@@ -40,6 +48,9 @@ class _QuestionScreenState extends State<QuestionScreen>{
     if (oldWidget.questions != widget.questions){
       _questions = widget.questions;
       _currentQuestion = _questions.first;
+
+      _answers.clear();
+      _answers = List.filled(_questions.length, '');
     }
   }
 
@@ -74,14 +85,17 @@ class _QuestionScreenState extends State<QuestionScreen>{
                 GestureDetector(
                   onTap: _backButtonPressed,
                   child: Image.asset(
-                    'lib/assets/icons/arrow_back_longer.png',
+                    AssetsPath.arrow_back_longer,
                     width: 26,
                     height: 20,
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 11.79),
-                  child: AppBarText(text: 'Luyện tập'),
+                Padding(
+                  padding: const EdgeInsets.only(left: 11.79),
+                  child: TextStandard.Heading(
+                      'Luyện tập',
+                      Global.AppBarContentColor
+                  ),
                 )
               ],
             ),
@@ -95,21 +109,16 @@ class _QuestionScreenState extends State<QuestionScreen>{
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Image.asset(
-                    'lib/assets/icons/clock.png',
+                    AssetsPath.clock,
                     width: 30,
                     height: 30,
                   ),
                   Container(
-                    margin: const EdgeInsets.only(bottom: 4),
-                    child: Text(
-                      '$hours:$minutes:$seconds',
-                      style: const TextStyle(
-                        fontFamily: 'Mulish',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        color: Color(0xFF0961F5),
-                      ),
-                    ),
+                    margin: EdgeInsets.only(bottom: 4),
+                    child: TextStandard.SubTitle(
+                        '$hours:$minutes:$seconds',
+                        const Color(0xFF0961F5),
+                    )
                   ),
                 ],
               ),
@@ -131,33 +140,29 @@ class _QuestionScreenState extends State<QuestionScreen>{
         ),
         child: FloatingActionButton(
           onPressed: _questionListButtonPressed,
+          backgroundColor: Color(0xFF0961F5),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0), // Thay đổi border circular tại đây
+          ),
           child: Row(
             children: [
               Padding(
                   padding: EdgeInsets.only(left: 23),
                   child: Image.asset(
-                    'lib/assets/icons/select_list.png',
+                    AssetsPath.select_list,
                     width: 25,
                     height: 25,
                   ),
               ),
               Padding(
                   padding: EdgeInsets.only(left: 10),
-                  child: const Text(
+                  //
+                  child: TextStandard.Button(
                     'Danh sách câu',
-                    style: TextStyle(
-                      fontFamily: 'Mulish',
-                      fontSize: 18,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    Colors.white
                   ),
               )
             ],
-          ),
-          backgroundColor: Color(0xFF0961F5),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0), // Thay đổi border circular tại đây
           ),
         ),
 
@@ -168,29 +173,49 @@ class _QuestionScreenState extends State<QuestionScreen>{
     throw UnimplementedError();
   }
 
-  void _backButtonPressed() {
-    Overlay.of(context).insert(
-      OverlayEntry(builder: (context)=> Stack(
-        children: [
-          Container(
-            color: Colors.black.withOpacity(0.53),
-          ),
-          Positioned(
-            bottom: 34,
-            left: 19,
-            right: 19,
-            child: ExitDialog(onConfirm: confirmLeaving),
-          )
-        ],
-      )
-
-      )
+  void exitDialogOverlay(BuildContext context){
+    overlayEntry = OverlayEntry(
+        builder: (BuildContext overlayContext){
+          return Stack(
+            children: [
+              Container(
+                color: Colors.black.withOpacity(0.53),
+              ),
+              Positioned(
+                bottom: 34,
+                left: 19,
+                right: 19,
+                child: ExitDialog(
+                  onStaying: (bool isStaying) {
+                    if(isStaying){
+                      overlayEntry.remove();
+                    }
+                    else {
+                      overlayEntry.remove();
+                      //Navigator pop().
+                    }
+                  },
+                ),
+              )
+            ],
+          );
+        }
     );
+  }
+
+  void _backButtonPressed() {
+    Overlay.of(context).insert(overlayEntry);
+  }
+
+  void closeOverlay(){
   }
 
   void _questionListButtonPressed() {
   }
 
   void confirmLeaving() {
+  }
+
+  void confirmStay() {
   }
 }

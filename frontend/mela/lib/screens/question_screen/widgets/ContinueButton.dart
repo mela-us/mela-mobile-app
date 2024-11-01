@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mela/themes/default/text_styles.dart';
 
 class ContinueButton extends StatelessWidget{
   @override
@@ -16,16 +17,8 @@ class ContinueButton extends StatelessWidget{
         children: [
           Padding(
             padding: EdgeInsets.symmetric(vertical: 19),
-            child: Text(
-              textAlign: TextAlign.center,
-              'Luyện tập tiếp',
-              style: TextStyle(
-                fontFamily: 'Mulish',
-                fontSize: 18,
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+            //
+            child: TextStandard.Button('Luyện tập tiếp', Colors.white),
           ),
           Positioned(
               right: 10,

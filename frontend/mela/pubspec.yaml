@@ -21,24 +21,21 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - lib/assets/icons/arrow_back_longer.png
-    - lib/assets/icons/clock.png
-    - lib/assets/icons/select_list.png
-    - lib/assets/images/exit_image.png
+    - assets/icons/arrow_back_longer.png
+    - assets/icons/clock.png
+    - assets/icons/select_list.png
+    - assets/images/exit_image.png
   fonts:
   - family: Asap
     fonts:
-      - asset:   lib/assets/fonts/Asap/Asap-Thin.ttf
-      - asset:   lib/assets/fonts/Asap/Asap-ExtraLight.ttf
-      - asset:   lib/assets/fonts/Asap/Asap-Regular.ttf
-      - asset:   lib/assets/fonts/Asap/Asap-Medium.ttf
-      - asset:   lib/assets/fonts/Asap/Asap-SemiBold.ttf
-      - asset:   lib/assets/fonts/Asap/Asap-Bold.ttf
-      - asset:   lib/assets/fonts/Asap/Asap-ExtraBold.ttf
-      - asset:   lib/assets/fonts/Asap/Asap-Black.ttf
+      - asset:   assets/fonts/Asap/Asap-Regular.ttf
+      - asset:   assets/fonts/Asap/Asap-SemiBold.ttf
+      - asset:   assets/fonts/Asap/Asap-Bold.ttf
+      - asset:   assets/fonts/Asap/Asap-ExtraBold.ttf
 
   - family: Mulish
     fonts:
-      - asset: lib/assets/fonts/Mulish/Mulish-Bold.ttf
-      - asset: lib/assets/fonts/Mulish/Mulish-Regular.ttf
-      - asset: lib/assets/fonts/Mulish/Mulish-SemiBold.ttf
+      - asset: assets/fonts/Mulish/Mulish-Bold.ttf
+      - asset: assets/fonts/Mulish/Mulish-Regular.ttf
+      - asset: assets/fonts/Mulish/Mulish-SemiBold.ttf
+      - asset: assets/fonts/Mulish/Mulish-ExtraBold.ttf

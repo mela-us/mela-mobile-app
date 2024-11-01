@@ -1,11 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mela/constants/assets_path.dart';
 import 'package:mela/screens/question_screen/widgets/ContinueButton.dart';
+import 'package:mela/themes/default/text_styles.dart';
 
 class ExitDialog extends StatelessWidget{
-  final VoidCallback onConfirm;
+  final Function(bool) onStaying;
 
-  const ExitDialog({super.key, required this.onConfirm});
+  const ExitDialog({
+    super.key,
+    required this.onStaying
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +45,7 @@ class ExitDialog extends StatelessWidget{
                   Padding(
                     padding: EdgeInsets.only(left: 60),
                     child: Image.asset(
-                      'lib/assets/images/exit_image.png',
+                      AssetsPath.exit_image,
                       width: 242,
                       height: 170.85,
                     ),
@@ -49,15 +54,9 @@ class ExitDialog extends StatelessWidget{
               ),
             ),
             SizedBox(height: 27.15),
-            Text(
-              'Xác nhận thoát!',
-              style: TextStyle(
-                fontFamily: 'Asap',
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF202244),
-              ),
-            ),
+            //,
+
+            TextStandard.Heading('Xác nhận thoát!', Color(0xFF202244),),
             SizedBox(height: 17),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 54),
@@ -76,24 +75,16 @@ class ExitDialog extends StatelessWidget{
             Padding(
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                 child: GestureDetector(
-                  onTap: continueButtonPressed,
+                  onTap: () => onStaying(true) ,
                   child: ContinueButton(),
                 )
             ),
             SizedBox(height: 8),
             GestureDetector(
-              onTap: quitButtonPressed,
-              child: Text(
-                'Đi ra ngoài',
-                style: TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF505050),
-                ),
-              ),
+              onTap: () => onStaying(false),
+              //,
+              child:TextStandard.Button('Đi ra ngoài', Color(0xFF505050))
             )
-
           ],
         ),
       ),
@@ -104,12 +95,4 @@ class ExitDialog extends StatelessWidget{
   }
 
 
-  void xButtonPressed() {
-  }
-
-  void continueButtonPressed() {
-  }
-
-  void quitButtonPressed() {
-  }
 }
