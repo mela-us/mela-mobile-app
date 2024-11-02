@@ -63,6 +63,7 @@ class _DividedLecturesAndExercisesScreenState
                 controller: _tabController,
                 labelColor: Colors.white,
                 unselectedLabelColor: ColorsStandards.textColorInBackground1,
+                overlayColor: WidgetStateProperty.all(Colors.transparent),
                 indicator: BoxDecoration(
                   color: ColorsStandards.backgroundButtonChooseColor,
                   borderRadius: BorderRadius.circular(40),

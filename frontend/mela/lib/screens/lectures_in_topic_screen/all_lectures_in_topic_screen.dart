@@ -6,7 +6,6 @@ import '../../models/topic.dart';
 import '../../themes/default/colors_standards.dart';
 import '../../themes/default/text_styles.dart';
 
-
 class AllLecturesInTopicScreen extends StatelessWidget {
   Topic currentTopic;
 
@@ -20,10 +19,8 @@ class AllLecturesInTopicScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: ColorsStandards.AppBackgroundColor,
           elevation: 0,
-          title: 
-          TextStandard.Heading(currentTopic.topicName,
-                      ColorsStandards.textColorInBackground1),
-          
+          title: TextStandard.Heading(
+              currentTopic.topicName, ColorsStandards.textColorInBackground1),
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () => Navigator.of(context).pop(),
@@ -42,6 +39,7 @@ class AllLecturesInTopicScreen extends StatelessWidget {
             labelColor: ColorsStandards.buttonYesColor1,
             unselectedLabelColor: ColorsStandards.guideTextColor,
             indicatorColor: ColorsStandards.buttonYesColor1,
+            overlayColor: WidgetStateProperty.all(Colors.transparent),
             tabs: const [
               Tab(text: "Tiểu học"),
               Tab(text: "Trung học"),

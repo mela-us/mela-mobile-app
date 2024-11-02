@@ -21,33 +21,37 @@ class ButtonLoginOrSignUp extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8),
         ),
         onPressed: onPressed,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
+          alignment: Alignment.center,
           children: [
-            Expanded(
-              child: Center(
-                child: Text(
-                  textButton,
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: 'Asap',
-                      fontWeight: FontWeight.bold,
-                      color: ColorsStandards.buttonYesColor2),
+            //Button Text
+            Center(
+              child: Text(
+                textButton,
+                style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: 'Asap',
+                    fontWeight: FontWeight.bold,
+                    color: ColorsStandards.buttonYesColor2),
+              ),
+            ),
+
+            //Button arrow
+            Positioned(
+              right: 0,
+              child: Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: ColorsStandards.buttonYesColor2,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.arrow_forward,
+                  color: ColorsStandards.buttonYesColor1,
                 ),
               ),
             ),
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: ColorsStandards.buttonYesColor2,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.arrow_forward,
-                color: ColorsStandards.buttonYesColor1,
-              ),
-            )
           ],
         ),
       ),

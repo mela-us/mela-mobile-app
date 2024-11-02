@@ -89,7 +89,7 @@ class __FormContentState extends State<_FormContent> {
                 return null;
               },
               decoration: InputDecoration(
-                labelText: 'Email',
+                labelText: null,
                 hintText: 'Nhập địa chỉ Email',
                 prefixIcon: Icon(
                   Icons.email_outlined,
@@ -97,10 +97,20 @@ class __FormContentState extends State<_FormContent> {
                   color: ColorsStandards.textColorInBackground2,
                 ),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                fillColor: ColorsStandards.backgroundTextFormColor,
-                filled: true,
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                  fillColor: ColorsStandards.backgroundTextFormColor,
+                  focusColor: ColorsStandards.backgroundTextFormColor,
+                  filled: true,
               ),
             ),
             const SizedBox(height: 16),
@@ -119,7 +129,7 @@ class __FormContentState extends State<_FormContent> {
               },
               obscureText: !_isPasswordVisible,
               decoration: InputDecoration(
-                  labelText: 'Mật khẩu',
+                  labelText: null,
                   hintText: 'Nhập mật khẩu của bạn',
                   prefixIcon: Icon(
                     Icons.lock_outline_rounded,
@@ -128,8 +138,18 @@ class __FormContentState extends State<_FormContent> {
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
                   ),
                   fillColor: ColorsStandards.backgroundTextFormColor,
+                  focusColor: ColorsStandards.backgroundTextFormColor,
                   filled: true,
                   suffixIcon: IconButton(
                     icon: Icon(_isPasswordVisible
