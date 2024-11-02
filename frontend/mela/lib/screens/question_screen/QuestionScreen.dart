@@ -6,6 +6,7 @@ import 'package:mela/models/QuestionFamily/AQuestion.dart';
 import 'package:mela/screens/question_screen/widgets/ExitDialog.dart';
 import 'package:mela/screens/question_screen/widgets/QuestionListDialog.dart';
 import 'package:mela/screens/question_screen/widgets/SingleQuestionView.dart';
+import 'package:mela/screens/result_screen/ResultScreen.dart';
 
 import '../../constants/global.dart';
 import '../../themes/default/text_styles.dart';
@@ -215,7 +216,7 @@ class _QuestionScreenState extends State<QuestionScreen>{
 
 
     questionListOverlayEntry = OverlayEntry(
-        builder: (BuildContext overlayContext){
+        builder: (BuildContext overlayContext) {
           return Stack(
             children: [
               Container(
@@ -228,17 +229,22 @@ class _QuestionScreenState extends State<QuestionScreen>{
                 child: QuestionListDialog(
                     answers: _answers,
                     onPickedQuestion: (int selected) {
-                      if (selected < _answers.length){
+                      if (selected < _answers.length) {
                         toSelectedQuestion(selected);
                         questionListOverlayEntry.remove();
                       }
                     },
-                    onSubmitted: (bool isStaying){
-                      if (!isStaying){
+                    onSubmitted: (bool isStaying) {
+                      if (!isStaying) {
                         questionListOverlayEntry.remove();
                       }
                       else {
-                        print(_answers);
+                        questionListOverlayEntry.remove();
+
+                        Navigator.pushReplacement(
+                          context,
+                          _changeScreenAnimation(),
+                        );
                       }
                     }),
               )
@@ -290,5 +296,33 @@ class _QuestionScreenState extends State<QuestionScreen>{
   void setAnswerValue(int questionIndex) {
     _answerController.text = _answers[questionIndex].isEmpty?
                   '' : _answers[questionIndex];
+  }
+
+  PageRouteBuilder _changeScreenAnimation() {
+    return PageRouteBuilder(
+        pageBuilder: (context, ani, secAni) =>
+            ResultScreen(
+                questions: _questions,
+                answers: _answers,
+                elapsedTime: _elapsedTime),
+        transitionsBuilder: (context, ani, secAni,
+            child) {
+          const begin = Offset(1.0, 0.0);
+          const end = Offset.zero;
+          const curve = Curves.ease;
+
+          var tween = Tween(
+              begin: begin,
+              end: end
+          ).chain(CurveTween(curve: curve));
+          var offsetAnimation = ani.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          );
+        },
+        transitionDuration: Duration(milliseconds: 500),
+    );
   }
 }

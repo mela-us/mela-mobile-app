@@ -6,6 +6,7 @@ class AssetsPath{
   static String select_list = 'assets/icons/select_list.png';
 
   //Image
-
   static String exit_image = 'assets/images/exit_image.png';
+  static String result_image = 'assets/images/result_image.png';
+
 }

@@ -24,7 +24,9 @@ flutter:
     - assets/icons/arrow_back_longer.png
     - assets/icons/clock.png
     - assets/icons/select_list.png
+
     - assets/images/exit_image.png
+    - assets/images/result_image.png
   fonts:
   - family: Asap
     fonts:
