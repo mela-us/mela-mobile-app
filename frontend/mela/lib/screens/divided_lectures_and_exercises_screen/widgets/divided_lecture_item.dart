@@ -1,54 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:mela/models/lecture.dart';
+
+import '../../../models/divided_lecture.dart';
+import '../../../themes/default/text_styles.dart';
+
 class DividedLectureItem extends StatelessWidget {
-  final String imageItemPath;
-  final String pages;
-  final String origin;
-  final Lecture currentLecture;
+  final DividedLecture currentDividedLecture;
 
   DividedLectureItem({
-    required this.imageItemPath,
-    required this.pages,
-    required this.origin,
-    required this.currentLecture,
+    required this.currentDividedLecture,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(bottom: 16, left: 16, right: 16),
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: Offset(0, 3),
-          ),
-        ],
       ),
       child: Row(
         children: [
-          Image.asset(imageItemPath, width: 40, height: 40),
-          SizedBox(width: 16),
+          // Image + completed questions/total questions
           Expanded(
+            flex: 1,
+            child: Image.asset(currentDividedLecture.imageDividedLecturePath,
+                width: 60, height: 60),
+          ),
+          SizedBox(width: 10),
+
+          Expanded(
+            flex: 2,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  currentLecture.lectureName,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                // Topic name + level name
+                TextStandard.SubTitle(
+                  '${currentDividedLecture.topicName} - ${currentDividedLecture.levelName}',
+                  Colors.orange,
                 ),
                 SizedBox(height: 4),
-                Text(
-                  "$pages | $origin",
-                  style: TextStyle(color: Colors.grey[600]),
+                // Divided Lecture name
+                TextStandard.SubHeading(
+                  currentDividedLecture.dividedLectureName,
+                  Colors.black,
                 ),
+                SizedBox(height: 8),
+                // pages + origin
+                TextStandard.Normal(
+                  '${currentDividedLecture.pages} trang | ${currentDividedLecture.origin}',
+                  Colors.black,
+                ),
+
+                SizedBox(width: 16),
               ],
             ),
           ),
+          SizedBox(width: 6),
         ],
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mela/models/lecture.dart';
+import 'package:mela/screens/divided_lectures_and_exercises_screen/widgets/divided_lecture_list_item.dart';
 import 'package:mela/screens/divided_lectures_and_exercises_screen/widgets/exercise_list_item.dart';
 
 import '../../themes/default/colors_standards.dart';
@@ -105,7 +106,7 @@ class _DividedLecturesAndExercisesScreenState
               controller: _tabController,
               children: [
                 //Tab "Lý thuyết" content
-                Center(child: Text("content goes here")),
+                DividedLectureListItem(currentLecture: widget.currentLecture),
 
                 //Tab "Luyện tập" content
                 ExerciseListItem(currentLecture: widget.currentLecture),
