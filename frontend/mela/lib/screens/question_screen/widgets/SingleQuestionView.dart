@@ -10,13 +10,17 @@ class SingleQuestionView extends StatefulWidget{
   final AQuestion question;
   final int qNumber;
   final Function(String) onContinueTextPressed;
+  final String answer;
+  final TextEditingController controller;
 
 
   const SingleQuestionView({
     super.key,
     required this.question,
     required this.qNumber,
-    required this.onContinueTextPressed
+    required this.onContinueTextPressed,
+    required this.answer,
+    required this.controller
   });
 
   @override
@@ -27,8 +31,8 @@ class _SingleQuestionState extends State<SingleQuestionView> {
   late AQuestion _question;
   late int _qNumber;
   late Function(String) _onContinueTextPressed;
-
-  final TextEditingController _controller = TextEditingController();
+  late String _answer;
+  late TextEditingController _controller;
 
   String? selectedChoice = '';
   String? selectedChoiceKey = '';
@@ -40,6 +44,10 @@ class _SingleQuestionState extends State<SingleQuestionView> {
     _question = widget.question;
     _qNumber = widget.qNumber;
     _onContinueTextPressed = widget.onContinueTextPressed;
+
+    //setText
+    _answer = widget.answer;
+    _controller = widget.controller;
   }
 
   @override
@@ -48,13 +56,25 @@ class _SingleQuestionState extends State<SingleQuestionView> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.question != widget.question) {
       _question = widget.question;
+      _answer = widget.answer;
+      _controller = widget.controller;
     }
+
     if (oldWidget.qNumber != widget.qNumber) {
       _qNumber = widget.qNumber;
     }
+
     if (oldWidget.onContinueTextPressed != widget.onContinueTextPressed) {
       _onContinueTextPressed = widget.onContinueTextPressed;
     }
+
+    // if (oldWidget.answer != widget.answer){
+    //   _answer = widget.answer;
+    // }
+    //
+    // if (oldWidget.answer != widget.answer){
+    //   _controller = widget.controller;
+    // }
   }
 
   @override

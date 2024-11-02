@@ -25,10 +25,12 @@ class _QuestionScreenState extends State<QuestionScreen>{
   late Timer _timer;
   late int _currentQuestionIndex;
   late AQuestion _currentQuestion;
-  Duration _elapsedTime = Duration.zero;
-
   late OverlayEntry quitOverlayEntry;
   late OverlayEntry questionListOverlayEntry;
+
+  Duration _elapsedTime = Duration.zero;
+
+  final TextEditingController _answerController = TextEditingController();
 
   @override
   void initState() {
@@ -132,6 +134,8 @@ class _QuestionScreenState extends State<QuestionScreen>{
       body: SingleQuestionView(
           question: _currentQuestion,
           qNumber: _questions.indexOf(_currentQuestion) + 1,
+          answer: _answers[_currentQuestionIndex],
+          controller: _answerController,
           onContinueTextPressed: (String answer) {
             toNextQuestion(answer);
           },
@@ -224,14 +228,17 @@ class _QuestionScreenState extends State<QuestionScreen>{
                 child: QuestionListDialog(
                     answers: _answers,
                     onPickedQuestion: (int selected) {
-
+                      if (selected < _answers.length){
+                        toSelectedQuestion(selected);
+                        questionListOverlayEntry.remove();
+                      }
                     },
                     onSubmitted: (bool isStaying){
                       if (!isStaying){
                         questionListOverlayEntry.remove();
                       }
                       else {
-
+                        print(_answers);
                       }
                     }),
               )
@@ -260,15 +267,28 @@ class _QuestionScreenState extends State<QuestionScreen>{
     setState(() {
       if (answer != null  && answer.isNotEmpty ) {
         _answers[_currentQuestionIndex] = answer;
-
-        //checker
-        for (String ans in _answers){
-          print(ans);
-        }
+        _answerController.text = answer;
       }
+
       if (_currentQuestionIndex == _questions.length-1) return;
       _currentQuestionIndex++;
+      //set Question view
       _currentQuestion = _questions.elementAt(_currentQuestionIndex);
+      //set Answer view
+      setAnswerValue(_currentQuestionIndex);
     });
+  }
+
+  void toSelectedQuestion(int index){
+    setState(() {
+      _currentQuestionIndex = index;
+      _currentQuestion = _questions.elementAt(_currentQuestionIndex);
+      setAnswerValue(_currentQuestionIndex);
+    });
+  }
+
+  void setAnswerValue(int questionIndex) {
+    _answerController.text = _answers[questionIndex].isEmpty?
+                  '' : _answers[questionIndex];
   }
 }

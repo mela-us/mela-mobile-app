@@ -75,9 +75,7 @@ class QuestionListDialog extends StatelessWidget{
                     itemCount: answers.length,
                     itemBuilder: (context, index) {
                       return GestureDetector(
-                        onTap: () {
-                          print(index+1);
-                        },
+                        onTap: () => onPickedQuestion(index),
                         child: Container(
                           width: 46,
                           height: 46,
