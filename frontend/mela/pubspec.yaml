@@ -25,20 +25,23 @@ flutter:
     - assets/images/
     - assets/images/topics/
     - assets/icons/
+    - assets/icons/arrow_back_longer.png
+    - assets/icons/clock.png
+    - assets/icons/select_list.png
+
+    - assets/images/exit_image.png
+    - assets/images/result_image.png
   fonts:
-    - family: Asap
-      fonts:
-        - asset: assets/fonts/Asap/Asap-Bold.ttf
-        - asset: assets/fonts/Asap/Asap-ExtraBold.ttf
-        - asset: assets/fonts/Asap/Asap-Regular.ttf
-        - asset: assets/fonts/Asap/Asap-SemiBold.ttf
+  - family: Asap
+    fonts:
+      - asset:   assets/fonts/Asap/Asap-Regular.ttf
+      - asset:   assets/fonts/Asap/Asap-SemiBold.ttf
+      - asset:   assets/fonts/Asap/Asap-Bold.ttf
+      - asset:   assets/fonts/Asap/Asap-ExtraBold.ttf
 
-    - family: Mulish
-      fonts:
-        - asset: assets/fonts/Mulish/Mulish-Bold.ttf
-        - asset: assets/fonts/Mulish/Mulish-ExtraBold.ttf
-        - asset: assets/fonts/Mulish/Mulish-Regular.ttf
-        - asset: assets/fonts/Mulish/Mulish-SemiBold.ttf
-
-
-
+  - family: Mulish
+    fonts:
+      - asset: assets/fonts/Mulish/Mulish-Bold.ttf
+      - asset: assets/fonts/Mulish/Mulish-Regular.ttf
+      - asset: assets/fonts/Mulish/Mulish-SemiBold.ttf
+      - asset: assets/fonts/Mulish/Mulish-ExtraBold.ttf

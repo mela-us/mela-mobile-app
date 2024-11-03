@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mela/screens/divided_lectures_and_exercises_screen/divided_lectures_and_exercises_screen.dart';
-import 'package:mela/themes/default/text_styles.dart';
 import 'package:mela/screens/signup_login_screen/login_or_signup_screen.dart';
 
-import 'models/lecture.dart';
+
 void main() {
   runApp(const MainApp());
 }

@@ -12,4 +12,6 @@ abstract class AQuestion{
   });
 
   bool isCorrect(String userAnswer);
+  int choiceSize();
+  List<String>? getChoiceList();
 }

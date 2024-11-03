@@ -1,4 +1,4 @@
-import 'package:mela/models/QuestionFamilly/AQuestion.dart';
+import 'package:mela/models/QuestionFamily/AQuestion.dart';
 
 class FitbQuestion extends AQuestion{
   FitbQuestion({
@@ -15,5 +15,15 @@ class FitbQuestion extends AQuestion{
     return false;
     // TODO: implement isCorrect
     throw UnimplementedError();
+  }
+
+  @override
+  int choiceSize() {
+    return 0;
+  }
+
+  @override
+  List<String>? getChoiceList() {
+    return null;
   }
 }
