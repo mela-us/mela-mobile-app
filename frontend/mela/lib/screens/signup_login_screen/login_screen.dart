@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mela/screens/courses_screen/courses_screen.dart';
 import 'package:mela/screens/signup_login_screen/widgets/login_or_sign_up_button.dart';
 import 'package:mela/screens/signup_login_screen/widgets/third_party_button.dart';
+import 'package:mela/screens/main_screen/main_screen.dart';
 
 import '../../constants/global.dart';
 import '../../themes/default/colors_standards.dart';
@@ -160,7 +161,7 @@ class __FormContentState extends State<_FormContent> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => CoursesScreen()));
+                            builder: (context) => const MainScreen()));
                   }
                 }),
             const SizedBox(height: 16),
