@@ -1,6 +1,6 @@
 package com.hcmus.mela.repository;
 
-import com.farukgenc.boilerplate.springboot.model.User;
+import com.hcmus.mela.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

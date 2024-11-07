@@ -1,22 +1,18 @@
 package com.hcmus.mela.security.jwt;
 
+import com.hcmus.mela.model.User;
+import com.hcmus.mela.security.dto.AuthenticatedUserDto;
+import com.hcmus.mela.security.dto.LoginRequest;
+import com.hcmus.mela.security.dto.LoginResponse;
 import com.hcmus.mela.security.mapper.UserMapper;
 import com.hcmus.mela.security.service.UserService;
-import com.farukgenc.boilerplate.springboot.model.User;
-import com.farukgenc.boilerplate.springboot.security.dto.AuthenticatedUserDto;
-import com.farukgenc.boilerplate.springboot.security.dto.LoginRequest;
-import com.farukgenc.boilerplate.springboot.security.dto.LoginResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
-/**
- * Created on Ağustos, 2020
- *
- * @author Faruk
- */
+
 @Slf4j
 @Service
 @RequiredArgsConstructor

@@ -1,8 +1,8 @@
 package com.hcmus.mela.controller;
 
-import com.farukgenc.boilerplate.springboot.security.dto.RegistrationRequest;
-import com.farukgenc.boilerplate.springboot.security.dto.RegistrationResponse;
-import com.farukgenc.boilerplate.springboot.security.service.UserService;
+import com.hcmus.mela.security.dto.RegistrationRequest;
+import com.hcmus.mela.security.dto.RegistrationResponse;
+import com.hcmus.mela.security.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,11 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-/**
- * Created on Ağustos, 2020
- *
- * @author Faruk
- */
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/register")

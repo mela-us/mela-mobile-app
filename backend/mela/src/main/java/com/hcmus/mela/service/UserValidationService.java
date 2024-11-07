@@ -1,18 +1,14 @@
 package com.hcmus.mela.service;
 
-import com.farukgenc.boilerplate.springboot.utils.ExceptionMessageAccessor;
-import com.farukgenc.boilerplate.springboot.exceptions.RegistrationException;
-import com.farukgenc.boilerplate.springboot.repository.UserRepository;
-import com.farukgenc.boilerplate.springboot.security.dto.RegistrationRequest;
+import com.hcmus.mela.exceptions.RegistrationException;
+import com.hcmus.mela.repository.UserRepository;
+import com.hcmus.mela.security.dto.RegistrationRequest;
+import com.hcmus.mela.utils.ExceptionMessageAccessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-/**
- * Created on Ağustos, 2020
- *
- * @author Faruk
- */
+
 @Slf4j
 @Service
 @RequiredArgsConstructor

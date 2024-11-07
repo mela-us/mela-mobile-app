@@ -8,11 +8,7 @@ import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
-/**
- * Created on Ağustos, 2020
- *
- * @author Faruk
- */
+
 @Getter
 @Setter
 @NoArgsConstructor

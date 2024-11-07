@@ -1,19 +1,17 @@
 package com.hcmus.mela.controller;
 
-import com.farukgenc.boilerplate.springboot.security.dto.LoginRequest;
-import com.farukgenc.boilerplate.springboot.security.dto.LoginResponse;
-import com.farukgenc.boilerplate.springboot.security.jwt.JwtTokenService;
+import com.hcmus.mela.repository.UserRepository;
+import com.hcmus.mela.security.dto.LoginRequest;
+import com.hcmus.mela.security.dto.LoginResponse;
+import com.hcmus.mela.security.jwt.JwtTokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * Created on Ağustos, 2020
- *
- * @author Faruk
- */
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/login")
@@ -30,4 +28,17 @@ public class LoginController {
 		return ResponseEntity.ok(loginResponse);
 	}
 
+	UserRepository userRepository;
+
+
+	@GetMapping("/test-db-connection")
+	public ResponseEntity<String> testDbConnection() {
+		try {
+			long count = userRepository.count();
+			return ResponseEntity.ok("Connected to database. User count: " + count);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Failed to connect to database: " + e.getMessage());
+		}
+	}
 }

@@ -3,21 +3,14 @@ package com.hcmus.mela.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-
-/**
- * Created on Ağustos, 2020
- *
- * @author Faruk
- */
 @Getter
 @Setter
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "USERS")
+@Table(name = "users")
 public class User {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -33,5 +26,4 @@ public class User {
 
 	@Enumerated(EnumType.STRING)
 	private UserRole userRole;
-
 }

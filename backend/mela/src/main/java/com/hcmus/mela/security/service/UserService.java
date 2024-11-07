@@ -1,15 +1,11 @@
 package com.hcmus.mela.security.service;
 
-import com.farukgenc.boilerplate.springboot.model.User;
-import com.farukgenc.boilerplate.springboot.security.dto.AuthenticatedUserDto;
-import com.farukgenc.boilerplate.springboot.security.dto.RegistrationRequest;
-import com.farukgenc.boilerplate.springboot.security.dto.RegistrationResponse;
 
-/**
- * Created on Ağustos, 2020
- *
- * @author Faruk
- */
+import com.hcmus.mela.model.User;
+import com.hcmus.mela.security.dto.AuthenticatedUserDto;
+import com.hcmus.mela.security.dto.RegistrationRequest;
+import com.hcmus.mela.security.dto.RegistrationResponse;
+
 public interface UserService {
 
 	User findByUsername(String username);

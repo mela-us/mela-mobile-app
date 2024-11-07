@@ -1,15 +1,12 @@
 package com.hcmus.mela.security.dto;
 
-import com.farukgenc.boilerplate.springboot.model.UserRole;
+
+import com.hcmus.mela.model.UserRole;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Created on Ağustos, 2020
- *
- * @author Faruk
- */
+
 @Getter
 @Setter
 @NoArgsConstructor

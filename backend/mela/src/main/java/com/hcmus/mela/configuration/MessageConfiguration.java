@@ -1,17 +1,13 @@
 package com.hcmus.mela.configuration;
 
-import com.farukgenc.boilerplate.springboot.utils.ProjectConstants;
+import com.hcmus.mela.utils.ProjectConstants;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-/**
- * Created on Ağustos, 2020
- *
- * @author Faruk
- */
+
 @Configuration
 public class MessageConfiguration {
 

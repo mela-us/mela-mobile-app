@@ -8,11 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-/**
- * Created on Ağustos, 2020
- *
- * @author Faruk
- */
+
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 

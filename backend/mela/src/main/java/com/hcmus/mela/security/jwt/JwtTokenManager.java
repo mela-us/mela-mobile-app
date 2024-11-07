@@ -4,18 +4,14 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.farukgenc.boilerplate.springboot.model.User;
-import com.farukgenc.boilerplate.springboot.model.UserRole;
+import com.hcmus.mela.model.User;
+import com.hcmus.mela.model.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-/**
- * Created on Ağustos, 2020
- *
- * @author Faruk
- */
+
 @Component
 @RequiredArgsConstructor
 public class JwtTokenManager {

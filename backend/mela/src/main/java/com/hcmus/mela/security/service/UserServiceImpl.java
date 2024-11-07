@@ -1,24 +1,21 @@
 package com.hcmus.mela.security.service;
 
-import com.farukgenc.boilerplate.springboot.service.UserValidationService;
-import com.farukgenc.boilerplate.springboot.model.User;
-import com.farukgenc.boilerplate.springboot.model.UserRole;
-import com.farukgenc.boilerplate.springboot.security.dto.AuthenticatedUserDto;
-import com.farukgenc.boilerplate.springboot.security.dto.RegistrationRequest;
-import com.farukgenc.boilerplate.springboot.security.dto.RegistrationResponse;
-import com.farukgenc.boilerplate.springboot.security.mapper.UserMapper;
-import com.farukgenc.boilerplate.springboot.utils.GeneralMessageAccessor;
-import com.farukgenc.boilerplate.springboot.repository.UserRepository;
+
+import com.hcmus.mela.model.User;
+import com.hcmus.mela.model.UserRole;
+import com.hcmus.mela.repository.UserRepository;
+import com.hcmus.mela.security.dto.AuthenticatedUserDto;
+import com.hcmus.mela.security.dto.RegistrationRequest;
+import com.hcmus.mela.security.dto.RegistrationResponse;
+import com.hcmus.mela.security.mapper.UserMapper;
+import com.hcmus.mela.service.UserValidationService;
+import com.hcmus.mela.utils.GeneralMessageAccessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-/**
- * Created on Ağustos, 2020
- *
- * @author Faruk
- */
+
 @Slf4j
 @Service
 @RequiredArgsConstructor

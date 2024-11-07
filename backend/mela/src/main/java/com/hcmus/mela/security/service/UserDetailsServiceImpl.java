@@ -1,7 +1,7 @@
 package com.hcmus.mela.security.service;
 
-import com.farukgenc.boilerplate.springboot.model.UserRole;
-import com.farukgenc.boilerplate.springboot.security.dto.AuthenticatedUserDto;
+import com.hcmus.mela.model.UserRole;
+import com.hcmus.mela.security.dto.AuthenticatedUserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,11 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.Objects;
 
-/**
- * Created on Ağustos, 2020
- *
- * @author Faruk
- */
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
