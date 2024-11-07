@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+
 
 @Slf4j
 @Service
@@ -45,6 +47,8 @@ public class UserServiceImpl implements UserService {
 		final User user = UserMapper.INSTANCE.convertToUser(registrationRequest);
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		user.setUserRole(UserRole.USER);
+		user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+		user.setUpdatedAt(user.getCreatedAt());
 
 		userRepository.save(user);
 
