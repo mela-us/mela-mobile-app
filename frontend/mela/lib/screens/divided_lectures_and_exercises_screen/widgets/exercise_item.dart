@@ -4,7 +4,6 @@ import 'package:mela/models/lecture.dart';
 import '../../../constants/global.dart';
 import '../../../models/exercise.dart';
 import '../../../themes/default/text_styles.dart';
-import 'package:mela/screens/question_screen/QuestionScreen.dart';
 
 class ExerciseItem extends StatelessWidget {
   Exercise currentExercise;
@@ -17,8 +16,8 @@ class ExerciseItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => QuestionScreen(questions: Global.questions,)));
+        // Navigator.push(
+        //     context, MaterialPageRoute(builder: (context) => QuestionScreen(questions: Global.questions,)));
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 16, left: 16, right: 16),
