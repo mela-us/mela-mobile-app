@@ -29,16 +29,4 @@ public class LoginController {
 	}
 
 	UserRepository userRepository;
-
-
-	@GetMapping("/test-db-connection")
-	public ResponseEntity<String> testDbConnection() {
-		try {
-			long count = userRepository.count();
-			return ResponseEntity.ok("Connected to database. User count: " + count);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Failed to connect to database: " + e.getMessage());
-		}
-	}
 }
