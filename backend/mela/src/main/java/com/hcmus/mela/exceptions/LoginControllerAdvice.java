@@ -16,7 +16,7 @@ public class LoginControllerAdvice {
 	@ExceptionHandler(BadCredentialsException.class)
 	ResponseEntity<ApiExceptionResponse> handleRegistrationException(BadCredentialsException exception) {
 
-		final ApiExceptionResponse response = new ApiExceptionResponse(exception.getMessage(), HttpStatus.UNAUTHORIZED, LocalDateTime.now());
+		final ApiExceptionResponse response = new ApiExceptionResponse("Invalid username or password", HttpStatus.UNAUTHORIZED, LocalDateTime.now());
 
 		return ResponseEntity.status(response.getStatus()).body(response);
 	}
