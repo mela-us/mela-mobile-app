@@ -1,5 +1,5 @@
-class Endpoints {
-  Endpoints._();
+class EndpointsConst {
+  EndpointsConst._();
 
   // base url
   static const String baseUrl = "http://jsonplaceholder.typicode.com";

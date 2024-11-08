@@ -2,7 +2,7 @@ import 'dart:async';
 
 import '../../../../core/data/network/dio/dio_client.dart';
 import '../../../../domain/entity/post/post_list.dart';
-import '../../constants/endpoints.dart';
+import '../../constants/endpoints_const.dart';
 import '../../rest_client.dart';
 
 class PostApi {
@@ -18,7 +18,7 @@ class PostApi {
   /// Returns list of post in response
   Future<PostList> getPosts() async {
     try {
-      final res = await _dioClient.dio.get(Endpoints.getPosts);
+      final res = await _dioClient.dio.get(EndpointsConst.getPosts);
       return PostList.fromJson(res.data);
     } catch (e) {
       print(e.toString());

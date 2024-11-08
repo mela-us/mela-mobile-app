@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-
+//Này là để đính kèm token vào header của request
 class AuthInterceptor extends Interceptor {
   final AsyncValueGetter<String?> accessToken;
 

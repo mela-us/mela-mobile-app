@@ -5,6 +5,11 @@ import '../error/error_store.dart';
 
 part 'form_store.g.dart';
 
+// FormStore: Đây là lớp chính lưu trữ các giá trị của các trường dữ liệu trong form (ví dụ: email, password, confirm password).
+// Nó XỬ LÍ VIỆC VALIDATE các trường này và trả về các lỗi tương ứng.
+
+//FormErrorStore:  quản lý các lỗi của từng trường trong form (email, password, confirm password). 
+//Nó sẽ LƯU TRỮ thông báo lỗi hoặc thông báo lỗi nếu trường dữ liệu đó không hợp lệ.
 class FormStore = _FormStore with _$FormStore;
 
 abstract class _FormStore with Store {
@@ -44,7 +49,9 @@ abstract class _FormStore with Store {
 
   @computed
   bool get canLogin =>
-      !formErrorStore.hasErrorsInLogin && userEmail.isNotEmpty && password.isNotEmpty;
+      !formErrorStore.hasErrorsInLogin &&
+      userEmail.isNotEmpty &&
+      password.isNotEmpty;
 
   @computed
   bool get canRegister =>

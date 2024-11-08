@@ -59,32 +59,49 @@ class AppThemeData {
   }
 
   static const ColorScheme lightColorScheme = ColorScheme(
-    primary: Color(0xFFd21e1d),
+    primary: Color(0xFF202244), //textInBackGround1
     primaryContainer: Color(0xFF9e1718),
-    secondary: Color(0xFFEFF3F3),
+
+    secondary: Color(0xFF545454), //textInBackGround2
     secondaryContainer: Color(0xFFFAFBFB),
-    surface: Color(0xFFFAFBFB),
+
+    tertiary: Color(0xFF0961F5), //ButtonnYesColor1
+    onTertiary: Color(0xFFFFFFFF), //ButtonnYesColor2 + backgroundTextFormColor
+
+    surface: Color(0xFFF5F9FF), //AppBackgroundColor
+
+    inversePrimary: Color(0xFF167F71), //backgroundButtonChooseColor
+    inverseSurface: Color(0xFFE8F1FF), //backgroundButtonNoChooseColor
+
     error: _lightFillColor,
     onError: _lightFillColor,
-    onPrimary: _lightFillColor,
-    onSecondary: Color(0xFF322942),
+    onPrimary: Color(0xFF202244), //AppBarContentColor
+    onSecondary: Color(0xFFB4BDC4), //guideTextColor
     onSurface: Color(0xFF241E30),
     brightness: Brightness.light,
   );
 
   static const ColorScheme darkColorScheme = ColorScheme(
-    primary: Color(0xFFFF8383),
-    primaryContainer: Color(0xFF1CDEC9),
-    secondary: Color(0xFF4D1F7C),
-    secondaryContainer: Color(0xFF451B6F),
-    surface: Color(0xFF1F1929),
-    // White with 0.05 opacity
-    error: _darkFillColor,
-    onError: _darkFillColor,
-    onPrimary: _darkFillColor,
-    onSecondary: _darkFillColor,
-    onSurface: _darkFillColor,
-    brightness: Brightness.dark,
+    primary: Color(0xFF202244), //textInBackGround1
+    primaryContainer: Color(0xFF9e1718),
+
+    secondary: Color(0xFF545454), //textInBackGround2
+    secondaryContainer: Color(0xFFFAFBFB),
+
+    tertiary: Color(0xFF0961F5), //ButtonnYesColor1
+    onTertiary: Color(0xFFFFFFFF), //ButtonnYesColor2 + backgroundTextFormColor
+
+    surface: Color(0xFFF5F9FF), //AppBackgroundColor
+
+    inversePrimary: Color(0xFF167F71), //backgroundButtonChooseColor
+    inverseSurface: Color(0xFFE8F1FF), //backgroundButtonNoChooseColor
+
+    error: _lightFillColor,
+    onError: _lightFillColor,
+    onPrimary: Color(0xFF202244), //AppBarContentColor
+    onSecondary: Color(0xFFB4BDC4), //guideTextColor
+    onSurface: Color(0xFF241E30),
+    brightness: Brightness.light,
   );
 
   static const _regular = FontWeight.w400;

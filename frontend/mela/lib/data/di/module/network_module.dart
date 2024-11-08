@@ -7,7 +7,7 @@ import '../../../core/data/network/dio/interceptors/auth_interceptor.dart';
 import '../../../core/data/network/dio/interceptors/logging_interceptor.dart';
 import '../../../di/service_locator.dart';
 import '../../network/apis/posts/post_api.dart';
-import '../../network/constants/endpoints.dart';
+import '../../network/constants/endpoints_const.dart';
 import '../../network/interceptors/error_interceptor.dart';
 import '../../network/rest_client.dart';
 import '../../sharedpref/shared_preference_helper.dart';
@@ -32,9 +32,9 @@ class NetworkModule {
     // dio:---------------------------------------------------------------------
     getIt.registerSingleton<DioConfigs>(
       const DioConfigs(
-        baseUrl: Endpoints.baseUrl,
-        connectionTimeout: Endpoints.connectionTimeout,
-        receiveTimeout:Endpoints.receiveTimeout,
+        baseUrl: EndpointsConst.baseUrl,
+        connectionTimeout: EndpointsConst.connectionTimeout,
+        receiveTimeout:EndpointsConst.receiveTimeout,
       ),
     );
     getIt.registerSingleton<DioClient>(

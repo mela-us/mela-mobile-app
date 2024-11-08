@@ -9,7 +9,7 @@ import 'package:mela/core/widgets/empty_app_bar_widget.dart';
 import 'package:mela/core/widgets/progress_indicator_widget.dart';
 import 'package:mela/core/widgets/rounded_button_widget.dart';
 import 'package:mela/core/widgets/textfield_widget.dart';
-import 'package:mela/data/sharedpref/constants/preferences.dart';
+import 'package:mela/data/sharedpref/constants/preferences_const.dart';
 import 'package:mela/presentation/home/store/theme/theme_store.dart';
 import 'package:mela/presentation/login/store/login_store.dart';
 import 'package:mela/utils/device/device_utils.dart';
@@ -198,7 +198,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget navigate(BuildContext context) {
     SharedPreferences.getInstance().then((prefs) {
-      prefs.setBool(Preferences.is_logged_in, true);
+      prefs.setBool(PreferencesConst.is_logged_in, true);
     });
 
     Future.delayed(Duration(milliseconds: 0), () {

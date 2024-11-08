@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mela/data/sharedpref/constants/preferences.dart';
+import 'package:mela/data/sharedpref/constants/preferences_const.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/home/store/language/language_store.dart';
 import 'package:mela/presentation/home/store/theme/theme_store.dart';
@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return IconButton(
       onPressed: () {
         SharedPreferences.getInstance().then((preference) {
-          preference.setBool(Preferences.is_logged_in, false);
+          preference.setBool(PreferencesConst.is_logged_in, false);
           Navigator.of(context).pushReplacementNamed(Routes.login);
         });
       },
