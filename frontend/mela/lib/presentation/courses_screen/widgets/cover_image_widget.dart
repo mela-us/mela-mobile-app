@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mela/constants/app_theme.dart';
 
 import '../../../constants/global.dart';
 import '../../../themes/default/colors_standards.dart';
-
 
 class CoverImageWidget extends StatelessWidget {
   const CoverImageWidget({super.key});
@@ -17,7 +17,7 @@ class CoverImageWidget extends StatelessWidget {
           width: 384,
           height: 290,
           decoration: BoxDecoration(
-            color: const Color(0xFFE8F1FF),
+            color: Theme.of(context).colorScheme.inverseSurface,
             borderRadius: BorderRadius.circular(20),
           ),
         ),
@@ -50,9 +50,12 @@ class CoverImageWidget extends StatelessWidget {
                 ),
                 padding: EdgeInsets.zero,
               ),
-              child: const Text(
+              child: Text(
                 'Học toán hàng ngày với Mela',
-                style: TextStyle(fontSize: 16, color: Colors.white),
+                style: Theme.of(context)
+                    .textTheme
+                    .content
+                    .copyWith(color: Theme.of(context).colorScheme.onTertiary),
               ),
             ),
           ),

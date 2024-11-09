@@ -3,6 +3,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/strings.dart';
 import 'package:mela/presentation/courses_screen/courses_screen.dart';
+import 'package:mela/presentation/signup_login_screen/login_screen.dart';
+import 'package:mela/utils/routes/routes.dart';
 // import 'package:mela/presentation/home/home.dart';
 // import 'package:mela/presentation/home/store/language/language_store.dart';
 // import 'package:mela/presentation/login/login.dart';
@@ -36,7 +38,7 @@ class MyApp extends StatelessWidget {
           theme: _themeStore.darkMode
               ? AppThemeData.darkThemeData
               : AppThemeData.lightThemeData,
-          // routes: Routes.routes,
+          routes: Routes.routes,
           // locale: Locale(_languageStore.locale),
           // supportedLocales: _languageStore.supportedLanguages
           //     .map((language) => Locale(language.locale, language.code))
@@ -52,7 +54,7 @@ class MyApp extends StatelessWidget {
           //   GlobalCupertinoLocalizations.delegate,
           // ],
           // home: _userStore.isLoggedIn ? HomeScreen() : LoginScreen(),
-          home: CoursesScreen(),
+          home: LoginScreen(onChangeToSignUp: (){},),
         );
       },
     );

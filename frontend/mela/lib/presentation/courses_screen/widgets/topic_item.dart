@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mela/constants/app_theme.dart';
 
 import '../../../domain/entity/topic/topic.dart';
 
@@ -44,10 +45,9 @@ class TopicItem extends StatelessWidget {
                 textAlign: TextAlign.center,
                 maxLines: null,
                 overflow: TextOverflow.visible,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context).textTheme.miniCaption.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
               ),
             ),
           ],

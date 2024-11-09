@@ -69,6 +69,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/core/widgets/progress_indicator_widget.dart';
 import 'package:mela/presentation/courses_screen/store/theme_store/theme_store.dart';
 import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
 import 'package:mela/presentation/my_app.dart';
@@ -110,13 +111,13 @@ class _CoursesScreenState extends State<CoursesScreen> {
               style: Theme.of(context)
                   .textTheme
                   .heading
-                  .copyWith(color: ColorsStandards.AppBarContentColor)),
+                  .copyWith(color: Theme.of(context).colorScheme.onPrimary)),
         ),
         actions: [
           IconButton(
             onPressed: () {},
             icon: const Icon(Icons.search),
-            color: ColorsStandards.AppBarContentColor,
+            color: Theme.of(context).colorScheme.onPrimary,
           )
         ],
       ),
@@ -124,7 +125,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
         builder: (context) {
           return _topicStore.loading
               ? const Center(
-                  child: CircularProgressIndicator(),
+                  child: CustomProgressIndicatorWidget(),
                 )
               : SingleChildScrollView(
                   physics: const ClampingScrollPhysics(),
@@ -133,27 +134,6 @@ class _CoursesScreenState extends State<CoursesScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        // //Header
-                        // Row(
-                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //     children: [
-                        //       Padding(
-                        //         padding: const EdgeInsets.only(left: 10),
-                        //         child: Text("MELA",
-                        //             style: Theme.of(context)
-                        //                 .textTheme
-                        //                 .heading
-                        //                 .copyWith(
-                        //                     color: ColorsStandards
-                        //                         .AppBarContentColor)),
-                        //       ),
-                        //       IconButton(
-                        //         onPressed: () {},
-                        //         icon: const Icon(Icons.search),
-                        //         color: ColorsStandards.AppBarContentColor,
-                        //       )
-                        //     ]),
-
                         //Cover Image Introduction
                         const CoverImageWidget(),
                         const SizedBox(height: 15),

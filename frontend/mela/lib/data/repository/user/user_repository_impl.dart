@@ -17,7 +17,12 @@ class UserRepositoryImpl extends UserRepository {
   // Login:---------------------------------------------------------------------
   @override
   Future<User?> login(LoginParams params) async {
-    return await Future.delayed(Duration(seconds: 2), () => User());
+    try {
+      // TODO: implement login
+      return await Future.delayed(Duration(seconds: 5), () => User(accessToken: "abc", username: "abc@gmail.com",  password: "abc"));
+    } catch (e) {
+      throw e;
+    }
   }
 
   @override

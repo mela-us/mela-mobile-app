@@ -178,3 +178,4 @@ extension CustomTextTheme on TextTheme {
   TextStyle get miniCaption => labelSmall!;
   TextStyle get buttonStyle => titleSmall!;
 }
+

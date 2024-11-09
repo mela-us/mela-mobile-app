@@ -16,6 +16,7 @@ import '../../../domain/usecase/user/save_login_in_status_usecase.dart';
 import '../../courses_screen/store/theme_store/theme_store.dart';
 import '../../home/store/language/language_store.dart';
 import '../../login/store/login_store.dart';
+import '../../signup_login_screen/store/user_login_store.dart';
 
 class StoreModule {
   static Future<void> configureStoreModuleInjection() async {
@@ -27,13 +28,11 @@ class StoreModule {
     );
 
     // stores:------------------------------------------------------------------
-    getIt.registerSingleton<UserStore>(
-      UserStore(
+    getIt.registerSingleton<UserLoginStore>(
+      UserLoginStore(
         getIt<IsLoggedInUseCase>(),
         getIt<SaveLoginStatusUseCase>(),
         getIt<LoginUseCase>(),
-        getIt<FormErrorStore>(),
-        getIt<ErrorStore>(),
       ),
     );
 
