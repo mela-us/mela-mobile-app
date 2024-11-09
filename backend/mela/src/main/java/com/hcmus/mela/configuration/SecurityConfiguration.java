@@ -41,6 +41,7 @@ public class SecurityConfiguration {
 																          "/swagger-ui/**",
 																	      "/swagger-ui.html",
 																	      "/actuator/**",
+																			"/reset-password/**",
 																			"/test-db-connection")
 													   .permitAll()
 													   .anyRequest()
