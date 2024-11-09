@@ -33,15 +33,17 @@ public class PasswordResetService {
         if (user == null) {
             return false; 
         }
+
         String otpCode = otpService.generateOtp();
         otpService.setOtpToUser(otpCode, user);
 
         EmailDetails details = new EmailDetails().builder()
                 .recipient(user.getUsername())
-                .subject("Verify OTP")
+                .subject("<b>Verify OTP</b>")
                 .msgBody(otpCode + " is your otp code")
                 .build();
         emailService.sendSimpleMail(details);
+        System.out.println(otpCode);
         return true;
     }
 

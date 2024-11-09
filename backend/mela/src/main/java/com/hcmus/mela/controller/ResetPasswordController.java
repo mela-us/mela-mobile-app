@@ -1,27 +1,20 @@
 package com.hcmus.mela.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.hcmus.mela.security.dto.ForgotPasswordRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.hcmus.mela.service.PasswordResetService;
 
-import org.springframework.web.bind.annotation.RequestBody;
-
 import com.hcmus.mela.security.dto.OtpConfirmationRequest;
 import com.hcmus.mela.security.dto.ResetPasswordRequest;
-
-
 
 @RestController
 @RequiredArgsConstructor
@@ -29,11 +22,17 @@ import com.hcmus.mela.security.dto.ResetPasswordRequest;
 public class ResetPasswordController {
     private final PasswordResetService passwordResetService;
 
-    @PostMapping("/{email}")
+    @PostMapping("/test")
+    @ResponseStatus(HttpStatus.OK)
+    public String test(@RequestBody ForgotPasswordRequest forgotPwRequest) {
+        return forgotPwRequest.getEmail();
+    }
+
+    @PostMapping()
     @ResponseStatus(HttpStatus.OK)
     @Operation(tags = "Forgot Password Service", 
         description = "You can use your email to change password. You will receive otp via email if your email is valid.")
-    public void forgotPasswordRequest (@PathVariable ForgotPasswordRequest forgotPwRequest) {
+    public void forgotPasswordRequest (@RequestBody ForgotPasswordRequest forgotPwRequest) {
         passwordResetService.generateOtpForResetPassword(forgotPwRequest);
     }
     

@@ -36,13 +36,18 @@ public class OtpService {
     }    
 
     public void setOtpToUser(String otp, User user) {
-        UserOtp userOtp = UserOtp.builder()
-            .otpCode(bCryptPasswordEncoder.encode(otp))
-            .expirationDate(LocalDateTime .now().plusMinutes(OTP_EXPIRY_MINUTES))
-            .user(user)
-            .build();
-        
-        userOtpRepository.deleteByUser(user); 
+        Optional<UserOtp> optionalUserOtp = userOtpRepository.findByUser(user);
+        UserOtp userOtp;
+        if (optionalUserOtp.isEmpty()) {
+            userOtp = new UserOtp();
+        }
+        else {
+            userOtp = optionalUserOtp.get();
+        }
+        userOtp.setUser(user);
+        userOtp.setOtpCode(bCryptPasswordEncoder.encode(otp));
+        userOtp.setExpirationDate(LocalDateTime .now().plusMinutes(OTP_EXPIRY_MINUTES));
+
         userOtpRepository.save(userOtp);
     }
 
@@ -51,11 +56,12 @@ public class OtpService {
         if (user == null) {
             return false;
         }
-        Optional<UserOtp> userOtp = userOtpRepository.findByUserAndOtpCode(user, bCryptPasswordEncoder.encode(otp));
+        Optional<UserOtp> userOtp = userOtpRepository.findByUser(user);
         if (userOtp.isEmpty()) {
             return false;
         }
-        if (userOtp.get().getExpirationDate().compareTo(LocalDateTime.now()) < 0) {
+        if (!userOtp.get().getOtpCode().equals(bCryptPasswordEncoder.encode(otp))
+                && userOtp.get().getExpirationDate().compareTo(LocalDateTime.now()) < 0) {
             return false;
         }
         return true;
