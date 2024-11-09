@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mela/models/exercise.dart';
 import 'package:mela/themes/default/colors_standards.dart';
 
+import '../domain/entity/topic/topic.dart';
 import '../models/divided_lecture.dart';
 import '../models/lecture.dart';
 import '../models/topic.dart';

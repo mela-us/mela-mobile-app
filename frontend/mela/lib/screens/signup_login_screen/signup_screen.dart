@@ -208,10 +208,10 @@ class __FormContentState extends State<_FormContent> {
                     return;
                   }
                   if (_formKey.currentState?.validate() ?? false) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CoursesScreen()));
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => CoursesScreen()));
                   }
                 }),
             const SizedBox(height: 16),

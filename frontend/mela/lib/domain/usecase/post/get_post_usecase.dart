@@ -10,6 +10,7 @@ class GetPostUseCase extends UseCase<PostList, void> {
 
   GetPostUseCase(this._postRepository);
 
+
   @override
   Future<PostList> call({required params}) {
     return _postRepository.getPosts();

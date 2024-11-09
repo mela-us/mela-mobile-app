@@ -10,7 +10,6 @@ import 'package:mela/core/widgets/progress_indicator_widget.dart';
 import 'package:mela/core/widgets/rounded_button_widget.dart';
 import 'package:mela/core/widgets/textfield_widget.dart';
 import 'package:mela/data/sharedpref/constants/preferences_const.dart';
-import 'package:mela/presentation/home/store/theme/theme_store.dart';
 import 'package:mela/presentation/login/store/login_store.dart';
 import 'package:mela/utils/device/device_utils.dart';
 import 'package:mela/utils/locale/app_localization.dart';
@@ -18,6 +17,7 @@ import 'package:mela/utils/routes/routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../di/service_locator.dart';
+import '../courses_screen/store/theme_store/theme_store.dart';
 
 class LoginScreen extends StatefulWidget {
   @override

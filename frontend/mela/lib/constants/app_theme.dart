@@ -168,13 +168,13 @@ class AppThemeData {
 
 // Extension to call follow figma text theme
 extension CustomTextTheme on TextTheme {
-  TextStyle? get bigTitle => headlineLarge;
-  TextStyle? get heading => headlineMedium;
-  TextStyle? get title => titleLarge;
-  TextStyle? get subHeading => bodyLarge;
-  TextStyle? get content => bodyMedium;
-  TextStyle? get subTitle => titleMedium;
-  TextStyle? get normal => labelMedium;
-  TextStyle? get miniCaption => labelSmall;
-  TextStyle? get buttonStyle => titleSmall;
+  TextStyle get bigTitle => headlineLarge!;
+  TextStyle get heading => headlineMedium!;
+  TextStyle get title => titleLarge!;
+  TextStyle get subHeading => bodyLarge!;
+  TextStyle get content => bodyMedium!;
+  TextStyle get subTitle => titleMedium!;
+  TextStyle get normal => labelMedium!;
+  TextStyle get miniCaption => labelSmall!;
+  TextStyle get buttonStyle => titleSmall!;
 }

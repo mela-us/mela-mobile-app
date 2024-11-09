@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mela/screens/lectures_in_topic_screen/widgets/lectures_in_topic_and_level.dart';
 
 import '../../constants/global.dart';
+import '../../domain/entity/topic/topic.dart';
 import '../../models/topic.dart';
 import '../../themes/default/colors_standards.dart';
 import '../../themes/default/text_styles.dart';
