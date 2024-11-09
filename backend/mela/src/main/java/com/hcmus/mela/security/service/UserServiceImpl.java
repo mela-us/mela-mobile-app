@@ -63,4 +63,9 @@ public class UserServiceImpl implements UserService {
 
 		return UserMapper.INSTANCE.convertToAuthenticatedUserDto(user);
 	}
+
+	@Override
+	public void updatePassword(User user) {
+		throw new UnsupportedOperationException("Unimplemented method 'updatePassword'");
+	}
 }
