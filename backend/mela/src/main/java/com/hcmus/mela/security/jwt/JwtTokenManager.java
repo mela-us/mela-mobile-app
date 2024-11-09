@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-
 @Component
 @RequiredArgsConstructor
 public class JwtTokenManager {
@@ -19,9 +18,12 @@ public class JwtTokenManager {
 	private final JwtProperties jwtProperties;
 
 	public String generateToken(User user) {
-
 		final String username = user.getUsername();
 		final UserRole userRole = user.getUserRole();
+
+		if (jwtProperties.getSecretKey() == null) {
+			throw new IllegalStateException("Secret key is not configured");
+		}
 
 		//@formatter:off
 		return JWT.create()
@@ -35,16 +37,12 @@ public class JwtTokenManager {
 	}
 
 	public String getUsernameFromToken(String token) {
-
 		final DecodedJWT decodedJWT = getDecodedJWT(token);
-
 		return decodedJWT.getSubject();
 	}
 
 	public boolean validateToken(String token, String authenticatedUsername) {
-
 		final String usernameFromToken = getUsernameFromToken(token);
-
 		final boolean equalsUsername = usernameFromToken.equals(authenticatedUsername);
 		final boolean tokenExpired = isTokenExpired(token);
 
@@ -52,23 +50,21 @@ public class JwtTokenManager {
 	}
 
 	private boolean isTokenExpired(String token) {
-
 		final Date expirationDateFromToken = getExpirationDateFromToken(token);
 		return expirationDateFromToken.before(new Date());
 	}
 
 	private Date getExpirationDateFromToken(String token) {
-
 		final DecodedJWT decodedJWT = getDecodedJWT(token);
-
 		return decodedJWT.getExpiresAt();
 	}
 
 	private DecodedJWT getDecodedJWT(String token) {
+		if (jwtProperties.getSecretKey() == null) {
+			throw new IllegalStateException("Secret key is not configured");
+		}
 
 		final JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(jwtProperties.getSecretKey().getBytes())).build();
-
 		return jwtVerifier.verify(token);
 	}
-
 }

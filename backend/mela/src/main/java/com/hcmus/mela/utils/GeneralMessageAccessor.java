@@ -2,16 +2,12 @@ package com.hcmus.mela.utils;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Locale;
 import java.util.Objects;
 
-/**
- * Created on Ağustos, 2020
- *
- * @author Faruk
- */
 @Service
 public class GeneralMessageAccessor {
 
@@ -24,10 +20,11 @@ public class GeneralMessageAccessor {
 	public String getMessage(Locale locale, String key, Object... parameter) {
 
 		if (Objects.isNull(locale)) {
-			return messageSource.getMessage(key, parameter, ProjectConstants.TURKISH_LOCALE);
+			System.out.println(LocaleContextHolder.getLocale());
+
+			return messageSource.getMessage(key, parameter, ProjectConstants.US_LOCALE);
 		}
 
 		return messageSource.getMessage(key, parameter, locale);
 	}
-
 }

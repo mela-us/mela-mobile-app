@@ -24,10 +24,7 @@ public class UserValidationService {
 
 	public void validateUser(RegistrationRequest registrationRequest) {
 
-		final String email = registrationRequest.getEmail();
 		final String username = registrationRequest.getUsername();
-
-		checkEmail(email);
 		checkUsername(username);
 	}
 
@@ -44,18 +41,4 @@ public class UserValidationService {
 		}
 
 	}
-
-	private void checkEmail(String email) {
-
-		final boolean existsByEmail = userRepository.existsByEmail(email);
-
-		if (existsByEmail) {
-
-			log.warn("{} is already being used!", email);
-
-			final String existsEmail = exceptionMessageAccessor.getMessage(null, EMAIL_ALREADY_EXISTS);
-			throw new RegistrationException(existsEmail);
-		}
-	}
-
 }

@@ -10,7 +10,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class LoginRequest {
-
 	@NotEmpty(message = "{login_username_not_empty}")
 	private String username;
 
