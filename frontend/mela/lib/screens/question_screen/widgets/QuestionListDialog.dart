@@ -30,34 +30,39 @@ class QuestionListDialog extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            //firstLine
-            Stack(
-              children: [
-                const Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 23),
-                    child: Text(
-                      'Danh sách câu hỏi',
-                      style: TextStyle(
-                        color: Color(0xFF202244),
-                        fontSize: 20,
-                        fontFamily: 'Asap',
-                        fontWeight: FontWeight.w600,
+            Container(
+              height: 60,
+              child: Stack(
+                children: [
+                  const Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 23),
+                      child: Text(
+                        'Danh sách câu hỏi',
+                        style: TextStyle(
+                          color: Color(0xFF202244),
+                          fontSize: 20,
+                          fontFamily: 'Asap',
+                          fontWeight: FontWeight.w600,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
-                ),
-                Positioned(
-                  right: 15,
-                  top: 15,
-                  child: IconButton(
-                      onPressed: () => onSubmitted(false),
-                      icon: const Icon(Icons.close)
+                  Positioned(
+                    right: 15,
+                    top: 15,
+                    child: IconButton(
+                        onPressed: () => onSubmitted(false),
+                        icon: const Icon(Icons.close)
+                    ),
                   ),
-                ),
-              ],
+
+                ],
+              ),
             ),
+            //firstLine
+
             const SizedBox(height: 10),
 
             Container(

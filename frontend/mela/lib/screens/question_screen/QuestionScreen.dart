@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:mela/constants/assets_path.dart';
 import 'package:mela/models/QuestionFamily/AQuestion.dart';
@@ -83,8 +84,8 @@ class _QuestionScreenState extends State<QuestionScreen>{
     String seconds = (_elapsedTime.inSeconds % 60).toString().padLeft(2, '0');
 
     return Scaffold(
-      backgroundColor: Global.AppBackgroundColor,
-      appBar: AppBar(
+        backgroundColor: Global.AppBackgroundColor,
+        appBar: AppBar(
           title: Padding(
             padding: EdgeInsets.only(left: Global.PracticeLeftPadding),
             child: Row(
@@ -107,9 +108,9 @@ class _QuestionScreenState extends State<QuestionScreen>{
               ],
             ),
           ),
-        backgroundColor: Global.AppBackgroundColor,
-        actions: [
-          Padding(
+          backgroundColor: Global.AppBackgroundColor,
+          actions: [
+            Padding(
               padding: EdgeInsets.only(right: Global.PracticeRightPadding),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -121,18 +122,18 @@ class _QuestionScreenState extends State<QuestionScreen>{
                     height: 30,
                   ),
                   Container(
-                    margin: EdgeInsets.only(bottom: 4),
-                    child: TextStandard.SubTitle(
+                      margin: EdgeInsets.only(bottom: 4),
+                      child: TextStandard.SubTitle(
                         '$hours:$minutes:$seconds',
                         const Color(0xFF0961F5),
-                    )
+                      )
                   ),
                 ],
               ),
-          )
-        ],
-      ),
-      body: SingleQuestionView(
+            )
+          ],
+        ),
+        body: SingleQuestionView(
           question: _currentQuestion,
           qNumber: _questions.indexOf(_currentQuestion) + 1,
           answer: _answers[_currentQuestionIndex],
@@ -140,46 +141,51 @@ class _QuestionScreenState extends State<QuestionScreen>{
           onContinueTextPressed: (String answer) {
             toNextQuestion(answer);
           },
-      ),
-      floatingActionButton: Container(
-        width: 220,
-        height: 45,
-        margin: const EdgeInsets.fromLTRB(
-            0,
-            0,
-            19,
-            30,
         ),
-        child: FloatingActionButton(
-          onPressed: _questionListButtonPressed,
-          backgroundColor: Color(0xFF0961F5),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0), // Thay đổi border circular tại đây
-          ),
-          child: Row(
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(left: 23),
-                  child: Image.asset(
-                    AssetsPath.select_list,
-                    width: 25,
-                    height: 25,
+        floatingActionButton: DraggableFab(
+          child: Container(
+            width: 220,
+            height: 45,
+            margin: const EdgeInsets.fromLTRB(
+              0,
+              0,
+              19,
+              30,
+            ),
+            child: FloatingActionButton(
+                onPressed: _questionListButtonPressed,
+                backgroundColor: Color(0xFF0961F5),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                      30.0),
+
+                ),
+                child: Center(
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 30),
+                        child: Image.asset(
+                          AssetsPath.select_list,
+                          width: 25,
+                          height: 25,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        //
+                        child: TextStandard.Button(
+                            'Danh sách câu',
+                            Colors.white
+                        ),
+                      )
+                    ],
                   ),
-              ),
-              Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  //
-                  child: TextStandard.Button(
-                    'Danh sách câu',
-                    Colors.white
-                  ),
-              )
-            ],
+                )
+            ),
+
           ),
         ),
-
-      )
-
     );
     // TODO: implement build
     throw UnimplementedError();

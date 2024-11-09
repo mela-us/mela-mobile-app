@@ -10,11 +10,6 @@ class Global {
   static double PracticeRightPadding = 34;
 
   static List<AQuestion> questions = [
-    FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null),
     QuizQuestion(
         quizChoice: ['12', '14', '16', '18'],
         id: 'QQ01',

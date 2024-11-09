@@ -28,22 +28,13 @@ class ExitDialog extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.end,
-            //   children: [
-            //     IconButton(
-            //       onPressed: xButtonPressed,
-            //       icon: const Icon(Icons.close),
-            //     ),
-            //   ],
-            // ),
             Padding(
               padding: const EdgeInsets.only(top: 25),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(left: 60),
+                    padding: EdgeInsets.only(left: 0),
                     child: Image.asset(
                       AssetsPath.exit_image,
                       width: 242,
@@ -87,9 +78,6 @@ class ExitDialog extends StatelessWidget{
         ),
       ),
     );
-
-    // TODO: implement build
-    throw UnimplementedError();
   }
 
 

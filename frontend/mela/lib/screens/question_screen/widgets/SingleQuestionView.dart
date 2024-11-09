@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:mela/constants/global.dart';
 import 'package:mela/models/QuestionFamily/AQuestion.dart';
@@ -84,50 +82,56 @@ class _SingleQuestionState extends State<SingleQuestionView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         //Question View
-        Container(
-          margin: EdgeInsets.fromLTRB(
-              30,
-              16.0,
-              Global.PracticeRightPadding,
-              0.0),
-          decoration: const BoxDecoration(
-            color: Colors.transparent,
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: const Offset(0, 3), // Đổ bóng
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(15, 18, 15, 18),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-
-                  TextStandard.SubTitle(
-                      'Câu $_qNumber:',
-                      const Color(0xFFFF6B00)
+        Row(
+          children: [
+            Expanded(
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(
+                      30,
+                      16.0,
+                      Global.PracticeRightPadding,
+                      0.0),
+                  decoration: const BoxDecoration(
+                    color: Colors.transparent,
                   ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: const Offset(0, 3), // Đổ bóng
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 18, 15, 18),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
 
-                  const SizedBox(height: 3.0),
+                          TextStandard.SubTitle(
+                              'Câu $_qNumber:',
+                              const Color(0xFFFF6B00)
+                          ),
 
-                  TextStandard.Content(
-                      _question.questionContent,
-                      const Color(0xFF393939)
-                  )
-                ],
-              ),
+                          const SizedBox(height: 3.0),
+
+                          TextStandard.Content(
+                              _question.questionContent,
+                              const Color(0xFF393939)
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
             ),
-          ),
+          ],
         ),
         const SizedBox(height: 27),
         Padding(
@@ -162,7 +166,7 @@ class _SingleQuestionState extends State<SingleQuestionView> {
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(16.0),
+                  borderRadius: BorderRadius.circular(12.0),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.2),
@@ -228,98 +232,12 @@ class _SingleQuestionState extends State<SingleQuestionView> {
           child: ListView.builder(
             itemCount: _question.choiceSize(),
             itemBuilder: (context, index) {
-              return index != _question.choiceSize() -1 ?
-                  //Not last tile.
-                Padding(
+              return index != _question.choiceSize() - 1 ?
+              //Not last tile.
+              Padding(
                   padding: EdgeInsets.only(bottom: 12),
-                  child: Container(
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(0, 3), // Đổ bóng
-                        ),
-                      ],
-                    ),
-                  child: RadioListTile<String>(
-                    title: TextStandard.Normal(
-                      makeChoiceFromIndex(index) +
-                          _question.getChoiceList()![index],
-                      Color(0xFF505050),
-                    ),
-                    value: _question.getChoiceList()![index],
-                    groupValue: selectedChoice,
-                    contentPadding:
-                        EdgeInsets.fromLTRB(18, 0, 15, 0),
-                    controlAffinity: ListTileControlAffinity.trailing,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedChoice = value;
-                        selectedChoiceKey = getAnswerFromIndex(index);
-                      });
-                    },
-                  ),
-                ),
-              ) :
-              Column(
-                children: [
-                  Container(
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(0, 3), // Đổ bóng
-                        ),
-                      ],
-                    ),
-                    child: RadioListTile<String>(
-                      title: TextStandard.Normal(
-                        makeChoiceFromIndex(index) +
-                          _question.getChoiceList()![index],
-                        Color(0xFF505050),
-                      ),
-                      value: _question.getChoiceList()![index],
-                      groupValue: selectedChoice,
-                      contentPadding:
-                      EdgeInsets.fromLTRB(18, 0, 15, 0),
-                      controlAffinity: ListTileControlAffinity.trailing,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedChoice = value;
-                          selectedChoiceKey = getAnswerFromIndex(index);
-                        });
-                      },
-                    ),
-                  ),
-                  Padding(
-                      padding:EdgeInsets.only(right: 9),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                              onPressed: () => _onContinueTextPressed(
-                                    getTrueAnswer(selectedChoiceKey)
-                                  ),
-                              child: TextStandard.SubTitle(
-                                  'Tiếp theo',
-                                  const Color(0xFF545454)
-                              )
-                          )
-                        ],
-                      )
-                  ),
-                ],
-              );
+                  child: radioTile(index)
+              ) : lastTileWidget(index);
             },
           ),
         ),
@@ -340,5 +258,80 @@ class _SingleQuestionState extends State<SingleQuestionView> {
   
   String getTrueAnswer(String? ans) {
     return ans ?? '';
+  }
+
+  Widget radioTile(int index){
+    return Container(
+      height: 60,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: const Offset(0, 3), // Đổ bóng
+          ),
+        ],
+      ),
+      child: RadioListTile<String>(
+        title: Align(
+          alignment: Alignment.centerLeft,
+          child: TextStandard.Normal(
+            makeChoiceFromIndex(index) +
+                _question.getChoiceList()![index],
+            Color(0xFF505050),
+          ),
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        value: _question.getChoiceList()![index],
+        groupValue: selectedChoice,
+        contentPadding:
+        EdgeInsets.fromLTRB(18, 0, 15, 12),
+        controlAffinity: ListTileControlAffinity.trailing,
+        onChanged: (value) {
+          setState(() {
+            selectedChoice = value;
+            selectedChoiceKey = getAnswerFromIndex(index);
+          });
+        },
+      ),
+    );
+  }
+
+  Widget notLastTileWidget(int index){
+    return Padding(
+      padding: EdgeInsets.only(bottom: 12),
+      child: radioTile(index),
+    );
+  }
+
+  Widget lastTileWidget(int index){
+    return Column(
+      children: [
+        radioTile(index),
+        SizedBox(height: 7),
+        Padding(
+            padding:EdgeInsets.only(right: 9),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                    onPressed: () => _onContinueTextPressed(
+                        getTrueAnswer(selectedChoiceKey)
+                    ),
+                    child: TextStandard.SubTitle(
+                        'Tiếp theo',
+                        const Color(0xFF545454)
+                    )
+                )
+              ],
+            )
+        ),
+      ],
+    );
   }
 }

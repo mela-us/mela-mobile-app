@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mela/models/QuestionFamily/AQuestion.dart';
+import 'package:mela/screens/review_screen/review_screen.dart';
 
 import '../../constants/assets_path.dart';
 import '../../constants/global.dart';
@@ -87,7 +88,7 @@ class ResultScreen extends StatelessWidget{
               ),
 
               SizedBox(width: 11),
-              valueDisplayContainer('THỜI GIAN', '0:22', Color(0xFF0961F5)),
+              valueDisplayContainer('THỜI GIAN', getTime(), Color(0xFF0961F5)),
             ],
           ),
           Expanded(
@@ -99,7 +100,7 @@ class ResultScreen extends StatelessWidget{
                   right: 0,
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 15),
-                    child: reviewButton(),
+                    child: reviewButton(context),
                   ),
                 ),
               ],
@@ -150,9 +151,17 @@ class ResultScreen extends StatelessWidget{
     );
   }
 
-  GestureDetector reviewButton() {
+  GestureDetector reviewButton(BuildContext context) {
     return GestureDetector(
-      onTap: reviewButtonPressed,
+      onTap: () =>
+      {
+        Navigator.push(
+            context,
+            _changeScreenAnimation(
+                ReviewScreen(questions: questions, answers: answers)
+            )
+        )
+      },
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
@@ -191,9 +200,6 @@ class ResultScreen extends StatelessWidget{
     );
   }
 
-  void reviewButtonPressed() {
-    print('Pressed');
-  }
 
   double calculatePoint(){
     int correct = 0;
@@ -205,10 +211,33 @@ class ResultScreen extends StatelessWidget{
     return correct/questions.length * 1.0;
   }
 
-  String getTime(){
+  String getTime() {
     String hours = elapsedTime.inHours.toString().padLeft(2, '0');
     String minutes = (elapsedTime.inMinutes % 60).toString().padLeft(2, '0');
 
     return '$hours:$minutes';
   }
+}
+PageRouteBuilder _changeScreenAnimation(Widget screen) {
+  return PageRouteBuilder(
+    pageBuilder: (context, ani, secAni) => screen,
+    transitionsBuilder: (context, ani, secAni,
+        child) {
+      const begin = Offset(1.0, 0.0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(
+          begin: begin,
+          end: end
+      ).chain(CurveTween(curve: curve));
+      var offsetAnimation = ani.drive(tween);
+
+      return SlideTransition(
+        position: offsetAnimation,
+        child: child,
+      );
+    },
+    transitionDuration: Duration(milliseconds: 500),
+  );
 }
