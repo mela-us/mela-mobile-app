@@ -1,17 +1,16 @@
 package com.hcmus.mela.service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
-import com.hcmus.mela.security.dto.EmailDetails;
-import com.hcmus.mela.security.dto.OtpConfirmationRequest;
+import com.hcmus.mela.security.dto.*;
+import com.hcmus.mela.security.jwt.JwtTokenForgetPasswordService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.hcmus.mela.model.User;
 import com.hcmus.mela.repository.UserOtpRepository;
 import com.hcmus.mela.repository.UserRepository;
-import com.hcmus.mela.security.dto.ForgotPasswordRequest;
-import com.hcmus.mela.security.dto.ResetPasswordRequest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +27,8 @@ public class PasswordResetService {
 
     private final EmailService emailService;
 
+    private final JwtTokenForgetPasswordService jwtTokenForgetPasswordService;
+
     public boolean generateOtpForResetPassword(ForgotPasswordRequest forgotPasswordRequest) {
         User user = userRepository.findByUsername(forgotPasswordRequest.getEmail());
         if (user == null) {
@@ -43,17 +44,25 @@ public class PasswordResetService {
                 .msgBody(otpCode + " is your otp code")
                 .build();
         emailService.sendSimpleMail(details);
-        System.out.println(otpCode);
         return true;
     }
 
-    public boolean validateOtp(OtpConfirmationRequest otpConfirmationRequest) {
-        return otpService.validateOtpOfUser(otpConfirmationRequest.getOtp(), otpConfirmationRequest.getEmail());
+    public Optional<OtpConfirmationResponse> validateOtp(OtpConfirmationRequest otpConfirmationRequest) {
+        if (otpService.validateOtpOfUser(otpConfirmationRequest.getOtp(), otpConfirmationRequest.getEmail())) {
+            String token = jwtTokenForgetPasswordService.generateToken(otpConfirmationRequest.getEmail());
+            OtpConfirmationResponse otpResponse = new OtpConfirmationResponse();
+            otpResponse.setEmail(otpConfirmationRequest.getEmail());
+            otpResponse.setJwt(token);
+            return Optional.of(otpResponse);
+        }
+        return Optional.empty();
     }
 
     public void resetPassword(ResetPasswordRequest resetPasswordRequest) {
-        User user = userRepository.findByUsername(resetPasswordRequest.getEmail());
-        user.setPassword(bCryptPasswordEncoder.encode(resetPasswordRequest.getNewPassword()));
-        userRepository.save(user);
+        if(jwtTokenForgetPasswordService.validateToken(resetPasswordRequest.getJwt(), resetPasswordRequest.getEmail())) {
+            User user = userRepository.findByUsername(resetPasswordRequest.getEmail());
+            user.setPassword(bCryptPasswordEncoder.encode(resetPasswordRequest.getNewPassword()));
+            userRepository.save(user);
+        }
     }
 }

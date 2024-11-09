@@ -1,5 +1,6 @@
 package com.hcmus.mela.controller;
 
+import com.hcmus.mela.security.dto.OtpConfirmationResponse;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,8 @@ import com.hcmus.mela.service.PasswordResetService;
 
 import com.hcmus.mela.security.dto.OtpConfirmationRequest;
 import com.hcmus.mela.security.dto.ResetPasswordRequest;
+
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,10 +42,11 @@ public class ResetPasswordController {
     @PostMapping("/validate-otp")
     @Operation(tags = "Otp Service", description = "You can enter the otp you receive via email.")
     public ResponseEntity<?> validateOtpRequest(@RequestBody OtpConfirmationRequest otpConfirmationRequest) {
-        if (passwordResetService.validateOtp(otpConfirmationRequest)) {
-            return new ResponseEntity<>("sucess", HttpStatus.OK);
+        Optional<OtpConfirmationResponse> optinalResponse = passwordResetService.validateOtp(otpConfirmationRequest);
+        if (optinalResponse.isEmpty()) {
+            return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(optinalResponse.get(), HttpStatus.OK);
     }
 
     @PostMapping("/reset-password")

@@ -21,5 +21,5 @@ public class ResetPasswordRequest {
     private String newPassword;
 
     @NotEmpty
-    private String secretToken;
+    private String jwt;
 }

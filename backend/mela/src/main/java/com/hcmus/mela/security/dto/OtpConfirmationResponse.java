@@ -17,5 +17,5 @@ public class OtpConfirmationResponse {
     private String email;
 
     @NotEmpty
-    private String secretToken;
+    private String jwt;
 }
