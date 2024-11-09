@@ -1,6 +1,5 @@
 package com.hcmus.mela.security.service;
 
-
 import com.hcmus.mela.model.User;
 import com.hcmus.mela.security.dto.AuthenticatedUserDto;
 import com.hcmus.mela.security.dto.RegistrationRequest;

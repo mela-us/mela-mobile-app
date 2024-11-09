@@ -1,6 +1,5 @@
 package com.hcmus.mela.security.service;
 
-
 import com.hcmus.mela.model.User;
 import com.hcmus.mela.model.UserRole;
 import com.hcmus.mela.repository.UserRepository;
@@ -16,7 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-
 
 @Slf4j
 @Service

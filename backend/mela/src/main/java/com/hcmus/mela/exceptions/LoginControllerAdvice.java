@@ -9,10 +9,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 
-
 @RestControllerAdvice(basePackageClasses = LoginController.class)
 public class LoginControllerAdvice {
-
 	@ExceptionHandler(BadCredentialsException.class)
 	ResponseEntity<ApiExceptionResponse> handleRegistrationException(BadCredentialsException exception) {
 

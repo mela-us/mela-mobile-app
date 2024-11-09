@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-
 @Configuration
 public class MessageConfiguration {
 
@@ -33,7 +32,6 @@ public class MessageConfiguration {
 
 	@Bean
 	public MessageSource validationMessageSource() {
-
 		final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
 		messageSource.setBasename("classpath:/messages/validation/ValidationMessages");
 		messageSource.setDefaultEncoding(ProjectConstants.DEFAULT_ENCODING);
@@ -49,5 +47,4 @@ public class MessageConfiguration {
 
 		return bean;
 	}
-
 }

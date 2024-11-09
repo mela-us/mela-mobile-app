@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Configuration;
 
 import static io.swagger.v3.oas.models.security.SecurityScheme.Type.HTTP;
 
-
 @Getter
 @Setter
 @Configuration

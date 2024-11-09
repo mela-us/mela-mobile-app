@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,5 +19,4 @@ public class ApiExceptionResponse {
 	private HttpStatus status;
 
 	private LocalDateTime time;
-
 }

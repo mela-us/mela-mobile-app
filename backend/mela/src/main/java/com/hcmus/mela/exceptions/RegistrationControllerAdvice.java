@@ -18,5 +18,4 @@ public class RegistrationControllerAdvice {
 
 		return ResponseEntity.status(response.getStatus()).body(response);
 	}
-
 }

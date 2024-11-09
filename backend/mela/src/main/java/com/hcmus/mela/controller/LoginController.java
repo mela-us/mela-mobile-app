@@ -1,16 +1,13 @@
 package com.hcmus.mela.controller;
 
-import com.hcmus.mela.repository.UserRepository;
 import com.hcmus.mela.security.dto.LoginRequest;
 import com.hcmus.mela.security.dto.LoginResponse;
 import com.hcmus.mela.security.jwt.JwtTokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 @RestController
 @RequiredArgsConstructor
@@ -28,5 +25,4 @@ public class LoginController {
 		return ResponseEntity.ok(loginResponse);
 	}
 
-	UserRepository userRepository;
 }
