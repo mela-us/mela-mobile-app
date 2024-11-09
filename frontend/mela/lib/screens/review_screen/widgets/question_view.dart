@@ -18,7 +18,9 @@ class QuestionView extends StatelessWidget{
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           questionWidget(notifier),
+
           const SizedBox(height: 27),
+
           Padding(
               padding: const EdgeInsets.only(left: 30),
               child: TextStandard.SubTitle(
@@ -26,10 +28,24 @@ class QuestionView extends StatelessWidget{
                   const Color(0xFF545454)
               )
           ),
+
           const SizedBox(height: 17),
 
           notifier.question is FitbQuestion ?
           answerWidgetFitb(notifier) : answerWidgetQuiz(notifier),
+
+          notifier.question is FitbQuestion ?
+          SizedBox(height: 27) : SizedBox(height: 15),
+
+
+          Padding(
+              padding: const EdgeInsets.only(left: 30),
+              child: TextStandard.SubTitle('Giải thích:', Color(0xFF545454)),
+          ),
+
+          // SizedBox(height: 17),
+          
+          explanationWidget('Phần giải thích cho đáp án nằm ở đây'),
 
         ],
       ),
@@ -81,6 +97,60 @@ Widget questionWidget(QAMixNotifier notifier){
 
                   TextStandard.Content(
                       notifier.question.questionContent,
+                      const Color(0xFF393939)
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
+Widget explanationWidget(String content){
+  return Row(
+    children: [
+      Expanded(
+        child: Container(
+          margin: EdgeInsets.fromLTRB(
+              30,
+              16.0,
+              Global.PracticeRightPadding,
+              0.0),
+          decoration: const BoxDecoration(
+            color: Colors.transparent,
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: const Offset(0, 3), // Đổ bóng
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(15, 18, 15, 18),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+
+                  TextStandard.SubTitle(
+                      'Lời giải:',
+                      const Color(0xFFFF6B00),
+                  ),
+
+                  const SizedBox(height: 3.0),
+
+                  TextStandard.Content(
+                      content,
                       const Color(0xFF393939)
                   )
                 ],
