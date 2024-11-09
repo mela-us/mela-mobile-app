@@ -2,7 +2,6 @@ package com.hcmus.mela.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Getter
@@ -11,11 +10,11 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user_otp")
+@Table(name = "otps")
 public class UserOtp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long otpId;
 
     @Column(name = "otp_code")
     private String otpCode;
@@ -24,5 +23,6 @@ public class UserOtp {
     private LocalDateTime expirationDate;
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User user;
 }

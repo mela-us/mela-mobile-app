@@ -3,18 +3,17 @@ package com.hcmus.mela.security.service;
 import com.hcmus.mela.model.User;
 import com.hcmus.mela.model.UserRole;
 import com.hcmus.mela.repository.UserRepository;
-import com.hcmus.mela.security.dto.AuthenticatedUserDto;
-import com.hcmus.mela.security.dto.RegistrationRequest;
-import com.hcmus.mela.security.dto.RegistrationResponse;
+import com.hcmus.mela.dto.service.AuthenticatedUserDto;
+import com.hcmus.mela.dto.request.RegistrationRequest;
+import com.hcmus.mela.dto.response.RegistrationResponse;
 import com.hcmus.mela.security.mapper.UserMapper;
-import com.hcmus.mela.service.UserValidationService;
 import com.hcmus.mela.utils.GeneralMessageAccessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Slf4j
 @Service
@@ -45,7 +44,7 @@ public class UserServiceImpl implements UserService {
 		final User user = UserMapper.INSTANCE.convertToUser(registrationRequest);
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		user.setUserRole(UserRole.USER);
-		user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+		user.setCreatedAt(LocalDateTime.now());
 		user.setUpdatedAt(user.getCreatedAt());
 
 		userRepository.save(user);
@@ -66,3 +65,4 @@ public class UserServiceImpl implements UserService {
 		return UserMapper.INSTANCE.convertToAuthenticatedUserDto(user);
 	}
 }
+

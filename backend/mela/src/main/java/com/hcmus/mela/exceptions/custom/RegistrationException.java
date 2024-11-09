@@ -1,4 +1,4 @@
-package com.hcmus.mela.exceptions;
+package com.hcmus.mela.exceptions.custom;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

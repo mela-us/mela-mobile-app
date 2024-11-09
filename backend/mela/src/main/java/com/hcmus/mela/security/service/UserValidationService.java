@@ -1,8 +1,8 @@
-package com.hcmus.mela.service;
+package com.hcmus.mela.security.service;
 
-import com.hcmus.mela.exceptions.RegistrationException;
+import com.hcmus.mela.exceptions.custom.RegistrationException;
 import com.hcmus.mela.repository.UserRepository;
-import com.hcmus.mela.security.dto.RegistrationRequest;
+import com.hcmus.mela.dto.request.RegistrationRequest;
 import com.hcmus.mela.utils.ExceptionMessageAccessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.hcmus.mela.security.dto;
+package com.hcmus.mela.dto.request;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;

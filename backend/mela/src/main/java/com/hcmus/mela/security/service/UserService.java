@@ -1,9 +1,9 @@
 package com.hcmus.mela.security.service;
 
 import com.hcmus.mela.model.User;
-import com.hcmus.mela.security.dto.AuthenticatedUserDto;
-import com.hcmus.mela.security.dto.RegistrationRequest;
-import com.hcmus.mela.security.dto.RegistrationResponse;
+import com.hcmus.mela.dto.service.AuthenticatedUserDto;
+import com.hcmus.mela.dto.request.RegistrationRequest;
+import com.hcmus.mela.dto.response.RegistrationResponse;
 
 public interface UserService {
 

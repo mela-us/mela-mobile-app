@@ -2,9 +2,8 @@ package com.hcmus.mela.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -13,12 +12,13 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
+@EqualsAndHashCode(of = "userId")
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long user_id;
+	private Long userId;
 
-	@Column(name = "username", unique = true, nullable = false)
+	@Column(name = "username", unique = true)
 	private String username;
 
 	@Column(name = "password_hash")
@@ -31,14 +31,15 @@ public class User {
 	private String imageUrl;
 
 	@Column(name = "created_at")
-	private Timestamp createdAt;
+	private LocalDateTime createdAt;
 
 	@Column(name = "updated_at")
-	private Timestamp updatedAt;
+	private LocalDateTime updatedAt;
 
 	@Column(name = "birthday")
-	private Date birthday;
+	private LocalDate birthday;
 
 	@Enumerated(EnumType.STRING)
+	@Column(name = "user_role")
 	private UserRole userRole;
 }

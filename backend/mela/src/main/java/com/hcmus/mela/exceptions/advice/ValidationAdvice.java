@@ -1,5 +1,6 @@
-package com.hcmus.mela.exceptions;
+package com.hcmus.mela.exceptions.advice;
 
+import com.hcmus.mela.exceptions.response.ValidationErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;

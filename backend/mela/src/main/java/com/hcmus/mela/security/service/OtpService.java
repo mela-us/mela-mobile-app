@@ -1,4 +1,4 @@
-package com.hcmus.mela.service;
+package com.hcmus.mela.security.service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -61,7 +61,7 @@ public class OtpService {
             return false;
         }
         if (!userOtp.get().getOtpCode().equals(bCryptPasswordEncoder.encode(otp))
-                && userOtp.get().getExpirationDate().compareTo(LocalDateTime.now()) < 0) {
+                && userOtp.get().getExpirationDate().isBefore(LocalDateTime.now())) {
             return false;
         }
         return true;

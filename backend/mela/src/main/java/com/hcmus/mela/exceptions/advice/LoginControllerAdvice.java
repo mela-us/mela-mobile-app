@@ -1,6 +1,7 @@
-package com.hcmus.mela.exceptions;
+package com.hcmus.mela.exceptions.advice;
 
 import com.hcmus.mela.controller.LoginController;
+import com.hcmus.mela.exceptions.response.ApiExceptionResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;

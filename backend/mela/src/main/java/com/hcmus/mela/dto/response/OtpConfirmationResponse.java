@@ -1,4 +1,4 @@
-package com.hcmus.mela.security.dto;
+package com.hcmus.mela.dto.response;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -11,11 +11,11 @@ import lombok.ToString;
 @Setter
 @ToString
 @NoArgsConstructor
-public class OtpConfirmationRequest {
-    @NotEmpty
+public class OtpConfirmationResponse {
     @Email
+    @NotEmpty
     private String email;
 
     @NotEmpty
-    private String otp;
+    private String jwt;
 }

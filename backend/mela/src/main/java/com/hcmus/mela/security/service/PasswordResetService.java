@@ -1,15 +1,18 @@
-package com.hcmus.mela.service;
+package com.hcmus.mela.security.service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
-import com.hcmus.mela.security.dto.*;
+import com.hcmus.mela.dto.request.ForgotPasswordRequest;
+import com.hcmus.mela.dto.request.OtpConfirmationRequest;
+import com.hcmus.mela.dto.request.ResetPasswordRequest;
+import com.hcmus.mela.dto.response.OtpConfirmationResponse;
+import com.hcmus.mela.dto.service.EmailDetails;
 import com.hcmus.mela.security.jwt.JwtTokenForgetPasswordService;
+import com.hcmus.mela.service.EmailService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.hcmus.mela.model.User;
-import com.hcmus.mela.repository.UserOtpRepository;
 import com.hcmus.mela.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;

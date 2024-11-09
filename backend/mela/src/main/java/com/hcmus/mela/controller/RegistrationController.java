@@ -1,7 +1,7 @@
 package com.hcmus.mela.controller;
 
-import com.hcmus.mela.security.dto.RegistrationRequest;
-import com.hcmus.mela.security.dto.RegistrationResponse;
+import com.hcmus.mela.dto.request.RegistrationRequest;
+import com.hcmus.mela.dto.response.RegistrationResponse;
 import com.hcmus.mela.security.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/register")
+@RequestMapping("/api/register")
 public class RegistrationController {
 
 	private final UserService userService;

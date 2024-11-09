@@ -1,4 +1,4 @@
-package com.hcmus.mela.security.dto;
+package com.hcmus.mela.dto.service;
 
 
 import com.hcmus.mela.model.UserRole;
