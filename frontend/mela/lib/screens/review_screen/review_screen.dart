@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mela/models/Notifiers/question_change_notifier.dart';
 import 'package:mela/models/QuestionFamily/AQuestion.dart';
+import 'package:mela/screens/review_screen/widgets/question_list_bar.dart';
 import 'package:mela/screens/review_screen/widgets/question_view.dart';
 import 'package:provider/provider.dart';
 
@@ -40,56 +41,85 @@ class _ReviewScreenState extends State<ReviewScreen> {
         _selectedIndex,
         _answers.elementAt(_selectedIndex)
     );
-
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _basicAppBar(),
+      appBar: _buildAppBar(),
       body: ChangeNotifierProvider(
         create: (_) => _notifier,
         child: QuestionView(),
+      ),
+      bottomNavigationBar: ChangeNotifierProvider(
+        create: (_) => _notifier,
+        child: QuestionListBar(questions: _questions, answers: _answers),
       )
     );
     // TODO: implement build
     throw UnimplementedError();
   }
+
+  Widget _buildReviewBody() {
+    return Stack(
+      children: [
+        Positioned.fill(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: QuestionView(),
+            )
+        ),
+        Positioned.fill(child: Align(
+          alignment: Alignment.bottomCenter,
+          child: QuestionListBar(questions: _questions, answers: _answers),
+        ))
+      ],
+    );
+    // return Column(
+    //   children: [
+    //     QuestionView(),
+    //     QuestionListBar(questions: _questions, answers: _answers),
+    //   ],
+    // );
+  }
+
+  AppBar _buildAppBar(){
+    return AppBar(
+      automaticallyImplyLeading: false,
+      title: Padding(
+        padding: EdgeInsets.only(left: Global.PracticeLeftPadding),
+        child: Row(
+          children: [
+            GestureDetector(
+              onTap: _backButtonPressed,
+              child: Image.asset(
+                AssetsPath.arrow_back_longer,
+                width: 26,
+                height: 20,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 11.79),
+              child: TextStandard.Heading(
+                  'Luyện tập',
+                  Global.AppBarContentColor
+              ),
+            )
+          ],
+        ),
+      ),
+      backgroundColor: Global.AppBackgroundColor,
+    );
+  }
+
+
 }
 
 
 void _backButtonPressed() {
 }
 
-AppBar _basicAppBar(){
-  return AppBar(
-    automaticallyImplyLeading: false,
-    title: Padding(
-      padding: EdgeInsets.only(left: Global.PracticeLeftPadding),
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: _backButtonPressed,
-            child: Image.asset(
-              AssetsPath.arrow_back_longer,
-              width: 26,
-              height: 20,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 11.79),
-            child: TextStandard.Heading(
-                'Luyện tập',
-                Global.AppBarContentColor
-            ),
-          )
-        ],
-      ),
-    ),
-    backgroundColor: Global.AppBackgroundColor,
-  );
-}
+
 
 
 

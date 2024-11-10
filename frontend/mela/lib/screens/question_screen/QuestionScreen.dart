@@ -7,7 +7,7 @@ import 'package:mela/models/QuestionFamily/AQuestion.dart';
 import 'package:mela/screens/question_screen/widgets/ExitDialog.dart';
 import 'package:mela/screens/question_screen/widgets/QuestionListDialog.dart';
 import 'package:mela/screens/question_screen/widgets/SingleQuestionView.dart';
-import 'package:mela/screens/result_screen/ResultScreen.dart';
+import 'package:mela/screens/result_screen/result_screen.dart';
 
 import '../../constants/global.dart';
 import '../../themes/default/text_styles.dart';
