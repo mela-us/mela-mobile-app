@@ -25,7 +25,7 @@ public class ForgotPasswordController {
     private final ForgotPasswordService forgotPasswordService;
 
     @PostMapping
-    @Operation(tags = "Forgot Password Service - Enter Email", description = "You can enter your email to receive otp via the email.")
+    @Operation(tags = "Forgot Password Service", description = "You can enter your email to receive otp via the email.")
     public ResponseEntity<ForgotPasswordResponse> forgotPasswordRequest(@Valid @RequestBody ForgotPasswordRequest forgotPasswordRequest) {
 
         final ForgotPasswordResponse forgotPasswordResponse = forgotPasswordService.sendOtpCodeByEmail(forgotPasswordRequest);
@@ -34,14 +34,14 @@ public class ForgotPasswordController {
     }
 
     @PostMapping("/validate-otp")
-    @Operation(tags = "Forgot Password Service - Otp Validation", description = "You must provide otp code to verify your account.")
+    @Operation(tags = "Forgot Password Service", description = "You must provide otp code to verify your account.")
     public ResponseEntity<OtpConfirmationResponse> validateOtpRequest(@Valid @RequestBody OtpConfirmationRequest otpConfirmationRequest) {
         OtpConfirmationResponse otpConfirmationResponse = forgotPasswordService.validateOtp(otpConfirmationRequest);
         return ResponseEntity.status(HttpStatus.OK).body(otpConfirmationResponse);
     }
 
     @PostMapping("/reset-password")
-    @Operation(tags = "Forgot Password Service - Reset Password", description = "You can reset your password.")
+    @Operation(tags = "Forgot Password Service", description = "You can reset your password.")
     public ResponseEntity<ResetPasswordResponse> resetPasswordRequest(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
         ResetPasswordResponse resetPasswordResponse = forgotPasswordService.resetPassword(resetPasswordRequest);
         return ResponseEntity.status(HttpStatus.OK).body(resetPasswordResponse);
