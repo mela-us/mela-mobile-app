@@ -10,6 +10,7 @@ dependencies:
   flutter_countdown_timer: ^4.1.0
   flutter:
     sdk: flutter
+  fl_chart: ^0.69.0
 
 
 dev_dependencies:
