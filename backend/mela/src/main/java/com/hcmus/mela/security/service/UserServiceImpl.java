@@ -1,5 +1,6 @@
 package com.hcmus.mela.security.service;
 
+import com.hcmus.mela.dto.request.ResetPasswordRequest;
 import com.hcmus.mela.model.User;
 import com.hcmus.mela.model.UserRole;
 import com.hcmus.mela.repository.UserRepository;
@@ -63,6 +64,16 @@ public class UserServiceImpl implements UserService {
 		final User user = findByUsername(username);
 
 		return UserMapper.INSTANCE.convertToAuthenticatedUserDto(user);
+	}
+
+	@Override
+	public void updatePassword(String username, String newPassword) {
+		User user = this.findByUsername(username);
+		if (user != null) {
+			user.setPassword(bCryptPasswordEncoder.encode(newPassword));
+			user.setUpdatedAt(LocalDateTime.now());
+			userRepository.save(user);
+		}
 	}
 }
 

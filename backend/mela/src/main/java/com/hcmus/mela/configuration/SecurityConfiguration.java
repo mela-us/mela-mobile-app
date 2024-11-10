@@ -37,14 +37,15 @@ public class SecurityConfiguration {
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 				.authorizeHttpRequests(request -> request.requestMatchers("/api/register",
 																	      "/api/login",
-																		  "/api/forgot-password/**",
+																		  "/api/forgot-password",
 																	      "/v3/api-docs/**",
 																          "/swagger-ui/**",
 																	      "/swagger-ui.html",
 																	      "/actuator/**")
 													   .permitAll()
 													   .anyRequest()
-													   .authenticated())
+													   .permitAll()/*
+													   .authenticated()*/)
 				.sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.exceptionHandling(handler -> handler.authenticationEntryPoint(unauthorizedHandler))
 				.build();

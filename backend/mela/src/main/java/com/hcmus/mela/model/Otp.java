@@ -11,7 +11,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "otps")
-public class UserOtp {
+@EqualsAndHashCode(of = "otpId")
+public class Otp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long otpId;
@@ -20,7 +21,7 @@ public class UserOtp {
     private String otpCode;
 
     @Column(name = "expired_at")
-    private LocalDateTime expirationDate;
+    private LocalDateTime expireAt;
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")

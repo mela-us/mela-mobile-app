@@ -4,66 +4,59 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
 
+import com.hcmus.mela.model.Otp;
+import com.hcmus.mela.repository.OtpRepository;
 import com.hcmus.mela.repository.UserRepository;
+import org.springframework.cglib.core.Local;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.hcmus.mela.model.User;
-import com.hcmus.mela.model.UserOtp;
-import com.hcmus.mela.repository.UserOtpRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class OtpService {
+    private final Random random = new Random();
+
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    private final UserOtpRepository userOtpRepository;
-
-    private final UserRepository userRepository;
+    private final OtpRepository otpRepository;
 
     private static final int OTP_EXPIRY_MINUTES = 5;
 
 
-    public String generateOtp() {
-        Random random = new Random();
-        StringBuilder otp = new StringBuilder();
-        for (int i = 0; i < 6; i++) {
-            otp.append(random.nextInt(10));
+    public String generateOtpCode(int length) {
+        StringBuilder otpCode = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            otpCode.append(this.random.nextInt(10));
         }
-        return otp.toString();
+        return otpCode.toString();
     }    
 
-    public void setOtpToUser(String otp, User user) {
-        Optional<UserOtp> optionalUserOtp = userOtpRepository.findByUser(user);
-        UserOtp userOtp;
-        if (optionalUserOtp.isEmpty()) {
-            userOtp = new UserOtp();
+    public void cacheOtpCode(String otpCode, User user) {
+        Otp otp = otpRepository.findByUser(user);
+        if (otp == null) {
+            otp = new Otp();
         }
-        else {
-            userOtp = optionalUserOtp.get();
-        }
-        userOtp.setUser(user);
-        userOtp.setOtpCode(bCryptPasswordEncoder.encode(otp));
-        userOtp.setExpirationDate(LocalDateTime .now().plusMinutes(OTP_EXPIRY_MINUTES));
+        otp.setUser(user);
+        otp.setOtpCode(bCryptPasswordEncoder.encode(otpCode));
+        otp.setExpireAt(LocalDateTime.now().plusMinutes(OTP_EXPIRY_MINUTES));
 
-        userOtpRepository.save(userOtp);
+        otpRepository.save(otp);
     }
 
-    public boolean validateOtpOfUser(String otp, String email) {
-        User user = userRepository.findByUsername(email);
-        if (user == null) {
+    public boolean validateOtpOfUser(String otpCode, String username) {
+        Otp otp = otpRepository.findByUserUsername(username);
+        if (otp == null) {
             return false;
         }
-        Optional<UserOtp> userOtp = userOtpRepository.findByUser(user);
-        if (userOtp.isEmpty()) {
+        if (!bCryptPasswordEncoder.matches(otpCode, otp.getOtpCode())
+                || otp.getExpireAt().isBefore(LocalDateTime.now())) {
             return false;
         }
-        if (!userOtp.get().getOtpCode().equals(bCryptPasswordEncoder.encode(otp))
-                && userOtp.get().getExpirationDate().isBefore(LocalDateTime.now())) {
-            return false;
-        }
+        otpRepository.deleteById(otp.getOtpId());
         return true;
     }
 }

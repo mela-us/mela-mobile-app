@@ -13,13 +13,13 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class ResetPasswordRequest {
-    @NotEmpty
-    @Email
-    private String email;
+    @NotEmpty(message = "{forgot_password_username_not_empty}")
+    @Email(message = "{forgot_password_username_must_be_email}")
+    private String username;
 
-    @NotEmpty
+    @NotEmpty(message = "{forgot_password_pw_not_empty}")
     private String newPassword;
 
-    @NotEmpty
-    private String jwt;
+    @NotEmpty(message = "{forgot_password_token_not_empty}")
+    private String token;
 }

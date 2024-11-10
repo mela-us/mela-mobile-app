@@ -20,8 +20,6 @@ public class GeneralMessageAccessor {
 	public String getMessage(Locale locale, String key, Object... parameter) {
 
 		if (Objects.isNull(locale)) {
-			System.out.println(LocaleContextHolder.getLocale());
-
 			return messageSource.getMessage(key, parameter, ProjectConstants.US_LOCALE);
 		}
 

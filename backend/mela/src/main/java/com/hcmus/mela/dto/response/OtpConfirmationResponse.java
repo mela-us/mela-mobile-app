@@ -12,10 +12,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class OtpConfirmationResponse {
-    @Email
-    @NotEmpty
-    private String email;
-
-    @NotEmpty
-    private String jwt;
+    private String username;
+    private String token;
+    private String message;
 }

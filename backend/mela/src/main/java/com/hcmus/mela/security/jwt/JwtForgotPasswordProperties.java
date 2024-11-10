@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 @Setter
 @Configuration
-@ConfigurationProperties(prefix = "forget.pw")
-public class JwtForgetPasswordProperties {
+@ConfigurationProperties(prefix = "forgot.pw")
+public class JwtForgotPasswordProperties {
 
 	private String issuer;
 
