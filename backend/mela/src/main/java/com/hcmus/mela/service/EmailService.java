@@ -1,15 +1,13 @@
 package com.hcmus.mela.service;
 
+import com.hcmus.mela.dto.service.EmailDetails;
 import com.hcmus.mela.exceptions.custom.ForgotPasswordException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-
-import com.hcmus.mela.dto.service.EmailDetails;
-
-import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +16,7 @@ public class EmailService {
     private final JavaMailSender javaMailSender;
 
     public String generateOtpNotify(String username, String otpCode) {
-        return  "<html>" +
+        return "<html>" +
                 "<body>" +
                 "<h3 style='color: #4CAF50;'>OTP Verification</h3>" +
                 "<p style='font-size: 16px;'>Hello <strong>" + username + "</strong>,</p>" +
@@ -31,8 +29,7 @@ public class EmailService {
                 "</html>";
     }
 
-    public void sendSimpleMail(EmailDetails details)
-    {
+    public void sendSimpleMail(EmailDetails details) {
         MimeMessage message = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);

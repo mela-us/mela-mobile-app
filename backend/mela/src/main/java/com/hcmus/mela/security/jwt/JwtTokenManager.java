@@ -15,17 +15,17 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtTokenManager {
 
-	private final JwtProperties jwtProperties;
+    private final JwtProperties jwtProperties;
 
-	public String generateToken(User user) {
-		final String username = user.getUsername();
-		final UserRole userRole = user.getUserRole();
+    public String generateToken(User user) {
+        final String username = user.getUsername();
+        final UserRole userRole = user.getUserRole();
 
-		if (jwtProperties.getSecretKey() == null) {
-			throw new IllegalStateException("Secret key is not configured");
-		}
+        if (jwtProperties.getSecretKey() == null) {
+            throw new IllegalStateException("Secret key is not configured");
+        }
 
-		//@formatter:off
+        //@formatter:off
 		return JWT.create()
 				.withSubject(username)
 				.withIssuer(jwtProperties.getIssuer())
@@ -34,37 +34,37 @@ public class JwtTokenManager {
 				.withExpiresAt(new Date(System.currentTimeMillis() + jwtProperties.getExpirationMinute() * 60 * 1000))
 				.sign(Algorithm.HMAC256(jwtProperties.getSecretKey().getBytes()));
 		//@formatter:on
-	}
+    }
 
-	public String getUsernameFromToken(String token) {
-		final DecodedJWT decodedJWT = getDecodedJWT(token);
-		return decodedJWT.getSubject();
-	}
+    public String getUsernameFromToken(String token) {
+        final DecodedJWT decodedJWT = getDecodedJWT(token);
+        return decodedJWT.getSubject();
+    }
 
-	public boolean validateToken(String token, String authenticatedUsername) {
-		final String usernameFromToken = getUsernameFromToken(token);
-		final boolean equalsUsername = usernameFromToken.equals(authenticatedUsername);
-		final boolean tokenExpired = isTokenExpired(token);
+    public boolean validateToken(String token, String authenticatedUsername) {
+        final String usernameFromToken = getUsernameFromToken(token);
+        final boolean equalsUsername = usernameFromToken.equals(authenticatedUsername);
+        final boolean tokenExpired = isTokenExpired(token);
 
-		return equalsUsername && !tokenExpired;
-	}
+        return equalsUsername && !tokenExpired;
+    }
 
-	private boolean isTokenExpired(String token) {
-		final Date expirationDateFromToken = getExpirationDateFromToken(token);
-		return expirationDateFromToken.before(new Date());
-	}
+    private boolean isTokenExpired(String token) {
+        final Date expirationDateFromToken = getExpirationDateFromToken(token);
+        return expirationDateFromToken.before(new Date());
+    }
 
-	private Date getExpirationDateFromToken(String token) {
-		final DecodedJWT decodedJWT = getDecodedJWT(token);
-		return decodedJWT.getExpiresAt();
-	}
+    private Date getExpirationDateFromToken(String token) {
+        final DecodedJWT decodedJWT = getDecodedJWT(token);
+        return decodedJWT.getExpiresAt();
+    }
 
-	private DecodedJWT getDecodedJWT(String token) {
-		if (jwtProperties.getSecretKey() == null) {
-			throw new IllegalStateException("Secret key is not configured");
-		}
+    private DecodedJWT getDecodedJWT(String token) {
+        if (jwtProperties.getSecretKey() == null) {
+            throw new IllegalStateException("Secret key is not configured");
+        }
 
-		final JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(jwtProperties.getSecretKey().getBytes())).build();
-		return jwtVerifier.verify(token);
-	}
+        final JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(jwtProperties.getSecretKey().getBytes())).build();
+        return jwtVerifier.verify(token);
+    }
 }

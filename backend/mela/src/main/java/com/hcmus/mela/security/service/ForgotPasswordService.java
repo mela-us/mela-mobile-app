@@ -8,14 +8,14 @@ import com.hcmus.mela.dto.response.OtpConfirmationResponse;
 import com.hcmus.mela.dto.response.ResetPasswordResponse;
 import com.hcmus.mela.dto.service.EmailDetails;
 import com.hcmus.mela.exceptions.custom.ForgotPasswordException;
+import com.hcmus.mela.model.User;
+import com.hcmus.mela.repository.UserRepository;
 import com.hcmus.mela.security.jwt.JwtTokenForgotPasswordService;
 import com.hcmus.mela.service.EmailService;
 import com.hcmus.mela.utils.ExceptionMessageAccessor;
-import org.springframework.stereotype.Service;
-import com.hcmus.mela.model.User;
-import com.hcmus.mela.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
@@ -45,7 +45,8 @@ public class ForgotPasswordService {
         }
         String otpCode = otpService.generateOtpCode(6);
         String otpMessage = emailService.generateOtpNotify(user.getUsername(), otpCode);
-        EmailDetails details = new EmailDetails().builder()
+        new EmailDetails();
+        EmailDetails details = EmailDetails.builder()
                 .recipient(user.getUsername())
                 .subject("Verify OTP - Forget Password")
                 .msgBody(otpMessage)
@@ -56,7 +57,7 @@ public class ForgotPasswordService {
         return new ForgotPasswordResponse("Send otp code to email successfully!");
     }
 
-    public  OtpConfirmationResponse validateOtp(OtpConfirmationRequest otpConfirmationRequest) {
+    public OtpConfirmationResponse validateOtp(OtpConfirmationRequest otpConfirmationRequest) {
         if (otpService.validateOtpOfUser(otpConfirmationRequest.getOtpCode(), otpConfirmationRequest.getUsername())) {
             String token = jwtTokenForgotPasswordService.generateToken(otpConfirmationRequest.getUsername());
             OtpConfirmationResponse otpConfirmationResponse = new OtpConfirmationResponse();
@@ -69,7 +70,7 @@ public class ForgotPasswordService {
     }
 
     public ResetPasswordResponse resetPassword(ResetPasswordRequest resetPasswordRequest) {
-        if(jwtTokenForgotPasswordService.validateToken(resetPasswordRequest.getToken(), resetPasswordRequest.getUsername())) {
+        if (jwtTokenForgotPasswordService.validateToken(resetPasswordRequest.getToken(), resetPasswordRequest.getUsername())) {
             userServiceImpl.updatePassword(resetPasswordRequest.getUsername(), resetPasswordRequest.getNewPassword());
             return new ResetPasswordResponse("Reset password successfully!");
         }

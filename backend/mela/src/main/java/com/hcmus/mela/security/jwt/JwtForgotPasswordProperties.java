@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "forgot.pw")
 public class JwtForgotPasswordProperties {
 
-	private String issuer;
+    private String issuer;
 
-	private String secretKey;
+    private String secretKey;
 
-	private long expirationMinute;
+    private long expirationMinute;
 
 }

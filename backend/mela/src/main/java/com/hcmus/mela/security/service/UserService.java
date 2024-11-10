@@ -1,17 +1,17 @@
 package com.hcmus.mela.security.service;
 
-import com.hcmus.mela.model.User;
-import com.hcmus.mela.dto.service.AuthenticatedUserDto;
 import com.hcmus.mela.dto.request.RegistrationRequest;
 import com.hcmus.mela.dto.response.RegistrationResponse;
+import com.hcmus.mela.dto.service.AuthenticatedUserDto;
+import com.hcmus.mela.model.User;
 
 public interface UserService {
 
-	User findByUsername(String username);
+    User findByUsername(String username);
 
-	RegistrationResponse registration(RegistrationRequest registrationRequest);
+    RegistrationResponse registration(RegistrationRequest registrationRequest);
 
-	AuthenticatedUserDto findAuthenticatedUserByUsername(String username);
+    AuthenticatedUserDto findAuthenticatedUserByUsername(String username);
 
-	void updatePassword(String username, String newPassword);
+    void updatePassword(String username, String newPassword);
 }

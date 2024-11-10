@@ -1,31 +1,22 @@
 package com.hcmus.mela.security.service;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.Random;
-
 import com.hcmus.mela.model.Otp;
+import com.hcmus.mela.model.User;
 import com.hcmus.mela.repository.OtpRepository;
-import com.hcmus.mela.repository.UserRepository;
-import org.springframework.cglib.core.Local;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.hcmus.mela.model.User;
-
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
 public class OtpService {
-    private final Random random = new Random();
-
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    private final OtpRepository otpRepository;
-
     private static final int OTP_EXPIRY_MINUTES = 5;
-
+    private final Random random = new Random();
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final OtpRepository otpRepository;
 
     public String generateOtpCode(int length) {
         StringBuilder otpCode = new StringBuilder();
@@ -33,7 +24,7 @@ public class OtpService {
             otpCode.append(this.random.nextInt(10));
         }
         return otpCode.toString();
-    }    
+    }
 
     public void cacheOtpCode(String otpCode, User user) {
         Otp otp = otpRepository.findByUser(user);

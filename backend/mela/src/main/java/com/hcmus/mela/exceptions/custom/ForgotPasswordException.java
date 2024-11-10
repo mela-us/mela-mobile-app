@@ -6,5 +6,5 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class ForgotPasswordException extends RuntimeException {
-	private final String errorMessage;
+    private final String errorMessage;
 }
