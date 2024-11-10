@@ -1,78 +1,8 @@
-// import 'package:flutter/foundation.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_mobx/flutter_mobx.dart';
-// import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
-
-// import '../../di/service_locator.dart';
-
-// class CoursesScreen extends StatefulWidget {
-//   const CoursesScreen({super.key});
-
-//   @override
-//   State<CoursesScreen> createState() => _CoursesScreenState();
-// }
-
-// class _CoursesScreenState extends State<CoursesScreen> {
-//   //stores:---------------------------------------------------------------------
-//   final TopicStore _topicStore = getIt<TopicStore>();
-
-//     @override
-//   void didChangeDependencies() {
-//     super.didChangeDependencies();
-
-//     // check to see if already called api
-//     if (!_topicStore.loading) {
-//       _topicStore.getTopics();
-//     }
-//   }
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text("Courses"),
-//       ),
-//       body: Observer(
-//         builder: (context) {
-//           return _topicStore.loading
-//               ? const Center(
-//                   child: CircularProgressIndicator(),
-//                 )
-//               : Column(
-//                   children: [
-//                     Expanded(
-//                       child: ListView.separated(
-//                           itemBuilder: (context, position) {
-//                             return ListTile(
-//                               title: Text( _topicStore
-//                                       .topicList!.topics[position].topicName
-//                                   ),
-//                               onTap: () {
-//                                 //
-//                               },
-//                             );
-//                           },
-//                           separatorBuilder: (_, position) {
-//                             return Divider();
-//                           },
-//                           itemCount: _topicStore.topicList!.topics.length),
-//                     ),
-//                         // itemCount: _topicStore.topicList!.topics.length)
-//                   ],
-//                 );
-//         },
-//       ),
-//     );
-//   }
-// }
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/core/widgets/progress_indicator_widget.dart';
-import 'package:mela/presentation/courses_screen/store/theme_store/theme_store.dart';
 import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
-import 'package:mela/presentation/my_app.dart';
 
 import '../../di/service_locator.dart';
 import '../../themes/default/colors_standards.dart';
@@ -88,7 +18,6 @@ class CoursesScreen extends StatefulWidget {
 
 class _CoursesScreenState extends State<CoursesScreen> {
   //stores:---------------------------------------------------------------------
-  final ThemeStore _themeStore = getIt<ThemeStore>();
   final TopicStore _topicStore = getIt<TopicStore>();
 
   @override

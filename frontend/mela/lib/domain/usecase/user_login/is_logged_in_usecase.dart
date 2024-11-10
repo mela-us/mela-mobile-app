@@ -7,7 +7,7 @@ class IsLoggedInUseCase implements UseCase<bool, void> {
   IsLoggedInUseCase(this._userLoginRepository);
 
   @override
-  Future<bool> call({required void params}) async {
-    return await _userLoginRepository.isLoggedIn;
+  Future<bool> call({required void params}){
+    return _userLoginRepository.isLoggedIn;
   }
 }

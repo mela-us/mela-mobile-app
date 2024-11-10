@@ -29,7 +29,7 @@ class LoginUseCase implements UseCase<User?, LoginParams> {
   LoginUseCase(this._userLoginRepository);
 
   @override
-  Future<User?> call({required LoginParams params}) async {
+  Future<User?> call({required LoginParams params}){
     return _userLoginRepository.login(params);
   }
 }

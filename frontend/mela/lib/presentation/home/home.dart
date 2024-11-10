@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
       onPressed: () {
         SharedPreferences.getInstance().then((preference) {
           preference.setBool(PreferencesConst.is_logged_in, false);
-          Navigator.of(context).pushReplacementNamed(Routes.login);
+          Navigator.of(context).pushReplacementNamed(Routes.loginScreen);
         });
       },
       icon: Icon(

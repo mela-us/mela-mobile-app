@@ -1,5 +1,3 @@
-import 'package:mela/core/stores/error/error_store.dart';
-import 'package:mela/core/stores/form/form_store.dart';
 import 'package:mela/domain/usecase/user_login/is_logged_in_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_login_in_status_usecase.dart';
 import 'package:mobx/mobx.dart';
@@ -87,6 +85,10 @@ abstract class _UserLoginStore with Store {
       // this.success = false;
       throw e;
     });
+  }
+  @action
+  void resetSettingForLogin(){
+    isPasswordVisible = false;
   }
 
   logout() async {

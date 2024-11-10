@@ -3,25 +3,26 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/assets_path.dart';
 import 'package:mela/di/service_locator.dart';
+import 'package:mobx/mobx.dart';
 
 import '../../core/widgets/progress_indicator_widget.dart';
 import '../../utils/routes/routes.dart';
+import 'store/login_or_signup_store/login_or_signup_store.dart';
 import 'store/user_login_store/user_login_store.dart';
 import 'widgets/login_or_sign_up_button.dart';
 import 'widgets/third_party_button.dart';
 
 class LoginScreen extends StatelessWidget {
-  void Function() onChangeToSignUp;
-  LoginScreen({super.key, required this.onChangeToSignUp});
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
-            child: _FormContent(onChangeToSignUp: onChangeToSignUp),
+            child: _FormContent(),
           ),
         ),
       ),
@@ -30,8 +31,7 @@ class LoginScreen extends StatelessWidget {
 }
 
 class _FormContent extends StatefulWidget {
-  void Function() onChangeToSignUp;
-  _FormContent({Key? key, required this.onChangeToSignUp}) : super(key: key);
+  const _FormContent({Key? key}) : super(key: key);
 
   @override
   State<_FormContent> createState() => __FormContentState();
@@ -40,10 +40,36 @@ class _FormContent extends StatefulWidget {
 class __FormContentState extends State<_FormContent> {
   //stores:---------------------------------------------------------------------
   final UserLoginStore _userLoginStore = getIt<UserLoginStore>();
+  final LoginOrSignupStore _loginOrSignupStore = getIt<LoginOrSignupStore>();
+
+  //controllers:-----------------------------------------------------------------
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  //disposers:-----------------------------------------------------------------
+  late final ReactionDisposer _loginReactionDisposer;
+  @override
+  void initState() {
+    super.initState();
+    _loginReactionDisposer =
+        reaction((_) => _userLoginStore.isLoggedIn, (bool success) {
+      if (success) {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            Routes.coursesScreen, (Route<dynamic> route) => false);
+            _userLoginStore.resetSettingForLogin();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _loginReactionDisposer();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,11 +80,6 @@ class __FormContentState extends State<_FormContent> {
         alignment: Alignment.center,
         children: [
           buildContentInLoginScreen(),
-          Observer(builder: (context) {
-            return _userLoginStore.isLoggedIn
-                ? navigateToCourseScreen(context)
-                : const SizedBox.shrink();
-          }),
           Observer(
             builder: (context) {
               return Visibility(
@@ -241,8 +262,7 @@ class __FormContentState extends State<_FormContent> {
                     pathLogo: AssetsPath.googleIcon, onPressed: () {}),
                 const SizedBox(width: 20),
                 ThirdPartyButton(
-                    pathLogo: AssetsPath.facebookIcon,
-                    onPressed: () {}),
+                    pathLogo: AssetsPath.facebookIcon, onPressed: () {}),
               ],
             ),
             const SizedBox(height: 30),
@@ -258,7 +278,10 @@ class __FormContentState extends State<_FormContent> {
                   width: 4,
                 ),
                 GestureDetector(
-                  onTap: widget.onChangeToSignUp,
+                  onTap: () {
+                    _loginOrSignupStore.toggleChangeScreen();
+                    _userLoginStore.resetSettingForLogin();
+                  },
                   child: Text(
                     "ĐĂNG KÝ",
                     style: Theme.of(context).textTheme.subTitle.copyWith(
@@ -272,14 +295,5 @@ class __FormContentState extends State<_FormContent> {
         ),
       ),
     );
-  }
-
-  Widget navigateToCourseScreen(BuildContext context) {
-    print("FlutterSa: Navigate to course screen");
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          Routes.coursesScreen, (Route<dynamic> route) => false);
-    });
-    return Container();
   }
 }

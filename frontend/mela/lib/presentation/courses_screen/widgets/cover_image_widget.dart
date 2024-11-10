@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
-
-import '../../../constants/global.dart';
 import '../../../themes/default/colors_standards.dart';
 
 class CoverImageWidget extends StatelessWidget {

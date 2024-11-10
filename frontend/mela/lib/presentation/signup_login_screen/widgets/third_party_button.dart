@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class ThirdPartyButton extends StatelessWidget {
   final String pathLogo;
-  void Function() onPressed;
-  ThirdPartyButton(
+  final void Function() onPressed;
+  const ThirdPartyButton(
       {super.key, required this.pathLogo, required this.onPressed});
 
   @override
