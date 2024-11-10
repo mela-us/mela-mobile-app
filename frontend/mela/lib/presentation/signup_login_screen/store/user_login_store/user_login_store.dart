@@ -1,11 +1,11 @@
 import 'package:mela/core/stores/error/error_store.dart';
 import 'package:mela/core/stores/form/form_store.dart';
-import 'package:mela/domain/usecase/user/is_logged_in_usecase.dart';
-import 'package:mela/domain/usecase/user/save_login_in_status_usecase.dart';
+import 'package:mela/domain/usecase/user_login/is_logged_in_usecase.dart';
+import 'package:mela/domain/usecase/user_login/save_login_in_status_usecase.dart';
 import 'package:mobx/mobx.dart';
 
-import '../../../domain/entity/user/user.dart';
-import '../../../domain/usecase/user/login_usecase.dart';
+import '../../../../domain/entity/user/user.dart';
+import '../../../../domain/usecase/user_login/login_usecase.dart';
 
 part 'user_login_store.g.dart';
 

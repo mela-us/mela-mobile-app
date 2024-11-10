@@ -10,13 +10,13 @@ import '../../../di/service_locator.dart';
 import '../../../domain/repository/setting/setting_repository.dart';
 import '../../../domain/usecase/post/get_post_usecase.dart';
 import '../../../domain/usecase/topic/get_topics_usecase.dart';
-import '../../../domain/usecase/user/is_logged_in_usecase.dart';
-import '../../../domain/usecase/user/login_usecase.dart';
-import '../../../domain/usecase/user/save_login_in_status_usecase.dart';
+import '../../../domain/usecase/user_login/is_logged_in_usecase.dart';
+import '../../../domain/usecase/user_login/login_usecase.dart';
+import '../../../domain/usecase/user_login/save_login_in_status_usecase.dart';
 import '../../courses_screen/store/theme_store/theme_store.dart';
 import '../../home/store/language/language_store.dart';
 import '../../login/store/login_store.dart';
-import '../../signup_login_screen/store/user_login_store.dart';
+import '../../signup_login_screen/store/user_login_store/user_login_store.dart';
 
 class StoreModule {
   static Future<void> configureStoreModuleInjection() async {

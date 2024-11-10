@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mela/constants/app_theme.dart';
+import 'package:mela/constants/assets_path.dart';
 import 'package:mela/di/service_locator.dart';
-import 'package:mela/screens/signup_login_screen/widgets/login_or_sign_up_button.dart';
-import 'package:mela/screens/signup_login_screen/widgets/third_party_button.dart';
 
-import '../../constants/global.dart';
 import '../../core/widgets/progress_indicator_widget.dart';
-import '../../themes/default/colors_standards.dart';
-import '../../themes/default/text_styles.dart';
 import '../../utils/routes/routes.dart';
-import 'store/user_login_store.dart';
+import 'store/user_login_store/user_login_store.dart';
+import 'widgets/login_or_sign_up_button.dart';
+import 'widgets/third_party_button.dart';
 
 class LoginScreen extends StatelessWidget {
   void Function() onChangeToSignUp;
@@ -20,14 +19,12 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          // Added Center widget here
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: _FormContent(onChangeToSignUp: onChangeToSignUp),
           ),
         ),
       ),
-      backgroundColor: ColorsStandards.AppBackgroundColor,
     );
   }
 }
@@ -72,7 +69,9 @@ class __FormContentState extends State<_FormContent> {
                     alignment: Alignment.center,
                     children: [
                       Container(
-                        color: Theme.of(context).colorScheme.primary
+                        color: Theme.of(context)
+                            .colorScheme
+                            .primary
                             .withOpacity(0.8),
                       ),
                       const CustomProgressIndicatorWidget(),
@@ -89,7 +88,7 @@ class __FormContentState extends State<_FormContent> {
 
   Widget buildContentInLoginScreen() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 30),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
       constraints: const BoxConstraints(maxWidth: 380),
       child: Form(
         key: _formKey,
@@ -99,11 +98,17 @@ class __FormContentState extends State<_FormContent> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //Title and Subtitle
-            TextStandard.BigTitle(
-                "Đăng nhập", ColorsStandards.textColorInBackground1),
+            Text("Đăng nhập",
+                style: Theme.of(context)
+                    .textTheme
+                    .bigTitle
+                    .copyWith(color: Theme.of(context).colorScheme.primary)),
             const SizedBox(height: 5),
-            TextStandard.SubTitle("Đăng nhập để tiếp tục hành trình của bạn",
-                ColorsStandards.textColorInBackground2),
+            Text("Đăng nhập để tiếp tục hành trình của bạn",
+                style: Theme.of(context)
+                    .textTheme
+                    .subTitle
+                    .copyWith(color: Theme.of(context).colorScheme.secondary)),
             const SizedBox(height: 35),
 
             //Email TextField
@@ -125,28 +130,18 @@ class __FormContentState extends State<_FormContent> {
                 return null;
               },
               decoration: InputDecoration(
-                labelText: null,
                 hintText: 'Nhập địa chỉ email',
-                prefixIcon: Icon(
-                  Icons.email_outlined,
-                  size: 25,
-                  color: ColorsStandards.textColorInBackground2,
-                ),
+                prefixIcon: const Icon(Icons.email_outlined, size: 25),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
-                ),
-                fillColor: ColorsStandards.backgroundTextFormColor,
-                focusColor: ColorsStandards.backgroundTextFormColor,
+                fillColor: Theme.of(context).colorScheme.onTertiary,
                 filled: true,
+                errorStyle: const TextStyle(
+                  color: Colors.red,
+                  fontSize: 14,
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -168,53 +163,46 @@ class __FormContentState extends State<_FormContent> {
                   },
                   obscureText: !_userLoginStore.isPasswordVisible,
                   decoration: InputDecoration(
-                      labelText: null,
-                      hintText: 'Nhập mật khẩu của bạn',
-                      prefixIcon: Icon(
-                        Icons.lock_outline_rounded,
+                    hintText: 'Nhập mật khẩu của bạn',
+                    prefixIcon: Icon(Icons.lock_outline_rounded,
                         size: 25,
-                        color: ColorsStandards.textColorInBackground2,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      fillColor: ColorsStandards.backgroundTextFormColor,
-                      focusColor: ColorsStandards.backgroundTextFormColor,
-                      filled: true,
-                      suffixIcon: IconButton(
-                        icon: Icon(_userLoginStore.isPasswordVisible
-                            ? Icons.visibility_off
-                            : Icons.visibility),
-                        onPressed: () {
-                          _userLoginStore.togglePasswordVisibility();
-                        },
-                      )),
+                        color: Theme.of(context).colorScheme.secondary),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                    fillColor: Theme.of(context).colorScheme.onTertiary,
+                    filled: true,
+                    suffixIcon: IconButton(
+                      icon: Icon(_userLoginStore.isPasswordVisible
+                          ? Icons.visibility_off
+                          : Icons.visibility),
+                      onPressed: () =>
+                          _userLoginStore.togglePasswordVisibility(),
+                    ),
+                    errorStyle: const TextStyle(
+                      color: Colors.red,
+                      fontSize: 14,
+                    ),
+                  ),
                 );
               },
             ),
             const SizedBox(height: 16),
 
-            //Accept Terms and Conditions
+            //Forgot password
             GestureDetector(
               onTap: () {},
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextStandard.Normal(
-                      "Quên mật khẩu?", ColorsStandards.textColorInBackground2),
+                  Text("Quên mật khẩu?",
+                      style: Theme.of(context).textTheme.normal.copyWith(
+                          color: Theme.of(context).colorScheme.secondary)),
                 ],
               ),
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
 
             // //Button Login
             ButtonLoginOrSignUp(
@@ -239,8 +227,9 @@ class __FormContentState extends State<_FormContent> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextStandard.Normal("Hoặc tiếp tục với",
-                    ColorsStandards.textColorInBackground2),
+                Text('Hoặc tiếp tục với',
+                    style: Theme.of(context).textTheme.normal.copyWith(
+                        color: Theme.of(context).colorScheme.secondary)),
               ],
             ),
             const SizedBox(height: 16),
@@ -249,10 +238,10 @@ class __FormContentState extends State<_FormContent> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ThirdPartyButton(
-                    pathLogo: "assets/icons/google_icon.png", onPressed: () {}),
+                    pathLogo: AssetsPath.googleIcon, onPressed: () {}),
                 const SizedBox(width: 20),
                 ThirdPartyButton(
-                    pathLogo: "assets/icons/facebook_icon.png",
+                    pathLogo: AssetsPath.facebookIcon,
                     onPressed: () {}),
               ],
             ),
@@ -262,17 +251,19 @@ class __FormContentState extends State<_FormContent> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextStandard.SubTitle("Chưa có tài khoản",
-                    ColorsStandards.textColorInBackground2),
+                Text("Chưa có tài khoản?",
+                    style: Theme.of(context).textTheme.subTitle.copyWith(
+                        color: Theme.of(context).colorScheme.secondary)),
                 const SizedBox(
                   width: 4,
                 ),
                 GestureDetector(
                   onTap: widget.onChangeToSignUp,
-                  child: TextStandard.SubTitle(
+                  child: Text(
                     "ĐĂNG KÝ",
-                    ColorsStandards.buttonYesColor1,
-                    decoration: TextDecoration.underline,
+                    style: Theme.of(context).textTheme.subTitle.copyWith(
+                        color: Theme.of(context).colorScheme.tertiary,
+                        decoration: TextDecoration.underline),
                   ),
                 )
               ],

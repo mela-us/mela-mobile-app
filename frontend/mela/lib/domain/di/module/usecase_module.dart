@@ -7,27 +7,27 @@ import 'package:mela/domain/usecase/topic/get_topics_usecase.dart';
 import '../../../di/service_locator.dart';
 import '../../repository/post/post_repository.dart';
 import '../../repository/topic/topic_repository.dart';
-import '../../repository/user/user_repository.dart';
+import '../../repository/user_login/user_login_repository.dart';
 import '../../usecase/post/delete_post_usecase.dart';
 import '../../usecase/post/find_post_by_id_usecase.dart';
 import '../../usecase/post/get_post_usecase.dart';
 import '../../usecase/post/insert_post_usecase.dart';
 import '../../usecase/post/udpate_post_usecase.dart';
-import '../../usecase/user/is_logged_in_usecase.dart';
-import '../../usecase/user/login_usecase.dart';
-import '../../usecase/user/save_login_in_status_usecase.dart';
+import '../../usecase/user_login/is_logged_in_usecase.dart';
+import '../../usecase/user_login/login_usecase.dart';
+import '../../usecase/user_login/save_login_in_status_usecase.dart';
 
 class UseCaseModule {
   static Future<void> configureUseCaseModuleInjection() async {
     // user:--------------------------------------------------------------------
     getIt.registerSingleton<IsLoggedInUseCase>(
-      IsLoggedInUseCase(getIt<UserRepository>()),
+      IsLoggedInUseCase(getIt<UserLoginRepository>()),
     );
     getIt.registerSingleton<SaveLoginStatusUseCase>(
-      SaveLoginStatusUseCase(getIt<UserRepository>()),
+      SaveLoginStatusUseCase(getIt<UserLoginRepository>()),
     );
     getIt.registerSingleton<LoginUseCase>(
-      LoginUseCase(getIt<UserRepository>()),
+      LoginUseCase(getIt<UserLoginRepository>()),
     );
 
     // post:--------------------------------------------------------------------

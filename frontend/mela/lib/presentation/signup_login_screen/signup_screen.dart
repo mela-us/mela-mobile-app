@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mela/screens/signup_login_screen/widgets/login_or_sign_up_button.dart';
-import 'package:mela/screens/signup_login_screen/widgets/third_party_button.dart';
 
 import '../../constants/global.dart';
 import '../../themes/default/text_styles.dart';
 import '../courses_screen/courses_screen.dart';
 import '../../themes/default/colors_standards.dart';
+import 'widgets/login_or_sign_up_button.dart';
+import 'widgets/third_party_button.dart';
 
 class SignUpScreen extends StatelessWidget {
   void Function() onChangeToLogin;

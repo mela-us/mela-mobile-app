@@ -1,6 +1,6 @@
 import '../../../core/domain/usecase/use_case.dart';
 import '../../entity/user/user.dart';
-import '../../repository/user/user_repository.dart';
+import '../../repository/user_login/user_login_repository.dart';
 
 class LoginParams {
   final String username;
@@ -24,12 +24,12 @@ class LoginParams {
 }
 
 class LoginUseCase implements UseCase<User?, LoginParams> {
-  final UserRepository _userRepository;
+  final UserLoginRepository _userLoginRepository;
 
-  LoginUseCase(this._userRepository);
+  LoginUseCase(this._userLoginRepository);
 
   @override
   Future<User?> call({required LoginParams params}) async {
-    return _userRepository.login(params);
+    return _userLoginRepository.login(params);
   }
 }

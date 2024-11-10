@@ -15,4 +15,8 @@ class AssetsPath{
   // login screen assets
   static const String carBackground = "assets/images/clock.jpg";
 
+  //Logo third party
+  static String facebookIcon = 'assets/icons/facebook_icon.png';
+  static String googleIcon = 'assets/icons/google_icon.png';
+
 }
