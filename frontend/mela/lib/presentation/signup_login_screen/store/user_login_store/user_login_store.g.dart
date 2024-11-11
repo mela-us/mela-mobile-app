@@ -88,6 +88,17 @@ mixin _$UserLoginStore on _UserLoginStore, Store {
   }
 
   @override
+  void resetSettingForLogin() {
+    final _$actionInfo = _$_UserLoginStoreActionController.startAction(
+        name: '_UserLoginStore.resetSettingForLogin');
+    try {
+      return super.resetSettingForLogin();
+    } finally {
+      _$_UserLoginStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isLoggedIn: ${isLoggedIn},

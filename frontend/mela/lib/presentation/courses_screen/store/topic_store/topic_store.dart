@@ -17,6 +17,7 @@ abstract class _TopicStore with Store {
   @computed
   bool get loading => fetchTopicsFuture.status == FutureStatus.pending;
 
+  late final ReactionDisposer _topicItemReactionDisposer;
   //Constructor
   _TopicStore(this._getTopicsUsecase);
 
@@ -31,6 +32,10 @@ abstract class _TopicStore with Store {
 
     future.then((topicList) {
       this.topicList = topicList;
+    }).catchError((onError) {
+      this.topicList = null;
+      print(onError);
+      throw onError;
     });
   }
 }

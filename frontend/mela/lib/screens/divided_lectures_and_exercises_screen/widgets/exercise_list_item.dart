@@ -3,6 +3,7 @@ import 'package:mela/models/lecture.dart';
 import 'package:mela/screens/divided_lectures_and_exercises_screen/widgets/exercise_item.dart';
 
 import '../../../constants/global.dart';
+import '../../../domain/entity/lecture/lecture.dart';
 
 class ExerciseListItem extends StatelessWidget {
   Lecture currentLecture;

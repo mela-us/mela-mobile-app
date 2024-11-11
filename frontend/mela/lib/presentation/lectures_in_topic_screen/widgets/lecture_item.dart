@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mela/models/lecture.dart';
-import 'package:mela/screens/divided_lectures_and_exercises_screen/divided_lectures_and_exercises_screen.dart';
-import 'package:mela/themes/default/text_styles.dart';
+import 'package:mela/constants/app_theme.dart';
 
-import '../../../constants/global.dart';
-import '../../../themes/default/colors_standards.dart';
+import '../../../domain/entity/lecture/lecture.dart';
 
 class LectureItem extends StatelessWidget {
   final Lecture lecture;
@@ -18,15 +15,19 @@ class LectureItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => DividedLecturesAndExercisesScreen(currentLecture: lecture,)));
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (context) => DividedLecturesAndExercisesScreen(
+        //               currentLecture: lecture,
+        //             )));
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: ColorsStandards.buttonYesColor2,
+            color: Theme.of(context).colorScheme.onTertiary,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Row(
@@ -42,15 +43,16 @@ class LectureItem extends StatelessWidget {
                       value: lecture
                           .progress, // Set progress value here (from 0.0 to 1.0)
                       strokeWidth: 3,
-                      color: ColorsStandards.buttonYesColor1,
+                      color: Theme.of(context).colorScheme.tertiary,
                       backgroundColor: Colors.grey[200],
                     ),
                   ),
                   CircleAvatar(
                     backgroundColor: Colors.white,
                     radius: 16,
-                    child: TextStandard.Normal(lecture.lectureId.toString(),
-                        ColorsStandards.textColorInBackground2),
+                    child: Text(lecture.lectureId.toString(),
+                        style: Theme.of(context).textTheme.normal.copyWith(
+                            color: Theme.of(context).colorScheme.secondary)),
                   ),
                 ],
               ),
@@ -60,11 +62,17 @@ class LectureItem extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextStandard.SubTitle(lecture.lectureName,
-                        ColorsStandards.textColorInBackground1),
+                    Text(
+                      lecture.lectureName,
+                      style: Theme.of(context).textTheme.subTitle.copyWith(
+                          color: Theme.of(context).colorScheme.primary),
+                    ),
                     const SizedBox(height: 8),
-                    TextStandard.Normal(lecture.lectureDescription,
-                        ColorsStandards.textColorInBackground2),
+                    Text(
+                      lecture.lectureDescription,
+                      style: Theme.of(context).textTheme.normal.copyWith(
+                          color: Theme.of(context).colorScheme.secondary),
+                    ),
                   ],
                 ),
               ),
@@ -74,12 +82,12 @@ class LectureItem extends StatelessWidget {
               Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: ColorsStandards.buttonYesColor1,
+                    color: Theme.of(context).colorScheme.tertiary,
                   ),
                   child: Icon(
                     Icons.play_arrow,
                     size: 20,
-                    color: ColorsStandards.buttonYesColor2,
+                    color: Theme.of(context).colorScheme.onTertiary,
                   )), // Play icon
             ],
           ),

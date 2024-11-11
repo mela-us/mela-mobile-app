@@ -115,6 +115,17 @@ mixin _$UserSignupStore on _UserSignupStore, Store {
   }
 
   @override
+  void resetSettingForSignnup() {
+    final _$actionInfo = _$_UserSignupStoreActionController.startAction(
+        name: '_UserSignupStore.resetSettingForSignnup');
+    try {
+      return super.resetSettingForSignnup();
+    } finally {
+      _$_UserSignupStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isSignupSuccessful: ${isSignupSuccessful},

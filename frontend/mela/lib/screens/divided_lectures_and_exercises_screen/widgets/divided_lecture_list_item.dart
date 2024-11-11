@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mela/models/lecture.dart';
 
 import '../../../constants/global.dart';
+import '../../../domain/entity/lecture/lecture.dart';
 import '../../../models/divided_lecture.dart';
 import 'divided_lecture_item.dart';
 

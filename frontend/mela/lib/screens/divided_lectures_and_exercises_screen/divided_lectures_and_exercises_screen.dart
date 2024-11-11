@@ -3,6 +3,7 @@ import 'package:mela/models/lecture.dart';
 import 'package:mela/screens/divided_lectures_and_exercises_screen/widgets/divided_lecture_list_item.dart';
 import 'package:mela/screens/divided_lectures_and_exercises_screen/widgets/exercise_list_item.dart';
 
+import '../../domain/entity/lecture/lecture.dart';
 import '../../themes/default/colors_standards.dart';
 import '../../themes/default/text_styles.dart';
 

@@ -16,7 +16,9 @@ import 'package:mela/utils/routes/routes.dart';
 
 import '../di/service_locator.dart';
 
+import 'courses_screen/courses_screen.dart';
 import 'courses_screen/store/theme_store/theme_store.dart';
+import 'signup_login_screen/store/user_login_store/user_login_store.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
   // with Hot Reload than creating it directly in the `build` function.
   final ThemeStore _themeStore = getIt<ThemeStore>();
   // final LanguageStore _languageStore = getIt<LanguageStore>();
-  // final UserStore _userStore = getIt<UserStore>();
+  final UserLoginStore _userStore = getIt<UserLoginStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +53,9 @@ class MyApp extends StatelessWidget {
           //   // Built-in localization of basic text for Cupertino widgets
           //   GlobalCupertinoLocalizations.delegate,
           // ],
-          // home: _userStore.isLoggedIn ? HomeScreen() : LoginScreen(),
-          home: LoginOrSignupScreen(),
+          home: _userStore.isLoggedIn ? CoursesScreen() : LoginOrSignupScreen(),
+          //home: LoginOrSignupScreen(),
+          // home: CoursesScreen(),
         );
       },
     );

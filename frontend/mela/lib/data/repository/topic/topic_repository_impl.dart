@@ -32,7 +32,7 @@ class TopicRepositoryImpl extends TopicRepository {
           topicName: "Tư duy",
           imageTopicPath: "assets/images/topics/tuduy.png"),
     ]);
-    await Future.delayed(const Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 2));
     return topicList;
   }
 
