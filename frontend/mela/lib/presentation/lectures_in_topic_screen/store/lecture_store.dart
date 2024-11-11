@@ -19,6 +19,7 @@ abstract class _LectureStore with Store {
   @observable
   LectureList?
       lectureList; //Lecture in Topic, not Lecture in Topic + level to improve performance
+      //mean get All lecture after filter in getLectureListByLevelId
 
   @computed
   bool get isGetLecturesLoading =>

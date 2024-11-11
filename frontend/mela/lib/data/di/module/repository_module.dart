@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:mela/data/repository/exercise/exercise_repository_impl.dart';
 import 'package:mela/data/repository/lecture/lecture_repository_impl.dart';
+import 'package:mela/domain/repository/exercise/exercise_repository.dart';
 import 'package:mela/domain/repository/post/post_repository.dart';
 import 'package:mela/domain/repository/setting/setting_repository.dart';
 import 'package:mela/domain/repository/topic/topic_repository.dart';
@@ -36,5 +38,6 @@ class RepositoryModule {
     ));
     getIt.registerSingleton<TopicRepository>(TopicRepositoryImpl());
     getIt.registerSingleton<LectureRepository>(LectureRepositoryImpl());
+    getIt.registerSingleton<ExerciseRepository>(ExerciseRepositoryImpl());
   }
 }

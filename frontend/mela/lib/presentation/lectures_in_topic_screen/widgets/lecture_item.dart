@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/di/service_locator.dart';
+import 'package:mela/presentation/divided_lectures_and_exercises_screen/store/exercise_store.dart';
 
 import '../../../domain/entity/lecture/lecture.dart';
+import '../../../utils/routes/routes.dart';
 
 class LectureItem extends StatelessWidget {
   final Lecture lecture;
@@ -13,14 +16,11 @@ class LectureItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ExerciseStore _exerciseStore = getIt<ExerciseStore>();
     return GestureDetector(
       onTap: () {
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) => DividedLecturesAndExercisesScreen(
-        //               currentLecture: lecture,
-        //             )));
+        _exerciseStore.setLectureId(lecture.lectureId);
+        Navigator.of(context).pushNamed(Routes.dividedLecturesAndExercisesScreen);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),

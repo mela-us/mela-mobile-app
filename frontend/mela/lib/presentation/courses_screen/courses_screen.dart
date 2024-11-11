@@ -53,8 +53,17 @@ class _CoursesScreenState extends State<CoursesScreen> {
       body: Observer(
         builder: (context) {
           return _topicStore.loading
-              ? const Center(
-                  child: CustomProgressIndicatorWidget(),
+              ? AbsorbPointer(
+                  absorbing: true,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        color: Theme.of(context).colorScheme.surface.withOpacity(0.8),
+                      ),
+                      const CustomProgressIndicatorWidget(),
+                    ],
+                  ),
                 )
               : SingleChildScrollView(
                   physics: const ClampingScrollPhysics(),
@@ -116,6 +125,11 @@ class _CoursesScreenState extends State<CoursesScreen> {
                           ),
                         ),
                         const SizedBox(height: 10),
+                        Text("abc"),
+                        Text("abc"),
+                        Text("abc"),
+                        Text("abc"),
+                        Text("abc"),
                         Text("abc"),
                         Text("abc"),
                         Text("abc"),

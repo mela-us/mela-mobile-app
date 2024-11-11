@@ -88,7 +88,7 @@ class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen> {
                       Container(
                         color: Theme.of(context)
                             .colorScheme
-                            .primary
+                            .surface
                             .withOpacity(0.8),
                       ),
                       const CustomProgressIndicatorWidget(),
@@ -110,7 +110,7 @@ class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen> {
 
 
 
-//Version replace
+//Version replace 2 
 // import 'package:flutter/material.dart';
 // import 'package:flutter_mobx/flutter_mobx.dart';
 // import 'package:mela/constants/app_theme.dart';

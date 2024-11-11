@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:mela/models/lecture.dart';
-import 'package:mela/screens/divided_lectures_and_exercises_screen/widgets/divided_lecture_list_item.dart';
-import 'package:mela/screens/divided_lectures_and_exercises_screen/widgets/exercise_list_item.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mela/constants/app_theme.dart';
+import 'package:mela/di/service_locator.dart';
+import 'package:mela/presentation/divided_lectures_and_exercises_screen/store/exercise_store.dart';
+import 'package:mela/presentation/divided_lectures_and_exercises_screen/widgets/exercise_list_item.dart';
+import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
 
-import '../../domain/entity/lecture/lecture.dart';
-import '../../themes/default/colors_standards.dart';
-import '../../themes/default/text_styles.dart';
+import '../../core/widgets/progress_indicator_widget.dart';
+import 'widgets/divided_lecture_list_item.dart';
 
 class DividedLecturesAndExercisesScreen extends StatefulWidget {
-  final Lecture currentLecture;
-  DividedLecturesAndExercisesScreen({super.key, required this.currentLecture});
+  DividedLecturesAndExercisesScreen({super.key});
   @override
   _DividedLecturesAndExercisesScreenState createState() =>
       _DividedLecturesAndExercisesScreenState();
@@ -20,10 +21,21 @@ class _DividedLecturesAndExercisesScreenState
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  ExerciseStore _exerciseStore = getIt<ExerciseStore>();
+  LectureStore _lectureStore = getIt<LectureStore>();
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_exerciseStore.isGetExercisesLoading) {
+      _exerciseStore.getExercisesByLectureId();
+    }
   }
 
   @override
@@ -32,21 +44,37 @@ class _DividedLecturesAndExercisesScreenState
     super.dispose();
   }
 
+  int _findIndexInLectureListById() {
+    for (int i = 0; i < _lectureStore.lectureList!.lectures.length; i++) {
+      if (_lectureStore.lectureList!.lectures[i].lectureId ==
+          _exerciseStore.lectureId) {
+        return i;
+      }
+    }
+    return 0;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorsStandards.AppBackgroundColor,
       appBar:
           //AppBar
           AppBar(
-        title: TextStandard.Heading(widget.currentLecture.lectureName,
-            ColorsStandards.textColorInBackground1),
+        title: Text(
+          _lectureStore
+              .lectureList!.lectures[_findIndexInLectureListById()].lectureName,
+          style: Theme.of(context)
+              .textTheme
+              .heading
+              .copyWith(color: Theme.of(context).colorScheme.primary),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.of(context).pop();
+            _exerciseStore.resetLectureId();
           },
           color: Colors.black,
         ),
@@ -57,16 +85,16 @@ class _DividedLecturesAndExercisesScreenState
             padding: EdgeInsets.all(16),
             child: DecoratedBox(
               decoration: BoxDecoration(
-                color: ColorsStandards.backgroundButtonNoChooseColor,
+                color: Theme.of(context).colorScheme.inverseSurface,
                 borderRadius: BorderRadius.circular(40),
               ),
               child: TabBar(
                 controller: _tabController,
                 labelColor: Colors.white,
-                unselectedLabelColor: ColorsStandards.textColorInBackground1,
+                unselectedLabelColor: Theme.of(context).colorScheme.primary,
                 overlayColor: WidgetStateProperty.all(Colors.transparent),
                 indicator: BoxDecoration(
-                  color: ColorsStandards.backgroundButtonChooseColor,
+                  color: Theme.of(context).colorScheme.inversePrimary,
                   borderRadius: BorderRadius.circular(40),
                 ),
                 dividerColor: Colors.transparent,
@@ -104,16 +132,32 @@ class _DividedLecturesAndExercisesScreenState
             ),
           ),
           Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                //Tab "Lý thuyết" content
-                DividedLectureListItem(currentLecture: widget.currentLecture),
+            child: Observer(builder: (context) {
+              return _exerciseStore.isGetExercisesLoading
+                  ? AbsorbPointer(
+                      absorbing: true,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            color: Theme.of(context).colorScheme.surface.withOpacity(0.8),
+                          ),
+                          const CustomProgressIndicatorWidget(),
+                        ],
+                      ),
+                    )
+                  // ? Text('Loading...')
+                  : TabBarView(
+                      controller: _tabController,
+                      children: [
+                        //Tab "Lý thuyết" content
+                        DividedLectureListItem(),
 
-                //Tab "Luyện tập" content
-                ExerciseListItem(currentLecture: widget.currentLecture),
-              ],
-            ),
+                        //Tab "Luyện tập" content
+                        ExerciseListItem(),
+                      ],
+                    );
+            }),
           ),
         ],
       ),

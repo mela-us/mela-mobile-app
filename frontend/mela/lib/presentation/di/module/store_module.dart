@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:mela/domain/usecase/exercise/get_exercises_usecase.dart';
 import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
+import 'package:mela/presentation/divided_lectures_and_exercises_screen/store/exercise_store.dart';
 import 'package:mela/presentation/post/store/post_store.dart';
 
 import '../../../core/stores/error/error_store.dart';
@@ -47,6 +49,9 @@ class StoreModule {
 
     getIt.registerSingleton<LoginOrSignupStore>(
       LoginOrSignupStore(),
+    );
+    getIt.registerSingleton<ExerciseStore>(
+      ExerciseStore(getIt<GetExercisesUseCase>()),
     );
 
     getIt.registerSingleton<PostStore>(

@@ -53,12 +53,12 @@ class __FormContentState extends State<_FormContent> {
   @override
   void initState() {
     super.initState();
-    print("---------------------------------------->LoginScreen: ${_userLoginStore.isLoggedIn ? "true" : "false"}");
+    // print("---------------------------------------->LoginScreen: ${_userLoginStore.isLoggedIn ? "true" : "false"}");
     _loginReactionDisposer =
         reaction((_) => _userLoginStore.isLoggedIn, (bool success) {
-          print("---------------------------------------->LoginScreen1 ${_userLoginStore.isLoggedIn ? "true" : "false"}");
+          // print("---------------------------------------->LoginScreen1 ${_userLoginStore.isLoggedIn ? "true" : "false"}");
       if (success) {
-        print("---------------------------------------->LoginScreen2 ${_userLoginStore.isLoggedIn ? "true" : "false"}");
+        // print("---------------------------------------->LoginScreen2 ${_userLoginStore.isLoggedIn ? "true" : "false"}");
         Navigator.of(context).pushNamedAndRemoveUntil(
             Routes.coursesScreen, (Route<dynamic> route) => false);
             _userLoginStore.resetSettingForLogin();

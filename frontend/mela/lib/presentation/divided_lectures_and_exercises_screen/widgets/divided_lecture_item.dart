@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mela/models/lecture.dart';
+import 'package:mela/constants/app_theme.dart';
 
-import '../../../models/divided_lecture.dart';
-import '../../../themes/default/text_styles.dart';
+import '../../../domain/entity/divided_lecture/divided_lecture.dart';
 
 class DividedLectureItem extends StatelessWidget {
   final DividedLecture currentDividedLecture;
@@ -14,8 +13,8 @@ class DividedLectureItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 16, left: 16, right: 16),
-      padding: EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -36,28 +35,38 @@ class DividedLectureItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Topic name + level name
-                TextStandard.SubTitle(
+                Text(
                   '${currentDividedLecture.topicName} - ${currentDividedLecture.levelName}',
-                  Colors.orange,
-                ),
-                SizedBox(height: 4),
-                // Divided Lecture name
-                TextStandard.SubHeading(
-                  currentDividedLecture.dividedLectureName,
-                  Colors.black,
-                ),
-                SizedBox(height: 8),
-                // pages + origin
-                TextStandard.Normal(
-                  '${currentDividedLecture.pages} trang | ${currentDividedLecture.origin}',
-                  Colors.black,
+                  style: Theme.of(context)
+                      .textTheme
+                      .subTitle
+                      .copyWith(color: Colors.orange),
                 ),
 
-                SizedBox(width: 16),
+                const SizedBox(height: 4),
+                // Divided Lecture name
+                Text(
+                  currentDividedLecture.dividedLectureName,
+                  style: Theme.of(context)
+                      .textTheme
+                      .subHeading
+                      .copyWith(color: Colors.black),
+                ),
+                const SizedBox(height: 8),
+                // pages + origin
+                Text(
+                  '${currentDividedLecture.pages} trang | ${currentDividedLecture.origin}',
+                  style: Theme.of(context)
+                      .textTheme
+                      .normal
+                      .copyWith(color: Colors.black),
+                ),
+
+                const SizedBox(width: 16),
               ],
             ),
           ),
-          SizedBox(width: 6),
+          const SizedBox(width: 6),
         ],
       ),
     );

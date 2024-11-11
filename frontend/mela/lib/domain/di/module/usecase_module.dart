@@ -3,11 +3,13 @@ import 'dart:async';
 
 import 'package:mela/domain/repository/lecture/lecture_repository.dart';
 import 'package:mela/domain/repository/user_register/user_signup_repostiory.dart';
+import 'package:mela/domain/usecase/exercise/get_exercises_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_lectures_usecase.dart';
 import 'package:mela/domain/usecase/topic/find_topic_by_id_usecase.dart';
 import 'package:mela/domain/usecase/topic/get_topics_usecase.dart';
 
 import '../../../di/service_locator.dart';
+import '../../repository/exercise/exercise_repository.dart';
 import '../../repository/post/post_repository.dart';
 import '../../repository/topic/topic_repository.dart';
 import '../../repository/user_login/user_login_repository.dart';
@@ -62,5 +64,8 @@ class UseCaseModule {
 
     //lecture:--------------------------------------------------------------------
     getIt.registerSingleton<GetLecturesUsecase>(GetLecturesUsecase(getIt<LectureRepository>()));
+
+    ///exercise:--------------------------------------------------------------------
+    getIt.registerSingleton<GetExercisesUseCase>(GetExercisesUseCase(getIt<ExerciseRepository>()));
   }
 }

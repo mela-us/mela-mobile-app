@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mela/models/lecture.dart';
+import 'package:mela/constants/app_theme.dart';
 
-import '../../../constants/global.dart';
-import '../../../models/exercise.dart';
-import '../../../themes/default/text_styles.dart';
+import '../../../domain/entity/exercise/exercise.dart';
 
 class ExerciseItem extends StatelessWidget {
-  Exercise currentExercise;
+  final Exercise currentExercise;
 
   ExerciseItem({
     required this.currentExercise,
@@ -20,8 +18,8 @@ class ExerciseItem extends StatelessWidget {
         //     context, MaterialPageRoute(builder: (context) => QuestionScreen(questions: Global.questions,)));
       },
       child: Container(
-        margin: EdgeInsets.only(bottom: 16, left: 16, right: 16),
-        padding: EdgeInsets.all(16),
+        margin: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -35,15 +33,18 @@ class ExerciseItem extends StatelessWidget {
                 children: [
                   Image.asset(currentExercise.imageExercisePath,
                       width: 60, height: 60),
-                  SizedBox(height: 8),
-                  TextStandard.MiniCaption(
+                  const SizedBox(height: 8),
+                  Text(
                     '${currentExercise.numberCompletedQuestions} / ${currentExercise.numberQuestions}',
-                    Colors.black,
+                    style: Theme.of(context)
+                        .textTheme
+                        .miniCaption
+                        .copyWith(color: Colors.black),
                   ),
                 ],
               ),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
 
             Expanded(
               flex: 2,
@@ -51,44 +52,60 @@ class ExerciseItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Topic name + level name
-                  TextStandard.SubTitle(
+                  Text(
                     '${currentExercise.topicName} - ${currentExercise.levelName}',
-                    Colors.orange,
-                  ),
-                  SizedBox(height: 4),
-                  // Exercise name
-                  TextStandard.SubTitle(
-                    currentExercise.exerciseName,
-                    Colors.black,
-                  ),
-                  SizedBox(height: 8),
-                  // Number of questions + type of questions
-                  TextStandard.Normal(
-                    '${currentExercise.numberQuestions} câu | ${currentExercise.typeQuestion}',
-                    Colors.black,
+                    style: Theme.of(context)
+                        .textTheme
+                        .subTitle
+                        .copyWith(color: Colors.orange),
                   ),
 
-                  SizedBox(width: 16),
+                  const SizedBox(height: 4),
+                  // Exercise name
+                  Text(
+                    currentExercise.exerciseName,
+                    style: Theme.of(context)
+                        .textTheme
+                        .subTitle
+                        .copyWith(color: Colors.black),
+                  ),
+
+                  const SizedBox(height: 8),
+                  // Number of questions + type of questions
+                  Text(
+                    '${currentExercise.numberQuestions} câu | ${currentExercise.typeQuestion}',
+                    style: Theme.of(context)
+                        .textTheme
+                        .normal
+                        .copyWith(color: Colors.black),
+                  ),
+
+                  const SizedBox(width: 16),
 
                   //Status of exercise
                   Row(
                     children: [
-                      TextStandard.Normal(
+                      Text(
                         'Trạng thái:   ',
-                        Colors.black,
+                        style: Theme.of(context)
+                            .textTheme
+                            .normal
+                            .copyWith(color: Colors.black),
                       ),
-                      TextStandard.Normal(
+                      Text(
                         currentExercise.statusExercise ? "Đạt" : "Chưa đạt",
-                        currentExercise.statusExercise
-                            ? Colors.green
-                            : Colors.red,
+                        style: Theme.of(context).textTheme.normal.copyWith(
+                              color: currentExercise.statusExercise
+                                  ? Colors.green
+                                  : Colors.red,
+                            ),
                       ),
                     ],
                   ),
                 ],
               ),
             ),
-            SizedBox(width: 6),
+            const SizedBox(width: 6),
           ],
         ),
       ),

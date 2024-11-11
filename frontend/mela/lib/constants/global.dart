@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mela/models/exercise.dart';
 import 'package:mela/themes/default/colors_standards.dart';
 
+import '../domain/entity/divided_lecture/divided_lecture.dart';
+import '../domain/entity/exercise/exercise.dart';
 import '../domain/entity/lecture/lecture.dart';
 import '../domain/entity/topic/topic.dart';
 import '../models/divided_lecture.dart';

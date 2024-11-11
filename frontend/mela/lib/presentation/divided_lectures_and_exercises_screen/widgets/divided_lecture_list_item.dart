@@ -1,0 +1,66 @@
+import 'package:flutter/material.dart';
+import 'package:mela/presentation/divided_lectures_and_exercises_screen/store/exercise_store.dart';
+import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
+
+import '../../../di/service_locator.dart';
+import '../../../domain/entity/divided_lecture/divided_lecture.dart';
+import '../../../domain/entity/divided_lecture/divided_lecture_list.dart';
+import 'divided_lecture_item.dart';
+
+class DividedLectureListItem extends StatelessWidget {
+  final LectureStore _lectureStore = getIt<LectureStore>();
+  final ExerciseStore _exerciseStore = getIt<ExerciseStore>();
+  DividedLectureListItem();
+  DividedLectureList fromJson(String str) {
+    DividedLectureList dividedLectures = DividedLectureList(dividedLectures: [
+      DividedLecture(
+        imageDividedLecturePath: 'assets/images/pdf_image.png',
+        pages: '10',
+        dividedLectureName: 'Lý thuyết đồng dư 1',
+        origin: 'NXB Hà Nội',
+        lectureId: 1,
+      ),
+      DividedLecture(
+        imageDividedLecturePath: 'assets/images/opened_book.png',
+        pages: '15',
+        dividedLectureName: 'Lý thuyết đồng dư 2',
+        origin: 'NXB Hà Nội',
+        lectureId: 1,
+      ),
+      DividedLecture(
+        imageDividedLecturePath: 'assets/images/pdf_image.png',
+        pages: '20',
+        dividedLectureName: 'Lý thuyết đồng dư 3',
+        origin: 'NXB Hà Nội',
+        lectureId: 1,
+      ),
+    ]);
+    return dividedLectures;
+  }
+
+  int _findIndexInLectureListById() {
+    for (int i = 0; i < _lectureStore.lectureList!.lectures.length; i++) {
+      if (_lectureStore.lectureList!.lectures[i].lectureId ==
+          _exerciseStore.lectureId) {
+        return i;
+      }
+    }
+    return 0;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    String currentContentLectures = _lectureStore
+        .lectureList!.lectures[_findIndexInLectureListById()].lectureContent;
+    DividedLectureList dividedLectures = fromJson(currentContentLectures);
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: dividedLectures.dividedLectures.length,
+      itemBuilder: (context, index) {
+        return DividedLectureItem(
+          currentDividedLecture: dividedLectures.dividedLectures[index],
+        );
+      },
+    );
+  }
+}
