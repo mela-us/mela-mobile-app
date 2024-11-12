@@ -5,6 +5,7 @@ import 'package:mela/presentation/lectures_in_topic_screen/all_lectures_in_topic
 import 'package:mela/presentation/search_screen/search_screen.dart';
 
 import '../../presentation/courses_screen/courses_screen.dart';
+import '../../presentation/filter_screen/filter_screen.dart';
 import '../../presentation/signup_login_screen/login_screen.dart';
 import '../../presentation/signup_login_screen/signup_screen.dart';
 
@@ -20,6 +21,7 @@ class Routes {
   static const String allLecturesInTopicScreen = '/all_lectures_in_topic_screen';
   static const String dividedLecturesAndExercisesScreen = '/divided_lectures_and_exercises_screen';
   static const String searchScreen = '/search_screen';
+  static const String filterScreen = '/filter_screen';
 
   static final routes = <String, WidgetBuilder>{
     loginScreen: (BuildContext context) => LoginScreen(),
@@ -29,5 +31,6 @@ class Routes {
     allLecturesInTopicScreen: (BuildContext context) => AllLecturesInTopicScreen(),
     dividedLecturesAndExercisesScreen: (BuildContext context) => DividedLecturesAndExercisesScreen(),
     searchScreen: (BuildContext context) => SearchScreen(),
+    filterScreen: (BuildContext context) => FilterScreen(),
   };
 }

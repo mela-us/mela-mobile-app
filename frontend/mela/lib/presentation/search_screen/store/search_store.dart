@@ -1,9 +1,12 @@
+import 'package:http/http.dart';
 import 'package:mela/domain/entity/lecture/lecture_list.dart';
 import 'package:mela/domain/usecase/search/get_history_search_list.dart';
 import 'package:mela/domain/usecase/search/get_search_lectures_result.dart';
+import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../../domain/usecase/topic/get_topics_usecase.dart';
+import '../../../di/service_locator.dart';
 // Include generated file
 part 'search_store.g.dart';
 
@@ -14,11 +17,17 @@ abstract class _SearchStore with Store {
   //UseCase
   GetHistorySearchList _getHistorySearchList;
   GetSearchLecturesResult _getSearchLecturesResult;
+
+  //Very important because if user search after we need to set LectureList in LectureStore=value search to when click is correct
+  LectureStore _lectureStore=getIt<LectureStore>();
   //Constructor
   _SearchStore(this._getHistorySearchList, this._getSearchLecturesResult);
 
   @observable
   bool isSearched = false; //check press enter to search or not
+
+  @observable
+  bool isFiltered = false;
 
   @observable
   List<String>? searchHistory;
@@ -61,6 +70,7 @@ abstract class _SearchStore with Store {
 
     future.then((value) {
       this.lecturesAfterSearching = value;
+      _lectureStore.lectureList = value;
     }).catchError((onError) {
       this.lecturesAfterSearching = null;
       print(onError);
@@ -76,4 +86,9 @@ abstract class _SearchStore with Store {
   void resetIsSearched() {
     isSearched = false;
   }
+  @action
+  void setIsFiltered(bool value) {
+    isFiltered = value;
+  }
+
 }

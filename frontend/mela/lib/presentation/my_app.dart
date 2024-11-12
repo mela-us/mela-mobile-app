@@ -4,6 +4,7 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/strings.dart';
 import 'package:mela/presentation/signup_login_screen/login_or_signup_screen.dart';
 import 'package:mela/utils/routes/routes.dart';
+import 'package:sembast/sembast.dart';
 // import 'package:mela/presentation/home/home.dart';
 // import 'package:mela/presentation/home/store/language/language_store.dart';
 // import 'package:mela/presentation/login/login.dart';
@@ -18,6 +19,7 @@ import '../di/service_locator.dart';
 
 import 'courses_screen/courses_screen.dart';
 import 'courses_screen/store/theme_store/theme_store.dart';
+import 'filter_screen/filter_screen.dart';
 import 'signup_login_screen/store/user_login_store/user_login_store.dart';
 
 class MyApp extends StatelessWidget {
@@ -55,7 +57,7 @@ class MyApp extends StatelessWidget {
           // ],
           home: _userStore.isLoggedIn ? CoursesScreen() : LoginOrSignupScreen(),
           //home: LoginOrSignupScreen(),
-          // home: CoursesScreen(),
+          //  home: FilterScreen(),
         );
       },
     );

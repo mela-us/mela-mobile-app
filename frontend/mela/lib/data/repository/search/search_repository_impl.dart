@@ -7,9 +7,6 @@ class SearchRepositoryImpl extends SearchRepository {
   @override
   Future<List<String>> getHistorySearchList() async {
     List<String> historySearchList = ['Lich su 1 Lich su 4 Lich su 4 Lich su 4 Lich su 4 Lich su 4 Lich su 4 ', 'Lich su 2', 'Lich su 3'];
-    if (DateTime.now().minute % 2 == 0) {
-      historySearchList = ['Lich su 4 Lich su 4 Lich su 4 Lich su 4 Lich su 4 Lich su 4 Lich su 4 Lich su 4', 'Lich su 5', 'Lich su 6'];
-    }
     await Future.delayed(const Duration(seconds: 2));
     return historySearchList;
   }

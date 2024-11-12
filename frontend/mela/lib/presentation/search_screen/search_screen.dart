@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/core/widgets/progress_indicator_widget.dart';
 import 'package:mela/di/service_locator.dart';
+import 'package:mela/presentation/filter_screen/store/filter_store.dart';
 import 'package:mela/presentation/lectures_in_topic_screen/widgets/lecture_item.dart';
 import 'package:mela/presentation/search_screen/widgets/search_bar.dart';
 
@@ -17,6 +18,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   SearchStore _searchStore = getIt<SearchStore>();
+  FilterStore _filterStore = getIt<FilterStore>();
   final GlobalKey<SearchingBarState> searchBarKey =
       GlobalKey<SearchingBarState>();
   @override
@@ -48,6 +50,8 @@ class _SearchScreenState extends State<SearchScreen> {
           onPressed: () {
             Navigator.of(context).pop();
             _searchStore.resetIsSearched();
+            _searchStore.setIsFiltered(false);
+            _filterStore.resetFilter();
           },
           icon: const Icon(Icons.arrow_back),
         ),

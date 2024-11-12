@@ -40,6 +40,22 @@ mixin _$SearchStore on _SearchStore, Store {
     });
   }
 
+  late final _$isFilteredAtom =
+      Atom(name: '_SearchStore.isFiltered', context: context);
+
+  @override
+  bool get isFiltered {
+    _$isFilteredAtom.reportRead();
+    return super.isFiltered;
+  }
+
+  @override
+  set isFiltered(bool value) {
+    _$isFilteredAtom.reportWrite(value, super.isFiltered, () {
+      super.isFiltered = value;
+    });
+  }
+
   late final _$searchHistoryAtom =
       Atom(name: '_SearchStore.searchHistory', context: context);
 
@@ -151,9 +167,21 @@ mixin _$SearchStore on _SearchStore, Store {
   }
 
   @override
+  void setIsFiltered(bool value) {
+    final _$actionInfo = _$_SearchStoreActionController.startAction(
+        name: '_SearchStore.setIsFiltered');
+    try {
+      return super.setIsFiltered(value);
+    } finally {
+      _$_SearchStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isSearched: ${isSearched},
+isFiltered: ${isFiltered},
 searchHistory: ${searchHistory},
 lecturesAfterSearching: ${lecturesAfterSearching},
 fetchLecturesAfterSearchingFuture: ${fetchLecturesAfterSearchingFuture},
