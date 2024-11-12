@@ -6,6 +6,7 @@ import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.d
 
 import '../../di/service_locator.dart';
 import '../../themes/default/colors_standards.dart';
+import '../../utils/routes/routes.dart';
 import 'widgets/cover_image_widget.dart';
 import 'widgets/topic_item.dart';
 
@@ -44,7 +45,9 @@ class _CoursesScreenState extends State<CoursesScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed(Routes.searchScreen);
+            },
             icon: const Icon(Icons.search),
             color: Theme.of(context).colorScheme.onPrimary,
           )

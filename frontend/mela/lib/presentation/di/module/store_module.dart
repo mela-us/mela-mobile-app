@@ -1,9 +1,12 @@
 import 'dart:async';
 
 import 'package:mela/domain/usecase/exercise/get_exercises_usecase.dart';
+import 'package:mela/domain/usecase/search/get_history_search_list.dart';
+import 'package:mela/domain/usecase/search/get_search_lectures_result.dart';
 import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
 import 'package:mela/presentation/divided_lectures_and_exercises_screen/store/exercise_store.dart';
 import 'package:mela/presentation/post/store/post_store.dart';
+import 'package:mela/presentation/search_screen/store/search_store.dart';
 
 import '../../../core/stores/error/error_store.dart';
 import '../../../core/stores/form/form_store.dart';
@@ -53,6 +56,8 @@ class StoreModule {
     getIt.registerSingleton<ExerciseStore>(
       ExerciseStore(getIt<GetExercisesUseCase>()),
     );
+    getIt.registerSingleton<SearchStore>(
+        SearchStore(getIt<GetHistorySearchList>(),getIt<GetSearchLecturesResult>()));
 
     getIt.registerSingleton<PostStore>(
       PostStore(

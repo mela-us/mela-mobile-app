@@ -89,7 +89,7 @@ class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen> {
                         color: Theme.of(context)
                             .colorScheme
                             .surface
-                            .withOpacity(0.8),
+                            .withOpacity(0.2),
                       ),
                       const CustomProgressIndicatorWidget(),
                     ],
