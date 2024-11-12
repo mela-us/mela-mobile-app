@@ -1,26 +1,22 @@
+import 'dart:async';
+
+import 'package:mela/di/service_locator.dart';
+import 'package:mela/presentation/my_app.dart';
 import 'package:flutter/material.dart';
-import 'package:mela/screens/question_screen/QuestionScreen.dart';
+import 'package:flutter/services.dart';
 
-import 'constants/global.dart';
-
-void main() {
-  runApp(const MainApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await setPreferredOrientations();
+  await ServiceLocator.configureDependencies();
+  runApp(MyApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return MaterialApp(
-      title: 'Todo App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: QuestionScreen(questions: Global.questions), // Test screen put here.
-    );
-    throw UnimplementedError();
-  }
-
+Future<void> setPreferredOrientations() {
+  return SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+    DeviceOrientation.landscapeRight,
+    DeviceOrientation.landscapeLeft,
+  ]);
 }

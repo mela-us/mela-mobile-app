@@ -218,26 +218,3 @@ class ResultScreen extends StatelessWidget{
     return '$hours:$minutes';
   }
 }
-PageRouteBuilder _changeScreenAnimation(Widget screen) {
-  return PageRouteBuilder(
-    pageBuilder: (context, ani, secAni) => screen,
-    transitionsBuilder: (context, ani, secAni,
-        child) {
-      const begin = Offset(1.0, 0.0);
-      const end = Offset.zero;
-      const curve = Curves.ease;
-
-      var tween = Tween(
-          begin: begin,
-          end: end
-      ).chain(CurveTween(curve: curve));
-      var offsetAnimation = ani.drive(tween);
-
-      return SlideTransition(
-        position: offsetAnimation,
-        child: child,
-      );
-    },
-    transitionDuration: Duration(milliseconds: 500),
-  );
-}

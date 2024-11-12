@@ -66,13 +66,6 @@ class _SingleQuestionState extends State<SingleQuestionView> {
       _onContinueTextPressed = widget.onContinueTextPressed;
     }
 
-    // if (oldWidget.answer != widget.answer){
-    //   _answer = widget.answer;
-    // }
-    //
-    // if (oldWidget.answer != widget.answer){
-    //   _controller = widget.controller;
-    // }
   }
 
   @override
@@ -80,59 +73,10 @@ class _SingleQuestionState extends State<SingleQuestionView> {
     // bool isQuiz = _question is QuizQuestion? true: false;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: <Widget>[
         //Question View
-        Row(
-          children: [
-            Expanded(
-                child: Container(
-                  margin: EdgeInsets.fromLTRB(
-                      30,
-                      16.0,
-                      Global.PracticeRightPadding,
-                      0.0),
-                  decoration: const BoxDecoration(
-                    color: Colors.transparent,
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(0, 3), // Đổ bóng
-                        ),
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 18, 15, 18),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
+        _buildQuestionContent(context),
 
-                          TextStandard.SubTitle(
-                              'Câu $_qNumber:',
-                              const Color(0xFFFF6B00)
-                          ),
-
-                          const SizedBox(height: 3.0),
-
-                          TextStandard.Content(
-                              _question.questionContent,
-                              const Color(0xFF393939)
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-            ),
-          ],
-        ),
         const SizedBox(height: 27),
         Padding(
             padding: const EdgeInsets.only(left: 30),
@@ -334,4 +278,7 @@ class _SingleQuestionState extends State<SingleQuestionView> {
       ],
     );
   }
+
+  //Build items:
+
 }

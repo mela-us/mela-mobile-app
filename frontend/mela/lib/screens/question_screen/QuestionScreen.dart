@@ -110,27 +110,7 @@ class _QuestionScreenState extends State<QuestionScreen>{
           ),
           backgroundColor: Global.AppBackgroundColor,
           actions: [
-            Padding(
-              padding: EdgeInsets.only(right: Global.PracticeRightPadding),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Image.asset(
-                    AssetsPath.clock,
-                    width: 30,
-                    height: 30,
-                  ),
-                  Container(
-                      margin: EdgeInsets.only(bottom: 4),
-                      child: TextStandard.SubTitle(
-                        '$hours:$minutes:$seconds',
-                        const Color(0xFF0961F5),
-                      )
-                  ),
-                ],
-              ),
-            )
+
           ],
         ),
         body: SingleQuestionView(

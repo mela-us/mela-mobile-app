@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mela/models/QuestionFamily/AQuestion.dart';
-import 'package:mela/models/QuestionFamily/FitbQuestion.dart';
-import 'package:mela/models/QuestionFamily/QuizQuestion.dart';
+import 'package:mela/domain/entity/question/fill_question.dart';
+import 'package:mela/domain/entity/question/question.dart';
+import 'package:mela/domain/entity/question/quiz_question.dart';
+
 
 class Global {
   static Color AppBackgroundColor = const Color(0xFFF5F9FF);
@@ -9,143 +10,61 @@ class Global {
   static double PracticeLeftPadding = 15;
   static double PracticeRightPadding = 34;
 
-  static List<AQuestion> questions = [
-    QuizQuestion(
-        quizChoice: ['12', '14', '16', '18'],
+  static List<Question> questions = [
+    Question(
         id: 'QQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'B',
-        imageUrl: null),
-    FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
+        content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
         answer: 'true',
-        imageUrl: null),
-    FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null),
-    FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null),
-    FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null), FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null),
-    FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null),
+        imageUrl: null,
+        choiceList: [],
+    ),
 
-    FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
+    Question(
+        choiceList: ['12', '14', '16', '18'],
+        id: 'QQ02',
+        content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
+        answer: 'B',
+        imageUrl: null
+    ),
+
+    Question(
+        choiceList: ['12', '14', '16', '18'],
+        id: 'QQ02',
+        content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
+        answer: 'B',
+        imageUrl: null,
+    ),
+    Question(
+        choiceList: ['12', '14', '16', '18'],
+        id: 'QQ02',
+        content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
+        answer: 'B',
+        imageUrl: null
+    ),
+    Question(
+        id: 'QQ01',
+        content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
         answer: 'true',
-        imageUrl: null),
-    FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null),
-    FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null),
-    FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null),
-    FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null),
-    FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null),
-    FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null), FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null), FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null), FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null),
-    FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null),
-    FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null),
-    FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null),
-    FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null),
-    FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null),
-    FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null),
-    FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null), FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null),
-    FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null),
-    FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null),
-    FitbQuestion(
-        id: 'FQ01',
-        questionContent: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null),
+        imageUrl: null
+    ),
   ];
+
+  static List<Question> questionsSub = [
+    Question(
+        id: 'QQ01',
+        content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
+        answer: 'true',
+        imageUrl: null
+    ),
+
+    Question(
+        choiceList: ['12', '14', '16', '18'],
+        id: 'QQ02',
+        content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
+        answer: 'B',
+        imageUrl: null
+    ),
+
+  ];
+
 }
