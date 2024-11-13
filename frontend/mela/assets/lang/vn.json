@@ -28,6 +28,13 @@
   "question_subtitle_for_quiz": "Hãy chọn đáp án chính xác nhất",
   "question_subtitle_for_fitb": "Hãy điền đáp án chính xác nhất",
   "question_btn_text_next": "Tiếp theo",
-  "question_end": "-------------------------------------------------------------------------------------"
+  "question_end": "-------------------------------------------------------------------------------------",
 
+  "result_start": "Below are list of strings for result",
+  "result_title": "Hoàn thành bài tập!!!",
+  "result_description": "Luyện mãi thành tài, miệt mài tất giỏi.",
+  "result_point_title": "ĐIỂM",
+  "result_time_title": "THỜI GIAN",
+  "result_btn_review": "Phân tích bài làm",
+  "result_end": "-------------------------------------------------------------------------------------"
 }

@@ -103,7 +103,7 @@ class QuestionQuitOverlay extends StatelessWidget {
         onTap: () => isStaying(false),
         child: Text(
           AppLocalizations.of(context)
-              .translate('question_btn_question_dialog_continue'),
+              .translate('question_btn_question_dialog_quit'),
           style: Theme.of(context)
               .textTheme
               .buttonStyle

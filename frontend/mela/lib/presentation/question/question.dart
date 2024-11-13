@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/domain/entity/question/question.dart';
@@ -11,6 +12,7 @@ import 'package:mela/presentation/question/store/timer/timer_store.dart';
 import 'package:mela/presentation/question/widgets/question_app_bar_widget.dart';
 import 'package:mela/presentation/question/widgets/question_list_overlay_widget.dart';
 import 'package:mela/utils/locale/app_localization.dart';
+import 'package:mela/utils/routes/routes.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../constants/assets.dart';
@@ -18,6 +20,8 @@ import '../../core/widgets/progress_indicator_widget.dart';
 import '../../di/service_locator.dart';
 
 class QuestionScreen extends StatefulWidget {
+  QuestionScreen({super.key});
+
   @override
   State<QuestionScreen> createState() => _QuestionScreenState();
 }
@@ -38,22 +42,31 @@ class _QuestionScreenState extends State<QuestionScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _initListOverlay();
-    
+
+    _timerStore.resetTimer();
+    _timerStore.startTimer();
+
+
+    //Reaction to questions status.
     reaction((_) => _questionStore.loading, (loading){
       if (!loading){
         //can't be null here
         _singleQuestionStore
             .generateAnswerList(_questionStore.questionList!
             .questions!.length);
+
+        SchedulerBinding.instance.addPostFrameCallback((_) async {
+          await _initListOverlay(context); // Hàm cần `context`
+        });
       }
     },
     fireImmediately: true);
 
+
+    //Reaction to question index change.
     reaction((_) => _singleQuestionStore.currentIndex, (index){
       String userAnswer = _singleQuestionStore.userAnswers[index];
       Question question = _questionStore.questionList!.questions![index];
-      print(userAnswer);
       if (isQuizQuestion(question)){
         if (userAnswer.isEmpty) {
           _singleQuestionStore.setQuizAnswerValue(userAnswer);
@@ -73,8 +86,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    _timerStore.resetTimer();
-    _timerStore.startTimer();
+
 
     // check to see if already called api
     if (!_questionStore.loading) {
@@ -82,6 +94,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
     }
 
     _singleQuestionStore.changeQuestion(0);
+
   }
 
   @override
@@ -449,7 +462,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
   // }
 
   //Initialize overlay:---------------------------------------------------------
-   void _initListOverlay(){
+   Future<void> _initListOverlay(BuildContext context) async{
      questionListOverlay = OverlayEntry(
          builder: (BuildContext overlayContext) {
            return Stack(
@@ -468,11 +481,8 @@ class _QuestionScreenState extends State<QuestionScreen> {
                        }
                        else {
                          questionListOverlay.remove();
-                         print('submit');
-                         // Navigator.pushReplacementNamed(
-                         //   context,
-                         //   //Review screen here
-                         // );
+                         Navigator.of(context)
+                             .pushReplacementNamed(Routes.result);
                        }
                      }),
                )
