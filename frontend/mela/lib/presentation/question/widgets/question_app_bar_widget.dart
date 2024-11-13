@@ -25,10 +25,16 @@ class _QuestionAppBarState extends State<QuestionAppBar> {
   final TimerStore _timerStore = getIt<TimerStore>();
 
   late OverlayEntry quitDialogOverlay;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _initQuitDialog();
+  }
 
   @override
   Widget build(BuildContext context) {
-    _initQuitDialog();
+
     return AppBar(
       title: _buildTitle(context),
       backgroundColor: Theme.of(context).colorScheme.appBackground,

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:another_flushbar/flushbar_helper.dart';
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -10,7 +9,9 @@ import 'package:mela/presentation/question/store/question_store.dart';
 import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
 import 'package:mela/presentation/question/store/timer/timer_store.dart';
 import 'package:mela/presentation/question/widgets/question_app_bar_widget.dart';
+import 'package:mela/presentation/question/widgets/question_list_overlay_widget.dart';
 import 'package:mela/utils/locale/app_localization.dart';
+import 'package:mobx/mobx.dart';
 
 import '../../constants/assets.dart';
 import '../../core/widgets/progress_indicator_widget.dart';
@@ -26,21 +27,46 @@ class _QuestionScreenState extends State<QuestionScreen> {
   final TimerStore _timerStore = getIt<TimerStore>();
   final QuestionStore _questionStore = getIt<QuestionStore>();
   final SingleQuestionStore _singleQuestionStore = getIt<SingleQuestionStore>();
+  late OverlayEntry questionListOverlay;
 
   //----------------------------------------------------------------------------
-  TextEditingController _controller = TextEditingController();
-  String? _quizAnswer;
+  final TextEditingController _controller = TextEditingController();
 
   //State set:------------------------------------------------------------------
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // check to see if already called api
-    if (!_questionStore.loading) {
-      _questionStore.getQuestions();
-      print(_questionStore.questionList.toString());
-    }
+    _initListOverlay();
+    
+    reaction((_) => _questionStore.loading, (loading){
+      if (!loading){
+        //can't be null here
+        _singleQuestionStore
+            .generateAnswerList(_questionStore.questionList!
+            .questions!.length);
+      }
+    },
+    fireImmediately: true);
+
+    reaction((_) => _singleQuestionStore.currentIndex, (index){
+      String userAnswer = _singleQuestionStore.userAnswers[index];
+      Question question = _questionStore.questionList!.questions![index];
+      print(userAnswer);
+      if (isQuizQuestion(question)){
+        if (userAnswer.isEmpty) {
+          _singleQuestionStore.setQuizAnswerValue(userAnswer);
+        }
+        int choiceIndex = getIndexFromLetter(userAnswer);
+        String choiceValue = question.choiceList![choiceIndex];
+
+        _singleQuestionStore.setQuizAnswerValue(choiceValue);
+      }
+      else {
+        _controller.text = userAnswer;
+      }
+    });
   }
 
   @override
@@ -56,7 +82,6 @@ class _QuestionScreenState extends State<QuestionScreen> {
     }
 
     _singleQuestionStore.changeQuestion(0);
-
   }
 
   @override
@@ -78,28 +103,16 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
 
   //Build components:-----------------------------------------------------------
-  Widget _buildBody(BuildContext context) {
-    //TODO: Need check more for null value
-    List<Question>? questions = _questionStore.questionList!.questions;
-    int index = _singleQuestionStore.currentIndex;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        //Question View
-        _buildQuestionContent(),
-        //spacing
-        const SizedBox(height: 27),
-
-        _buildQuestionSubTitle(context, questions![index]),
-
-        const SizedBox(height: 17),
-        //Answer View
-
-        isQuizQuestion(questions[index]) ?
-        //quiz view      :      fill view
-        _buildQuizView(questions[index]) : _buildFillView(questions[index]),
-      ],
+  Widget _buildMainBody(){
+    return Observer(
+      builder: (context){
+        if (_questionStore.loading){
+          return const CustomProgressIndicatorWidget();
+        }
+        else {
+          return _buildBodyContent(context);
+        }
+      },
     );
   }
 
@@ -110,7 +123,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
         height: 45,
         margin: const EdgeInsets.fromLTRB(0, 0, 19, 30,),
         child: FloatingActionButton(
-            onPressed: _viewQuestionList,
+            onPressed: _listButtonPressedEvent,
             backgroundColor: const Color(0xFF0961F5),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(
@@ -149,7 +162,6 @@ class _QuestionScreenState extends State<QuestionScreen> {
               ),
             )
         ),
-
       ),
     );
   }
@@ -168,22 +180,32 @@ class _QuestionScreenState extends State<QuestionScreen> {
     ],
   );
 
-  Widget _buildMainBody(){
-    return Observer(
-      builder: (context){
-        if (_questionStore.loading){
-          return const CustomProgressIndicatorWidget();
-        }
-        else {
-          _singleQuestionStore
-              .generateAnswerList(_questionStore.questionList!
-              .questions!.length);
-          return _buildBody(context);
-        }
-      },
-    );
 
+  Widget _buildBodyContent(BuildContext context) {
+    //TODO: Need check more for null value
+    List<Question>? questions = _questionStore.questionList!.questions;
+    int index = _singleQuestionStore.currentIndex;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        //Question View
+        _buildQuestionContent(),
+        //spacing
+        const SizedBox(height: 27),
+
+        _buildQuestionSubTitle(context, questions![index]),
+
+        const SizedBox(height: 17),
+        //Answer View
+        isQuizQuestion(questions[index]) ?
+        //quiz view      :      fill view
+        _buildQuizView(questions[index]) : _buildFillView(questions[index]),
+      ],
+    );
   }
+
+
   Widget _buildQuestionSubTitle(BuildContext context, Question question){
     return Padding(
         padding: const EdgeInsets.only(left: 30),
@@ -201,6 +223,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
         )
     );
   }
+
   Widget _buildQuestionContent(){
     return Row(
       children: [
@@ -360,15 +383,14 @@ class _QuestionScreenState extends State<QuestionScreen> {
               getAnswerFromIndex(index)
           );
           _singleQuestionStore.setQuizAnswerValue(value!);
-          print(_singleQuestionStore.currentQuizAnswer);
         },
       ),
     );
   }
 
   //Event handlers:-------------------------------------------------------------
-  void _viewQuestionList() {
-
+  void _listButtonPressedEvent() {
+    Overlay.of(context).insert(questionListOverlay);
   }
 
   void _continueButtonPressedEvent() {
@@ -412,20 +434,53 @@ class _QuestionScreenState extends State<QuestionScreen> {
   String getAnswerFromIndex(int index){
     return String.fromCharCode(index + 65);
   }
+  // _showErrorMessage(String message) {
+  //   Future.delayed(const Duration(milliseconds: 0), () {
+  //     if (message.isNotEmpty) {
+  //       FlushbarHelper.createError(
+  //         message: message,
+  //         title: AppLocalizations.of(context).translate('home_tv_error'),
+  //         duration: const Duration(seconds: 3),
+  //       ).show(context);
+  //     }
+  //   });
+  //
+  //   return const SizedBox.shrink();
+  // }
 
-  _showErrorMessage(String message) {
-    Future.delayed(const Duration(milliseconds: 0), () {
-      if (message.isNotEmpty) {
-        print(_questionStore.questionList.toString());
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: const Duration(seconds: 3),
-        ).show(context);
-      }
-    });
+  //Initialize overlay:---------------------------------------------------------
+   void _initListOverlay(){
+     questionListOverlay = OverlayEntry(
+         builder: (BuildContext overlayContext) {
+           return Stack(
+             children: [
+               Container(
+                 color: Colors.black.withOpacity(0.53),
+               ),
+               Positioned(
+                 bottom: 34,
+                 left: 19,
+                 right: 19,
+                 child: QuestionListOverlay(
+                     isSubmitted: (bool submit) {
+                       if (!submit) {
+                         questionListOverlay.remove();
+                       }
+                       else {
+                         questionListOverlay.remove();
+                         print('submit');
+                         // Navigator.pushReplacementNamed(
+                         //   context,
+                         //   //Review screen here
+                         // );
+                       }
+                     }),
+               )
+             ],
+           );
+         }
+     );
+   }
 
-    return const SizedBox.shrink();
-  }
 }
 
