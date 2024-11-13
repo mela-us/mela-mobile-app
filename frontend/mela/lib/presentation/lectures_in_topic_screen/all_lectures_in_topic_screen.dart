@@ -5,6 +5,7 @@ import 'package:mela/core/widgets/progress_indicator_widget.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
 import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
+import '../../utils/routes/routes.dart';
 import 'widgets/lectures_in_topic_and_level.dart';
 
 class AllLecturesInTopicScreen extends StatefulWidget {
@@ -56,7 +57,9 @@ class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen> {
             Padding(
               padding: const EdgeInsets.only(right: 10),
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushNamed(Routes.searchScreen);
+                },
                 icon: const Icon(Icons.search),
                 color: Theme.of(context).colorScheme.onPrimary,
               ),

@@ -19,7 +19,7 @@ abstract class _SearchStore with Store {
   GetSearchLecturesResult _getSearchLecturesResult;
 
   //Very important because if user search after we need to set LectureList in LectureStore=value search to when click is correct
-  LectureStore _lectureStore=getIt<LectureStore>();
+  LectureStore _lectureStore = getIt<LectureStore>();
   //Constructor
   _SearchStore(this._getHistorySearchList, this._getSearchLecturesResult);
 
@@ -33,7 +33,11 @@ abstract class _SearchStore with Store {
   List<String>? searchHistory;
 
   @observable
-  LectureList? lecturesAfterSearching;
+  LectureList? lecturesAfterSearchingAndFiltering;
+
+  @observable
+  LectureList?
+      lecturesAfterSearching; // it is not used because it is same with lecture.lecureList
 
   @computed
   bool get isLoadingSearch =>
@@ -71,24 +75,39 @@ abstract class _SearchStore with Store {
     future.then((value) {
       this.lecturesAfterSearching = value;
       _lectureStore.lectureList = value;
+      updateLectureAfterSeachingAndFiltering(value);
     }).catchError((onError) {
       this.lecturesAfterSearching = null;
+      updateLectureAfterSeachingAndFiltering(null);
       print(onError);
       throw onError;
     });
   }
 
   @action
+  void updateLectureAfterSeachingAndFiltering(LectureList? value) {
+    print("Chieu dai cua  list luc truoc: ");
+    if (lecturesAfterSearchingAndFiltering != null) {
+      print(lecturesAfterSearchingAndFiltering!.lectures.length);
+    }
+
+    lecturesAfterSearchingAndFiltering = value;
+    print("Chieu dai cua  list luc sau: ");
+    print(lecturesAfterSearchingAndFiltering!.lectures.length);
+  }
+
+  @action
   void toggleIsSearched() {
     isSearched = !isSearched;
   }
+
   @action
   void resetIsSearched() {
     isSearched = false;
   }
+
   @action
   void setIsFiltered(bool value) {
     isFiltered = value;
   }
-
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mela/constants/app_theme.dart';
 import 'package:mela/core/widgets/progress_indicator_widget.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/filter_screen/store/filter_store.dart';
@@ -31,11 +32,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   void handleHistoryItemClick(String searchText) {
     // Update the search bar text
-    if (searchBarKey.currentState == null) {
-      print("searchBarKey.currentState is null");
-      return;
-    }
-    print("searchBarKey.currentState is not null");
+    // print("searchBarKey.currentState is not null");
     searchBarKey.currentState?.controller.text = searchText;
     // Perform the search
     searchBarKey.currentState?.performSearch(searchText);
@@ -45,9 +42,20 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Tìm kiếm"),
+        title: Text("Tìm kiếm",
+            style: Theme.of(context)
+                .textTheme
+                .heading
+                .copyWith(color: Theme.of(context).colorScheme.primary)),
         leading: IconButton(
           onPressed: () {
+            if (_searchStore.isSearched) {
+              _searchStore.resetIsSearched();
+              _filterStore.resetFilter();
+              _searchStore.setIsFiltered(false);
+              return;
+            }
+            //if not issearched, pop the screen
             Navigator.of(context).pop();
             _searchStore.resetIsSearched();
             _searchStore.setIsFiltered(false);
@@ -57,10 +65,47 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          //Search bar
           SearchingBar(key: searchBarKey),
+
+          //Row History search
+          Observer(builder: (context) {
+            if (!_searchStore.isSearched) {
+              return Padding(
+                padding: const EdgeInsets.only(left: 30),
+                child: Text("Lịch sử tìm kiếm",
+                    style: Theme.of(context)
+                        .textTheme
+                        .normal
+                        .copyWith(color: Theme.of(context).colorScheme.primary)),
+              );
+            }
+
+            return _searchStore.isLoadingSearch
+                ? Container()
+                : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Tìm thấy",
+                            style: Theme.of(context).textTheme.normal.copyWith(
+                                color: Theme.of(context).colorScheme.primary)),
+                        Text(
+                            "${_searchStore.lecturesAfterSearchingAndFiltering!.lectures.length.toString()} kết quả",
+                            style: Theme.of(context).textTheme.normal.copyWith(
+                                color: Theme.of(context).colorScheme.tertiary)),
+                      ],
+                    ),
+                  );
+          }),
+
+          //List history search or list lectures after searching
           Expanded(
             child: Observer(builder: (context) {
+              //List history search
               if (!_searchStore.isSearched) {
                 return _searchStore.isLoadingHistorySearch
                     ? AbsorbPointer(
@@ -83,7 +128,8 @@ class _SearchScreenState extends State<SearchScreen> {
                         itemBuilder: (context, index) {
                           return Container(
                               height: 40,
-                              padding: EdgeInsets.symmetric(horizontal: 12),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
                               margin: const EdgeInsets.symmetric(
                                   vertical: 2, horizontal: 20),
                               child: Row(
@@ -91,7 +137,6 @@ class _SearchScreenState extends State<SearchScreen> {
                                   Expanded(
                                     child: GestureDetector(
                                       onTap: () {
-                                        print("OnTap in item");
                                         handleHistoryItemClick(
                                             _searchStore.searchHistory![index]);
                                       },
@@ -116,15 +161,18 @@ class _SearchScreenState extends State<SearchScreen> {
                         },
                       );
               }
+
+              ///List lectures after searching
               return _searchStore.isLoadingSearch
                   ? const Center(child: CustomProgressIndicatorWidget())
                   : ListView.builder(
-                      itemCount:
-                          _searchStore.lecturesAfterSearching!.lectures.length,
+                      itemCount: _searchStore
+                          .lecturesAfterSearchingAndFiltering!.lectures.length,
                       itemBuilder: (context, index) {
                         return LectureItem(
                             lecture: _searchStore
-                                .lecturesAfterSearching!.lectures[index]);
+                                .lecturesAfterSearchingAndFiltering!
+                                .lectures[index]);
                       },
                     );
             }),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
+import 'package:mela/domain/entity/lecture/lecture_list.dart';
 import 'package:mela/presentation/filter_screen/store/filter_store.dart';
 import 'package:mela/presentation/filter_screen/widgets/checkbox_row.dart';
 import 'package:mela/presentation/search_screen/store/search_store.dart';
@@ -19,7 +21,7 @@ class _FilterScreenState extends State<FilterScreen> {
   final TextEditingController startController = TextEditingController();
   final TextEditingController endController = TextEditingController();
   final SearchStore _searchStore = getIt<SearchStore>();
-
+  LectureList filteredLectures = LectureList(lectures: []);
   final List<Map<String, dynamic>> rangeChoices = [
     {"label": "0%-50%", "start": 0.0, "end": 50.0},
     {"label": "20%-80%", "start": 20.0, "end": 80.0},
@@ -40,7 +42,59 @@ class _FilterScreenState extends State<FilterScreen> {
     endController.dispose();
     super.dispose();
   }
-  
+
+  void filterLectures() {
+    filteredLectures.lectures.clear();
+    filteredLectures = LectureList(
+        lectures: []); //Must have to create new filterList to pass to filterList in SeachStore
+    //add all lectures that match the filter range progress to filteredLectures
+    for (var lecture in _searchStore.lecturesAfterSearching!.lectures) {
+      if (lecture.progress >= _filterStore.startPercentage &&
+          lecture.progress <= _filterStore.endPercentage) {
+        filteredLectures.lectures.add(lecture);
+      }
+    }
+    // print("filterLectures------------------------>2");
+    // for (var lecture in filteredLectures.lectures) {
+    //   print("lectureId: ${lecture.lectureId}");
+    // }
+    //Because if all level id be choose = no level id be choose
+    if (_filterStore.isPrimarySelected ||
+        _filterStore.isSecondarySelected ||
+        _filterStore.isHighSchoolSelected) {
+      if (!_filterStore.isPrimarySelected) {
+        filteredLectures.lectures
+            .removeWhere((lecture) => lecture.levelId == 0);
+      }
+      if (!_filterStore.isSecondarySelected) {
+        filteredLectures.lectures
+            .removeWhere((lecture) => lecture.levelId == 1);
+      }
+      if (!_filterStore.isHighSchoolSelected) {
+        filteredLectures.lectures
+            .removeWhere((lecture) => lecture.levelId == 2);
+      }
+    }
+
+    if (_filterStore.isNotStartedSelected ||
+        _filterStore.isInProgressSelected ||
+        _filterStore.isCompletedSelected) {
+      if (!_filterStore.isNotStartedSelected) {
+        filteredLectures.lectures
+            .removeWhere((lecture) => lecture.progress == 0);
+      }
+      if (!_filterStore.isInProgressSelected) {
+        filteredLectures.lectures.removeWhere(
+            (lecture) => lecture.progress > 0 && lecture.progress < 100);
+      }
+      if (!_filterStore.isCompletedSelected) {
+        filteredLectures.lectures
+            .removeWhere((lecture) => lecture.progress == 100);
+      }
+    }
+    _searchStore.updateLectureAfterSeachingAndFiltering(filteredLectures);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +107,11 @@ class _FilterScreenState extends State<FilterScreen> {
               }
               Navigator.pop(context);
             }),
-        title: Text('Lọc'),
+        title: Text("Lọc",
+            style: Theme.of(context)
+                .textTheme
+                .heading
+                .copyWith(color: Theme.of(context).colorScheme.primary)),
         actions: [
           TextButton(
             onPressed: () {
@@ -62,8 +120,14 @@ class _FilterScreenState extends State<FilterScreen> {
               _filterStore.setIsFilteredButtonPressed(false);
               startController.clear();
               endController.clear();
+              _searchStore.updateLectureAfterSeachingAndFiltering(
+                  _searchStore.lecturesAfterSearching!);
             },
-            child: Text('Đặt lại', style: TextStyle(color: Colors.black)),
+            child: Text("Đặt lại",
+                style: Theme.of(context)
+                    .textTheme
+                    .content
+                    .copyWith(color: Theme.of(context).colorScheme.secondary)),
           ),
         ],
       ),
@@ -73,8 +137,12 @@ class _FilterScreenState extends State<FilterScreen> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Cấp độ',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+              //Cấp độ
+              Text("Cấp độ",
+                  style: Theme.of(context)
+                      .textTheme
+                      .title
+                      .copyWith(color: Theme.of(context).colorScheme.primary)),
               CheckboxRow(
                   label: "Tiểu học",
                   isSelected: _filterStore.isPrimarySelected,
@@ -88,8 +156,13 @@ class _FilterScreenState extends State<FilterScreen> {
                   isSelected: _filterStore.isHighSchoolSelected,
                   onToggle: _filterStore.toggleHighSchool),
               const SizedBox(height: 16),
-              const Text('Tiến trình',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+
+              //Tiến trình
+              Text("Tiến trình",
+                  style: Theme.of(context)
+                      .textTheme
+                      .title
+                      .copyWith(color: Theme.of(context).colorScheme.primary)),
               CheckboxRow(
                   label: "Chưa học",
                   isSelected: _filterStore.isNotStartedSelected,
@@ -103,23 +176,52 @@ class _FilterScreenState extends State<FilterScreen> {
                   isSelected: _filterStore.isCompletedSelected,
                   onToggle: _filterStore.toggleCompleted),
               const SizedBox(height: 16),
-              const Text('Điều chỉnh tiến trình',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 8),
-              _buildRangeSelection(),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildRangeChoices(),
-                ],
-              ),
-              const SizedBox(height: 16),
+
+              //Tinh chỉnh tiến trình
+              _filterStore.isInProgressSelected
+                  ? Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Điều chỉnh tiến trình",
+                              style: Theme.of(context).textTheme.title.copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.primary)),
+                          const SizedBox(height: 4),
+                          Text("Đang học (%)",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .normal
+                                  .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary)),
+                          const SizedBox(height: 8),
+                          _buildRangeSelection(),
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              _buildRangeChoices(),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                        ],
+                      ),
+                    )
+                  : Container(),
+
+                //Button Áp dụng
               FilterButton(
                 textButton: "Áp dụng",
                 onPressed: () {
-                  
-                  // _searchStore.filterCourses();
+                  if(_filterStore.startPercentage>_filterStore.endPercentage){
+                       ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Giá trị % "Từ" phải nhỏ hơn')),
+                      );
+                      return;
+                  }
+                  filterLectures();
                   _filterStore.setIsFilteredButtonPressed(true);
                   _searchStore.setIsFiltered(true);
                   Navigator.pop(context);
@@ -140,7 +242,11 @@ class _FilterScreenState extends State<FilterScreen> {
           _filterStore.changeStartPercentage(double.tryParse(value)!);
           _filterStore.resetSelectedRangeIndex();
         }),
-        Text("------", style: TextStyle(fontSize: 20, color: Colors.teal)),
+        Text("------",
+            style: Theme.of(context)
+                .textTheme
+                .subHeading
+                .copyWith(color: Theme.of(context).colorScheme.inversePrimary)),
         _buildPercentageField("Đến", _filterStore.endPercentage, (value) {
           _filterStore.changeEndPercentage(double.tryParse(value)!);
           _filterStore.resetSelectedRangeIndex();
@@ -149,18 +255,24 @@ class _FilterScreenState extends State<FilterScreen> {
     );
   }
 
+  //_buildPercentageField to enter the percentage
   Widget _buildPercentageField(
       String label, double? value, Function(String) onChanged) {
     return Container(
       width: 80,
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.teal),
+        border: Border.all(color: Theme.of(context).colorScheme.inversePrimary),
         borderRadius: BorderRadius.circular(16),
       ),
       child: TextField(
         controller: label == "Từ" ? startController : endController,
-        decoration: InputDecoration.collapsed(hintText: label),
+        decoration: InputDecoration.collapsed(
+            hintText: label,
+            hintStyle: Theme.of(context)
+                .textTheme
+                .normal
+                .copyWith(color: Theme.of(context).colorScheme.inversePrimary)),
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
         textInputAction: TextInputAction.done,
@@ -194,13 +306,22 @@ class _FilterScreenState extends State<FilterScreen> {
     );
   }
 
+  //Range choices in Tiến trình
   Widget _buildRangeChoices() {
     return Wrap(
       spacing: 8,
       children: List<Widget>.generate(
         rangeChoices.length,
         (index) => ChoiceChip(
-          label: Text(rangeChoices[index]["label"]!),
+          showCheckmark: false,
+          selectedColor: Theme.of(context).colorScheme.inversePrimary,
+          label: Text(
+            rangeChoices[index]["label"]!,
+            style: Theme.of(context)
+                .textTheme
+                .normal
+                .copyWith(color: Theme.of(context).colorScheme.primary),
+          ),
           selected: _filterStore.selectedRangeIndex == index,
           onSelected: (selected) {
             if (selected) {

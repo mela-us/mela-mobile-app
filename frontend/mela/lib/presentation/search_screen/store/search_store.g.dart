@@ -72,6 +72,24 @@ mixin _$SearchStore on _SearchStore, Store {
     });
   }
 
+  late final _$lecturesAfterSearchingAndFilteringAtom = Atom(
+      name: '_SearchStore.lecturesAfterSearchingAndFiltering',
+      context: context);
+
+  @override
+  LectureList? get lecturesAfterSearchingAndFiltering {
+    _$lecturesAfterSearchingAndFilteringAtom.reportRead();
+    return super.lecturesAfterSearchingAndFiltering;
+  }
+
+  @override
+  set lecturesAfterSearchingAndFiltering(LectureList? value) {
+    _$lecturesAfterSearchingAndFilteringAtom
+        .reportWrite(value, super.lecturesAfterSearchingAndFiltering, () {
+      super.lecturesAfterSearchingAndFiltering = value;
+    });
+  }
+
   late final _$lecturesAfterSearchingAtom =
       Atom(name: '_SearchStore.lecturesAfterSearching', context: context);
 
@@ -145,6 +163,17 @@ mixin _$SearchStore on _SearchStore, Store {
       ActionController(name: '_SearchStore', context: context);
 
   @override
+  void updateLectureAfterSeachingAndFiltering(LectureList? value) {
+    final _$actionInfo = _$_SearchStoreActionController.startAction(
+        name: '_SearchStore.updateLectureAfterSeachingAndFiltering');
+    try {
+      return super.updateLectureAfterSeachingAndFiltering(value);
+    } finally {
+      _$_SearchStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void toggleIsSearched() {
     final _$actionInfo = _$_SearchStoreActionController.startAction(
         name: '_SearchStore.toggleIsSearched');
@@ -183,6 +212,7 @@ mixin _$SearchStore on _SearchStore, Store {
 isSearched: ${isSearched},
 isFiltered: ${isFiltered},
 searchHistory: ${searchHistory},
+lecturesAfterSearchingAndFiltering: ${lecturesAfterSearchingAndFiltering},
 lecturesAfterSearching: ${lecturesAfterSearching},
 fetchLecturesAfterSearchingFuture: ${fetchLecturesAfterSearchingFuture},
 fetchHistorySearchFuture: ${fetchHistorySearchFuture},

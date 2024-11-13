@@ -39,7 +39,7 @@ class SearchRepositoryImpl extends SearchRepository {
             lectureContent: "Nội dung bài học"),
         Lecture(
             lectureId: 13,
-            levelId: 1,
+            levelId: 0,
             topicId: topicId,
             lectureName: "Lý thuyết chia hết",
             lectureDescription: "Mô tả bài học",
@@ -60,7 +60,7 @@ class SearchRepositoryImpl extends SearchRepository {
             lectureContent: "Nội dung bài học"),
         Lecture(
             lectureId: 16,
-            levelId: 2,
+            levelId: 0,
             topicId: topicId,
             lectureName: "Lý thuyết chia hết",
             lectureDescription: "Mô tả bài học",
@@ -74,14 +74,14 @@ class SearchRepositoryImpl extends SearchRepository {
             lectureContent: "Nội dung bài học"),
         Lecture(
             lectureId: 18,
-            levelId: 0,
+            levelId: 2,
             topicId: topicId,
             lectureName: "Hàm Euler, hàm số học",
             lectureDescription: "Mô tả bài học",
             lectureContent: "Nội dung bài học"),
         Lecture(
             lectureId: 19,
-            levelId: 2,
+            levelId: 0,
             topicId: topicId,
             lectureName: "Lý thuyết chia hết",
             lectureDescription: "Mô tả bài học",
