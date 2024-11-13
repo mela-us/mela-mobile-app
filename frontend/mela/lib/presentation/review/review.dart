@@ -68,7 +68,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
             _buildQuizAnswer() : _buildFillAnswer(),
 
             isQuizQuestion(questions[_singleQuestionStore.currentIndex])?
-            const SizedBox(height: 27) : const SizedBox(height: 15),
+            const SizedBox(height: 15): const SizedBox(height: 27),
 
 
             Padding(
