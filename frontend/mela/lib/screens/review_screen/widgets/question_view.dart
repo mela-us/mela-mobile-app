@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mela/constants/app_theme.dart';
 import 'package:mela/models/Notifiers/question_change_notifier.dart';
 import 'package:mela/models/QuestionFamily/AQuestion.dart';
 import 'package:mela/models/QuestionFamily/FitbQuestion.dart';
@@ -57,59 +58,7 @@ class QuestionView extends StatelessWidget{
   }
 }
 
-Widget questionWidget(QAMixNotifier notifier){
-  return Row(
-    children: [
-      Expanded(
-        child: Container(
-          margin: EdgeInsets.fromLTRB(
-              30,
-              16.0,
-              Global.PracticeRightPadding,
-              0.0),
-          decoration: const BoxDecoration(
-            color: Colors.transparent,
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: const Offset(0, 3), // Đổ bóng
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(15, 18, 15, 18),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
 
-                  TextStandard.SubTitle(
-                      'Câu ${notifier.index+1}:',
-                      const Color(0xFFFF6B00)
-                  ),
-
-                  const SizedBox(height: 3.0),
-
-                  TextStandard.Content(
-                      notifier.question.questionContent,
-                      const Color(0xFF393939)
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    ],
-  );
-}
 
 Widget explanationWidget(String content){
   return Row(
@@ -191,7 +140,7 @@ Container correctAnswerFitbView(String answer){
     ),
     child: answerTile(
         answer,
-        Color(0xFF8EFF97),
+        Theme.of(context).colorScheme.buttonCorrect,
         Color(0xFF167F71),
         Icons.check_circle
     ),

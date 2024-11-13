@@ -5,6 +5,7 @@ import 'package:mela/presentation/question/store/question_store.dart';
 import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
 import 'package:mela/presentation/question/store/timer/timer_store.dart';
 import 'package:mela/utils/locale/app_localization.dart';
+import 'package:mela/utils/routes/routes.dart';
 
 import '../../constants/assets.dart';
 import '../../di/service_locator.dart';
@@ -21,7 +22,7 @@ class ResultScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.appBackground,
-      appBar: const PracticeAppBar(previousScreen: null),
+      appBar: const PracticeAppBar(previousScreenRoute: null),
       body: _buildBody(context),
     );
   }
@@ -126,13 +127,7 @@ class ResultScreen extends StatelessWidget {
     return GestureDetector(
       onTap: () =>
       {
-        print('pressed change screen'),
-        // Navigator.push(
-        //     context,
-        //     _changeScreenAnimation(
-        //         ReviewScreen(questions: questions, answers: answers)
-        //     )
-        // )
+        Navigator.of(context).pushNamed(Routes.review),
       },
       child: Container(
         width: double.infinity,

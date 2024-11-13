@@ -39,8 +39,6 @@ class QuestionListBar extends StatelessWidget{
         },
       ),
     );
-
-
   }
 
   void _onQuestionSelected(QAMixNotifier notifier, int index) {

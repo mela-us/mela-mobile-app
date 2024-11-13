@@ -1,0 +1,404 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mela/constants/app_theme.dart';
+import 'package:mela/core/widgets/practice_app_bar_widget.dart';
+import 'package:mela/di/service_locator.dart';
+import 'package:mela/domain/entity/question/question.dart';
+import 'package:mela/presentation/question/store/question_store.dart';
+import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
+import 'package:mela/presentation/review/widgets/list_item_tile_widget.dart';
+import 'package:mela/utils/locale/app_localization.dart';
+import 'package:mela/utils/routes/routes.dart';
+
+import '../../constants/enum.dart';
+
+class ReviewScreen extends StatefulWidget {
+  ReviewScreen({super.key});
+
+  @override
+  State<ReviewScreen> createState() => _ReviewScreenState();
+}
+
+class _ReviewScreenState extends State<ReviewScreen> {
+  final QuestionStore _questionStore = getIt<QuestionStore>();
+  final SingleQuestionStore _singleQuestionStore = getIt<SingleQuestionStore>();
+  late List<Question> questions;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    questions = _questionStore.questionList!.questions!;
+    _singleQuestionStore.changeQuestion(0); //reset to 0.
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: const PracticeAppBar(previousScreenRoute: Routes.result),
+        body: _buildBody(),
+        bottomNavigationBar: _buildQuestionList(),
+    );
+  }
+
+  //Build Components:-----------------------------------------------------------
+  Widget _buildBody(){
+    return Observer(builder: (context){
+      return SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildQuestionWidget(),
+
+            const SizedBox(height: 27),
+
+            Padding(
+                padding: const EdgeInsets.only(left: 30),
+                child: Text(
+                  AppLocalizations.of(context).translate('review_ask'),
+                  style: Theme.of(context).textTheme.subTitle
+                      .copyWith(color: Theme.of(context).colorScheme.textInBg2),
+                ),
+            ),
+
+            const SizedBox(height: 17),
+
+            isQuizQuestion(questions[_singleQuestionStore.currentIndex])?
+            _buildQuizAnswer() : _buildFillAnswer(),
+
+            isQuizQuestion(questions[_singleQuestionStore.currentIndex])?
+            const SizedBox(height: 27) : const SizedBox(height: 15),
+
+
+            Padding(
+              padding: const EdgeInsets.only(left: 30),
+              child: Text(
+                AppLocalizations.of(context).translate('review_explain'),
+                style: Theme.of(context).textTheme.subTitle
+                    .copyWith(color: Theme.of(context).colorScheme.textInBg2),
+              ),
+            ),
+
+            // SizedBox(height: 17),
+            _buildExplainView('Phần giải thích cho đáp án nằm ở đây'),
+          ],
+        ),
+      );
+    });
+  }
+
+  Widget _buildQuestionList(){
+    return Container(
+      height: 134,
+      color: Colors.white,
+      child: ListView.builder(
+        padding: const EdgeInsets.only(bottom: 61),
+        itemCount: questions.length,
+        scrollDirection: Axis.horizontal,
+        shrinkWrap: true,
+        itemBuilder: (context, i) {
+          return Observer(builder: (context){
+            return InkWell(
+              borderRadius: BorderRadius.circular(90),
+              onTap: (){
+                _singleQuestionStore.changeQuestion(i);
+              },
+              child: ListItemTile(
+                  status: getStatus(
+                      questions[i], _singleQuestionStore.userAnswers[i]
+                  ),
+                  index: i,
+              ),
+            );
+          });
+        },
+      ),
+    );
+  }
+  //Build Items:----------------------------------------------------------------
+  Widget _buildQuestionWidget(){
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            margin: const EdgeInsets.fromLTRB(30, 16.0, 34, 0.0),
+            decoration: const BoxDecoration(
+              color: Colors.transparent,
+            ),
+            child: Container(
+              decoration: decorationWithShadow,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(15, 18, 15, 18),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Câu ${_singleQuestionStore.currentIndex + 1}',
+                      style: Theme.of(context).textTheme.subTitle
+                          .copyWith(color: const Color(0xFFFF6B00)),
+                    ),
+
+                    const SizedBox(height: 3.0),
+
+                    Text(
+                      questions[_singleQuestionStore.currentIndex].content!,
+                      style: Theme.of(context).textTheme.content
+                          .copyWith(color: Theme.of(context)
+                          .colorScheme.inputTitleText),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildExplainView(String content){
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            margin: const EdgeInsets.fromLTRB(30, 16.0, 34, 0.0),
+            decoration: const BoxDecoration(
+              color: Colors.transparent,
+            ),
+            child: Container(
+              decoration: decorationWithShadow,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(15, 18, 15, 18),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context).translate('review_solution'),
+                      style: Theme.of(context).textTheme.subTitle
+                          .copyWith(color: const Color(0xFFFF6B00)),
+                    ),
+                    const SizedBox(height: 3.0),
+
+                    Text(
+                      content,
+                      style: Theme.of(context).textTheme.content.copyWith(
+                          color: Theme.of(context).colorScheme.inputTitleText),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFillAnswer(){
+    Question question = questions[_singleQuestionStore.currentIndex];
+    String userAnswer = _singleQuestionStore
+        .userAnswers[_singleQuestionStore.currentIndex];
+
+    //answer is correct
+    if (isAnswerCorrect(question, userAnswer)){
+      return _buildCorrectFill(userAnswer);
+    }
+    //answer is incorrect
+    else {
+      return _buildIncorrectFill(question.answer!, userAnswer);
+    }
+  }
+
+
+  Widget _buildCorrectFill(String answer){
+    return Container(
+      margin: const EdgeInsets.fromLTRB(30, 0, 34, 0.0),
+      decoration: const BoxDecoration(
+        color: Colors.transparent,
+      ),
+      child: _buildSingleAnswerView(
+          answer,
+          Theme.of(context).colorScheme.buttonCorrect,
+          Theme.of(context).colorScheme.buttonChooseBackground,
+          Icons.check_circle
+      ),
+    );
+  }
+
+  Widget _buildIncorrectFill(String correctAnswer, String answer){
+    return Container(
+        margin: const EdgeInsets.fromLTRB(30, 0, 34, 0.0),
+        decoration: const BoxDecoration(
+          color: Colors.transparent,
+        ),
+
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildSingleAnswerView(
+                answer,
+                Theme.of(context).colorScheme.buttonIncorrect,
+                const Color(0xFFD32F2F),
+                Icons.cancel
+            ),
+            const SizedBox(height: 12),
+            _buildSingleAnswerView(
+                correctAnswer,
+                Theme.of(context).colorScheme.buttonCorrect,
+                Theme.of(context).colorScheme.buttonChooseBackground,
+                Icons.check_circle
+            )
+          ],
+        )
+    );
+  }
+
+  Widget _buildQuizAnswer() {
+    Question question = questions[_singleQuestionStore.currentIndex];
+    String userAnswer = _singleQuestionStore
+        .userAnswers[_singleQuestionStore.currentIndex];
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(30, 0, 34, 0.0),
+      child: ListView.builder(
+        itemCount: question.choiceList!.length,
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          return Observer(builder: (context){
+            return  Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: _buildQuizTile(
+                  question.choiceList![index],
+                  index,
+                  userAnswer,
+                  question.answer!,
+              ),
+            );
+          });
+        },
+      ),
+    );
+  }
+
+  Widget _buildQuizTile(
+      String quizChoice, int index, String userAnswer, String questionAnswer){
+    String choiceKey = convertNumberToLetter(index);
+    String newQuizContent = '$choiceKey. $quizChoice';
+    if (choiceKey == questionAnswer){
+      //correct
+      return _buildSingleAnswerView(
+          newQuizContent,
+          const Color(0xFF8EFF97),
+          const Color(0xFF167F71),
+          Icons.check_circle
+      );
+    }
+
+    if (choiceKey == userAnswer){
+      //incorrect
+      return _buildSingleAnswerView(
+          newQuizContent,
+          const Color(0xFFFFD5DB),
+          const Color(0xFFD32F2F),
+          Icons.cancel
+      );
+    }
+    //neutral
+    return _buildSingleAnswerView(
+        newQuizContent,
+        Colors.white,
+        const Color(0xFF505050),
+        Icons.circle_outlined
+    );
+  }
+
+  Widget _buildSingleAnswerView(
+      String text, Color backgroundColor, Color textColor, IconData icon) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(12.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: const Offset(0, 3), // Đổ bóng
+          ),
+        ],
+      ),
+      height: 60.0,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // TextStandard.Normal(text, textColor),
+          Text(
+            text,
+            style: Theme.of(context).textTheme.normal
+                .copyWith(color: textColor),
+          ),
+          Icon(
+            icon,
+            color: textColor,
+            size: 30.0,
+          ),
+        ],
+      ),
+    );
+  }
+
+
+  BoxDecoration decorationWithShadow = BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.circular(16.0),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.2),
+        spreadRadius: 2,
+        blurRadius: 5,
+        offset: const Offset(0, 3), // Đổ bóng
+      ),
+    ],
+  );
+
+  //Others:---------------------------------------------------------------------
+  int getIndexFromLetter(String key){
+    return key.codeUnitAt(0) - 'A'.codeUnitAt(0);
+  }
+
+  bool isQuizQuestion(Question question){
+    if (question.choiceList == null) {
+      return false;
+    }
+    if (question.choiceList!.isEmpty){
+      return false;
+    }
+    return true;
+  }
+
+  String makeChoiceFromIndex(int index) {
+    return '${String.fromCharCode(index + 65)}. ';
+  }
+
+  String getAnswerFromIndex(int index){
+    return String.fromCharCode(index + 65);
+  }
+  bool isAnswerCorrect(Question question, String answer){
+    if (answer == question.answer) return true;
+    return false;
+  }
+  String convertNumberToLetter(int number){
+    return String.fromCharCode(number + 65);
+  }
+
+  AnswerStatus getStatus(Question q, String a){
+    if (a.isEmpty) return AnswerStatus.noAnswer;
+    if (a == q.answer) return AnswerStatus.correct;
+    return AnswerStatus.incorrect;
+  }
+}

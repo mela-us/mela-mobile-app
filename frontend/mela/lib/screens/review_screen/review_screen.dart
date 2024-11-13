@@ -60,28 +60,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
     throw UnimplementedError();
   }
 
-  Widget _buildReviewBody() {
-    return Stack(
-      children: [
-        Positioned.fill(
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: QuestionView(),
-            )
-        ),
-        Positioned.fill(child: Align(
-          alignment: Alignment.bottomCenter,
-          child: QuestionListBar(questions: _questions, answers: _answers),
-        ))
-      ],
-    );
-    // return Column(
-    //   children: [
-    //     QuestionView(),
-    //     QuestionListBar(questions: _questions, answers: _answers),
-    //   ],
-    // );
-  }
 
   AppBar _buildAppBar(){
     return AppBar(

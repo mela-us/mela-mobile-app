@@ -36,5 +36,11 @@
   "result_point_title": "ĐIỂM",
   "result_time_title": "THỜI GIAN",
   "result_btn_review": "Phân tích bài làm",
-  "result_end": "-------------------------------------------------------------------------------------"
+  "result_end": "-------------------------------------------------------------------------------------",
+
+  "review_start": "Below are list of strings for result",
+  "review_ask": "Đáp án của bạn:",
+  "review_explain": "Giải thích:",
+  "review_solution": "Lời giải:",
+  "review_end": "-------------------------------------------------------------------------------------"
 }

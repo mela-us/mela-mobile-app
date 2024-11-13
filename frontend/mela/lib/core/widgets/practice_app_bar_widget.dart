@@ -7,8 +7,8 @@ import 'package:mela/utils/locale/app_localization.dart';
 import '../../constants/assets.dart';
 
 class PracticeAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String? previousScreen;
-  const PracticeAppBar({super.key, required this.previousScreen});
+  final String? previousScreenRoute;
+  const PracticeAppBar({super.key, required this.previousScreenRoute});
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +16,7 @@ class PracticeAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: _buildTitle(context),
       backgroundColor: Theme.of(context).colorScheme.appBackground,
       actions: _buildAction(),
+      automaticallyImplyLeading: false,
     );
   }
 
@@ -64,9 +65,9 @@ class PracticeAppBar extends StatelessWidget implements PreferredSizeWidget {
 
 
   void _backPreviousScreen(BuildContext context){
-    if (previousScreen != null){
+    if (previousScreenRoute != null){
       //Has previous screen closed
-      Navigator.of(context).pushReplacementNamed(previousScreen!);
+      Navigator.of(context).pushReplacementNamed(previousScreenRoute!);
     }
     else {
       //Has previous screen not closed
