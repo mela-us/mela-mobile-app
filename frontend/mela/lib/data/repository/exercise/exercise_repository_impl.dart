@@ -45,6 +45,7 @@ class ExerciseRepositoryImpl extends ExerciseRepository {
       ];
     }
     await Future.delayed(const Duration(seconds: 3));
+    //throw "Error in exercise repository";
     return exerciseList;
   }
 }

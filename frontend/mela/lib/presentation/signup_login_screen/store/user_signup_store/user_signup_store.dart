@@ -31,15 +31,15 @@ abstract class _UserSignupStore with Store {
   //actions
   @action
   Future<void> signUp(String email, String password) async {
-    print("FlutterSa0: ${isSignupLoading}");
+    // print("FlutterSa0: ${isSignupLoading}");
     SignupParams signupParams =
         SignupParams(username: email, password: password);
     final future = _signupUseCase.call(params: signupParams);
     signUpFuture = ObservableFuture(future);
-    print("FlutterSa1: ${isSignupLoading}");
+    // print("FlutterSa1: ${isSignupLoading}");
     try {
       await future;
-      print("FlutterSa2: ${isSignupLoading}");
+      // print("FlutterSa2: ${isSignupLoading}");
       isSignupSuccessful = true;
     } catch (e) {
       isSignupSuccessful = false;

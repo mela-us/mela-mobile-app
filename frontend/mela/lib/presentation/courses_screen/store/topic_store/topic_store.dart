@@ -14,6 +14,9 @@ abstract class _TopicStore with Store {
   @observable
   TopicList? topicList;
 
+  @observable
+  String errorString = '';
+
   @computed
   bool get loading => fetchTopicsFuture.status == FutureStatus.pending;
 
@@ -32,10 +35,14 @@ abstract class _TopicStore with Store {
 
     future.then((topicList) {
       this.topicList = topicList;
+      this.errorString = '';
     }).catchError((onError) {
       this.topicList = null;
-      print(onError);
-      throw onError;
+      this.errorString = onError.toString();
     });
+  }
+  @action
+  void resetErrorString() {
+    errorString = '';
   }
 }

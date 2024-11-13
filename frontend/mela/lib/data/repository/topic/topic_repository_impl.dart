@@ -33,6 +33,7 @@ class TopicRepositoryImpl extends TopicRepository {
           imageTopicPath: "assets/images/topics/tuduy.png"),
     ]);
     await Future.delayed(const Duration(seconds: 2));
+    //throw "Error in topic repository";
     return topicList;
   }
 

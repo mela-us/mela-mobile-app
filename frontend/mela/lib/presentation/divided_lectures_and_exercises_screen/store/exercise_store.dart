@@ -17,6 +17,9 @@ abstract class _ExerciseStore with Store {
   int lectureId = -1;
 
   @observable
+  String errorString = '';
+
+  @observable
   ExerciseList? exerciseList;
 
   @observable
@@ -33,10 +36,11 @@ abstract class _ExerciseStore with Store {
     fetchExercisesFuture = ObservableFuture(future);
     await future.then((value) {
       this.exerciseList = value;
+      this.errorString = '';
     }).catchError((onError) {
       print(onError);
       this.exerciseList = null;
-      throw onError;
+      this.errorString = onError.toString();
     });
   }
     @action
@@ -49,5 +53,9 @@ abstract class _ExerciseStore with Store {
   @action
   void resetLectureId() {
     lectureId = -1;
+  }
+  @action
+  void resetErrorString() {
+    errorString = '';
   }
 }

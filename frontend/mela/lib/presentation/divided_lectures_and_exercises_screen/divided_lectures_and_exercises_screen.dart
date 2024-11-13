@@ -60,21 +60,28 @@ class _DividedLecturesAndExercisesScreenState
       appBar:
           //AppBar
           AppBar(
-        title: Text(
-          _lectureStore
-              .lectureList!.lectures[_findIndexInLectureListById()].lectureName,
-          style: Theme.of(context)
-              .textTheme
-              .heading
-              .copyWith(color: Theme.of(context).colorScheme.primary),
-        ),
+        title: Observer(builder: (context) {
+          // print("Lecture TopicId");
+          // print(_lectureStore.toppicId);
+          return _exerciseStore.errorString.isEmpty
+              ? Text(
+                  _lectureStore.lectureList!
+                      .lectures[_findIndexInLectureListById()].lectureName,
+                  style: Theme.of(context)
+                      .textTheme
+                      .heading
+                      .copyWith(color: Theme.of(context).colorScheme.primary),
+                )
+              : SizedBox.shrink();
+        }),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.of(context).pop();
-            _exerciseStore.resetLectureId();
+            // _exerciseStore.resetLectureId();
+            _exerciseStore.resetErrorString();
           },
           color: Colors.black,
         ),
@@ -140,7 +147,10 @@ class _DividedLecturesAndExercisesScreenState
                         alignment: Alignment.center,
                         children: [
                           Container(
-                            color: Theme.of(context).colorScheme.surface.withOpacity(0.8),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .surface
+                                .withOpacity(0.8),
                           ),
                           const CustomProgressIndicatorWidget(),
                         ],
@@ -149,13 +159,28 @@ class _DividedLecturesAndExercisesScreenState
                   // ? Text('Loading...')
                   : TabBarView(
                       controller: _tabController,
-                      children: [
-                        //Tab "Lý thuyết" content
-                        DividedLectureListItem(),
+                      children: _exerciseStore.errorString.isEmpty
+                          ? [
+                              //Tab "Lý thuyết" content
+                              DividedLectureListItem(),
 
-                        //Tab "Luyện tập" content
-                        ExerciseListItem(),
-                      ],
+                              //Tab "Luyện tập" content
+                              ExerciseListItem(),
+                            ]
+                          : [
+                              Center(
+                                child: Text(
+                                  _exerciseStore.errorString,
+                                  style: const TextStyle(color: Colors.red),
+                                ),
+                              ),
+                              Center(
+                                child: Text(
+                                  _exerciseStore.errorString,
+                                  style: const TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            ],
                     );
             }),
           ),

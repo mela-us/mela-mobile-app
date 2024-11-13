@@ -17,77 +17,78 @@ class SearchRepositoryImpl extends SearchRepository {
     LectureList temp=LectureList(lectures: []);
       temp = LectureList(lectures: [
         Lecture(
-            lectureId: 10,
+            lectureId: 20,
             levelId: 0,
             topicId: topicId,
-            lectureName: "Lý thuyết đồng dư",
+            lectureName: "A",
             lectureDescription: "Mô tả bài học chi tiết",
             lectureContent: "Nội dung bài học"),
         Lecture(
-            lectureId: 11,
+            lectureId: 21,
             levelId: 1,
             topicId: topicId,
-            lectureName: "Hàm Euler, hàm số học",
+            lectureName: "B",
             lectureDescription: "Mô tả bài học",
             lectureContent: "Nội dung bài học"),
         Lecture(
-            lectureId: 12,
+            lectureId: 22,
             levelId: 2,
             topicId: topicId,
-            lectureName: "Hàm Euler, hàm số học",
+            lectureName: "C",
             lectureDescription: "Mô tả bài học",
             lectureContent: "Nội dung bài học"),
         Lecture(
-            lectureId: 13,
+            lectureId: 23,
             levelId: 0,
             topicId: topicId,
-            lectureName: "Lý thuyết chia hết",
+            lectureName: "D",
             lectureDescription: "Mô tả bài học",
             lectureContent: "Nội dung bài học"),
         Lecture(
-            lectureId: 14,
+            lectureId: 24,
             levelId: 1,
             topicId: topicId,
-            lectureName: "Lý thuyết đồng dư",
+            lectureName: "E",
             lectureDescription: "Mô tả bài học chi tiết",
             lectureContent: "Nội dung bài học"),
         Lecture(
-            lectureId: 15,
+            lectureId: 25,
             levelId: 2,
             topicId: topicId,
-            lectureName: "Hàm Euler, hàm số học",
+            lectureName: "F",
             lectureDescription: "Mô tả bài học",
             lectureContent: "Nội dung bài học"),
         Lecture(
-            lectureId: 16,
+            lectureId: 26,
             levelId: 0,
             topicId: topicId,
-            lectureName: "Lý thuyết chia hết",
+            lectureName: "G",
             lectureDescription: "Mô tả bài học",
             lectureContent: "Nội dung bài học"),
         Lecture(
-            lectureId: 17,
+            lectureId: 27,
             levelId: 1,
             topicId: topicId,
-            lectureName: "Lý thuyết đồng dư",
+            lectureName: "H",
             lectureDescription: "Mô tả bài học chi tiết",
             lectureContent: "Nội dung bài học"),
         Lecture(
-            lectureId: 18,
+            lectureId: 28,
             levelId: 2,
             topicId: topicId,
-            lectureName: "Hàm Euler, hàm số học",
+            lectureName: "I",
             lectureDescription: "Mô tả bài học",
             lectureContent: "Nội dung bài học"),
         Lecture(
-            lectureId: 19,
+            lectureId: 29,
             levelId: 0,
             topicId: topicId,
-            lectureName: "Lý thuyết chia hết",
+            lectureName: "J",
             lectureDescription: "Mô tả bài học",
             lectureContent: "Nội dung bài học"),
       ]);
     await Future.delayed(Duration(seconds: 2));
+    //throw "Error  in search impl"; 
     return temp;
   }
 }

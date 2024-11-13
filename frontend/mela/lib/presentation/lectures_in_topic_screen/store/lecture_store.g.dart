@@ -33,6 +33,22 @@ mixin _$LectureStore on _LectureStore, Store {
     });
   }
 
+  late final _$errorStringAtom =
+      Atom(name: '_LectureStore.errorString', context: context);
+
+  @override
+  String get errorString {
+    _$errorStringAtom.reportRead();
+    return super.errorString;
+  }
+
+  @override
+  set errorString(String value) {
+    _$errorStringAtom.reportWrite(value, super.errorString, () {
+      super.errorString = value;
+    });
+  }
+
   late final _$lectureListAtom =
       Atom(name: '_LectureStore.lectureList', context: context);
 
@@ -101,9 +117,21 @@ mixin _$LectureStore on _LectureStore, Store {
   }
 
   @override
+  void resetErrorString() {
+    final _$actionInfo = _$_LectureStoreActionController.startAction(
+        name: '_LectureStore.resetErrorString');
+    try {
+      return super.resetErrorString();
+    } finally {
+      _$_LectureStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 toppicId: ${toppicId},
+errorString: ${errorString},
 lectureList: ${lectureList},
 fetchLectureFuture: ${fetchLectureFuture},
 isGetLecturesLoading: ${isGetLecturesLoading}

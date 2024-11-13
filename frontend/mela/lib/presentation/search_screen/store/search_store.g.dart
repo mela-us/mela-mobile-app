@@ -56,6 +56,22 @@ mixin _$SearchStore on _SearchStore, Store {
     });
   }
 
+  late final _$errorStringAtom =
+      Atom(name: '_SearchStore.errorString', context: context);
+
+  @override
+  String get errorString {
+    _$errorStringAtom.reportRead();
+    return super.errorString;
+  }
+
+  @override
+  set errorString(String value) {
+    _$errorStringAtom.reportWrite(value, super.errorString, () {
+      super.errorString = value;
+    });
+  }
+
   late final _$searchHistoryAtom =
       Atom(name: '_SearchStore.searchHistory', context: context);
 
@@ -207,10 +223,22 @@ mixin _$SearchStore on _SearchStore, Store {
   }
 
   @override
+  void resetErrorString() {
+    final _$actionInfo = _$_SearchStoreActionController.startAction(
+        name: '_SearchStore.resetErrorString');
+    try {
+      return super.resetErrorString();
+    } finally {
+      _$_SearchStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isSearched: ${isSearched},
 isFiltered: ${isFiltered},
+errorString: ${errorString},
 searchHistory: ${searchHistory},
 lecturesAfterSearchingAndFiltering: ${lecturesAfterSearchingAndFiltering},
 lecturesAfterSearching: ${lecturesAfterSearching},

@@ -53,6 +53,7 @@ class _SearchScreenState extends State<SearchScreen> {
               _searchStore.resetIsSearched();
               _filterStore.resetFilter();
               _searchStore.setIsFiltered(false);
+              _searchStore.resetErrorString();
               return;
             }
             //if not issearched, pop the screen
@@ -60,6 +61,7 @@ class _SearchScreenState extends State<SearchScreen> {
             _searchStore.resetIsSearched();
             _searchStore.setIsFiltered(false);
             _filterStore.resetFilter();
+            _searchStore.resetErrorString();
           },
           icon: const Icon(Icons.arrow_back),
         ),
@@ -70,36 +72,38 @@ class _SearchScreenState extends State<SearchScreen> {
           //Search bar
           SearchingBar(key: searchBarKey),
 
-          //Row History search
+          //Row History search or number of lectures after searching
           Observer(builder: (context) {
             if (!_searchStore.isSearched) {
               return Padding(
                 padding: const EdgeInsets.only(left: 30),
                 child: Text("Lịch sử tìm kiếm",
-                    style: Theme.of(context)
-                        .textTheme
-                        .normal
-                        .copyWith(color: Theme.of(context).colorScheme.primary)),
+                    style: Theme.of(context).textTheme.normal.copyWith(
+                        color: Theme.of(context).colorScheme.primary)),
               );
             }
-
-            return _searchStore.isLoadingSearch
-                ? Container()
-                : Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Tìm thấy",
-                            style: Theme.of(context).textTheme.normal.copyWith(
-                                color: Theme.of(context).colorScheme.primary)),
-                        Text(
-                            "${_searchStore.lecturesAfterSearchingAndFiltering!.lectures.length.toString()} kết quả",
-                            style: Theme.of(context).textTheme.normal.copyWith(
-                                color: Theme.of(context).colorScheme.tertiary)),
-                      ],
-                    ),
-                  );
+            if (_searchStore.isLoadingSearch) {
+              return Container();
+            }
+            if (_searchStore.errorString.isEmpty) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Tìm thấy",
+                        style: Theme.of(context).textTheme.normal.copyWith(
+                            color: Theme.of(context).colorScheme.primary)),
+                    Text(
+                        "${_searchStore.lecturesAfterSearchingAndFiltering!.lectures.length.toString()} kết quả",
+                        style: Theme.of(context).textTheme.normal.copyWith(
+                            color: Theme.of(context).colorScheme.tertiary)),
+                  ],
+                ),
+              );
+            }
+            //if error
+            return Container();
           }),
 
           //List history search or list lectures after searching
@@ -160,6 +164,18 @@ class _SearchScreenState extends State<SearchScreen> {
                               ));
                         },
                       );
+              }
+
+              if (_searchStore.isLoadingSearch) {
+                return const Center(child: CustomProgressIndicatorWidget());
+              }
+              if (_searchStore.errorString.isNotEmpty) {
+                return Center(
+                  child: Text(
+                    _searchStore.errorString,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                );
               }
 
               ///List lectures after searching

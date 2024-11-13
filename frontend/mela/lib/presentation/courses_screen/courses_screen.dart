@@ -55,30 +55,33 @@ class _CoursesScreenState extends State<CoursesScreen> {
       ),
       body: Observer(
         builder: (context) {
-          return _topicStore.loading
-              ? AbsorbPointer(
-                  absorbing: true,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Container(
-                        color: Theme.of(context).colorScheme.surface.withOpacity(0.8),
-                      ),
-                      const CustomProgressIndicatorWidget(),
-                    ],
+          if (_topicStore.loading) {
+            return AbsorbPointer(
+              absorbing: true,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    color:
+                        Theme.of(context).colorScheme.surface.withOpacity(0.8),
                   ),
-                )
-              : SingleChildScrollView(
-                  physics: const ClampingScrollPhysics(),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
+                  const CustomProgressIndicatorWidget(),
+                ],
+              ),
+            );
+          }
+
+          return SingleChildScrollView(
+            physics: const ClampingScrollPhysics(),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: _topicStore.errorString.isEmpty
+                  ? Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         //Cover Image Introduction
                         const CoverImageWidget(),
                         const SizedBox(height: 15),
-
                         //Topics Grid
                         GridView.builder(
                           padding: EdgeInsets.zero,
@@ -99,6 +102,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
                             );
                           },
                         ),
+
                         const SizedBox(height: 15),
                         //Text "Chủ đề đang học"
                         Padding(
@@ -146,9 +150,15 @@ class _CoursesScreenState extends State<CoursesScreen> {
                         //   }).toList(),
                         // )
                       ],
-                    ),
+                    )
+                  : Center(
+                    child: Text(
+                        _topicStore.errorString,
+                        style: const TextStyle(color: Colors.red),
+                      ),
                   ),
-                );
+            ),
+          );
         },
       ),
     );

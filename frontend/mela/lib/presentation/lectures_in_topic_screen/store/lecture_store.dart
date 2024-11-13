@@ -15,11 +15,13 @@ abstract class _LectureStore with Store {
   @observable
   int toppicId = -1;
 
+  @observable
+  String errorString = '';
 
   @observable
   LectureList?
       lectureList; //Lecture in Topic, not Lecture in Topic + level to improve performance
-      //mean get All lecture after filter in getLectureListByLevelId
+  //mean get All lecture after filter in getLectureListByLevelId
 
   @computed
   bool get isGetLecturesLoading =>
@@ -36,10 +38,11 @@ abstract class _LectureStore with Store {
     fetchLectureFuture = ObservableFuture(future);
     await future.then((value) {
       this.lectureList = value;
+      this.errorString = '';
     }).catchError((onError) {
       print(onError);
-      this.lectureList=null;
-      throw onError;
+      this.lectureList = null;
+      this.errorString = onError.toString();
     });
   }
 
@@ -57,7 +60,7 @@ abstract class _LectureStore with Store {
 
   //getLectureListByLevelId
   LectureList lecturesByLevelId = LectureList(lectures: []);
-  LectureList getLectureListByLevelId(int levelId){
+  LectureList getLectureListByLevelId(int levelId) {
     if (lectureList == null) {
       // print("FlutterSa: LectureList is null trong getLevelId");
       return lecturesByLevelId;
@@ -67,6 +70,16 @@ abstract class _LectureStore with Store {
     lecturesByLevelId.lectures = lectureList!.lectures
         .where((element) => element.levelId == levelId)
         .toList();
+    // print(
+    //     "*****LectureID trong getLecture by levelId sau khi da loc thanh cong****");
+    // lecturesByLevelId!.lectures.forEach((element) {
+    //   print("Lecture trong getLecture by levelId: ${element.lectureName}");
+    // });
     return lecturesByLevelId;
+  }
+
+  @action
+  void resetErrorString() {
+    errorString = '';
   }
 }

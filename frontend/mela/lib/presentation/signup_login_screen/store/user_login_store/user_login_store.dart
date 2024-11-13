@@ -21,9 +21,7 @@ abstract class _UserLoginStore with Store {
 
     // checking if user is logged in share preference
     _isLoggedInUseCase.call(params: null).then((value) async {
-      print("---------------------------------------->LoginScreen4:  ${isLoggedIn ? "true" : "false"}");
       isLoggedIn = value;
-      print("---------------------------------------->LoginScreen5:  ${isLoggedIn ? "true" : "false"}");
     });
   }
 
@@ -31,6 +29,9 @@ abstract class _UserLoginStore with Store {
   final IsLoggedInUseCase _isLoggedInUseCase;
   final SaveLoginStatusUseCase _saveLoginStatusUseCase;
   final LoginUseCase _loginUseCase;
+
+  //Error
+  
 
 
   // disposers:-----------------------------------------------------------------

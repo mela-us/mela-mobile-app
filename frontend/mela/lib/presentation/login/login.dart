@@ -196,18 +196,18 @@
 //     );
 //   }
 
-  // Widget navigate(BuildContext context) {
-  //   SharedPreferences.getInstance().then((prefs) {
-  //     prefs.setBool(PreferencesConst.is_logged_in, true);
-  //   });
+//   Widget navigate(BuildContext context) {
+//     SharedPreferences.getInstance().then((prefs) {
+//       prefs.setBool(PreferencesConst.is_logged_in, true);
+//     });
 
-  //   Future.delayed(Duration(milliseconds: 0), () {
-  //     Navigator.of(context).pushNamedAndRemoveUntil(
-  //         Routes.home, (Route<dynamic> route) => false);
-  //   });
+//     Future.delayed(Duration(milliseconds: 0), () {
+//       Navigator.of(context).pushNamedAndRemoveUntil(
+//           Routes.home, (Route<dynamic> route) => false);
+//     });
 
-  //   return Container();
-  // }
+//     return Container();
+//   }
 
 //   // General Methods:-----------------------------------------------------------
 //   _showErrorMessage(String message) {

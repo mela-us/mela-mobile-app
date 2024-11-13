@@ -32,6 +32,22 @@ mixin _$TopicStore on _TopicStore, Store {
     });
   }
 
+  late final _$errorStringAtom =
+      Atom(name: '_TopicStore.errorString', context: context);
+
+  @override
+  String get errorString {
+    _$errorStringAtom.reportRead();
+    return super.errorString;
+  }
+
+  @override
+  set errorString(String value) {
+    _$errorStringAtom.reportWrite(value, super.errorString, () {
+      super.errorString = value;
+    });
+  }
+
   late final _$fetchTopicsFutureAtom =
       Atom(name: '_TopicStore.fetchTopicsFuture', context: context);
 
@@ -56,10 +72,25 @@ mixin _$TopicStore on _TopicStore, Store {
     return _$getTopicsAsyncAction.run(() => super.getTopics());
   }
 
+  late final _$_TopicStoreActionController =
+      ActionController(name: '_TopicStore', context: context);
+
+  @override
+  void resetErrorString() {
+    final _$actionInfo = _$_TopicStoreActionController.startAction(
+        name: '_TopicStore.resetErrorString');
+    try {
+      return super.resetErrorString();
+    } finally {
+      _$_TopicStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
 topicList: ${topicList},
+errorString: ${errorString},
 fetchTopicsFuture: ${fetchTopicsFuture},
 loading: ${loading}
     ''';

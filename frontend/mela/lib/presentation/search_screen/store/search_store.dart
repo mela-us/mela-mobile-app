@@ -30,6 +30,9 @@ abstract class _SearchStore with Store {
   bool isFiltered = false;
 
   @observable
+  String errorString = '';
+
+  @observable
   List<String>? searchHistory;
 
   @observable
@@ -63,7 +66,6 @@ abstract class _SearchStore with Store {
     }).catchError((onError) {
       this.searchHistory = null;
       print(onError);
-      throw onError;
     });
   }
 
@@ -75,25 +77,32 @@ abstract class _SearchStore with Store {
     future.then((value) {
       this.lecturesAfterSearching = value;
       _lectureStore.lectureList = value;
+      this.errorString = '';
       updateLectureAfterSeachingAndFiltering(value);
+
+      //Debug
+      // print("*****Lecture trong getLecture by levelId****");
+      // _lectureStore.lectureList!.lectures.forEach((element) {
+      //   print("Lecture trong getLecture by levelId: ${element.lectureName}");
+      // });
     }).catchError((onError) {
       this.lecturesAfterSearching = null;
       updateLectureAfterSeachingAndFiltering(null);
       print(onError);
-      throw onError;
+      this.errorString = onError.toString();
     });
   }
 
   @action
   void updateLectureAfterSeachingAndFiltering(LectureList? value) {
-    print("Chieu dai cua  list luc truoc: ");
-    if (lecturesAfterSearchingAndFiltering != null) {
-      print(lecturesAfterSearchingAndFiltering!.lectures.length);
-    }
+    // print("Chieu dai cua  list luc truoc: ");
+    // if (lecturesAfterSearchingAndFiltering != null) {
+    //   print(lecturesAfterSearchingAndFiltering!.lectures.length);
+    // }
 
     lecturesAfterSearchingAndFiltering = value;
-    print("Chieu dai cua  list luc sau: ");
-    print(lecturesAfterSearchingAndFiltering!.lectures.length);
+    // print("Chieu dai cua  list luc sau: ");
+    // print(lecturesAfterSearchingAndFiltering!.lectures.length);
   }
 
   @action
@@ -109,5 +118,10 @@ abstract class _SearchStore with Store {
   @action
   void setIsFiltered(bool value) {
     isFiltered = value;
+  }
+
+  @action
+  void resetErrorString() {
+    errorString = '';
   }
 }

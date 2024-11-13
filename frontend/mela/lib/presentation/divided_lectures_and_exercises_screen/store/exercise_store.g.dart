@@ -33,6 +33,22 @@ mixin _$ExerciseStore on _ExerciseStore, Store {
     });
   }
 
+  late final _$errorStringAtom =
+      Atom(name: '_ExerciseStore.errorString', context: context);
+
+  @override
+  String get errorString {
+    _$errorStringAtom.reportRead();
+    return super.errorString;
+  }
+
+  @override
+  set errorString(String value) {
+    _$errorStringAtom.reportWrite(value, super.errorString, () {
+      super.errorString = value;
+    });
+  }
+
   late final _$exerciseListAtom =
       Atom(name: '_ExerciseStore.exerciseList', context: context);
 
@@ -101,9 +117,21 @@ mixin _$ExerciseStore on _ExerciseStore, Store {
   }
 
   @override
+  void resetErrorString() {
+    final _$actionInfo = _$_ExerciseStoreActionController.startAction(
+        name: '_ExerciseStore.resetErrorString');
+    try {
+      return super.resetErrorString();
+    } finally {
+      _$_ExerciseStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 lectureId: ${lectureId},
+errorString: ${errorString},
 exerciseList: ${exerciseList},
 fetchExercisesFuture: ${fetchExercisesFuture},
 isGetExercisesLoading: ${isGetExercisesLoading}

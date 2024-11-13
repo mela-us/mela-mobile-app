@@ -40,61 +40,62 @@ class LectureRepositoryImpl extends LectureRepository {
           lectureId: 12,
           levelId: 2,
           topicId: topicId,
-          lectureName: "Hàm Euler, hàm số học",
+          lectureName: "Tổ hợp",
           lectureDescription: "Mô tả bài học",
           lectureContent: "Nội dung bài học"),
       Lecture(
           lectureId: 13,
           levelId: 1,
           topicId: topicId,
-          lectureName: "Lý thuyết chia hết",
+          lectureName: "Tích phân",
           lectureDescription: "Mô tả bài học",
           lectureContent: "Nội dung bài học"),
       Lecture(
           lectureId: 14,
           levelId: 1,
           topicId: topicId,
-          lectureName: "Lý thuyết đồng dư",
+          lectureName: "Hình học",
           lectureDescription: "Mô tả bài học chi tiết",
           lectureContent: "Nội dung bài học"),
       Lecture(
           lectureId: 15,
           levelId: 2,
           topicId: topicId,
-          lectureName: "Hàm Euler, hàm số học",
+          lectureName: "Số cơ bản",
           lectureDescription: "Mô tả bài học",
           lectureContent: "Nội dung bài học"),
       Lecture(
           lectureId: 16,
           levelId: 2,
           topicId: topicId,
-          lectureName: "Lý thuyết chia hết",
+          lectureName: "Số dư",
           lectureDescription: "Mô tả bài học",
           lectureContent: "Nội dung bài học"),
       Lecture(
           lectureId: 17,
           levelId: 1,
           topicId: topicId,
-          lectureName: "Lý thuyết đồng dư",
+          lectureName: "Số chia",
           lectureDescription: "Mô tả bài học chi tiết",
           lectureContent: "Nội dung bài học"),
       Lecture(
           lectureId: 18,
           levelId: 0,
           topicId: topicId,
-          lectureName: "Hàm Euler, hàm số học",
+          lectureName: "Cộng trừ nâng cao",
           lectureDescription: "Mô tả bài học",
           lectureContent: "Nội dung bài học"),
       Lecture(
           lectureId: 19,
           levelId: 2,
           topicId: topicId,
-          lectureName: "Lý thuyết chia hết",
+          lectureName: "Cộng trừ cơ bản",
           lectureDescription: "Mô tả bài học",
           lectureContent: "Nội dung bài học"),
     ]);
 
     await Future.delayed(Duration(seconds: 2));
+    //throw "Error in lecture repository";
     return temp;
   }
 }

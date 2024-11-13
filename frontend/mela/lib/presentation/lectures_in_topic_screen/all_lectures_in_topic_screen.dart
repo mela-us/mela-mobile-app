@@ -37,19 +37,27 @@ class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen> {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title: Text(
-            _topicStore.topicList!.topics[_lectureStore.toppicId].topicName,
-            style: Theme.of(context)
-                .textTheme
-                .heading
-                .copyWith(color: Theme.of(context).colorScheme.primary),
-          ),
+          title: Observer(builder: (context) {
+            // print("Lecture TopicId");
+            // print(_lectureStore.toppicId);
+            return _lectureStore.errorString.isEmpty
+                ? Text(
+                    _topicStore
+                        .topicList!.topics[_lectureStore.toppicId].topicName,
+                    style: Theme.of(context)
+                        .textTheme
+                        .heading
+                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                  )
+                : SizedBox.shrink();
+          }),
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () {
               Navigator.of(context).pop();
               // print("FlutterSa<------: trc khi back ${_lectureStore.toppicId}");
-              _lectureStore.resetTopicId();
+              // _lectureStore.resetTopicId();
+              _lectureStore.resetErrorString();
               // print("FlutterSa<------: sau khi back ${_lectureStore.toppicId}");
             },
           ),
@@ -99,11 +107,32 @@ class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen> {
                   ),
                 )
               : TabBarView(
-                  children: [
-                    LecturesInTopicAndLevel(levelId: 0),
-                    LecturesInTopicAndLevel(levelId: 1),
-                    LecturesInTopicAndLevel(levelId: 2),
-                  ],
+                  children: _lectureStore.errorString.isEmpty
+                      ? [
+                          LecturesInTopicAndLevel(levelId: 0),
+                          LecturesInTopicAndLevel(levelId: 1),
+                          LecturesInTopicAndLevel(levelId: 2),
+                        ]
+                      : [
+                          Center(
+                            child: Text(
+                              _topicStore.errorString,
+                              style: const TextStyle(color: Colors.red),
+                            ),
+                          ),
+                          Center(
+                            child: Text(
+                              _topicStore.errorString,
+                              style: const TextStyle(color: Colors.red),
+                            ),
+                          ),
+                          Center(
+                            child: Text(
+                              _topicStore.errorString,
+                              style: const TextStyle(color: Colors.red),
+                            ),
+                          )
+                        ],
                 );
         }),
       ),
