@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/utils/locale/app_localization.dart';

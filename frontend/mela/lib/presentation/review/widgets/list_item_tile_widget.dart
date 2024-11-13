@@ -3,10 +3,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
-import 'package:mela/utils/locale/app_localization.dart';
 
 import '../../../constants/enum.dart';
-import '../../question/store/single_question/single_question_store.dart';
 
 class ListItemTile extends StatelessWidget {
   ListItemTile({super.key, required this.index, required this.status});

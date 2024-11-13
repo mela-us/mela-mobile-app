@@ -268,17 +268,15 @@ class _ReviewScreenState extends State<ReviewScreen> {
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         itemBuilder: (context, index) {
-          return Observer(builder: (context){
-            return  Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: _buildQuizTile(
-                  question.choiceList![index],
-                  index,
-                  userAnswer,
-                  question.answer!,
-              ),
-            );
-          });
+          return  Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: _buildQuizTile(
+              question.choiceList![index],
+              index,
+              userAnswer,
+              question.answer!,
+            ),
+          );
         },
       ),
     );
