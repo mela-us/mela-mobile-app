@@ -116,19 +116,19 @@ class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen> {
                       : [
                           Center(
                             child: Text(
-                              _topicStore.errorString,
+                              _lectureStore.errorString,
                               style: const TextStyle(color: Colors.red),
                             ),
                           ),
                           Center(
                             child: Text(
-                              _topicStore.errorString,
+                              _lectureStore.errorString,
                               style: const TextStyle(color: Colors.red),
                             ),
                           ),
                           Center(
                             child: Text(
-                              _topicStore.errorString,
+                              _lectureStore.errorString,
                               style: const TextStyle(color: Colors.red),
                             ),
                           )

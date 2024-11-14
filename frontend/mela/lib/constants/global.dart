@@ -165,31 +165,31 @@ class Global {
     ];
   }
 
-  static List<DividedLecture> getDividedLectures(lectureId) {
-    return [
-      DividedLecture(
-        imageDividedLecturePath: 'assets/images/pdf_image.png',
-        pages: '10',
-        dividedLectureName: 'Lý thuyết đồng dư 1',
-        origin: 'NXB Hà Nội',
-        lectureId: 1,
-      ),
-      DividedLecture(
-        imageDividedLecturePath: 'assets/images/opened_book.png',
-        pages: '15',
-        dividedLectureName: 'Lý thuyết đồng dư 2',
-        origin: 'NXB Hà Nội',
-        lectureId: 1,
-      ),
-      DividedLecture(
-        imageDividedLecturePath: 'assets/images/pdf_image.png',
-        pages: '20',
-        dividedLectureName: 'Lý thuyết đồng dư 3',
-        origin: 'NXB Hà Nội',
-        lectureId: 1,
-      ),
-    ];
-  }
+  // static List<DividedLecture> getDividedLectures(lectureId) {
+  //   return [
+  //     DividedLecture(
+  //       imageDividedLecturePath: 'assets/images/pdf_image.png',
+  //       pages: '10',
+  //       dividedLectureName: 'Lý thuyết đồng dư 1',
+  //       origin: 'NXB Hà Nội',
+  //       lectureId: 1,
+  //     ),
+  //     DividedLecture(
+  //       imageDividedLecturePath: 'assets/images/opened_book.png',
+  //       pages: '15',
+  //       dividedLectureName: 'Lý thuyết đồng dư 2',
+  //       origin: 'NXB Hà Nội',
+  //       lectureId: 1,
+  //     ),
+  //     DividedLecture(
+  //       imageDividedLecturePath: 'assets/images/pdf_image.png',
+  //       pages: '20',
+  //       dividedLectureName: 'Lý thuyết đồng dư 3',
+  //       origin: 'NXB Hà Nội',
+  //       lectureId: 1,
+  //     ),
+  //   ];
+  // }
 
   // static List<AQuestion> questions = [
   //   FitbQuestion(

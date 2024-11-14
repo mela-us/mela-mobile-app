@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/constants/route_observer.dart';
 import 'package:mela/core/widgets/progress_indicator_widget.dart';
 import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
 
@@ -25,12 +26,24 @@ class _CoursesScreenState extends State<CoursesScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
+    // routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
     // check to see if already called api
     if (!_topicStore.loading) {
       _topicStore.getTopics();
       _topicStore.getAreLearningLectures();
     }
+  }
+
+  // @override
+  // void didPopNext() {
+  //   _topicStore.getTopics();
+  //   _topicStore.getAreLearningLectures();
+  //   print("didPopNext In CoursesScreen");
+  // }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override

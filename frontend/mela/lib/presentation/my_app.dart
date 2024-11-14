@@ -15,6 +15,7 @@ import 'package:sembast/sembast.dart';
 // import 'package:flutter_localizations/flutter_localizations.dart';
 // import 'package:flutter_mobx/flutter_mobx.dart';
 
+import '../constants/route_observer.dart';
 import '../di/service_locator.dart';
 
 import 'courses_screen/courses_screen.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
     return Observer(
       builder: (context) {
         return MaterialApp(
+          navigatorObservers: [routeObserver],
           debugShowCheckedModeBanner: false,
           title: Strings.appName,
           theme: _themeStore.darkMode

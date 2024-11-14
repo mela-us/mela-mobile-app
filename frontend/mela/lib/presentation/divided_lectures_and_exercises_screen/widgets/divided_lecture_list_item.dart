@@ -19,6 +19,7 @@ class DividedLectureListItem extends StatelessWidget {
         dividedLectureName: 'Lý thuyết đồng dư 1',
         origin: 'NXB Hà Nội',
         lectureId: 1,
+        contentInDividedLecture: "Nội dung bài học \n Lí thuyết 1 \n Lí thuyết 2",
       ),
       DividedLecture(
         imageDividedLecturePath: 'assets/images/opened_book.png',
@@ -26,6 +27,7 @@ class DividedLectureListItem extends StatelessWidget {
         dividedLectureName: 'Lý thuyết đồng dư 2',
         origin: 'NXB Hà Nội',
         lectureId: 1,
+        contentInDividedLecture: "Nội dung bài học \n Lí thuyết 1 \n Lí thuyết 2",
       ),
       DividedLecture(
         imageDividedLecturePath: 'assets/images/pdf_image.png',
@@ -33,6 +35,7 @@ class DividedLectureListItem extends StatelessWidget {
         dividedLectureName: 'Lý thuyết đồng dư 3',
         origin: 'NXB Hà Nội',
         lectureId: 1,
+        contentInDividedLecture: "Nội dung bài học \n Lí thuyết 1 \n Lí thuyết 3",
       ),
     ]);
     return dividedLectures;
