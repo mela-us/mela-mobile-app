@@ -17,19 +17,19 @@ mixin _$LectureStore on _LectureStore, Store {
               name: '_LectureStore.isGetLecturesLoading'))
       .value;
 
-  late final _$toppicIdAtom =
-      Atom(name: '_LectureStore.toppicId', context: context);
+  late final _$currentTopicAtom =
+      Atom(name: '_LectureStore.currentTopic', context: context);
 
   @override
-  int get toppicId {
-    _$toppicIdAtom.reportRead();
-    return super.toppicId;
+  Topic? get currentTopic {
+    _$currentTopicAtom.reportRead();
+    return super.currentTopic;
   }
 
   @override
-  set toppicId(int value) {
-    _$toppicIdAtom.reportWrite(value, super.toppicId, () {
-      super.toppicId = value;
+  set currentTopic(Topic? value) {
+    _$currentTopicAtom.reportWrite(value, super.currentTopic, () {
+      super.currentTopic = value;
     });
   }
 
@@ -95,33 +95,11 @@ mixin _$LectureStore on _LectureStore, Store {
       ActionController(name: '_LectureStore', context: context);
 
   @override
-  void setTopicId(int mtopicId) {
+  void setCurrentTopic(Topic mCurrentTopic) {
     final _$actionInfo = _$_LectureStoreActionController.startAction(
-        name: '_LectureStore.setTopicId');
+        name: '_LectureStore.setCurrentTopic');
     try {
-      return super.setTopicId(mtopicId);
-    } finally {
-      _$_LectureStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void resetTopicId() {
-    final _$actionInfo = _$_LectureStoreActionController.startAction(
-        name: '_LectureStore.resetTopicId');
-    try {
-      return super.resetTopicId();
-    } finally {
-      _$_LectureStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void updateLectureList(LectureList? newlectureList) {
-    final _$actionInfo = _$_LectureStoreActionController.startAction(
-        name: '_LectureStore.updateLectureList');
-    try {
-      return super.updateLectureList(newlectureList);
+      return super.setCurrentTopic(mCurrentTopic);
     } finally {
       _$_LectureStoreActionController.endAction(_$actionInfo);
     }
@@ -141,7 +119,7 @@ mixin _$LectureStore on _LectureStore, Store {
   @override
   String toString() {
     return '''
-toppicId: ${toppicId},
+currentTopic: ${currentTopic},
 errorString: ${errorString},
 lectureList: ${lectureList},
 fetchLectureFuture: ${fetchLectureFuture},

@@ -1,6 +1,7 @@
 import 'package:mela/domain/entity/exercise/exercise_list.dart';
 import 'package:mobx/mobx.dart';
 
+import '../../../domain/entity/lecture/lecture.dart';
 import '../../../domain/usecase/exercise/get_exercises_usecase.dart';
 part 'exercise_store.g.dart';
 
@@ -14,7 +15,7 @@ abstract class _ExerciseStore with Store {
 
 //obserbale
   @observable
-  int lectureId = -1;
+  Lecture? currentLecture;
 
   @observable
   String errorString = '';
@@ -32,7 +33,7 @@ abstract class _ExerciseStore with Store {
 
   @action
   Future getExercisesByLectureId() async {
-    final future = _getExercisesUsecase.call(params: this.lectureId);
+    final future = _getExercisesUsecase.call(params: this.currentLecture!.lectureId);
     fetchExercisesFuture = ObservableFuture(future);
     await future.then((value) {
       this.exerciseList = value;
@@ -44,16 +45,16 @@ abstract class _ExerciseStore with Store {
     });
   }
     @action
-  void setLectureId(int mLectureId) {
+  void setCurrentLecture(Lecture mLecture) {
     // print("FlutterSa: Doi topic id trong setTopicId: $mtopicId");
-    lectureId = mLectureId;
+    this.currentLecture = mLecture;
   }
 
   //Do when press back button
-  @action
-  void resetLectureId() {
-    lectureId = -1;
-  }
+  // @action
+  // void resetLectureId() {
+  //   lectureId = -1;
+  // }
   @action
   void resetErrorString() {
     errorString = '';

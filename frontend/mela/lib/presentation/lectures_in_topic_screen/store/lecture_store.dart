@@ -2,6 +2,8 @@ import 'package:mela/domain/entity/lecture/lecture_list.dart';
 import 'package:mela/domain/usecase/lecture/get_lectures_are_learning_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_lectures_usecase.dart';
 import 'package:mobx/mobx.dart';
+
+import '../../../domain/entity/topic/topic.dart';
 part 'lecture_store.g.dart';
 
 class LectureStore = _LectureStore with _$LectureStore;
@@ -15,7 +17,7 @@ abstract class _LectureStore with Store {
 
 //obserbale
   @observable
-  int toppicId = -1;
+  Topic? currentTopic;
 
   @observable
   String errorString = '';
@@ -36,7 +38,7 @@ abstract class _LectureStore with Store {
   //action
   @action
   Future getListLectureByTopicIdAndLevelId() async {
-    final future = _getLecturesUsecase.call(params: toppicId);
+    final future = _getLecturesUsecase.call(params: currentTopic!.topicId);
     fetchLectureFuture = ObservableFuture(future);
     await future.then((value) {
       this.lectureList = value;
@@ -49,16 +51,16 @@ abstract class _LectureStore with Store {
   }
 
   @action
-  void setTopicId(int mtopicId) {
+  void setCurrentTopic(Topic mCurrentTopic) {
     // print("FlutterSa: Doi topic id trong setTopicId: $mtopicId");
-    toppicId = mtopicId;
+    this.currentTopic = mCurrentTopic;
   }
 
   //Do when press back button
-  @action
-  void resetTopicId() {
-    toppicId = -1;
-  }
+  // @action
+  // void resetTopicId() {
+  //   toppicId = -1;
+  // }
 
   //getLectureListByLevelId
   LectureList lecturesByLevelId = LectureList(lectures: []);
@@ -80,13 +82,6 @@ abstract class _LectureStore with Store {
     return lecturesByLevelId;
   }
 
-  //change LectureList by value : using in course_screen and searchbar widget.
-  @action
-  void updateLectureList(LectureList? newlectureList) {
-    
-    this.lectureList = newlectureList;
-    print("length of lectureList: ${lectureList!.lectures.length}");
-  }
 
   @action
   void resetErrorString() {

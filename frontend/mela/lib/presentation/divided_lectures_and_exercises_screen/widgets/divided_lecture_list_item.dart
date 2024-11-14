@@ -8,7 +8,6 @@ import '../../../domain/entity/divided_lecture/divided_lecture_list.dart';
 import 'divided_lecture_item.dart';
 
 class DividedLectureListItem extends StatelessWidget {
-  final LectureStore _lectureStore = getIt<LectureStore>();
   final ExerciseStore _exerciseStore = getIt<ExerciseStore>();
   DividedLectureListItem();
   DividedLectureList fromJson(String str) {
@@ -41,20 +40,10 @@ class DividedLectureListItem extends StatelessWidget {
     return dividedLectures;
   }
 
-  int _findIndexInLectureListById() {
-    for (int i = 0; i < _lectureStore.lectureList!.lectures.length; i++) {
-      if (_lectureStore.lectureList!.lectures[i].lectureId ==
-          _exerciseStore.lectureId) {
-        return i;
-      }
-    }
-    return 0;
-  }
 
   @override
   Widget build(BuildContext context) {
-    String currentContentLectures = _lectureStore
-        .lectureList!.lectures[_findIndexInLectureListById()].lectureContent;
+    String currentContentLectures = _exerciseStore.currentLecture!.lectureContent;
     DividedLectureList dividedLectures = fromJson(currentContentLectures);
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),

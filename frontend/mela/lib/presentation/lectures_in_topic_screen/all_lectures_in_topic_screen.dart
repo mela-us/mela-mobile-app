@@ -17,7 +17,6 @@ class AllLecturesInTopicScreen extends StatefulWidget {
 }
 
 class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen> {
-  final TopicStore _topicStore = getIt<TopicStore>();
 
   final LectureStore _lectureStore = getIt<LectureStore>();
 
@@ -42,8 +41,7 @@ class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen> {
             // print(_lectureStore.toppicId);
             return _lectureStore.errorString.isEmpty
                 ? Text(
-                    _topicStore
-                        .topicList!.topics[_lectureStore.toppicId].topicName,
+                    _lectureStore.currentTopic!.topicName,
                     style: Theme.of(context)
                         .textTheme
                         .heading

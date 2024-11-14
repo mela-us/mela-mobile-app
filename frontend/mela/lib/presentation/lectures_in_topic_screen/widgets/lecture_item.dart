@@ -19,7 +19,7 @@ class LectureItem extends StatelessWidget {
     ExerciseStore _exerciseStore = getIt<ExerciseStore>();
     return GestureDetector(
       onTap: () {
-        _exerciseStore.setLectureId(lecture.lectureId);
+        _exerciseStore.setCurrentLecture(lecture);
         Navigator.of(context).pushNamed(Routes.dividedLecturesAndExercisesScreen);
       },
       child: Padding(

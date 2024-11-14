@@ -17,19 +17,19 @@ mixin _$ExerciseStore on _ExerciseStore, Store {
               name: '_ExerciseStore.isGetExercisesLoading'))
       .value;
 
-  late final _$lectureIdAtom =
-      Atom(name: '_ExerciseStore.lectureId', context: context);
+  late final _$currentLectureAtom =
+      Atom(name: '_ExerciseStore.currentLecture', context: context);
 
   @override
-  int get lectureId {
-    _$lectureIdAtom.reportRead();
-    return super.lectureId;
+  Lecture? get currentLecture {
+    _$currentLectureAtom.reportRead();
+    return super.currentLecture;
   }
 
   @override
-  set lectureId(int value) {
-    _$lectureIdAtom.reportWrite(value, super.lectureId, () {
-      super.lectureId = value;
+  set currentLecture(Lecture? value) {
+    _$currentLectureAtom.reportWrite(value, super.currentLecture, () {
+      super.currentLecture = value;
     });
   }
 
@@ -95,22 +95,11 @@ mixin _$ExerciseStore on _ExerciseStore, Store {
       ActionController(name: '_ExerciseStore', context: context);
 
   @override
-  void setLectureId(int mLectureId) {
+  void setCurrentLecture(Lecture mLecture) {
     final _$actionInfo = _$_ExerciseStoreActionController.startAction(
-        name: '_ExerciseStore.setLectureId');
+        name: '_ExerciseStore.setCurrentLecture');
     try {
-      return super.setLectureId(mLectureId);
-    } finally {
-      _$_ExerciseStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void resetLectureId() {
-    final _$actionInfo = _$_ExerciseStoreActionController.startAction(
-        name: '_ExerciseStore.resetLectureId');
-    try {
-      return super.resetLectureId();
+      return super.setCurrentLecture(mLecture);
     } finally {
       _$_ExerciseStoreActionController.endAction(_$actionInfo);
     }
@@ -130,7 +119,7 @@ mixin _$ExerciseStore on _ExerciseStore, Store {
   @override
   String toString() {
     return '''
-lectureId: ${lectureId},
+currentLecture: ${currentLecture},
 errorString: ${errorString},
 exerciseList: ${exerciseList},
 fetchExercisesFuture: ${fetchExercisesFuture},

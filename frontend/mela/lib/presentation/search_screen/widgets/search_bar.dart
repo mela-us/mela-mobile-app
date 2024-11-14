@@ -158,7 +158,6 @@ class SearchingBar extends StatefulWidget {
 class SearchingBarState extends State<SearchingBar> {
   //warning: using SearchingBarState not _SearchingBarState to can use in searchBarKy in search_screen.dart
   SearchStore _searchStore = getIt<SearchStore>();
-  LectureStore _lectureStore = getIt<LectureStore>();
   TextEditingController controller = TextEditingController();
 
   @override
@@ -191,10 +190,6 @@ class SearchingBarState extends State<SearchingBar> {
       _searchStore.setIsFiltered(false);
       await _searchStore.getLecturesAfterSearch(value);
 
-      //Very important because if user search after we need to set LectureList in LectureStore=value
-      //When click, in appbar, title will be set by lecturename which is found in lecturestore.lectureList.findbyID(id in exercise_store)
-      //so if we don't set lectureStore.lecturelist=value, it will be incorrect.
-      _lectureStore.updateLectureList(_searchStore.lecturesAfterSearching);
     } else {
       //if user delete all text in search bar, we need to reset isSearched to false
       _searchStore.resetIsSearched();

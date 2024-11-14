@@ -65,8 +65,6 @@ abstract class _TopicStore with Store {
     try {
       final lecturesAreLearningList = await future;
       this.lecturesAreLearningList = lecturesAreLearningList;
-      //Very important to set lectureList in lectureStore
-      _lectureStore.updateLectureList(lecturesAreLearningList);
       this.errorString = '';
     } catch (onError) {
       this.lecturesAreLearningList = null;

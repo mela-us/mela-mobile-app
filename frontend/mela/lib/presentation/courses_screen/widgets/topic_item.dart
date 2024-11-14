@@ -17,7 +17,7 @@ class TopicItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        _lectureStore.setTopicId(topic.topicId);
+        _lectureStore.setCurrentTopic(topic);
         Navigator.of(context).pushNamed(Routes.allLecturesInTopicScreen);
       },
       child: Container(

@@ -22,7 +22,6 @@ class _DividedLecturesAndExercisesScreenState
   late TabController _tabController;
 
   ExerciseStore _exerciseStore = getIt<ExerciseStore>();
-  LectureStore _lectureStore = getIt<LectureStore>();
 
   @override
   void initState() {
@@ -44,15 +43,6 @@ class _DividedLecturesAndExercisesScreenState
     super.dispose();
   }
 
-  int _findIndexInLectureListById() {
-    for (int i = 0; i < _lectureStore.lectureList!.lectures.length; i++) {
-      if (_lectureStore.lectureList!.lectures[i].lectureId ==
-          _exerciseStore.lectureId) {
-        return i;
-      }
-    }
-    return 0;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +55,7 @@ class _DividedLecturesAndExercisesScreenState
           // print(_lectureStore.toppicId);
           return _exerciseStore.errorString.isEmpty
               ? Text(
-                  _lectureStore.lectureList!
-                      .lectures[_findIndexInLectureListById()].lectureName,
+                  _exerciseStore.currentLecture!.lectureName,
                   style: Theme.of(context)
                       .textTheme
                       .heading
