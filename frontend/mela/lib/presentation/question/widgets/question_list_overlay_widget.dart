@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
-import 'package:mela/domain/entity/question/question.dart';
+import 'package:mela/constants/dimens.dart';
 import 'package:mela/presentation/question/store/question_store.dart';
 import 'package:mela/utils/locale/app_localization.dart';
 
@@ -86,7 +86,8 @@ class QuestionListOverlay extends StatelessWidget {
 
   Widget _buildQuestionList(){
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.symmetric(
+          horizontal: Dimens.practiceHorizontalText),
       height: 130,
       child: SingleChildScrollView(
         child: GridView.builder(
@@ -118,7 +119,9 @@ class QuestionListOverlay extends StatelessWidget {
           height: 46,
           decoration: BoxDecoration(
             color: _singleQuestionStore.userAnswers[index].isEmpty?
-            const Color(0xFFE9E9E9) : const Color(0xFFC6DCFF),
+            Theme.of(context).colorScheme.inputMutedText :
+            Theme.of(context).colorScheme.buttonList,
+
             shape: BoxShape.circle,
           ),
           child: Center(
@@ -135,15 +138,19 @@ class QuestionListOverlay extends StatelessWidget {
 
   Widget _buildSubmitButton(BuildContext context){
     return Padding(
-        padding: const EdgeInsets.fromLTRB(15, 30, 15, 0),
+        padding: const EdgeInsets.fromLTRB(
+            Dimens.practiceHorizontalText,
+            30,
+            Dimens.practiceHorizontalText,
+            0
+        ),
         child: GestureDetector(
           onTap: () => isSubmitted(true),
           child: Container(
             width: double.infinity,
-            // padding: EdgeInsets.symmetric(vertical: 15),
             decoration: BoxDecoration(
-              color: const Color(0xFF0961F5),
-              borderRadius: BorderRadius.circular(30),
+              color: Theme.of(context).colorScheme.buttonYesBgOrText,
+              borderRadius: BorderRadius.circular(Dimens.bigButtonRadius),
             ),
             child: _buildButtonContent(context)
           ),
@@ -173,11 +180,11 @@ class QuestionListOverlay extends StatelessWidget {
               shape: BoxShape.circle,
               color: Colors.white,
             ),
-            child: const Padding(
-              padding: EdgeInsets.all(0),
+            child: Padding(
+              padding: const EdgeInsets.all(0),
               child: Icon(
                 Icons.arrow_forward,
-                color: Color(0xFF0961F5),
+                color: Theme.of(context).colorScheme.buttonYesBgOrText,
               ),
             ),
           ),

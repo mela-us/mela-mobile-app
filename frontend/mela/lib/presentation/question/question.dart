@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/constants/dimens.dart';
 import 'package:mela/domain/entity/question/question.dart';
 import 'package:mela/presentation/question/store/question_store.dart';
 import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
@@ -16,6 +17,7 @@ import 'package:mela/utils/routes/routes.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../constants/assets.dart';
+import '../../constants/layout.dart';
 import '../../core/widgets/progress_indicator_widget.dart';
 import '../../di/service_locator.dart';
 
@@ -134,21 +136,21 @@ class _QuestionScreenState extends State<QuestionScreen> {
       child: Container(
         width: 220,
         height: 45,
-        margin: const EdgeInsets.fromLTRB(0, 0, 19, 30,),
+        margin: const EdgeInsets.fromLTRB(0, 0, 19, 30),
         child: FloatingActionButton(
             onPressed: _listButtonPressedEvent,
             backgroundColor: const Color(0xFF0961F5),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(
-                  30.0),
-
+              borderRadius: BorderRadius.circular(Dimens.bigButtonRadius),
             ),
             child: Center(
               child: Row(
                 children: [
                   //Icon
                   Padding(
-                    padding: const EdgeInsets.only(left: 30),
+                    padding: const EdgeInsets.only(
+                        left: Dimens.practiceLeftContainer
+                    ),
                     child: Image.asset(
                       Assets.select_list,
                       width: 25,
@@ -182,14 +184,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
   //Build items:----------------------------------------------------------------
   BoxDecoration decorationWithShadow = BoxDecoration(
     color: Colors.white,
-    borderRadius: BorderRadius.circular(16.0),
+    borderRadius: BorderRadius.circular(Dimens.textContainerRadius),
     boxShadow: [
-      BoxShadow(
-        color: Colors.grey.withOpacity(0.2),
-        spreadRadius: 2,
-        blurRadius: 5,
-        offset: const Offset(0, 3), // Đổ bóng
-      ),
+      Layout.practiceBoxShadow,
     ],
   );
 
@@ -221,7 +218,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
   Widget _buildQuestionSubTitle(BuildContext context, Question question){
     return Padding(
-        padding: const EdgeInsets.only(left: 30),
+        padding: const EdgeInsets.only(left: Dimens.practiceLeftContainer),
         child: isQuizQuestion(question) ?
         Text(
           AppLocalizations.of(context)
@@ -243,7 +240,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
         Expanded(
           child: Container(
             //Outside Border
-            margin: const EdgeInsets.fromLTRB(30, 16.0, 34, 0.0),
+            margin: Layout.practiceContainerPaddingWithTop,
             decoration: const BoxDecoration(
               color: Colors.transparent,
             ),
@@ -251,7 +248,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
             child: Container(
               decoration: decorationWithShadow,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(15, 18, 15, 18),
+                padding: Layout.practiceTextPadding,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -281,30 +278,32 @@ class _QuestionScreenState extends State<QuestionScreen> {
     );
   }
 
-  Widget _buildQuizView(Question question){
+  Widget _buildQuizView(Question question) {
     return Column(
-      children: [Container(
-        padding: const EdgeInsets.fromLTRB(30, 0, 34, 0.0),
-        child: ListView.builder(
-          itemCount: getCurrentQuestion()!.choiceList!.length,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return Observer(builder: (context){
-              return Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: _radioTile(index)
-              );
-            });
-          },
-        ),
-      ),
-        _buildNextButton(question),
-    ]);
+        children: [
+          Container(
+            padding: Layout.practiceContainerPadding,
+            child: ListView.builder(
+              itemCount: getCurrentQuestion()!.choiceList!.length,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return Observer(builder: (context) {
+                  return Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: _radioTile(index)
+                  );
+                });
+              },
+            ),
+          ),
+          _buildNextButton(question),
+        ]
+    );
   }
 
   Widget _buildFillView(Question question) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(30, 0, 34, 0.0),
+      margin: Layout.practiceContainerPadding,
       decoration: const BoxDecoration(
         color: Colors.transparent,
       ),
@@ -324,7 +323,8 @@ class _QuestionScreenState extends State<QuestionScreen> {
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(
                     vertical: 21,
-                    horizontal: 15),
+                    horizontal: Dimens.practiceHorizontalText
+                ),
 
               ),
               onChanged: (value){
@@ -369,7 +369,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
   Widget _radioTile(int index){
     return Container(
-      height: 60,
+      height: Dimens.answerTileHeight,
       decoration: decorationWithShadow,
       child: RadioListTile<String>(
         title: Align(
@@ -383,7 +383,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
           ),
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
+          borderRadius: BorderRadius.circular(Dimens.answerTileRadius),
         ),
         value: getCurrentQuestion()!.choiceList![index],
         groupValue: _singleQuestionStore.currentQuizAnswer,

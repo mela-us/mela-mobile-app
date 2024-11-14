@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/constants/dimens.dart';
 import 'package:mela/utils/locale/app_localization.dart';
 
 import '../../../constants/assets.dart';
@@ -116,8 +117,8 @@ class QuestionQuitOverlay extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFF0961F5),
-        borderRadius: BorderRadius.circular(30),
+        color: Theme.of(context).colorScheme.buttonYesBgOrText,
+        borderRadius: BorderRadius.circular(Dimens.bigButtonRadius),
       ),
       child: Stack(
         alignment: Alignment.center,

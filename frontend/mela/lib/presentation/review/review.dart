@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/constants/dimens.dart';
+import 'package:mela/constants/layout.dart';
 import 'package:mela/core/widgets/practice_app_bar_widget.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/question/question.dart';
@@ -54,7 +56,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
             const SizedBox(height: 27),
 
             Padding(
-                padding: const EdgeInsets.only(left: 30),
+                padding: const EdgeInsets.only(left: Dimens.practiceLeftContainer),
                 child: Text(
                   AppLocalizations.of(context).translate('review_ask'),
                   style: Theme.of(context).textTheme.subTitle
@@ -72,7 +74,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
 
             Padding(
-              padding: const EdgeInsets.only(left: 30),
+              padding: const EdgeInsets.only(left: Dimens.practiceLeftContainer),
               child: Text(
                 AppLocalizations.of(context).translate('review_explain'),
                 style: Theme.of(context).textTheme.subTitle
@@ -82,6 +84,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
             // SizedBox(height: 17),
             _buildExplainView('Phần giải thích cho đáp án nằm ở đây'),
+            const SizedBox(height: 17),
           ],
         ),
       );
@@ -90,7 +93,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
   Widget _buildQuestionList(){
     return Container(
-      height: 134,
+      height: Dimens.listOverlayHeight,
       color: Colors.white,
       child: ListView.builder(
         padding: const EdgeInsets.only(bottom: 61),
@@ -122,14 +125,14 @@ class _ReviewScreenState extends State<ReviewScreen> {
       children: [
         Expanded(
           child: Container(
-            margin: const EdgeInsets.fromLTRB(30, 16.0, 34, 0.0),
+            margin: Layout.practiceContainerPaddingWithTop,
             decoration: const BoxDecoration(
               color: Colors.transparent,
             ),
             child: Container(
               decoration: decorationWithShadow,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(15, 18, 15, 18),
+                padding: Layout.practiceTextPadding,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -163,14 +166,14 @@ class _ReviewScreenState extends State<ReviewScreen> {
       children: [
         Expanded(
           child: Container(
-            margin: const EdgeInsets.fromLTRB(30, 16.0, 34, 0.0),
+            margin: Layout.practiceContainerPaddingWithTop,
             decoration: const BoxDecoration(
               color: Colors.transparent,
             ),
             child: Container(
               decoration: decorationWithShadow,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(15, 18, 15, 18),
+                padding: Layout.practiceTextPadding,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -215,7 +218,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
   Widget _buildCorrectFill(String answer){
     return Container(
-      margin: const EdgeInsets.fromLTRB(30, 0, 34, 0.0),
+      margin: Layout.practiceContainerPadding,
       decoration: const BoxDecoration(
         color: Colors.transparent,
       ),
@@ -230,7 +233,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
   Widget _buildIncorrectFill(String correctAnswer, String answer){
     return Container(
-        margin: const EdgeInsets.fromLTRB(30, 0, 34, 0.0),
+        margin: Layout.practiceContainerPadding,
         decoration: const BoxDecoration(
           color: Colors.transparent,
         ),
@@ -262,7 +265,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
         .userAnswers[_singleQuestionStore.currentIndex];
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(30, 0, 34, 0.0),
+      padding: Layout.practiceContainerPadding,
       child: ListView.builder(
         itemCount: question.choiceList!.length,
         scrollDirection: Axis.vertical,
@@ -290,8 +293,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
       //correct
       return _buildSingleAnswerView(
           newQuizContent,
-          const Color(0xFF8EFF97),
-          const Color(0xFF167F71),
+          Theme.of(context).colorScheme.buttonCorrect,
+          Theme.of(context).colorScheme.buttonChooseBackground,
           Icons.check_circle
       );
     }
@@ -300,7 +303,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
       //incorrect
       return _buildSingleAnswerView(
           newQuizContent,
-          const Color(0xFFFFD5DB),
+          Theme.of(context).colorScheme.buttonIncorrect,
           const Color(0xFFD32F2F),
           Icons.cancel
       );
@@ -309,7 +312,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     return _buildSingleAnswerView(
         newQuizContent,
         Colors.white,
-        const Color(0xFF505050),
+        Theme.of(context).colorScheme.inputText,
         Icons.circle_outlined
     );
   }
@@ -320,21 +323,15 @@ class _ReviewScreenState extends State<ReviewScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(12.0),
+        borderRadius: BorderRadius.circular(Dimens.answerTileRadius),
         boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 3), // Đổ bóng
-          ),
+          Layout.practiceBoxShadow,
         ],
       ),
-      height: 60.0,
+      height: Dimens.answerTileHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // TextStandard.Normal(text, textColor),
           Text(
             text,
             style: Theme.of(context).textTheme.normal
@@ -343,7 +340,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
           Icon(
             icon,
             color: textColor,
-            size: 30.0,
+            size: Dimens.answerTileIconSize,
           ),
         ],
       ),
@@ -353,14 +350,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
   BoxDecoration decorationWithShadow = BoxDecoration(
     color: Colors.white,
-    borderRadius: BorderRadius.circular(16.0),
+    borderRadius: BorderRadius.circular(Dimens.textContainerRadius),
     boxShadow: [
-      BoxShadow(
-        color: Colors.grey.withOpacity(0.2),
-        spreadRadius: 2,
-        blurRadius: 5,
-        offset: const Offset(0, 3), // Đổ bóng
-      ),
+      Layout.practiceBoxShadow,
     ],
   );
 
@@ -387,7 +379,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     return String.fromCharCode(index + 65);
   }
   bool isAnswerCorrect(Question question, String answer){
-    if (answer == question.answer) return true;
+    if (answer.toLowerCase() == question.answer!.toLowerCase()) return true;
     return false;
   }
   String convertNumberToLetter(int number){

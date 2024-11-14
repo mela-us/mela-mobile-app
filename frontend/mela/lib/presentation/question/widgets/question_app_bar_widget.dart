@@ -1,8 +1,7 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/constants/dimens.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/question/store/timer/timer_store.dart';
 import 'package:mela/presentation/question/widgets/question_quit_overlay_widget.dart';
@@ -45,7 +44,7 @@ class _QuestionAppBarState extends State<QuestionAppBar> {
   //Build component:------------------------------------------------------------
   Widget _buildTitle(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 15),
+      padding: const EdgeInsets.only(left: Dimens.horizontal_padding),
       child: Row(
         children: [
           _buildBackButton(context),
@@ -83,7 +82,7 @@ class _QuestionAppBarState extends State<QuestionAppBar> {
   Widget _buildClockTimer(BuildContext context){
     return Observer(builder: (_) =>
         Padding(
-          padding: const EdgeInsets.only(right: 34),
+          padding: const EdgeInsets.only(right: Dimens.practiceRightContainer),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.end,

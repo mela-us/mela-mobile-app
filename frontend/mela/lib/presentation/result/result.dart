@@ -129,12 +129,14 @@ class ResultScreen extends StatelessWidget {
       {
         Navigator.of(context).pushNamed(Routes.review),
       },
+
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: const Color(0xFF0961F5),
+          color: Theme.of(context).colorScheme.buttonYesBgOrText,
           borderRadius: BorderRadius.circular(30),
         ),
+
         child: Stack(
           alignment: Alignment.center,
           children: [
@@ -146,6 +148,7 @@ class ResultScreen extends StatelessWidget {
                     .copyWith(color: Colors.white),
               ),
             ),
+
             Positioned(
               right: 10,
               child: Container(
