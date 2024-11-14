@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/constants/route_observer.dart';
 import 'package:mela/core/widgets/progress_indicator_widget.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
@@ -16,16 +17,23 @@ class AllLecturesInTopicScreen extends StatefulWidget {
       _AllLecturesInTopicScreenState();
 }
 
-class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen> {
-
+class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen>
+    with RouteAware {
   final LectureStore _lectureStore = getIt<LectureStore>();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
     if (!_lectureStore.isGetLecturesLoading) {
       _lectureStore.getListLectureByTopicIdAndLevelId();
     }
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
   }
 
   @override

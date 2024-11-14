@@ -133,7 +133,15 @@ class LectureRepositoryImpl extends LectureRepository {
           lectureDescription: "Mô tả bài học",
           lectureContent: "Nội dung bài học"),
     ]);
-
+    // if(DateTime.now().minute%2==0){
+    //   temp.lectures.add(Lecture(
+    //       lectureId: 74,
+    //       levelId: 1,
+    //       topicId: topicId,
+    //       lectureName: "Tích phân 5",
+    //       lectureDescription: "Mô tả bài học",
+    //       lectureContent: "Nội dung bài học"));
+    // }
     await Future.delayed(Duration(seconds: 4));
     //throw "Error in lecture repository";
     return temp;

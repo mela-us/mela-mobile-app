@@ -8,6 +8,7 @@ import 'package:mela/presentation/filter_screen/store/filter_store.dart';
 import 'package:mela/presentation/lectures_in_topic_screen/widgets/lecture_item.dart';
 import 'package:mela/presentation/search_screen/widgets/search_bar.dart';
 
+import '../../constants/route_observer.dart';
 import 'store/search_store.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -25,10 +26,12 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    //first time running
     if (!_searchStore.isLoadingHistorySearch) {
       _searchStore.getHistorySearchList();
     }
   }
+
 
   void handleHistoryItemClick(String searchText) {
     // Update the search bar text
@@ -48,12 +51,13 @@ class _SearchScreenState extends State<SearchScreen> {
                 .heading
                 .copyWith(color: Theme.of(context).colorScheme.primary)),
         leading: IconButton(
-          onPressed: () {
+          onPressed: () async {
             if (_searchStore.isSearched) {
               _searchStore.resetIsSearched();
               _filterStore.resetFilter();
               _searchStore.setIsFiltered(false);
               _searchStore.resetErrorString();
+              await _searchStore.getHistorySearchList();
               return;
             }
             //if not issearched, pop the screen

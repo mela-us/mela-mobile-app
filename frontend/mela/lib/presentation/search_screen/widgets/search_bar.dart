@@ -144,7 +144,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
+import 'package:mela/presentation/filter_screen/store/filter_store.dart';
 import 'package:mela/presentation/search_screen/store/search_store.dart';
+import 'package:sembast/sembast.dart';
 import '../../../utils/routes/routes.dart';
 import '../../lectures_in_topic_screen/store/lecture_store.dart';
 
@@ -158,6 +160,7 @@ class SearchingBar extends StatefulWidget {
 class SearchingBarState extends State<SearchingBar> {
   //warning: using SearchingBarState not _SearchingBarState to can use in searchBarKy in search_screen.dart
   SearchStore _searchStore = getIt<SearchStore>();
+  FilterStore _filterStore = getIt<FilterStore>();
   TextEditingController controller = TextEditingController();
 
   @override
@@ -186,8 +189,9 @@ class SearchingBarState extends State<SearchingBar> {
       if (!_searchStore.isSearched) {
         _searchStore.toggleIsSearched();
       }
-      //always set isFiltered to false when user search
+      //always set isFiltered to false when user search and reset filter
       _searchStore.setIsFiltered(false);
+      _filterStore.resetFilter();
       await _searchStore.getLecturesAfterSearch(value);
 
     } else {

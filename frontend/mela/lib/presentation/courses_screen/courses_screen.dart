@@ -19,14 +19,15 @@ class CoursesScreen extends StatefulWidget {
   State<CoursesScreen> createState() => _CoursesScreenState();
 }
 
-class _CoursesScreenState extends State<CoursesScreen> {
+class _CoursesScreenState extends State<CoursesScreen> with RouteAware {
   //stores:---------------------------------------------------------------------
   final TopicStore _topicStore = getIt<TopicStore>();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
+    routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
+    print("didChangeDependencies In CoursesScreen");
     // check to see if already called api
     if (!_topicStore.loading) {
       _topicStore.getTopics();
@@ -34,15 +35,10 @@ class _CoursesScreenState extends State<CoursesScreen> {
     }
   }
 
-  // @override
-  // void didPopNext() {
-  //   _topicStore.getTopics();
-  //   _topicStore.getAreLearningLectures();
-  //   print("didPopNext In CoursesScreen");
-  // }
 
   @override
   void dispose() {
+    routeObserver.unsubscribe(this);
     super.dispose();
   }
 

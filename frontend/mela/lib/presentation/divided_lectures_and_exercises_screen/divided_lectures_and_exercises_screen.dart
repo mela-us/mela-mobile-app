@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
+import 'package:mela/domain/entity/topic/topic.dart';
+import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
 import 'package:mela/presentation/divided_lectures_and_exercises_screen/store/exercise_store.dart';
 import 'package:mela/presentation/divided_lectures_and_exercises_screen/widgets/exercise_list_item.dart';
 import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
 
+import '../../constants/route_observer.dart';
 import '../../core/widgets/progress_indicator_widget.dart';
 import 'widgets/divided_lecture_list_item.dart';
 
@@ -18,7 +21,7 @@ class DividedLecturesAndExercisesScreen extends StatefulWidget {
 
 class _DividedLecturesAndExercisesScreenState
     extends State<DividedLecturesAndExercisesScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, RouteAware {
   late TabController _tabController;
 
   ExerciseStore _exerciseStore = getIt<ExerciseStore>();
@@ -32,6 +35,7 @@ class _DividedLecturesAndExercisesScreenState
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
     if (!_exerciseStore.isGetExercisesLoading) {
       _exerciseStore.getExercisesByLectureId();
     }
@@ -40,6 +44,7 @@ class _DividedLecturesAndExercisesScreenState
   @override
   void dispose() {
     _tabController.dispose();
+    routeObserver.unsubscribe(this);
     super.dispose();
   }
 
