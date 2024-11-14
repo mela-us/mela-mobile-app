@@ -1,4 +1,5 @@
 import 'package:mela/domain/entity/lecture/lecture_list.dart';
+import 'package:mela/domain/usecase/lecture/get_lectures_are_learning_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_lectures_usecase.dart';
 import 'package:mobx/mobx.dart';
 part 'lecture_store.g.dart';
@@ -8,8 +9,9 @@ class LectureStore = _LectureStore with _$LectureStore;
 abstract class _LectureStore with Store {
   //usecase--------------
   GetLecturesUsecase _getLecturesUsecase;
+  GetLecturesAreLearningUsecase getLecturesAreLearningUsecase;//use in topicstore
 
-  _LectureStore(this._getLecturesUsecase);
+  _LectureStore(this._getLecturesUsecase, this.getLecturesAreLearningUsecase);
 
 //obserbale
   @observable
@@ -76,6 +78,14 @@ abstract class _LectureStore with Store {
     //   print("Lecture trong getLecture by levelId: ${element.lectureName}");
     // });
     return lecturesByLevelId;
+  }
+
+  //change LectureList by value : using in course_screen and searchbar widget.
+  @action
+  void updateLectureList(LectureList? newlectureList) {
+    
+    this.lectureList = newlectureList;
+    print("length of lectureList: ${lectureList!.lectures.length}");
   }
 
   @action

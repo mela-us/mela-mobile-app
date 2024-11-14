@@ -140,15 +140,13 @@
 //   }
 // }
 
-
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/search_screen/store/search_store.dart';
 import '../../../utils/routes/routes.dart';
+import '../../lectures_in_topic_screen/store/lecture_store.dart';
 
 class SearchingBar extends StatefulWidget {
   SearchingBar({super.key});
@@ -158,7 +156,9 @@ class SearchingBar extends StatefulWidget {
 }
 
 class SearchingBarState extends State<SearchingBar> {
+  //warning: using SearchingBarState not _SearchingBarState to can use in searchBarKy in search_screen.dart
   SearchStore _searchStore = getIt<SearchStore>();
+  LectureStore _lectureStore = getIt<LectureStore>();
   TextEditingController controller = TextEditingController();
 
   @override
@@ -181,12 +181,22 @@ class SearchingBarState extends State<SearchingBar> {
   }
 
   void performSearch(String value) async {
+    // if search in first time, isSearch is false, we need to change it to true
+//     //but if  search in second time, continuing from first time, isSearch is true, we don't need to change it
     if (value.isNotEmpty) {
       if (!_searchStore.isSearched) {
         _searchStore.toggleIsSearched();
       }
+      //always set isFiltered to false when user search
+      _searchStore.setIsFiltered(false);
       await _searchStore.getLecturesAfterSearch(value);
+
+      //Very important because if user search after we need to set LectureList in LectureStore=value
+      //When click, in appbar, title will be set by lecturename which is found in lecturestore.lectureList.findbyID(id in exercise_store)
+      //so if we don't set lectureStore.lecturelist=value, it will be incorrect.
+      _lectureStore.updateLectureList(_searchStore.lecturesAfterSearching);
     } else {
+      //if user delete all text in search bar, we need to reset isSearched to false
       _searchStore.resetIsSearched();
       await _searchStore.getHistorySearchList();
     }
@@ -196,21 +206,21 @@ class SearchingBarState extends State<SearchingBar> {
     if (_searchStore.errorString.isNotEmpty) {
       return Container();
     }
-    
+
     if (_searchStore.isLoadingSearch) {
       return Container();
     }
-    
+
     if (!_searchStore.isSearched) {
       return Container();
     }
 
-    Color buttonColor = _searchStore.isFiltered 
-        ? Theme.of(context).colorScheme.tertiary 
+    Color buttonColor = _searchStore.isFiltered
+        ? Theme.of(context).colorScheme.tertiary
         : Theme.of(context).colorScheme.onTertiary;
-        
-    Color iconColor = _searchStore.isFiltered 
-        ? Theme.of(context).colorScheme.onTertiary 
+
+    Color iconColor = _searchStore.isFiltered
+        ? Theme.of(context).colorScheme.onTertiary
         : Theme.of(context).colorScheme.tertiary;
 
     BoxBorder? border;
@@ -274,6 +284,7 @@ class SearchingBarState extends State<SearchingBar> {
                 ),
               ),
               const SizedBox(width: 4),
+              //Filter Icon
               _buildFilterButton(context),
             ],
           ),

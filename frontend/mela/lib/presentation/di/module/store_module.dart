@@ -13,6 +13,7 @@ import '../../../core/stores/error/error_store.dart';
 import '../../../core/stores/form/form_store.dart';
 import '../../../di/service_locator.dart';
 import '../../../domain/repository/setting/setting_repository.dart';
+import '../../../domain/usecase/lecture/get_lectures_are_learning_usecase.dart';
 import '../../../domain/usecase/lecture/get_lectures_usecase.dart';
 import '../../../domain/usecase/post/get_post_usecase.dart';
 import '../../../domain/usecase/topic/get_topics_usecase.dart';
@@ -58,10 +59,10 @@ class StoreModule {
       ExerciseStore(getIt<GetExercisesUseCase>()),
     );
 
-    //Must Register LectureStore before SearchStore because LectureStore use in SearchStore
     getIt.registerSingleton<LectureStore>(
       LectureStore(
         getIt<GetLecturesUsecase>(),
+        getIt<GetLecturesAreLearningUsecase>(),
       ),
     );
 

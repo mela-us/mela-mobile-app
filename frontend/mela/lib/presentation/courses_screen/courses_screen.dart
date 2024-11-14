@@ -7,6 +7,7 @@ import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.d
 import '../../di/service_locator.dart';
 import '../../themes/default/colors_standards.dart';
 import '../../utils/routes/routes.dart';
+import '../lectures_in_topic_screen/widgets/lecture_item.dart';
 import 'widgets/cover_image_widget.dart';
 import 'widgets/topic_item.dart';
 
@@ -28,6 +29,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
     // check to see if already called api
     if (!_topicStore.loading) {
       _topicStore.getTopics();
+      _topicStore.getAreLearningLectures();
     }
   }
 
@@ -132,31 +134,23 @@ class _CoursesScreenState extends State<CoursesScreen> {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        Text("abc"),
-                        Text("abc"),
-                        Text("abc"),
-                        Text("abc"),
-                        Text("abc"),
-                        Text("abc"),
-                        Text("abc"),
-                        Text("abc"),
-                        Text("abc"),
-                        Text("abc"),
                         //Lectures is learning
 
-                        // Column(
-                        //   children: currentLecturesIsLearning.map((lecture) {
-                        //     return LectureItem(lecture: lecture);
-                        //   }).toList(),
-                        // )
+                        Column(
+                          children: _topicStore
+                              .lecturesAreLearningList!.lectures
+                              .map((lecture) {
+                            return LectureItem(lecture: lecture);
+                          }).toList(),
+                        )
                       ],
                     )
                   : Center(
-                    child: Text(
+                      child: Text(
                         _topicStore.errorString,
                         style: const TextStyle(color: Colors.red),
                       ),
-                  ),
+                    ),
             ),
           );
         },

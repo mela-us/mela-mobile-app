@@ -72,7 +72,7 @@ class _DividedLecturesAndExercisesScreenState
                       .heading
                       .copyWith(color: Theme.of(context).colorScheme.primary),
                 )
-              : SizedBox.shrink();
+              : Container();
         }),
         backgroundColor: Colors.transparent,
         elevation: 0,

@@ -1,6 +1,9 @@
+import 'package:mela/domain/entity/lecture/lecture_list.dart';
 import 'package:mela/domain/entity/topic/topic_list.dart';
+import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
 import 'package:mobx/mobx.dart';
 
+import '../../../../di/service_locator.dart';
 import '../../../../domain/usecase/topic/get_topics_usecase.dart';
 // Include generated file
 part 'topic_store.g.dart';
@@ -15,10 +18,17 @@ abstract class _TopicStore with Store {
   TopicList? topicList;
 
   @observable
+  LectureList? lecturesAreLearningList;
+
+  LectureStore _lectureStore = getIt<LectureStore>();
+
+  @observable
   String errorString = '';
 
   @computed
-  bool get loading => fetchTopicsFuture.status == FutureStatus.pending;
+  bool get loading =>
+      fetchTopicsFuture.status == FutureStatus.pending ||
+      fetchLecturesAreLearningFuture.status == FutureStatus.pending;
 
   late final ReactionDisposer _topicItemReactionDisposer;
   //Constructor
@@ -28,19 +38,42 @@ abstract class _TopicStore with Store {
   ObservableFuture<TopicList?> fetchTopicsFuture =
       ObservableFuture<TopicList?>(ObservableFuture.value(null));
 
+  @observable
+  ObservableFuture<LectureList?> fetchLecturesAreLearningFuture =
+      ObservableFuture<LectureList?>(ObservableFuture.value(null));
+
   @action
   Future getTopics() async {
     final future = _getTopicsUsecase.call(params: null);
     fetchTopicsFuture = ObservableFuture(future);
 
-    future.then((topicList) {
+    try {
+      final topicList = await future;
       this.topicList = topicList;
       this.errorString = '';
-    }).catchError((onError) {
+    } catch (onError) {
       this.topicList = null;
       this.errorString = onError.toString();
-    });
+    }
   }
+
+  @action
+  Future getAreLearningLectures() async {
+    final future =
+        _lectureStore.getLecturesAreLearningUsecase.call(params: null);
+    fetchLecturesAreLearningFuture = ObservableFuture(future);
+    try {
+      final lecturesAreLearningList = await future;
+      this.lecturesAreLearningList = lecturesAreLearningList;
+      //Very important to set lectureList in lectureStore
+      _lectureStore.updateLectureList(lecturesAreLearningList);
+      this.errorString = '';
+    } catch (onError) {
+      this.lecturesAreLearningList = null;
+      this.errorString = onError.toString();
+    }
+  }
+
   @action
   void resetErrorString() {
     errorString = '';

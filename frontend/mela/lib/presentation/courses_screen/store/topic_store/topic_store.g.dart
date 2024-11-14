@@ -32,6 +32,23 @@ mixin _$TopicStore on _TopicStore, Store {
     });
   }
 
+  late final _$lecturesAreLearningListAtom =
+      Atom(name: '_TopicStore.lecturesAreLearningList', context: context);
+
+  @override
+  LectureList? get lecturesAreLearningList {
+    _$lecturesAreLearningListAtom.reportRead();
+    return super.lecturesAreLearningList;
+  }
+
+  @override
+  set lecturesAreLearningList(LectureList? value) {
+    _$lecturesAreLearningListAtom
+        .reportWrite(value, super.lecturesAreLearningList, () {
+      super.lecturesAreLearningList = value;
+    });
+  }
+
   late final _$errorStringAtom =
       Atom(name: '_TopicStore.errorString', context: context);
 
@@ -64,12 +81,38 @@ mixin _$TopicStore on _TopicStore, Store {
     });
   }
 
+  late final _$fetchLecturesAreLearningFutureAtom = Atom(
+      name: '_TopicStore.fetchLecturesAreLearningFuture', context: context);
+
+  @override
+  ObservableFuture<LectureList?> get fetchLecturesAreLearningFuture {
+    _$fetchLecturesAreLearningFutureAtom.reportRead();
+    return super.fetchLecturesAreLearningFuture;
+  }
+
+  @override
+  set fetchLecturesAreLearningFuture(ObservableFuture<LectureList?> value) {
+    _$fetchLecturesAreLearningFutureAtom
+        .reportWrite(value, super.fetchLecturesAreLearningFuture, () {
+      super.fetchLecturesAreLearningFuture = value;
+    });
+  }
+
   late final _$getTopicsAsyncAction =
       AsyncAction('_TopicStore.getTopics', context: context);
 
   @override
   Future<dynamic> getTopics() {
     return _$getTopicsAsyncAction.run(() => super.getTopics());
+  }
+
+  late final _$getAreLearningLecturesAsyncAction =
+      AsyncAction('_TopicStore.getAreLearningLectures', context: context);
+
+  @override
+  Future<dynamic> getAreLearningLectures() {
+    return _$getAreLearningLecturesAsyncAction
+        .run(() => super.getAreLearningLectures());
   }
 
   late final _$_TopicStoreActionController =
@@ -90,8 +133,10 @@ mixin _$TopicStore on _TopicStore, Store {
   String toString() {
     return '''
 topicList: ${topicList},
+lecturesAreLearningList: ${lecturesAreLearningList},
 errorString: ${errorString},
 fetchTopicsFuture: ${fetchTopicsFuture},
+fetchLecturesAreLearningFuture: ${fetchLecturesAreLearningFuture},
 loading: ${loading}
     ''';
   }

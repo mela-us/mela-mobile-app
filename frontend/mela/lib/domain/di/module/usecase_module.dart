@@ -15,6 +15,7 @@ import '../../repository/post/post_repository.dart';
 import '../../repository/search/search_repository.dart';
 import '../../repository/topic/topic_repository.dart';
 import '../../repository/user_login/user_login_repository.dart';
+import '../../usecase/lecture/get_lectures_are_learning_usecase.dart';
 import '../../usecase/post/delete_post_usecase.dart';
 import '../../usecase/post/find_post_by_id_usecase.dart';
 import '../../usecase/post/get_post_usecase.dart';
@@ -67,7 +68,7 @@ class UseCaseModule {
 
     //lecture:--------------------------------------------------------------------
     getIt.registerSingleton<GetLecturesUsecase>(GetLecturesUsecase(getIt<LectureRepository>()));
-
+    getIt.registerSingleton<GetLecturesAreLearningUsecase>(GetLecturesAreLearningUsecase(getIt<LectureRepository>()));
     ///exercise:--------------------------------------------------------------------
     getIt.registerSingleton<GetExercisesUseCase>(GetExercisesUseCase(getIt<ExerciseRepository>()));
   

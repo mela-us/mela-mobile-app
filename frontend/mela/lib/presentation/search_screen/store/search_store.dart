@@ -18,8 +18,6 @@ abstract class _SearchStore with Store {
   GetHistorySearchList _getHistorySearchList;
   GetSearchLecturesResult _getSearchLecturesResult;
 
-  //Very important because if user search after we need to set LectureList in LectureStore=value search to when click is correct
-  LectureStore _lectureStore = getIt<LectureStore>();
   //Constructor
   _SearchStore(this._getHistorySearchList, this._getSearchLecturesResult);
 
@@ -74,23 +72,28 @@ abstract class _SearchStore with Store {
     final future = _getSearchLecturesResult.call(params: txtSearching);
     fetchLecturesAfterSearchingFuture = ObservableFuture(future);
 
-    future.then((value) {
+    try {
+      final value = await future;
       this.lecturesAfterSearching = value;
-      _lectureStore.lectureList = value;
       this.errorString = '';
+
+      // Kiểm tra null trước khi sử dụng toán tử '!'
+      // print(
+      //     "----->length of lecturesAfterSearching: ${lecturesAfterSearching!.lectures.length}");
+
       updateLectureAfterSeachingAndFiltering(value);
 
-      //Debug
+      // Debug
       // print("*****Lecture trong getLecture by levelId****");
-      // _lectureStore.lectureList!.lectures.forEach((element) {
+      // _lectureStore.lectureList?.lectures.forEach((element) {
       //   print("Lecture trong getLecture by levelId: ${element.lectureName}");
       // });
-    }).catchError((onError) {
+    } catch (onError) {
       this.lecturesAfterSearching = null;
       updateLectureAfterSeachingAndFiltering(null);
       print(onError);
       this.errorString = onError.toString();
-    });
+    }
   }
 
   @action

@@ -117,6 +117,17 @@ mixin _$LectureStore on _LectureStore, Store {
   }
 
   @override
+  void updateLectureList(LectureList? newlectureList) {
+    final _$actionInfo = _$_LectureStoreActionController.startAction(
+        name: '_LectureStore.updateLectureList');
+    try {
+      return super.updateLectureList(newlectureList);
+    } finally {
+      _$_LectureStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void resetErrorString() {
     final _$actionInfo = _$_LectureStoreActionController.startAction(
         name: '_LectureStore.resetErrorString');
