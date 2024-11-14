@@ -4,8 +4,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.hcmus.mela.model.User;
-import com.hcmus.mela.model.UserRole;
+import com.hcmus.mela.model.postgre.User;
+import com.hcmus.mela.model.postgre.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

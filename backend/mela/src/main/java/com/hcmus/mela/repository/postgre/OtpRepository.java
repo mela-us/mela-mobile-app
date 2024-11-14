@@ -1,7 +1,7 @@
-package com.hcmus.mela.repository;
+package com.hcmus.mela.repository.postgre;
 
-import com.hcmus.mela.model.Otp;
-import com.hcmus.mela.model.User;
+import com.hcmus.mela.model.postgre.Otp;
+import com.hcmus.mela.model.postgre.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OtpRepository extends JpaRepository<Otp, Long> {

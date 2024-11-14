@@ -1,4 +1,4 @@
-package com.hcmus.mela.model;
+package com.hcmus.mela.model.postgre;
 
 import jakarta.persistence.*;
 import lombok.*;

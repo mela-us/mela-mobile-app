@@ -3,7 +3,7 @@ package com.hcmus.mela.security.service;
 import com.hcmus.mela.dto.request.RegistrationRequest;
 import com.hcmus.mela.dto.response.RegistrationResponse;
 import com.hcmus.mela.dto.service.AuthenticatedUserDto;
-import com.hcmus.mela.model.User;
+import com.hcmus.mela.model.postgre.User;
 
 public interface UserService {
 

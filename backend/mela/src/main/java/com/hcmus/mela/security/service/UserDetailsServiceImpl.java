@@ -1,7 +1,7 @@
 package com.hcmus.mela.security.service;
 
 import com.hcmus.mela.dto.service.AuthenticatedUserDto;
-import com.hcmus.mela.model.UserRole;
+import com.hcmus.mela.model.postgre.UserRole;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

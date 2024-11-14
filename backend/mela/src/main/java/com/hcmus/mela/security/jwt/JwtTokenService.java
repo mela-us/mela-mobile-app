@@ -3,7 +3,7 @@ package com.hcmus.mela.security.jwt;
 import com.hcmus.mela.dto.request.LoginRequest;
 import com.hcmus.mela.dto.response.LoginResponse;
 import com.hcmus.mela.dto.service.AuthenticatedUserDto;
-import com.hcmus.mela.model.User;
+import com.hcmus.mela.model.postgre.User;
 import com.hcmus.mela.security.mapper.UserMapper;
 import com.hcmus.mela.security.service.UserService;
 import lombok.RequiredArgsConstructor;

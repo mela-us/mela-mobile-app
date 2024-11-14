@@ -1,7 +1,7 @@
 package com.hcmus.mela.dto.service;
 
 
-import com.hcmus.mela.model.UserRole;
+import com.hcmus.mela.model.postgre.UserRole;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

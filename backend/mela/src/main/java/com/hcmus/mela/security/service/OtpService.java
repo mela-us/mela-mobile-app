@@ -1,8 +1,8 @@
 package com.hcmus.mela.security.service;
 
-import com.hcmus.mela.model.Otp;
-import com.hcmus.mela.model.User;
-import com.hcmus.mela.repository.OtpRepository;
+import com.hcmus.mela.model.postgre.Otp;
+import com.hcmus.mela.model.postgre.User;
+import com.hcmus.mela.repository.postgre.OtpRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
