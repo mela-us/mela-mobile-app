@@ -58,16 +58,6 @@ class QuestionListOverlay extends StatelessWidget {
                 style: Theme.of(context).textTheme.title
                     .copyWith(color: Theme.of(context).colorScheme.textInBg1),
               ),
-              // child: Text(
-              //   'Danh sách câu hỏi',
-              //   style: TextStyle(
-              //     color: Color(0xFF202244),
-              //     fontSize: 20,
-              //     fontFamily: 'Asap',
-              //     fontWeight: FontWeight.w600,
-              //   ),
-              //   textAlign: TextAlign.center,
-              // ),
             ),
           ),
           Positioned(
