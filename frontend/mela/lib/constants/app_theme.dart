@@ -164,7 +164,13 @@ class AppThemeData {
       fontFamily: 'Asap',
       fontWeight: FontWeight.w600,
     ), // Button
+    displaySmall: TextStyle(
+      fontSize: 14,
+      fontFamily: 'Mulish',
+      fontWeight: FontWeight.normal,
+    ),//QuestionStyle
   );
+
 }
 
 // Extension to call follow figma text theme
@@ -178,6 +184,7 @@ extension CustomTextTheme on TextTheme {
   TextStyle get normal => labelMedium!;
   TextStyle get miniCaption => labelSmall!;
   TextStyle get buttonStyle => titleSmall!;
+  TextStyle get questionStyle => displaySmall!;
 }
 
 extension CustomColorTheme on ColorScheme{

@@ -56,10 +56,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
         _singleQuestionStore
             .generateAnswerList(_questionStore.questionList!
             .questions!.length);
-
-        SchedulerBinding.instance.addPostFrameCallback((_) async {
-          await _initListOverlay(context); // Hàm cần `context`
-        });
+        _initListOverlay(context);
       }
     },
     fireImmediately: true);
@@ -89,11 +86,21 @@ class _QuestionScreenState extends State<QuestionScreen> {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
 
-
     // check to see if already called api
     if (!_questionStore.loading) {
       _questionStore.getQuestions();
     }
+
+    reaction((_) => _questionStore.questionList, (questions){
+      if (questions != null){
+        //can't be null here
+        _singleQuestionStore
+            .generateAnswerList(_questionStore.questionList!
+            .questions!.length);
+        _initListOverlay(context);
+      }
+    },
+        fireImmediately: true);
 
     _singleQuestionStore.changeQuestion(0);
 
@@ -125,7 +132,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
           return const CustomProgressIndicatorWidget();
         }
         else {
-          return _buildBodyContent(context);
+          return SingleChildScrollView(
+            child: _buildBodyContent(context),
+          );
         }
       },
     );
@@ -262,7 +271,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
                     Text(
                       getCurrentQuestion()!.content!,
-                      style: Theme.of(context).textTheme.content
+                      style: Theme.of(context).textTheme.questionStyle
                           .copyWith(
                           color: Theme.of(context)
                               .colorScheme.inputTitleText
@@ -462,7 +471,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
   // }
 
   //Initialize overlay:---------------------------------------------------------
-   Future<void> _initListOverlay(BuildContext context) async{
+   void _initListOverlay(BuildContext context) async{
      questionListOverlay = OverlayEntry(
          builder: (BuildContext overlayContext) {
            return Stack(
