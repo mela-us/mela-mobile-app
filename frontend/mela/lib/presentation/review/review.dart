@@ -187,7 +187,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
                     Text(
                       content,
-                      style: Theme.of(context).textTheme.content.copyWith(
+                      style: Theme.of(context).textTheme.questionStyle.copyWith(
                           color: Theme.of(context).colorScheme.inputTitleText),
                     ),
                   ],
