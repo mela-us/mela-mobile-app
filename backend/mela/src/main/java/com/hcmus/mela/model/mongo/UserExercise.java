@@ -21,18 +21,17 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @Document(collection = "users_exercises")
 public class UserExercise {
-    @Id
-    private UserExerciseId userExerciseId;
+    @Field("user_id")
+    private Integer userId;
+    @Field("exercise_id")
+    private Integer exerciseId;
 
     @Field("right_answers")
     private Integer rightAnswers;
-
     @Field("test_duration")
     private LocalTime testDuration;
-
     @Field("test_time")
-    private LocalDateTime testAt;
-
+    private LocalDateTime testTime;
     @Enumerated(EnumType.STRING)
     private ExerciseStatus status;
 }

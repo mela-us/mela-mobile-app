@@ -15,9 +15,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Document(collection = "lectures")
 public class UserLecture {
-    @Id
-    private UserLectureId userLectureId;
+    @Field("user_id")
+    private Integer userId;
+    @Field("lecture_id")
+    private Integer lectureId;
 
     @Field("study_time")
-    private LocalDateTime studyAt;
+    private LocalDateTime studyTime;
 }

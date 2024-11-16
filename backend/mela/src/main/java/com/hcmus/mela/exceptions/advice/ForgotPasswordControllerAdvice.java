@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @RestControllerAdvice(basePackageClasses = ForgotPasswordController.class)
 public class ForgotPasswordControllerAdvice {
     @ExceptionHandler(ForgotPasswordException.class)
-    ResponseEntity<ApiExceptionResponse> handleRegistrationException(ForgotPasswordException exception) {
+    ResponseEntity<ApiExceptionResponse> handleForgotPasswordException(ForgotPasswordException exception) {
 
         final ApiExceptionResponse response = new ApiExceptionResponse(exception.getErrorMessage(), HttpStatus.BAD_REQUEST, LocalDateTime.now());
 

@@ -3,28 +3,32 @@ package com.hcmus.mela.model.mongo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.json.JsonObject;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "lectures")
 public class Lecture {
-    @Id
     @Field("lecture_id")
+    @Indexed(unique = true)
     private Integer lectureId;
 
-    @Field("name")
+    @Field("lecture_name")
     private String lectureName;
     @Field("lecture_content")
-    private String lectureContent;
+    private LectureContent lectureContent;
+    @Field("level_id")
+    private Integer levelId;
+    @Field("topic_id")
+    private Integer topicId;
 
-    @DBRef
-    private Topic topic;
-    @DBRef
-    private Level level;
-
+    @Field("exercise_count")
+    private Integer exerciseCount;
 }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -12,10 +13,10 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @AllArgsConstructor
 @Document(collection = "levels")
 public class Level {
-    @Id
     @Field("level_id")
+    @Indexed(unique = true)
     private Integer levelId;
 
-    @Field("name")
+    @Field("level_name")
     private String levelName;
 }
