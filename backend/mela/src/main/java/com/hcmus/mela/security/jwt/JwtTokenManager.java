@@ -17,9 +17,9 @@ public class JwtTokenManager {
 
     private final JwtProperties jwtProperties;
 
-    public String generateToken(User user) {
-        final String username = user.getUsername();
-        final UserRole userRole = user.getUserRole();
+    public String generateAccessToken(User user) {
+        Long userID = user.getUserId();
+        UserRole userRole = user.getUserRole();
 
         if (jwtProperties.getSecretKey() == null) {
             throw new IllegalStateException("Secret key is not configured");
@@ -27,13 +27,32 @@ public class JwtTokenManager {
 
         //@formatter:off
 		return JWT.create()
-				.withSubject(username)
+				.withSubject(userID.toString())
 				.withIssuer(jwtProperties.getIssuer())
 				.withClaim("role", userRole.name())
 				.withIssuedAt(new Date())
-				.withExpiresAt(new Date(System.currentTimeMillis() + jwtProperties.getExpirationMinute() * 60 * 1000))
+				.withExpiresAt(new Date(System.currentTimeMillis() + jwtProperties.getAccessTokenExpirationMinute() * 60 * 1000))
 				.sign(Algorithm.HMAC256(jwtProperties.getSecretKey().getBytes()));
 		//@formatter:on
+    }
+
+    public String generateRefreshToken(User user) {
+        Long userID = user.getUserId();
+        final UserRole userRole = user.getUserRole();
+
+        if (jwtProperties.getSecretKey() == null) {
+            throw new IllegalStateException("Secret key is not configured");
+        }
+
+        //@formatter:off
+        return JWT.create()
+                .withSubject(userID.toString())
+                .withIssuer(jwtProperties.getIssuer())
+                .withClaim("role", userRole.name())
+                .withIssuedAt(new Date())
+                .withExpiresAt(new Date(System.currentTimeMillis() + jwtProperties.getRefreshTokenExpirationDay() * 1000 * 60 * 60 * 24))
+                .sign(Algorithm.HMAC256(jwtProperties.getSecretKey().getBytes()));
+        //@formatter:on
     }
 
     public String getUsernameFromToken(String token) {
