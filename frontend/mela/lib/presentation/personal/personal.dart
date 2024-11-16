@@ -1,20 +1,46 @@
 import 'package:flutter/material.dart';
 import '../../constants/assets.dart';
 import '../../constants/app_theme.dart';
+import '../../di/service_locator.dart';
 import 'store/personal_store.dart';
-import 'personal_info/personal_info.dart';
+import 'personal_info.dart';
 import 'widgets/signout_dialog.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
-class Personal extends StatefulWidget {
-  const Personal({super.key});
+class PersonalScreen extends StatefulWidget {
+  const PersonalScreen({super.key});
 
   @override
   _PersonalScreenState createState() => _PersonalScreenState();
 }
 
-class _PersonalScreenState extends State<Personal> {
-  final PersonalStore _store = PersonalStore();
+class _PersonalScreenState extends State<PersonalScreen> {
+  //Stores:---------------------------------------------------------------------
+  final PersonalStore _store = getIt<PersonalStore>();
+  //State set:------------------------------------------------------------------
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    await _store.getUserInfo();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,10 +92,10 @@ class _PersonalScreenState extends State<Personal> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => PersonalInfo(
-                                name: _store.userName,
-                                email: "long@gmail.com",
-                                dob: "01/01/2003",
-                                password: "12345678",
+                                name: _store.user?.name ?? 'Người học không tên',
+                                email: _store.user?.email ?? '',
+                                dob: _store.user?.dob ?? '',
+                                password: _store.user?.password ?? '',
                               ),
                             ),
                           );
@@ -144,16 +170,21 @@ class _PersonalScreenState extends State<Personal> {
                 child: Column(
                   children: [
                     CircleAvatar(
-                      backgroundImage: AssetImage('assets/icons/default_profile_pic.png'),
+                      backgroundImage: AssetImage(Assets.default_profile_pic),
                       radius: 50.0,
                     ),
                     SizedBox(height: 5.0),
                     Observer(
-                      builder: (_) => Text(
-                        _store.userName,
-                        style: Theme.of(context).textTheme.bigTitle
-                            .copyWith(color: Theme.of(context).colorScheme.textInBg1),
-                      ),
+                      builder: (context) {
+                        if (_store.progressLoading || _store.detailedProgressLoading) {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                        return Text(
+                          _store.user?.name ?? 'Người học không tên',
+                          style: Theme.of(context).textTheme.bigTitle
+                              .copyWith(color: Theme.of(context).colorScheme.textInBg1),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -172,12 +203,11 @@ class _PersonalScreenState extends State<Personal> {
       builder: (BuildContext context) {
         return LogoutConfirmationDialog(
           onLogout: () {
-            _store.logout(); // Call logout from the store
-            Navigator.of(context).pop(); // Close the dialog
-            // Optionally navigate to login/screen
+            Navigator.of(context).pop();
+            // implement logout
           },
           onCancel: () {
-            Navigator.of(context).pop(); // Close the dialog
+            Navigator.of(context).pop();
           },
         );
       },

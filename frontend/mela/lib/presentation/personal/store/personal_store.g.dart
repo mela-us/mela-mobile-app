@@ -9,51 +9,84 @@ part of 'personal_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$PersonalStore on _PersonalStore, Store {
-  late final _$userNameAtom =
-      Atom(name: '_PersonalStore.userName', context: context);
+  Computed<bool>? _$progressLoadingComputed;
 
   @override
-  String get userName {
-    _$userNameAtom.reportRead();
-    return super.userName;
+  bool get progressLoading =>
+      (_$progressLoadingComputed ??= Computed<bool>(() => super.progressLoading,
+              name: '_PersonalStore.progressLoading'))
+          .value;
+  Computed<bool>? _$detailedProgressLoadingComputed;
+
+  @override
+  bool get detailedProgressLoading => (_$detailedProgressLoadingComputed ??=
+          Computed<bool>(() => super.detailedProgressLoading,
+              name: '_PersonalStore.detailedProgressLoading'))
+      .value;
+
+  late final _$fetchFutureAtom =
+      Atom(name: '_PersonalStore.fetchFuture', context: context);
+
+  @override
+  ObservableFuture<User?> get fetchFuture {
+    _$fetchFutureAtom.reportRead();
+    return super.fetchFuture;
   }
 
   @override
-  set userName(String value) {
-    _$userNameAtom.reportWrite(value, super.userName, () {
-      super.userName = value;
+  set fetchFuture(ObservableFuture<User?> value) {
+    _$fetchFutureAtom.reportWrite(value, super.fetchFuture, () {
+      super.fetchFuture = value;
     });
   }
 
-  late final _$_PersonalStoreActionController =
-      ActionController(name: '_PersonalStore', context: context);
+  late final _$userAtom = Atom(name: '_PersonalStore.user', context: context);
 
   @override
-  void updateUserName(String name) {
-    final _$actionInfo = _$_PersonalStoreActionController.startAction(
-        name: '_PersonalStore.updateUserName');
-    try {
-      return super.updateUserName(name);
-    } finally {
-      _$_PersonalStoreActionController.endAction(_$actionInfo);
-    }
+  User? get user {
+    _$userAtom.reportRead();
+    return super.user;
   }
 
   @override
-  void logout() {
-    final _$actionInfo = _$_PersonalStoreActionController.startAction(
-        name: '_PersonalStore.logout');
-    try {
-      return super.logout();
-    } finally {
-      _$_PersonalStoreActionController.endAction(_$actionInfo);
-    }
+  set user(User? value) {
+    _$userAtom.reportWrite(value, super.user, () {
+      super.user = value;
+    });
+  }
+
+  late final _$successAtom =
+      Atom(name: '_PersonalStore.success', context: context);
+
+  @override
+  bool get success {
+    _$successAtom.reportRead();
+    return super.success;
+  }
+
+  @override
+  set success(bool value) {
+    _$successAtom.reportWrite(value, super.success, () {
+      super.success = value;
+    });
+  }
+
+  late final _$getUserInfoAsyncAction =
+      AsyncAction('_PersonalStore.getUserInfo', context: context);
+
+  @override
+  Future<dynamic> getUserInfo() {
+    return _$getUserInfoAsyncAction.run(() => super.getUserInfo());
   }
 
   @override
   String toString() {
     return '''
-userName: ${userName}
+fetchFuture: ${fetchFuture},
+user: ${user},
+success: ${success},
+progressLoading: ${progressLoading},
+detailedProgressLoading: ${detailedProgressLoading}
     ''';
   }
 }

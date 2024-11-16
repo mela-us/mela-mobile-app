@@ -1,23 +1,49 @@
+import 'dart:async';
+
+
 import 'package:flutter/material.dart';
-import '../../constants/assets.dart';
-import '../../constants/app_theme.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mela/constants/app_theme.dart';
+
 import 'widgets/expandable_list.dart';
+
 import 'store/stats_store.dart';
+import '../../di/service_locator.dart';
 
 class StatisticsScreen extends StatefulWidget {
-  const StatisticsScreen({super.key});
+  StatisticsScreen({super.key});
 
   @override
-  _StatisticsScreenState createState() => _StatisticsScreenState();
+  State<StatisticsScreen> createState() => _StatisticsScreenState();
 }
 
 class _StatisticsScreenState extends State<StatisticsScreen> {
-  late final StatisticsStore _store;
+  //Stores:---------------------------------------------------------------------
+  final StatisticsStore _store = getIt<StatisticsStore>();
+  //State set:------------------------------------------------------------------
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    _store = StatisticsStore();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    await _store.getProgressList();
+    await _store.getDetailedProgressList();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
@@ -31,8 +57,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
           elevation: 0,
           title: Text(
             'Thống kê',
-            style: Theme.of(context).textTheme.heading
-                .copyWith(color: Theme.of(context).colorScheme.textInBg1),
+            style: Theme.of(context).textTheme.heading.copyWith(
+              color: Theme.of(context).colorScheme.textInBg1,
+            ),
           ),
           actions: [
             Padding(
@@ -55,15 +82,25 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
             ],
           ),
         ),
-        body: TabBarView(
-          children: [
-            ExpandableList(store: _store),
-            ExpandableList(store: _store),
-            ExpandableList(store: _store),
-          ],
+        body: Observer(
+          builder: (context) {
+            if (_store.progressLoading || _store.detailedProgressLoading) {
+              return Center(child: CircularProgressIndicator());
+            }
+            return TabBarView(
+              children: [
+                ExpandableList(store: _store, division: "Tiểu học"),
+                ExpandableList(store: _store, division: "Trung học"),
+                ExpandableList(store: _store, division: "Phổ thông"),
+              ],
+            );
+          },
         ),
         backgroundColor: Theme.of(context).colorScheme.appBackground,
       ),
     );
   }
 }
+
+
+

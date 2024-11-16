@@ -8,9 +8,11 @@ import 'package:mela/data/repository/user/user_repository_impl.dart';
 import 'package:mela/data/sharedpref/shared_preference_helper.dart';
 import 'package:mela/domain/repository/post/post_repository.dart';
 import 'package:mela/domain/repository/setting/setting_repository.dart';
+import 'package:mela/domain/repository/stat/stat_repository.dart';
 import 'package:mela/domain/repository/user/user_repository.dart';
 
 import '../../../di/service_locator.dart';
+import '../../repository/stat/stat_repository_impl.dart';
 
 class RepositoryModule {
   static Future<void> configureRepositoryModuleInjection() async {
@@ -27,5 +29,8 @@ class RepositoryModule {
       getIt<PostApi>(),
       getIt<PostDataSource>(),
     ) as PostRepository);
+
+    getIt.registerSingleton<StatRepository>(
+        StatRepositoryImpl() as StatRepository);
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mela/domain/entity/stat/progress.dart';
 
 import '../store/stats_store.dart';
 
@@ -9,7 +10,7 @@ import '../../../constants/app_theme.dart';
 
 
 class ExpandableItem extends StatefulWidget {
-  final Item item;
+  final Progress item;
   final StatisticsStore store;
   final int index;
 
@@ -44,12 +45,12 @@ class _ExpandableItemState extends State<ExpandableItem> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '${widget.item.title} ${widget.item.currentProgress}/${widget.item.total}',
+                        '${widget.item.topicName} ${widget.item.current!}/${widget.item.total!}',
                         style: Theme.of(context).textTheme.normal
                             .copyWith(color: Colors.black),
                       ),
                       Image.asset(
-                        _isExpanded ? 'assets/icons/stats_hide.png' : 'assets/icons/stats_show.png',
+                        _isExpanded ? Assets.stats_hide : Assets.stats_show,
                         width: 18,
                         height: 18,
                       )
@@ -60,7 +61,7 @@ class _ExpandableItemState extends State<ExpandableItem> {
                     padding: const EdgeInsets.only(left: 25.0, right: 25.0, bottom: 1.0),
                     child: LinearProgressIndicator(
                       minHeight: 12,
-                      value: widget.item.currentProgress * 1.0 / widget.item.total,
+                      value: widget.item.current! * 1.0 / widget.item.total!,
                       color: Theme.of(context).colorScheme.buttonYesBgOrText,
                       backgroundColor: Theme.of(context).colorScheme.textInBg1.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(10.0),
@@ -78,12 +79,12 @@ class _ExpandableItemState extends State<ExpandableItem> {
                 children: [
                   SizedBox(height: 8),
                   Text(
-                    'Bài tập đã hoàn thành trong chuyên đề',
-                    style: Theme.of(context).textTheme.subHeading
+                    'Bài tập đã hoàn thành (7 ngày gần đây)',
+                    style: Theme.of(context).textTheme.subTitle
                         .copyWith(color: Theme.of(context).colorScheme.textInBg1),
                   ),
                   SizedBox(height: 8),
-                  BarChartWidget(),
+                  BarChartWidget(store: widget.store, topicName: "Số học", division: "Trung học"),
                   SizedBox(height: 8),
                 ],
               ),

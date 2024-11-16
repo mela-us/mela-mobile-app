@@ -25,4 +25,21 @@ class UserRepositoryImpl extends UserRepository {
 
   @override
   Future<bool> get isLoggedIn => _sharedPrefsHelper.isLoggedIn;
+
+  @override
+  Future<User> getUserInfo() async {
+    return User(
+      id: '128736',
+      name: 'Anh Long',
+      email: 'anhlong@gmail.com',
+      dob: '01/01/2003',
+      password: '123456789' //encrypted
+    );
+  }
+
+  @override
+  Future<User> updateUserInfo(User newUser) {
+    // TODO: implement updateUserInfo
+    throw UnimplementedError();
+  }
 }

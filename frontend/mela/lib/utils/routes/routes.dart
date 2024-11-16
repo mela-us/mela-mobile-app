@@ -21,7 +21,7 @@ class Routes {
   static final routes = <String, WidgetBuilder>{
     login: (BuildContext context) => LoginScreen(),
     home: (BuildContext context) => HomeScreen(),
-    personal: (BuildContext context) => Personal(),
+    personal: (BuildContext context) => PersonalScreen(),
     stats: (BuildContext context) => StatisticsScreen(),
   };
 }

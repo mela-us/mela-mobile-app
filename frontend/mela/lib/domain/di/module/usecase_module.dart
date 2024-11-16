@@ -10,8 +10,12 @@ import 'package:mela/domain/usecase/post/udpate_post_usecase.dart';
 import 'package:mela/domain/usecase/user/is_logged_in_usecase.dart';
 import 'package:mela/domain/usecase/user/login_usecase.dart';
 import 'package:mela/domain/usecase/user/save_login_in_status_usecase.dart';
+import 'package:mela/domain/usecase/user/get_user_info_usecase.dart';
 
 import '../../../di/service_locator.dart';
+import '../../repository/stat/stat_repository.dart';
+import 'package:mela/domain/usecase/stat/get_progress_usecase.dart';
+import 'package:mela/domain/usecase/stat/get_detailed_progress_usecase.dart';
 
 class UseCaseModule {
   static Future<void> configureUseCaseModuleInjection() async {
@@ -25,7 +29,9 @@ class UseCaseModule {
     getIt.registerSingleton<LoginUseCase>(
       LoginUseCase(getIt<UserRepository>()),
     );
-
+    getIt.registerSingleton<GetUserInfoUseCase>(
+      GetUserInfoUseCase(getIt<UserRepository>()),
+    );
     // post:--------------------------------------------------------------------
     getIt.registerSingleton<GetPostUseCase>(
       GetPostUseCase(getIt<PostRepository>()),
@@ -41,6 +47,13 @@ class UseCaseModule {
     );
     getIt.registerSingleton<DeletePostUseCase>(
       DeletePostUseCase(getIt<PostRepository>()),
+    );
+    //stats:--------------------------------------------------------------------
+    getIt.registerSingleton<GetProgressListUseCase>(
+      GetProgressListUseCase(getIt<StatRepository>()),
+    );
+    getIt.registerSingleton<GetDetailedProgressListUseCase>(
+      GetDetailedProgressListUseCase(getIt<StatRepository>()),
     );
   }
 }

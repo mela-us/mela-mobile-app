@@ -1,45 +1,79 @@
 import 'package:mobx/mobx.dart';
 
+import '../../../core/stores/error/error_store.dart';
+import '../../../domain/entity/stat/detailed_progress_list.dart';
+import '../../../domain/entity/stat/progress_list.dart';
+import '../../../utils/dio/dio_error_util.dart';
+
+import '../../../domain/usecase/stat/get_progress_usecase.dart';
+import '../../../domain/usecase/stat/get_detailed_progress_usecase.dart';
+
 part 'stats_store.g.dart';
 
 class StatisticsStore = _StatisticsStore with _$StatisticsStore;
 
 abstract class _StatisticsStore with Store {
-  @observable
-  ObservableList<Item> items = ObservableList<Item>();
+  //Constructor:----------------------------------------------------------------
+  _StatisticsStore(
+      this._getProgressListUseCase,
+      this._getDetailedProgressListUseCase,
+      this._errorStore
+  );
+  //UseCase:--------------------------------------------------------------------
+  final GetProgressListUseCase _getProgressListUseCase;
+  final GetDetailedProgressListUseCase _getDetailedProgressListUseCase;
+  //Store:----------------------------------------------------------------------
+  final ErrorStore _errorStore;
 
-  _StatisticsStore() {
-    items.addAll(createItems());
+  // store variables:-----------------------------------------------------------
+  //empty-------------
+  static ObservableFuture<ProgressList?> emptyProgressListResponse =
+  ObservableFuture.value(null);
+  static ObservableFuture<DetailedProgressList?> emptyDetailedProgressListResponse =
+  ObservableFuture.value(null);
+  //fetch-------------
+  @observable
+  ObservableFuture<ProgressList?> fetchProgressFuture =
+  ObservableFuture<ProgressList?>(emptyProgressListResponse);
+  @observable
+  ObservableFuture<DetailedProgressList?> fetchDetailedProgressFuture =
+  ObservableFuture<DetailedProgressList?>(emptyDetailedProgressListResponse);
+  //lists
+  @observable
+  ProgressList? progressList;
+  @observable
+  DetailedProgressList? detailedProgressList;
+  //
+  @observable
+  bool success = false;
+  //loading
+  @computed
+  bool get progressLoading => fetchProgressFuture.status == FutureStatus.pending;
+  @computed
+  bool get detailedProgressLoading => fetchDetailedProgressFuture.status == FutureStatus.pending;
+
+  //action:---------------------------------------------------------------------
+  @action
+  Future getProgressList() async {
+    final future = _getProgressListUseCase.call(params: null);
+    fetchProgressFuture = ObservableFuture(future);
+
+    future.then((list) {
+      progressList = list;
+    }).catchError((error) {
+      _errorStore.errorMessage = DioExceptionUtil.handleError(error);
+    });
   }
 
   @action
-  void updateItemProgress(int index, int newProgress) {
-    if (index >= 0 && index < items.length) {
-      items[index].currentProgress = newProgress;
-    }
+  Future getDetailedProgressList() async {
+    final future = _getDetailedProgressListUseCase.call(params: null);
+    fetchDetailedProgressFuture = ObservableFuture(future);
+
+    future.then((list) {
+      detailedProgressList = list;
+    }).catchError((error) {
+      _errorStore.errorMessage = DioExceptionUtil.handleError(error);
+    });
   }
-}
-
-class Item {
-  String title;
-  int currentProgress;
-  int total;
-
-  Item({
-    required this.title,
-    required this.currentProgress,
-    required this.total,
-  });
-}
-
-List<Item> createItems() {
-  return [
-    Item(title: 'Số học', currentProgress: 3, total: 10),
-    Item(title: 'Đại số', currentProgress: 3, total: 10),
-    Item(title: 'Hình học', currentProgress: 2, total: 10),
-    Item(title: 'Lý thuyết số', currentProgress: 1, total: 10),
-    Item(title: 'Xác suất thống kê', currentProgress: 7, total: 10),
-    Item(title: 'Vị phần', currentProgress: 4, total: 10),
-    Item(title: 'Dãy số', currentProgress: 20, total: 30),
-  ];
 }

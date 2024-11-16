@@ -1,8 +1,7 @@
 // lib/personal_info_screen.dart
 import 'package:flutter/material.dart';
-import '../../../themes/default/colors_standards.dart';
-import '../../../themes/default/text_styles.dart';
-import 'store/personal_info_store.dart';
+import '../../themes/default/colors_standards.dart';
+import '../../themes/default/text_styles.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 class PersonalInfo extends StatefulWidget {
@@ -24,17 +23,10 @@ class PersonalInfo extends StatefulWidget {
 }
 
 class _PersonalInfoState extends State<PersonalInfo> {
-  late final PersonalInfoStore _store;
 
   @override
   void initState() {
     super.initState();
-    _store = PersonalInfoStore(
-      name: widget.name,
-      email: widget.email,
-      dob: widget.dob,
-      password: widget.password,
-    );
   }
 
   @override
@@ -76,7 +68,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              TextStandard.Button(_store.name, ColorsStandards.textColorInBackground2),
+                              TextStandard.Button(widget.name, ColorsStandards.textColorInBackground2),
                               SizedBox(width: 8.0),
                               Icon(Icons.arrow_forward_ios, size: 18.0),
                             ],
@@ -89,7 +81,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              TextStandard.Button(_store.email, ColorsStandards.textColorInBackground2),
+                              TextStandard.Button(widget.email, ColorsStandards.textColorInBackground2),
                               SizedBox(width: 8.0),
                               Icon(Icons.arrow_forward_ios, size: 18.0),
                             ],
@@ -102,7 +94,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              TextStandard.Button(_store.dob, ColorsStandards.textColorInBackground2),
+                              TextStandard.Button(widget.dob, ColorsStandards.textColorInBackground2),
                               SizedBox(width: 8.0),
                               Icon(Icons.arrow_forward_ios, size: 18.0),
                             ],
@@ -115,7 +107,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              TextStandard.Button(_store.password.replaceAll(RegExp(r'.'), '*'), ColorsStandards.textColorInBackground2),
+                              TextStandard.Button(widget.password.replaceAll(RegExp(r'.'), '*'), ColorsStandards.textColorInBackground2),
                               SizedBox(width: 8.0),
                               Icon(Icons.arrow_forward_ios, size: 18.0),
                             ],
