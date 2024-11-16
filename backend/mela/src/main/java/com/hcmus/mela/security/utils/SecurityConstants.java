@@ -6,22 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class SecurityConstants {
     /**
-     * Token expiration time 1 days.
-     */
-    public static final long EXPIRATION_TIME = 24L*60*60*1000;
-
-    /**
-     * Secret key for signature
-     */
-    public static final String SECRET_KEY = "mySecretKey";
-
-    /**
-     * The company who provided token.
-     * You can customize issuer name, this is given as an example.
-     */
-    public static final String ISSUER = "www.boilerplate.design";
-
-    /**
      * Token Prefix
      * We will use this prefix when parsing JWT Token
      */

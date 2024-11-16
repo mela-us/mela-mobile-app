@@ -35,12 +35,13 @@ public class JwtTokenService {
         final AuthenticatedUserDto authenticatedUserDto = userService.findAuthenticatedUserByUsername(username);
 
         final User user = UserMapper.INSTANCE.convertToUser(authenticatedUserDto);
-        final String token = jwtTokenManager.generateToken(user);
+        final String accessToken = jwtTokenManager.generateAccessToken(user);
+        final String refreshToken = jwtTokenManager.generateRefreshToken(user);
         final String message = "Log in successfully!";
 
         log.info("{} has successfully logged in!", user.getUsername());
 
-        return new LoginResponse(token, message);
+        return new LoginResponse(accessToken, refreshToken, message);
     }
 
 }
