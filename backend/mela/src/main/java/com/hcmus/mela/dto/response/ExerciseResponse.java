@@ -1,6 +1,6 @@
 package com.hcmus.mela.dto.response;
 
-import com.hcmus.mela.model.mongo.Exercise;
+import com.hcmus.mela.dto.service.ExerciseDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,5 +15,5 @@ import java.util.List;
 @AllArgsConstructor
 public class ExerciseResponse {
     private String message;
-    private List<Exercise> exercises;
+    private List<ExerciseDto> exercises;
 }

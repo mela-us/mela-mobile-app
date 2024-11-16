@@ -2,36 +2,40 @@ package com.hcmus.mela.controller;
 
 import com.hcmus.mela.dto.request.ExerciseRequest;
 import com.hcmus.mela.dto.response.ExerciseResponse;
+import com.hcmus.mela.dto.service.ExerciseDto;
+import com.hcmus.mela.security.jwt.JwtTokenService;
+import com.hcmus.mela.security.utils.SecurityConstants;
 import com.hcmus.mela.service.ExerciseService;
-import com.hcmus.mela.model.mongo.Exercise;
 import io.swagger.v3.oas.annotations.Operation;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequiredArgsConstructor
+@AllArgsConstructor
 @RequestMapping("/api")
 public class ExerciseController {
     private final ExerciseService exerciseService;
 
-
+    private JwtTokenService jwtTokenService;
 
     @RequestMapping(value = "/lectures/{lectureId}/exercises", method = RequestMethod.GET)
     @Operation(tags = "Exercise Service", description = "You can find a list of exercises belonging to a lecture from " +
             "the system by accessing the appropriate path.")
     public ResponseEntity<ExerciseResponse> getExerciseInLecture(
             @PathVariable Integer lectureId,
-            @AuthenticationPrincipal OAuth2ResourceServerProperties.Jwt accessToken) {
+            @RequestHeader("Authorization") String authorizationHeader) {
 
         ExerciseRequest exerciseRequest = new ExerciseRequest(null, lectureId);
 
         final ExerciseResponse exerciseResponse = exerciseService.getAllExercisesInLecture(exerciseRequest);
 
+        String token = authorizationHeader.replace(SecurityConstants.TOKEN_PREFIX, Strings.EMPTY);
+
+        //return ResponseEntity.ok(jwtTokenService.getUserIdFromToken(token).toString());
         return ResponseEntity.ok(exerciseResponse);
     }
 
@@ -40,12 +44,14 @@ public class ExerciseController {
             "appropriate path.")
     public ResponseEntity<ExerciseResponse> getExercise(
             @PathVariable Integer exerciseId,
-            @AuthenticationPrincipal OAuth2ResourceServerProperties.Jwt accessToken) {
+            @RequestHeader("Authorization") String authorizationHeader) {
 
         ExerciseRequest exerciseRequest = new ExerciseRequest(exerciseId, null);
 
         final ExerciseResponse exerciseResponse = exerciseService.getExercise(exerciseRequest);
+        String token = authorizationHeader.replace(SecurityConstants.TOKEN_PREFIX, Strings.EMPTY);
 
+        //return ResponseEntity.ok(jwtTokenService.getUserIdFromToken(token).toString());
         return ResponseEntity.ok(exerciseResponse);
     }
 
