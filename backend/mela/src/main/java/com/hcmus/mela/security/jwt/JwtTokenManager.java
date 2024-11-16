@@ -3,6 +3,7 @@ package com.hcmus.mela.security.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.hcmus.mela.model.postgre.User;
 import com.hcmus.mela.model.postgre.UserRole;
@@ -86,12 +87,20 @@ public class JwtTokenManager {
         return decodedJWT.getExpiresAt();
     }
 
-    private DecodedJWT getDecodedJWT(String token) {
+    public DecodedJWT getDecodedJWT(String token) {
         if (jwtProperties.getSecretKey() == null) {
             throw new IllegalStateException("Secret key is not configured");
         }
 
-        final JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(jwtProperties.getSecretKey().getBytes())).build();
-        return jwtVerifier.verify(token);
+        try {
+            final JWTVerifier jwtVerifier = JWT.require(
+                    Algorithm.HMAC256(jwtProperties.getSecretKey().getBytes())
+            ).build();
+
+            return jwtVerifier.verify(token);
+
+        } catch (JWTVerificationException ex) {
+            throw new IllegalArgumentException("Invalid refresh token", ex);
+        }
     }
 }

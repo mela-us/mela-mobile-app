@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class RefreshTokenRequest {
-    @NotEmpty(message = "{}")
-    private String accessToken;
+    @NotEmpty(message = "{refresh_token_not_empty}")
+    private String refreshToken;
 }
