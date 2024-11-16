@@ -18,6 +18,7 @@ public class JwtTokenManager {
     private final JwtProperties jwtProperties;
 
     public String generateAccessToken(User user) {
+        String username = user.getUsername();
         Long userID = user.getUserId();
         UserRole userRole = user.getUserRole();
 
@@ -30,6 +31,7 @@ public class JwtTokenManager {
 				.withSubject(userID.toString())
 				.withIssuer(jwtProperties.getIssuer())
 				.withClaim("role", userRole.name())
+                .withClaim("username", username)
 				.withIssuedAt(new Date())
 				.withExpiresAt(new Date(System.currentTimeMillis() + jwtProperties.getAccessTokenExpirationMinute() * 60 * 1000))
 				.sign(Algorithm.HMAC256(jwtProperties.getSecretKey().getBytes()));
@@ -37,8 +39,9 @@ public class JwtTokenManager {
     }
 
     public String generateRefreshToken(User user) {
-        Long userID = user.getUserId();
+        final String username = user.getUsername();
         final UserRole userRole = user.getUserRole();
+        Long userID = user.getUserId();
 
         if (jwtProperties.getSecretKey() == null) {
             throw new IllegalStateException("Secret key is not configured");
@@ -48,6 +51,7 @@ public class JwtTokenManager {
         return JWT.create()
                 .withSubject(userID.toString())
                 .withIssuer(jwtProperties.getIssuer())
+                .withClaim("username", username)
                 .withClaim("role", userRole.name())
                 .withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + jwtProperties.getRefreshTokenExpirationDay() * 1000 * 60 * 60 * 24))
@@ -55,9 +59,13 @@ public class JwtTokenManager {
         //@formatter:on
     }
 
-    public String getUsernameFromToken(String token) {
+    public Long getUserIdFromToken(String token) {
         final DecodedJWT decodedJWT = getDecodedJWT(token);
-        return decodedJWT.getSubject();
+        return Long.parseLong(decodedJWT.getSubject());
+    }
+
+    public String getUsernameFromToken(String token) {
+        return getDecodedJWT(token).getClaim("username").asString();
     }
 
     public boolean validateToken(String token, String authenticatedUsername) {
