@@ -1,5 +1,5 @@
 package com.hcmus.mela.model.mongo;
-
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.*;
@@ -26,29 +26,23 @@ public class Question {
     @Field(name = "exercise_id")
     private Integer exerciseId;
 
-    @Field(name = "question_content")
-    private QuestionContent questionContent;
-
     @Field(name = "question_number")
     private Integer questionNumber;
 
-    @Field(name = "answer_content")
-    private AnswerContent answerContent;
-
     @Field(name = "question_type")
     private String questionType;
-}
 
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-class QuestionContent {
+    @ElementCollection
+    @Field(name = "choices")
+    private List<String> choices;
 
+    @ElementCollection
     @Field(name = "question")
     private List<String> question;
 
-    @Field(name = "choices")
-    private List<String> choices;
+    @ElementCollection
+    @Field(name = "answer")
+    private List<String> answer;
 }
+
+
