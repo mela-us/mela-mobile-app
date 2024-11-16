@@ -44,4 +44,11 @@ public class JwtTokenService {
         return new LoginResponse(accessToken, refreshToken, message);
     }
 
+    public Long getUserIdFromToken(String token) {
+        return jwtTokenManager.getUserIdFromToken(token);
+    }
+
+    public String getUsernameFromToken(String token) {
+        return jwtTokenManager.getUsernameFromToken(token);
+    }
 }
