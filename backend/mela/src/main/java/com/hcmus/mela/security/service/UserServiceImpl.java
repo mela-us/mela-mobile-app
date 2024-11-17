@@ -1,17 +1,25 @@
 package com.hcmus.mela.security.service;
 
+import com.hcmus.mela.dto.request.LoginRequest;
+import com.hcmus.mela.dto.request.RefreshTokenRequest;
 import com.hcmus.mela.dto.request.RegistrationRequest;
-import com.hcmus.mela.dto.response.RegistrationResponse;
-import com.hcmus.mela.dto.service.AuthenticatedUserDto;
+import com.hcmus.mela.dto.request.UpdateProfileRequest;
+import com.hcmus.mela.dto.response.*;
+import com.hcmus.mela.exceptions.custom.InvalidTokenException;
 import com.hcmus.mela.exceptions.custom.RegistrationException;
 import com.hcmus.mela.model.postgre.User;
 import com.hcmus.mela.model.postgre.UserRole;
 import com.hcmus.mela.repository.postgre.UserRepository;
+import com.hcmus.mela.security.jwt.JwtTokenService;
 import com.hcmus.mela.security.mapper.UserMapper;
+import com.hcmus.mela.security.utils.SecurityConstants;
 import com.hcmus.mela.utils.ExceptionMessageAccessor;
 import com.hcmus.mela.utils.GeneralMessageAccessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.util.Strings;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,11 +36,15 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    private final AuthenticationManager authenticationManager;
+
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private final GeneralMessageAccessor generalMessageAccessor;
 
     private final ExceptionMessageAccessor exceptionMessageAccessor;
+
+    private final JwtTokenService jwtTokenService;
 
     @Override
     public User findByUsername(String username) {
@@ -71,14 +83,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public AuthenticatedUserDto findAuthenticatedUserByUsername(String username) {
-
-        final User user = findByUsername(username);
-
-        return UserMapper.INSTANCE.convertToAuthenticatedUserDto(user);
-    }
-
-    @Override
     public void updatePassword(String username, String newPassword) {
         User user = this.findByUsername(username);
         if (user != null) {
@@ -87,5 +91,92 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
         }
     }
+
+    @Override
+    public UpdateProfileResponse updateProfile(UpdateProfileRequest updateProfileRequest, String authorizationHeader) {
+
+        final String accessToken = authorizationHeader.replace(SecurityConstants.TOKEN_PREFIX, Strings.EMPTY);
+
+        final Long userId = jwtTokenService.getUserIdFromToken(accessToken);
+
+        // Check valid token
+        final boolean validToken = jwtTokenService.validateToken(accessToken);
+
+        if(!validToken) {
+            final String invalidToken = exceptionMessageAccessor.getMessage(null, "invalid_token");
+            throw new InvalidTokenException(invalidToken);
+        }
+
+        User user = userRepository.findById(userId).orElse(null);
+
+        if (user == null) {
+            final String userNotFound = exceptionMessageAccessor.getMessage(null, "user_not_found");
+            throw new InvalidTokenException(userNotFound);
+        }
+        user.setBirthday(updateProfileRequest.getBirthday());
+        user.setFullName(updateProfileRequest.getFullName());
+        user.setImageUrl(updateProfileRequest.getImageUrl());
+        user.setUpdatedAt(LocalDateTime.now());
+
+        userRepository.save(user);
+
+        final String updatedSuccessfully = generalMessageAccessor.getMessage(null, "update_user_successful");
+
+        return new UpdateProfileResponse(updatedSuccessfully);
+    }
+
+    @Override
+    public GetUserProfileResponse getUserProfile(String authorizationHeader) {
+
+        final String accessToken = authorizationHeader.replace(SecurityConstants.TOKEN_PREFIX, Strings.EMPTY);
+
+        final Long userId = jwtTokenService.getUserIdFromToken(accessToken);
+
+        User user = userRepository.findById(userId).orElse(null);
+
+        if (user == null) {
+            final String userNotFound = exceptionMessageAccessor.getMessage(null, "{user_not_found}");
+            throw new InvalidTokenException(userNotFound);
+        }
+
+        return UserMapper.INSTANCE.convertToGetUserProfileResponse(user);
+    }
+
+    @Override
+    public RefreshTokenResponse getRefreshTokenResponse(RefreshTokenRequest refreshTokenRequest) {
+
+        final String refreshToken = refreshTokenRequest.getRefreshToken();
+
+        final boolean validToken = jwtTokenService.validateToken(refreshToken);
+
+        final String username = jwtTokenService.getUsernameFromToken(refreshToken);
+
+        final User user = userRepository.findByUsername(username);
+
+        if (validToken) {
+            return new RefreshTokenResponse(jwtTokenService.generateRefreshToken(user));
+        } else {
+            final String invalidToken = exceptionMessageAccessor.getMessage(null, "{invalid_refresh_token}");
+            throw new InvalidTokenException(invalidToken);
+        }
+    }
+
+    public LoginResponse getLoginResponse(LoginRequest loginRequest) {
+
+        final String username = loginRequest.getUsername();
+        final String password = loginRequest.getPassword();
+
+        final UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+
+        authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+
+        final User user = userRepository.findByUsername(username);
+
+        final String accessToken = jwtTokenService.generateAccessToken(user);
+        final String refreshToken = jwtTokenService.generateRefreshToken(user);
+
+        return new LoginResponse(accessToken, refreshToken);
+    }
+
 }
 

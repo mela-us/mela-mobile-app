@@ -1,6 +1,8 @@
 package com.hcmus.mela.security.mapper;
 
 import com.hcmus.mela.dto.request.RegistrationRequest;
+import com.hcmus.mela.dto.request.UpdateProfileRequest;
+import com.hcmus.mela.dto.response.GetUserProfileResponse;
 import com.hcmus.mela.dto.service.AuthenticatedUserDto;
 import com.hcmus.mela.model.postgre.User;
 import org.mapstruct.Mapper;
@@ -17,4 +19,6 @@ public interface UserMapper {
     AuthenticatedUserDto convertToAuthenticatedUserDto(User user);
 
     User convertToUser(AuthenticatedUserDto authenticatedUserDto);
+
+    GetUserProfileResponse convertToGetUserProfileResponse(User user);
 }

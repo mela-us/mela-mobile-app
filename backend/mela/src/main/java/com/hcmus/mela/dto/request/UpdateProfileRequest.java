@@ -1,19 +1,21 @@
 package com.hcmus.mela.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class EditUserProfileRequest {
+public class UpdateProfileRequest {
 
     private String fullName;
 
     private String imageUrl;
 
-    private Date birthday;
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private LocalDate birthday;
 }

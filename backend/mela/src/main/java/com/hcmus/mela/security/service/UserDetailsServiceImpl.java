@@ -1,7 +1,7 @@
 package com.hcmus.mela.security.service;
 
-import com.hcmus.mela.dto.service.AuthenticatedUserDto;
 import com.hcmus.mela.model.postgre.UserRole;
+import com.hcmus.mela.repository.postgre.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,22 +21,25 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private static final String USERNAME_OR_PASSWORD_INVALID = "Invalid username or password.";
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) {
 
-        final AuthenticatedUserDto authenticatedUser = userService.findAuthenticatedUserByUsername(username);
+        final com.hcmus.mela.model.postgre.User user = userRepository.findByUsername(username);
 
-        if (Objects.isNull(authenticatedUser)) {
+        if (Objects.isNull(user)) {
             throw new UsernameNotFoundException(USERNAME_OR_PASSWORD_INVALID);
         }
 
-        final String authenticatedUsername = authenticatedUser.getUsername();
-        final String authenticatedPassword = authenticatedUser.getPassword();
-        final UserRole userRole = authenticatedUser.getUserRole();
+        final String authenticatedUsername = user.getUsername();
+        final String authenticatedPassword = user.getPassword();
+        final UserRole userRole = user.getUserRole();
         final SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority(userRole.name());
 
-        return new User(authenticatedUsername, authenticatedPassword, Collections.singletonList(grantedAuthority));
+        return new org.springframework.security.core.userdetails.User(
+                authenticatedUsername,
+                authenticatedPassword,
+                Collections.singletonList(grantedAuthority));
     }
 }

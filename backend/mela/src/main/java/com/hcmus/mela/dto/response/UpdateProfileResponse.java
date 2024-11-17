@@ -7,9 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class LoginResponse {
-
-    private String accessToken;
-
-    private String refreshToken;
+public class UpdateProfileResponse {
+    private String message;
 }

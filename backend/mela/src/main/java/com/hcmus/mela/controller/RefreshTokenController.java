@@ -2,7 +2,7 @@ package com.hcmus.mela.controller;
 
 import com.hcmus.mela.dto.request.RefreshTokenRequest;
 import com.hcmus.mela.dto.response.RefreshTokenResponse;
-import com.hcmus.mela.security.jwt.JwtTokenService;
+import com.hcmus.mela.security.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/refresh-token")
 public class RefreshTokenController {
-    private final JwtTokenService jwtTokenService;
+
+    private final UserService userService;
 
     @GetMapping
     @Operation(
@@ -21,7 +22,7 @@ public class RefreshTokenController {
             description = "API endpoint to refresh access token using the provided refresh token.")
     public ResponseEntity<RefreshTokenResponse> refreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
 
-        final RefreshTokenResponse refreshTokenResponse = jwtTokenService.getRefreshTokenResponse(refreshTokenRequest);
+        final RefreshTokenResponse refreshTokenResponse = userService.getRefreshTokenResponse(refreshTokenRequest);
 
         return ResponseEntity.ok(refreshTokenResponse);
     }
