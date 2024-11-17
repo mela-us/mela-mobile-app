@@ -61,4 +61,18 @@ public class JwtTokenManager {
             throw new IllegalArgumentException("Invalid token", ex);
         }
     }
+
+    // Get the expiration date of the token
+    public Date getExpirationDate(String token) {
+        return getDecodedJWT(token).getExpiresAt();
+    }
+
+    // Get the remaining time (in milliseconds) before the token expires
+    public long getRemainingTimeBeforeExpiration(String token) {
+        Date expirationDate = getExpirationDate(token);
+        if (expirationDate != null) {
+            return expirationDate.getTime() - System.currentTimeMillis();
+        }
+        return 0; // Token does not have expiration set
+    }
 }

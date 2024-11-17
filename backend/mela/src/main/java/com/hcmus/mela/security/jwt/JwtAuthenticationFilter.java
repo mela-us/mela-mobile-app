@@ -1,5 +1,6 @@
 package com.hcmus.mela.security.jwt;
 
+import com.hcmus.mela.security.service.TokenStoreService;
 import com.hcmus.mela.security.service.UserDetailsServiceImpl;
 import com.hcmus.mela.security.utils.SecurityConstants;
 import jakarta.servlet.FilterChain;
@@ -30,6 +31,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final UserDetailsServiceImpl userDetailsService;
 
+    private final TokenStoreService tokenStoreService;  // Add TokenStoreService to check blacklist
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain chain)
             throws IOException, ServletException {
@@ -57,6 +60,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (!canBeStartTokenValidation) {
             chain.doFilter(request, response);
+            return;
+        }
+
+        // Check if the token is blacklisted
+        if (tokenStoreService.isAccessTokenBlacklisted(authToken)) {
+            log.warn("The token is blacklisted. Authentication failed.");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);  // Unauthorized response
+            response.getWriter().write("Token is blacklisted");
             return;
         }
 

@@ -8,9 +8,7 @@ import com.hcmus.mela.service.ExerciseService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -44,7 +42,8 @@ public class ExerciseController {
     public ResponseEntity<ExerciseResponse> getExercise(
             @PathVariable Integer exerciseId,
             @RequestHeader("Authorization") String authorizationHeader) {
-        String token = authorizationHeader.replace(SecurityConstants.TOKEN_PREFIX, Strings.EMPTY);
+
+        String token = jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader);
 
         Integer userId = jwtTokenService.getUserIdFromToken(token).intValue();
 

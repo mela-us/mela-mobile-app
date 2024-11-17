@@ -1,7 +1,9 @@
 package com.hcmus.mela.controller;
 
+import com.hcmus.mela.dto.request.LogoutRequest;
 import com.hcmus.mela.dto.request.UpdateProfileRequest;
 import com.hcmus.mela.dto.response.GetUserProfileResponse;
+import com.hcmus.mela.dto.response.LogoutResponse;
 import com.hcmus.mela.dto.response.UpdateProfileResponse;
 import com.hcmus.mela.security.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,5 +43,15 @@ public class UserController {
         final GetUserProfileResponse getUserProfileResponse = userService.getUserProfile(authorizationHeader);
 
         return ResponseEntity.status(HttpStatus.OK).body(getUserProfileResponse);
+    }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    @Operation(
+            tags = "Logout",
+            description = "API endpoint to logout.")
+    public ResponseEntity<LogoutResponse> logout(@RequestBody LogoutRequest logoutRequest) {
+        final LogoutResponse logoutResponse = userService.getLogoutResponse(logoutRequest);
+
+        return ResponseEntity.status(HttpStatus.OK).body(logoutResponse);
     }
 }

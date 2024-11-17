@@ -1,9 +1,6 @@
 package com.hcmus.mela.security.service;
 
-import com.hcmus.mela.dto.request.LoginRequest;
-import com.hcmus.mela.dto.request.RefreshTokenRequest;
-import com.hcmus.mela.dto.request.RegistrationRequest;
-import com.hcmus.mela.dto.request.UpdateProfileRequest;
+import com.hcmus.mela.dto.request.*;
 import com.hcmus.mela.dto.response.*;
 import com.hcmus.mela.exceptions.custom.InvalidTokenException;
 import com.hcmus.mela.exceptions.custom.RegistrationException;
@@ -45,6 +42,8 @@ public class UserServiceImpl implements UserService {
     private final ExceptionMessageAccessor exceptionMessageAccessor;
 
     private final JwtTokenService jwtTokenService;
+
+    private final TokenStoreService tokenStoreService;
 
     @Override
     public User findByUsername(String username) {
@@ -147,6 +146,12 @@ public class UserServiceImpl implements UserService {
 
         final String refreshToken = refreshTokenRequest.getRefreshToken();
 
+        // Check if the refresh token is blacklisted
+        if (tokenStoreService.isRefreshTokenBlacklisted(refreshToken)) {
+            final String blacklistedTokenMessage = exceptionMessageAccessor.getMessage(null, "{blacklisted_refresh_token}");
+            throw new InvalidTokenException(blacklistedTokenMessage);
+        }
+
         final boolean validToken = jwtTokenService.validateToken(refreshToken);
 
         final String username = jwtTokenService.getUsernameFromToken(refreshToken);
@@ -160,6 +165,7 @@ public class UserServiceImpl implements UserService {
             throw new InvalidTokenException(invalidToken);
         }
     }
+
 
     public LoginResponse getLoginResponse(LoginRequest loginRequest) {
 
@@ -176,6 +182,16 @@ public class UserServiceImpl implements UserService {
         final String refreshToken = jwtTokenService.generateRefreshToken(user);
 
         return new LoginResponse(accessToken, refreshToken);
+    }
+
+    @Override
+    public LogoutResponse getLogoutResponse(LogoutRequest logoutRequest) {
+
+        tokenStoreService.storeAccessToken(logoutRequest.getAccessToken());
+        tokenStoreService.storeRefreshToken(logoutRequest.getRefreshToken());
+
+        final String logoutSuccessMessage = generalMessageAccessor.getMessage(null, "logout_successful");
+        return new LogoutResponse(logoutSuccessMessage);
     }
 
 }

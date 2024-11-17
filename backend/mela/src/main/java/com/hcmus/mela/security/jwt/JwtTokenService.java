@@ -1,14 +1,14 @@
 package com.hcmus.mela.security.jwt;
 
-import com.hcmus.mela.dto.request.LoginRequest;
-import com.hcmus.mela.dto.response.LoginResponse;
 import com.hcmus.mela.model.postgre.User;
 import com.hcmus.mela.repository.postgre.UserRepository;
+import com.hcmus.mela.security.utils.SecurityConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 @Slf4j
 @Service
@@ -42,5 +42,17 @@ public class JwtTokenService {
 
     public String generateAccessToken(User user) {
         return jwtTokenManager.generateAccessToken(user);
+    }
+
+    public Date getExpirationDate(String token) {
+        return jwtTokenManager.getExpirationDate(token);
+    }
+
+    public long getRemainingTimeBeforeExpiration(String token){
+        return jwtTokenManager.getRemainingTimeBeforeExpiration(token);
+    }
+
+    public String extractTokenFromAuthorizationHeader(String authorizationHeader) {
+        return authorizationHeader.replace(SecurityConstants.TOKEN_PREFIX, Strings.EMPTY);
     }
 }
