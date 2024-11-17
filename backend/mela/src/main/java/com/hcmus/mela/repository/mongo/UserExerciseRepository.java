@@ -1,6 +1,5 @@
 package com.hcmus.mela.repository.mongo;
 
-import com.hcmus.mela.model.mongo.Exercise;
 import com.hcmus.mela.model.mongo.UserExercise;
 import org.springframework.data.mongodb.repository.MongoRepository;
 

@@ -1,14 +1,11 @@
 package com.hcmus.mela.repository.mongo;
 
-import com.hcmus.mela.dto.service.LectureDto;
 import com.hcmus.mela.model.mongo.ExerciseStatus;
 import com.hcmus.mela.model.mongo.LectureStats;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.aggregation.ConditionalOperators;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Repository;
 

@@ -3,13 +3,11 @@ package com.hcmus.mela.repository.mongo;
 import com.hcmus.mela.exceptions.custom.MathContentException;
 import com.hcmus.mela.model.mongo.Lecture;
 import lombok.RequiredArgsConstructor;
-import org.bson.Document;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository

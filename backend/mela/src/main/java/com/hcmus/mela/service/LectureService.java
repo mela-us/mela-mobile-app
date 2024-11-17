@@ -19,8 +19,6 @@ public class LectureService {
 
     private final LectureStatsRepositoryImpl lectureStatsRepository;
 
-    private final UserServiceImpl userServervice;
-
     public LectureContentDto getLectureContent(Integer lectureId) {
            return LectureMapper.INSTANCE.lectureToLectureContentDto(
                    lectureRepository.findByLectureId(lectureId).getLectureContent()

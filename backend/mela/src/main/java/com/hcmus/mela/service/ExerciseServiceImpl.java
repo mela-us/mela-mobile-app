@@ -7,7 +7,6 @@ import com.hcmus.mela.dto.service.UserExerciseDto;
 import com.hcmus.mela.model.mongo.Exercise;
 import com.hcmus.mela.repository.mongo.ExerciseRepository;
 import com.hcmus.mela.security.mapper.ExerciseMapper;
-import com.hcmus.mela.security.service.UserService;
 import com.hcmus.mela.utils.GeneralMessageAccessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
