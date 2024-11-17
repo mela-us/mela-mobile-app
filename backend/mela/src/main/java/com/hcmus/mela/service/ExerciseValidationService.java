@@ -3,14 +3,12 @@ package com.hcmus.mela.service;
 
 import com.hcmus.mela.dto.request.ExerciseRequest;
 import com.hcmus.mela.exceptions.custom.ExerciseException;
-import com.hcmus.mela.model.mongo.Exercise;
 import com.hcmus.mela.repository.mongo.ExerciseRepository;
 import com.hcmus.mela.utils.ExceptionMessageAccessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Slf4j
 @Service

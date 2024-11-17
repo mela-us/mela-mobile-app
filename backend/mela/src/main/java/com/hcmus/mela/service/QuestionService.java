@@ -14,4 +14,6 @@ public interface QuestionService {
     QuestionResponse getQuestion(QuestionRequest questionRequest);
 
     QuestionResponse getAllQuestionsInExercise(QuestionRequest questionRequest);
+
+    Integer getNumberOfQuestionsInExercise(Integer exerciseId);
 }

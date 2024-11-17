@@ -2,7 +2,6 @@ package com.hcmus.mela.controller;
 
 import com.hcmus.mela.dto.request.ExerciseRequest;
 import com.hcmus.mela.dto.response.ExerciseResponse;
-import com.hcmus.mela.dto.service.ExerciseDto;
 import com.hcmus.mela.security.jwt.JwtTokenService;
 import com.hcmus.mela.security.utils.SecurityConstants;
 import com.hcmus.mela.service.ExerciseService;
@@ -28,14 +27,14 @@ public class ExerciseController {
     public ResponseEntity<ExerciseResponse> getExerciseInLecture(
             @PathVariable Integer lectureId,
             @RequestHeader("Authorization") String authorizationHeader) {
+        String token = authorizationHeader.replace(SecurityConstants.TOKEN_PREFIX, Strings.EMPTY);
 
-        ExerciseRequest exerciseRequest = new ExerciseRequest(null, lectureId);
+        Integer userId = jwtTokenService.getUserIdFromToken(token).intValue();
+
+        ExerciseRequest exerciseRequest = new ExerciseRequest(null, lectureId, userId);
 
         final ExerciseResponse exerciseResponse = exerciseService.getAllExercisesInLecture(exerciseRequest);
 
-        String token = authorizationHeader.replace(SecurityConstants.TOKEN_PREFIX, Strings.EMPTY);
-
-        //return ResponseEntity.ok(jwtTokenService.getUserIdFromToken(token).toString());
         return ResponseEntity.ok(exerciseResponse);
     }
 
@@ -45,13 +44,14 @@ public class ExerciseController {
     public ResponseEntity<ExerciseResponse> getExercise(
             @PathVariable Integer exerciseId,
             @RequestHeader("Authorization") String authorizationHeader) {
-
-        ExerciseRequest exerciseRequest = new ExerciseRequest(exerciseId, null);
-
-        final ExerciseResponse exerciseResponse = exerciseService.getExercise(exerciseRequest);
         String token = authorizationHeader.replace(SecurityConstants.TOKEN_PREFIX, Strings.EMPTY);
 
-        //return ResponseEntity.ok(jwtTokenService.getUserIdFromToken(token).toString());
+        Integer userId = jwtTokenService.getUserIdFromToken(token).intValue();
+
+        ExerciseRequest exerciseRequest = new ExerciseRequest(exerciseId, null, userId);
+
+        final ExerciseResponse exerciseResponse = exerciseService.getExercise(exerciseRequest);
+
         return ResponseEntity.ok(exerciseResponse);
     }
 

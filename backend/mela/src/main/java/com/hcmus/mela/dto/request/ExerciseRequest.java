@@ -10,4 +10,6 @@ public class ExerciseRequest {
     private Integer exerciseId;
 
     private Integer lectureId;
+
+    private Integer userId;
 }

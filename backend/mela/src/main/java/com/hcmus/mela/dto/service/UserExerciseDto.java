@@ -5,18 +5,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExerciseDto {
+public class UserExerciseDto {
+
+    private Integer userId;
+
     private Integer exerciseId;
 
-    private Integer lectureId;
+    private Integer rightAnswer;
 
-    private String exerciseName;
+    private String status;
 
-    private Integer exerciseNumber;
+    private Instant testStart;
 
-    private UserExerciseDto userExercise;
+    private Instant testEnd;
+
+    private Integer totalAnswer;
 }

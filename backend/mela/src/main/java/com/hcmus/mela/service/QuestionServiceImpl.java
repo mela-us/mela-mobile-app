@@ -73,4 +73,14 @@ public class QuestionServiceImpl implements QuestionService {
 
         return new QuestionResponse(questionsSuccessMessage, questionDtos);
     }
+
+    @Override
+    public Integer getNumberOfQuestionsInExercise(Integer exerciseId) {
+
+        List<Question> questions = findAllQuestionsInExercise(exerciseId);
+
+        return questions.size();
+    }
+
+
 }
