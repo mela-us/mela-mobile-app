@@ -40,7 +40,8 @@ public class ForgotPasswordService {
         User user = userRepository.findByUsername(forgotPasswordRequest.getUsername());
         if (user == null) {
             throw new ForgotPasswordException(
-                    exceptionMessageAccessor.getMessage(null, USER_NOT_FOUND, forgotPasswordRequest.getUsername())
+                    "Sending otp via email failed! "
+                    + exceptionMessageAccessor.getMessage(null, USER_NOT_FOUND, forgotPasswordRequest.getUsername())
             );
         }
         String otpCode = otpService.generateOtpCode(6);

@@ -4,19 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExerciseDto {
-    private Integer exerciseId;
-
-    private Integer lectureId;
-
-    private String exerciseName;
-
-    private Integer exerciseNumber;
-
-    private UserExerciseDto userExercise;
+public class LectureContentDto {
+    private List<String> contents;
 }
