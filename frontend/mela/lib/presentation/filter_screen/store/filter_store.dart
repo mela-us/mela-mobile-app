@@ -1,8 +1,5 @@
-import 'package:mela/domain/entity/exercise/exercise_list.dart';
 import 'package:mobx/mobx.dart';
 
-import '../../../domain/entity/lecture/lecture_list.dart';
-import '../../../domain/usecase/exercise/get_exercises_usecase.dart';
 part 'filter_store.g.dart';
 
 class FilterStore = _FilterStore with _$FilterStore;

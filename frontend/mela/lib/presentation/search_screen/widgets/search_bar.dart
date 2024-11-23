@@ -146,9 +146,7 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/filter_screen/store/filter_store.dart';
 import 'package:mela/presentation/search_screen/store/search_store.dart';
-import 'package:sembast/sembast.dart';
 import '../../../utils/routes/routes.dart';
-import '../../lectures_in_topic_screen/store/lecture_store.dart';
 
 class SearchingBar extends StatefulWidget {
   SearchingBar({super.key});

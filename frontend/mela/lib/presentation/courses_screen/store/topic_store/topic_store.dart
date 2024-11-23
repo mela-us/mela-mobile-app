@@ -1,4 +1,3 @@
-import 'package:mela/domain/entity/lecture/lecture.dart';
 import 'package:mela/domain/entity/lecture/lecture_list.dart';
 import 'package:mela/domain/entity/topic/topic_list.dart';
 import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
@@ -31,7 +30,6 @@ abstract class _TopicStore with Store {
       fetchTopicsFuture.status == FutureStatus.pending ||
       fetchLecturesAreLearningFuture.status == FutureStatus.pending;
 
-  late final ReactionDisposer _topicItemReactionDisposer;
   //Constructor
   _TopicStore(this._getTopicsUsecase);
 

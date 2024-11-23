@@ -7,7 +7,6 @@ import 'package:mela/domain/entity/lecture/lecture_list.dart';
 import 'package:mela/presentation/filter_screen/store/filter_store.dart';
 import 'package:mela/presentation/filter_screen/widgets/checkbox_row.dart';
 import 'package:mela/presentation/search_screen/store/search_store.dart';
-import 'package:sembast/sembast.dart';
 
 import 'widgets/filter_button.dart';
 

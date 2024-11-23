@@ -1,7 +1,8 @@
 import 'dart:async';
 
 
-import '../../entity/user/user.dart';
+import 'package:mela/domain/entity/user/user.dart';
+
 import '../../usecase/user_login/login_usecase.dart';
 
 abstract class UserLoginRepository {

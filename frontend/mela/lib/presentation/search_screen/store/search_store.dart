@@ -1,12 +1,8 @@
-import 'package:http/http.dart';
 import 'package:mela/domain/entity/lecture/lecture_list.dart';
 import 'package:mela/domain/usecase/search/get_history_search_list.dart';
 import 'package:mela/domain/usecase/search/get_search_lectures_result.dart';
-import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
 import 'package:mobx/mobx.dart';
 
-import '../../../../domain/usecase/topic/get_topics_usecase.dart';
-import '../../../di/service_locator.dart';
 // Include generated file
 part 'search_store.g.dart';
 

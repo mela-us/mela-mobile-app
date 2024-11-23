@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:mela/domain/entity/user/user.dart';
 import 'package:mela/domain/usecase/user_login/login_usecase.dart';
 
-import '../../../domain/entity/user/user.dart';
 import '../../../domain/repository/user_login/user_login_repository.dart';
 import '../../sharedpref/shared_preference_helper.dart';
 
@@ -16,7 +16,6 @@ class UserLoginRepositoryImpl extends UserLoginRepository {
   // Login:---------------------------------------------------------------------
   @override
   Future<User?> login(LoginParams params) async {
-
     // try {
     //   // Step 1: Make API call
     //   final response = await http.post(
@@ -47,11 +46,15 @@ class UserLoginRepositoryImpl extends UserLoginRepository {
     // }
 
     try {
-      return await Future.delayed(Duration(seconds: 5), () =>
-          User(
-              accessToken: "abc", username: "abc@gmail.com",  password: "abc"
-          )
-      );
+      return await Future.delayed(
+          Duration(seconds: 5),
+          () => User(
+              id: '128736',
+              name: 'Anh Long',
+              email: 'anhlong@gmail.com',
+              dob: '01/01/2003',
+              password: '123456789' //encrypted
+              ));
     } catch (e) {
       throw e;
     }

@@ -40,6 +40,10 @@ class RepositoryModule {
   static Future<void> configureRepositoryModuleInjection() async {
     // repository:--------------------------------------------------------------
 
+    //UserInfor:
+    getIt.registerSingleton<UserRepository>(
+        UserRepositoryImpl(getIt<SharedPreferenceHelper>()));
+
     //Setting:------------------------------------------------------------------
     getIt.registerSingleton<SettingRepository>(SettingRepositoryImpl(
       getIt<SharedPreferenceHelper>(),

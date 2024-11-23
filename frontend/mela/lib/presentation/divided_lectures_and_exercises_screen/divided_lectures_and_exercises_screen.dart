@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
-import 'package:mela/domain/entity/topic/topic.dart';
-import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
 import 'package:mela/presentation/divided_lectures_and_exercises_screen/store/exercise_store.dart';
 import 'package:mela/presentation/divided_lectures_and_exercises_screen/widgets/exercise_list_item.dart';
-import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
 
 import '../../constants/route_observer.dart';
 import '../../core/widgets/progress_indicator_widget.dart';

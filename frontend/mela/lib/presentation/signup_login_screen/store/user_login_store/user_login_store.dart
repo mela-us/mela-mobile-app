@@ -1,8 +1,8 @@
+import 'package:mela/domain/entity/user/user.dart';
 import 'package:mela/domain/usecase/user_login/is_logged_in_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_login_in_status_usecase.dart';
 import 'package:mobx/mobx.dart';
 
-import '../../../../domain/entity/user/user.dart';
 import '../../../../domain/usecase/user_login/login_usecase.dart';
 
 part 'user_login_store.g.dart';

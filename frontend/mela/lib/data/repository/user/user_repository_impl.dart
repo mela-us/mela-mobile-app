@@ -4,8 +4,7 @@ import 'package:mela/domain/repository/user/user_repository.dart';
 import 'package:mela/data/sharedpref/shared_preference_helper.dart';
 
 import '../../../domain/entity/user/user.dart';
-import '../../../domain/entity/user_data/user.dart';
-import '../../../domain/usecase/user/login_usecase.dart';
+import '../../../domain/entity/user/user.dart';
 
 class UserRepositoryImpl extends UserRepository {
   // shared pref object
@@ -15,21 +14,10 @@ class UserRepositoryImpl extends UserRepository {
   UserRepositoryImpl(this._sharedPrefsHelper);
 
   // Login:---------------------------------------------------------------------
-  @override
-  Future<User?> login(LoginParams params) async {
-    return null;
-  }
 
   @override
-  Future<void> saveIsLoggedIn(bool value) =>
-      _sharedPrefsHelper.saveIsLoggedIn(value);
-
-  @override
-  Future<bool> get isLoggedIn => _sharedPrefsHelper.isLoggedIn;
-
-  @override
-  Future<UserData> getUserInfo() async {
-    return UserData(
+  Future<User> getUserInfo() async {
+    return User(
         id: '128736',
         name: 'Anh Long',
         email: 'anhlong@gmail.com',
@@ -39,7 +27,7 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<UserData> updateUserInfo(UserData newUser) {
+  Future<User> updateUserInfo(User newUser) {
     // TODO: implement updateUserInfo
     throw UnimplementedError();
   }

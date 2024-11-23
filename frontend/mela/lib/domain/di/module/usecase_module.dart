@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:mela/domain/repository/lecture/lecture_repository.dart';
+import 'package:mela/domain/repository/user/user_repository.dart';
 import 'package:mela/domain/repository/user_register/user_signup_repostiory.dart';
 
 import 'package:mela/domain/usecase/exercise/get_exercises_usecase.dart';
@@ -8,6 +9,7 @@ import 'package:mela/domain/usecase/lecture/get_lectures_usecase.dart';
 import 'package:mela/domain/usecase/search/get_search_lectures_result.dart';
 import 'package:mela/domain/usecase/topic/find_topic_by_id_usecase.dart';
 import 'package:mela/domain/usecase/topic/get_topics_usecase.dart';
+import 'package:mela/domain/usecase/user/get_user_info_usecase.dart';
 
 import '../../../di/service_locator.dart';
 
@@ -32,6 +34,7 @@ import 'package:mela/domain/usecase/stat/get_detailed_progress_usecase.dart';
 class UseCaseModule {
   static Future<void> configureUseCaseModuleInjection() async {
     // user:--------------------------------------------------------------------
+    getIt.registerSingleton<GetUserInfoUseCase>(GetUserInfoUseCase(getIt<UserRepository>()));
     // user login:--------------------------------------------------------------
     getIt.registerSingleton<IsLoggedInUseCase>(
       IsLoggedInUseCase(getIt<UserLoginRepository>()),

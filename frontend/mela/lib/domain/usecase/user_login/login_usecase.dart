@@ -1,5 +1,6 @@
+import 'package:mela/domain/entity/user/user.dart';
+
 import '../../../core/domain/usecase/use_case.dart';
-import '../../entity/user/user.dart';
 import '../../repository/user_login/user_login_repository.dart';
 
 class LoginParams {

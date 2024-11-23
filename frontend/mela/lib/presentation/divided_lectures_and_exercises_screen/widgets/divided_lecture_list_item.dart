@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mela/presentation/divided_lectures_and_exercises_screen/store/exercise_store.dart';
-import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
 
 import '../../../di/service_locator.dart';
 import '../../../domain/entity/divided_lecture/divided_lecture.dart';
