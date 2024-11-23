@@ -1,15 +1,16 @@
-import 'package:mela/core/data/network/dio/configs/dio_configs.dart';
-import 'package:mela/core/data/network/dio/dio_client.dart';
-import 'package:mela/core/data/network/dio/interceptors/auth_interceptor.dart';
-import 'package:mela/core/data/network/dio/interceptors/logging_interceptor.dart';
-import 'package:mela/data/network/apis/posts/post_api.dart';
-import 'package:mela/data/network/constants/endpoints.dart';
-import 'package:mela/data/network/interceptors/error_interceptor.dart';
-import 'package:mela/data/network/rest_client.dart';
-import 'package:mela/data/sharedpref/shared_preference_helper.dart';
+
 import 'package:event_bus/event_bus.dart';
 
+import '../../../core/data/network/dio/configs/dio_configs.dart';
+import '../../../core/data/network/dio/dio_client.dart';
+import '../../../core/data/network/dio/interceptors/auth_interceptor.dart';
+import '../../../core/data/network/dio/interceptors/logging_interceptor.dart';
 import '../../../di/service_locator.dart';
+import '../../network/apis/posts/post_api.dart';
+import '../../network/constants/endpoints_const.dart';
+import '../../network/interceptors/error_interceptor.dart';
+import '../../network/rest_client.dart';
+import '../../sharedpref/shared_preference_helper.dart';
 
 class NetworkModule {
   static Future<void> configureNetworkModuleInjection() async {
@@ -31,9 +32,9 @@ class NetworkModule {
     // dio:---------------------------------------------------------------------
     getIt.registerSingleton<DioConfigs>(
       const DioConfigs(
-        baseUrl: Endpoints.baseUrl,
-        connectionTimeout: Endpoints.connectionTimeout,
-        receiveTimeout:Endpoints.receiveTimeout,
+        baseUrl: EndpointsConst.baseUrl,
+        connectionTimeout: EndpointsConst.connectionTimeout,
+        receiveTimeout:EndpointsConst.receiveTimeout,
       ),
     );
     getIt.registerSingleton<DioClient>(

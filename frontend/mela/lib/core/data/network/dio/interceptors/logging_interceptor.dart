@@ -3,7 +3,7 @@ library dio_logging_interceptor;
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-
+//Này là để ghi log ra console của Dio khi gửi request đi hoặc nhận response về
 /// Log Level
 enum Level {
   /// No logs.

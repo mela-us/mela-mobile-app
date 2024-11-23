@@ -1,4 +1,6 @@
 import 'package:another_flushbar/flushbar_helper.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/core/widgets/progress_indicator_widget.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/post/store/post_store.dart';
@@ -36,6 +38,7 @@ class _PostListScreenState extends State<PostListScreen> {
       children: <Widget>[
         _handleErrorMessage(),
         _buildMainContent(),
+        ElevatedButton(onPressed: (){}, child: Text("Add Post")),
       ],
     );
   }

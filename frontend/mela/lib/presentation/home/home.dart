@@ -1,15 +1,14 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mela/data/sharedpref/constants/preferences_const.dart';
+import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/home/store/language/language_store.dart';
-import 'package:mela/presentation/home/store/theme/theme_store.dart';
+import 'package:mela/presentation/post/post_list.dart';
+import 'package:mela/utils/locale/app_localization.dart';
+import 'package:mela/utils/routes/routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../data/sharedpref/constants/preferences.dart';
-import '../../di/service_locator.dart';
-import '../../utils/locale/app_localization.dart';
-import '../../utils/routes/routes.dart';
-import '../post/post_list.dart';
+import '../courses_screen/store/theme_store/theme_store.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -64,8 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return IconButton(
       onPressed: () {
         SharedPreferences.getInstance().then((preference) {
-          preference.setBool(Preferences.is_logged_in, false);
-          Navigator.of(context).pushReplacementNamed(Routes.login);
+          preference.setBool(PreferencesConst.is_logged_in, false);
+          Navigator.of(context).pushReplacementNamed(Routes.loginScreen);
         });
       },
       icon: Icon(
