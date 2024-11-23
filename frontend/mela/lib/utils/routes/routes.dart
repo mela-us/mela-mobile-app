@@ -12,8 +12,6 @@ import '../../presentation/filter_screen/filter_screen.dart';
 import '../../presentation/signup_login_screen/login_screen.dart';
 import '../../presentation/signup_login_screen/signup_screen.dart';
 
-import '../../presentation/home/home.dart';
-import '../../presentation/login/login.dart';
 import '../../presentation/personal/personal.dart';
 import '../../presentation/stats/stats.dart';
 
@@ -54,5 +52,3 @@ class Routes {
   };
 }
 
-
-}

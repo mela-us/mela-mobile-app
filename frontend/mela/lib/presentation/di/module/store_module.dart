@@ -9,6 +9,7 @@ import 'package:mela/presentation/question/store/single_question/single_question
 import 'package:mela/presentation/question/store/timer/timer_store.dart';
 
 import '../../../di/service_locator.dart';
+import '../../../domain/usecase/user/get_user_info_usecase.dart';
 import '../../question/store/question_store.dart';
 import 'package:mela/domain/usecase/exercise/get_exercises_usecase.dart';
 import 'package:mela/domain/usecase/search/get_history_search_list.dart';
@@ -32,22 +33,13 @@ import '../../lectures_in_topic_screen/store/lecture_store.dart';
 import '../../signup_login_screen/store/login_or_signup_store/login_or_signup_store.dart';
 import '../../signup_login_screen/store/user_login_store/user_login_store.dart';
 import '../../signup_login_screen/store/user_signup_store/user_signup_store.dart';
-import 'package:mela/domain/repository/setting/setting_repository.dart';
-import 'package:mela/domain/usecase/post/get_post_usecase.dart';
+
 import 'package:mela/domain/usecase/stat/get_progress_usecase.dart';
 import 'package:mela/domain/usecase/stat/get_detailed_progress_usecase.dart';
-import 'package:mela/domain/usecase/user/is_logged_in_usecase.dart';
-import 'package:mela/domain/usecase/user/login_usecase.dart';
-import 'package:mela/domain/usecase/user/save_login_in_status_usecase.dart';
-import 'package:mela/presentation/home/store/language/language_store.dart';
-import 'package:mela/presentation/home/store/theme/theme_store.dart';
-import 'package:mela/presentation/login/store/login_store.dart';
-import 'package:mela/presentation/post/store/post_store.dart';
+
 import 'package:mela/presentation/stats/store/stats_store.dart';
 import 'package:mela/presentation/personal/store/personal_store.dart';
 
-import '../../../di/service_locator.dart';
-import '../../../domain/usecase/user/get_user_info_usecase.dart';
 
 class StoreModule {
   static Future<void> configureStoreModuleInjection() async {

@@ -23,6 +23,7 @@ dependencies:
   # E
   event_bus: ^2.0.0
   # F
+  fl_chart: ^0.69.2
   flutter_mobx: ^2.0.6+5
   # G
   get_it: ^7.2.0

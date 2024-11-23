@@ -1,7 +1,6 @@
 // lib/personal_info_screen.dart
 import 'package:flutter/material.dart';
 import '../../themes/default/colors_standards.dart';
-import '../../themes/default/text_styles.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 class PersonalInfo extends StatefulWidget {

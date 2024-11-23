@@ -1,8 +1,8 @@
+import 'package:mela/domain/entity/user_data/user.dart';
 import 'package:mela/domain/usecase/user/get_user_info_usecase.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../core/stores/error/error_store.dart';
-import '../../../domain/entity/user/user.dart';
 import '../../../utils/dio/dio_error_util.dart';
 
 part 'personal_store.g.dart';
@@ -23,15 +23,15 @@ abstract class _PersonalStore with Store {
 
   // store variables:-----------------------------------------------------------
   //empty-------------
-  static ObservableFuture<User?> emptyResponse =
+  static ObservableFuture<UserData?> emptyResponse =
   ObservableFuture.value(null);
   //fetch-------------
   @observable
-  ObservableFuture<User?> fetchFuture =
-  ObservableFuture<User?>(emptyResponse);
+  ObservableFuture<UserData?> fetchFuture =
+  ObservableFuture<UserData?>(emptyResponse);
   //
   @observable
-  User? user;
+  UserData? user;
   //
   @observable
   bool success = false;
