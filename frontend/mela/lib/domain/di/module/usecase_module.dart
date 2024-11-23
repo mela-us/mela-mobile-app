@@ -25,6 +25,22 @@ import '../../usecase/user_login/login_usecase.dart';
 import '../../usecase/user_login/save_login_in_status_usecase.dart';
 import '../../usecase/user_signup/signup_usecase.dart';
 
+import 'package:mela/domain/repository/post/post_repository.dart';
+import 'package:mela/domain/repository/user/user_repository.dart';
+import 'package:mela/domain/usecase/post/delete_post_usecase.dart';
+import 'package:mela/domain/usecase/post/find_post_by_id_usecase.dart';
+import 'package:mela/domain/usecase/post/get_post_usecase.dart';
+import 'package:mela/domain/usecase/post/insert_post_usecase.dart';
+import 'package:mela/domain/usecase/post/udpate_post_usecase.dart';
+import 'package:mela/domain/usecase/user/is_logged_in_usecase.dart';
+import 'package:mela/domain/usecase/user/login_usecase.dart';
+import 'package:mela/domain/usecase/user/save_login_in_status_usecase.dart';
+import 'package:mela/domain/usecase/user/get_user_info_usecase.dart';
+
+import '../../../di/service_locator.dart';
+import '../../repository/stat/stat_repository.dart';
+import 'package:mela/domain/usecase/stat/get_progress_usecase.dart';
+import 'package:mela/domain/usecase/stat/get_detailed_progress_usecase.dart';
 
 class UseCaseModule {
   static Future<void> configureUseCaseModuleInjection() async {
@@ -69,5 +85,15 @@ class UseCaseModule {
         GetHistorySearchList(getIt<SearchRepository>()));
     getIt.registerSingleton<GetSearchLecturesResult>(
         GetSearchLecturesResult(getIt<SearchRepository>()));
+
+    //stats:--------------------------------------------------------------------
+    getIt.registerSingleton<GetProgressListUseCase>(
+      GetProgressListUseCase(getIt<StatRepository>()),
+    );
+    getIt.registerSingleton<GetDetailedProgressListUseCase>(
+      GetDetailedProgressListUseCase(getIt<StatRepository>()),
+    );
   }
+
 }
+

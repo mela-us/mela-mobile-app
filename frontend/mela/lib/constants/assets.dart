@@ -19,4 +19,18 @@ class Assets{
   static String facebookIcon = 'assets/icons/facebook_icon.png';
   static String googleIcon = 'assets/icons/google_icon.png';
 
+  //Profile
+  static String personal_info = 'assets/icons/personal_info.png';
+  static String personal_language = 'assets/icons/personal_language.png';
+  static String personal_term = 'assets/icons/personal_term.png';
+  static String personal_signout = 'assets/icons/personal_signout.png';
+  static String personal_darkmode = 'assets/icons/personal_darkmode.png';
+  static String personal_support = 'assets/icons/personal_support.png';
+  static String upload_profile_pic = 'assets/icons/upload_profile_pic.png';
+  static String default_profile_pic = "assets/icons/default_profile_pic.png";
+
+  //Stats
+  static String  stats_hide = 'assets/icons/stats_hide.png';
+  static String  stats_show = 'assets/icons/stats_show.png';
+
 }

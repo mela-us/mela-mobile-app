@@ -12,6 +12,11 @@ import '../../presentation/filter_screen/filter_screen.dart';
 import '../../presentation/signup_login_screen/login_screen.dart';
 import '../../presentation/signup_login_screen/signup_screen.dart';
 
+import '../../presentation/home/home.dart';
+import '../../presentation/login/login.dart';
+import '../../presentation/personal/personal.dart';
+import '../../presentation/stats/stats.dart';
+
 class Routes {
   Routes._();
 
@@ -28,7 +33,8 @@ class Routes {
   static const String question = '/question';
   static const String result = '/result';
   static const String review = '/review';
-
+  static const String personal = '/personal';
+  static const String stats = '/stats';
 
   static final routes = <String, WidgetBuilder>{
     loginScreen: (BuildContext context) => LoginScreen(),
@@ -43,5 +49,10 @@ class Routes {
     question: (BuildContext context) => QuestionScreen(),
     result: (BuildContext context) => ResultScreen(),
     review: (BuildContext context) => ReviewScreen(),
+    personal: (BuildContext context) => PersonalScreen(),
+    stats: (BuildContext context) => StatisticsScreen(),
   };
+}
+
+
 }

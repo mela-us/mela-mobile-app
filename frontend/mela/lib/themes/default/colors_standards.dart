@@ -11,5 +11,4 @@ class ColorsStandards {
   static Color guideTextColor = const Color(0xFFB4BDC4);
   static Color backgroundButtonChooseColor = const Color(0xFF167F71);
   static Color backgroundButtonNoChooseColor = const Color(0xFFE8F1FF);
-
 }
