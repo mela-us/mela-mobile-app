@@ -3,3 +3,9 @@ enum AnswerStatus{
   incorrect,
   noAnswer,
 }
+
+enum QuitOverlayResponse{
+  wait,
+  quit,
+  stay,
+}

@@ -1,9 +1,14 @@
 import 'dart:async';
 
+//Data:-------------------------------------------------------------------------
 import 'package:mela/core/data/network/dio/dio_client.dart';
-import 'package:mela/data/network/constants/endpoints.dart';
 import 'package:mela/data/network/rest_client.dart';
+
+//Domain:-----------------------------------------------------------------------
 import 'package:mela/domain/entity/post/post_list.dart';
+
+//Other:------------------------------------------------------------------------
+import '../../constants/endpoints_const.dart';
 
 class PostApi {
   // dio instance
@@ -21,9 +26,10 @@ class PostApi {
       final res = await _dioClient.dio.get(EndpointsConst.getPosts);
       return PostList.fromJson(res.data);
     } catch (e) {
-      print(e.toString());
-      throw e;
+      print(_restClient.toString());
+      rethrow;
     }
+
   }
 
   /// sample api call with default rest client

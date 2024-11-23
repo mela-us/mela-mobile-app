@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/utils/routes/routes.dart';
 
 import '../../../domain/entity/exercise/exercise.dart';
 
@@ -14,8 +15,7 @@ class ExerciseItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigator.push(
-        //     context, MaterialPageRoute(builder: (context) => QuestionScreen(questions: Global.questions,)));
+        Navigator.pushNamed(context, Routes.question);
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 16, left: 16, right: 16),

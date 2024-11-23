@@ -1,8 +1,5 @@
-import 'dart:async';
-
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/dimens.dart';
@@ -17,6 +14,7 @@ import 'package:mela/utils/routes/routes.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../constants/assets.dart';
+import '../../constants/enum.dart';
 import '../../constants/layout.dart';
 import '../../core/widgets/progress_indicator_widget.dart';
 import '../../di/service_locator.dart';
@@ -79,6 +77,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
         _controller.text = userAnswer;
       }
     });
+
   }
 
   @override
@@ -99,8 +98,14 @@ class _QuestionScreenState extends State<QuestionScreen> {
             .questions!.length);
         _initListOverlay(context);
       }
-    },
-        fireImmediately: true);
+    }, fireImmediately: true);
+
+    //Reaction to quit
+    reaction((_) => _questionStore.isQuit, (quit){
+      if (quit == QuitOverlayResponse.quit){
+        Navigator.of(context).pop();
+      }
+    }, fireImmediately: true);
 
     _singleQuestionStore.changeQuestion(0);
 
@@ -456,19 +461,6 @@ class _QuestionScreenState extends State<QuestionScreen> {
   String getAnswerFromIndex(int index){
     return String.fromCharCode(index + 65);
   }
-  // _showErrorMessage(String message) {
-  //   Future.delayed(const Duration(milliseconds: 0), () {
-  //     if (message.isNotEmpty) {
-  //       FlushbarHelper.createError(
-  //         message: message,
-  //         title: AppLocalizations.of(context).translate('home_tv_error'),
-  //         duration: const Duration(seconds: 3),
-  //       ).show(context);
-  //     }
-  //   });
-  //
-  //   return const SizedBox.shrink();
-  // }
 
   //Initialize overlay:---------------------------------------------------------
    void _initListOverlay(BuildContext context) async{
@@ -486,7 +478,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
                  child: QuestionListOverlay(
                      isSubmitted: (bool submit) {
                        if (!submit) {
+                         Navigator.of(context).pop();
                          questionListOverlay.remove();
+
                        }
                        else {
                          questionListOverlay.remove();

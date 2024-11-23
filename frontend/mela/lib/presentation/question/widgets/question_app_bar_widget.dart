@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/dimens.dart';
+import 'package:mela/constants/enum.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/question/store/timer/timer_store.dart';
 import 'package:mela/presentation/question/widgets/question_quit_overlay_widget.dart';
+import 'package:mobx/mobx.dart';
 
 import '../../../constants/assets.dart';
 import '../../../utils/locale/app_localization.dart';
+import '../store/question_store.dart';
 
 class QuestionAppBar extends StatefulWidget implements PreferredSizeWidget{
   const QuestionAppBar({super.key});
@@ -22,6 +25,7 @@ class QuestionAppBar extends StatefulWidget implements PreferredSizeWidget{
 
 class _QuestionAppBarState extends State<QuestionAppBar> {
   final TimerStore _timerStore = getIt<TimerStore>();
+  final QuestionStore _questionStore = getIt<QuestionStore>();
 
   late OverlayEntry quitDialogOverlay;
   @override
@@ -32,12 +36,29 @@ class _QuestionAppBarState extends State<QuestionAppBar> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    //Reaction to quit
+    reaction((_) => _questionStore.isQuit, (quit){
+      if (quit == QuitOverlayResponse.quit || quit == QuitOverlayResponse.stay){
+        quitDialogOverlay.remove();
+        _questionStore.setQuit(QuitOverlayResponse.wait);
+      }
+      else {
+        //Do nothing
+      }
+    }, fireImmediately: true);
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     return AppBar(
       title: _buildTitle(context),
       backgroundColor: Theme.of(context).colorScheme.appBackground,
       actions: _buildAction(context),
+      automaticallyImplyLeading: false,
     );
   }
 
@@ -154,17 +175,7 @@ class _QuestionAppBarState extends State<QuestionAppBar> {
                 bottom: 34,
                 left: 19,
                 right: 19,
-                child: QuestionQuitOverlay(
-                  isStaying: (bool isStaying) {
-                    if(isStaying){
-                      quitDialogOverlay.remove();
-                    }
-                    else {
-                      quitDialogOverlay.remove();
-                      //Navigator pop().
-                    }
-                  },
-                ),
+                child: QuestionQuitOverlay(),
               )
             ],
           );

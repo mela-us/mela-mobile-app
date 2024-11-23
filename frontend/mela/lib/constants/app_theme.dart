@@ -163,7 +163,15 @@ class AppThemeData {
       fontFamily: 'Asap',
       fontWeight: FontWeight.w600,
     ), // Button
+
+    displaySmall: TextStyle(
+      fontSize: 14,
+      fontFamily: 'Mulish',
+      fontWeight: FontWeight.normal,
+    ),//QuestionStyle
+
   );
+
 }
 
 // Extension to call follow figma text theme
@@ -177,5 +185,39 @@ extension CustomTextTheme on TextTheme {
   TextStyle get normal => labelMedium!;
   TextStyle get miniCaption => labelSmall!;
   TextStyle get buttonStyle => titleSmall!;
+  TextStyle get questionStyle => displaySmall!;
+}
+
+extension CustomColorTheme on ColorScheme{
+  Color get appBackground => const Color(0xFFF5F9FF);
+  Color get textInBg1 => const Color(0xFF202244);
+  Color get textInBg2 => const Color(0xFF545454);
+  Color get dialogBackground => const Color(0xFF202244);
+
+  Color get buttonStroke => const Color(0xFFD6DCE1);
+  //Màu sắc của nút câu hỏi khi đã chọn
+  Color get buttonList => const Color(0xFFC6DCFF);
+
+  Color get buttonCorrect => const Color(0xFF8EFF97);
+  Color get buttonIncorrect => const Color(0xFFFFD5DB);
+
+  Color get buttonYesBgOrText => const Color(0xFF0961F5);
+  Color get buttonYesTextOrBg => const Color(0xFFFFFFFF);
+
+  Color get buttonNoBackground => const Color(0xFFE8F1FF);
+  Color get buttonNoBorder => const Color(0xFFB4BDC4);
+  Color get buttonNoText => const Color(0xFF202244);
+
+  Color get buttonChooseBackground => const Color(0xFF167F71);
+  Color get buttonChooseText => const Color(0xFFFFFFFF);
+
+  Color get buttonNoChooseBackground => const Color(0xFFE8F1FF);
+  Color get buttonNoChooseText => const Color(0xFF202244);
+
+  Color get inputBackground => const Color(0xFFFFFFFF);
+  Color get inputText => const Color(0xFF505050);
+  Color get inputTitleText => const Color(0xFF393939);
+  Color get inputMutedText => const Color(0xFFE9E9E9);
+  Color get inputHintText => const Color(0xFFB4BDC4);
 }
 

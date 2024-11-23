@@ -1,33 +1,19 @@
+//Package:----------------------------------------------------------------------
 import 'package:flutter/material.dart';
-import 'package:mela/domain/entity/question/fill_question.dart';
-import 'package:mela/domain/entity/question/question.dart';
-import 'package:mela/domain/entity/question/quiz_question.dart';
 
-import 'package:mela/models/exercise.dart';
-import 'package:mela/themes/default/colors_standards.dart';
-
-import '../domain/entity/divided_lecture/divided_lecture.dart';
+//Domain:-----------------------------------------------------------------------
 import '../domain/entity/exercise/exercise.dart';
 import '../domain/entity/lecture/lecture.dart';
 import '../domain/entity/topic/topic.dart';
-import '../models/divided_lecture.dart';
-import '../models/lecture.dart';
-import '../models/topic.dart';
+import 'package:mela/domain/entity/question/question.dart';
+
 class Global {
   static Color AppBackgroundColor = const Color(0xFFF5F9FF);
   static Color AppBarContentColor = const Color(0xFF202244);
   static double PracticeLeftPadding = 15;
   static double PracticeRightPadding = 34;
-  static Color AppBackgroundColor = const Color(0xFFF5F9FF);
-  static Color AppBarContentColor = const Color(0xFF202244);
-  //Login/sign up screen
 
-  // static TextStyle heading = TextStyle(fontFamily: 'Asap',fontSize: 21,fontWeight: FontWeight.bold,color: ColorsStandards.textColorInBackground1);
-  // static TextStyle subTitle=TextStyle(fontFamily: 'Mulish',fontSize: 14,fontWeight: FontWeight.bold,color: ColorsStandards.textColorInBackground2);
-  // static TextStyle normalText=TextStyle(fontFamily: 'Mulish',fontSize: 13,fontWeight: FontWeight.bold,color: ColorsStandards.textColorInBackground2);
-
-  //Courses screen
-
+  //Course:---------------------------------------------------------------------
   static List<Topic> getTopics() {
     return [
       Topic(
@@ -57,13 +43,14 @@ class Global {
     ];
   }
 
+  //Questions:------------------------------------------------------------------
   static List<Question> questions = [
     Question(
-        id: 'QQ01',
-        content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null,
-        choiceList: [],
+      id: 'QQ01',
+      content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
+      answer: 'true',
+      imageUrl: null,
+      choiceList: [],
     ),
 
     Question(
@@ -75,11 +62,11 @@ class Global {
     ),
 
     Question(
-        choiceList: ['12', '14', '16', '18'],
-        id: 'QQ02',
-        content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'B',
-        imageUrl: null,
+      choiceList: ['12', '14', '16', '18'],
+      id: 'QQ02',
+      content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
+      answer: 'B',
+      imageUrl: null,
     ),
     Question(
         choiceList: ['12', '14', '16', '18'],
@@ -95,6 +82,7 @@ class Global {
         imageUrl: null
     ),
   ];
+
 
   static List<Question> questionsSub = [
     Question(
@@ -114,6 +102,7 @@ class Global {
 
   ];
 
+  //Topic:----------------------------------------------------------------------
   static List<Lecture> getLecturesIsLearning() {
     return [
       Lecture(
@@ -140,6 +129,7 @@ class Global {
     ];
   }
 
+  //Topic:----------------------------------------------------------------------
   static List<Lecture> getLecturesInTopicAndLevel(levelId, topicId) {
     return [
       Lecture(
@@ -227,5 +217,4 @@ class Global {
       ),
     ];
   }
- }
 }

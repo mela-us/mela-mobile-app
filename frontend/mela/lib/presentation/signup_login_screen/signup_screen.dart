@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
-import 'package:mela/constants/assets_path.dart';
 import 'package:mela/presentation/signup_login_screen/store/login_or_signup_store/login_or_signup_store.dart';
 import 'package:mobx/mobx.dart';
 
+import '../../constants/assets.dart';
 import '../../core/widgets/progress_indicator_widget.dart';
 import '../../di/service_locator.dart';
 import 'store/user_signup_store/user_signup_store.dart';
@@ -285,10 +285,10 @@ class __FormContentState extends State<_FormContent> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ThirdPartyButton(
-                    pathLogo: AssetsPath.googleIcon, onPressed: () {}),
+                    pathLogo: Assets.googleIcon, onPressed: () {}),
                 const SizedBox(width: 20),
                 ThirdPartyButton(
-                    pathLogo: AssetsPath.facebookIcon, onPressed: () {}),
+                    pathLogo: Assets.facebookIcon, onPressed: () {}),
               ],
             ),
             const SizedBox(height: 30),

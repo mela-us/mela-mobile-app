@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/dimens.dart';
+import 'package:mela/constants/enum.dart';
+import 'package:mela/presentation/question/store/question_store.dart';
 import 'package:mela/utils/locale/app_localization.dart';
 
 import '../../../constants/assets.dart';
+import '../../../di/service_locator.dart';
 
 class QuestionQuitOverlay extends StatelessWidget {
-  const QuestionQuitOverlay({super.key, required this.isStaying});
-  final Function(bool) isStaying;
+  final QuestionStore questionStore = getIt<QuestionStore>();
+
+  QuestionQuitOverlay({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +97,9 @@ class QuestionQuitOverlay extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
         child: GestureDetector(
-          onTap: () => isStaying(true) ,
+          onTap: () {
+            questionStore.setQuit(QuitOverlayResponse.stay);
+          },
           child: _buildContinueButtonMain(context),
         )
     );
@@ -101,7 +107,9 @@ class QuestionQuitOverlay extends StatelessWidget {
 
   Widget _buildQuitButton(BuildContext context){
     return GestureDetector(
-        onTap: () => isStaying(false),
+        onTap: () {
+          questionStore.setQuit(QuitOverlayResponse.quit);
+        },
         child: Text(
           AppLocalizations.of(context)
               .translate('question_btn_question_dialog_quit'),

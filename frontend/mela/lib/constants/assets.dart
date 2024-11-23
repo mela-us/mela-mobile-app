@@ -1,5 +1,5 @@
-class AssetsPath{
-  AssetsPath._();
+class Assets{
+  Assets._();
   //Icons
   static String arrow_back_longer = 'assets/icons/arrow_back_longer.png';
   static String clock = 'assets/icons/clock.png';

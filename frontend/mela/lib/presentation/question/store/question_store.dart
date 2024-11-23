@@ -1,3 +1,4 @@
+import 'package:mela/constants/enum.dart';
 import 'package:mela/domain/entity/question/question_list.dart';
 import 'package:mobx/mobx.dart';
 
@@ -31,6 +32,9 @@ abstract class _QuestionStore with Store{
   @observable
   bool success = false;
 
+  @observable
+  QuitOverlayResponse isQuit = QuitOverlayResponse.wait;
+
   @computed
   bool get loading => fetchQuestionsFuture.status == FutureStatus.pending;
 
@@ -40,11 +44,16 @@ abstract class _QuestionStore with Store{
     final future = _getQuestionsUseCase.call(params: null);
     fetchQuestionsFuture = ObservableFuture(future);
 
-
     future.then((questions) {
       questionList = questions;
     }).catchError((error) {
       _errorStore.errorMessage = DioExceptionUtil.handleError(error);
     });
+  }
+
+  //action
+  @action
+  void setQuit(QuitOverlayResponse value){
+    isQuit = value;
   }
 }

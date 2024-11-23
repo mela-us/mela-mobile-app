@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
-import 'package:mela/constants/assets_path.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mobx/mobx.dart';
 
+import '../../constants/assets.dart';
 import '../../core/widgets/progress_indicator_widget.dart';
 import '../../utils/routes/routes.dart';
 import 'store/login_or_signup_store/login_or_signup_store.dart';
@@ -53,7 +53,7 @@ class __FormContentState extends State<_FormContent> {
   @override
   void initState() {
     super.initState();
-    // print("---------------------------------------->LoginScreen: ${_userLoginStore.isLoggedIn ? "true" : "false"}");
+
     _loginReactionDisposer =
         reaction((_) => _userLoginStore.isLoggedIn, (bool success) {
           // print("---------------------------------------->LoginScreen1 ${_userLoginStore.isLoggedIn ? "true" : "false"}");
@@ -262,10 +262,10 @@ class __FormContentState extends State<_FormContent> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ThirdPartyButton(
-                    pathLogo: AssetsPath.googleIcon, onPressed: () {}),
+                    pathLogo: Assets.googleIcon, onPressed: () {}),
                 const SizedBox(width: 20),
                 ThirdPartyButton(
-                    pathLogo: AssetsPath.facebookIcon, onPressed: () {}),
+                    pathLogo: Assets.facebookIcon, onPressed: () {}),
               ],
             ),
             const SizedBox(height: 30),

@@ -46,19 +46,12 @@ class UserLoginRepositoryImpl extends UserLoginRepository {
     //   throw Exception('Login failed: ${e.toString()}');
     // }
 
-
-
-
     try {
-      
-      return await Future.delayed(Duration(seconds: 5), () => User(accessToken: "abc", username: "abc@gmail.com",  password: "abc"));
-     
-      //await Future.delayed(Duration(seconds: 3));
-      //throw "Password is incorrect";
-
-
-      
-      
+      return await Future.delayed(Duration(seconds: 5), () =>
+          User(
+              accessToken: "abc", username: "abc@gmail.com",  password: "abc"
+          )
+      );
     } catch (e) {
       throw e;
     }

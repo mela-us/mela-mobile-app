@@ -65,6 +65,22 @@ mixin _$QuestionStore on _QuestionStore, Store {
     });
   }
 
+  late final _$isQuitAtom =
+      Atom(name: '_QuestionStore.isQuit', context: context);
+
+  @override
+  QuitOverlayResponse get isQuit {
+    _$isQuitAtom.reportRead();
+    return super.isQuit;
+  }
+
+  @override
+  set isQuit(QuitOverlayResponse value) {
+    _$isQuitAtom.reportWrite(value, super.isQuit, () {
+      super.isQuit = value;
+    });
+  }
+
   late final _$getQuestionsAsyncAction =
       AsyncAction('_QuestionStore.getQuestions', context: context);
 
@@ -73,12 +89,27 @@ mixin _$QuestionStore on _QuestionStore, Store {
     return _$getQuestionsAsyncAction.run(() => super.getQuestions());
   }
 
+  late final _$_QuestionStoreActionController =
+      ActionController(name: '_QuestionStore', context: context);
+
+  @override
+  void setQuit(QuitOverlayResponse value) {
+    final _$actionInfo = _$_QuestionStoreActionController.startAction(
+        name: '_QuestionStore.setQuit');
+    try {
+      return super.setQuit(value);
+    } finally {
+      _$_QuestionStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
 fetchQuestionsFuture: ${fetchQuestionsFuture},
 questionList: ${questionList},
 success: ${success},
+isQuit: ${isQuit},
 loading: ${loading}
     ''';
   }
