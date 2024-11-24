@@ -33,4 +33,12 @@ class Assets{
   static String  stats_hide = 'assets/icons/stats_hide.png';
   static String  stats_show = 'assets/icons/stats_show.png';
 
+  //Navigation
+  static String nav_topic = "assets/icons/nav_topic.png";
+  static String nav_stats = "assets/icons/nav_stat.png";
+  static String nav_chat = "assets/icons/nav_chat.png";
+  static String nav_personal = "assets/icons/nav_personal.png";
+
+  //Chat
+  static String currently_developing_icon = "assets/icons/currently_developing_icon.png";
 }
