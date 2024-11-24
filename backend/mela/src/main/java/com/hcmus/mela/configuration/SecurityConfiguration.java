@@ -1,7 +1,7 @@
 package com.hcmus.mela.configuration;
 
-import com.hcmus.mela.security.jwt.JwtAuthenticationEntryPoint;
-import com.hcmus.mela.security.jwt.JwtAuthenticationFilter;
+import com.hcmus.mela.auth.security.jwt.JwtAuthenticationEntryPoint;
+import com.hcmus.mela.auth.security.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
