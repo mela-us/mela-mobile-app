@@ -1,3 +1,4 @@
+import 'package:mela/domain/entity/user/token_model.dart';
 import 'package:mela/domain/entity/user/user.dart';
 
 import '../../../core/domain/usecase/use_case.dart';
@@ -24,13 +25,13 @@ class LoginParams {
   }
 }
 
-class LoginUseCase implements UseCase<User?, LoginParams> {
+class LoginUseCase implements UseCase<TokenModel?, LoginParams> {
   final UserLoginRepository _userLoginRepository;
 
   LoginUseCase(this._userLoginRepository);
 
   @override
-  Future<User?> call({required LoginParams params}){
+  Future<TokenModel?> call({required LoginParams params}){
     return _userLoginRepository.login(params);
   }
 }

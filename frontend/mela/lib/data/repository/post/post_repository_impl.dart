@@ -22,12 +22,20 @@ class PostRepositoryImpl extends PostRepository {
   @override
   Future<PostList> getPosts() async {
     return await _postApi.getPosts().then((postsList) {
+      // print("-----------------");
+      // postsList.posts?.forEach((post) {
+      //   print(post.title);
+      // });
       postsList.posts?.forEach((post) {
         _postDataSource.insert(post);
       });
 
       return postsList;
-    }).catchError((error) => throw error);
+    }).catchError((error) {
+      print("-------Loi o run time----------");
+      print(error.runtimeType);
+      throw error;
+    });
   }
 
   @override

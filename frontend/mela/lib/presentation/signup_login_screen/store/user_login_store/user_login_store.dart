@@ -1,6 +1,10 @@
+import 'package:mela/core/stores/error/error_store.dart';
+import 'package:mela/domain/entity/user/token_model.dart';
 import 'package:mela/domain/entity/user/user.dart';
 import 'package:mela/domain/usecase/user_login/is_logged_in_usecase.dart';
+import 'package:mela/domain/usecase/user_login/save_access_token_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_login_in_status_usecase.dart';
+import 'package:mela/domain/usecase/user_login/save_refresh_token_usecase.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../../domain/usecase/user_login/login_usecase.dart';
@@ -15,6 +19,9 @@ abstract class _UserLoginStore with Store {
     this._isLoggedInUseCase,
     this._saveLoginStatusUseCase,
     this._loginUseCase,
+    this._saveAccessTokenUsecase,
+    this._saveRefreshTokenUsecase,
+    this.errorStore,
   ) {
     // // setting up disposers
     // _setupDisposers();
@@ -29,6 +36,9 @@ abstract class _UserLoginStore with Store {
   final IsLoggedInUseCase _isLoggedInUseCase;
   final SaveLoginStatusUseCase _saveLoginStatusUseCase;
   final LoginUseCase _loginUseCase;
+  final SaveAccessTokenUsecase _saveAccessTokenUsecase;
+  final SaveRefreshTokenUsecase _saveRefreshTokenUsecase;
+  final ErrorStore errorStore;
 
   //Error
   
@@ -44,7 +54,7 @@ abstract class _UserLoginStore with Store {
   // }
 
   // empty responses:-----------------------------------------------------------
-  static ObservableFuture<User?> emptyLoginResponse =
+  static ObservableFuture<TokenModel?> emptyLoginResponse =
       ObservableFuture.value(null);
 
   // store variables:-----------------------------------------------------------
@@ -58,7 +68,7 @@ abstract class _UserLoginStore with Store {
   bool isPasswordVisible = false;
 
   @observable
-  ObservableFuture<User?> loginFuture = emptyLoginResponse;
+  ObservableFuture<TokenModel?> loginFuture = emptyLoginResponse;
 
   @computed
   bool get isLoading => loginFuture.status == FutureStatus.pending;
@@ -74,12 +84,12 @@ abstract class _UserLoginStore with Store {
         LoginParams(username: email, password: password);
     final future = _loginUseCase.call(params: loginParams);
     loginFuture = ObservableFuture(future);
-    print("FlutterSa: loginFuture: ${isLoggedIn ? "true" : "false"}");
+    //print("FlutterSa: loginFuture: ${isLoggedIn ? "true" : "false"}");
     await future.then((value) async {
       if (value != null) {
         await _saveLoginStatusUseCase.call(params: true);
         this.isLoggedIn = true;
-        print("FlutterSa: After future reture: ${isLoggedIn ? "true" : "false"}");
+        //print("FlutterSa: After future reture: ${isLoggedIn ? "true" : "false"}");
         // this.success = true;
       }
     }).catchError((e) {

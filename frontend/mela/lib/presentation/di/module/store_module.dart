@@ -1,8 +1,13 @@
 import 'dart:async';
 
+import 'package:http/http.dart';
 import 'package:mela/core/stores/error/error_store.dart';
 import 'package:mela/core/stores/form/form_store.dart';
+import 'package:mela/domain/usecase/post/get_post_usecase.dart';
 import 'package:mela/domain/usecase/question/get_questions_usecase.dart';
+import 'package:mela/domain/usecase/user_login/save_access_token_usecase.dart';
+import 'package:mela/domain/usecase/user_login/save_refresh_token_usecase.dart';
+import 'package:mela/presentation/post/store/post_store.dart';
 
 
 import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
@@ -60,12 +65,16 @@ class StoreModule {
     //     getIt<ErrorStore>(),
     //   ),
     // );
+    getIt.registerSingleton<PostStore>(PostStore(getIt<GetPostUseCase>(), getIt<ErrorStore>()));
 
     getIt.registerSingleton<UserLoginStore>(
       UserLoginStore(
         getIt<IsLoggedInUseCase>(),
         getIt<SaveLoginStatusUseCase>(),
         getIt<LoginUseCase>(),
+        getIt<SaveAccessTokenUsecase>(),
+        getIt<SaveRefreshTokenUsecase>(),
+        getIt<ErrorStore>(),
       ),
     );
     //UserSignupStore

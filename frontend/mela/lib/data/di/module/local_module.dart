@@ -1,18 +1,15 @@
 import 'dart:async';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mela/core/data/local/sembast/sembast_client.dart';
 import 'package:mela/data/local/constants/db_constants.dart';
 import 'package:mela/data/local/datasources/post/post_datasource.dart';
+import 'package:mela/data/securestorage/secure_storage_helper.dart';
 import 'package:mela/data/sharedpref/shared_preference_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../core/data/local/sembast/sembast_client.dart';
-import '../../../di/service_locator.dart';
-import '../../local/constants/db_constants.dart';
-import '../../local/datasources/post/post_datasource.dart';
-import '../../sharedpref/shared_preference_helper.dart';
 import '../../../di/service_locator.dart';
 
 class LocalModule {
@@ -22,6 +19,13 @@ class LocalModule {
         SharedPreferences.getInstance);
     getIt.registerSingleton<SharedPreferenceHelper>(
       SharedPreferenceHelper(await getIt.getAsync<SharedPreferences>()),
+    );
+    //Secure Storage:-----------------------------------------------------------
+    getIt.registerSingleton<FlutterSecureStorage>(
+        FlutterSecureStorage(),
+    );
+    getIt.registerSingleton<SecureStorageHelper>(SecureStorageHelper(
+      getIt.get<FlutterSecureStorage>())
     );
 
     // database:----------------------------------------------------------------

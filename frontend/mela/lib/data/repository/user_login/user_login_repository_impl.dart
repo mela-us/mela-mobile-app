@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:mela/domain/entity/user/user.dart';
+import 'package:mela/data/securestorage/secure_storage_helper.dart';
+import 'package:mela/domain/entity/user/token_model.dart';
 import 'package:mela/domain/usecase/user_login/login_usecase.dart';
 
 import '../../../domain/repository/user_login/user_login_repository.dart';
@@ -9,13 +10,14 @@ import '../../sharedpref/shared_preference_helper.dart';
 class UserLoginRepositoryImpl extends UserLoginRepository {
   // shared pref object
   final SharedPreferenceHelper _sharedPrefsHelper;
+  final SecureStorageHelper _secureStorageHelper;
 
   // constructor
-  UserLoginRepositoryImpl(this._sharedPrefsHelper);
+  UserLoginRepositoryImpl(this._sharedPrefsHelper, this._secureStorageHelper);
 
   // Login:---------------------------------------------------------------------
   @override
-  Future<User?> login(LoginParams params) async {
+  Future<TokenModel?> login(LoginParams params) async {
     // try {
     //   // Step 1: Make API call
     //   final response = await http.post(
@@ -48,13 +50,8 @@ class UserLoginRepositoryImpl extends UserLoginRepository {
     try {
       return await Future.delayed(
           Duration(seconds: 5),
-          () => User(
-              id: '128736',
-              name: 'Anh Long',
-              email: 'anhlong@gmail.com',
-              dob: '01/01/2003',
-              password: '123456789' //encrypted
-              ));
+          () =>
+              TokenModel(accessToken: "abcd", refreshToken: "adasdadadddsd"));
     } catch (e) {
       throw e;
     }
@@ -66,4 +63,14 @@ class UserLoginRepositoryImpl extends UserLoginRepository {
 
   @override
   Future<bool> get isLoggedIn => _sharedPrefsHelper.isLoggedIn;
+  
+  @override
+  Future<void> saveAccessToken(String accessToken) {
+    return _secureStorageHelper.saveAccessToken(accessToken);
+  }
+  
+  @override
+  Future<void> saveRefreshToken(String refreshToken) {
+    return _secureStorageHelper.saveRefreshToken(refreshToken);
+  }
 }
