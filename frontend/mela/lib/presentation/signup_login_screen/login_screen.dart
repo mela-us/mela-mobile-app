@@ -60,7 +60,7 @@ class __FormContentState extends State<_FormContent> {
       if (success) {
         // print("---------------------------------------->LoginScreen2 ${_userLoginStore.isLoggedIn ? "true" : "false"}");
         Navigator.of(context).pushNamedAndRemoveUntil(
-            Routes.coursesScreen, (Route<dynamic> route) => false);
+            Routes.allScreens, (Route<dynamic> route) => false);
             _userLoginStore.resetSettingForLogin();
       }
     });
