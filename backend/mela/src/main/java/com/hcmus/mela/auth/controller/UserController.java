@@ -35,7 +35,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(registrationResponse);
     }
 
-    @GetMapping("/refresh-token")
     @PostMapping("/refresh-token")
     @Operation(
             tags = "Refresh Token Service",

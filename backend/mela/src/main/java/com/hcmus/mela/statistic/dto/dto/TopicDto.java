@@ -1,4 +1,4 @@
-package com.hcmus.mela.lecture.dto.dto;
+package com.hcmus.mela.statistic.dto.dto;
 
 import lombok.*;
 
@@ -12,6 +12,4 @@ import java.util.UUID;
 public class TopicDto {
     private UUID topicId;
     private String name;
-    private String description;
-    private String imageUrl;
 }

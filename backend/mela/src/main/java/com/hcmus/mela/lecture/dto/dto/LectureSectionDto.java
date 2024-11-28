@@ -5,14 +5,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LectureDto {
-    private Integer lectureId;
-    private String lectureName;
-    private Integer levelId;
-    private Integer topicId;
-    private Integer exerciseCount;
+public class LectureSectionDto {
+    private Integer ordinalNumber;
+    private String name;
+    private String content;
+    private String url;
+    private String sectionType;
 }

@@ -25,5 +25,4 @@ public class MathContentControllerAdvice {
 
         return ResponseEntity.status(response.getStatus()).body(response);
     }
-
 }

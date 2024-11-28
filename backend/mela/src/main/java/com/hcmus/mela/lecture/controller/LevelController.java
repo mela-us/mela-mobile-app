@@ -1,6 +1,7 @@
 package com.hcmus.mela.lecture.controller;
 
 import com.hcmus.mela.lecture.dto.dto.LevelDto;
+import com.hcmus.mela.lecture.dto.response.GetLevelsResponse;
 import com.hcmus.mela.lecture.service.LevelServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ public class LevelController {
 
     @GetMapping
     @Operation(tags = "Level Service", description = "Get all levels.")
-    public ResponseEntity<List<LevelDto>> getLevelRequest() {
+    public ResponseEntity<GetLevelsResponse> getLevelRequest() {
 
         return ResponseEntity.ok(levelService.getAllLevels());
     }

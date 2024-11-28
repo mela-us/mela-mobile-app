@@ -6,18 +6,16 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "lectures")
-public class UserLecture {
-    @Field("user_id")
-    private Integer userId;
+@Document(collection = "lecture_content")
+public class LectureExerciseTotal {
     @Field("lecture_id")
-    private Integer lectureId;
+    private UUID lectureId;
 
-    @Field("study_time")
-    private LocalDateTime studyTime;
+    private Integer total;
 }

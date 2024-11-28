@@ -10,11 +10,16 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LectureStats {
-    @Field("_id")
-    private Integer lectureId;
-    @Field("pass_count")
-    private Integer passExercisesCount;
-    @Field("study_time")
-    private LocalDateTime studyTime;
+public class LectureSection {
+    @Field("ordinal_number")
+    private Integer ordinalNumber;
+
+    private String name;
+
+    private String content;
+
+    private String url;
+
+    @Field("section_type")
+    private String sectionType;
 }

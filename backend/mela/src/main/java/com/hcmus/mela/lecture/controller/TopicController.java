@@ -1,6 +1,7 @@
 package com.hcmus.mela.lecture.controller;
 
 import com.hcmus.mela.lecture.dto.dto.TopicDto;
+import com.hcmus.mela.lecture.dto.response.GetTopicsResponse;
 import com.hcmus.mela.lecture.service.TopicServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class TopicController {
 
     @GetMapping
     @Operation(tags = "Topic Service", description = "Get all topics.")
-    public ResponseEntity<List<TopicDto>> getTopicRequest() {
+    public ResponseEntity<GetTopicsResponse> getTopicsRequest() {
 
         return ResponseEntity.ok(topicService.getAllTopics());
     }
