@@ -1,9 +1,9 @@
 package com.hcmus.mela.lecture.controller;
 
-import com.hcmus.mela.lecture.dto.LectureContentDto;
-import com.hcmus.mela.lecture.dto.LectureDto;
-import com.hcmus.mela.lecture.dto.LectureStatsDto;
-import com.hcmus.mela.lecture.service.LectureService;
+import com.hcmus.mela.lecture.dto.dto.LectureContentDto;
+import com.hcmus.mela.lecture.dto.dto.LectureDto;
+import com.hcmus.mela.lecture.dto.dto.LectureStatsDto;
+import com.hcmus.mela.lecture.service.LectureServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("/api/lectures")
 public class LectureController {
 
-    private final LectureService lectureService;
+    private final LectureServiceImpl lectureService;
 
     @GetMapping
     @Operation(tags = "Lecture Service", description = "Get lectures with specific topic id (null), level id (null) and keyword (null).")

@@ -1,6 +1,6 @@
 package com.hcmus.mela.lecture.mapper;
 
-import com.hcmus.mela.lecture.dto.LectureStatsDto;
+import com.hcmus.mela.lecture.dto.dto.LectureStatsDto;
 import com.hcmus.mela.lecture.model.LectureStats;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;

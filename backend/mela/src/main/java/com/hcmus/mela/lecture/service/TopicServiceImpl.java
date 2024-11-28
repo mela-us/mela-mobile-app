@@ -1,6 +1,6 @@
 package com.hcmus.mela.lecture.service;
 
-import com.hcmus.mela.lecture.dto.TopicDto;
+import com.hcmus.mela.lecture.dto.dto.TopicDto;
 import com.hcmus.mela.lecture.exception.exception.MathContentException;
 import com.hcmus.mela.lecture.mapper.TopicMapper;
 import com.hcmus.mela.lecture.model.Topic;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class TopicService {
+public class TopicServiceImpl {
     private final TopicRepository topicRepository;
 
     public List<TopicDto> getAllTopics() {

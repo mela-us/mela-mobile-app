@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -15,8 +16,8 @@ import java.time.LocalDateTime;
 public class Otp {
     @Id
     @Column(name = "otp_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long otpId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID otpId;
 
     @Column(name = "otp_code")
     private String otpCode;

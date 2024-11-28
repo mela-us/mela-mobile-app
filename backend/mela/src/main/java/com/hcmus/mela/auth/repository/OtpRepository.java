@@ -4,7 +4,9 @@ import com.hcmus.mela.auth.model.Otp;
 import com.hcmus.mela.auth.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface OtpRepository extends JpaRepository<Otp, Long> {
+import java.util.UUID;
+
+public interface OtpRepository extends JpaRepository<Otp, UUID> {
     Otp findByUser(User user);
 
     Otp findByUserUsername(String username);

@@ -26,7 +26,7 @@ public class UserControllerAdvice {
     @ExceptionHandler(InvalidTokenException.class)
     ResponseEntity<ApiExceptionResponse> handleInvalidTokenException(InvalidTokenException exception) {
 
-        final ApiExceptionResponse response = new ApiExceptionResponse(exception.getMessage(), HttpStatus.UNAUTHORIZED, LocalDateTime.now());
+        final ApiExceptionResponse response = new ApiExceptionResponse(exception.getErrorMessage(), HttpStatus.UNAUTHORIZED, LocalDateTime.now());
 
         return ResponseEntity.status(response.getStatus()).body(response);
     }

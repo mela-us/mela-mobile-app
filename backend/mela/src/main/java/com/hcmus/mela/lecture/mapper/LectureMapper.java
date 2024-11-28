@@ -1,7 +1,7 @@
 package com.hcmus.mela.lecture.mapper;
 
-import com.hcmus.mela.lecture.dto.LectureContentDto;
-import com.hcmus.mela.lecture.dto.LectureDto;
+import com.hcmus.mela.lecture.dto.dto.LectureContentDto;
+import com.hcmus.mela.lecture.dto.dto.LectureDto;
 import com.hcmus.mela.lecture.model.Lecture;
 import com.hcmus.mela.lecture.model.LectureContent;
 import org.mapstruct.Mapper;

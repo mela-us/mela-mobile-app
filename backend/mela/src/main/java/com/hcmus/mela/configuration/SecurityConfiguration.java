@@ -47,7 +47,7 @@ public class SecurityConfiguration {
 																	      "/actuator/**")
 													   .permitAll()
 													   .anyRequest()
-						.permitAll()
+													   .permitAll()
 													   /*.authenticated()*/)
 				.sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.exceptionHandling(handler -> handler.authenticationEntryPoint(unauthorizedHandler))

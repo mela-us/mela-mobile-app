@@ -16,7 +16,8 @@ import org.springframework.lang.NonNull;
 @EnableMongoRepositories(basePackages =
         {
                 "com.hcmus.mela.exercise.repository",
-                "com.hcmus.mela.lecture.repository"
+                "com.hcmus.mela.lecture.repository",
+                "com.hcmus.mela.statistic"
         }
     )
 @RequiredArgsConstructor

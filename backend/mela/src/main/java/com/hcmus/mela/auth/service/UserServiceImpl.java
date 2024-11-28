@@ -21,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -96,12 +97,12 @@ public class UserServiceImpl implements UserService {
 
         final String accessToken = authorizationHeader.replace(SecurityConstants.TOKEN_PREFIX, Strings.EMPTY);
 
-        final Long userId = jwtTokenService.getUserIdFromToken(accessToken);
+        final UUID userId = jwtTokenService.getUserIdFromToken(accessToken);
 
         // Check valid token
         final boolean validToken = jwtTokenService.validateToken(accessToken);
 
-        if(!validToken) {
+        if (!validToken) {
             final String invalidToken = exceptionMessageAccessor.getMessage(null, "invalid_token");
             throw new InvalidTokenException(invalidToken);
         }
@@ -113,7 +114,6 @@ public class UserServiceImpl implements UserService {
             throw new InvalidTokenException(userNotFound);
         }
         user.setBirthday(updateProfileRequest.getBirthday());
-        user.setFullName(updateProfileRequest.getFullName());
         user.setImageUrl(updateProfileRequest.getImageUrl());
         user.setUpdatedAt(LocalDateTime.now());
 
@@ -129,12 +129,12 @@ public class UserServiceImpl implements UserService {
 
         final String accessToken = authorizationHeader.replace(SecurityConstants.TOKEN_PREFIX, Strings.EMPTY);
 
-        final Long userId = jwtTokenService.getUserIdFromToken(accessToken);
+        final UUID userId = jwtTokenService.getUserIdFromToken(accessToken);
 
         User user = userRepository.findById(userId).orElse(null);
 
         if (user == null) {
-            final String userNotFound = exceptionMessageAccessor.getMessage(null, "{user_not_found}");
+            final String userNotFound = exceptionMessageAccessor.getMessage(null, "user_not_found");
             throw new InvalidTokenException(userNotFound);
         }
 
@@ -148,7 +148,7 @@ public class UserServiceImpl implements UserService {
 
         // Check if the refresh token is blacklisted
         if (tokenStoreService.isRefreshTokenBlacklisted(refreshToken)) {
-            final String blacklistedTokenMessage = exceptionMessageAccessor.getMessage(null, "{blacklisted_refresh_token}");
+            final String blacklistedTokenMessage = exceptionMessageAccessor.getMessage(null, "blacklisted_refresh_token");
             throw new InvalidTokenException(blacklistedTokenMessage);
         }
 
@@ -161,7 +161,7 @@ public class UserServiceImpl implements UserService {
         if (validToken) {
             return new RefreshTokenResponse(jwtTokenService.generateRefreshToken(user));
         } else {
-            final String invalidToken = exceptionMessageAccessor.getMessage(null, "{invalid_refresh_token}");
+            final String invalidToken = exceptionMessageAccessor.getMessage(null, "invalid_token");
             throw new InvalidTokenException(invalidToken);
         }
     }
@@ -195,4 +195,3 @@ public class UserServiceImpl implements UserService {
     }
 
 }
-

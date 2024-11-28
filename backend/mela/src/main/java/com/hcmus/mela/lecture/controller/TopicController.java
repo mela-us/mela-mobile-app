@@ -1,7 +1,7 @@
 package com.hcmus.mela.lecture.controller;
 
-import com.hcmus.mela.lecture.dto.TopicDto;
-import com.hcmus.mela.lecture.service.TopicService;
+import com.hcmus.mela.lecture.dto.dto.TopicDto;
+import com.hcmus.mela.lecture.service.TopicServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/api/topics")
 public class TopicController {
 
-    private final TopicService topicService;
+    private final TopicServiceImpl topicService;
 
     @GetMapping
     @Operation(tags = "Topic Service", description = "Get all topics.")

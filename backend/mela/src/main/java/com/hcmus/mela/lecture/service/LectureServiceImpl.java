@@ -1,8 +1,8 @@
 package com.hcmus.mela.lecture.service;
 
-import com.hcmus.mela.lecture.dto.LectureContentDto;
-import com.hcmus.mela.lecture.dto.LectureDto;
-import com.hcmus.mela.lecture.dto.LectureStatsDto;
+import com.hcmus.mela.lecture.dto.dto.LectureContentDto;
+import com.hcmus.mela.lecture.dto.dto.LectureDto;
+import com.hcmus.mela.lecture.dto.dto.LectureStatsDto;
 import com.hcmus.mela.lecture.mapper.LectureMapper;
 import com.hcmus.mela.lecture.mapper.LectureStatsMapper;
 import com.hcmus.mela.lecture.repository.LectureRepositoryImpl;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class LectureService {
+public class LectureServiceImpl {
     private final LectureRepositoryImpl lectureRepository;
 
     private final LectureStatsRepositoryImpl lectureStatsRepository;

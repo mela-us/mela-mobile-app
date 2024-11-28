@@ -1,6 +1,6 @@
 package com.hcmus.mela.lecture.mapper;
 
-import com.hcmus.mela.lecture.dto.LevelDto;
+import com.hcmus.mela.lecture.dto.dto.LevelDto;
 import com.hcmus.mela.lecture.model.Level;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;

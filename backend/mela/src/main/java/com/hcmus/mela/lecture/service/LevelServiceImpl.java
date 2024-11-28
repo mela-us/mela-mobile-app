@@ -1,6 +1,6 @@
 package com.hcmus.mela.lecture.service;
 
-import com.hcmus.mela.lecture.dto.LevelDto;
+import com.hcmus.mela.lecture.dto.dto.LevelDto;
 import com.hcmus.mela.lecture.exception.exception.MathContentException;
 import com.hcmus.mela.lecture.mapper.LevelMapper;
 import com.hcmus.mela.lecture.model.Level;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class LevelService {
+public class LevelServiceImpl {
     private final LevelRepository levelRepository;
 
     public List<LevelDto> getAllLevels() {
