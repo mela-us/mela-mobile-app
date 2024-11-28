@@ -23,8 +23,9 @@ class PostApi {
   /// Returns list of post in response
   Future<PostList> getPosts() async {
     try {
-      print("------------->PostApi: getPosts");
+      //print("------------->PostApi: getPosts");
       final res = await _dioClient.get(EndpointsConst.getPosts);
+      
       return PostList.fromJson(res);
     } catch (e) {
       print("-------------->PostApi: getPosts: Error");

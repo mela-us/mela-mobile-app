@@ -5,4 +5,16 @@ class TokenModel {
     required this.accessToken,
     required this.refreshToken,
   });
+  factory TokenModel.fromJson(Map<String, dynamic> json) {
+    return TokenModel(
+      accessToken: json['accessToken'],
+      refreshToken: json['refreshToken'],
+    );
+  }
+  Map<String, dynamic> toJson() { 
+    return {
+      'accessToken': accessToken,
+      'refreshToken': refreshToken,
+    };
+  }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:mela/data/network/apis/login_signup/login_api.dart';
 import 'package:mela/data/repository/question/question_repository_impl.dart';
 import 'package:mela/data/repository/setting/setting_repository_impl.dart';
 import 'package:mela/data/securestorage/secure_storage_helper.dart';
@@ -54,6 +55,7 @@ class RepositoryModule {
     getIt.registerSingleton<UserLoginRepository>(UserLoginRepositoryImpl(
       getIt<SharedPreferenceHelper>(),
       getIt<SecureStorageHelper>(),
+      getIt<LoginApi>(),
     ));
     getIt.registerSingleton<UserSignUpRepository>(UserSignupRepositoryImpl());
 

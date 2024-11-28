@@ -14,10 +14,9 @@ class AuthInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    print("Vao onRequest AuthInterceptor");
+    //print("Vao onRequest AuthInterceptor");
     final String token = await accessToken() ?? '';
     if (token.isNotEmpty) {
-      print("Vao onRequest AuthInterceptor voi token la: $token");
       options.headers.putIfAbsent('Authorization', () => 'Bearer $token');
     }
     print("Headers trong AuthInterceptor: ${options.headers}");

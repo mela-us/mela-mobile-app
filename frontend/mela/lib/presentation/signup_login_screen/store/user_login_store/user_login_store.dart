@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:mela/core/stores/error/error_store.dart';
 import 'package:mela/domain/entity/user/token_model.dart';
 import 'package:mela/domain/entity/user/user.dart';
@@ -84,15 +85,31 @@ abstract class _UserLoginStore with Store {
         LoginParams(username: email, password: password);
     final future = _loginUseCase.call(params: loginParams);
     loginFuture = ObservableFuture(future);
+    print("-----********* Email password");
+    print(email);
+    print(password);
     //print("FlutterSa: loginFuture: ${isLoggedIn ? "true" : "false"}");
     await future.then((value) async {
       if (value != null) {
         await _saveLoginStatusUseCase.call(params: true);
+        await _saveAccessTokenUsecase.call(params: value.accessToken);
+        await _saveRefreshTokenUsecase.call(params: value.refreshToken);
+        print("-----********* Sau khi login thanh cong in UserLoginStore");
+        print(value.accessToken);
+        print(value.refreshToken);
         this.isLoggedIn = true;
         //print("FlutterSa: After future reture: ${isLoggedIn ? "true" : "false"}");
         // this.success = true;
       }
     }).catchError((e) {
+      print("-----********* Error in UserLoginStore");
+      if(e is DioException){
+        print(e);  
+        print(e.message);
+        print(e.response?.data);
+        print(e.response?.statusCode);
+        //errorStore.errorMessage = e.toString();
+      }
       print(e);
       this.isLoggedIn = false;
       // this.success = false;

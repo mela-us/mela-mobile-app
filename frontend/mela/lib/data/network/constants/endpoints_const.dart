@@ -2,7 +2,9 @@ class EndpointsConst {
   EndpointsConst._();
 
   // base url
-  static const String baseUrl = "http://jsonplaceholder.typicode.com";
+  //static const String baseUrl = "http://jsonplaceholder.typicode.com";
+  static const String baseUrl =
+      "http://c4147a5c-0d19-46d9-8885-54b78c14c9c6.mock.pstmn.io";
 
   // receiveTimeout
   static const int receiveTimeout = 15000;
@@ -12,4 +14,5 @@ class EndpointsConst {
 
   // booking endpoints
   static const String getPosts = "/posts";
+  static const String login = "/api/login";
 }

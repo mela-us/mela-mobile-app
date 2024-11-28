@@ -1,5 +1,6 @@
 
 import 'package:event_bus/event_bus.dart';
+import 'package:mela/data/network/apis/login_signup/login_api.dart';
 import 'package:mela/data/network/dio_client.dart';
 import 'package:mela/data/securestorage/secure_storage_helper.dart';
 
@@ -50,5 +51,6 @@ class NetworkModule {
 
     // api's:-------------------------------------------------------------------
     getIt.registerSingleton(PostApi(getIt<DioClient>(), getIt<RestClient>()));
+    getIt.registerSingleton<LoginApi>(LoginApi(getIt<DioClient>()));
   }
 }

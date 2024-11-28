@@ -31,14 +31,13 @@ class DioClient {
     ProgressCallback? onReceiveProgress,
   }) async {
     try {
-      print('\n=== REQUEST INFO ===');
-      print('URL: ${_dio.options.baseUrl}$uri');
-      print('Method: GET');
-      print('Headers: ${_dio.options.headers}');
-      print('Query Parameters: $queryParameters');
-      print('Options: ${options?.toString()}');
-      _dio.options.headers['Content-Type'] = 'application/json';
-      uri="abcd";
+      //print('\n=== REQUEST INFO ===');
+      // print('URL: ${_dio.options.baseUrl}$uri');
+      // print('Method: GET');
+      // print('Headers: ${_dio.options.headers}');
+      // print('Query Parameters: $queryParameters');
+      // print('Options: ${options?.toString()}');
+      //_dio.options.headers['Content-Type'] = 'application/json';
       final Response response = await _dio.get(
         uri,
         queryParameters: queryParameters,
@@ -46,9 +45,8 @@ class DioClient {
         cancelToken: cancelToken,
         onReceiveProgress: onReceiveProgress,
       );
-      print("------------>DioClient: get luc sau");
-      // In ra headers thực tế từ response
-      print("Actual Request Headers: ${response.requestOptions.headers}");
+      // print("------------>DioClient: get luc sau");
+      // print("Actual Request Headers: ${response.requestOptions.headers}");
       //print(response.data);
       return response.data;
     } catch (e) {
