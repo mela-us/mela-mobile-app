@@ -36,6 +36,7 @@ public class UserController {
     }
 
     @GetMapping("/refresh-token")
+    @PostMapping("/refresh-token")
     @Operation(
             tags = "Refresh Token Service",
             description = "API endpoint to refresh access token using the provided refresh token.")

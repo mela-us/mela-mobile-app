@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class UpdateProfileRequest {
 
-    private String fullName;
+    private String fullname;
 
     private String imageUrl;
 

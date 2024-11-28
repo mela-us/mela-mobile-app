@@ -114,6 +114,7 @@ public class UserServiceImpl implements UserService {
             throw new InvalidTokenException(userNotFound);
         }
         user.setBirthday(updateProfileRequest.getBirthday());
+        user.setFullname(updateProfileRequest.getFullname());
         user.setImageUrl(updateProfileRequest.getImageUrl());
         user.setUpdatedAt(LocalDateTime.now());
 

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -45,7 +46,7 @@ public class ExerciseServiceImpl implements ExerciseService {
         exerciseValidationService.validateExercise(exerciseRequest);
 
         final Integer exerciseId = exerciseRequest.getExerciseId();
-        final Integer userId = exerciseRequest.getUserId();
+        final UUID userId = exerciseRequest.getUserId();
         final Integer numberOfQuestions = questionService.getNumberOfQuestionsInExercise(exerciseId);
 
         Exercise exercise = findByExerciseId(exerciseId);
@@ -78,7 +79,7 @@ public class ExerciseServiceImpl implements ExerciseService {
 
         for(Exercise exercise: exercises) {
             final Integer exerciseId = exercise.getExerciseId();
-            final Integer userId = exerciseRequest.getUserId();
+            final UUID userId = exerciseRequest.getUserId();
             final Integer numberOfQuestions = questionService.getNumberOfQuestionsInExercise(exerciseId);
 
             ExerciseDto exerciseDto = ExerciseMapper.INSTANCE.convertToExerciseDto(exercise);

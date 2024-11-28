@@ -2,6 +2,8 @@ package com.hcmus.mela.exercise.dto.request;
 
 import lombok.*;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -11,5 +13,5 @@ public class ExerciseRequest {
 
     private Integer lectureId;
 
-    private Integer userId;
+    private UUID userId;
 }

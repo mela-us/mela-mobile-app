@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -17,12 +19,12 @@ public class UserExerciseServiceImpl implements UserExerciseService {
     private final UserExerciseValidationService userExerciseValidationService;
 
     @Override
-    public UserExercise findByUserIdAndExerciseId(Integer userId, Integer exerciseId) {
+    public UserExercise findByUserIdAndExerciseId(UUID userId, Integer exerciseId) {
         return userExerciseRepository.findByUserIdAndExerciseId(userId, exerciseId);
     }
 
     @Override
-    public UserExerciseDto getUserExercise(Integer userId, Integer exerciseId) {
+    public UserExerciseDto getUserExercise(UUID userId, Integer exerciseId) {
         final boolean studiedExercise = userExerciseValidationService.validateUserExercise(userId, exerciseId);
         UserExerciseDto userExerciseDto;
 

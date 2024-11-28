@@ -27,7 +27,7 @@ public class User {
     private String password;
 
     @Column(name = "full_name")
-    private String fullName;
+    private String fullname;
 
     @Column(name = "image_url")
     private String imageUrl;

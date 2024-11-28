@@ -3,9 +3,11 @@ package com.hcmus.mela.exercise.service;
 import com.hcmus.mela.exercise.dto.dto.UserExerciseDto;
 import com.hcmus.mela.exercise.model.UserExercise;
 
+import java.util.UUID;
+
 public interface UserExerciseService {
 
-    UserExercise findByUserIdAndExerciseId(Integer userId, Integer exerciseId);
+    UserExercise findByUserIdAndExerciseId(UUID userId, Integer exerciseId);
 
-    UserExerciseDto getUserExercise(Integer userId, Integer exerciseId);
+    UserExerciseDto getUserExercise(UUID userId, Integer exerciseId);
 }
