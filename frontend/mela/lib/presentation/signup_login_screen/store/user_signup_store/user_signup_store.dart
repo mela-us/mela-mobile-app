@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:mela/core/extensions/response_status.dart';
 import 'package:mela/utils/dio/dio_error_util.dart';
 import 'package:mobx/mobx.dart';
 import '../../../../domain/usecase/user_signup/signup_usecase.dart';
@@ -46,13 +47,13 @@ abstract class _UserSignupStore with Store {
     } catch (e) {
       isSignupSuccessful = false;
       if (e is DioException) {
-        if (e.response!.statusCode == 400) {
-          throw e.response!.data['message'];
-        } else {
-          throw DioExceptionUtil.handleError(e);
+        throw DioExceptionUtil.handleError(e);
+      } else {
+        if (e == ResponseStatus.BAD_REQUEST) {
+          throw "Email already exists";
         }
+        throw "Something went wrong";
       }
-      throw e.toString();
     }
   }
 

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:mela/core/extensions/response_status.dart';
 import 'package:mela/core/stores/error/error_store.dart';
 import 'package:mela/domain/entity/user/token_model.dart';
 import 'package:mela/domain/entity/user/user.dart';
@@ -85,9 +86,9 @@ abstract class _UserLoginStore with Store {
         LoginParams(username: email, password: password);
     final future = _loginUseCase.call(params: loginParams);
     loginFuture = ObservableFuture(future);
-    print("-----********* Email password");
-    print(email);
-    print(password);
+    // print("-----********* Email password");
+    // print(email);
+    // print(password);
     //print("FlutterSa: loginFuture: ${isLoggedIn ? "true" : "false"}");
     await future.then((value) async {
       if (value != null) {
@@ -99,19 +100,14 @@ abstract class _UserLoginStore with Store {
         print(value.accessToken);
         print(value.refreshToken);
         this.isLoggedIn = true;
-
-        //print("FlutterSa: After future reture: ${isLoggedIn ? "true" : "false"}");
-        // this.success = true;
       }
     }).catchError((e) {
       print("-----********* Error in UserLoginStore");
       if (e is DioException) {
-        print(e.response?.data);
-        if (e.response?.statusCode == 401) {
-          errorStore.errorMessage =
-              (e.response?.data as Map<String, dynamic>)["message"];
-        } else {
-          errorStore.errorMessage = DioExceptionUtil.handleError(e);
+        errorStore.errorMessage = DioExceptionUtil.handleError(e);
+      } else {
+        if (e == ResponseStatus.UNAUTHORIZED) {
+          errorStore.errorMessage = "Mat khau hoac tai khoan khong dung";
         }
       }
       this.isLoggedIn = false;

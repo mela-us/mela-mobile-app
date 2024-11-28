@@ -1,6 +1,7 @@
 
 import 'package:event_bus/event_bus.dart';
 import 'package:mela/data/network/apis/login_signup/login_api.dart';
+import 'package:mela/data/network/apis/login_signup/refresh_access_token_api.dart';
 import 'package:mela/data/network/dio_client.dart';
 import 'package:mela/data/securestorage/secure_storage_helper.dart';
 
@@ -54,5 +55,6 @@ class NetworkModule {
     getIt.registerSingleton(PostApi(getIt<DioClient>(), getIt<RestClient>()));
     getIt.registerSingleton<LoginApi>(LoginApi(getIt<DioClient>()));
     getIt.registerSingleton<SignupApi>(SignupApi(getIt<DioClient>()));
+    getIt.registerSingleton<RefreshAccessTokenApi>(RefreshAccessTokenApi(getIt<DioClient>()));
   }
 }

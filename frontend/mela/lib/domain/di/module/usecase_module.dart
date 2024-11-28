@@ -13,6 +13,7 @@ import 'package:mela/domain/usecase/search/get_search_lectures_result.dart';
 import 'package:mela/domain/usecase/topic/find_topic_by_id_usecase.dart';
 import 'package:mela/domain/usecase/topic/get_topics_usecase.dart';
 import 'package:mela/domain/usecase/user/get_user_info_usecase.dart';
+import 'package:mela/domain/usecase/user_login/refresh_access_token_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_access_token_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_refresh_token_usecase.dart';
 
@@ -55,12 +56,14 @@ class UseCaseModule {
     getIt.registerSingleton<LoginUseCase>(
       LoginUseCase(getIt<UserLoginRepository>()),
     );
-    
+
     getIt.registerSingleton<SaveAccessTokenUsecase>(
         SaveAccessTokenUsecase(getIt<UserLoginRepository>()));
 
     getIt.registerSingleton<SaveRefreshTokenUsecase>(
         SaveRefreshTokenUsecase(getIt<UserLoginRepository>()));
+    getIt.registerSingleton<RefreshAccessTokenUsecase>(
+        RefreshAccessTokenUsecase(getIt<UserLoginRepository>()));
     //user signup:--------------------------------------------------------------
     getIt.registerSingleton<SignupUseCase>(
       SignupUseCase(getIt<UserSignUpRepository>()),

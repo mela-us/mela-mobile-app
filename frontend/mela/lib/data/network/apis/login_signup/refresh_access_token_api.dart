@@ -2,24 +2,22 @@ import 'package:dio/dio.dart';
 import 'package:mela/core/extensions/response_status.dart';
 import 'package:mela/data/network/constants/endpoints_const.dart';
 import 'package:mela/data/network/dio_client.dart';
-import 'package:mela/domain/entity/user/token_model.dart';
-import 'package:mela/domain/usecase/user_login/login_usecase.dart';
 
-class LoginApi {
+class RefreshAccessTokenApi {
   final DioClient _dioClient;
-  LoginApi(this._dioClient);
-  Future<TokenModel> login(LoginParams loginParams) async {
+  RefreshAccessTokenApi(this._dioClient);
+  Future<String> refreshAccessToken(String? refreshToken) async {
     try {
       final responseData = await _dioClient.post(
-        EndpointsConst.login,
+        EndpointsConst.refreshAccessToken,
         options: Options(headers: {'Content-Type': 'application/json'}),
-        data: loginParams.toJson(),
+        data: {'refreshToken': refreshToken},
       );
-
       if (responseData['status'] == 'UNAUTHORIZED') {
         throw ResponseStatus.UNAUTHORIZED;
       }
-      return TokenModel.fromJson(responseData);
+
+      return responseData['accessToken'];
     } catch (e) {
       rethrow;
     }

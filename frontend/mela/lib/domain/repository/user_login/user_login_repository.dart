@@ -13,6 +13,7 @@ abstract class UserLoginRepository {
 
   Future<void> saveAccessToken(String accessToken);
   Future<void> saveRefreshToken(String refreshToken);
+  Future<String> refreshAccessToken();
 
   Future<bool> get isLoggedIn;
 }

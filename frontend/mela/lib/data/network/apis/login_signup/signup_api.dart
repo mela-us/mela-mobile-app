@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:mela/core/extensions/response_status.dart';
 import 'package:mela/data/network/constants/endpoints_const.dart';
 import 'package:mela/data/network/dio_client.dart';
 import 'package:mela/domain/entity/user/token_model.dart';
@@ -10,26 +11,13 @@ class SignupApi {
   SignupApi(this._dioClient);
   Future<void> signup(SignupParams signupParams) async {
     try {
-      await _dioClient.post(
+      final responseData = await _dioClient.post(
         EndpointsConst.signup,
         options: Options(headers: {'Content-Type': 'application/json'}),
         data: signupParams.toJson(),
-      
       );
-      final requestOptions = RequestOptions(path: '/api/register');
-      if (DateTime.now().minute % 2 == 0) {
-        throw DioException(
-          requestOptions: requestOptions,
-          response: Response(
-            requestOptions: requestOptions,
-            statusCode: 400,
-            data: {
-              "message": "Email already exists",
-              "status": "UNAUTHORIZED",
-              "time": "2024-11-26T19:58:40.3939856",
-            },
-          ),
-        );
+      if (responseData['status'] == 'BAD_REQUEST') {
+        throw ResponseStatus.BAD_REQUEST;
       }
     } catch (e) {
       rethrow;
