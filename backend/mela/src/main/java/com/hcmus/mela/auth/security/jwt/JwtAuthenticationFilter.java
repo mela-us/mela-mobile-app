@@ -3,7 +3,6 @@ package com.hcmus.mela.auth.security.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.hcmus.mela.auth.exception.response.ApiExceptionResponse;
 import com.hcmus.mela.auth.service.TokenStoreService;
 import com.hcmus.mela.auth.service.UserDetailsServiceImpl;
@@ -26,7 +25,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @Slf4j

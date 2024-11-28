@@ -11,6 +11,8 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api")
@@ -27,7 +29,7 @@ public class ExerciseController {
             @RequestHeader("Authorization") String authorizationHeader) {
         String token = authorizationHeader.replace(SecurityConstants.TOKEN_PREFIX, Strings.EMPTY);
 
-        Integer userId = jwtTokenService.getUserIdFromToken(token).intValue();
+        UUID userId = jwtTokenService.getUserIdFromToken(token);
 
         ExerciseRequest exerciseRequest = new ExerciseRequest(null, lectureId, userId);
 
@@ -45,7 +47,7 @@ public class ExerciseController {
 
         String token = jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader);
 
-        Integer userId = jwtTokenService.getUserIdFromToken(token).intValue();
+        UUID userId = jwtTokenService.getUserIdFromToken(token);
 
         ExerciseRequest exerciseRequest = new ExerciseRequest(exerciseId, null, userId);
 

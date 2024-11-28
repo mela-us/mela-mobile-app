@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -40,8 +41,8 @@ public class JwtTokenManager {
         return generateToken(user, jwtProperties.getRefreshTokenExpirationDay() * 24 * 60 * 60 * 1000);
     }
 
-    public Long getUserIdFromToken(String token) {
-        return Long.parseLong(getDecodedJWT(token).getSubject());
+    public UUID getUserIdFromToken(String token) {
+        return UUID.fromString(getDecodedJWT(token).getSubject());
     }
 
     public String getUsernameFromToken(String token) {

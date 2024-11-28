@@ -9,6 +9,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -19,7 +20,7 @@ public class JwtTokenService {
 
     private final JwtTokenManager jwtTokenManager;
 
-    public Long getUserIdFromToken(String token) {
+    public UUID getUserIdFromToken(String token) {
         return jwtTokenManager.getUserIdFromToken(token);
     }
 

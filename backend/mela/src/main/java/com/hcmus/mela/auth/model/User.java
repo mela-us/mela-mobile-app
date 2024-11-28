@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -16,8 +17,8 @@ import java.time.LocalDateTime;
 public class User {
     @Id
     @Column(name = "user_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID userId;
 
     @Column(name = "username", unique = true)
     private String username;
@@ -26,7 +27,7 @@ public class User {
     private String password;
 
     @Column(name = "full_name")
-    private String fullName;
+    private String fullname;
 
     @Column(name = "image_url")
     private String imageUrl;
