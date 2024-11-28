@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:mela/domain/entity/lecture/lecture_list.dart';
 import 'package:mela/domain/entity/topic/topic_list.dart';
 import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
@@ -5,6 +6,7 @@ import 'package:mobx/mobx.dart';
 
 import '../../../../di/service_locator.dart';
 import '../../../../domain/usecase/topic/get_topics_usecase.dart';
+import '../../../../utils/dio/dio_error_util.dart';
 // Include generated file
 part 'topic_store.g.dart';
 
@@ -47,12 +49,19 @@ abstract class _TopicStore with Store {
     fetchTopicsFuture = ObservableFuture(future);
 
     try {
+      print("Vao get topic in topic store");
       final topicList = await future;
       this.topicList = topicList;
-      this.errorString = '';
+      //this.errorString = '';
     } catch (onError) {
+      if (onError is DioException) {
+        this.errorString = DioExceptionUtil.handleError(onError);
+      } else {
+        this.errorString = onError.toString();
+      }
+      print("-==================================Error: $errorString");
       this.topicList = null;
-      this.errorString = onError.toString();
+      print("-==================================TopicList null");
     }
   }
 
@@ -64,10 +73,14 @@ abstract class _TopicStore with Store {
     try {
       final lecturesAreLearningList = await future;
       this.lecturesAreLearningList = lecturesAreLearningList;
-      this.errorString = '';
+      //this.errorString = '';
     } catch (onError) {
       this.lecturesAreLearningList = null;
-      this.errorString = onError.toString();
+      if (onError is DioException) {
+        this.errorString = DioExceptionUtil.handleError(onError);
+      } else {
+        this.errorString = onError.toString();
+      }
     }
   }
 

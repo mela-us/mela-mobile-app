@@ -35,7 +35,6 @@ class _CoursesScreenState extends State<CoursesScreen> with RouteAware {
     }
   }
 
-
   @override
   void dispose() {
     routeObserver.unsubscribe(this);
@@ -44,6 +43,7 @@ class _CoursesScreenState extends State<CoursesScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
+    print("^^^^^^^^^^^^^^^^^^ErrorString in Courses_Screen1: ${_topicStore.errorString}");
     return Scaffold(
       appBar: AppBar(
         title: Padding(
@@ -66,6 +66,7 @@ class _CoursesScreenState extends State<CoursesScreen> with RouteAware {
       ),
       body: Observer(
         builder: (context) {
+          print("^^^^^^^^^^^^^^^^^^ErrorString in Courses_Screen2: ${_topicStore.errorString}");
           if (_topicStore.loading) {
             return AbsorbPointer(
               absorbing: true,
@@ -81,86 +82,84 @@ class _CoursesScreenState extends State<CoursesScreen> with RouteAware {
               ),
             );
           }
-
+          print("^^^^^^^^^^^^^^^^^^ErrorString in Courses_Screen 3: ${_topicStore.errorString}");
+          if (_topicStore.errorString.isNotEmpty) {
+            return Center(
+              child: Text(_topicStore.errorString,
+                  style: const TextStyle(color: Colors.red)),
+            );
+          }
+          print("build In CoursesScreen+++++++++++++++++++++++++++++++");
           return SingleChildScrollView(
             physics: const ClampingScrollPhysics(),
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _topicStore.errorString.isEmpty
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        //Cover Image Introduction
-                        const CoverImageWidget(),
-                        const SizedBox(height: 15),
-                        //Topics Grid
-                        GridView.builder(
-                          padding: EdgeInsets.zero,
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            mainAxisSpacing: 0,
-                            crossAxisSpacing: 0,
-                            childAspectRatio: 1,
-                            mainAxisExtent: 100, // set the height of each item
-                          ),
-                          itemCount: _topicStore.topicList!.topics.length,
-                          itemBuilder: (context, index) {
-                            return TopicItem(
-                              topic: _topicStore.topicList!.topics[index],
-                            );
-                          },
-                        ),
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    //Cover Image Introduction
+                    const CoverImageWidget(),
+                    const SizedBox(height: 15),
+                    //Topics Grid
+                    GridView.builder(
+                      padding: EdgeInsets.zero,
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        mainAxisSpacing: 0,
+                        crossAxisSpacing: 0,
+                        childAspectRatio: 1,
+                        mainAxisExtent: 100, // set the height of each item
+                      ),
+                      itemCount: _topicStore.topicList!.topics.length,
+                      itemBuilder: (context, index) {
+                        return TopicItem(
+                          topic: _topicStore.topicList!.topics[index],
+                        );
+                      },
+                    ),
 
-                        const SizedBox(height: 15),
-                        //Text "Chủ đề đang học"
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Image.asset(
-                                'assets/images/fire.png',
-                                width: 20,
-                                height: 28,
-                                fit: BoxFit.contain,
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                "Chủ đề đang học",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subTitle
-                                    .copyWith(
-                                        color: ColorsStandards
-                                            .textColorInBackground2),
-                              )
-                            ],
+                    const SizedBox(height: 15),
+                    //Text "Chủ đề đang học"
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Image.asset(
+                            'assets/images/fire.png',
+                            width: 20,
+                            height: 28,
+                            fit: BoxFit.contain,
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                        //Lectures is learning
-
-                        Column(
-                          children: _topicStore
-                              .lecturesAreLearningList!.lectures
-                              .map((lecture) {
-                            return LectureItem(lecture: lecture);
-                          }).toList(),
-                        )
-                      ],
-                    )
-                  : Center(
-                      child: Text(
-                        _topicStore.errorString,
-                        style: const TextStyle(color: Colors.red),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Chủ đề đang học",
+                            style: Theme.of(context)
+                                .textTheme
+                                .subTitle
+                                .copyWith(
+                                    color:
+                                        ColorsStandards.textColorInBackground2),
+                          )
+                        ],
                       ),
                     ),
-            ),
+                    const SizedBox(height: 10),
+                    //Lectures is learning
+
+                    Column(
+                      children: _topicStore.lecturesAreLearningList!.lectures
+                          .map((lecture) {
+                        return LectureItem(lecture: lecture);
+                      }).toList(),
+                    )
+                  ],
+                )),
           );
         },
       ),

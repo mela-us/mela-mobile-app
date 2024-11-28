@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:http/http.dart';
 import 'package:mela/domain/repository/lecture/lecture_repository.dart';
 import 'package:mela/domain/repository/post/post_repository.dart';
 import 'package:mela/domain/repository/user/user_repository.dart';
@@ -75,8 +74,8 @@ class UseCaseModule {
     );
 
     /// topic:------------------------------------------------------------------
-    getIt.registerSingleton<GetTopicsUsecase>(
-        GetTopicsUsecase(getIt<TopicRepository>()));
+    getIt.registerSingleton<GetTopicsUsecase>(GetTopicsUsecase(
+        getIt<TopicRepository>()));
     getIt.registerSingleton<FindTopicByIdUsecase>(
         FindTopicByIdUsecase(getIt<TopicRepository>()));
 

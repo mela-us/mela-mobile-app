@@ -12,7 +12,7 @@ class GetTopicsUsecase extends UseCase<TopicList, void> {
 
   //params is type dynamic so it can pass by null
   @override
-  Future<TopicList> call({required void params}) {
+  Future<TopicList> call({required void params}) async {
     return _topicRepository.getTopics();
   }
 }

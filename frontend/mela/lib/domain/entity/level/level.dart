@@ -1,5 +1,5 @@
 class Level {
-  int id;
+  String id;
   String name;
   Level({required this.id, required this.name});
 }

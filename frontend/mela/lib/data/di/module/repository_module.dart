@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:mela/data/network/apis/login_signup/login_api.dart';
 import 'package:mela/data/network/apis/login_signup/refresh_access_token_api.dart';
 import 'package:mela/data/network/apis/login_signup/signup_api.dart';
+import 'package:mela/data/network/apis/topics/topic_api.dart';
 import 'package:mela/data/repository/question/question_repository_impl.dart';
 import 'package:mela/data/repository/setting/setting_repository_impl.dart';
 import 'package:mela/data/securestorage/secure_storage_helper.dart';
 import 'package:mela/data/sharedpref/shared_preference_helper.dart';
+import 'package:mela/domain/entity/topic/topic.dart';
 import 'package:mela/domain/repository/question/question_repository.dart';
 import 'package:mela/domain/repository/setting/setting_repository.dart';
 
@@ -64,7 +66,7 @@ class RepositoryModule {
 
     //Content Deli:-------------------------------------------------------------
 
-    getIt.registerSingleton<TopicRepository>(TopicRepositoryImpl());
+    getIt.registerSingleton<TopicRepository>(TopicRepositoryImpl(getIt<TopicApi>()));
     getIt.registerSingleton<LectureRepository>(LectureRepositoryImpl());
     getIt.registerSingleton<ExerciseRepository>(ExerciseRepositoryImpl());
     getIt.registerSingleton<SearchRepository>(SearchRepositoryImpl());

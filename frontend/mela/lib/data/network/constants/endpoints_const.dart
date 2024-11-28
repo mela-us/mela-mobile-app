@@ -17,4 +17,5 @@ class EndpointsConst {
   static const String login = "/api/login";
   static const String signup = "/api/register";
   static const String refreshAccessToken = "/api/refresh-token";
+  static const String getTopics = "/api/topics";
 }

@@ -1,6 +1,7 @@
 //---Version 1:
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
 import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
 
 import '../../../di/service_locator.dart';
@@ -12,12 +13,14 @@ class TopicItem extends StatelessWidget {
   TopicItem({super.key, required this.topic});
 
   final LectureStore _lectureStore = getIt<LectureStore>();
+  final TopicStore _topicStore = getIt<TopicStore>();
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
         _lectureStore.setCurrentTopic(topic);
+        _topicStore.resetErrorString();
         Navigator.of(context).pushNamed(Routes.allLecturesInTopicScreen);
       },
       child: Container(

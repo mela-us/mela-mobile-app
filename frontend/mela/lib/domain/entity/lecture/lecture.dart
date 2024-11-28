@@ -1,7 +1,7 @@
 class Lecture {
-  final int lectureId;
-  final int levelId;
-  final int topicId;
+  final String lectureId;
+  final String levelId;
+  final String topicId;
   final String lectureName;
   final String lectureDescription;
   final String lectureContent;

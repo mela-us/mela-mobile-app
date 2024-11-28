@@ -1,7 +1,7 @@
 class Exercise {
-  int exerciseId;
+  String exerciseId;
   String exerciseName;
-  int lectureId;
+  String lectureId;
   Exercise({
     required this.exerciseId,
     required this.exerciseName,
