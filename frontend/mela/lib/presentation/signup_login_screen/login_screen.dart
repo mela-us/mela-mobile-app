@@ -50,18 +50,26 @@ class __FormContentState extends State<_FormContent> {
 
   //disposers:-----------------------------------------------------------------
   late final ReactionDisposer _loginReactionDisposer;
+  late final ReactionDisposer _errorLoginReactionDisposer;
   @override
   void initState() {
     super.initState();
 
     _loginReactionDisposer =
         reaction((_) => _userLoginStore.isLoggedIn, (bool success) {
-          // print("---------------------------------------->LoginScreen1 ${_userLoginStore.isLoggedIn ? "true" : "false"}");
+      // print("---------------------------------------->LoginScreen1 ${_userLoginStore.isLoggedIn ? "true" : "false"}");
       if (success) {
         // print("---------------------------------------->LoginScreen2 ${_userLoginStore.isLoggedIn ? "true" : "false"}");
         Navigator.of(context).pushNamedAndRemoveUntil(
             Routes.allScreens, (Route<dynamic> route) => false);
-            _userLoginStore.resetSettingForLogin();
+        _userLoginStore.resetSettingForLogin();
+      }
+    });
+    _errorLoginReactionDisposer = reaction(
+        (_) => _userLoginStore.errorStore.errorMessage, (String errorMessage) {
+      if (errorMessage.isNotEmpty) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(errorMessage)));
       }
     });
   }
@@ -71,6 +79,7 @@ class __FormContentState extends State<_FormContent> {
     _emailController.dispose();
     _passwordController.dispose();
     _loginReactionDisposer();
+    _errorLoginReactionDisposer();
     super.dispose();
   }
 
@@ -261,8 +270,7 @@ class __FormContentState extends State<_FormContent> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ThirdPartyButton(
-                    pathLogo: Assets.googleIcon, onPressed: () {}),
+                ThirdPartyButton(pathLogo: Assets.googleIcon, onPressed: () {}),
                 const SizedBox(width: 20),
                 ThirdPartyButton(
                     pathLogo: Assets.facebookIcon, onPressed: () {}),

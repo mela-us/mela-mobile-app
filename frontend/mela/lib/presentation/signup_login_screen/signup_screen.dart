@@ -260,12 +260,14 @@ class __FormContentState extends State<_FormContent> {
                         _emailController.text,
                         _passwordController.text,
                       );
+                      _emailController.clear();
+                      _passwordController.clear();
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Đăng ký thành công')),
                       );
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('${e.toString()}')),
+                        SnackBar(content: Text(e.toString())),
                       );
                     }
                   }

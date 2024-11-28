@@ -15,4 +15,5 @@ class EndpointsConst {
   // booking endpoints
   static const String getPosts = "/posts";
   static const String login = "/api/login";
+  static const String signup = "/api/register";
 }

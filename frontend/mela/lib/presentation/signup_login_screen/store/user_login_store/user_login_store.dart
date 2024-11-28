@@ -6,6 +6,7 @@ import 'package:mela/domain/usecase/user_login/is_logged_in_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_access_token_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_login_in_status_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_refresh_token_usecase.dart';
+import 'package:mela/utils/dio/dio_error_util.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../../domain/usecase/user_login/login_usecase.dart';
@@ -42,8 +43,6 @@ abstract class _UserLoginStore with Store {
   final ErrorStore errorStore;
 
   //Error
-  
-
 
   // disposers:-----------------------------------------------------------------
   late List<ReactionDisposer> _disposers;
@@ -79,6 +78,7 @@ abstract class _UserLoginStore with Store {
   void togglePasswordVisibility() {
     isPasswordVisible = !isPasswordVisible;
   }
+
   @action
   Future login(String email, String password) async {
     final LoginParams loginParams =
@@ -94,36 +94,40 @@ abstract class _UserLoginStore with Store {
         await _saveLoginStatusUseCase.call(params: true);
         await _saveAccessTokenUsecase.call(params: value.accessToken);
         await _saveRefreshTokenUsecase.call(params: value.refreshToken);
+        errorStore.reset("");
         print("-----********* Sau khi login thanh cong in UserLoginStore");
         print(value.accessToken);
         print(value.refreshToken);
         this.isLoggedIn = true;
+
         //print("FlutterSa: After future reture: ${isLoggedIn ? "true" : "false"}");
         // this.success = true;
       }
     }).catchError((e) {
       print("-----********* Error in UserLoginStore");
-      if(e is DioException){
-        print(e);  
-        print(e.message);
+      if (e is DioException) {
         print(e.response?.data);
-        print(e.response?.statusCode);
-        //errorStore.errorMessage = e.toString();
+        if (e.response?.statusCode == 401) {
+          errorStore.errorMessage =
+              (e.response?.data as Map<String, dynamic>)["message"];
+        } else {
+          errorStore.errorMessage = DioExceptionUtil.handleError(e);
+        }
       }
-      print(e);
       this.isLoggedIn = false;
-      // this.success = false;
-      throw e;
     });
   }
+
   @action
-  void resetSettingForLogin(){
+  void resetSettingForLogin() {
     isPasswordVisible = false;
   }
 
   logout() async {
     this.isLoggedIn = false;
     await _saveLoginStatusUseCase.call(params: false);
+    await _saveAccessTokenUsecase.call(params: "");
+    await _saveRefreshTokenUsecase.call(params: "");
   }
 
   // general methods:-----------------------------------------------------------

@@ -8,6 +8,7 @@ import '../../../core/data/network/dio/configs/dio_configs.dart';
 import '../../../core/data/network/dio/interceptors/auth_interceptor.dart';
 import '../../../core/data/network/dio/interceptors/logging_interceptor.dart';
 import '../../../di/service_locator.dart';
+import '../../network/apis/login_signup/signup_api.dart';
 import '../../network/apis/posts/post_api.dart';
 import '../../network/constants/endpoints_const.dart';
 import '../../network/interceptors/error_interceptor.dart';
@@ -52,5 +53,6 @@ class NetworkModule {
     // api's:-------------------------------------------------------------------
     getIt.registerSingleton(PostApi(getIt<DioClient>(), getIt<RestClient>()));
     getIt.registerSingleton<LoginApi>(LoginApi(getIt<DioClient>()));
+    getIt.registerSingleton<SignupApi>(SignupApi(getIt<DioClient>()));
   }
 }

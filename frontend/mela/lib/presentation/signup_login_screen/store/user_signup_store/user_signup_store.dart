@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:mela/utils/dio/dio_error_util.dart';
 import 'package:mobx/mobx.dart';
 import '../../../../domain/usecase/user_signup/signup_usecase.dart';
 
@@ -43,7 +45,14 @@ abstract class _UserSignupStore with Store {
       isSignupSuccessful = true;
     } catch (e) {
       isSignupSuccessful = false;
-      throw e;
+      if (e is DioException) {
+        if (e.response!.statusCode == 400) {
+          throw e.response!.data['message'];
+        } else {
+          throw DioExceptionUtil.handleError(e);
+        }
+      }
+      throw e.toString();
     }
   }
 
@@ -51,6 +60,7 @@ abstract class _UserSignupStore with Store {
   void togglePasswordVisibility() {
     isPasswordVisible = !isPasswordVisible;
   }
+
   @action
   void toggleAccepted() {
     isAccepted = !isAccepted;
