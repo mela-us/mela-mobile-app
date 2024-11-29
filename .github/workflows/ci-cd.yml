@@ -35,6 +35,9 @@ jobs:
           echo "MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}" >> $GITHUB_ENV
           echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> $GITHUB_ENV
           echo "JWT_FORGET_PASSWORD_SECRET_KEY=${{ secrets.JWT_FORGET_PASSWORD_SECRET_KEY }}" >> $GITHUB_ENV
+        
+      - name: Navigate to the backend directory
+        run: cd backend/mela
 
       - name: Build the Spring Boot application
         run: mvn clean package -DskipTests
