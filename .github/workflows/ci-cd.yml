@@ -67,4 +67,4 @@ jobs:
         uses: Azure/webapps-deploy@v3
         with:
           app-name: mela-backend-dev
-          docker-image: ${{ secrets.DOCKER_HUB_USERNAME }}/mela-app-dev:latest
+          images: ${{ secrets.DOCKER_HUB_USERNAME }}/mela-app-dev:latest
