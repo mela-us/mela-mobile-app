@@ -21,7 +21,7 @@ public class LevelController {
 
     @GetMapping
     @Operation(tags = "Level Service", description = "Get all levels.")
-    public ResponseEntity<GetLevelsResponse> getLevelRequest() {
+    public ResponseEntity<GetLevelsResponse> getLevelsRequest() {
 
         return ResponseEntity.ok(levelService.getAllLevels());
     }

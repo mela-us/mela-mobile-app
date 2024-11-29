@@ -1,13 +1,11 @@
 package com.hcmus.mela.statistic.dto.dto;
 
-import com.hcmus.mela.lecture.model.Topic;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter

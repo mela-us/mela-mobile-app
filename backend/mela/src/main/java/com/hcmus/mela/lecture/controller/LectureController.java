@@ -22,7 +22,7 @@ public class LectureController {
 
     @GetMapping
     @Operation(tags = "Lecture Service", description = "Get lectures with specific topic id")
-    public ResponseEntity<GetLecturesResponse> getLectureByTopicRequest(
+    public ResponseEntity<GetLecturesResponse> getLecturesByTopicRequest(
             @RequestParam(value = "topicId") UUID topicId,
             @RequestHeader("Authorization") String authorizationHeader
     ) {
@@ -31,7 +31,7 @@ public class LectureController {
 
     @GetMapping("/search")
     @Operation(tags = "Lecture Service", description = "Get lectures with keyword.")
-    public ResponseEntity<GetLecturesResponse> getLectureByKeywordRequest(
+    public ResponseEntity<GetLecturesResponse> getLecturesByKeywordRequest(
             @RequestParam(value = "q") String keyword,
             @RequestHeader("Authorization") String authorizationHeader
     ) {
@@ -40,7 +40,7 @@ public class LectureController {
 
     @GetMapping("/recent")
     @Operation(tags = "Lecture Service", description = "Get lecture recently.")
-    public ResponseEntity<GetLecturesResponse> getLectureByRecentRequest(
+    public ResponseEntity<GetLecturesResponse> getLecturesByRecentRequest(
             @RequestParam(value = "size") Integer size,
             @RequestHeader("Authorization") String authorizationHeader
     ) {

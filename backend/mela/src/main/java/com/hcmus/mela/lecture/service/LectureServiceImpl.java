@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -110,19 +111,27 @@ public class LectureServiceImpl implements LectureService {
             List<LectureExerciseTotal> exerciseTotals,
             List<LectureExerciseTotal> passExerciseTotals
     ) {
-        List<LectureDetailDto> lecturDetaileDtos = new ArrayList<>();
-        lectures.forEach(lecture -> {
-            LectureDetailDto lectureDetailDto = LectureMapper.INSTANCE.lectureToLectureDetailDto((lecture));
-            LectureExerciseTotal lectureExerciseTotal = exerciseTotals.stream()
-                    .filter(e -> e.getLectureId().equals(lecture.getLectureId()))
-                    .findFirst().orElse(null);
-            lectureDetailDto.setTotalExercises(lectureExerciseTotal != null ? lectureExerciseTotal.getTotal() : 0);
-            LectureExerciseTotal lecturePassExerciseTotal = passExerciseTotals.stream()
-                    .filter(e -> e.getLectureId().equals(lecture.getLectureId()))
-                    .findFirst().orElse(null);
-            lectureDetailDto.setTotalPassExercises(lectureExerciseTotal != null ? lectureExerciseTotal.getTotal() : 0);
-            lecturDetaileDtos.add(lectureDetailDto);
-        });
-        return lecturDetaileDtos;
+        Map<UUID, Integer> exerciseTotalsMap = exerciseTotals.stream()
+                .collect(Collectors.toMap(LectureExerciseTotal::getLectureId, LectureExerciseTotal::getTotal));
+
+        Map<UUID, Integer> passExerciseTotalsMap = passExerciseTotals.stream()
+                .collect(Collectors.toMap(LectureExerciseTotal::getLectureId, LectureExerciseTotal::getTotal));
+
+        List<LectureDetailDto> lectureDetailDtos = new ArrayList<>();
+
+        for (Lecture lecture : lectures) {
+            LectureDetailDto lectureDetailDto = LectureMapper.INSTANCE.lectureToLectureDetailDto(lecture);
+
+            // Get total exercises from the map, default to 0 if not found
+            Integer totalExercises = exerciseTotalsMap.getOrDefault(lecture.getLectureId(), 0);
+            lectureDetailDto.setTotalExercises(totalExercises);
+
+            // Get total passed exercises from the map, default to 0 if not found
+            Integer totalPassExercises = passExerciseTotalsMap.getOrDefault(lecture.getLectureId(), 0);
+            lectureDetailDto.setTotalPassExercises(totalPassExercises);
+
+            lectureDetailDtos.add(lectureDetailDto);
+        }
+        return lectureDetailDtos;
     }
 }
