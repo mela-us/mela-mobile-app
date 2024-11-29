@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:mela/core/extensions/response_status.dart';
 import 'package:mela/domain/entity/lecture/lecture_list.dart';
 import 'package:mela/domain/entity/topic/topic_list.dart';
 import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
@@ -25,7 +26,11 @@ abstract class _TopicStore with Store {
   LectureStore _lectureStore = getIt<LectureStore>();
 
   @observable
-  String errorString = '';
+  String errorString = ''; //for dioException
+
+  @observable
+  bool isUnAuthorized =
+      false; //for call api failed with refresh token expired -> login again
 
   @computed
   bool get loading =>
@@ -49,19 +54,18 @@ abstract class _TopicStore with Store {
     fetchTopicsFuture = ObservableFuture(future);
 
     try {
-      print("Vao get topic in topic store");
-      final topicList = await future;
-      this.topicList = topicList;
+      //print("Vao get topic in topic store");
+      topicList = await future;
       //this.errorString = '';
     } catch (onError) {
       if (onError is DioException) {
-        this.errorString = DioExceptionUtil.handleError(onError);
+        errorString = DioExceptionUtil.handleError(onError);
       } else {
-        this.errorString = onError.toString();
+        errorString = onError.toString();
       }
-      print("-==================================Error: $errorString");
-      this.topicList = null;
-      print("-==================================TopicList null");
+      //print("-==================================Error: $errorString");
+      topicList = null;
+      //print("-==================================TopicList null");
     }
   }
 
@@ -71,15 +75,17 @@ abstract class _TopicStore with Store {
         _lectureStore.getLecturesAreLearningUsecase.call(params: null);
     fetchLecturesAreLearningFuture = ObservableFuture(future);
     try {
-      final lecturesAreLearningList = await future;
-      this.lecturesAreLearningList = lecturesAreLearningList;
+      lecturesAreLearningList = await future;
       //this.errorString = '';
     } catch (onError) {
-      this.lecturesAreLearningList = null;
       if (onError is DioException) {
-        this.errorString = DioExceptionUtil.handleError(onError);
+        errorString = DioExceptionUtil.handleError(onError);
+        lecturesAreLearningList = null;
       } else {
-        this.errorString = onError.toString();
+        lecturesAreLearningList = null;
+        if (onError == ResponseStatus.UNAUTHORIZED) {
+          isUnAuthorized = true;
+        }
       }
     }
   }

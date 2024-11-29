@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:mela/data/network/apis/lectures/lecture_api.dart';
 import 'package:mela/data/network/apis/login_signup/login_api.dart';
 import 'package:mela/data/network/apis/login_signup/refresh_access_token_api.dart';
 import 'package:mela/data/network/apis/login_signup/signup_api.dart';
@@ -62,15 +63,17 @@ class RepositoryModule {
       getIt<LoginApi>(),
       getIt<RefreshAccessTokenApi>(),
     ));
-    getIt.registerSingleton<UserSignUpRepository>(UserSignupRepositoryImpl(getIt<SignupApi>()));
+    getIt.registerSingleton<UserSignUpRepository>(
+        UserSignupRepositoryImpl(getIt<SignupApi>()));
 
     //Content Deli:-------------------------------------------------------------
 
-    getIt.registerSingleton<TopicRepository>(TopicRepositoryImpl(getIt<TopicApi>()));
-    getIt.registerSingleton<LectureRepository>(LectureRepositoryImpl());
+    getIt.registerSingleton<TopicRepository>(
+        TopicRepositoryImpl(getIt<TopicApi>()));
+    getIt.registerSingleton<LectureRepository>(
+        LectureRepositoryImpl(getIt<LectureApi>()));
     getIt.registerSingleton<ExerciseRepository>(ExerciseRepositoryImpl());
     getIt.registerSingleton<SearchRepository>(SearchRepositoryImpl());
-
 
     getIt.registerSingleton<StatRepository>(
         StatRepositoryImpl() as StatRepository);

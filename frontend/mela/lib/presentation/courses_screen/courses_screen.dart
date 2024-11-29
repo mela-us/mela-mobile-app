@@ -4,6 +4,7 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/route_observer.dart';
 import 'package:mela/core/widgets/progress_indicator_widget.dart';
 import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
+import 'package:mobx/mobx.dart';
 
 import '../../di/service_locator.dart';
 import '../../themes/default/colors_standards.dart';
@@ -19,15 +20,35 @@ class CoursesScreen extends StatefulWidget {
   State<CoursesScreen> createState() => _CoursesScreenState();
 }
 
-class _CoursesScreenState extends State<CoursesScreen> with RouteAware {
+class _CoursesScreenState extends State<CoursesScreen> {
   //stores:---------------------------------------------------------------------
   final TopicStore _topicStore = getIt<TopicStore>();
+  late final ReactionDisposer _unAuthorizedReactionDisposer;
+  @override
+  void initState() {
+    super.initState();
+    //routeObserver.subscribe(this, ModalRoute.of(context));
+
+    //for only refresh token expired
+    _unAuthorizedReactionDisposer = reaction(
+      (_) => _topicStore.isUnAuthorized,
+      (value) {
+        if (value) {
+          _topicStore.isUnAuthorized = false;
+          _topicStore.resetErrorString();
+          //Remove all routes in stack
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              Routes.loginOrSignupScreen, (route) => false);
+        }
+      },
+    );
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
     print("didChangeDependencies In CoursesScreen");
+    print("========TopicError: ${_topicStore.errorString}");
     // check to see if already called api
     if (!_topicStore.loading) {
       _topicStore.getTopics();
@@ -37,13 +58,14 @@ class _CoursesScreenState extends State<CoursesScreen> with RouteAware {
 
   @override
   void dispose() {
-    routeObserver.unsubscribe(this);
+    //routeObserver.unsubscribe(this);
+    _unAuthorizedReactionDisposer();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("^^^^^^^^^^^^^^^^^^ErrorString in Courses_Screen1: ${_topicStore.errorString}");
+    //print("^^^^^^^^^^^^^^^^^^ErrorString in Courses_Screen1: ${_topicStore.errorString}");
     return Scaffold(
       appBar: AppBar(
         title: Padding(
@@ -66,7 +88,7 @@ class _CoursesScreenState extends State<CoursesScreen> with RouteAware {
       ),
       body: Observer(
         builder: (context) {
-          print("^^^^^^^^^^^^^^^^^^ErrorString in Courses_Screen2: ${_topicStore.errorString}");
+          //print("^^^^^^^^^^^^^^^^^^ErrorString in Courses_Screen2: ${_topicStore.errorString}");
           if (_topicStore.loading) {
             return AbsorbPointer(
               absorbing: true,
@@ -82,14 +104,14 @@ class _CoursesScreenState extends State<CoursesScreen> with RouteAware {
               ),
             );
           }
-          print("^^^^^^^^^^^^^^^^^^ErrorString in Courses_Screen 3: ${_topicStore.errorString}");
+          //print("^^^^^^^^^^^^^^^^^^ErrorString in Courses_Screen 3: ${_topicStore.errorString}");
           if (_topicStore.errorString.isNotEmpty) {
             return Center(
               child: Text(_topicStore.errorString,
                   style: const TextStyle(color: Colors.red)),
             );
           }
-          print("build In CoursesScreen+++++++++++++++++++++++++++++++");
+          //print("build In CoursesScreen+++++++++++++++++++++++++++++++");
           return SingleChildScrollView(
             physics: const ClampingScrollPhysics(),
             child: Padding(

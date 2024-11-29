@@ -1,6 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:mela/domain/entity/lecture/lecture_list.dart';
+import 'package:mela/domain/entity/level/level_list.dart';
 import 'package:mela/domain/usecase/lecture/get_lectures_are_learning_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_lectures_usecase.dart';
+import 'package:mela/domain/usecase/lecture/get_levels_usecase.dart';
+import 'package:mela/utils/dio/dio_error_util.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../domain/entity/topic/topic.dart';
@@ -11,9 +15,11 @@ class LectureStore = _LectureStore with _$LectureStore;
 abstract class _LectureStore with Store {
   //usecase--------------
   GetLecturesUsecase _getLecturesUsecase;
-  GetLecturesAreLearningUsecase getLecturesAreLearningUsecase;//use in topicstore
-
-  _LectureStore(this._getLecturesUsecase, this.getLecturesAreLearningUsecase);
+  GetLecturesAreLearningUsecase
+      getLecturesAreLearningUsecase; //use in topicstore
+  GetLevelsUsecase _getLevelsUsecase;
+  _LectureStore(this._getLecturesUsecase, this.getLecturesAreLearningUsecase,
+      this._getLevelsUsecase);
 
 //obserbale
   @observable
@@ -23,17 +29,25 @@ abstract class _LectureStore with Store {
   String errorString = '';
 
   @observable
+  LevelList? levelList;
+
+  @observable
   LectureList?
       lectureList; //Lecture in Topic, not Lecture in Topic + level to improve performance
   //mean get All lecture after filter in getLectureListByLevelId
 
   @computed
   bool get isGetLecturesLoading =>
-      fetchLectureFuture.status == FutureStatus.pending;
+      fetchLectureFuture.status == FutureStatus.pending ||
+      fetchLevelsFuture.status == FutureStatus.pending;
 
   @observable
   ObservableFuture<LectureList?> fetchLectureFuture =
       ObservableFuture<LectureList?>(ObservableFuture.value(null));
+
+  @observable
+  ObservableFuture<LevelList?> fetchLevelsFuture =
+      ObservableFuture<LevelList?>(ObservableFuture.value(null));
 
   //action
   @action
@@ -41,47 +55,57 @@ abstract class _LectureStore with Store {
     final future = _getLecturesUsecase.call(params: currentTopic!.topicId);
     fetchLectureFuture = ObservableFuture(future);
     await future.then((value) {
-      this.lectureList = value;
-      this.errorString = '';
+      lectureList = value;
     }).catchError((onError) {
-      print(onError);
-      this.lectureList = null;
-      this.errorString = onError.toString();
+      if (onError is DioException) {
+        errorString = DioExceptionUtil.handleError(onError);
+      } else {
+        errorString = onError.toString();
+      }
+      lectureList = null;
+    });
+  }
+
+  @action
+  Future getLevels() async {
+    final future = _getLevelsUsecase.call(params: null);
+    fetchLevelsFuture = ObservableFuture(future);
+    await future.then((value) {
+      levelList = value;
+    }).catchError((onError) {
+      if (onError is DioException) {
+        errorString = DioExceptionUtil.handleError(onError);
+      } else {
+        errorString = onError.toString();
+      }
+      levelList = null;
     });
   }
 
   @action
   void setCurrentTopic(Topic mCurrentTopic) {
     // print("FlutterSa: Doi topic id trong setTopicId: $mtopicId");
-    this.currentTopic = mCurrentTopic;
+    currentTopic = mCurrentTopic;
   }
 
   //Do when press back button
-  // @action
-  // void resetTopicId() {
-  //   toppicId = -1;
-  // }
+  @action
+  void resetTopic() {
+    currentTopic = null;
+  }
 
   //getLectureListByLevelId
   LectureList lecturesByLevelId = LectureList(lectures: []);
-  LectureList getLectureListByLevelId(int levelId) {
+  LectureList getLectureListByLevelId(String levelId) {
     if (lectureList == null) {
-      // print("FlutterSa: LectureList is null trong getLevelId");
       return lecturesByLevelId;
     }
-    // print("FlutterSa: LectureList is Khong null trong getLevelId");
     lecturesByLevelId.lectures.clear();
     lecturesByLevelId.lectures = lectureList!.lectures
         .where((element) => element.levelId == levelId)
         .toList();
-    // print(
-    //     "*****LectureID trong getLecture by levelId sau khi da loc thanh cong****");
-    // lecturesByLevelId!.lectures.forEach((element) {
-    //   print("Lecture trong getLecture by levelId: ${element.lectureName}");
-    // });
     return lecturesByLevelId;
   }
-
 
   @action
   void resetErrorString() {

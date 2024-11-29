@@ -19,7 +19,7 @@ class AuthInterceptor extends Interceptor {
     if (token.isNotEmpty) {
       options.headers.putIfAbsent('Authorization', () => 'Bearer $token');
     }
-    print("Headers trong AuthInterceptor: ${options.headers}");
+    //print("Headers trong AuthInterceptor: ${options.headers}");
 
     //handler.next(options);
     super.onRequest(options, handler);

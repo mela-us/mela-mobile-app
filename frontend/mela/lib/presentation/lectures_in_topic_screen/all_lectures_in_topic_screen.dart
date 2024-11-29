@@ -16,23 +16,17 @@ class AllLecturesInTopicScreen extends StatefulWidget {
       _AllLecturesInTopicScreenState();
 }
 
-class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen>
-    with RouteAware {
+class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen> {
   final LectureStore _lectureStore = getIt<LectureStore>();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
+
     if (!_lectureStore.isGetLecturesLoading) {
+      _lectureStore.getLevels();
       _lectureStore.getListLectureByTopicIdAndLevelId();
     }
-  }
-
-  @override
-  void dispose() {
-    routeObserver.unsubscribe(this);
-    super.dispose();
   }
 
   @override
@@ -43,27 +37,19 @@ class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen>
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title: Observer(builder: (context) {
-            // print("Lecture TopicId");
-            // print(_lectureStore.toppicId);
-            return _lectureStore.errorString.isEmpty
-                ? Text(
-                    _lectureStore.currentTopic!.topicName,
-                    style: Theme.of(context)
-                        .textTheme
-                        .heading
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
-                  )
-                : SizedBox.shrink();
-          }),
+          title: Text(
+            _lectureStore.currentTopic!.topicName,
+            style: Theme.of(context)
+                .textTheme
+                .heading
+                .copyWith(color: Theme.of(context).colorScheme.primary),
+          ),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.black),
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () {
               Navigator.of(context).pop();
-              // print("FlutterSa<------: trc khi back ${_lectureStore.toppicId}");
-              // _lectureStore.resetTopicId();
+              //_lectureStore.resetTopic();
               _lectureStore.resetErrorString();
-              // print("FlutterSa<------: sau khi back ${_lectureStore.toppicId}");
             },
           ),
           actions: [
@@ -112,11 +98,18 @@ class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen>
                   ),
                 )
               : TabBarView(
-                  children: _lectureStore.errorString.isEmpty
+                  children: (_lectureStore.errorString.isEmpty &&
+                          _lectureStore.lectureList != null)
                       ? [
-                          LecturesInTopicAndLevel(levelId: 0),
-                          LecturesInTopicAndLevel(levelId: 1),
-                          LecturesInTopicAndLevel(levelId: 2),
+                          LecturesInTopicAndLevel(
+                              levelId: _lectureStore
+                                  .levelList!.levelList[0].levelId),
+                          LecturesInTopicAndLevel(
+                              levelId: _lectureStore
+                                  .levelList!.levelList[1].levelId),
+                          LecturesInTopicAndLevel(
+                              levelId: _lectureStore
+                                  .levelList!.levelList[2].levelId),
                         ]
                       : [
                           Center(

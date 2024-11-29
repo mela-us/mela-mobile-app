@@ -1,5 +1,4 @@
 import 'package:mela/domain/entity/user/token_model.dart';
-import 'package:mela/domain/entity/user/user.dart';
 
 import '../../../core/domain/usecase/use_case.dart';
 import '../../repository/user_login/user_login_repository.dart';

@@ -42,7 +42,8 @@ class DividedLectureListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String currentContentLectures = _exerciseStore.currentLecture!.lectureContent;
+    //String currentContentLectures = _exerciseStore.currentLecture!.lectureContent;
+    String currentContentLectures = "ACB";
     DividedLectureList dividedLectures = fromJson(currentContentLectures);
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),

@@ -172,9 +172,9 @@ class __FormContentState extends State<_FormContent> {
                     return 'Vui lòng nhập dữ liệu';
                   }
 
-                  if (value.length < 6) {
-                    return 'Mật khẩu ít nhất 6 kí tự';
-                  }
+                  // if (value.length < 6) {
+                  //   return 'Mật khẩu ít nhất 6 kí tự';
+                  // }
                   return null;
                 },
                 obscureText: !_userSignupStore.isPasswordVisible,

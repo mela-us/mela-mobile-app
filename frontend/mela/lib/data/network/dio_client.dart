@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:mela/core/data/network/dio/configs/dio_configs.dart';
+import 'package:mela/core/extensions/response_status.dart';
 
 class DioClient {
   // dio instance
@@ -20,6 +21,18 @@ class DioClient {
   Dio addInterceptors(Iterable<Interceptor> interceptors) {
     print("------------>DioClient: addInterceptors");
     return _dio..interceptors.addAll(interceptors);
+  }
+
+  //Until
+  ResponseStatus getResponseStatus(int? statusCode) {
+    if (statusCode == 401) {
+      return ResponseStatus.UNAUTHORIZED;
+    }
+    if (statusCode == 400) {
+      return ResponseStatus.BAD_REQUEST;
+    }
+    //....
+    return ResponseStatus.UNKNOWN;
   }
 
   // Get:-----------------------------------------------------------------------
@@ -48,11 +61,17 @@ class DioClient {
       // print("------------>DioClient: get luc sau");
       // print("Actual Request Headers: ${response.requestOptions.headers}");
       //print(response.data);
+
+      if (response.statusCode != 200) {
+        throw getResponseStatus(response.statusCode);
+      }
+      //200 OK
       return response.data;
     } catch (e) {
       print("------------>DioClient: error ");
       print(e.runtimeType);
-      throw e;
+      //cat error above or other exception dio eg timeout....
+      rethrow;
     }
   }
 
@@ -76,9 +95,17 @@ class DioClient {
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
+      //Only for register account
+      if (response.statusCode == 201) {
+        return response.data;
+      }
+      if (response.statusCode != 200) {
+        throw getResponseStatus(response.statusCode);
+      }
       return response.data;
     } catch (e) {
-      throw e;
+      //cat unauthorized above or other exception dio eg timeout....
+      rethrow;
     }
   }
 
@@ -102,9 +129,12 @@ class DioClient {
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
+      if (response.statusCode != 200) {
+        throw getResponseStatus(response.statusCode);
+      }
       return response.data;
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -126,9 +156,12 @@ class DioClient {
         options: options,
         cancelToken: cancelToken,
       );
+      if (response.statusCode != 200) {
+        throw getResponseStatus(response.statusCode);
+      }
       return response.data;
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 }

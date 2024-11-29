@@ -49,6 +49,22 @@ mixin _$LectureStore on _LectureStore, Store {
     });
   }
 
+  late final _$levelListAtom =
+      Atom(name: '_LectureStore.levelList', context: context);
+
+  @override
+  LevelList? get levelList {
+    _$levelListAtom.reportRead();
+    return super.levelList;
+  }
+
+  @override
+  set levelList(LevelList? value) {
+    _$levelListAtom.reportWrite(value, super.levelList, () {
+      super.levelList = value;
+    });
+  }
+
   late final _$lectureListAtom =
       Atom(name: '_LectureStore.lectureList', context: context);
 
@@ -81,6 +97,22 @@ mixin _$LectureStore on _LectureStore, Store {
     });
   }
 
+  late final _$fetchLevelsFutureAtom =
+      Atom(name: '_LectureStore.fetchLevelsFuture', context: context);
+
+  @override
+  ObservableFuture<LevelList?> get fetchLevelsFuture {
+    _$fetchLevelsFutureAtom.reportRead();
+    return super.fetchLevelsFuture;
+  }
+
+  @override
+  set fetchLevelsFuture(ObservableFuture<LevelList?> value) {
+    _$fetchLevelsFutureAtom.reportWrite(value, super.fetchLevelsFuture, () {
+      super.fetchLevelsFuture = value;
+    });
+  }
+
   late final _$getListLectureByTopicIdAndLevelIdAsyncAction = AsyncAction(
       '_LectureStore.getListLectureByTopicIdAndLevelId',
       context: context);
@@ -89,6 +121,14 @@ mixin _$LectureStore on _LectureStore, Store {
   Future<dynamic> getListLectureByTopicIdAndLevelId() {
     return _$getListLectureByTopicIdAndLevelIdAsyncAction
         .run(() => super.getListLectureByTopicIdAndLevelId());
+  }
+
+  late final _$getLevelsAsyncAction =
+      AsyncAction('_LectureStore.getLevels', context: context);
+
+  @override
+  Future<dynamic> getLevels() {
+    return _$getLevelsAsyncAction.run(() => super.getLevels());
   }
 
   late final _$_LectureStoreActionController =
@@ -100,6 +140,17 @@ mixin _$LectureStore on _LectureStore, Store {
         name: '_LectureStore.setCurrentTopic');
     try {
       return super.setCurrentTopic(mCurrentTopic);
+    } finally {
+      _$_LectureStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void resetTopic() {
+    final _$actionInfo = _$_LectureStoreActionController.startAction(
+        name: '_LectureStore.resetTopic');
+    try {
+      return super.resetTopic();
     } finally {
       _$_LectureStoreActionController.endAction(_$actionInfo);
     }
@@ -121,8 +172,10 @@ mixin _$LectureStore on _LectureStore, Store {
     return '''
 currentTopic: ${currentTopic},
 errorString: ${errorString},
+levelList: ${levelList},
 lectureList: ${lectureList},
 fetchLectureFuture: ${fetchLectureFuture},
+fetchLevelsFuture: ${fetchLevelsFuture},
 isGetLecturesLoading: ${isGetLecturesLoading}
     ''';
   }

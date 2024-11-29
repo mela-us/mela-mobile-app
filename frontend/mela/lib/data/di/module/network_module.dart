@@ -1,4 +1,3 @@
-
 import 'package:event_bus/event_bus.dart';
 import 'package:mela/data/network/apis/login_signup/login_api.dart';
 import 'package:mela/data/network/apis/login_signup/refresh_access_token_api.dart';
@@ -10,6 +9,7 @@ import '../../../core/data/network/dio/configs/dio_configs.dart';
 import '../../../core/data/network/dio/interceptors/auth_interceptor.dart';
 import '../../../core/data/network/dio/interceptors/logging_interceptor.dart';
 import '../../../di/service_locator.dart';
+import '../../network/apis/lectures/lecture_api.dart';
 import '../../network/apis/login_signup/signup_api.dart';
 import '../../network/apis/posts/post_api.dart';
 import '../../network/constants/endpoints_const.dart';
@@ -38,7 +38,7 @@ class NetworkModule {
       const DioConfigs(
         baseUrl: EndpointsConst.baseUrl,
         connectionTimeout: EndpointsConst.connectionTimeout,
-        receiveTimeout:EndpointsConst.receiveTimeout,
+        receiveTimeout: EndpointsConst.receiveTimeout,
       ),
     );
     getIt.registerSingleton<DioClient>(
@@ -56,7 +56,9 @@ class NetworkModule {
     getIt.registerSingleton(PostApi(getIt<DioClient>(), getIt<RestClient>()));
     getIt.registerSingleton<LoginApi>(LoginApi(getIt<DioClient>()));
     getIt.registerSingleton<SignupApi>(SignupApi(getIt<DioClient>()));
-    getIt.registerSingleton<RefreshAccessTokenApi>(RefreshAccessTokenApi(getIt<DioClient>()));
+    getIt.registerSingleton<RefreshAccessTokenApi>(
+        RefreshAccessTokenApi(getIt<DioClient>()));
     getIt.registerSingleton<TopicApi>(TopicApi(getIt<DioClient>()));
+    getIt.registerSingleton<LectureApi>(LectureApi(getIt<DioClient>()));
   }
 }

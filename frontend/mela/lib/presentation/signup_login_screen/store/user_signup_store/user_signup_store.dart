@@ -52,6 +52,7 @@ abstract class _UserSignupStore with Store {
         if (e == ResponseStatus.BAD_REQUEST) {
           throw "Email already exists";
         }
+        print("FlutterSa3: $e");
         throw "Something went wrong";
       }
     }

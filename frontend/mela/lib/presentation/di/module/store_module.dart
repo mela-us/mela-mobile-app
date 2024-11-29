@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:http/http.dart';
 import 'package:mela/core/stores/error/error_store.dart';
 import 'package:mela/core/stores/form/form_store.dart';
+import 'package:mela/domain/usecase/lecture/get_levels_usecase.dart';
 import 'package:mela/domain/usecase/post/get_post_usecase.dart';
 import 'package:mela/domain/usecase/question/get_questions_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_access_token_usecase.dart';
@@ -95,6 +96,7 @@ class StoreModule {
       LectureStore(
         getIt<GetLecturesUsecase>(),
         getIt<GetLecturesAreLearningUsecase>(),
+        getIt<GetLevelsUsecase>(),
       ),
     );
 

@@ -7,13 +7,9 @@ class TopicApi {
   final DioClient _dioClient;
   TopicApi(this._dioClient);
   Future<TopicList> getTopics() async {
-    try {
-      final responseData = await _dioClient.get(
-        EndpointsConst.getTopics,
-      );
-      return TopicList.fromJson(responseData['data']);
-    } catch (e) {
-      rethrow;
-    }
+    final responseData = await _dioClient.get(
+      EndpointsConst.getTopics,
+    );
+    return TopicList.fromJson(responseData['data']);
   }
 }

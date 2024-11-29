@@ -65,6 +65,22 @@ mixin _$TopicStore on _TopicStore, Store {
     });
   }
 
+  late final _$isUnAuthorizedAtom =
+      Atom(name: '_TopicStore.isUnAuthorized', context: context);
+
+  @override
+  bool get isUnAuthorized {
+    _$isUnAuthorizedAtom.reportRead();
+    return super.isUnAuthorized;
+  }
+
+  @override
+  set isUnAuthorized(bool value) {
+    _$isUnAuthorizedAtom.reportWrite(value, super.isUnAuthorized, () {
+      super.isUnAuthorized = value;
+    });
+  }
+
   late final _$fetchTopicsFutureAtom =
       Atom(name: '_TopicStore.fetchTopicsFuture', context: context);
 
@@ -135,6 +151,7 @@ mixin _$TopicStore on _TopicStore, Store {
 topicList: ${topicList},
 lecturesAreLearningList: ${lecturesAreLearningList},
 errorString: ${errorString},
+isUnAuthorized: ${isUnAuthorized},
 fetchTopicsFuture: ${fetchTopicsFuture},
 fetchLecturesAreLearningFuture: ${fetchLecturesAreLearningFuture},
 loading: ${loading}

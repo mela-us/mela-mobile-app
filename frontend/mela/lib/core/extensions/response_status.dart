@@ -3,5 +3,6 @@ enum ResponseStatus{
   SIMILAR,
   UNAUTHORIZED,
   ERROR,
-  BAD_REQUEST
+  BAD_REQUEST,
+  UNKNOWN
 }
