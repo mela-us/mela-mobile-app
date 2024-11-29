@@ -49,6 +49,22 @@ mixin _$LectureStore on _LectureStore, Store {
     });
   }
 
+  late final _$isUnAuthorizedAtom =
+      Atom(name: '_LectureStore.isUnAuthorized', context: context);
+
+  @override
+  bool get isUnAuthorized {
+    _$isUnAuthorizedAtom.reportRead();
+    return super.isUnAuthorized;
+  }
+
+  @override
+  set isUnAuthorized(bool value) {
+    _$isUnAuthorizedAtom.reportWrite(value, super.isUnAuthorized, () {
+      super.isUnAuthorized = value;
+    });
+  }
+
   late final _$levelListAtom =
       Atom(name: '_LectureStore.levelList', context: context);
 
@@ -172,6 +188,7 @@ mixin _$LectureStore on _LectureStore, Store {
     return '''
 currentTopic: ${currentTopic},
 errorString: ${errorString},
+isUnAuthorized: ${isUnAuthorized},
 levelList: ${levelList},
 lectureList: ${lectureList},
 fetchLectureFuture: ${fetchLectureFuture},

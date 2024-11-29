@@ -5,6 +5,7 @@ import 'package:mela/constants/route_observer.dart';
 import 'package:mela/core/widgets/progress_indicator_widget.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
+import 'package:mobx/mobx.dart';
 import '../../utils/routes/routes.dart';
 import 'widgets/lectures_in_topic_and_level.dart';
 
@@ -18,6 +19,32 @@ class AllLecturesInTopicScreen extends StatefulWidget {
 
 class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen> {
   final LectureStore _lectureStore = getIt<LectureStore>();
+  late final ReactionDisposer _unAuthorizedReactionDisposer;
+  @override
+  void initState() {
+    super.initState();
+    //routeObserver.subscribe(this, ModalRoute.of(context));
+
+    //for only refresh token expired
+    _unAuthorizedReactionDisposer = reaction(
+      (_) => _lectureStore.isUnAuthorized,
+      (value) {
+        if (value) {
+          _lectureStore.isUnAuthorized = false;
+          _lectureStore.resetErrorString();
+          //Remove all routes in stack
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              Routes.loginOrSignupScreen, (route) => false);
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _unAuthorizedReactionDisposer();
+  }
 
   @override
   void didChangeDependencies() {
