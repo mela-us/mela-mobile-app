@@ -4,14 +4,11 @@ import com.hcmus.mela.exercise.model.Question;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
+import java.util.UUID;
 
-public interface QuestionRepository extends MongoRepository<Question, Integer> {
+public interface QuestionRepository extends MongoRepository<Question, UUID> {
 
-    Question findByQuestionId(Integer questionId);
+    Question findByQuestionId(UUID questionId);
 
-    List<Question> findAllByExerciseId(Integer exerciseId);
-
-    boolean existsByQuestionId(Integer questionId);
-
-    boolean existsByExerciseId(Integer exerciseId);
+    Boolean existsByQuestionId(UUID questionId);
 }

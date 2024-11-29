@@ -5,15 +5,8 @@ import com.hcmus.mela.exercise.dto.response.QuestionResponse;
 import com.hcmus.mela.exercise.model.Question;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface QuestionService {
-    Question findByQuestionId(Integer questionId);
-
-    List<Question> findAllQuestionsInExercise(Integer exerciseId);
-
-    QuestionResponse getQuestion(QuestionRequest questionRequest);
-
-    QuestionResponse getAllQuestionsInExercise(QuestionRequest questionRequest);
-
-    Integer getNumberOfQuestionsInExercise(Integer exerciseId);
+    Question findByQuestionId(UUID questionId);
 }

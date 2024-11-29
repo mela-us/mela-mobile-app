@@ -1,15 +1,16 @@
 package com.hcmus.mela.exercise.model;
 
-
-import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
+
+import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
-@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,17 +18,17 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Exercise {
     @Id
     @Field(name = "_id")
-    private String id;
-
-    @Field(name = "exercise_id")
-    private Integer exerciseId;
+    private UUID exerciseId;
 
     @Field(name = "lecture_id")
-    private Integer lectureId;
+    private UUID lectureId;
 
-    @Field(name = "exercise_name")
+    @Field(name = "name")
     private String exerciseName;
 
-    @Field(name = "exercise_number")
-    private Integer exerciseNumber;
+    @Field(name = "ordinal_number")
+    private Integer ordinalNumber;
+
+    @Field(name = "questions")
+    private List<Question> questions;
 }

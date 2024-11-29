@@ -1,48 +1,39 @@
 package com.hcmus.mela.exercise.model;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
-@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "questions")
+@Document
 public class Question {
-    @Id
     @Field(name = "_id")
-    private String id;
+    private UUID questionId;
 
-    @Field(name = "question_id")
-    private Integer questionId;
+    @Field(name = "ordinal_number")
+    private Integer ordinalNumber;
 
-    @Field(name = "exercise_id")
-    private Integer exerciseId;
-
-    @Field(name = "question_number")
-    private Integer questionNumber;
+    @Field(name = "content")
+    private String content;
 
     @Field(name = "question_type")
-    private String questionType;
+    private QuestionType questionType;
 
-    @ElementCollection
-    @Field(name = "choices")
-    private List<String> choices;
+    @Field(name = "options")
+    private List<Option> options;
 
-    @ElementCollection
-    @Field(name = "question")
-    private List<String> question;
+    @Field(name = "blank_answer")
+    private String blankAnswer;
 
-    @ElementCollection
-    @Field(name = "answer")
-    private List<String> answer;
+    @Field(name = "guide")
+    private String guide;
 }
 
 

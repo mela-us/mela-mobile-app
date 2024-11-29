@@ -1,6 +1,8 @@
 package com.hcmus.mela.configuration;
 
 import com.hcmus.mela.utils.ProjectConstants;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.ConnectionString;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +15,10 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import org.springframework.lang.NonNull;
 
 @Configuration
-@EnableMongoRepositories(basePackages =
-        {
-                "com.hcmus.mela.exercise.repository",
-                "com.hcmus.mela.lecture.repository"
-        }
-    )
+@EnableMongoRepositories(basePackages = {
+        "com.hcmus.mela.exercise.repository",
+        "com.hcmus.mela.lecture.repository"
+})
 @RequiredArgsConstructor
 public class ContentDataSourceConfiguration extends AbstractMongoClientConfiguration {
 
@@ -35,7 +35,12 @@ public class ContentDataSourceConfiguration extends AbstractMongoClientConfigura
     @Override
     @NonNull
     public MongoClient mongoClient() {
-        return MongoClients.create(mongoUri);
+        MongoClientSettings settings = MongoClientSettings.builder()
+                .applyConnectionString(new ConnectionString(mongoUri))
+                .uuidRepresentation(org.bson.UuidRepresentation.STANDARD) // Explicitly set UUID representation
+                .build();
+
+        return MongoClients.create(settings);
     }
 
     @Bean

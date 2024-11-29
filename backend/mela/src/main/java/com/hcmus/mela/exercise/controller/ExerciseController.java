@@ -4,6 +4,7 @@ import com.hcmus.mela.exercise.dto.request.ExerciseRequest;
 import com.hcmus.mela.exercise.dto.response.ExerciseResponse;
 import com.hcmus.mela.auth.security.jwt.JwtTokenService;
 import com.hcmus.mela.auth.security.utils.SecurityConstants;
+import com.hcmus.mela.exercise.dto.response.QuestionResponse;
 import com.hcmus.mela.exercise.service.ExerciseService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
@@ -25,13 +26,13 @@ public class ExerciseController {
     @Operation(tags = "Exercise Service", description = "You can find a list of exercises belonging to a lecture from " +
             "the system by accessing the appropriate path.")
     public ResponseEntity<ExerciseResponse> getExerciseInLecture(
-            @PathVariable Integer lectureId,
+            @PathVariable String lectureId,
             @RequestHeader("Authorization") String authorizationHeader) {
         String token = authorizationHeader.replace(SecurityConstants.TOKEN_PREFIX, Strings.EMPTY);
 
         UUID userId = jwtTokenService.getUserIdFromToken(token);
 
-        ExerciseRequest exerciseRequest = new ExerciseRequest(null, lectureId, userId);
+        ExerciseRequest exerciseRequest = new ExerciseRequest(null, UUID.fromString(lectureId), userId);
 
         final ExerciseResponse exerciseResponse = exerciseService.getAllExercisesInLecture(exerciseRequest);
 
@@ -41,17 +42,17 @@ public class ExerciseController {
     @RequestMapping(value = "/exercises/{exerciseId}", method = RequestMethod.GET)
     @Operation(tags = "Exercise Service", description = "You can find a single exercise from the system by accessing the " +
             "appropriate path.")
-    public ResponseEntity<ExerciseResponse> getExercise(
-            @PathVariable Integer exerciseId,
+    public ResponseEntity<QuestionResponse> getExercise(
+            @PathVariable String exerciseId,
             @RequestHeader("Authorization") String authorizationHeader) {
 
         String token = jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader);
 
         UUID userId = jwtTokenService.getUserIdFromToken(token);
 
-        ExerciseRequest exerciseRequest = new ExerciseRequest(exerciseId, null, userId);
+        ExerciseRequest exerciseRequest = new ExerciseRequest(UUID.fromString(exerciseId), null, userId);
 
-        final ExerciseResponse exerciseResponse = exerciseService.getExercise(exerciseRequest);
+        final QuestionResponse exerciseResponse = exerciseService.getExercise(exerciseRequest);
 
         return ResponseEntity.ok(exerciseResponse);
     }

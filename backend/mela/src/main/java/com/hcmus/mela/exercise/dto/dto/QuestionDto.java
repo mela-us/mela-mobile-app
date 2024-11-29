@@ -1,11 +1,14 @@
 package com.hcmus.mela.exercise.dto.dto;
 
+import com.hcmus.mela.exercise.model.Option;
+import com.hcmus.mela.exercise.model.QuestionType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -13,17 +16,17 @@ import java.util.List;
 @AllArgsConstructor
 public class QuestionDto {
 
-    private Integer questionId;
+    private UUID questionId;
 
-    private Integer exerciseId;
+    private Integer ordinalNumber;
 
-    private Integer questionNumber;
+    private String content;
 
-    private String questionType;
+    private QuestionType questionType;
 
-    private List<String> choices;
+    private List<Option> options;
 
-    private List<String> question;
+    private String blankAnswer;
 
-    private List<String> answer;
+    private String guide;
 }

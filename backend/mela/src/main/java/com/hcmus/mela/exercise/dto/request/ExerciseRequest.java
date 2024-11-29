@@ -9,9 +9,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExerciseRequest {
-    private Integer exerciseId;
+    private UUID exerciseId;
 
-    private Integer lectureId;
+    private UUID lectureId;
 
     private UUID userId;
 }

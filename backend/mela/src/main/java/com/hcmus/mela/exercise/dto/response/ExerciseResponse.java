@@ -15,5 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 public class ExerciseResponse {
     private String message;
+    private Integer total;
     private List<ExerciseDto> exercises;
 }
