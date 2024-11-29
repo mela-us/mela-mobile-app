@@ -17,8 +17,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-            java-version: '17'
-            distribution: 'zulu'
+          java-version: "17"
+          distribution: "zulu"
 
       - name: Set up environment variables from GitHub Secrets
         run: |
@@ -35,15 +35,11 @@ jobs:
           echo "MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}" >> $GITHUB_ENV
           echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> $GITHUB_ENV
           echo "JWT_FORGET_PASSWORD_SECRET_KEY=${{ secrets.JWT_FORGET_PASSWORD_SECRET_KEY }}" >> $GITHUB_ENV
-        
-      - name: Navigate to the backend directory
-        run: cd backend/mela
 
-      - name: Build the Spring Boot application
-        run: mvn clean package -DskipTests
-
-      - name: Build Docker image
+      - name: Build the Spring Boot application and Docker image
         run: |
+          cd backend/mela
+          mvn clean package -DskipTests
           docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/mela-app-dev:${{ github.sha }} -t ${{ secrets.DOCKER_HUB_USERNAME }}/mela-app-dev:latest .
 
       - name: Log in to Docker Hub
@@ -63,11 +59,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-
       - name: Login to Azure using Service Principal
         run: |
           az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
-
 
       - name: Deploy to Azure Web App (Dev) using Docker
         uses: azure/webapps-deploy@v4
