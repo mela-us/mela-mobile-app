@@ -38,7 +38,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const PracticeAppBar(previousScreenRoute: Routes.result),
+        appBar: const PracticeAppBar(previousScreenRoute: null),
         body: _buildBody(),
         bottomNavigationBar: _buildQuestionList(),
     );
@@ -146,7 +146,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                     const SizedBox(height: 3.0),
 
                     Text(
-                      questions[_singleQuestionStore.currentIndex].content!,
+                      questions[_singleQuestionStore.currentIndex].content,
                       style: Theme.of(context).textTheme.questionStyle
                           .copyWith(color: Theme.of(context)
                           .colorScheme.inputTitleText),
@@ -211,7 +211,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     }
     //answer is incorrect
     else {
-      return _buildIncorrectFill(question.answer!, userAnswer);
+      return _buildIncorrectFill(question.blankAnswer, userAnswer);
     }
   }
 
@@ -267,17 +267,17 @@ class _ReviewScreenState extends State<ReviewScreen> {
     return Container(
       padding: Layout.practiceContainerPadding,
       child: ListView.builder(
-        itemCount: question.choiceList!.length,
+        itemCount: question.options.length,
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         itemBuilder: (context, index) {
           return  Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: _buildQuizTile(
-              question.choiceList![index],
+              question.options[index].content,
               index,
               userAnswer,
-              question.answer!,
+              question.correctQuizKey(),
             ),
           );
         },
@@ -362,10 +362,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
   }
 
   bool isQuizQuestion(Question question){
-    if (question.choiceList == null) {
-      return false;
-    }
-    if (question.choiceList!.isEmpty){
+    if (question.options.isEmpty){
       return false;
     }
     return true;
@@ -379,7 +376,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     return String.fromCharCode(index + 65);
   }
   bool isAnswerCorrect(Question question, String answer){
-    if (answer.toLowerCase() == question.answer!.toLowerCase()) return true;
+    if (question.isCorrect(answer)) return true;
     return false;
   }
   String convertNumberToLetter(int number){
@@ -388,7 +385,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
   AnswerStatus getStatus(Question q, String a){
     if (a.isEmpty) return AnswerStatus.noAnswer;
-    if (a == q.answer) return AnswerStatus.correct;
+    if (q.isCorrect(a)) return AnswerStatus.correct;
     return AnswerStatus.incorrect;
   }
 }

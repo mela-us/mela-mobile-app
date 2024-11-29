@@ -65,6 +65,22 @@ mixin _$QuestionStore on _QuestionStore, Store {
     });
   }
 
+  late final _$questionUidAtom =
+      Atom(name: '_QuestionStore.questionUid', context: context);
+
+  @override
+  String get questionUid {
+    _$questionUidAtom.reportRead();
+    return super.questionUid;
+  }
+
+  @override
+  set questionUid(String value) {
+    _$questionUidAtom.reportWrite(value, super.questionUid, () {
+      super.questionUid = value;
+    });
+  }
+
   late final _$isQuitAtom =
       Atom(name: '_QuestionStore.isQuit', context: context);
 
@@ -109,6 +125,7 @@ mixin _$QuestionStore on _QuestionStore, Store {
 fetchQuestionsFuture: ${fetchQuestionsFuture},
 questionList: ${questionList},
 success: ${success},
+questionUid: ${questionUid},
 isQuit: ${isQuit},
 loading: ${loading}
     ''';

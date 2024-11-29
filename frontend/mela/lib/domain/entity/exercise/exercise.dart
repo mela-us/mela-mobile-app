@@ -7,6 +7,7 @@ class Exercise {
     required this.exerciseName,
     required this.lectureId,
   });
+  get exerciseUid => exerciseId;
   get imageExercisePath => "assets/images/homework.png";
   get topicName => "Số học";
   get levelName => "Trung học";

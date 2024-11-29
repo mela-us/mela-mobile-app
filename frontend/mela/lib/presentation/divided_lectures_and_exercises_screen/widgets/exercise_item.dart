@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/presentation/question/store/question_store.dart';
 import 'package:mela/utils/routes/routes.dart';
 
+import '../../../di/service_locator.dart';
 import '../../../domain/entity/exercise/exercise.dart';
 
 class ExerciseItem extends StatelessWidget {
   final Exercise currentExercise;
+  final QuestionStore _questionStore = getIt<QuestionStore>();
 
-  ExerciseItem({
-    required this.currentExercise,
-  });
+  ExerciseItem({super.key, required this.currentExercise});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+
+        //TODO: Give this method a true parameter value:
+        // _questionStore.setQuestionsUid(currentExercise.exerciseId.toString());
+        _questionStore.setQuestionsUid("uuid-exercise-01");
+
         Navigator.pushNamed(context, Routes.question);
       },
       child: Container(

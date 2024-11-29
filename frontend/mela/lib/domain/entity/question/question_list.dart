@@ -1,21 +1,22 @@
-import 'package:mela/domain/entity/question/fill_question.dart';
-import 'package:mela/domain/entity/question/quiz_question.dart';
-
 import 'question.dart';
 
 class QuestionList{
+  final String message;
+  final int size;
   final List<Question>? questions;
 
   QuestionList({
-    this.questions,
+    required this.message,
+    required this.size,
+    required this.questions
   });
 
-  factory QuestionList.fromJson(List<dynamic> json) {
-    List<Question> questions = <Question>[];
-    questions = json.map((question) => Question.fromMap(question)).toList();
-
+  factory QuestionList.fromJson(Map<String, dynamic> json) {
     return QuestionList(
-      questions: questions,
+      message: json['message'],
+      size: json['total'],
+      questions: (json['questions'] as List<dynamic>).map(
+              (q) => Question.fromJson(q)).toList(),
     );
   }
 }

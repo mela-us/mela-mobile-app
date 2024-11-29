@@ -33,6 +33,9 @@ abstract class _QuestionStore with Store{
   bool success = false;
 
   @observable
+  String questionUid  = '';
+
+  @observable
   QuitOverlayResponse isQuit = QuitOverlayResponse.wait;
 
   @computed
@@ -41,7 +44,7 @@ abstract class _QuestionStore with Store{
   //action:---------------------------------------------------------------------
   @action
   Future getQuestions() async {
-    final future = _getQuestionsUseCase.call(params: null);
+    final future = _getQuestionsUseCase.call(params: questionUid);
     fetchQuestionsFuture = ObservableFuture(future);
 
     future.then((questions) {
@@ -55,5 +58,9 @@ abstract class _QuestionStore with Store{
   @action
   void setQuit(QuitOverlayResponse value){
     isQuit = value;
+  }
+
+  void setQuestionsUid(String uid){
+    questionUid = uid;
   }
 }

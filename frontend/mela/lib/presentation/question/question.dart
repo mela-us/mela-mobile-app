@@ -69,7 +69,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
           _singleQuestionStore.setQuizAnswerValue(userAnswer);
         }
         int choiceIndex = getIndexFromLetter(userAnswer);
-        String choiceValue = question.choiceList![choiceIndex];
+        String choiceValue = question.options[choiceIndex].content;
 
         _singleQuestionStore.setQuizAnswerValue(choiceValue);
       }
@@ -275,7 +275,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
                     const SizedBox(height: 3.0),
 
                     Text(
-                      getCurrentQuestion()!.content!,
+                      getCurrentQuestion()!.content,
                       style: Theme.of(context).textTheme.questionStyle
                           .copyWith(
                           color: Theme.of(context)
@@ -298,7 +298,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
           Container(
             padding: Layout.practiceContainerPadding,
             child: ListView.builder(
-              itemCount: getCurrentQuestion()!.choiceList!.length,
+              itemCount: getCurrentQuestion()!.options.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 return Observer(builder: (context) {
@@ -389,9 +389,10 @@ class _QuestionScreenState extends State<QuestionScreen> {
         title: Align(
           alignment: Alignment.centerLeft,
           child: Text(
-            getCurrentQuestion()!.choiceList == null ?
+            getCurrentQuestion()!.options.isEmpty ?
             'null' :
-            makeChoiceFromIndex(index)+getCurrentQuestion()!.choiceList![index],
+            makeChoiceFromIndex(index)+
+                getCurrentQuestion()!.options[index].content,
             style: Theme.of(context).textTheme.normal
                 .copyWith(color: Theme.of(context).colorScheme.inputText),
           ),
@@ -399,7 +400,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(Dimens.answerTileRadius),
         ),
-        value: getCurrentQuestion()!.choiceList![index],
+        value: getCurrentQuestion()!.options[index].content,
         groupValue: _singleQuestionStore.currentQuizAnswer,
         contentPadding: const EdgeInsets.fromLTRB(18, 0, 15, 12),
         controlAffinity: ListTileControlAffinity.trailing,
@@ -445,10 +446,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
   }
 
   bool isQuizQuestion(Question question){
-    if (question.choiceList == null) {
-      return false;
-    }
-    if (question.choiceList!.isEmpty){
+    if (question.options.isEmpty){
       return false;
     }
     return true;
@@ -478,9 +476,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
                  child: QuestionListOverlay(
                      isSubmitted: (bool submit) {
                        if (!submit) {
-                         Navigator.of(context).pop();
                          questionListOverlay.remove();
-
                        }
                        else {
                          questionListOverlay.remove();

@@ -226,7 +226,10 @@ class ResultScreen extends StatelessWidget {
     List<String> userAnswers = singleQuestionStore.userAnswers;
 
     for (int i= 0; i < questions.length; i ++){
-      if (questions[i].answer!.toLowerCase() == userAnswers[i].toLowerCase()){
+      if (userAnswers[i].isEmpty) {
+        print("Empty $i");
+      };
+      if (questions[i].isCorrect(userAnswers[i])){
         correct ++;
       }
     }

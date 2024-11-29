@@ -1,13 +1,13 @@
 
 import 'package:event_bus/event_bus.dart';
+import 'package:mela/data/network/apis/questions/questions_api.dart';
 
+import '../../../core/data/network/constants/network_constants.dart';
 import '../../../core/data/network/dio/configs/dio_configs.dart';
-import '../../../core/data/network/dio/dio_client.dart';
 import '../../../core/data/network/dio/interceptors/auth_interceptor.dart';
 import '../../../core/data/network/dio/interceptors/logging_interceptor.dart';
 import '../../../di/service_locator.dart';
-import '../../network/apis/posts/post_api.dart';
-import '../../network/constants/endpoints_const.dart';
+import '../../network/dio_client.dart';
 import '../../network/interceptors/error_interceptor.dart';
 import '../../network/rest_client.dart';
 import '../../sharedpref/shared_preference_helper.dart';
@@ -32,9 +32,9 @@ class NetworkModule {
     // dio:---------------------------------------------------------------------
     getIt.registerSingleton<DioConfigs>(
       const DioConfigs(
-        baseUrl: EndpointsConst.baseUrl,
-        connectionTimeout: EndpointsConst.connectionTimeout,
-        receiveTimeout:EndpointsConst.receiveTimeout,
+        baseUrl: NetworkConstants.baseUrl,
+        connectionTimeout: NetworkConstants.connectionTimeout,
+        receiveTimeout: NetworkConstants.receiveTimeout,
       ),
     );
     getIt.registerSingleton<DioClient>(
@@ -49,6 +49,6 @@ class NetworkModule {
     );
 
     // api's:-------------------------------------------------------------------
-    getIt.registerSingleton(PostApi(getIt<DioClient>(), getIt<RestClient>()));
+    getIt.registerSingleton(QuestionsApi(getIt<DioClient>()));
   }
 }

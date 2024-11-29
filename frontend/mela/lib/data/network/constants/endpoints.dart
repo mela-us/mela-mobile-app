@@ -1,15 +1,9 @@
 class Endpoints {
   Endpoints._();
 
-  // base url
-  static const String baseUrl = "http://jsonplaceholder.typicode.com";
+  //Note: Base Url in core
 
-  // receiveTimeout
-  static const int receiveTimeout = 15000;
+  //Endpoints:------------------------------------------------------------------
+  static const String getQuestions = "/api/exercises/"; // +:exerciseId
 
-  // connectTimeout
-  static const int connectionTimeout = 30000;
-
-  // booking endpoints
-  static const String getPosts = baseUrl + "/posts";
 }

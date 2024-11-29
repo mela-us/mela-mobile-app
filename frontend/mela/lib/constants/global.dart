@@ -47,63 +47,63 @@ class Global {
   }
 
   //Questions:------------------------------------------------------------------
-  static List<Question> questions = [
-    Question(
-      id: 'QQ01',
-      content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-      answer: 'true',
-      imageUrl: null,
-      choiceList: [],
-    ),
+  // static List<Question> questions = [
+  //   Question(
+  //     id: 'QQ01',
+  //     content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
+  //     answer: 'true',
+  //     imageUrl: null,
+  //     choiceList: [],
+  //   ),
+  //
+  //   Question(
+  //       choiceList: ['12', '14', '16', '18'],
+  //       id: 'QQ02',
+  //       content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
+  //       answer: 'B',
+  //       imageUrl: null
+  //   ),
+  //
+  //   Question(
+  //     choiceList: ['12', '14', '16', '18'],
+  //     id: 'QQ02',
+  //     content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
+  //     answer: 'B',
+  //     imageUrl: null,
+  //   ),
+  //   Question(
+  //       choiceList: ['12', '14', '16', '18'],
+  //       id: 'QQ02',
+  //       content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
+  //       answer: 'B',
+  //       imageUrl: null
+  //   ),
+  //   Question(
+  //       id: 'QQ01',
+  //       content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
+  //       answer: 'true',
+  //       imageUrl: null
+  //   ),
+  // ];
 
-    Question(
-        choiceList: ['12', '14', '16', '18'],
-        id: 'QQ02',
-        content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'B',
-        imageUrl: null
-    ),
-
-    Question(
-      choiceList: ['12', '14', '16', '18'],
-      id: 'QQ02',
-      content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-      answer: 'B',
-      imageUrl: null,
-    ),
-    Question(
-        choiceList: ['12', '14', '16', '18'],
-        id: 'QQ02',
-        content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'B',
-        imageUrl: null
-    ),
-    Question(
-        id: 'QQ01',
-        content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null
-    ),
-  ];
-
-
-  static List<Question> questionsSub = [
-    Question(
-        id: 'QQ01',
-        content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'true',
-        imageUrl: null
-    ),
-
-    Question(
-        choiceList: ['12', '14', '16', '18'],
-        id: 'QQ02',
-        content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
-        answer: 'B',
-        imageUrl: null
-    ),
-
-  ];
+  //
+  // static List<Question> questionsSub = [
+  //   Question(
+  //       id: 'QQ01',
+  //       content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
+  //       answer: 'true',
+  //       imageUrl: null
+  //   ),
+  //
+  //   Question(
+  //       choiceList: ['12', '14', '16', '18'],
+  //       id: 'QQ02',
+  //       content: 'Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu? Trong một buổi tiệc, có 12 người tham gia. Mỗi người đều bắt tay với mỗi người còn lại một lần. Hỏi tổng số lần bắt tay diễn ra là bao nhiêu?',
+  //       answer: 'B',
+  //       imageUrl: null
+  //   ),
+  //
+  // ];
 
   //Topic:----------------------------------------------------------------------
   static List<Lecture> getLecturesIsLearning() {
