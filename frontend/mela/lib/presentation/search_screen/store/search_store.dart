@@ -70,38 +70,19 @@ abstract class _SearchStore with Store {
 
     try {
       final value = await future;
-      this.lecturesAfterSearching = value;
-      this.errorString = '';
-
-      // Kiểm tra null trước khi sử dụng toán tử '!'
-      // print(
-      //     "----->length of lecturesAfterSearching: ${lecturesAfterSearching!.lectures.length}");
-
+      lecturesAfterSearching = value;
       updateLectureAfterSeachingAndFiltering(value);
-
-      // Debug
-      // print("*****Lecture trong getLecture by levelId****");
-      // _lectureStore.lectureList?.lectures.forEach((element) {
-      //   print("Lecture trong getLecture by levelId: ${element.lectureName}");
-      // });
     } catch (onError) {
-      this.lecturesAfterSearching = null;
+      lecturesAfterSearching = null;
       updateLectureAfterSeachingAndFiltering(null);
       print(onError);
-      this.errorString = onError.toString();
+      errorString = onError.toString();
     }
   }
 
   @action
   void updateLectureAfterSeachingAndFiltering(LectureList? value) {
-    // print("Chieu dai cua  list luc truoc: ");
-    // if (lecturesAfterSearchingAndFiltering != null) {
-    //   print(lecturesAfterSearchingAndFiltering!.lectures.length);
-    // }
-
     lecturesAfterSearchingAndFiltering = value;
-    // print("Chieu dai cua  list luc sau: ");
-    // print(lecturesAfterSearchingAndFiltering!.lectures.length);
   }
 
   @action

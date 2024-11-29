@@ -30,7 +30,6 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
-
   void handleHistoryItemClick(String searchText) {
     // Update the search bar text
     // print("searchBarKey.currentState is not null");
@@ -58,7 +57,7 @@ class _SearchScreenState extends State<SearchScreen> {
               await _searchStore.getHistorySearchList();
               return;
             }
-            //if not issearched, pop the screen
+            //if not isSearched, pop the screen
             Navigator.of(context).pop();
             _searchStore.resetIsSearched();
             _searchStore.setIsFiltered(false);
@@ -85,9 +84,10 @@ class _SearchScreenState extends State<SearchScreen> {
               );
             }
             if (_searchStore.isLoadingSearch) {
-              return Container();
+              return const SizedBox.shrink();
             }
-            if (_searchStore.errorString.isEmpty) {
+            if (_searchStore.errorString.isEmpty &&
+                _searchStore.lecturesAfterSearchingAndFiltering != null) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
@@ -105,7 +105,12 @@ class _SearchScreenState extends State<SearchScreen> {
               );
             }
             //if error
-            return Container();
+            return Center(
+              child: Text(
+                _searchStore.errorString,
+                style: const TextStyle(color: Colors.red),
+              ),
+            );
           }),
 
           //List history search or list lectures after searching
@@ -171,7 +176,7 @@ class _SearchScreenState extends State<SearchScreen> {
               if (_searchStore.isLoadingSearch) {
                 return const Center(child: CustomProgressIndicatorWidget());
               }
-              if (_searchStore.errorString.isNotEmpty) {
+              if (_searchStore.errorString.isNotEmpty || _searchStore.lecturesAfterSearchingAndFiltering == null) {
                 return Center(
                   child: Text(
                     _searchStore.errorString,
@@ -179,11 +184,8 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                 );
               }
-
               ///List lectures after searching
-              return _searchStore.isLoadingSearch
-                  ? const Center(child: CustomProgressIndicatorWidget())
-                  : ListView.builder(
+              return ListView.builder(
                       itemCount: _searchStore
                           .lecturesAfterSearchingAndFiltering!.lectures.length,
                       itemBuilder: (context, index) {

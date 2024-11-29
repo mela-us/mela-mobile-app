@@ -63,15 +63,15 @@ class _FilterScreenState extends State<FilterScreen> {
         _filterStore.isHighSchoolSelected) {
       if (!_filterStore.isPrimarySelected) {
         filteredLectures.lectures
-            .removeWhere((lecture) => lecture.levelId == 0);
+            .removeWhere((lecture) => lecture.levelId == "0");
       }
       if (!_filterStore.isSecondarySelected) {
         filteredLectures.lectures
-            .removeWhere((lecture) => lecture.levelId == 1);
+            .removeWhere((lecture) => lecture.levelId == "1");
       }
       if (!_filterStore.isHighSchoolSelected) {
         filteredLectures.lectures
-            .removeWhere((lecture) => lecture.levelId == 2);
+            .removeWhere((lecture) => lecture.levelId == "2");
       }
     }
 
@@ -84,11 +84,11 @@ class _FilterScreenState extends State<FilterScreen> {
       }
       if (!_filterStore.isInProgressSelected) {
         filteredLectures.lectures.removeWhere(
-            (lecture) => lecture.progress > 0 && lecture.progress < 100);
+            (lecture) => lecture.progress > 0.0 && lecture.progress < 1);
       }
       if (!_filterStore.isCompletedSelected) {
         filteredLectures.lectures
-            .removeWhere((lecture) => lecture.progress == 100);
+            .removeWhere((lecture) => lecture.progress == 1);
       }
     }
     _searchStore.updateLectureAfterSeachingAndFiltering(filteredLectures);
@@ -99,11 +99,12 @@ class _FilterScreenState extends State<FilterScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              if (!_filterStore.isFilterButtonPressed) {
-                _filterStore.resetFilter();
-              }
+              //if the filter button ("Button Áp dụng") is not pressed, reset the filter
+              // if (!_filterStore.isFilterButtonPressed) {
+              //   _filterStore.resetFilter();
+              // }
               Navigator.pop(context);
             }),
         title: Text("Lọc",
