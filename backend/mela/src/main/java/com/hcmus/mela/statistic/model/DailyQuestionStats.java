@@ -21,7 +21,7 @@ public class DailyQuestionStats {
     @Field("total_answers")
     private Integer totalAnswers;
 
-    private LocalDate date;
+    private String date;
 
     @Field("topic_id")
     private UUID topicId;

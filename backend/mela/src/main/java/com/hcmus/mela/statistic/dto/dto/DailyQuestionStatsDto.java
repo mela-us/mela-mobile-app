@@ -17,5 +17,5 @@ public class DailyQuestionStatsDto {
 
     private Integer totalAnswers;
 
-    private LocalDate date;
+    private String date;
 }

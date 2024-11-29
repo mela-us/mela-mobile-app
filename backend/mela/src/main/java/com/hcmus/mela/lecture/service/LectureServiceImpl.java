@@ -18,10 +18,7 @@ import com.hcmus.mela.utils.GeneralMessageAccessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -147,10 +144,11 @@ public class LectureServiceImpl implements LectureService {
         Lecture lecture = lectureRepository.findLectureSectionsByLecture(lectureId);
 
         LectureInfoDto lectureInfo = LectureMapper.INSTANCE.lectureToLectureInfoDto(lecture);
-        List<LectureSectionDto> lectureSectionDtos = new ArrayList<LectureSectionDto>();
-        lecture.getSections().stream().forEach(section -> {
+        List<LectureSectionDto> lectureSectionDtos = new ArrayList<>();
+        lecture.getSections().forEach(section -> {
             lectureSectionDtos.add(LectureSectionMapper.INSTANCE.lectureSectionToLectureSectionDto(section));
         });
+        lectureSectionDtos.sort(Comparator.comparingInt(LectureSectionDto::getOrdinalNumber));
 
         return new GetLectureSectionsResponse(
                 generalMessageAccessor.getMessage(null, "get_sections_success"),

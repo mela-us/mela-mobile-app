@@ -47,18 +47,28 @@ public class StatisticRepositoryImpl implements StatisticRepository {
     @Override
     public List<DailyQuestionStats> getDailyQuestionStatsLast7Days(UUID userId) {
         LocalDate currentDate = LocalDate.now();
-        LocalDate date7DaysAgo = currentDate.minusDays(7);
+        LocalDate date6DaysAgo = currentDate.minusDays(6);
 
         Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.match(Criteria.where("user_id").is(userId)),
                 Aggregation.match(Criteria.where("end_at")
-                        .gt(date7DaysAgo)
+                        .gte(date6DaysAgo)
                         .lte(currentDate)),
-                Aggregation.project("end_at")
-                        .andExpression("dateToString({'format': '%Y-%m-%d', 'date': '$end_at'})")
-                        .as("date")
+                Aggregation.project()
+                        .and("end_at").dateAsFormattedString("%Y-%m-%d").as("date")
                         .and("topic_id").as("topic_id")
                         .and("level_id").as("level_id")
+                        .and("total_correct_answers").as("total_correct_answers")
+                        .and("total_answers").as("total_answers"),
+                Aggregation.group("topic_id", "level_id", "date")
+                        .sum("total_correct_answers").as("total_correct_answers")
+                        .sum("total_answers").as("total_answers"),
+                Aggregation.project()
+                        .and("_id.topic_id").as("topic_id")
+                        .and("_id.level_id").as("level_id")
+                        .and("_id.date").as("date")
+                        .and("total_correct_answers").as("total_correct_answers")
+                        .and("total_answers").as("total_answers")
         );
         AggregationResults<DailyQuestionStats> result = mongoTemplate.aggregate(
                 aggregation,
