@@ -37,7 +37,7 @@ jobs:
           echo "JWT_FORGET_PASSWORD_SECRET_KEY=${{ secrets.JWT_FORGET_PASSWORD_SECRET_KEY }}" >> $GITHUB_ENV
 
       - name: Build the Spring Boot application
-        run: mnv clean package -DskipTests
+        run: mvn clean package -DskipTests
 
       - name: Build Docker image
         run: |
