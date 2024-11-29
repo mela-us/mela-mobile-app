@@ -1,17 +1,23 @@
 package com.hcmus.mela.lecture.dto.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TopicDto {
+
     private UUID topicId;
+
     private String name;
+
     private String description;
+
     private String imageUrl;
 }

@@ -1,7 +1,5 @@
 package com.hcmus.mela.lecture.controller;
 
-import com.hcmus.mela.lecture.dto.dto.LectureDetailDto;
-import com.hcmus.mela.lecture.dto.dto.LectureSectionDto;
 import com.hcmus.mela.lecture.dto.response.GetLectureSectionsResponse;
 import com.hcmus.mela.lecture.dto.response.GetLecturesResponse;
 import com.hcmus.mela.lecture.service.LectureServiceImpl;
@@ -10,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController

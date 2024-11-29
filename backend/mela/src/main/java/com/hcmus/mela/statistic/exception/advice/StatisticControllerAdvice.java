@@ -12,11 +12,14 @@ import java.time.LocalDateTime;
 
 @RestControllerAdvice(basePackageClasses = StatisticController.class)
 public class StatisticControllerAdvice {
+
     @ExceptionHandler(StatisticException.class)
     ResponseEntity<ApiExceptionResponse> handleMathContentException(StatisticException exception) {
-
-        final ApiExceptionResponse response = new ApiExceptionResponse(exception.getErrorMessage(), HttpStatus.BAD_REQUEST, LocalDateTime.now());
-
+        final ApiExceptionResponse response = new ApiExceptionResponse(
+                exception.getErrorMessage(),
+                HttpStatus.BAD_REQUEST,
+                LocalDateTime.now()
+        );
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 }

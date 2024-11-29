@@ -13,7 +13,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetStatisticsResponse {
+
     private String message;
+
     private List<QuestionStatsDto> data;
 }
 

@@ -6,5 +6,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class MathContentException extends RuntimeException {
+    
     private final String errorMessage;
 }

@@ -12,9 +12,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class QuestionStatsDto {
+
     private TopicDto topic;
+
     private LevelDto level;
+
     private Integer totalCorrectAnswers;
+
     private Integer totalAnswers;
+
     private List<DailyQuestionStatsDto> last7Days;
 }

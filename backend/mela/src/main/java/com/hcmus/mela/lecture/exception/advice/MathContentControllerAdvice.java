@@ -18,10 +18,15 @@ import java.time.LocalDateTime;
         LectureController.class
 })
 public class MathContentControllerAdvice {
+
     @ExceptionHandler(MathContentException.class)
     ResponseEntity<ApiExceptionResponse> handleMathContentException(MathContentException exception) {
 
-        final ApiExceptionResponse response = new ApiExceptionResponse(exception.getErrorMessage(), HttpStatus.BAD_REQUEST, LocalDateTime.now());
+        final ApiExceptionResponse response = new ApiExceptionResponse(
+                exception.getErrorMessage(),
+                HttpStatus.BAD_REQUEST,
+                LocalDateTime.now()
+        );
 
         return ResponseEntity.status(response.getStatus()).body(response);
     }

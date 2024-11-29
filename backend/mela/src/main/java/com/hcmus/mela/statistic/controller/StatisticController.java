@@ -1,7 +1,5 @@
 package com.hcmus.mela.statistic.controller;
 
-import com.hcmus.mela.lecture.dto.response.GetLevelsResponse;
-import com.hcmus.mela.lecture.service.LevelServiceImpl;
 import com.hcmus.mela.statistic.dto.response.GetStatisticsResponse;
 import com.hcmus.mela.statistic.service.StatisticServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,5 +24,4 @@ public class StatisticController {
     ) {
         return ResponseEntity.ok(statisticService.getStatisticByUserId(authorizationHeader));
     }
-
 }

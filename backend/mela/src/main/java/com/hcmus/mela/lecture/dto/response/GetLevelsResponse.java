@@ -1,7 +1,6 @@
 package com.hcmus.mela.lecture.dto.response;
 
 import com.hcmus.mela.lecture.dto.dto.LevelDto;
-import com.hcmus.mela.lecture.dto.dto.TopicDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +13,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetLevelsResponse {
+
     private String message;
+
     private Integer total;
+    
     private List<LevelDto> data;
 }

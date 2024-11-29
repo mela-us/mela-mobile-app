@@ -12,7 +12,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DailyQuestionStatsDto {
+
     private Integer totalCorrectAnswers;
+
     private Integer totalAnswers;
+
     private LocalDate date;
 }

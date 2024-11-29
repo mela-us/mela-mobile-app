@@ -13,7 +13,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetTopicsResponse {
+    
     private String message;
+
     private Integer total;
+
     private List<TopicDto> data;
 }

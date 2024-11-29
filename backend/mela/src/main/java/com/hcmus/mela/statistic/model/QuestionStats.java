@@ -1,15 +1,15 @@
 package com.hcmus.mela.statistic.model;
 
-import com.hcmus.mela.statistic.dto.dto.LevelDto;
-import com.hcmus.mela.statistic.dto.dto.TopicDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Document(collection = "exercise_results")
 public class QuestionStats {
 
     private Topic topic;

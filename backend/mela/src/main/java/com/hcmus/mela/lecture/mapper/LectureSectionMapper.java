@@ -8,6 +8,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface LectureSectionMapper {
+
     LectureSectionMapper INSTANCE = Mappers.getMapper(LectureSectionMapper.class);
 
     LectureSectionDto lectureSectionToLectureSectionDto(LectureSection lectureSection);

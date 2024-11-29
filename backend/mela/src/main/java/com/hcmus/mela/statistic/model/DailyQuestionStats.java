@@ -12,8 +12,9 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "lecture_content")
+@Document(collection = "exercise_results")
 public class DailyQuestionStats {
+
     @Field("total_correct_answers")
     private Integer totalCorrectAnswers;
 

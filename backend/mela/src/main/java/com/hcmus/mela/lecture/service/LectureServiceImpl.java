@@ -39,13 +39,19 @@ public class LectureServiceImpl implements LectureService {
 
     @Override
     public GetLecturesResponse getLecturesByTopic(String authorizationHeader, UUID topicId) {
-        UUID userId = jwtTokenService.getUserIdFromToken(jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader));
+        UUID userId = jwtTokenService.getUserIdFromToken(
+                jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader)
+        );
 
         List<Lecture> lectures = lectureRepository.findLecturesByTopic(topicId);
         List<LectureExerciseTotal> exerciseTotals = exerciseCountRepository.countTotalExerciseOfLectures();
         List<LectureExerciseTotal> passExerciseTotals = exerciseCountRepository.countTotalPassExerciseOfLectures(userId);
 
-        List<LectureDetailDto> lectureDetailDtos = convertLecturesToLectureDetailDtos(lectures, exerciseTotals, passExerciseTotals);
+        List<LectureDetailDto> lectureDetailDtos = convertLecturesToLectureDetailDtos(
+                lectures,
+                exerciseTotals,
+                passExerciseTotals
+        );
 
         return new GetLecturesResponse(
                 generalMessageAccessor.getMessage(null, "get_lectures_success"),
@@ -56,13 +62,19 @@ public class LectureServiceImpl implements LectureService {
 
     @Override
     public GetLecturesResponse getLecturesByKeyword(String authorizationHeader, String keyword) {
-        UUID userId = jwtTokenService.getUserIdFromToken(jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader));
+        UUID userId = jwtTokenService.getUserIdFromToken(
+                jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader)
+        );
 
         List<Lecture> lectures = lectureRepository.findLecturesByKeyword(keyword);
         List<LectureExerciseTotal> exerciseTotals = exerciseCountRepository.countTotalExerciseOfLectures();
         List<LectureExerciseTotal> passExerciseTotals = exerciseCountRepository.countTotalPassExerciseOfLectures(userId);
 
-        List<LectureDetailDto> lectureDetailDtos = convertLecturesToLectureDetailDtos(lectures, exerciseTotals, passExerciseTotals);
+        List<LectureDetailDto> lectureDetailDtos = convertLecturesToLectureDetailDtos(
+                lectures,
+                exerciseTotals,
+                passExerciseTotals
+        );
 
         return new GetLecturesResponse(
                 generalMessageAccessor.getMessage(null, "search_lectures_success"),
@@ -73,13 +85,19 @@ public class LectureServiceImpl implements LectureService {
 
     @Override
     public GetLecturesResponse getLecturesByRecent(String authorizationHeader, Integer size) {
-        UUID userId = jwtTokenService.getUserIdFromToken(jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader));
+        UUID userId = jwtTokenService.getUserIdFromToken(
+                jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader)
+        );
 
         List<Lecture> lectures = lectureRepository.findLectureByRecent(size);
         List<LectureExerciseTotal> exerciseTotals = exerciseCountRepository.countTotalExerciseOfLectures();
         List<LectureExerciseTotal> passExerciseTotals = exerciseCountRepository.countTotalPassExerciseOfLectures(userId);
 
-        List<LectureDetailDto> lectureDetailDtos = convertLecturesToLectureDetailDtos(lectures, exerciseTotals, passExerciseTotals);
+        List<LectureDetailDto> lectureDetailDtos = convertLecturesToLectureDetailDtos(
+                lectures,
+                exerciseTotals,
+                passExerciseTotals
+        );
 
         return new GetLecturesResponse(
                 generalMessageAccessor.getMessage(null, "get_recent_lectures_success"),
@@ -122,11 +140,9 @@ public class LectureServiceImpl implements LectureService {
         for (Lecture lecture : lectures) {
             LectureDetailDto lectureDetailDto = LectureMapper.INSTANCE.lectureToLectureDetailDto(lecture);
 
-            // Get total exercises from the map, default to 0 if not found
             Integer totalExercises = exerciseTotalsMap.getOrDefault(lecture.getLectureId(), 0);
             lectureDetailDto.setTotalExercises(totalExercises);
 
-            // Get total passed exercises from the map, default to 0 if not found
             Integer totalPassExercises = passExerciseTotalsMap.getOrDefault(lecture.getLectureId(), 0);
             lectureDetailDto.setTotalPassExercises(totalPassExercises);
 

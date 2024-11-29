@@ -17,7 +17,7 @@ import org.springframework.lang.NonNull;
         {
                 "com.hcmus.mela.exercise.repository",
                 "com.hcmus.mela.lecture.repository",
-                "com.hcmus.mela.statistic"
+                "com.hcmus.mela.statistic.repository"
         }
     )
 @RequiredArgsConstructor

@@ -12,8 +12,12 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LectureInfoDto {
+    
     private UUID lectureId;
+
     private UUID topicId;
+
     private UUID levelId;
+
     private String name;
 }

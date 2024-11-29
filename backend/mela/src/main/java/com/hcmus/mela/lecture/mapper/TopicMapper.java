@@ -8,6 +8,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface TopicMapper {
+
     TopicMapper INSTANCE = Mappers.getMapper(TopicMapper.class);
 
     TopicDto topicToTopicDto(Topic topic);

@@ -13,7 +13,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetLecturesResponse {
+
     private String message;
+
     private Integer total;
+
     private List<LectureDetailDto> data;
 }

@@ -1,17 +1,6 @@
 package com.hcmus.mela.statistic.service;
 
 import com.hcmus.mela.auth.security.jwt.JwtTokenService;
-import com.hcmus.mela.lecture.dto.dto.LectureDetailDto;
-import com.hcmus.mela.lecture.dto.dto.LectureInfoDto;
-import com.hcmus.mela.lecture.dto.dto.LectureSectionDto;
-import com.hcmus.mela.lecture.dto.response.GetLectureSectionsResponse;
-import com.hcmus.mela.lecture.dto.response.GetLecturesResponse;
-import com.hcmus.mela.lecture.mapper.LectureMapper;
-import com.hcmus.mela.lecture.mapper.LectureSectionMapper;
-import com.hcmus.mela.lecture.model.Lecture;
-import com.hcmus.mela.lecture.model.LectureExerciseTotal;
-import com.hcmus.mela.lecture.repository.ExerciseCountRepositoryImpl;
-import com.hcmus.mela.lecture.repository.LectureRepositoryImpl;
 import com.hcmus.mela.statistic.dto.dto.DailyQuestionStatsDto;
 import com.hcmus.mela.statistic.dto.dto.QuestionStatsDto;
 import com.hcmus.mela.statistic.dto.response.GetStatisticsResponse;
@@ -27,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -45,7 +33,9 @@ public class StatisticServiceImpl implements StatisticService {
 
     @Override
     public GetStatisticsResponse getStatisticByUserId(String authorizationHeader) {
-        UUID userId = jwtTokenService.getUserIdFromToken(jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader));
+        UUID userId = jwtTokenService.getUserIdFromToken(
+                jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader)
+        );
 
         List<QuestionStats> questionStatsList = statisticRepository.getQuestionStats(userId);
         List<DailyQuestionStats> dailyQuestionStatsList = statisticRepository.getDailyQuestionStatsLast7Days(userId);
@@ -57,7 +47,7 @@ public class StatisticServiceImpl implements StatisticService {
             List<DailyQuestionStatsDto> dailyQuestionStatsDtos = dailyQuestionStatsList.stream()
                     .filter(dailyStats ->
                             dailyStats.getTopicId().equals(stats.getTopic().getTopicId())
-                            && dailyStats.getLevelId().equals(stats.getLevel().getLevelId())
+                                    && dailyStats.getLevelId().equals(stats.getLevel().getLevelId())
                     )
                     .map(DailyQuestionStatsMapper.INSTANCE::dailyQuestionStatsToDailyQuestionStatsDto)
                     .collect(Collectors.toList());

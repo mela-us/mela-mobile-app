@@ -1,6 +1,5 @@
 package com.hcmus.mela.lecture.controller;
 
-import com.hcmus.mela.lecture.dto.dto.LevelDto;
 import com.hcmus.mela.lecture.dto.response.GetLevelsResponse;
 import com.hcmus.mela.lecture.service.LevelServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,5 +22,4 @@ public class LevelController {
 
         return ResponseEntity.ok(levelService.getAllLevels());
     }
-
 }

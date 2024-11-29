@@ -8,8 +8,8 @@ import java.util.UUID;
 
 public interface StatisticRepository {
 
-     List<QuestionStats> getQuestionStats(UUID userId);
+    List<QuestionStats> getQuestionStats(UUID userId);
 
-     List<DailyQuestionStats> getDailyQuestionStatsLast7Days(UUID userId);
+    List<DailyQuestionStats> getDailyQuestionStatsLast7Days(UUID userId);
 }
 

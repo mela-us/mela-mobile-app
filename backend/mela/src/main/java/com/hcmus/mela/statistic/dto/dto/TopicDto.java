@@ -1,15 +1,19 @@
 package com.hcmus.mela.statistic.dto.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TopicDto {
+
     private UUID topicId;
+
     private String name;
 }

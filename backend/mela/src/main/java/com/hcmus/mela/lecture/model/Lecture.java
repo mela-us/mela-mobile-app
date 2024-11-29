@@ -15,6 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Document(collection = "lectures")
 public class Lecture {
+
     @Id
     private UUID lectureId;
 

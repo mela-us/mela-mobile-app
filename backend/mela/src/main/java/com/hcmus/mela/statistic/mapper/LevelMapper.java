@@ -8,6 +8,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface LevelMapper {
+
     LevelMapper INSTANCE = Mappers.getMapper(LevelMapper.class);
 
     LevelDto levelToLevelDto(Level level);

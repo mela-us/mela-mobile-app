@@ -13,6 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Document(collection = "levels")
 public class Level {
+
     @Id
     private UUID levelId;
 

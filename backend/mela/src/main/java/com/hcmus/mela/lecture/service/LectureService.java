@@ -6,12 +6,12 @@ import com.hcmus.mela.lecture.dto.response.GetLecturesResponse;
 import java.util.UUID;
 
 public interface LectureService {
-    public GetLecturesResponse getLecturesByTopic(String authorizationHeader, UUID topicId);
 
-    public GetLecturesResponse getLecturesByKeyword(String authorizationHeader, String keyword);
+    GetLecturesResponse getLecturesByTopic(String authorizationHeader, UUID topicId);
 
-    public GetLecturesResponse getLecturesByRecent(String authorizationHeader, Integer size);
+    GetLecturesResponse getLecturesByKeyword(String authorizationHeader, String keyword);
 
-    public GetLectureSectionsResponse getLectureSections(UUID lectureId);
+    GetLecturesResponse getLecturesByRecent(String authorizationHeader, Integer size);
 
+    GetLectureSectionsResponse getLectureSections(UUID lectureId);
 }
