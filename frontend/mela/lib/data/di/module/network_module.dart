@@ -1,4 +1,5 @@
 import 'package:event_bus/event_bus.dart';
+import 'package:mela/data/network/apis/exercises/exercise_api.dart';
 import 'package:mela/data/network/apis/login_signup/login_api.dart';
 import 'package:mela/data/network/apis/login_signup/refresh_access_token_api.dart';
 import 'package:mela/data/network/apis/topics/topic_api.dart';
@@ -60,5 +61,6 @@ class NetworkModule {
         RefreshAccessTokenApi(getIt<DioClient>()));
     getIt.registerSingleton<TopicApi>(TopicApi(getIt<DioClient>()));
     getIt.registerSingleton<LectureApi>(LectureApi(getIt<DioClient>()));
+    getIt.registerSingleton<ExerciseApi>(ExerciseApi(getIt<DioClient>()));
   }
 }

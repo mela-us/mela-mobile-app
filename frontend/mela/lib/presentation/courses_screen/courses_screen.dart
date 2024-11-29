@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
-import 'package:mela/constants/route_observer.dart';
 import 'package:mela/core/widgets/progress_indicator_widget.dart';
 import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
 import 'package:mobx/mobx.dart';

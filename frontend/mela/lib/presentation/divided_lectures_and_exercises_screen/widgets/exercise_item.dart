@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/di/service_locator.dart';
+import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
+import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
 import 'package:mela/utils/routes/routes.dart';
 
 import '../../../domain/entity/exercise/exercise.dart';
 
 class ExerciseItem extends StatelessWidget {
+  final _topicStore = getIt<TopicStore>();
+  final _lectureStore = getIt<LectureStore>();
   final Exercise currentExercise;
 
   ExerciseItem({
@@ -13,6 +18,11 @@ class ExerciseItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final topicName = _topicStore
+        .getTopicNameById(_lectureStore.getTopicId(currentExercise.lectureId));
+        //hoặc thay currentExercise.lectureId bằng _exerciseStore.currentLecture.lectureId
+    final levelName = _lectureStore
+        .getLevelName(_lectureStore.getLevelId(currentExercise.lectureId));
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, Routes.question);
@@ -34,13 +44,15 @@ class ExerciseItem extends StatelessWidget {
                   Image.asset(currentExercise.imageExercisePath,
                       width: 60, height: 60),
                   const SizedBox(height: 8),
-                  Text(
-                    '${currentExercise.numberCompletedQuestions} / ${currentExercise.numberQuestions}',
-                    style: Theme.of(context)
-                        .textTheme
-                        .miniCaption
-                        .copyWith(color: Colors.black),
-                  ),
+                  currentExercise.bestResult.status != null
+                      ? Text(
+                          '${currentExercise.bestResult.totalCorrectAnswers} / ${currentExercise.totalQuestions}',
+                          style: Theme.of(context)
+                              .textTheme
+                              .miniCaption
+                              .copyWith(color: Colors.black),
+                        )
+                      : const SizedBox.shrink()
                 ],
               ),
             ),
@@ -53,7 +65,7 @@ class ExerciseItem extends StatelessWidget {
                 children: [
                   // Topic name + level name
                   Text(
-                    '${currentExercise.topicName} - ${currentExercise.levelName}',
+                    '$topicName - $levelName',
                     style: Theme.of(context)
                         .textTheme
                         .subTitle
@@ -73,7 +85,7 @@ class ExerciseItem extends StatelessWidget {
                   const SizedBox(height: 8),
                   // Number of questions + type of questions
                   Text(
-                    '${currentExercise.numberQuestions} câu | ${currentExercise.typeQuestion}',
+                    '${currentExercise.totalQuestions} câu | ${currentExercise.typeQuestion}',
                     style: Theme.of(context)
                         .textTheme
                         .normal
@@ -92,14 +104,23 @@ class ExerciseItem extends StatelessWidget {
                             .normal
                             .copyWith(color: Colors.black),
                       ),
-                      Text(
-                        currentExercise.statusExercise ? "Đạt" : "Chưa đạt",
-                        style: Theme.of(context).textTheme.normal.copyWith(
-                              color: currentExercise.statusExercise
-                                  ? Colors.green
-                                  : Colors.red,
-                            ),
-                      ),
+                      currentExercise.bestResult.status != null
+                          ? Text(
+                              currentExercise.statusExercise
+                                  ? "Đạt"
+                                  : "Chưa đạt",
+                              style:
+                                  Theme.of(context).textTheme.normal.copyWith(
+                                        color: currentExercise.statusExercise
+                                            ? Colors.green
+                                            : Colors.red,
+                                      ),
+                            )
+                          : Text('Chưa làm',
+                              style:
+                                  Theme.of(context).textTheme.normal.copyWith(
+                                        color: Colors.black,
+                                      )),
                     ],
                   ),
                 ],

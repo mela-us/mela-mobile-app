@@ -6,6 +6,7 @@ import 'package:mela/domain/repository/user/user_repository.dart';
 import 'package:mela/domain/repository/user_register/user_signup_repostiory.dart';
 
 import 'package:mela/domain/usecase/exercise/get_exercises_usecase.dart';
+import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_lectures_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_levels_usecase.dart';
 import 'package:mela/domain/usecase/post/get_post_usecase.dart';
@@ -83,11 +84,16 @@ class UseCaseModule {
     //lecture:--------------------------------------------------------------------
     getIt.registerSingleton<GetLecturesUsecase>(GetLecturesUsecase(
         getIt<LectureRepository>(), getIt<RefreshAccessTokenUsecase>()));
+
     getIt.registerSingleton<GetLecturesAreLearningUsecase>(
         GetLecturesAreLearningUsecase(
             getIt<LectureRepository>(), getIt<RefreshAccessTokenUsecase>()));
+
     getIt.registerSingleton<GetLevelsUsecase>(
         GetLevelsUsecase(getIt<LectureRepository>()));
+        
+    getIt.registerSingleton<GetDividedLectureUsecase>(GetDividedLectureUsecase(
+        getIt<LectureRepository>(), getIt<RefreshAccessTokenUsecase>()));
 
     ///exercise:--------------------------------------------------------------------
     getIt.registerSingleton<GetExercisesUseCase>(

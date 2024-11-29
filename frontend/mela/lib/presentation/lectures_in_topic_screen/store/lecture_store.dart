@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:mela/constants/enum.dart';
 import 'package:mela/domain/entity/lecture/lecture_list.dart';
 import 'package:mela/domain/entity/level/level_list.dart';
+import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_lectures_are_learning_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_lectures_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_levels_usecase.dart';
@@ -17,10 +18,12 @@ abstract class _LectureStore with Store {
   //usecase--------------
   GetLecturesUsecase _getLecturesUsecase;
   GetLecturesAreLearningUsecase
-      getLecturesAreLearningUsecase; //use in topicstore
+      getLecturesAreLearningUsecase;
+  GetDividedLectureUsecase getDividedLectureUsecase; //use in topicstore
+  
   GetLevelsUsecase _getLevelsUsecase;
   _LectureStore(this._getLecturesUsecase, this.getLecturesAreLearningUsecase,
-      this._getLevelsUsecase);
+      this._getLevelsUsecase, this.getDividedLectureUsecase);
 
 //obserbale
   @observable
@@ -117,5 +120,34 @@ abstract class _LectureStore with Store {
   @action
   void resetErrorString() {
     errorString = '';
+  }
+
+  //Untils--------------------------------------------------------------
+  String getTopicId(String lectureId) {
+    if (lectureList == null) return "Topic id null";
+    return lectureList!.lectures
+        .firstWhere((element) => element.lectureId == lectureId)
+        .topicId;
+  }
+
+  String getLectureNameById(String lectureId) {
+    if (lectureList == null) return "Lecture name null";
+    return lectureList!.lectures
+        .firstWhere((element) => element.lectureId == lectureId)
+        .lectureName;
+  }
+
+  String getLevelId(String lectureId) {
+    if (lectureList == null) return "Level id null";
+    return lectureList!.lectures
+        .firstWhere((element) => element.lectureId == lectureId)
+        .levelId;
+  }
+
+  String getLevelName(String levelId) {
+    if (levelList == null) return "Level name null";
+    return levelList!.levelList
+        .firstWhere((element) => element.levelId == levelId)
+        .levelName;
   }
 }

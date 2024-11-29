@@ -1,4 +1,5 @@
 import 'package:mela/data/network/apis/lectures/lecture_api.dart';
+import 'package:mela/domain/entity/divided_lecture/divided_lecture_list.dart';
 import 'package:mela/domain/entity/lecture/lecture.dart';
 
 import 'package:mela/domain/entity/lecture/lecture_list.dart';
@@ -7,7 +8,7 @@ import 'package:mela/domain/entity/level/level_list.dart';
 import '../../../domain/repository/lecture/lecture_repository.dart';
 
 class LectureRepositoryImpl extends LectureRepository {
-  LectureApi _lectureApi;
+  final LectureApi _lectureApi;
   LectureRepositoryImpl(this._lectureApi);
 
   @override
@@ -36,7 +37,11 @@ class LectureRepositoryImpl extends LectureRepository {
 
   @override
   Future<LevelList> getLevels() {
-    // TODO: implement getLevels
     return _lectureApi.getLevels();
+  }
+
+  @override
+  Future<DividedLectureList> getDividedLectureList(String lectureId) {
+    return _lectureApi.getDividedLectures(lectureId);
   }
 }

@@ -4,8 +4,6 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/divided_lectures_and_exercises_screen/store/exercise_store.dart';
 import 'package:mela/presentation/divided_lectures_and_exercises_screen/widgets/exercise_list_item.dart';
-
-import '../../constants/route_observer.dart';
 import '../../core/widgets/progress_indicator_widget.dart';
 import 'widgets/divided_lecture_list_item.dart';
 
@@ -18,7 +16,7 @@ class DividedLecturesAndExercisesScreen extends StatefulWidget {
 
 class _DividedLecturesAndExercisesScreenState
     extends State<DividedLecturesAndExercisesScreen>
-    with SingleTickerProviderStateMixin, RouteAware {
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   ExerciseStore _exerciseStore = getIt<ExerciseStore>();
@@ -32,8 +30,9 @@ class _DividedLecturesAndExercisesScreenState
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
+    //routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
     if (!_exerciseStore.isGetExercisesLoading) {
+      _exerciseStore.getDividedLecturesByLectureId();
       _exerciseStore.getExercisesByLectureId();
     }
   }
@@ -41,10 +40,9 @@ class _DividedLecturesAndExercisesScreenState
   @override
   void dispose() {
     _tabController.dispose();
-    routeObserver.unsubscribe(this);
+    //routeObserver.unsubscribe(this);
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -52,19 +50,13 @@ class _DividedLecturesAndExercisesScreenState
       appBar:
           //AppBar
           AppBar(
-        title: Observer(builder: (context) {
-          // print("Lecture TopicId");
-          // print(_lectureStore.toppicId);
-          return _exerciseStore.errorString.isEmpty
-              ? Text(
-                  _exerciseStore.currentLecture!.lectureName,
-                  style: Theme.of(context)
-                      .textTheme
-                      .heading
-                      .copyWith(color: Theme.of(context).colorScheme.primary),
-                )
-              : Container();
-        }),
+        title: Text(
+          _exerciseStore.currentLecture!.lectureName,
+          style: Theme.of(context)
+              .textTheme
+              .heading
+              .copyWith(color: Theme.of(context).colorScheme.primary),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
@@ -80,7 +72,7 @@ class _DividedLecturesAndExercisesScreenState
       body: Column(
         children: [
           Container(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: DecoratedBox(
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.inverseSurface,
@@ -150,7 +142,9 @@ class _DividedLecturesAndExercisesScreenState
                   // ? Text('Loading...')
                   : TabBarView(
                       controller: _tabController,
-                      children: _exerciseStore.errorString.isEmpty
+                      children: (_exerciseStore.errorString.isEmpty &&
+                              _exerciseStore.dividedLectureList != null &&
+                              _exerciseStore.exerciseList != null)
                           ? [
                               //Tab "Lý thuyết" content
                               DividedLectureListItem(),

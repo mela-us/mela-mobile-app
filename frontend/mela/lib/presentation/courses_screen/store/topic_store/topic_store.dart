@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:mela/constants/enum.dart';
 import 'package:mela/domain/entity/lecture/lecture_list.dart';
+import 'package:mela/domain/entity/topic/topic.dart';
 import 'package:mela/domain/entity/topic/topic_list.dart';
 import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
 import 'package:mobx/mobx.dart';
@@ -93,5 +94,18 @@ abstract class _TopicStore with Store {
   @action
   void resetErrorString() {
     errorString = '';
+  }
+
+
+  //Untils--------------------------------------------------------------
+    //Use in exercise
+  String getTopicNameById(String topicId) {
+    if(topicList == null) return "Topic name null";
+    for (Topic topic in topicList!.topics) {
+      if (topic.topicId == topicId) {
+        return topic.topicName;
+      }
+    }
+    return "Empty";
   }
 }

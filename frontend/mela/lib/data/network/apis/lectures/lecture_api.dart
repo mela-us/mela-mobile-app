@@ -1,5 +1,6 @@
 import 'package:mela/data/network/constants/endpoints_const.dart';
 import 'package:mela/data/network/dio_client.dart';
+import 'package:mela/domain/entity/divided_lecture/divided_lecture_list.dart';
 import 'package:mela/domain/entity/lecture/lecture_list.dart';
 import 'package:mela/domain/entity/level/level_list.dart';
 
@@ -15,7 +16,7 @@ class LectureApi {
   Future<LectureList> getLectures(String topicId) async {
     final responseData = await _dioClient
         .get(EndpointsConst.getLectures, queryParameters: {'topicId': topicId});
-    print(responseData);
+    //print(responseData);
     return LectureList.fromJson(responseData['data']);
   }
 
@@ -24,5 +25,22 @@ class LectureApi {
         EndpointsConst.getLecturesAreLearning,
         queryParameters: {'size': 3});
     return LectureList.fromJson(responseData['data']);
+  }
+
+  Future<DividedLectureList> getDividedLectures(String lectureId) async {
+    final url =
+        EndpointsConst.getDividedLectures.replaceAll(':lectureId', lectureId);
+    final responseData =
+        await _dioClient.get(url);
+
+    //convert data
+    List<dynamic> json = responseData['data'];
+    json.forEach((dividedLecture) {
+      dividedLecture['lectureId'] = lectureId;
+    });
+    // print("================================ResponseData LectureApi=====================with lectureId= $lectureId");
+    // print("responseData: ${json}");
+
+    return DividedLectureList.fromJson(json);
   }
 }
