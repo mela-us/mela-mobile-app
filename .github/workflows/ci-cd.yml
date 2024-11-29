@@ -66,5 +66,5 @@ jobs:
       - name: Deploy to Azure Web App (Dev) using Docker
         uses: Azure/webapps-deploy@v3
         with:
-          app-name: your-dev-webapp-name
+          app-name: mela-backend-dev
           docker-image: ${{ secrets.DOCKER_HUB_USERNAME }}/mela-app-dev:latest
