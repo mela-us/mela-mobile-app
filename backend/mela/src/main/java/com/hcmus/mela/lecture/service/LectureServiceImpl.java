@@ -6,6 +6,7 @@ import com.hcmus.mela.lecture.dto.dto.LectureInfoDto;
 import com.hcmus.mela.lecture.dto.dto.LectureSectionDto;
 import com.hcmus.mela.lecture.dto.response.GetLectureSectionsResponse;
 import com.hcmus.mela.lecture.dto.response.GetLecturesResponse;
+import com.hcmus.mela.lecture.exception.exception.AsyncException;
 import com.hcmus.mela.lecture.mapper.LectureMapper;
 import com.hcmus.mela.lecture.mapper.LectureSectionMapper;
 import com.hcmus.mela.lecture.model.Lecture;
@@ -21,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,21 +46,32 @@ public class LectureServiceImpl implements LectureService {
                 jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader)
         );
 
-        List<Lecture> lectures = lectureRepository.findLecturesByTopic(topicId);
-        List<LectureExerciseTotal> exerciseTotals = exerciseCountRepository.countTotalExerciseOfLectures();
-        List<LectureExerciseTotal> passExerciseTotals = exerciseCountRepository.countTotalPassExerciseOfLectures(userId);
+        CompletableFuture<List<Lecture>> getLectureTask = CompletableFuture.supplyAsync(() -> {
+            return lectureRepository.findLecturesByTopic(topicId);
+        });
+        CompletableFuture<List<LectureExerciseTotal>> getTotalPassExerciseTask = CompletableFuture.supplyAsync(() -> {
+            return exerciseCountRepository.countTotalPassExerciseOfLectures(userId);
+        });
+        CompletableFuture<Void> allOf = CompletableFuture.allOf(getLectureTask, getTotalPassExerciseTask);
+        allOf.join();
 
-        List<LectureDetailDto> lectureDetailDtos = convertLecturesToLectureDetailDtos(
-                lectures,
-                exerciseTotals,
-                passExerciseTotals
-        );
+        try {
+            List<Lecture> lectures = getLectureTask.get();
+            List<LectureExerciseTotal> passExerciseTotals = getTotalPassExerciseTask.get();
 
-        return new GetLecturesResponse(
-                generalMessageAccessor.getMessage(null, "get_lectures_success"),
-                lectureDetailDtos.size(),
-                lectureDetailDtos
-        );
+            List<LectureDetailDto> lectureDetailDtos = convertLecturesToLectureDetailDtos(
+                    lectures,
+                    passExerciseTotals
+            );
+
+            return new GetLecturesResponse(
+                    generalMessageAccessor.getMessage(null, "get_lectures_success"),
+                    lectureDetailDtos.size(),
+                    lectureDetailDtos
+            );
+        } catch (InterruptedException | ExecutionException e) {
+            throw new AsyncException(e.getMessage());
+        }
     }
 
     @Override
@@ -66,21 +80,32 @@ public class LectureServiceImpl implements LectureService {
                 jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader)
         );
 
-        List<Lecture> lectures = lectureRepository.findLecturesByKeyword(keyword);
-        List<LectureExerciseTotal> exerciseTotals = exerciseCountRepository.countTotalExerciseOfLectures();
-        List<LectureExerciseTotal> passExerciseTotals = exerciseCountRepository.countTotalPassExerciseOfLectures(userId);
+        CompletableFuture<List<Lecture>> getLectureTask = CompletableFuture.supplyAsync(() -> {
+            return lectureRepository.findLecturesByKeyword(keyword);
+        });
+        CompletableFuture<List<LectureExerciseTotal>> getTotalPassExerciseTask = CompletableFuture.supplyAsync(() -> {
+            return exerciseCountRepository.countTotalPassExerciseOfLectures(userId);
+        });
+        CompletableFuture<Void> allOf = CompletableFuture.allOf(getLectureTask, getTotalPassExerciseTask);
+        allOf.join();
 
-        List<LectureDetailDto> lectureDetailDtos = convertLecturesToLectureDetailDtos(
-                lectures,
-                exerciseTotals,
-                passExerciseTotals
-        );
+        try {
+            List<Lecture> lectures = getLectureTask.get();
+            List<LectureExerciseTotal> passExerciseTotals = getTotalPassExerciseTask.get();
 
-        return new GetLecturesResponse(
-                generalMessageAccessor.getMessage(null, "search_lectures_success"),
-                lectureDetailDtos.size(),
-                lectureDetailDtos
-        );
+            List<LectureDetailDto> lectureDetailDtos = convertLecturesToLectureDetailDtos(
+                    lectures,
+                    passExerciseTotals
+            );
+
+            return new GetLecturesResponse(
+                    generalMessageAccessor.getMessage(null, "search_lectures_success"),
+                    lectureDetailDtos.size(),
+                    lectureDetailDtos
+            );
+        } catch (InterruptedException | ExecutionException e) {
+            throw new AsyncException(e.getMessage());
+        }
     }
 
     @Override
@@ -89,21 +114,32 @@ public class LectureServiceImpl implements LectureService {
                 jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader)
         );
 
-        List<Lecture> lectures = lectureRepository.findLectureByRecent(size);
-        List<LectureExerciseTotal> exerciseTotals = exerciseCountRepository.countTotalExerciseOfLectures();
-        List<LectureExerciseTotal> passExerciseTotals = exerciseCountRepository.countTotalPassExerciseOfLectures(userId);
+        CompletableFuture<List<Lecture>> getLectureTask = CompletableFuture.supplyAsync(() -> {
+            return lectureRepository.findLectureByRecent(size);
+        });
+        CompletableFuture<List<LectureExerciseTotal>> getTotalPassExerciseTask = CompletableFuture.supplyAsync(() -> {
+            return exerciseCountRepository.countTotalPassExerciseOfLectures(userId);
+        });
+        CompletableFuture<Void> allOf = CompletableFuture.allOf(getLectureTask, getTotalPassExerciseTask);
+        allOf.join();
 
-        List<LectureDetailDto> lectureDetailDtos = convertLecturesToLectureDetailDtos(
-                lectures,
-                exerciseTotals,
-                passExerciseTotals
-        );
+        try {
+            List<Lecture> lectures = getLectureTask.get();
+            List<LectureExerciseTotal> passExerciseTotals = getTotalPassExerciseTask.get();
 
-        return new GetLecturesResponse(
-                generalMessageAccessor.getMessage(null, "get_recent_lectures_success"),
-                lectureDetailDtos.size(),
-                lectureDetailDtos
-        );
+            List<LectureDetailDto> lectureDetailDtos = convertLecturesToLectureDetailDtos(
+                    lectures,
+                    passExerciseTotals
+            );
+
+            return new GetLecturesResponse(
+                    generalMessageAccessor.getMessage(null, "get_recent_lectures_success"),
+                    lectureDetailDtos.size(),
+                    lectureDetailDtos
+            );
+        } catch (InterruptedException | ExecutionException e) {
+            throw new AsyncException(e.getMessage());
+        }
     }
 
     @Override
@@ -126,12 +162,8 @@ public class LectureServiceImpl implements LectureService {
 
     public List<LectureDetailDto> convertLecturesToLectureDetailDtos(
             List<Lecture> lectures,
-            List<LectureExerciseTotal> exerciseTotals,
             List<LectureExerciseTotal> passExerciseTotals
     ) {
-        Map<UUID, Integer> exerciseTotalsMap = exerciseTotals.stream()
-                .collect(Collectors.toMap(LectureExerciseTotal::getLectureId, LectureExerciseTotal::getTotal));
-
         Map<UUID, Integer> passExerciseTotalsMap = passExerciseTotals.stream()
                 .collect(Collectors.toMap(LectureExerciseTotal::getLectureId, LectureExerciseTotal::getTotal));
 
@@ -139,9 +171,6 @@ public class LectureServiceImpl implements LectureService {
 
         for (Lecture lecture : lectures) {
             LectureDetailDto lectureDetailDto = LectureMapper.INSTANCE.lectureToLectureDetailDto(lecture);
-
-            Integer totalExercises = exerciseTotalsMap.getOrDefault(lecture.getLectureId(), 0);
-            lectureDetailDto.setTotalExercises(totalExercises);
 
             Integer totalPassExercises = passExerciseTotalsMap.getOrDefault(lecture.getLectureId(), 0);
             lectureDetailDto.setTotalPassExercises(totalPassExercises);

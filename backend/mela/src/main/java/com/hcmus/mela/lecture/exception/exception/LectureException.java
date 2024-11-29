@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class MathContentException extends RuntimeException {
+public class LectureException extends RuntimeException {
     
     private final String errorMessage;
 }

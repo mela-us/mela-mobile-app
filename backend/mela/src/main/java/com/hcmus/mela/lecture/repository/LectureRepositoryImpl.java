@@ -18,11 +18,28 @@ public class LectureRepositoryImpl implements LectureRepository {
 
     private final MongoTemplate mongoTemplate;
 
+//    @Override
+//    public List<Lecture> findLecturesByTopic(UUID topicId) {
+//        Aggregation aggregation = Aggregation.newAggregation(
+//                Aggregation.match(Criteria.where("topic_id").is(topicId)),
+//                Aggregation.project("_id", "level_id", "topic_id", "name", "description")
+//        );
+//        AggregationResults<Lecture> result = mongoTemplate.aggregate(
+//                aggregation,
+//                "lectures",
+//                Lecture.class
+//        );
+//        return result.getMappedResults();
+//    }
+
     @Override
     public List<Lecture> findLecturesByTopic(UUID topicId) {
         Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.match(Criteria.where("topic_id").is(topicId)),
+                Aggregation.project("_id", "level_id", "topic_id", "name", "description"),
+                Aggregation.lookup("exercises", "_id", "lecture_id", "exercises"),
                 Aggregation.project("_id", "level_id", "topic_id", "name", "description")
+                        .and("exercises").size().as("total_exercises")
         );
         AggregationResults<Lecture> result = mongoTemplate.aggregate(
                 aggregation,
@@ -38,7 +55,10 @@ public class LectureRepositoryImpl implements LectureRepository {
                 (keyword != null && !keyword.isEmpty())
                         ? Aggregation.match(Criteria.where("name").regex(keyword, "i"))
                         : Aggregation.match(new Criteria()),
+                Aggregation.project("_id", "level_id", "topic_id", "name", "description"),
+                Aggregation.lookup("exercises", "_id", "lecture_id", "exercises"),
                 Aggregation.project("_id", "level_id", "topic_id", "name", "description")
+                        .and("exercises").size().as("total_exercises")
         );
         AggregationResults<Lecture> result = mongoTemplate.aggregate(
                 aggregation,
@@ -61,9 +81,13 @@ public class LectureRepositoryImpl implements LectureRepository {
                         .and("lecture.level_id").as("level_id")
                         .and("lecture.topic_id").as("topic_id")
                         .and("lecture.name").as("name")
-                        .and("lecture.description").as("description")
+                        .and("lecture.description").as("description"),
+                Aggregation.lookup("exercises", "_id", "lecture_id", "exercises"),
+                Aggregation.project("_id", "level_id", "topic_id", "name", "description")
+                        .and("exercises").size().as("total_exercises")
         );
-        AggregationResults<Lecture> result = mongoTemplate.aggregate(aggregation,
+        AggregationResults<Lecture> result = mongoTemplate.aggregate(
+                aggregation,
                 "exercise_results",
                 Lecture.class
         );

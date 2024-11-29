@@ -29,5 +29,11 @@ public class Lecture {
 
     private String description;
 
+    @Field("total_exercises")
+    private Integer totalExercises;
+
+    @Field("total_pass_exercises")
+    private Integer totalPassExercises;
+
     private List<LectureSection> sections;
 }

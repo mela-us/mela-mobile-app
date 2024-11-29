@@ -3,8 +3,7 @@ package com.hcmus.mela.lecture.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.annotation.Id;
 
 import java.util.UUID;
 
@@ -13,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class LectureExerciseTotal {
 
-    @Field("lecture_id")
+    @Id
     private UUID lectureId;
 
     private Integer total;

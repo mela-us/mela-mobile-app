@@ -1,5 +1,7 @@
 package com.hcmus.mela.configuration;
 
+import com.hcmus.mela.configuration.converter.BinaryToUUIDConverter;
+import com.hcmus.mela.configuration.converter.UUIDToBinaryConverter;
 import com.hcmus.mela.utils.ProjectConstants;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -9,8 +11,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.lang.NonNull;
+
+import java.util.List;
 
 @Configuration
 @EnableMongoRepositories(basePackages =
@@ -19,7 +24,7 @@ import org.springframework.lang.NonNull;
                 "com.hcmus.mela.lecture.repository",
                 "com.hcmus.mela.statistic.repository"
         }
-    )
+)
 @RequiredArgsConstructor
 public class ContentDataSourceConfiguration extends AbstractMongoClientConfiguration {
 
@@ -43,5 +48,10 @@ public class ContentDataSourceConfiguration extends AbstractMongoClientConfigura
     @NonNull
     public MongoTemplate mongoTemplate(MongoClient mongoClient) {
         return new MongoTemplate(mongoClient, getDatabaseName());
+    }
+
+    @Bean
+    public MongoCustomConversions customConversions() {
+        return new MongoCustomConversions(List.of(new UUIDToBinaryConverter(), new BinaryToUUIDConverter()));
     }
 }

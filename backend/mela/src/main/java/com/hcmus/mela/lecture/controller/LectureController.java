@@ -5,6 +5,7 @@ import com.hcmus.mela.lecture.dto.response.GetLecturesResponse;
 import com.hcmus.mela.lecture.service.LectureServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.bson.UuidRepresentation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,10 +21,10 @@ public class LectureController {
     @GetMapping
     @Operation(tags = "Lecture Service", description = "Get lectures with specific topic id")
     public ResponseEntity<GetLecturesResponse> getLecturesByTopicRequest(
-            @RequestParam(value = "topicId") UUID topicId,
+            @RequestParam(value = "topicId") String topicId,
             @RequestHeader("Authorization") String authorizationHeader
     ) {
-        return ResponseEntity.ok(lectureService.getLecturesByTopic(authorizationHeader, topicId));
+        return ResponseEntity.ok(lectureService.getLecturesByTopic(authorizationHeader, UUID.fromString(topicId)));
     }
 
     @GetMapping("/search")

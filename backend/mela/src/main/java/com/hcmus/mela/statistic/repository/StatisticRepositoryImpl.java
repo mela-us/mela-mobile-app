@@ -55,7 +55,7 @@ public class StatisticRepositoryImpl implements StatisticRepository {
                         .gt(date7DaysAgo)
                         .lte(currentDate)),
                 Aggregation.project("end_at")
-                        .andExpression("dateToString({'format': '%Y-%m-%d', 'date': '$date_time'})")
+                        .andExpression("dateToString({'format': '%Y-%m-%d', 'date': '$end_at'})")
                         .as("date")
                         .and("topic_id").as("topic_id")
                         .and("level_id").as("level_id")
