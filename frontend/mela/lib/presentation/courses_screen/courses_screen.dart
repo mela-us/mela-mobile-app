@@ -76,13 +76,22 @@ class _CoursesScreenState extends State<CoursesScreen> {
                   .copyWith(color: Theme.of(context).colorScheme.onPrimary)),
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(Routes.searchScreen);
-            },
-            icon: const Icon(Icons.search),
-            color: Theme.of(context).colorScheme.onPrimary,
-          )
+          Observer(builder: (context) {
+            if (_topicStore.errorString.isNotEmpty ||
+                _topicStore.topicList == null ||
+                _topicStore.lecturesAreLearningList == null) {
+              return const SizedBox.shrink();
+            }
+            return IconButton(
+              onPressed: () {
+                //eg: incourse no wifi, enter search, turnon wifi, back to app
+                _topicStore.resetErrorString();
+                Navigator.of(context).pushNamed(Routes.searchScreen);
+              },
+              icon: const Icon(Icons.search),
+              color: Theme.of(context).colorScheme.onPrimary,
+            );
+          })
         ],
       ),
       body: Observer(
@@ -104,7 +113,9 @@ class _CoursesScreenState extends State<CoursesScreen> {
             );
           }
           //print("^^^^^^^^^^^^^^^^^^ErrorString in Courses_Screen 3: ${_topicStore.errorString}");
-          if (_topicStore.errorString.isNotEmpty) {
+          if (_topicStore.errorString.isNotEmpty ||
+              _topicStore.topicList == null ||
+              _topicStore.lecturesAreLearningList == null) {
             return Center(
               child: Text(_topicStore.errorString,
                   style: const TextStyle(color: Colors.red)),

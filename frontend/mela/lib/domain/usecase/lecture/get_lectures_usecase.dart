@@ -33,6 +33,7 @@ class GetLecturesUsecase extends UseCase<LectureList, String> {
           //it have a DioException, so we should call recursive
           return call(params: params);
         } else {
+          //Call logout, logout will delete token in secure storage, shared preference.....
           throw ResponseStatus.UNAUTHORIZED;
         }
       }

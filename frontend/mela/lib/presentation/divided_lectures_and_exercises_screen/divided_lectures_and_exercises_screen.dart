@@ -4,6 +4,8 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/divided_lectures_and_exercises_screen/store/exercise_store.dart';
 import 'package:mela/presentation/divided_lectures_and_exercises_screen/widgets/exercise_list_item.dart';
+import 'package:mela/utils/routes/routes.dart';
+import 'package:mobx/mobx.dart';
 import '../../core/widgets/progress_indicator_widget.dart';
 import 'widgets/divided_lecture_list_item.dart';
 
@@ -21,10 +23,24 @@ class _DividedLecturesAndExercisesScreenState
 
   ExerciseStore _exerciseStore = getIt<ExerciseStore>();
 
+  late final ReactionDisposer _unAuthorizedReactionDisposer;
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    //for only refresh token expired
+    _unAuthorizedReactionDisposer = reaction(
+      (_) => _exerciseStore.isUnAuthorized,
+      (value) {
+        if (value) {
+          _exerciseStore.isUnAuthorized = false;
+          _exerciseStore.resetErrorString();
+          //Remove all routes in stack
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              Routes.loginOrSignupScreen, (route) => false);
+        }
+      },
+    );
   }
 
   @override
@@ -40,6 +56,7 @@ class _DividedLecturesAndExercisesScreenState
   @override
   void dispose() {
     _tabController.dispose();
+    _unAuthorizedReactionDisposer();
     //routeObserver.unsubscribe(this);
     super.dispose();
   }

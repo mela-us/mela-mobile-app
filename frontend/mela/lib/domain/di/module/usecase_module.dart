@@ -91,13 +91,13 @@ class UseCaseModule {
 
     getIt.registerSingleton<GetLevelsUsecase>(
         GetLevelsUsecase(getIt<LectureRepository>()));
-        
+
     getIt.registerSingleton<GetDividedLectureUsecase>(GetDividedLectureUsecase(
         getIt<LectureRepository>(), getIt<RefreshAccessTokenUsecase>()));
 
     ///exercise:--------------------------------------------------------------------
-    getIt.registerSingleton<GetExercisesUseCase>(
-        GetExercisesUseCase(getIt<ExerciseRepository>()));
+    getIt.registerSingleton<GetExercisesUseCase>(GetExercisesUseCase(
+        getIt<ExerciseRepository>(), getIt<RefreshAccessTokenUsecase>()));
 
     //search:--------------------------------------------------------------------
     getIt.registerSingleton<GetHistorySearchList>(

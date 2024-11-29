@@ -81,13 +81,21 @@ class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen> {
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 10),
-              child: IconButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(Routes.searchScreen);
-                },
-                icon: const Icon(Icons.search),
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
+              child: Observer(builder: (context) {
+                if (_lectureStore.errorString.isNotEmpty ||
+                    _lectureStore.lectureList == null ||
+                    _lectureStore.levelList == null) {
+                  return const SizedBox.shrink();
+                }
+                return IconButton(
+                  onPressed: () {
+                    _lectureStore.resetErrorString();
+                    Navigator.of(context).pushNamed(Routes.searchScreen);
+                  },
+                  icon: const Icon(Icons.search),
+                  color: Theme.of(context).colorScheme.onPrimary,
+                );
+              }),
             )
           ],
           bottom: TabBar(
@@ -125,7 +133,7 @@ class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen> {
                 )
               : TabBarView(
                   children: (_lectureStore.errorString.isEmpty &&
-                          _lectureStore.lectureList != null)
+                          _lectureStore.lectureList != null && _lectureStore.levelList != null)
                       ? [
                           LecturesInTopicAndLevel(
                               levelId: _lectureStore

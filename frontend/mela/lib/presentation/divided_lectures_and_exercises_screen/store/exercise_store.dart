@@ -1,8 +1,11 @@
+import 'package:dio/dio.dart';
+import 'package:mela/constants/enum.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/divided_lecture/divided_lecture.dart';
 import 'package:mela/domain/entity/divided_lecture/divided_lecture_list.dart';
 import 'package:mela/domain/entity/exercise/exercise_list.dart';
 import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
+import 'package:mela/utils/dio/dio_error_util.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../domain/entity/lecture/lecture.dart';
@@ -24,6 +27,9 @@ abstract class _ExerciseStore with Store {
 
   @observable
   String errorString = '';
+
+  @observable
+  bool isUnAuthorized = false;
 
   @observable
   ExerciseList? exerciseList;
@@ -49,13 +55,20 @@ abstract class _ExerciseStore with Store {
     final future =
         _getExercisesUsecase.call(params: this.currentLecture!.lectureId);
     fetchExercisesFuture = ObservableFuture(future);
-    print("*********ABC");
+    //print("*********ABC");
     await future.then((value) {
       exerciseList = value;
-      print("*********exerciseList trong exercise store");
+      //print("*********exerciseList trong exercise store");
     }).catchError((onError) {
-      exerciseList = null;
-      errorString = onError.toString();
+      if (onError is DioException) {
+        errorString = DioExceptionUtil.handleError(onError);
+        exerciseList = null;
+      } else {
+        exerciseList = null;
+        if (onError == ResponseStatus.UNAUTHORIZED) {
+          isUnAuthorized = true;
+        }
+      }
     });
   }
 
@@ -66,10 +79,18 @@ abstract class _ExerciseStore with Store {
     fetchDividedLecturesFuture = ObservableFuture(future);
     await future.then((value) {
       dividedLectureList = value;
-      print("*********dividedLectureList trong exercise store");
+      //print("*********dividedLectureList trong exercise store");
     }).catchError((onError) {
-      dividedLectureList = null;
-      errorString = onError.toString();
+      if (onError is DioException) {
+        errorString = DioExceptionUtil.handleError(onError);
+        dividedLectureList = null;
+      } else {
+        dividedLectureList = null;
+        if (onError == ResponseStatus.UNAUTHORIZED) {
+          isUnAuthorized = true;
+        }
+      }
+      //errorString = onError.toString();
     });
   }
 
