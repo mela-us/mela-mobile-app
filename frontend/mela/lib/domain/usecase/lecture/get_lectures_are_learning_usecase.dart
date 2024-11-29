@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:mela/constants/enum.dart';
 import 'package:mela/core/domain/usecase/use_case.dart';
-import 'package:mela/core/extensions/response_status.dart';
 import 'package:mela/domain/entity/lecture/lecture_list.dart';
 import 'package:mela/domain/repository/lecture/lecture_repository.dart';
 import 'package:mela/domain/usecase/user_login/refresh_access_token_usecase.dart';

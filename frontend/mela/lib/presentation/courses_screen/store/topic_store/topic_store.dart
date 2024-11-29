@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:mela/core/extensions/response_status.dart';
+import 'package:mela/constants/enum.dart';
 import 'package:mela/domain/entity/lecture/lecture_list.dart';
 import 'package:mela/domain/entity/topic/topic_list.dart';
 import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';

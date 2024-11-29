@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:mela/core/extensions/response_status.dart';
 import 'package:mela/core/stores/error/error_store.dart';
 import 'package:mela/domain/entity/user/token_model.dart';
 import 'package:mela/domain/entity/user/user.dart';
@@ -10,6 +9,7 @@ import 'package:mela/domain/usecase/user_login/save_refresh_token_usecase.dart';
 import 'package:mela/utils/dio/dio_error_util.dart';
 import 'package:mobx/mobx.dart';
 
+import '../../../../constants/enum.dart';
 import '../../../../domain/usecase/user_login/login_usecase.dart';
 
 part 'user_login_store.g.dart';

@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:mela/constants/enum.dart';
 import 'package:mela/core/data/network/dio/configs/dio_configs.dart';
-import 'package:mela/core/extensions/response_status.dart';
 
 class DioClient {
   // dio instance
