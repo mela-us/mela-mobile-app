@@ -18,7 +18,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
             java-version: '17'
-            distribution: 'adoptopenjdk'
+            distribution: 'zulu'
 
       - name: Set up environment variables from GitHub Secrets
         run: |
@@ -60,7 +60,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-        
+
       - name: Login to Azure using Service Principal
         run: |
           az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
