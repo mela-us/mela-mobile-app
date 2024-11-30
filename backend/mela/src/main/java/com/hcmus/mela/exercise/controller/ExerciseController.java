@@ -1,11 +1,17 @@
 package com.hcmus.mela.exercise.controller;
 
+import com.hcmus.mela.auth.dto.request.LoginRequest;
 import com.hcmus.mela.exercise.dto.request.ExerciseRequest;
+import com.hcmus.mela.exercise.dto.request.ExerciseResultRequest;
 import com.hcmus.mela.exercise.dto.response.ExerciseResponse;
 import com.hcmus.mela.auth.security.jwt.JwtTokenService;
 import com.hcmus.mela.auth.security.utils.SecurityConstants;
+import com.hcmus.mela.exercise.dto.response.ExerciseResultResponse;
+import com.hcmus.mela.exercise.dto.response.QuestionResponse;
+import com.hcmus.mela.exercise.service.ExerciseResultService;
 import com.hcmus.mela.exercise.service.ExerciseService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +24,7 @@ import java.util.UUID;
 @RequestMapping("/api")
 public class ExerciseController {
     private final ExerciseService exerciseService;
+    private final ExerciseResultService exerciseResultService;
 
     private JwtTokenService jwtTokenService;
 
@@ -25,13 +32,13 @@ public class ExerciseController {
     @Operation(tags = "Exercise Service", description = "You can find a list of exercises belonging to a lecture from " +
             "the system by accessing the appropriate path.")
     public ResponseEntity<ExerciseResponse> getExerciseInLecture(
-            @PathVariable Integer lectureId,
+            @PathVariable String lectureId,
             @RequestHeader("Authorization") String authorizationHeader) {
         String token = authorizationHeader.replace(SecurityConstants.TOKEN_PREFIX, Strings.EMPTY);
 
         UUID userId = jwtTokenService.getUserIdFromToken(token);
 
-        ExerciseRequest exerciseRequest = new ExerciseRequest(null, lectureId, userId);
+        ExerciseRequest exerciseRequest = new ExerciseRequest(null, UUID.fromString(lectureId), userId);
 
         final ExerciseResponse exerciseResponse = exerciseService.getAllExercisesInLecture(exerciseRequest);
 
@@ -41,19 +48,34 @@ public class ExerciseController {
     @RequestMapping(value = "/exercises/{exerciseId}", method = RequestMethod.GET)
     @Operation(tags = "Exercise Service", description = "You can find a single exercise from the system by accessing the " +
             "appropriate path.")
-    public ResponseEntity<ExerciseResponse> getExercise(
-            @PathVariable Integer exerciseId,
+    public ResponseEntity<QuestionResponse> getExercise(
+            @PathVariable String exerciseId,
             @RequestHeader("Authorization") String authorizationHeader) {
 
         String token = jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader);
 
         UUID userId = jwtTokenService.getUserIdFromToken(token);
 
-        ExerciseRequest exerciseRequest = new ExerciseRequest(exerciseId, null, userId);
+        ExerciseRequest exerciseRequest = new ExerciseRequest(UUID.fromString(exerciseId), null, userId);
 
-        final ExerciseResponse exerciseResponse = exerciseService.getExercise(exerciseRequest);
+        final QuestionResponse exerciseResponse = exerciseService.getExercise(exerciseRequest);
 
         return ResponseEntity.ok(exerciseResponse);
+    }
+
+    @RequestMapping(value = "/exercises/save", method = RequestMethod.POST)
+    @Operation(tags = "Exercise Service", description = "Save exercise result to database")
+    public ResponseEntity<ExerciseResultResponse> saveResult(
+            @RequestBody ExerciseResultRequest exerciseResultRequest,
+            @RequestHeader("Authorization") String authorizationHeader
+    ) {
+        String token = jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader);
+
+        UUID userId = jwtTokenService.getUserIdFromToken(token);
+
+        final ExerciseResultResponse exerciseResultResponse = exerciseResultService.saveResult(exerciseResultRequest, userId);
+
+        return ResponseEntity.ok(exerciseResultResponse);
     }
 
 }

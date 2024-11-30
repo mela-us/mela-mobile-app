@@ -1,19 +1,14 @@
-package com.hcmus.mela.exercise.dto.request;
+package com.hcmus.mela.exercise.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.UUID;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class QuestionRequest {
-
-    private UUID questionId;
-
-    private UUID exerciseId;
+public class ExerciseResultResponse {
+    private String message;
 }

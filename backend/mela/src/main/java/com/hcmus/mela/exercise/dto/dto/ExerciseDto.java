@@ -5,18 +5,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExerciseDto {
-    private Integer exerciseId;
+    private UUID exerciseId;
 
-    private Integer lectureId;
+    private UUID lectureId;
 
     private String exerciseName;
 
-    private Integer exerciseNumber;
+    private Integer ordinalNumber;
 
-    private UserExerciseDto userExercise;
+    private Integer totalQuestions;
+
+    private ExerciseResultDto bestResult;
 }

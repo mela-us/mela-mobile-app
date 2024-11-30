@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 
 @Slf4j
 @Service
@@ -23,16 +25,16 @@ public class ExerciseValidationService {
     private final ExceptionMessageAccessor exceptionMessageAccessor;
 
     public void validateExercise(ExerciseRequest exerciseRequest) {
-        final Integer exerciseId = exerciseRequest.getExerciseId();
+        final UUID exerciseId = exerciseRequest.getExerciseId();
         checkExerciseId(exerciseId);
     }
 
     public void validateLecture(ExerciseRequest exerciseRequest) {
-        final Integer lectureId = exerciseRequest.getLectureId();
+        final UUID lectureId = exerciseRequest.getLectureId();
         checkLectureId(lectureId);
     }
 
-    private void checkExerciseId(Integer exerciseId) {
+    private void checkExerciseId(UUID exerciseId) {
         final boolean existsByExerciseId = exerciseRepository.existsByExerciseId(exerciseId);
         if (!existsByExerciseId) {
             log.warn("Exercise ID {} doesn't exist", exerciseId);
@@ -42,7 +44,7 @@ public class ExerciseValidationService {
         }
     }
 
-    private void checkLectureId(Integer lectureId) {
+    private void checkLectureId(UUID lectureId) {
         final boolean existsByLectureId = exerciseRepository.existsByLectureId(lectureId);
         if (!existsByLectureId) {
             log.warn("Lecture ID {} doesn't exist", lectureId);

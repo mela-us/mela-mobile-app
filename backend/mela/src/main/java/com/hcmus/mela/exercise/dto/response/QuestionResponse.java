@@ -16,5 +16,7 @@ public class QuestionResponse {
 
     private String message;
 
+    private Integer total;
+
     private List<QuestionDto> questions;
 }
