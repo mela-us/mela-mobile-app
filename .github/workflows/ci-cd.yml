@@ -20,22 +20,6 @@ jobs:
           java-version: "17"
           distribution: "zulu"
 
-      - name: Set up environment variables from GitHub Secrets
-        run: |
-          echo "POSTGRESQL_DB_HOST=${{ secrets.POSTGRESQL_DB_HOST }}" >> $GITHUB_ENV
-          echo "POSTGRESQL_DB_NAME=${{ secrets.POSTGRESQL_DB_NAME }}" >> $GITHUB_ENV
-          echo "POSTGRESQL_DB_USERNAME=${{ secrets.POSTGRESQL_DB_USERNAME }}" >> $GITHUB_ENV
-          echo "POSTGRESQL_DB_PASSWORD=${{ secrets.POSTGRESQL_DB_PASSWORD }}" >> $GITHUB_ENV
-          echo "MONGODB_DB_CONNECTION_STRING=${{ secrets.MONGODB_DB_CONNECTION_STRING }}" >> $GITHUB_ENV
-          echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> $GITHUB_ENV
-          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> $GITHUB_ENV
-          echo "REDIS_USERNAME=${{ secrets.REDIS_USERNAME }}" >> $GITHUB_ENV
-          echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> $GITHUB_ENV
-          echo "MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}" >> $GITHUB_ENV
-          echo "MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}" >> $GITHUB_ENV
-          echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> $GITHUB_ENV
-          echo "JWT_FORGET_PASSWORD_SECRET_KEY=${{ secrets.JWT_FORGET_PASSWORD_SECRET_KEY }}" >> $GITHUB_ENV
-
       - name: Build the Spring Boot application and Docker image
         run: |
           cd backend/mela
@@ -66,9 +50,23 @@ jobs:
       - name: Log in to Docker Hub
         run: |
           echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-
+        
       - name: Deploy to Azure Web App (Dev) using Docker
         uses: Azure/webapps-deploy@v3
         with:
           app-name: mela-backend-dev
           images: ${{ secrets.DOCKER_HUB_USERNAME }}/mela-app-dev:latest
+        env:
+            POSTGRESQL_DB_HOST: ${{ secrets.POSTGRESQL_DB_HOST }}
+            POSTGRESQL_DB_NAME: ${{ secrets.POSTGRESQL_DB_NAME }}
+            POSTGRESQL_DB_USERNAME: ${{ secrets.POSTGRESQL_DB_USERNAME }}
+            POSTGRESQL_DB_PASSWORD: ${{ secrets.POSTGRESQL_DB_PASSWORD }}
+            MONGODB_DB_CONNECTION_STRING: ${{ secrets.MONGODB_DB_CONNECTION_STRING }}
+            REDIS_HOST: ${{ secrets.REDIS_HOST }}
+            REDIS_PORT: ${{ secrets.REDIS_PORT }}
+            REDIS_USERNAME: ${{ secrets.REDIS_USERNAME }}
+            REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+            MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+            MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+            JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+            JWT_FORGET_PASSWORD_SECRET_KEY: ${{ secrets.JWT_FORGET_PASSWORD_SECRET_KEY }}
