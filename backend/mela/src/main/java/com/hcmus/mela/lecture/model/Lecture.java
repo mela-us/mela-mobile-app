@@ -3,28 +3,37 @@ package com.hcmus.mela.lecture.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+
+import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "lectures")
 public class Lecture {
-    @Field("lecture_id")
-    @Indexed(unique = true)
-    private Integer lectureId;
 
-    @Field("lecture_name")
-    private String lectureName;
-    @Field("lecture_content")
-    private LectureContent lectureContent;
+    @Id
+    private UUID lectureId;
+
     @Field("level_id")
-    private Integer levelId;
-    @Field("topic_id")
-    private Integer topicId;
+    private UUID levelId;
 
-    @Field("exercise_count")
-    private Integer exerciseCount;
+    @Field("topic_id")
+    private UUID topicId;
+
+    private String name;
+
+    private String description;
+
+    @Field("total_exercises")
+    private Integer totalExercises;
+
+    @Field("total_pass_exercises")
+    private Integer totalPassExercises;
+
+    private List<LectureSection> sections;
 }

@@ -6,7 +6,7 @@ import com.hcmus.mela.auth.dto.request.ResetPasswordRequest;
 import com.hcmus.mela.auth.dto.response.ForgotPasswordResponse;
 import com.hcmus.mela.auth.dto.response.OtpConfirmationResponse;
 import com.hcmus.mela.auth.dto.response.ResetPasswordResponse;
-import com.hcmus.mela.auth.service.ForgotPasswordService;
+import com.hcmus.mela.auth.service.ForgotPasswordServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/forgot-password")
 public class ForgotPasswordController {
 
-    private final ForgotPasswordService forgotPasswordService;
+    private final ForgotPasswordServiceImpl forgotPasswordService;
 
     @PostMapping
     @Operation(tags = "Forgot Password Service", description = "You can enter your email to receive otp via the email.")
@@ -36,14 +36,18 @@ public class ForgotPasswordController {
     @PostMapping("/validate-otp")
     @Operation(tags = "Forgot Password Service", description = "You must provide otp code to verify your account.")
     public ResponseEntity<OtpConfirmationResponse> validateOtpRequest(@Valid @RequestBody OtpConfirmationRequest otpConfirmationRequest) {
-        OtpConfirmationResponse otpConfirmationResponse = forgotPasswordService.validateOtp(otpConfirmationRequest);
+
+        final OtpConfirmationResponse otpConfirmationResponse = forgotPasswordService.validateOtp(otpConfirmationRequest);
+
         return ResponseEntity.status(HttpStatus.OK).body(otpConfirmationResponse);
     }
 
     @PostMapping("/reset-password")
     @Operation(tags = "Forgot Password Service", description = "You can reset your password.")
     public ResponseEntity<ResetPasswordResponse> resetPasswordRequest(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
-        ResetPasswordResponse resetPasswordResponse = forgotPasswordService.resetPassword(resetPasswordRequest);
+
+        final ResetPasswordResponse resetPasswordResponse = forgotPasswordService.resetPassword(resetPasswordRequest);
+
         return ResponseEntity.status(HttpStatus.OK).body(resetPasswordResponse);
     }
 }

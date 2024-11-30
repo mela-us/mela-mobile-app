@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService {
         // Check valid token
         final boolean validToken = jwtTokenService.validateToken(accessToken);
 
-        if(!validToken) {
+        if (!validToken) {
             final String invalidToken = exceptionMessageAccessor.getMessage(null, "invalid_token");
             throw new InvalidTokenException(invalidToken);
         }
@@ -196,4 +196,3 @@ public class UserServiceImpl implements UserService {
     }
 
 }
-

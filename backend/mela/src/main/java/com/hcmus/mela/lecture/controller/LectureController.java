@@ -1,42 +1,53 @@
 package com.hcmus.mela.lecture.controller;
 
-import com.hcmus.mela.lecture.dto.LectureContentDto;
-import com.hcmus.mela.lecture.dto.LectureDto;
-import com.hcmus.mela.lecture.dto.LectureStatsDto;
-import com.hcmus.mela.lecture.service.LectureService;
+import com.hcmus.mela.lecture.dto.response.GetLectureSectionsResponse;
+import com.hcmus.mela.lecture.dto.response.GetLecturesResponse;
+import com.hcmus.mela.lecture.service.LectureServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.bson.UuidRepresentation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/lectures")
 public class LectureController {
 
-    private final LectureService lectureService;
+    private final LectureServiceImpl lectureService;
 
     @GetMapping
-    @Operation(tags = "Lecture Service", description = "Get lectures with specific topic id (null), level id (null) and keyword (null).")
-    public ResponseEntity<List<LectureDto>> getLectureRequest(
-            @RequestParam(value = "topic", required = false) Integer topicId,
-            @RequestParam(value = "level", required = false) Integer levelId,
-            @RequestParam(value = "q", required = false) String keyword
+    @Operation(tags = "Lecture Service", description = "Get lectures with specific topic id")
+    public ResponseEntity<GetLecturesResponse> getLecturesByTopicRequest(
+            @RequestParam(value = "topicId") String topicId,
+            @RequestHeader("Authorization") String authorizationHeader
     ) {
-        return ResponseEntity.ok(lectureService.getLeturesByFilters(topicId, levelId, keyword));
+        return ResponseEntity.ok(lectureService.getLecturesByTopic(authorizationHeader, UUID.fromString(topicId)));
     }
 
-    @GetMapping("/stats")
-    @Operation(tags = "Lecture Service", description = "Get lecture stats of the user.")
-    public ResponseEntity<List<LectureStatsDto>> getLectureStatsListRequest() {
-        return ResponseEntity.ok(lectureService.getLectureStatsLists());
+    @GetMapping("/search")
+    @Operation(tags = "Lecture Service", description = "Get lectures with keyword.")
+    public ResponseEntity<GetLecturesResponse> getLecturesByKeywordRequest(
+            @RequestParam(value = "q") String keyword,
+            @RequestHeader("Authorization") String authorizationHeader
+    ) {
+        return ResponseEntity.ok(lectureService.getLecturesByKeyword(authorizationHeader, keyword));
     }
 
-    @GetMapping("/{lectureId}/content")
-    @Operation(tags = "Lecture Service", description = "Get lecture content by id.")
-    public ResponseEntity<LectureContentDto> getLectureContentRequest(@PathVariable Integer lectureId) {
-        return ResponseEntity.ok(lectureService.getLectureContent(lectureId));
+    @GetMapping("/recent")
+    @Operation(tags = "Lecture Service", description = "Get lecture recently.")
+    public ResponseEntity<GetLecturesResponse> getLecturesByRecentRequest(
+            @RequestParam(value = "size") Integer size,
+            @RequestHeader("Authorization") String authorizationHeader
+    ) {
+        return ResponseEntity.ok(lectureService.getLecturesByRecent(authorizationHeader, size));
+    }
+
+    @GetMapping("/{lectureId}/sections")
+    @Operation(tags = "Lecture Service", description = "Get lecture sections by lecture id.")
+    public ResponseEntity<GetLectureSectionsResponse> getLectureSectionsRequest(@PathVariable UUID lectureId) {
+        return ResponseEntity.ok(lectureService.getLectureSections(lectureId));
     }
 }

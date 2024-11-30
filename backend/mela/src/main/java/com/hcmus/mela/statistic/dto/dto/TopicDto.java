@@ -1,16 +1,19 @@
-package com.hcmus.mela.lecture.dto;
+package com.hcmus.mela.statistic.dto.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LectureContentDto {
-    private List<String> contents;
+public class TopicDto {
+
+    private UUID topicId;
+
+    private String name;
 }
