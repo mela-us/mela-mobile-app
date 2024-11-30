@@ -57,7 +57,7 @@ jobs:
 
       - name: Run Docker container with environment variables
         run: |
-          docker run -d -p 8080:8080 \
+          docker run \
             -e POSTGRESQL_DB_HOST=${{ secrets.POSTGRESQL_DB_HOST }} \
             -e POSTGRESQL_DB_NAME=${{ secrets.POSTGRESQL_DB_NAME }} \
             -e POSTGRESQL_DB_USERNAME=${{ secrets.POSTGRESQL_DB_USERNAME }} \
