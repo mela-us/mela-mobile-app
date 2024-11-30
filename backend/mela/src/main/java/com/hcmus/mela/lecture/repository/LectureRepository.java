@@ -7,6 +7,8 @@ import java.util.UUID;
 
 public interface LectureRepository {
 
+    Lecture findById(UUID lectureId);
+
     List<Lecture> findLecturesByTopic(UUID topicId);
 
     List<Lecture> findLecturesByKeyword(String keyword);

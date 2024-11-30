@@ -38,6 +38,11 @@ public class LectureServiceImpl implements LectureService {
     private final JwtTokenService jwtTokenService;
 
     @Override
+    public Lecture getLectureById(UUID lectureId) {
+        return lectureRepository.findById(lectureId);
+    }
+
+    @Override
     public GetLecturesResponse getLecturesByTopic(String authorizationHeader, UUID topicId) {
         UUID userId = jwtTokenService.getUserIdFromToken(
                 jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader)

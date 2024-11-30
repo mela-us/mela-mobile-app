@@ -14,9 +14,8 @@ import com.hcmus.mela.lecture.model.Lecture;
 import com.hcmus.mela.lecture.service.LectureService;
 import com.hcmus.mela.utils.GeneralMessageAccessor;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.*;
@@ -27,6 +26,7 @@ import java.util.UUID;
 
 @Slf4j
 @Service
+@Setter
 @RequiredArgsConstructor
 public class ExerciseResultServiceImpl implements ExerciseResultService {
     private static final String RESULTS_FOUND = "results_found_successful";
@@ -36,7 +36,6 @@ public class ExerciseResultServiceImpl implements ExerciseResultService {
     private final ExerciseRepository exerciseRepository;
     private final LectureService lectureService;
 
-    @Autowired
     private MongoTemplate mongoTemplate;
 
     @Override
@@ -95,6 +94,8 @@ public class ExerciseResultServiceImpl implements ExerciseResultService {
             status = ExerciseStatus.PASS;
         }
         exerciseResult.setStatus(status);
+
+        exerciseResult.setExerciseResultId(UUID.randomUUID());
 
         exerciseResultRepository.save(exerciseResult);
 
