@@ -57,9 +57,11 @@ class __FormContentState extends State<_FormContent> {
 
     _loginReactionDisposer =
         reaction((_) => _userLoginStore.isLoggedIn, (bool success) {
-      // print("---------------------------------------->LoginScreen1 ${_userLoginStore.isLoggedIn ? "true" : "false"}");
+      print(
+          "---------------------------------------->LoginScreen1 ${_userLoginStore.isLoggedIn ? "true" : "false"}");
       if (success) {
-        // print("---------------------------------------->LoginScreen2 ${_userLoginStore.isLoggedIn ? "true" : "false"}");
+        print(
+            "---------------------------------------->LoginScreen2 ${_userLoginStore.isLoggedIn ? "true" : "false"}");
         Navigator.of(context).pushNamedAndRemoveUntil(
             Routes.allScreens, (Route<dynamic> route) => false);
         _userLoginStore.resetSettingForLogin();
@@ -73,6 +75,18 @@ class __FormContentState extends State<_FormContent> {
       }
     });
   }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    //for logout from another screen when refreshToken is expired
+    print("}}}}}}}}}}}}}}}-------}}}}}}}}}}}}}}}");
+   if (!_userLoginStore.isSetLoginLoading) {
+    print("}}}}}}}}}}}}}}}}*****}}}}}}}}}}}}}}");
+      _userLoginStore.setIsLogin();
+    }
+    
+  }
+ 
 
   @override
   void dispose() {
@@ -91,7 +105,9 @@ class __FormContentState extends State<_FormContent> {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          buildContentInLoginScreen(),
+          Observer(builder: (context) {
+            return buildContentInLoginScreen();
+          }),
           Observer(
             builder: (context) {
               return Visibility(
@@ -120,6 +136,11 @@ class __FormContentState extends State<_FormContent> {
   }
 
   Widget buildContentInLoginScreen() {
+    if (_userLoginStore.isSetLoginLoading) {
+      return const Center(
+        child: CustomProgressIndicatorWidget(),
+      );
+    }
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
       constraints: const BoxConstraints(maxWidth: 380),
@@ -247,6 +268,8 @@ class __FormContentState extends State<_FormContent> {
                         _emailController.text,
                         _passwordController.text,
                       );
+                      _emailController.clear();
+                      _passwordController.clear();
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(

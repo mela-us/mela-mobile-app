@@ -69,7 +69,7 @@ class DioClient {
       return response.data;
     } catch (e) {
       print("------------>DioClient: error ");
-      print(e.runtimeType);
+      print(e);
       //cat error above or other exception dio eg timeout....
       rethrow;
     }
@@ -95,16 +95,16 @@ class DioClient {
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
-      //Only for register account
-      if (response.statusCode == 201) {
-        return response.data;
-      }
-      if (response.statusCode != 200) {
-        throw getResponseStatus(response.statusCode);
-      }
+      // //Only for register account
+      // if (response.statusCode == 201) {
+      //   return response.data;
+      // }
+      // if (response.statusCode != 200) {
+      //   throw getResponseStatus(response.statusCode);
+      // }
       return response.data;
     } catch (e) {
-      //cat unauthorized above or other exception dio eg timeout....
+      //cat unauthorized above or other exception dio eg timeout...
       rethrow;
     }
   }
@@ -129,9 +129,6 @@ class DioClient {
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
-      if (response.statusCode != 200) {
-        throw getResponseStatus(response.statusCode);
-      }
       return response.data;
     } catch (e) {
       rethrow;
@@ -156,9 +153,6 @@ class DioClient {
         options: options,
         cancelToken: cancelToken,
       );
-      if (response.statusCode != 200) {
-        throw getResponseStatus(response.statusCode);
-      }
       return response.data;
     } catch (e) {
       rethrow;

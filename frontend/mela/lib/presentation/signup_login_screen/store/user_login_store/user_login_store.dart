@@ -29,7 +29,7 @@ abstract class _UserLoginStore with Store {
     // // setting up disposers
     // _setupDisposers();
 
-    // checking if user is logged in share preference
+    // checking if user is logged in share preference --> for myapp.dart
     _isLoggedInUseCase.call(params: null).then((value) async {
       isLoggedIn = value;
     });
@@ -70,14 +70,32 @@ abstract class _UserLoginStore with Store {
 
   @observable
   ObservableFuture<TokenModel?> loginFuture = emptyLoginResponse;
+  @observable
+  ObservableFuture<void> setIsLoginFuture = ObservableFuture.value(null);
 
   @computed
   bool get isLoading => loginFuture.status == FutureStatus.pending;
+
+  @computed
+  bool get isSetLoginLoading => setIsLoginFuture.status == FutureStatus.pending;
 
   // actions:-------------------------------------------------------------------
   @action
   void togglePasswordVisibility() {
     isPasswordVisible = !isPasswordVisible;
+  }
+
+
+  //use for refreshToken expired and set isLoggedIn=new value in share preferences
+  @action
+  void setIsLogin() async {
+    final future = _isLoggedInUseCase.call(params: null);
+
+    setIsLoginFuture = ObservableFuture(future);
+
+    await future.then((value) async {
+      isLoggedIn = value;
+    });
   }
 
   @action
@@ -102,15 +120,17 @@ abstract class _UserLoginStore with Store {
         this.isLoggedIn = true;
       }
     }).catchError((e) {
-      print("-----********* Error in UserLoginStore");
+      this.isLoggedIn = false;
+      //print("-----********* Error in UserLoginStore");
       if (e is DioException) {
+        if (e.response?.statusCode == 401) {
+          errorStore.errorMessage = "Mật khẩu hoặc tài khoản không hợp lệ";
+          return;
+        }
         errorStore.errorMessage = DioExceptionUtil.handleError(e);
       } else {
-        if (e == ResponseStatus.UNAUTHORIZED) {
-          errorStore.errorMessage = "Mat khau hoac tai khoan khong dung";
-        }
+        errorStore.errorMessage = "Có lỗi, thử lại sau";
       }
-      this.isLoggedIn = false;
     });
   }
 
@@ -119,11 +139,17 @@ abstract class _UserLoginStore with Store {
     isPasswordVisible = false;
   }
 
-  logout() async {
-    this.isLoggedIn = false;
+  void logout() async {
+
+
+    isLoggedIn = false;
+
+
     await _saveLoginStatusUseCase.call(params: false);
     await _saveAccessTokenUsecase.call(params: "");
     await _saveRefreshTokenUsecase.call(params: "");
+  
+  
   }
 
   // general methods:-----------------------------------------------------------

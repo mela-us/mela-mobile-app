@@ -18,7 +18,7 @@ class TopicItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
+      onTap: () {
         _lectureStore.setCurrentTopic(topic);
         _topicStore.resetErrorString();
         Navigator.of(context).pushNamed(Routes.allLecturesInTopicScreen);
@@ -29,7 +29,7 @@ class TopicItem extends StatelessWidget {
         padding: const EdgeInsets.all(0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             //Logo topic
@@ -37,7 +37,9 @@ class TopicItem extends StatelessWidget {
               width: 55,
               height: 55,
               child: Image.asset(
-                topic.imageTopicPath,
+                topic.imageTopicPath.isEmpty
+                    ? 'assets/images/topics/daiso.png'
+                    : topic.imageTopicPath,
                 fit: BoxFit.contain,
               ),
             ),

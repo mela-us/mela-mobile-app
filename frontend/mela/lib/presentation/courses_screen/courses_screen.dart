@@ -50,6 +50,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
     print("========TopicError: ${_topicStore.errorString}");
     // check to see if already called api
     if (!_topicStore.loading) {
+      _topicStore.getLevels();
       _topicStore.getTopics();
       _topicStore.getAreLearningLectures();
     }
@@ -79,7 +80,8 @@ class _CoursesScreenState extends State<CoursesScreen> {
           Observer(builder: (context) {
             if (_topicStore.errorString.isNotEmpty ||
                 _topicStore.topicList == null ||
-                _topicStore.lecturesAreLearningList == null) {
+                _topicStore.lecturesAreLearningList == null ||
+                _topicStore.levelList == null) {
               return const SizedBox.shrink();
             }
             return IconButton(
@@ -115,7 +117,8 @@ class _CoursesScreenState extends State<CoursesScreen> {
           //print("^^^^^^^^^^^^^^^^^^ErrorString in Courses_Screen 3: ${_topicStore.errorString}");
           if (_topicStore.errorString.isNotEmpty ||
               _topicStore.topicList == null ||
-              _topicStore.lecturesAreLearningList == null) {
+              _topicStore.lecturesAreLearningList == null ||
+              _topicStore.levelList == null) {
             return Center(
               child: Text(_topicStore.errorString,
                   style: const TextStyle(color: Colors.red)),

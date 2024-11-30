@@ -31,6 +31,8 @@ class LoginUseCase implements UseCase<TokenModel?, LoginParams> {
 
   @override
   Future<TokenModel?> call({required LoginParams params}){
+    print("==============Login Paramgrams");
+    print(params.toJson());
     
     return _userLoginRepository.login(params);
   }

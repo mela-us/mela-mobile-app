@@ -132,6 +132,7 @@ class __FormContentState extends State<_FormContent> {
 
             //Email TextField
             TextFormField(
+              controller: _emailController,
               validator: (value) {
                 // add email validation
                 if (value == null || value.isEmpty) {
@@ -167,6 +168,7 @@ class __FormContentState extends State<_FormContent> {
             //Password TextField
             Observer(builder: (context) {
               return TextFormField(
+                controller: _passwordController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Vui lòng nhập dữ liệu';
@@ -256,6 +258,8 @@ class __FormContentState extends State<_FormContent> {
                   }
                   if (_formKey.currentState?.validate() ?? false) {
                     try {
+                      print("sdsdsdsds");
+                      print(_emailController.text);
                       await _userSignupStore.signUp(
                         _emailController.text,
                         _passwordController.text,

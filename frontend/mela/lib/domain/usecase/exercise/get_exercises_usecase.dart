@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:mela/constants/enum.dart';
 import 'package:mela/core/domain/usecase/use_case.dart';
 import 'package:mela/domain/usecase/user_login/refresh_access_token_usecase.dart';
 
@@ -19,22 +18,24 @@ class GetExercisesUseCase extends UseCase<ExerciseList, String> {
       return _exerciseRepository.getExercises(params);
     } catch (e) {
       if (e is DioException) {
-        //eg timeout, no wifi,...
+        //eg accessToken is expired
+        if (e.response?.statusCode == 401) {
+          bool isRefreshTokenSuccess =
+              await _refreshAccessTokenUsecase.call(params: null);
+          if (isRefreshTokenSuccess) {
+            //not use return _lectureRepository.getLectures(params); in here beacause if do it
+            //it have a DioException, so we should call recursive
+            print("----------->E1: $e");
+            return call(params: params);
+          }
+          //Call logout, logout will delete token in secure storage, shared preference.....
+
+          //.................
+        }
+        print("----------->E2: $e");
         rethrow;
       }
-
-      // UNAUTHORIZED, call refreshToken
-      if (e == ResponseStatus.UNAUTHORIZED) {
-        bool isRefreshTokenSuccess =
-            await _refreshAccessTokenUsecase.call(params: null);
-        if (isRefreshTokenSuccess) {
-          //not use return _lectureRepository.getLectures(params); in here beacause if do it
-          //it have a DioException, so we should call recursive
-          return call(params: params);
-        } else {
-          throw ResponseStatus.UNAUTHORIZED;
-        }
-      }
+      print("----------->E3: $e");
       rethrow;
     }
 

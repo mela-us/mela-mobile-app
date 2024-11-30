@@ -6,8 +6,14 @@ import 'package:mela/domain/usecase/user_signup/signup_usecase.dart';
 class SignupApi {
   final DioClient _dioClient;
   SignupApi(this._dioClient);
-  Future<void> signup(SignupParams signupParams)  {
-    return _dioClient.post(
+  Future<void> signup(SignupParams signupParams) async {
+    // return _dioClient.post(
+    //   EndpointsConst.signup,
+    //   options: Options(headers: {'Content-Type': 'application/json'}),
+    //   data: signupParams.toJson(),
+    // );
+
+    await _dioClient.post(
       EndpointsConst.signup,
       options: Options(headers: {'Content-Type': 'application/json'}),
       data: signupParams.toJson(),

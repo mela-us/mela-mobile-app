@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/core/widgets/progress_indicator_widget.dart';
 import 'package:mela/di/service_locator.dart';
+import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
 import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
 import 'package:mobx/mobx.dart';
 import '../../utils/routes/routes.dart';
@@ -18,6 +19,7 @@ class AllLecturesInTopicScreen extends StatefulWidget {
 
 class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen> {
   final LectureStore _lectureStore = getIt<LectureStore>();
+  final TopicStore _topicStore = getIt<TopicStore>();
   late final ReactionDisposer _unAuthorizedReactionDisposer;
   @override
   void initState() {
@@ -50,7 +52,6 @@ class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen> {
     super.didChangeDependencies();
 
     if (!_lectureStore.isGetLecturesLoading) {
-      _lectureStore.getLevels();
       _lectureStore.getListLectureByTopicIdAndLevelId();
     }
   }
@@ -83,8 +84,7 @@ class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen> {
               padding: const EdgeInsets.only(right: 10),
               child: Observer(builder: (context) {
                 if (_lectureStore.errorString.isNotEmpty ||
-                    _lectureStore.lectureList == null ||
-                    _lectureStore.levelList == null) {
+                    _lectureStore.lectureList == null) {
                   return const SizedBox.shrink();
                 }
                 return IconButton(
@@ -133,16 +133,16 @@ class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen> {
                 )
               : TabBarView(
                   children: (_lectureStore.errorString.isEmpty &&
-                          _lectureStore.lectureList != null && _lectureStore.levelList != null)
+                          _lectureStore.lectureList != null)
                       ? [
                           LecturesInTopicAndLevel(
-                              levelId: _lectureStore
+                              levelId: _topicStore
                                   .levelList!.levelList[0].levelId),
                           LecturesInTopicAndLevel(
-                              levelId: _lectureStore
+                              levelId: _topicStore
                                   .levelList!.levelList[1].levelId),
                           LecturesInTopicAndLevel(
-                              levelId: _lectureStore
+                              levelId: _topicStore
                                   .levelList!.levelList[2].levelId),
                         ]
                       : [

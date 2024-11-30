@@ -8,23 +8,17 @@ import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.d
 
 import 'lecture_item.dart';
 
-class LecturesInTopicAndLevel extends StatefulWidget {
+class LecturesInTopicAndLevel extends StatelessWidget {
   final String levelId;
 
   LecturesInTopicAndLevel({super.key, required this.levelId});
 
-  @override
-  State<LecturesInTopicAndLevel> createState() =>
-      _LecturesInTopicAndLevelState();
-}
-
-class _LecturesInTopicAndLevelState extends State<LecturesInTopicAndLevel> {
   final LectureStore lectureStore = getIt<LectureStore>();
 
   @override
   Widget build(BuildContext context) {
     LectureList lecturesInTopicAndLevel =
-        lectureStore.getLectureListByLevelId(widget.levelId);
+        lectureStore.getLectureListByLevelId(levelId);
     
     if(lecturesInTopicAndLevel.lectures.isEmpty){
       return const Center(child: Text("Không có bài giảng"));

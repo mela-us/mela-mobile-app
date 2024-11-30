@@ -37,6 +37,10 @@ abstract class _UserSignupStore with Store {
     // print("FlutterSa0: ${isSignupLoading}");
     SignupParams signupParams =
         SignupParams(username: email, password: password);
+    print("Signup in singup store");
+    print(email);
+    print(password);
+    print(signupParams.toJson());
     final future = _signupUseCase.call(params: signupParams);
     signUpFuture = ObservableFuture(future);
     // print("FlutterSa1: ${isSignupLoading}");
@@ -47,13 +51,12 @@ abstract class _UserSignupStore with Store {
     } catch (e) {
       isSignupSuccessful = false;
       if (e is DioException) {
+        if (e.response?.statusCode == 400) {
+          throw "Tài khoản đã tồn tại";
+        }
         throw DioExceptionUtil.handleError(e);
       } else {
-        if (e == ResponseStatus.BAD_REQUEST) {
-          throw "Email already exists";
-        }
-        print("FlutterSa3: $e");
-        throw "Something went wrong";
+        throw "Có lỗi. Thử lại sau";
       }
     }
   }

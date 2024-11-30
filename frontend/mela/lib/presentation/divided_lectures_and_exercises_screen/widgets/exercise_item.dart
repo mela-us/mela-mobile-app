@@ -18,11 +18,20 @@ class ExerciseItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final topicName = _topicStore
-        .getTopicNameById(_lectureStore.getTopicId(currentExercise.lectureId));
-        //hoặc thay currentExercise.lectureId bằng _exerciseStore.currentLecture.lectureId
-    final levelName = _lectureStore
-        .getLevelName(_lectureStore.getLevelId(currentExercise.lectureId));
+    //Navigator from all_lectures_screen
+    String topicName = _topicStore.getTopicNameByIdInTopicStore(
+        _lectureStore.getTopicIdInLectures(currentExercise.lectureId));
+    String levelName = _topicStore.getLevelNameInTopicStore(_lectureStore
+        .getLevelIdByLectureIdInLectures(currentExercise.lectureId));
+
+    //Navigator from courses_screen
+    if (topicName.isEmpty || levelName.isEmpty) {
+      topicName = _topicStore.getTopicNameByIdInTopicStore(_topicStore
+          .getTopicIdInAreLearningLectures(currentExercise.lectureId));
+      levelName = _topicStore.getLevelNameInTopicStore(
+          _topicStore.getLevelIdByLectureIdInAreLearningLectures(
+              currentExercise.lectureId));
+    }
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, Routes.question);

@@ -17,13 +17,12 @@ class LectureStore = _LectureStore with _$LectureStore;
 abstract class _LectureStore with Store {
   //usecase--------------
   GetLecturesUsecase _getLecturesUsecase;
-  GetLecturesAreLearningUsecase
-      getLecturesAreLearningUsecase;
+  GetLecturesAreLearningUsecase getLecturesAreLearningUsecase;
   GetDividedLectureUsecase getDividedLectureUsecase; //use in topicstore
-  
-  GetLevelsUsecase _getLevelsUsecase;
+
+  GetLevelsUsecase getLevelsUsecase;
   _LectureStore(this._getLecturesUsecase, this.getLecturesAreLearningUsecase,
-      this._getLevelsUsecase, this.getDividedLectureUsecase);
+      this.getLevelsUsecase, this.getDividedLectureUsecase);
 
 //obserbale
   @observable
@@ -36,25 +35,17 @@ abstract class _LectureStore with Store {
   bool isUnAuthorized = false;
 
   @observable
-  LevelList? levelList;
-
-  @observable
   LectureList?
       lectureList; //Lecture in Topic, not Lecture in Topic + level to improve performance
   //mean get All lecture after filter in getLectureListByLevelId
 
   @computed
   bool get isGetLecturesLoading =>
-      fetchLectureFuture.status == FutureStatus.pending ||
-      fetchLevelsFuture.status == FutureStatus.pending;
+      fetchLectureFuture.status == FutureStatus.pending;
 
   @observable
   ObservableFuture<LectureList?> fetchLectureFuture =
       ObservableFuture<LectureList?>(ObservableFuture.value(null));
-
-  @observable
-  ObservableFuture<LevelList?> fetchLevelsFuture =
-      ObservableFuture<LevelList?>(ObservableFuture.value(null));
 
   //action
   @action
@@ -64,31 +55,16 @@ abstract class _LectureStore with Store {
     await future.then((value) {
       lectureList = value;
     }).catchError((onError) {
+      lectureList = null;
       if (onError is DioException) {
-        errorString = DioExceptionUtil.handleError(onError);
-        lectureList = null;
-      } else {
-        lectureList = null;
-        if (onError == ResponseStatus.UNAUTHORIZED) {
+        if (onError.response?.statusCode == 401) {
           isUnAuthorized = true;
+          return;
         }
-      }
-    });
-  }
-
-  @action
-  Future getLevels() async {
-    final future = _getLevelsUsecase.call(params: null);
-    fetchLevelsFuture = ObservableFuture(future);
-    await future.then((value) {
-      levelList = value;
-    }).catchError((onError) {
-      if (onError is DioException) {
         errorString = DioExceptionUtil.handleError(onError);
       } else {
-        errorString = onError.toString();
+        errorString = "Có lỗi, thử lại sau";
       }
-      levelList = null;
     });
   }
 
@@ -123,31 +99,39 @@ abstract class _LectureStore with Store {
   }
 
   //Untils--------------------------------------------------------------
-  String getTopicId(String lectureId) {
-    if (lectureList == null) return "Topic id null";
-    return lectureList!.lectures
-        .firstWhere((element) => element.lectureId == lectureId)
-        .topicId;
+  String getTopicIdInLectures(String lectureId) {
+    if (lectureList == null) return "";
+
+    for (var lecture in lectureList!.lectures) {
+      if (lecture.lectureId == lectureId) {
+        return lecture.topicId;
+      }
+    }
+
+    return "";
   }
 
-  String getLectureNameById(String lectureId) {
-    if (lectureList == null) return "Lecture name null";
-    return lectureList!.lectures
-        .firstWhere((element) => element.lectureId == lectureId)
-        .lectureName;
+  String getLectureNameByIdInLectures(String lectureId) {
+    if (lectureList == null) return "";
+
+    for (var lecture in lectureList!.lectures) {
+      if (lecture.lectureId == lectureId) {
+        return lecture.lectureName;
+      }
+    }
+
+    return "";
   }
 
-  String getLevelId(String lectureId) {
-    if (lectureList == null) return "Level id null";
-    return lectureList!.lectures
-        .firstWhere((element) => element.lectureId == lectureId)
-        .levelId;
-  }
+  String getLevelIdByLectureIdInLectures(String lectureId) {
+    if (lectureList == null) return "";
 
-  String getLevelName(String levelId) {
-    if (levelList == null) return "Level name null";
-    return levelList!.levelList
-        .firstWhere((element) => element.levelId == levelId)
-        .levelName;
+    for (var lecture in lectureList!.lectures) {
+      if (lecture.lectureId == lectureId) {
+        return lecture.levelId;
+      }
+    }
+
+    return "";
   }
 }

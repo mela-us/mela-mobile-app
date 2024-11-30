@@ -76,8 +76,9 @@ class UseCaseModule {
     );
 
     /// topic:------------------------------------------------------------------
-    getIt.registerSingleton<GetTopicsUsecase>(
-        GetTopicsUsecase(getIt<TopicRepository>()));
+    getIt.registerSingleton<GetTopicsUsecase>(GetTopicsUsecase(
+        getIt<TopicRepository>(), getIt<RefreshAccessTokenUsecase>()));
+        
     getIt.registerSingleton<FindTopicByIdUsecase>(
         FindTopicByIdUsecase(getIt<TopicRepository>()));
 
@@ -89,8 +90,8 @@ class UseCaseModule {
         GetLecturesAreLearningUsecase(
             getIt<LectureRepository>(), getIt<RefreshAccessTokenUsecase>()));
 
-    getIt.registerSingleton<GetLevelsUsecase>(
-        GetLevelsUsecase(getIt<LectureRepository>()));
+    getIt.registerSingleton<GetLevelsUsecase>(GetLevelsUsecase(
+        getIt<LectureRepository>(), getIt<RefreshAccessTokenUsecase>()));
 
     getIt.registerSingleton<GetDividedLectureUsecase>(GetDividedLectureUsecase(
         getIt<LectureRepository>(), getIt<RefreshAccessTokenUsecase>()));

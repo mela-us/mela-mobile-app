@@ -18,11 +18,21 @@ class DividedLectureItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final topicName = _topicStore.getTopicNameById(
-        _lectureStore.getTopicId(currentDividedLecture.lectureId));
-    //hoặc thay currentExercise.lectureId bằng _exerciseStore.currentLecture.lectureId
-    final levelName = _lectureStore.getLevelName(
-        _lectureStore.getLevelId(currentDividedLecture.lectureId));
+    //Navigator from all_lectures_screen
+    String topicName = _topicStore.getTopicNameByIdInTopicStore(
+        _lectureStore.getTopicIdInLectures(currentDividedLecture.lectureId));
+    String levelName = _topicStore.getLevelNameInTopicStore(_lectureStore
+        .getLevelIdByLectureIdInLectures(currentDividedLecture.lectureId));
+
+    //Navigator from courses_screen
+    if (topicName.isEmpty || levelName.isEmpty) {
+      topicName = _topicStore.getTopicNameByIdInTopicStore(_topicStore
+          .getTopicIdInAreLearningLectures(currentDividedLecture.lectureId));
+      levelName = _topicStore.getLevelNameInTopicStore(
+          _topicStore.getLevelIdByLectureIdInAreLearningLectures(
+              currentDividedLecture.lectureId));
+    }
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
       padding: const EdgeInsets.all(16),

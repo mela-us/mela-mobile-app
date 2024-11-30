@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:mela/constants/enum.dart';
 import 'package:mela/di/service_locator.dart';
-import 'package:mela/domain/entity/divided_lecture/divided_lecture.dart';
 import 'package:mela/domain/entity/divided_lecture/divided_lecture_list.dart';
 import 'package:mela/domain/entity/exercise/exercise_list.dart';
 import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
@@ -60,14 +59,15 @@ abstract class _ExerciseStore with Store {
       exerciseList = value;
       //print("*********exerciseList trong exercise store");
     }).catchError((onError) {
+      exerciseList = null;
       if (onError is DioException) {
-        errorString = DioExceptionUtil.handleError(onError);
-        exerciseList = null;
-      } else {
-        exerciseList = null;
-        if (onError == ResponseStatus.UNAUTHORIZED) {
+        if (onError.response?.statusCode == 401) {
           isUnAuthorized = true;
+          return;
         }
+        errorString = DioExceptionUtil.handleError(onError);
+      } else {
+        errorString = "Có lỗi, thử lại sau";
       }
     });
   }
@@ -81,14 +81,15 @@ abstract class _ExerciseStore with Store {
       dividedLectureList = value;
       //print("*********dividedLectureList trong exercise store");
     }).catchError((onError) {
+      dividedLectureList = null;
       if (onError is DioException) {
-        errorString = DioExceptionUtil.handleError(onError);
-        dividedLectureList = null;
-      } else {
-        dividedLectureList = null;
-        if (onError == ResponseStatus.UNAUTHORIZED) {
+        if (onError.response?.statusCode == 401) {
           isUnAuthorized = true;
+          return;
         }
+        errorString = DioExceptionUtil.handleError(onError);
+      } else {
+        errorString = "Có lỗi, thử lại sau";
       }
       //errorString = onError.toString();
     });
