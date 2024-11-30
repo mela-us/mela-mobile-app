@@ -7,6 +7,7 @@ class TopicApi {
   final DioClient _dioClient;
   TopicApi(this._dioClient);
   Future<TopicList> getTopics() async {
+    print("================================ở getTopics API");
     final responseData = await _dioClient.get(
       EndpointsConst.getTopics,
     );

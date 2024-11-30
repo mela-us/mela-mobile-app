@@ -57,7 +57,8 @@ abstract class _ExerciseStore with Store {
     //print("*********ABC");
     await future.then((value) {
       exerciseList = value;
-      //print("*********exerciseList trong exercise store");
+      print("*********exerciseList trong exercise store");
+      print(exerciseList);
     }).catchError((onError) {
       exerciseList = null;
       if (onError is DioException) {

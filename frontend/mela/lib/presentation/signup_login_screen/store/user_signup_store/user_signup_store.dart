@@ -37,10 +37,6 @@ abstract class _UserSignupStore with Store {
     // print("FlutterSa0: ${isSignupLoading}");
     SignupParams signupParams =
         SignupParams(username: email, password: password);
-    print("Signup in singup store");
-    print(email);
-    print(password);
-    print(signupParams.toJson());
     final future = _signupUseCase.call(params: signupParams);
     signUpFuture = ObservableFuture(future);
     // print("FlutterSa1: ${isSignupLoading}");

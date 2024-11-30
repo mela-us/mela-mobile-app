@@ -9,11 +9,13 @@ class LectureApi {
   LectureApi(this._dioClient);
 
   Future<LevelList> getLevels() async {
+    print("================================ở getLevels API");
     final responseData = await _dioClient.get(EndpointsConst.getLevels);
     return LevelList.fromJson(responseData['data']);
   }
 
   Future<LectureList> getLectures(String topicId) async {
+    print("================================ở getLectures API");
     final responseData = await _dioClient
         .get(EndpointsConst.getLectures, queryParameters: {'topicId': topicId});
     //print(responseData);
@@ -21,6 +23,7 @@ class LectureApi {
   }
 
   Future<LectureList> getLecturesAreLearning() async {
+    print("================================ở getLectureAreLearning API");
     final responseData = await _dioClient.get(
         EndpointsConst.getLecturesAreLearning,
         queryParameters: {'size': 3});
@@ -28,6 +31,7 @@ class LectureApi {
   }
 
   Future<DividedLectureList> getDividedLectures(String lectureId) async {
+    print("================================ở getDividedLectured API");
     final url =
         EndpointsConst.getDividedLectures.replaceAll(':lectureId', lectureId);
     final responseData =

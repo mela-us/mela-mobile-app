@@ -3,8 +3,7 @@ class EndpointsConst {
 
   // base url
   //static const String baseUrl = "http://jsonplaceholder.typicode.com";
-  static const String baseUrl =
-      "https://api.dev.mela.guru";
+  static const String baseUrl = "https://api.dev.mela.guru";
 
   // receiveTimeout
   static const int receiveTimeout = 15000;
@@ -23,4 +22,5 @@ class EndpointsConst {
   static const String getLevels = "/api/levels";
   static const String getDividedLectures = "/api/lectures/:lectureId/sections";
   static const String getExercises = "/api/lectures/:lectureId/exercises";
+  static const String getLecturesSearch = "/api/lectures/search";
 }

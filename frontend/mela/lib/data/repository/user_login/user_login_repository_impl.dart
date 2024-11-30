@@ -17,12 +17,12 @@ class UserLoginRepositoryImpl extends UserLoginRepository {
   final RefreshAccessTokenApi _refreshAccessTokenApi;
 
   // constructor
-  UserLoginRepositoryImpl(
-      this._sharedPrefsHelper, this._secureStorageHelper, this._loginApi, this._refreshAccessTokenApi);
+  UserLoginRepositoryImpl(this._sharedPrefsHelper, this._secureStorageHelper,
+      this._loginApi, this._refreshAccessTokenApi);
 
   // Login:---------------------------------------------------------------------
   @override
-  Future<TokenModel?> login(LoginParams params)  {
+  Future<TokenModel?> login(LoginParams params) {
     return _loginApi.login(params);
   }
 
@@ -42,10 +42,11 @@ class UserLoginRepositoryImpl extends UserLoginRepository {
   Future<void> saveRefreshToken(String refreshToken) {
     return _secureStorageHelper.saveRefreshToken(refreshToken);
   }
-  
+
   @override
-  Future<String> refreshAccessToken() async{
-    // TODO: implement refreshAccessToken
-    return _refreshAccessTokenApi.refreshAccessToken(await _secureStorageHelper.refreshToken);
+  Future<String> refreshAccessToken() async {
+    String refreshToken = await _secureStorageHelper.refreshToken ?? "";
+    print(refreshToken);
+    return _refreshAccessTokenApi.refreshAccessToken(refreshToken);
   }
 }

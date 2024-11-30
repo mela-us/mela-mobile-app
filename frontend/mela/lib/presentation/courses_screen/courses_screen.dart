@@ -47,7 +47,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     print("didChangeDependencies In CoursesScreen");
-    print("========TopicError: ${_topicStore.errorString}");
+    //print("========TopicError: ${_topicStore.errorString}");
     // check to see if already called api
     if (!_topicStore.loading) {
       _topicStore.getLevels();

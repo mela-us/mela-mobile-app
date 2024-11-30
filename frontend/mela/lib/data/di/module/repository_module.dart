@@ -5,6 +5,7 @@ import 'package:mela/data/network/apis/lectures/lecture_api.dart';
 import 'package:mela/data/network/apis/login_signup/login_api.dart';
 import 'package:mela/data/network/apis/login_signup/refresh_access_token_api.dart';
 import 'package:mela/data/network/apis/login_signup/signup_api.dart';
+import 'package:mela/data/network/apis/searchs/search_api.dart';
 import 'package:mela/data/network/apis/topics/topic_api.dart';
 import 'package:mela/data/repository/question/question_repository_impl.dart';
 import 'package:mela/data/repository/setting/setting_repository_impl.dart';
@@ -74,11 +75,12 @@ class RepositoryModule {
 
     getIt.registerSingleton<LectureRepository>(
         LectureRepositoryImpl(getIt<LectureApi>()));
-        
+
     getIt.registerSingleton<ExerciseRepository>(
         ExerciseRepositoryImpl(getIt<ExerciseApi>()));
-        
-    getIt.registerSingleton<SearchRepository>(SearchRepositoryImpl());
+
+    getIt.registerSingleton<SearchRepository>(
+        SearchRepositoryImpl(getIt<SearchApi>()));
 
     getIt.registerSingleton<StatRepository>(
         StatRepositoryImpl() as StatRepository);

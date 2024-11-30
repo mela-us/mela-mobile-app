@@ -6,6 +6,8 @@ import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/filter_screen/store/filter_store.dart';
 import 'package:mela/presentation/lectures_in_topic_screen/widgets/lecture_item.dart';
 import 'package:mela/presentation/search_screen/widgets/search_bar.dart';
+import 'package:mela/utils/routes/routes.dart';
+import 'package:mobx/mobx.dart';
 
 import 'store/search_store.dart';
 
@@ -17,10 +19,31 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  SearchStore _searchStore = getIt<SearchStore>();
-  FilterStore _filterStore = getIt<FilterStore>();
+  final SearchStore _searchStore = getIt<SearchStore>();
+  final FilterStore _filterStore = getIt<FilterStore>();
   final GlobalKey<SearchingBarState> searchBarKey =
       GlobalKey<SearchingBarState>();
+  late final ReactionDisposer _unAuthorizedReactionDisposer;
+  @override
+  void initState() {
+    super.initState();
+    //routeObserver.subscribe(this, ModalRoute.of(context));
+
+    //for only refresh token expired
+    _unAuthorizedReactionDisposer = reaction(
+      (_) => _searchStore.isUnAuthorized,
+      (value) {
+        if (value) {
+          _searchStore.isUnAuthorized = false;
+          _searchStore.resetErrorString();
+          //Remove all routes in stack
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              Routes.loginOrSignupScreen, (route) => false);
+        }
+      },
+    );
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -28,6 +51,12 @@ class _SearchScreenState extends State<SearchScreen> {
     if (!_searchStore.isLoadingHistorySearch) {
       _searchStore.getHistorySearchList();
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _unAuthorizedReactionDisposer();
   }
 
   void handleHistoryItemClick(String searchText) {
@@ -73,7 +102,7 @@ class _SearchScreenState extends State<SearchScreen> {
           //Search bar
           SearchingBar(key: searchBarKey),
 
-          //Row History search or number of lectures after searching
+          //ONLY Row History search or number of lectures after searching
           Observer(builder: (context) {
             if (!_searchStore.isSearched) {
               return Padding(
@@ -176,7 +205,8 @@ class _SearchScreenState extends State<SearchScreen> {
               if (_searchStore.isLoadingSearch) {
                 return const Center(child: CustomProgressIndicatorWidget());
               }
-              if (_searchStore.errorString.isNotEmpty || _searchStore.lecturesAfterSearchingAndFiltering == null) {
+              if (_searchStore.errorString.isNotEmpty ||
+                  _searchStore.lecturesAfterSearchingAndFiltering == null) {
                 return Center(
                   child: Text(
                     _searchStore.errorString,
@@ -184,17 +214,17 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                 );
               }
+
               ///List lectures after searching
               return ListView.builder(
-                      itemCount: _searchStore
-                          .lecturesAfterSearchingAndFiltering!.lectures.length,
-                      itemBuilder: (context, index) {
-                        return LectureItem(
-                            lecture: _searchStore
-                                .lecturesAfterSearchingAndFiltering!
-                                .lectures[index]);
-                      },
-                    );
+                itemCount: _searchStore
+                    .lecturesAfterSearchingAndFiltering!.lectures.length,
+                itemBuilder: (context, index) {
+                  return LectureItem(
+                      lecture: _searchStore
+                          .lecturesAfterSearchingAndFiltering!.lectures[index]);
+                },
+              );
             }),
           ),
         ],

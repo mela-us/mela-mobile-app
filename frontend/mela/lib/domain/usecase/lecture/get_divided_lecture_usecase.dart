@@ -15,7 +15,7 @@ class GetDividedLectureUsecase extends UseCase<DividedLectureList, String> {
   @override
   Future<DividedLectureList> call({required String params}) async {
     try {
-      return _lectureRepository.getDividedLectureList(params);
+      return await _lectureRepository.getDividedLectureList(params);
     } catch (e) {
       if (e is DioException) {
 
@@ -27,7 +27,7 @@ class GetDividedLectureUsecase extends UseCase<DividedLectureList, String> {
             //not use return _lectureRepository.getLectures(params); in here beacause if do it
             //it have a DioException, so we should call recursive
             print("----------->E1: $e");
-            return call(params: params);
+            return await call(params: params);
           }
           //Call logout, logout will delete token in secure storage, shared preference.....
 

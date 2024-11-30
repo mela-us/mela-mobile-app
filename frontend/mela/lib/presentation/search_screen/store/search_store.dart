@@ -1,6 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:mela/domain/entity/lecture/lecture_list.dart';
 import 'package:mela/domain/usecase/search/get_history_search_list.dart';
 import 'package:mela/domain/usecase/search/get_search_lectures_result.dart';
+import 'package:mela/utils/dio/dio_error_util.dart';
 import 'package:mobx/mobx.dart';
 
 // Include generated file
@@ -22,6 +24,9 @@ abstract class _SearchStore with Store {
 
   @observable
   bool isFiltered = false;
+
+  @observable
+  bool isUnAuthorized = false;
 
   @observable
   String errorString = '';
@@ -59,7 +64,7 @@ abstract class _SearchStore with Store {
       this.searchHistory = value;
     }).catchError((onError) {
       this.searchHistory = null;
-      print(onError);
+      //errorString = onError.toString();
     });
   }
 
@@ -75,8 +80,16 @@ abstract class _SearchStore with Store {
     } catch (onError) {
       lecturesAfterSearching = null;
       updateLectureAfterSeachingAndFiltering(null);
-      print(onError);
-      errorString = onError.toString();
+
+      if (onError is DioException) {
+        if (onError.response?.statusCode == 401) {
+          isUnAuthorized = true;
+          return;
+        }
+        errorString = DioExceptionUtil.handleError(onError);
+      } else {
+        errorString = "Có lỗi, thử lại sau";
+      }
     }
   }
 

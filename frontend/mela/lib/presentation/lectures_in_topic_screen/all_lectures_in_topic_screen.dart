@@ -58,7 +58,7 @@ class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("FlutterSa: AllLecturesInTopicScreen");
+    print("AllLecturesInTopicScreen");
     return DefaultTabController(
       length: 3,
       child: Scaffold(

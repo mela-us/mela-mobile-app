@@ -68,8 +68,6 @@ class DioClient {
       //200 OK
       return response.data;
     } catch (e) {
-      print("------------>DioClient: error ");
-      print(e);
       //cat error above or other exception dio eg timeout....
       rethrow;
     }

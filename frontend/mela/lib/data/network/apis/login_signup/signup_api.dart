@@ -12,6 +12,7 @@ class SignupApi {
     //   options: Options(headers: {'Content-Type': 'application/json'}),
     //   data: signupParams.toJson(),
     // );
+    print("================================ở signup API");
 
     await _dioClient.post(
       EndpointsConst.signup,

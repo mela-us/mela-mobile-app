@@ -78,7 +78,7 @@ class UseCaseModule {
     /// topic:------------------------------------------------------------------
     getIt.registerSingleton<GetTopicsUsecase>(GetTopicsUsecase(
         getIt<TopicRepository>(), getIt<RefreshAccessTokenUsecase>()));
-        
+
     getIt.registerSingleton<FindTopicByIdUsecase>(
         FindTopicByIdUsecase(getIt<TopicRepository>()));
 
@@ -103,8 +103,8 @@ class UseCaseModule {
     //search:--------------------------------------------------------------------
     getIt.registerSingleton<GetHistorySearchList>(
         GetHistorySearchList(getIt<SearchRepository>()));
-    getIt.registerSingleton<GetSearchLecturesResult>(
-        GetSearchLecturesResult(getIt<SearchRepository>()));
+    getIt.registerSingleton<GetSearchLecturesResult>(GetSearchLecturesResult(
+        getIt<SearchRepository>(), getIt<RefreshAccessTokenUsecase>()));
 
     //stats:--------------------------------------------------------------------
     getIt.registerSingleton<GetProgressListUseCase>(

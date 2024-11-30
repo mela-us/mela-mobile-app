@@ -7,17 +7,13 @@ class ExerciseApi {
   ExerciseApi(this._dioClient);
 
   Future<ExerciseList> getExercises(String lectureId) async {
+
+    print("================================ ở getExercises API");
     final url = EndpointsConst.getExercises.replaceAll(':lectureId', lectureId);
     final responseData = await _dioClient.get(url);
-    // print(
-    //     "================================ResponseData ExerciseApi=====================with lectureId= $lectureId");
-    // print("responseData: ${responseData}");
-
-    final a = ExerciseList.fromJson(responseData['exercises']);
+    return ExerciseList.fromJson(responseData['exercises']);
     // print(
     //     "================================********==================");
     // print("a=: ${a}");n
-
-    return a;
   }
 }

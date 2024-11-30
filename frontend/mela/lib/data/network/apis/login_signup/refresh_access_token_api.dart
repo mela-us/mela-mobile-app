@@ -5,10 +5,10 @@ import 'package:mela/data/network/dio_client.dart';
 class RefreshAccessTokenApi {
   final DioClient _dioClient;
   RefreshAccessTokenApi(this._dioClient);
-  Future<String> refreshAccessToken(String? refreshToken) async {
+  Future<String> refreshAccessToken(String refreshToken) async {
+    print("================================ở refresh API");
     final responseData = await _dioClient.post(
       EndpointsConst.refreshAccessToken,
-      options: Options(headers: {'Content-Type': 'application/json'}),
       data: {'refreshToken': refreshToken},
     );
 

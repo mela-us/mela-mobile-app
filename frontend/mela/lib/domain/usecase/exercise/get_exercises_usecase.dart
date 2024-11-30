@@ -15,7 +15,7 @@ class GetExercisesUseCase extends UseCase<ExerciseList, String> {
   @override
   Future<ExerciseList> call({required String params}) async {
     try {
-      return _exerciseRepository.getExercises(params);
+      return await _exerciseRepository.getExercises(params);
     } catch (e) {
       if (e is DioException) {
         //eg accessToken is expired
@@ -26,7 +26,7 @@ class GetExercisesUseCase extends UseCase<ExerciseList, String> {
             //not use return _lectureRepository.getLectures(params); in here beacause if do it
             //it have a DioException, so we should call recursive
             print("----------->E1: $e");
-            return call(params: params);
+            return await call(params: params);
           }
           //Call logout, logout will delete token in secure storage, shared preference.....
 

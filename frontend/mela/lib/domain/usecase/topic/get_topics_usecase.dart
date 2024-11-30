@@ -19,7 +19,7 @@ class GetTopicsUsecase extends UseCase<TopicList, void> {
     //it not use accessToken so do not need to refresh accessToken
 
     try {
-      return _topicRepository.getTopics();
+      return await _topicRepository.getTopics();
     } catch (e) {
       if (e is DioException) {
         //eg accessToken is expired
@@ -30,7 +30,7 @@ class GetTopicsUsecase extends UseCase<TopicList, void> {
             //not use return _lectureRepository.getLectures(params); in here beacause if do it
             //it have a DioException, so we should call recursive
             print("----------->E1: $e");
-            return call(params: null);
+            return await call(params: null);
           }
           //Call logout, logout will delete token in secure storage, shared preference.....
 

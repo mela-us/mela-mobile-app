@@ -9,12 +9,18 @@ class RefreshAccessTokenUsecase extends UseCase<bool, void> {
   @override
   Future<bool> call({required void params}) async {
     try {
+      //Must have to request not add authInterceptor into request
+      await _userLoginRepository.saveAccessToken("");
+      
       String newAccessToken = await _userLoginRepository.refreshAccessToken();
+
+      //print("New access Token Khi het han la: $newAccessToken");
       if (newAccessToken.isNotEmpty) {
         await _userLoginRepository.saveAccessToken(newAccessToken);
       }
       return true;
     } catch (e) {
+      //print("Lúc lấy new access bị lỗi $e");
       //refreshToken is expired e == ResponseStatus.UNAUTHORIZED or DioException
       return false;
     }
