@@ -57,18 +57,4 @@ jobs:
 
       - name: Run Docker container with environment variables
         run: |
-          docker run \
-            -e POSTGRESQL_DB_HOST=${{ secrets.POSTGRESQL_DB_HOST }} \
-            -e POSTGRESQL_DB_NAME=${{ secrets.POSTGRESQL_DB_NAME }} \
-            -e POSTGRESQL_DB_USERNAME=${{ secrets.POSTGRESQL_DB_USERNAME }} \
-            -e POSTGRESQL_DB_PASSWORD=${{ secrets.POSTGRESQL_DB_PASSWORD }} \
-            -e MONGODB_DB_CONNECTION_STRING=${{ secrets.MONGODB_DB_CONNECTION_STRING }} \
-            -e REDIS_HOST=${{ secrets.REDIS_HOST }} \
-            -e REDIS_PORT=${{ secrets.REDIS_PORT }} \
-            -e REDIS_USERNAME=${{ secrets.REDIS_USERNAME }} \
-            -e REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} \
-            -e MAIL_USERNAME=${{ secrets.MAIL_USERNAME }} \
-            -e MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }} \
-            -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
-            -e JWT_FORGET_PASSWORD_SECRET_KEY=${{ secrets.JWT_FORGET_PASSWORD_SECRET_KEY }} \
-            ${{ secrets.DOCKER_HUB_USERNAME }}/mela-app-dev:latest
+            docker run -e POSTGRESQL_DB_HOST=${{ secrets.POSTGRESQL_DB_HOST }} -e POSTGRESQL_DB_NAME=${{ secrets.POSTGRESQL_DB_NAME }} -e POSTGRESQL_DB_USERNAME=${{ secrets.POSTGRESQL_DB_USERNAME }} -e POSTGRESQL_DB_PASSWORD=${{ secrets.POSTGRESQL_DB_PASSWORD }} -e MONGODB_DB_CONNECTION_STRING=${{ secrets.MONGODB_DB_CONNECTION_STRING }} -e REDIS_HOST=${{ secrets.REDIS_HOST }} -e REDIS_PORT=${{ secrets.REDIS_PORT }} -e REDIS_USERNAME=${{ secrets.REDIS_USERNAME }} -e REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} -e MAIL_USERNAME=${{ secrets.MAIL_USERNAME }} -e MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }} -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} -e JWT_FORGET_PASSWORD_SECRET_KEY=${{ secrets.JWT_FORGET_PASSWORD_SECRET_KEY }} ${{ secrets.DOCKER_HUB_USERNAME }}/mela-app-dev:latest
