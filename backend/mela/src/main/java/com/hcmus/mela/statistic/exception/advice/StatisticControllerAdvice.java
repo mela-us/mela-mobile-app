@@ -34,7 +34,7 @@ public class StatisticControllerAdvice {
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 LocalDateTime.now()
         );
-        log.info("Async exception thrown: ", exception);
+        log.info("Async exception thrown: {}", exception.getMessage());
 
         return ResponseEntity.status(response.getStatus()).body(response);
     }
@@ -44,10 +44,10 @@ public class StatisticControllerAdvice {
 
         final ApiExceptionResponse response = new ApiExceptionResponse(
                 exception.getMessage(),
-                HttpStatus.BAD_REQUEST,
+                HttpStatus.INTERNAL_SERVER_ERROR,
                 LocalDateTime.now()
         );
-        log.info("Unexpected exception thrown: ", exception);
+        log.info("Unexpected exception thrown: {}", exception.getMessage());
 
         return ResponseEntity.status(response.getStatus()).body(response);
     }

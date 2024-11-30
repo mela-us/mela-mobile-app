@@ -77,7 +77,9 @@ public class LectureRepositoryImpl implements LectureRepository {
                 Aggregation.sort(Sort.by(Sort.Order.desc("end_at"))),
                 Aggregation.limit(size),
                 Aggregation.lookup("lectures", "_id", "_id", "lecture"),
-                Aggregation.project("_id")
+                Aggregation.unwind("lecture"),
+                Aggregation.project()
+                        .and("_id").as("_id")
                         .and("lecture.level_id").as("level_id")
                         .and("lecture.topic_id").as("topic_id")
                         .and("lecture.name").as("name")
