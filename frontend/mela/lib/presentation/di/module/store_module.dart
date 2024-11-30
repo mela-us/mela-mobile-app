@@ -7,8 +7,11 @@ import 'package:mela/domain/usecase/question/get_questions_usecase.dart';
 
 import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
 import 'package:mela/presentation/question/store/timer/timer_store.dart';
+import 'package:mela/presentation/stats/store/stat_filter_store.dart';
 
 import '../../../di/service_locator.dart';
+import '../../../domain/usecase/stat/get_stat_search_history_usecase.dart';
+import '../../../domain/usecase/stat/update_stat_search_history_usecase.dart';
 import '../../../domain/usecase/user/get_user_info_usecase.dart';
 import '../../question/store/question_store.dart';
 import 'package:mela/domain/usecase/exercise/get_exercises_usecase.dart';
@@ -39,6 +42,8 @@ import 'package:mela/domain/usecase/stat/get_detailed_progress_usecase.dart';
 
 import 'package:mela/presentation/stats/store/stats_store.dart';
 import 'package:mela/presentation/personal/store/personal_store.dart';
+
+import '../../stats/store/stat_search_store.dart';
 
 
 class StoreModule {
@@ -127,6 +132,17 @@ class StoreModule {
       ),
     );
 
+    getIt.registerSingleton<StatSearchStore>(
+      StatSearchStore(
+        getIt<GetStatSearchHistoryUseCase>(),
+        getIt<UpdateStatSearchHistoryUseCase>(),
+      ),
+    );
+
+    getIt.registerSingleton<StatFilterStore>(
+      StatFilterStore(
+      ),
+    );
   }
 }
 

@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:mela/data/repository/question/question_repository_impl.dart';
 import 'package:mela/data/repository/setting/setting_repository_impl.dart';
+import 'package:mela/data/repository/stat/stat_search_impl.dart';
 import 'package:mela/data/sharedpref/shared_preference_helper.dart';
 import 'package:mela/domain/repository/question/question_repository.dart';
 import 'package:mela/domain/repository/setting/setting_repository.dart';
+import 'package:mela/domain/repository/stat/stat_search_repository.dart';
 
 import '../../../di/service_locator.dart';
 import 'package:mela/data/repository/exercise/exercise_repository_impl.dart';
@@ -68,8 +70,11 @@ class RepositoryModule {
       getIt<PostDataSource>(),
     ) as PostRepository);
 
+    //STATS-------------------------
     getIt.registerSingleton<StatRepository>(
         StatRepositoryImpl() as StatRepository);
+    getIt.registerSingleton<StatSearchRepository>(
+        StatSearchRepositoryImpl() as StatSearchRepository);
     //Practice De
     getIt.registerSingleton<QuestionRepository>(
         QuestionRepositoryImpl() as QuestionRepository);

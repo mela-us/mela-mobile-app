@@ -1,26 +1,23 @@
-import 'package:mela/domain/entity/stat/progress_list.dart';
-import 'package:mela/presentation/stats/store/stats_store.dart';
-
-import '../../../constants/global.dart';
-import '../../../di/service_locator.dart';
-import '../../../domain/entity/stat/progress.dart';
 import '../../../domain/repository/stat/stat_search_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class StatSearchRepositoryImpl extends StatSearchRepository {
+  static const String _searchHistoryKey = 'mela_stat_search_history';
+
   @override
   Future<List<String>> getStatSearchHistory() async {
-    List<String> historySearchList = ['Số học', 'Hình học', 'Hello'];
-    return historySearchList;
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getStringList(_searchHistoryKey) ?? [];
   }
 
   @override
-  Future<ProgressList> getStatSearchResult(String searchText) async {
-    List<Progress>? temp = Global.progressList?.where(
-            (progress) => progress.topicName?.contains(searchText) ?? false
-    ).toList();
-    return ProgressList(
-        progressList: temp,
-    );
+  Future<void> updateStatSearchHistory(List<String> historySearchList) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(_searchHistoryKey, historySearchList);
   }
 }
+
+// List<Progress>? temp = Global.progressList?.where(
+//         (progress) => progress.topicName?.contains(searchText) ?? false
+// ).toList();

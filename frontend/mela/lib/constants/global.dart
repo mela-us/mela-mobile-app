@@ -232,7 +232,7 @@ class Global {
   ];
 
   static List<DetailedProgress> detailedProgressList = [
-    DetailedProgress(topicName: 'Số học', division: 'Trung học', date: '23/11/2024', count: 2),
+    DetailedProgress(topicName: 'Số học', division: 'Trung học', date: '10/11/2024', count: 2),
     DetailedProgress(topicName: 'Số học', division: 'Trung học', date: '15/11/2024', count: 1),
     DetailedProgress(topicName: 'Số học', division: 'Trung học', date: '21/11/2024', count: 1),
     DetailedProgress(topicName: 'Số học', division: 'Trung học', date: '11/11/2024', count: 2),

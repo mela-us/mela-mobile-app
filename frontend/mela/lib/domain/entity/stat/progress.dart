@@ -5,6 +5,8 @@ class Progress{
   int? current;
   int? total;
 
+  double get completion => total != 0 ? current! / total! : double.infinity;
+
 
   Progress({
     this.id, this.topicName, this.division, this.current, this.total

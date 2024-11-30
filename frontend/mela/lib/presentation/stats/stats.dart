@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 
+import '../../domain/entity/stat/progress.dart';
+import '../../utils/routes/routes.dart';
 import 'widgets/expandable_list.dart';
 
 import 'store/stats_store.dart';
@@ -65,16 +67,23 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
             Padding(
               padding: const EdgeInsets.only(right: 10),
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushNamed(Routes.searchStats);
+                },
                 icon: const Icon(Icons.search),
-                color: Theme.of(context).colorScheme.appBackground,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
             )
           ],
           bottom: TabBar(
-            labelColor: Theme.of(context).colorScheme.buttonYesBgOrText,
-            unselectedLabelColor: Theme.of(context).colorScheme.textInBg1,
-            indicatorColor: Theme.of(context).colorScheme.buttonYesBgOrText,
+            labelColor: Theme.of(context).colorScheme.tertiary,
+            unselectedLabelColor: Theme.of(context).colorScheme.onSecondary,
+            dividerColor: Colors.transparent,
+            overlayColor: WidgetStateProperty.all(Colors.transparent),
+            indicator: UnderlineTabIndicator(
+              borderSide: BorderSide(
+                  color: Theme.of(context).colorScheme.tertiary, width: 2),
+            ),
             tabs: const [
               Tab(text: "Tiểu học"),
               Tab(text: "Trung học"),
@@ -87,18 +96,25 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
             if (_store.progressLoading || _store.detailedProgressLoading) {
               return Center(child: CircularProgressIndicator());
             }
-            return TabBarView(
+            else {
+              return TabBarView(
               children: [
-                ExpandableList(store: _store, division: "Tiểu học"),
-                ExpandableList(store: _store, division: "Trung học"),
-                ExpandableList(store: _store, division: "Phổ thông"),
-              ],
-            );
+                  ExpandableList(list: filterProgressByDivision("Tiểu học")),
+                  ExpandableList(list: filterProgressByDivision("Trung học")),
+                  ExpandableList(list: filterProgressByDivision("Phổ thông")),
+                ],
+              );
+            }
           },
         ),
         backgroundColor: Theme.of(context).colorScheme.appBackground,
       ),
     );
+  }
+  //
+  List<Progress> filterProgressByDivision(String division) {
+    List<Progress>? list = _store.progressList?.progressList;
+    return list?.where((progress) => progress.division == division).toList() ?? [];
   }
 }
 

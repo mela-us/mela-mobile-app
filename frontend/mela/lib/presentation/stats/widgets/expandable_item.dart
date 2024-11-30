@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mela/domain/entity/stat/progress.dart';
 
+import '../../../di/service_locator.dart';
 import '../store/stats_store.dart';
 
 import 'bar_chart.dart';
@@ -11,10 +12,10 @@ import '../../../constants/app_theme.dart';
 
 class ExpandableItem extends StatefulWidget {
   final Progress item;
-  final StatisticsStore store;
-  final int index;
 
-  ExpandableItem({super.key, required this.item, required this.store, required this.index});
+  final StatisticsStore store = getIt<StatisticsStore>();
+
+  ExpandableItem({super.key, required this.item});
 
   @override
   _ExpandableItemState createState() => _ExpandableItemState();
@@ -84,7 +85,7 @@ class _ExpandableItemState extends State<ExpandableItem> {
                         .copyWith(color: Theme.of(context).colorScheme.textInBg1),
                   ),
                   SizedBox(height: 8),
-                  BarChartWidget(store: widget.store, topicName: "Số học", division: "Trung học"),
+                  BarChartWidget(topicName: "Số học", division: "Trung học"),
                   SizedBox(height: 8),
                 ],
               ),
