@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:mela/data/network/apis/questions/save_result_api.dart';
 import 'package:mela/domain/repository/lecture/lecture_repository.dart';
 import 'package:mela/domain/repository/user/user_repository.dart';
 import 'package:mela/domain/repository/user_register/user_signup_repostiory.dart';
 
 import 'package:mela/domain/usecase/exercise/get_exercises_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_lectures_usecase.dart';
+import 'package:mela/domain/usecase/question/submit_result_usecase.dart';
 import 'package:mela/domain/usecase/search/get_search_lectures_result.dart';
 import 'package:mela/domain/usecase/topic/find_topic_by_id_usecase.dart';
 import 'package:mela/domain/usecase/topic/get_topics_usecase.dart';
@@ -53,6 +55,10 @@ class UseCaseModule {
     // question:----------------------------------------------------------------
     getIt.registerSingleton<GetQuestionsUseCase>(
       GetQuestionsUseCase(getIt<QuestionRepository>()),
+    );
+
+    getIt.registerSingleton<SubmitResultUseCase>(
+      SubmitResultUseCase(getIt<SaveResultApi>()),
     );
     /// topic:------------------------------------------------------------------
     getIt.registerSingleton<GetTopicsUsecase>(

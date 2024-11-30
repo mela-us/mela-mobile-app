@@ -1,5 +1,7 @@
 import 'package:mela/constants/enum.dart';
 import 'package:mela/domain/entity/question/question_list.dart';
+import 'package:mela/domain/params/question/submit_result_params.dart';
+import 'package:mela/domain/usecase/question/submit_result_usecase.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../core/stores/error/error_store.dart';
@@ -11,20 +13,30 @@ class QuestionStore = _QuestionStore with _$QuestionStore;
 
 abstract class _QuestionStore with Store{
   //Constructor:----------------------------------------------------------------
-  _QuestionStore(this._getQuestionsUseCase, this._errorStore);
+  _QuestionStore(
+      this._getQuestionsUseCase,
+      this._errorStore,
+      this._submitResultUseCase);
 
   //UseCase:--------------------------------------------------------------------
   final GetQuestionsUseCase _getQuestionsUseCase;
+  final SubmitResultUseCase _submitResultUseCase;
   //Store:----------------------------------------------------------------------
   final ErrorStore _errorStore;
 
   // store variables:-----------------------------------------------------------
   static ObservableFuture<QuestionList?> emptyQuestionResponse =
   ObservableFuture.value(null);
+  static ObservableFuture<int?> emptySaveResponse =
+      ObservableFuture.value(null);
 
   @observable
   ObservableFuture<QuestionList?> fetchQuestionsFuture =
   ObservableFuture<QuestionList?>(emptyQuestionResponse);
+
+  @observable
+  ObservableFuture<int?> saveUserResult =
+      ObservableFuture<int?>(emptySaveResponse);
 
   @observable
   QuestionList? questionList;
@@ -33,7 +45,7 @@ abstract class _QuestionStore with Store{
   bool success = false;
 
   @observable
-  String questionUid  = '';
+  String questionsUid  = '';
 
   @observable
   QuitOverlayResponse isQuit = QuitOverlayResponse.wait;
@@ -41,15 +53,39 @@ abstract class _QuestionStore with Store{
   @computed
   bool get loading => fetchQuestionsFuture.status == FutureStatus.pending;
 
+  @observable
+  bool get saving => saveUserResult.status == FutureStatus.pending;
+
   //action:---------------------------------------------------------------------
   @action
   Future getQuestions() async {
-    final future = _getQuestionsUseCase.call(params: questionUid);
+    final future = _getQuestionsUseCase.call(params: questionsUid);
     fetchQuestionsFuture = ObservableFuture(future);
 
     future.then((questions) {
       questionList = questions;
-    }).catchError((error) {
+    }).catchError((error){
+      _errorStore.errorMessage = DioExceptionUtil.handleError(error);
+    });
+  }
+
+  @action
+  Future submitAnswer(int correct, DateTime start, DateTime end) async {
+    final future = _submitResultUseCase.call(
+        params: SubmitResultParams(
+            exerciseId: questionsUid,
+            totalCorrectAnswers: correct,
+            totalAnswers: questionList!.size,
+            startAt: start,
+            endAt: end
+        )
+    );
+    saveUserResult = ObservableFuture(future);
+    future.then((statusCode){
+      if (statusCode == 200) {
+        print('Saving done');
+      }
+    }).catchError((error){
       _errorStore.errorMessage = DioExceptionUtil.handleError(error);
     });
   }
@@ -60,7 +96,9 @@ abstract class _QuestionStore with Store{
     isQuit = value;
   }
 
+  @action
   void setQuestionsUid(String uid){
-    questionUid = uid;
+    questionsUid = uid;
   }
+
 }

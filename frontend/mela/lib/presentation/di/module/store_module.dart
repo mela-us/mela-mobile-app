@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:mela/core/stores/error/error_store.dart';
 import 'package:mela/core/stores/form/form_store.dart';
 import 'package:mela/domain/usecase/question/get_questions_usecase.dart';
+import 'package:mela/domain/usecase/question/submit_result_usecase.dart';
 
 
 import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
@@ -105,6 +106,7 @@ class StoreModule {
       QuestionStore(
         getIt<GetQuestionsUseCase>(),
         getIt<ErrorStore>(),
+        getIt<SubmitResultUseCase>(),
       )
     );
 

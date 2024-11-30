@@ -69,15 +69,15 @@ mixin _$QuestionStore on _QuestionStore, Store {
       Atom(name: '_QuestionStore.questionUid', context: context);
 
   @override
-  String get questionUid {
+  String get questionsUid {
     _$questionUidAtom.reportRead();
-    return super.questionUid;
+    return super.questionsUid;
   }
 
   @override
-  set questionUid(String value) {
-    _$questionUidAtom.reportWrite(value, super.questionUid, () {
-      super.questionUid = value;
+  set questionsUid(String value) {
+    _$questionUidAtom.reportWrite(value, super.questionsUid, () {
+      super.questionsUid = value;
     });
   }
 
@@ -125,7 +125,7 @@ mixin _$QuestionStore on _QuestionStore, Store {
 fetchQuestionsFuture: ${fetchQuestionsFuture},
 questionList: ${questionList},
 success: ${success},
-questionUid: ${questionUid},
+questionUid: ${questionsUid},
 isQuit: ${isQuit},
 loading: ${loading}
     ''';

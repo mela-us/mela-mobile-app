@@ -2,10 +2,8 @@ import 'dart:async';
 
 //Data:-------------------------------------------------------------------------
 import 'package:dio/dio.dart';
-import 'package:mela/core/data/network/dio/dio_client.dart';
 
 //Domain:-----------------------------------------------------------------------
-import 'package:mela/domain/entity/post/post_list.dart';
 import 'package:mela/domain/entity/question/question_list.dart';
 
 //Other:------------------------------------------------------------------------

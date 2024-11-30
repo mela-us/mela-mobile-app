@@ -6,18 +6,37 @@ import 'package:mela/presentation/question/store/single_question/single_question
 import 'package:mela/presentation/question/store/timer/timer_store.dart';
 import 'package:mela/utils/locale/app_localization.dart';
 import 'package:mela/utils/routes/routes.dart';
+import 'package:mobx/mobx.dart';
 
 import '../../constants/assets.dart';
 import '../../di/service_locator.dart';
 import '../../domain/entity/question/question.dart';
 
-class ResultScreen extends StatelessWidget {
-  final QuestionStore questionStore = getIt<QuestionStore>();
-  final SingleQuestionStore singleQuestionStore = getIt<SingleQuestionStore>();
-  final TimerStore timerStore = getIt<TimerStore>();
-
+class ResultScreen extends StatefulWidget{
   ResultScreen({super.key});
 
+  @override
+  State<ResultScreen> createState() => _ResultScreenState();
+}
+
+class _ResultScreenState extends State<ResultScreen> {
+  final QuestionStore _questionStore = getIt<QuestionStore>();
+  final SingleQuestionStore _singleQuestionStore = getIt<SingleQuestionStore>();
+  final TimerStore _timerStore = getIt<TimerStore>();
+
+  @override
+  void didChangeDependencies() {
+    if (!_questionStore.saving) {
+      _questionStore.submitAnswer(
+          getCorrect(),
+          DateTime.now(),
+          DateTime.now().subtract(_timerStore.elapsedTime)
+      );
+    }
+
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -222,25 +241,34 @@ class ResultScreen extends StatelessWidget {
   double calculatePoint(){
     int correct = 0;
     //Can't be null
-    List<Question> questions = questionStore.questionList!.questions!;
-    List<String> userAnswers = singleQuestionStore.userAnswers;
+    List<Question> questions = _questionStore.questionList!.questions!;
+    List<String> userAnswers = _singleQuestionStore.userAnswers;
 
-    for (int i= 0; i < questions.length; i ++){
-      if (userAnswers[i].isEmpty) {
-        print("Empty $i");
-      };
-      if (questions[i].isCorrect(userAnswers[i])){
-        correct ++;
-      }
-    }
-    return correct/questions.length * 1.0;
+    correct = getCorrect();
+    return correct/questions.length * 10.0;
   }
 
   String getTime() {
-    Duration elapsedTime = timerStore.elapsedTime;
+    Duration elapsedTime = _timerStore.elapsedTime;
     String hours = elapsedTime.inHours.toString().padLeft(2, '0');
-    String minutes = (elapsedTime.inMinutes % 60).toString().padLeft(2, '0');
-    return '$hours:$minutes';
+    String minutes = (elapsedTime.inMinutes).toString().padLeft(2, '0');
+    String seconds = (elapsedTime.inSeconds % 60).toString().padLeft(2, '0');
+    return '$minutes:$seconds';
   }
 
+  int getCorrect(){
+    List<Question> questions = _questionStore.questionList!.questions!;
+    List<String> userAnswers = _singleQuestionStore.userAnswers;
+    int correct = 0;
+    for (int i= 0; i < questions.length; i ++){
+      if (userAnswers[i].isEmpty) {
+        print("Empty $i");
+        continue;
+      }
+      if (questions[i].isCorrect(userAnswers[i])){
+        correct++;
+      }
+    }
+    return correct;
+  }
 }

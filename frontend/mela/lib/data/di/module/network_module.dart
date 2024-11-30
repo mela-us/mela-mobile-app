@@ -1,6 +1,7 @@
 
 import 'package:event_bus/event_bus.dart';
 import 'package:mela/data/network/apis/questions/questions_api.dart';
+import 'package:mela/data/network/apis/questions/save_result_api.dart';
 
 import '../../../core/data/network/constants/network_constants.dart';
 import '../../../core/data/network/dio/configs/dio_configs.dart';
@@ -50,5 +51,6 @@ class NetworkModule {
 
     // api's:-------------------------------------------------------------------
     getIt.registerSingleton(QuestionsApi(getIt<DioClient>()));
+    getIt.registerSingleton(SaveResultApi(getIt<DioClient>()));
   }
 }
