@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/core/widgets/practice_app_bar_widget.dart';
 import 'package:mela/presentation/question/store/question_store.dart';
@@ -9,6 +10,7 @@ import 'package:mela/utils/routes/routes.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../constants/assets.dart';
+import '../../core/widgets/progress_indicator_widget.dart';
 import '../../di/service_locator.dart';
 import '../../domain/entity/question/question.dart';
 
@@ -39,10 +41,19 @@ class _ResultScreenState extends State<ResultScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.appBackground,
-      appBar: const PracticeAppBar(previousScreenRoute: null),
-      body: _buildBody(context),
+    return Observer(
+      builder: (context) {
+        if (_questionStore.saving) {
+          return const CustomProgressIndicatorWidget();
+        }
+        else {
+          return Scaffold(
+            backgroundColor: Theme.of(context).colorScheme.appBackground,
+            appBar: const PracticeAppBar(previousScreenRoute: null),
+            body: _buildBody(context),
+          );
+        }
+      },
     );
   }
 
