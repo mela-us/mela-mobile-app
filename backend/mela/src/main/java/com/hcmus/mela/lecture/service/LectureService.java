@@ -5,12 +5,14 @@ import com.hcmus.mela.lecture.dto.LectureDto;
 import com.hcmus.mela.lecture.dto.LectureStatsDto;
 import com.hcmus.mela.lecture.mapper.LectureMapper;
 import com.hcmus.mela.lecture.mapper.LectureStatsMapper;
+import com.hcmus.mela.lecture.model.Lecture;
 import com.hcmus.mela.lecture.repository.LectureRepositoryImpl;
 import com.hcmus.mela.lecture.repository.LectureStatsRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,7 +22,7 @@ public class LectureService {
 
     private final LectureStatsRepositoryImpl lectureStatsRepository;
 
-    public LectureContentDto getLectureContent(Integer lectureId) {
+    public LectureContentDto getLectureContent(UUID lectureId) {
            return LectureMapper.INSTANCE.lectureToLectureContentDto(
                    lectureRepository.findByLectureId(lectureId).getLectureContent()
            );
@@ -39,4 +41,7 @@ public class LectureService {
         ).collect(Collectors.toList());
     }
 
+    public Lecture getLectureById(UUID lectureId) {
+        return lectureRepository.findByLectureId(lectureId);
+    }
 }

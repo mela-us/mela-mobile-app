@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,7 +37,7 @@ public class LectureController {
 
     @GetMapping("/{lectureId}/content")
     @Operation(tags = "Lecture Service", description = "Get lecture content by id.")
-    public ResponseEntity<LectureContentDto> getLectureContentRequest(@PathVariable Integer lectureId) {
+    public ResponseEntity<LectureContentDto> getLectureContentRequest(@PathVariable UUID lectureId) {
         return ResponseEntity.ok(lectureService.getLectureContent(lectureId));
     }
 }

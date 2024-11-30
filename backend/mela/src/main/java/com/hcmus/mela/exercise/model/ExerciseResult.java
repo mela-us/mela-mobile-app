@@ -29,6 +29,9 @@ public class ExerciseResult {
     @Field(name = "lecture_id")
     private UUID lectureId;
 
+    @Field(name = "level_id")
+    private UUID levelId;
+
     @Field(name = "exercise_id")
     private UUID exerciseId;
 

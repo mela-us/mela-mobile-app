@@ -7,6 +7,8 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,16 +16,16 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Lecture {
     @Field("lecture_id")
     @Indexed(unique = true)
-    private Integer lectureId;
+    private UUID lectureId;
 
     @Field("lecture_name")
     private String lectureName;
     @Field("lecture_content")
     private LectureContent lectureContent;
     @Field("level_id")
-    private Integer levelId;
+    private UUID levelId;
     @Field("topic_id")
-    private Integer topicId;
+    private UUID topicId;
 
     @Field("exercise_count")
     private Integer exerciseCount;

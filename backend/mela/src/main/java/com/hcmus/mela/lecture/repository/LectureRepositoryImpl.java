@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
@@ -17,7 +18,7 @@ public class LectureRepositoryImpl implements LectureRepository {
      private final MongoTemplate mongoTemplate;
 
      @Override
-     public Lecture findByLectureId(Integer lectureId) {
+     public Lecture findByLectureId(UUID lectureId) {
           Aggregation aggregation = Aggregation.newAggregation(
                   Aggregation.match(
                           Criteria.where("lecture_id").is(lectureId)
