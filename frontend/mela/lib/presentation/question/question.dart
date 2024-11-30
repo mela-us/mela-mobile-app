@@ -43,10 +43,6 @@ class _QuestionScreenState extends State<QuestionScreen> {
     // TODO: implement initState
     super.initState();
 
-    _timerStore.resetTimer();
-    _timerStore.startTimer();
-
-
     //Reaction to questions status.
     reaction((_) => _questionStore.loading, (loading){
       if (!loading){
@@ -55,6 +51,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
             .generateAnswerList(_questionStore.questionList!
             .questions!.length);
         _initListOverlay(context);
+
+        _timerStore.resetTimer();
+        _timerStore.startTimer();
       }
     },
     fireImmediately: true);
@@ -120,29 +119,32 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.appBackground,
-      appBar: const QuestionAppBar(),
-      body: _buildMainBody(),
-      floatingActionButton: _buildFAB(context),
+    return Observer(
+      builder: (context) {
+        if (_questionStore.loading) {
+          return const CustomProgressIndicatorWidget();
+        }
+        else {
+          return Scaffold(
+            backgroundColor: Theme
+                .of(context)
+                .colorScheme
+                .appBackground,
+            appBar: const QuestionAppBar(),
+            body: SingleChildScrollView(
+              child: _buildMainBody(),
+            ),
+            floatingActionButton: _buildFAB(context),
+          );
+        }
+      },
     );
   }
 
 
   //Build components:-----------------------------------------------------------
   Widget _buildMainBody(){
-    return Observer(
-      builder: (context){
-        if (_questionStore.loading){
-          return const CustomProgressIndicatorWidget();
-        }
-        else {
-          return SingleChildScrollView(
-            child: _buildBodyContent(context),
-          );
-        }
-      },
-    );
+    return  _buildBodyContent(context);
   }
 
   Widget _buildFAB(BuildContext context) {
