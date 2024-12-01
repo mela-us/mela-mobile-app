@@ -106,10 +106,30 @@ class _SearchScreenState extends State<SearchScreen> {
           Observer(builder: (context) {
             if (!_searchStore.isSearched) {
               return Padding(
-                padding: const EdgeInsets.only(left: 30),
-                child: Text("Lịch sử tìm kiếm",
-                    style: Theme.of(context).textTheme.normal.copyWith(
-                        color: Theme.of(context).colorScheme.primary)),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Lịch sử tìm kiếm",
+                        style: Theme.of(context).textTheme.normal.copyWith(
+                            color: Theme.of(context).colorScheme.primary)),
+                    _searchStore.searchHistory!.isEmpty
+                        ? const SizedBox.shrink()
+                        : InkWell(
+                            onTap: () async {
+                              await _searchStore.deleteAllHistorySearch();
+                            },
+                            child: Text("Xóa tất cả",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .normal
+                                    .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary)),
+                          ),
+                  ],
+                ),
               );
             }
             if (_searchStore.isLoadingSearch) {
@@ -178,23 +198,21 @@ class _SearchScreenState extends State<SearchScreen> {
                                   Expanded(
                                     child: GestureDetector(
                                       onTap: () async {
-                                     
-                                     
                                         String searchText = _searchStore
                                             .searchHistory![index].searchText;
 
-                                    //Must have searchText, not use handleHistoryItemClick with
-                                    // _searchStore.searchHistory![index].searchText  
-                                    //because eg have a,b,c,d when delete in index 2 => searchText = c, 
-                                     //mobx will rebuild and searchHistory now have a,b,d
-                                     //so it continue do await handleHistoryItemClick() at index =2, 
-                                     //_searchStore.searchHistory![2].searchText = d and display in handleHistoryItemClick is d => not correct, 
-                                     //correct must be searchText = c
+                                        //Must have searchText, not use handleHistoryItemClick with
+                                        // _searchStore.searchHistory![index].searchText
+                                        //because eg have a,b,c,d when delete in index 2 => searchText = c,
+                                        //mobx will rebuild and searchHistory now have a,b,d
+                                        //so it continue do await handleHistoryItemClick() at index =2,
+                                        //_searchStore.searchHistory![2].searchText = d and display in handleHistoryItemClick is d => not correct,
+                                        //correct must be searchText = c
 
                                         await _searchStore.deleteHistorySearch(
                                             _searchStore.searchHistory![index]);
                                         await handleHistoryItemClick(
-                                           searchText);
+                                            searchText);
                                       },
                                       child: Text(
                                         _searchStore
