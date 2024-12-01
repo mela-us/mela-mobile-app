@@ -19,22 +19,19 @@ class SearchRepositoryImpl extends SearchRepository {
   Future<LectureList> getSearchLecturesResult(String searchText) {
     return _searchApi.searchLecturesByText(searchText);
   }
-  
+
   @override
   Future<void> addHistorySearch(HistorySearch historySearch) {
-    // TODO: implement addHistorySearch
-    throw UnimplementedError();
+    return _historyDataSource.insert(historySearch);
   }
-  
+
   @override
   Future<void> deleteAllHistorySearch() {
-    // TODO: implement deleteAllHistorySearch
-    throw UnimplementedError();
+    return _historyDataSource.deleteAll();
   }
-  
+
   @override
   Future<void> deleteHistorySearch(HistorySearch historySearch) {
-    // TODO: implement deleteHistorySearch
-    throw UnimplementedError();
+    return _historyDataSource.delete(historySearch);
   }
 }

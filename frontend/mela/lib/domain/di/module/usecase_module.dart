@@ -10,6 +10,9 @@ import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_lectures_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_levels_usecase.dart';
 import 'package:mela/domain/usecase/post/get_post_usecase.dart';
+import 'package:mela/domain/usecase/search/add_history_search_usecase.dart';
+import 'package:mela/domain/usecase/search/delete_all_history_search_usecase.dart';
+import 'package:mela/domain/usecase/search/delete_history_search_usecase.dart';
 import 'package:mela/domain/usecase/search/get_search_lectures_result_usecase.dart';
 import 'package:mela/domain/usecase/topic/find_topic_by_id_usecase.dart';
 import 'package:mela/domain/usecase/topic/get_topics_usecase.dart';
@@ -103,8 +106,18 @@ class UseCaseModule {
     //search:--------------------------------------------------------------------
     getIt.registerSingleton<GetHistorySearchListUsecase>(
         GetHistorySearchListUsecase(getIt<SearchRepository>()));
-    getIt.registerSingleton<GetSearchLecturesResultUsecase>(GetSearchLecturesResultUsecase(
-        getIt<SearchRepository>(), getIt<RefreshAccessTokenUsecase>()));
+    getIt.registerSingleton<GetSearchLecturesResultUsecase>(
+        GetSearchLecturesResultUsecase(
+            getIt<SearchRepository>(), getIt<RefreshAccessTokenUsecase>()));
+
+    getIt.registerSingleton<AddHistorySearchUsecase>(
+        AddHistorySearchUsecase(getIt<SearchRepository>()));
+        
+    getIt.registerSingleton<DeleteHistorySearchUsecase>(
+        DeleteHistorySearchUsecase(getIt<SearchRepository>()));
+
+    getIt.registerSingleton<DeleteAllHistorySearchUsecase>(
+        DeleteAllHistorySearchUsecase(getIt<SearchRepository>()));
 
     //stats:--------------------------------------------------------------------
     getIt.registerSingleton<GetProgressListUseCase>(

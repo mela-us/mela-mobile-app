@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
+import 'package:mela/domain/entity/history_search/history_search.dart';
 import 'package:mela/presentation/filter_screen/store/filter_store.dart';
 import 'package:mela/presentation/search_screen/store/search_store.dart';
 import '../../../utils/routes/routes.dart';
@@ -48,8 +49,9 @@ class SearchingBarState extends State<SearchingBar> {
       //always set isFiltered to false when user or and reset filter
       _searchStore.setIsFiltered(false);
       _filterStore.resetFilter();
+      await _searchStore.addHistorySearch(HistorySearch(
+          id: DateTime.now().millisecondsSinceEpoch, searchText: value));
       await _searchStore.getLecturesAfterSearch(value);
-
     } else {
       //if user delete all text in search bar, we need to reset isSearched to false
       _searchStore.resetIsSearched();
@@ -58,7 +60,9 @@ class SearchingBarState extends State<SearchingBar> {
   }
 
   Widget _buildFilterButton(BuildContext context) {
-    if (_searchStore.errorString.isNotEmpty ||_searchStore.lecturesAfterSearching==null || _searchStore.lecturesAfterSearching!.lectures.isEmpty) {
+    if (_searchStore.errorString.isNotEmpty ||
+        _searchStore.lecturesAfterSearching == null ||
+        _searchStore.lecturesAfterSearching!.lectures.isEmpty) {
       return const SizedBox.shrink();
     }
 

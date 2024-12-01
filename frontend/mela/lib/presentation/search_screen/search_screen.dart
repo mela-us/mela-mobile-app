@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/core/widgets/progress_indicator_widget.dart';
 import 'package:mela/di/service_locator.dart';
+import 'package:mela/domain/entity/history_search/history_search.dart';
 import 'package:mela/presentation/filter_screen/store/filter_store.dart';
 import 'package:mela/presentation/lectures_in_topic_screen/widgets/lecture_item.dart';
 import 'package:mela/presentation/search_screen/widgets/search_bar.dart';
@@ -147,6 +148,10 @@ class _SearchScreenState extends State<SearchScreen> {
             child: Observer(builder: (context) {
               //List history search
               if (!_searchStore.isSearched) {
+                print("Lúc BUILD LẠI TRONG SearchScreen");
+                for (HistorySearch historySearch in _searchStore.searchHistory!) {
+                  print(historySearch.searchText);
+                }
                 return _searchStore.isLoadingHistorySearch
                     ? AbsorbPointer(
                         absorbing: true,
@@ -177,11 +182,12 @@ class _SearchScreenState extends State<SearchScreen> {
                                   Expanded(
                                     child: GestureDetector(
                                       onTap: () {
-                                        handleHistoryItemClick(
-                                            _searchStore.searchHistory![index].searchText);
+                                        // handleHistoryItemClick(
+                                        //     _searchStore.searchHistory![index].searchText);
                                       },
                                       child: Text(
-                                        _searchStore.searchHistory![index].searchText,
+                                        _searchStore
+                                            .searchHistory![index].searchText,
                                         style: TextStyle(fontSize: 12),
                                         softWrap: true,
                                         maxLines: null,

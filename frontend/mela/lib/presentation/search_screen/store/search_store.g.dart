@@ -182,6 +182,33 @@ mixin _$SearchStore on _SearchStore, Store {
         .run(() => super.getHistorySearchList());
   }
 
+  late final _$addHistorySearchAsyncAction =
+      AsyncAction('_SearchStore.addHistorySearch', context: context);
+
+  @override
+  Future<dynamic> addHistorySearch(HistorySearch historySearch) {
+    return _$addHistorySearchAsyncAction
+        .run(() => super.addHistorySearch(historySearch));
+  }
+
+  late final _$deleteAllHistorySearchAsyncAction =
+      AsyncAction('_SearchStore.deleteAllHistorySearch', context: context);
+
+  @override
+  Future<dynamic> deleteAllHistorySearch() {
+    return _$deleteAllHistorySearchAsyncAction
+        .run(() => super.deleteAllHistorySearch());
+  }
+
+  late final _$deleteHistorySearchAsyncAction =
+      AsyncAction('_SearchStore.deleteHistorySearch', context: context);
+
+  @override
+  Future<dynamic> deleteHistorySearch(HistorySearch historySearch) {
+    return _$deleteHistorySearchAsyncAction
+        .run(() => super.deleteHistorySearch(historySearch));
+  }
+
   late final _$getLecturesAfterSearchAsyncAction =
       AsyncAction('_SearchStore.getLecturesAfterSearch', context: context);
 
