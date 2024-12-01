@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:mela/constants/enum.dart';
 import 'package:mela/domain/entity/question/question_list.dart';
 import 'package:mela/domain/params/question/submit_result_params.dart';
@@ -45,7 +46,7 @@ abstract class _QuestionStore with Store{
   bool success = false;
 
   @observable
-  String questionsUid  = '';
+  String questionsUid  = '93869de4-5814-435e-834e-48013500eebe';
 
   @observable
   QuitOverlayResponse isQuit = QuitOverlayResponse.wait;
@@ -65,6 +66,15 @@ abstract class _QuestionStore with Store{
     future.then((questions) {
       questionList = questions;
     }).catchError((error){
+      if (error is DioException) {
+        if (error.response?.statusCode == 401){
+
+        }
+        else {
+
+        }
+      }
+      questionList = QuestionList(message: '', size: 0, questions: []);
       _errorStore.errorMessage = DioExceptionUtil.handleError(error);
     });
   }
@@ -86,6 +96,7 @@ abstract class _QuestionStore with Store{
         print('Saving done');
       }
     }).catchError((error){
+      print("Store: $error");
       _errorStore.errorMessage = DioExceptionUtil.handleError(error);
     });
   }

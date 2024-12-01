@@ -1,9 +1,12 @@
 class NetworkConstants {
   NetworkConstants._();
 
-  // base url
-  static const String baseUrl =
-      'https://c4147a5c-0d19-46d9-8885-54b78c14c9c6.mock.pstmn.io';
+  // // base url
+  // static const String baseUrl =
+  //     'https://c4147a5c-0d19-46d9-8885-54b78c14c9c6.mock.pstmn.io';
+
+  static const String baseUrl = "https://api.dev.mela.guru";
+
 
   // receiveTimeout
   static const int receiveTimeout = 15000;

@@ -19,7 +19,7 @@ class ExerciseItem extends StatelessWidget {
 
         //TODO: Give this method a true parameter value:
         // _questionStore.setQuestionsUid(currentExercise.exerciseId.toString());
-        _questionStore.setQuestionsUid("uuid-exercise-01");
+        _questionStore.setQuestionsUid("93869de4-5814-435e-834e-48013500eebe");
 
         Navigator.pushNamed(context, Routes.question);
       },
