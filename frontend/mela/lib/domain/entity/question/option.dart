@@ -11,9 +11,9 @@ class Option {
 
   factory Option.fromJson(Map<String, dynamic> json) {
     return Option(
-      ordinalNumber: json['ordinalNumber'],
-      content: json['content'],
-      isCorrect: json['isCorrect'],
+      ordinalNumber: json['ordinalNumber'] ?? "",
+      content: json['content'] ?? "",
+      isCorrect: json['isCorrect'] ?? "",
     );
   }
 }

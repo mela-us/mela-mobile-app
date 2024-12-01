@@ -17,7 +17,6 @@ class GetTopicsUsecase extends UseCase<TopicList, void> {
   @override
   Future<TopicList> call({required void params}) async {
     //it not use accessToken so do not need to refresh accessToken
-
     try {
       return await _topicRepository.getTopics();
     } catch (e) {
@@ -33,7 +32,6 @@ class GetTopicsUsecase extends UseCase<TopicList, void> {
             return await call(params: null);
           }
           //Call logout, logout will delete token in secure storage, shared preference.....
-
           //.................
         }
         print("----------->E2: $e");

@@ -1,6 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:mela/constants/global.dart';
-import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/question/question_list.dart';
 import 'package:mela/domain/repository/question/question_repository.dart';
 
@@ -18,9 +16,6 @@ class QuestionRepositoryImpl extends QuestionRepository{
       return temp;
     }
     catch (e){
-      if (e is DioException){
-        print('Error caught in QRI: ${e.response?.statusCode}');
-      }
       rethrow;
     }
   }

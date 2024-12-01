@@ -1,17 +1,35 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:mela/core/domain/usecase/use_case.dart';
 import 'package:mela/data/network/apis/questions/save_result_api.dart';
+import 'package:mela/domain/usecase/user_login/refresh_access_token_usecase.dart';
 
 import '../../params/question/submit_result_params.dart';
 
 class SubmitResultUseCase extends UseCase<int, SubmitResultParams>{
   final SaveResultApi _saveApi;
+  final RefreshAccessTokenUsecase _refreshAccessTokenUsecase;
 
-  SubmitResultUseCase(this._saveApi);
+  SubmitResultUseCase(this._saveApi, this._refreshAccessTokenUsecase);
   @override
   Future<int> call({required SubmitResultParams params}) async {
-    int resultCode = await _saveApi.saveResult(params);
-    return resultCode;
+    try {
+      int resultCode = await _saveApi.saveResult(params);
+      return resultCode;
+    } catch (e){
+      if (e is DioException){
+        if (e.response?.statusCode  == 401){
+          bool isSuccess = await _refreshAccessTokenUsecase.call(params: null);
+          if (isSuccess) {
+            return call(params: params);
+          }
+          else {
+            rethrow;
+          }
+        }
+      }
+      return -1;
+    }
   }
 }

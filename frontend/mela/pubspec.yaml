@@ -7,24 +7,24 @@ environment:
   sdk: ^3.5.3
 
 dependencies:
-  flutter_countdown_timer: ^4.1.0
+
   flutter:
     sdk: flutter
-
-  draggable_fab: ^0.1.4
-  provider: ^6.1.2
   # A
   another_flushbar: ^1.12.29
   # B
   # C
   cupertino_icons: ^1.0.5
   # D
+  draggable_fab: ^0.1.4
   dio: ^5.1.1
   # E
   event_bus: ^2.0.0
   # F
   fl_chart: ^0.69.2
   flutter_mobx: ^2.0.6+5
+  flutter_countdown_timer: ^4.1.0
+  flutter_secure_storage: ^9.2.2
   # G
   get_it: ^7.2.0
   google_fonts: ^4.0.3
@@ -41,6 +41,7 @@ dependencies:
   # N
   # O
   # P
+  provider: ^6.1.2
   path_provider: ^2.0.14
   # Q
   # R
@@ -55,7 +56,6 @@ dependencies:
   # W
   # X
   xxtea: ^2.1.0
-  flutter_secure_storage: ^9.2.2
   # Y
   # Z
 

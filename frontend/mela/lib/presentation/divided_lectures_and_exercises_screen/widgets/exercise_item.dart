@@ -3,6 +3,7 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
 import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
+import 'package:mela/presentation/question/store/question_store.dart';
 import 'package:mela/utils/routes/routes.dart';
 
 import '../../../domain/entity/exercise/exercise.dart';
@@ -10,6 +11,7 @@ import '../../../domain/entity/exercise/exercise.dart';
 class ExerciseItem extends StatelessWidget {
   final _topicStore = getIt<TopicStore>();
   final _lectureStore = getIt<LectureStore>();
+  final _questionStore = getIt<QuestionStore>();
   final Exercise currentExercise;
 
   ExerciseItem({
@@ -34,6 +36,7 @@ class ExerciseItem extends StatelessWidget {
     }
     return GestureDetector(
       onTap: () {
+        _questionStore.setQuestionsUid(currentExercise.exerciseId);
         Navigator.pushNamed(context, Routes.question);
       },
       child: Container(

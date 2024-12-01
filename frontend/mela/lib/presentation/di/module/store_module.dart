@@ -58,18 +58,6 @@ class StoreModule {
       () => FormStore(getIt<FormErrorStore>(), getIt<ErrorStore>()),
     );
 
-    // stores:------------------------------------------------------------------
-    // getIt.registerSingleton<UserStore>(
-    //   UserStore(
-    //     getIt<IsLoggedInUseCase>(),
-    //     getIt<SaveLoginStatusUseCase>(),
-    //     getIt<LoginUseCase>(),
-    //     getIt<FormErrorStore>(),
-    //     getIt<ErrorStore>(),
-    //   ),
-    // );
-    getIt.registerSingleton<PostStore>(PostStore(getIt<GetPostUseCase>(), getIt<ErrorStore>()));
-
     getIt.registerSingleton<UserLoginStore>(
       UserLoginStore(
         getIt<IsLoggedInUseCase>(),

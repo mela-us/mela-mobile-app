@@ -332,10 +332,13 @@ class _ReviewScreenState extends State<ReviewScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            text,
-            style: Theme.of(context).textTheme.normal
-                .copyWith(color: textColor),
+          Flexible(
+            child: Text(
+              text,
+              softWrap: true,
+              style: Theme.of(context).textTheme.normal
+                  .copyWith(color: textColor),
+            ),
           ),
           Icon(
             icon,

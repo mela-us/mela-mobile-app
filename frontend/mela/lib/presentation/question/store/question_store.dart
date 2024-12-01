@@ -46,7 +46,10 @@ abstract class _QuestionStore with Store{
   bool success = false;
 
   @observable
-  String questionsUid  = '93869de4-5814-435e-834e-48013500eebe';
+  bool isAuthorized = true;
+
+  @observable
+  String questionsUid  = "93869de4-5814-435e-834e-48013500eebe";
 
   @observable
   QuitOverlayResponse isQuit = QuitOverlayResponse.wait;
@@ -54,7 +57,7 @@ abstract class _QuestionStore with Store{
   @computed
   bool get loading => fetchQuestionsFuture.status == FutureStatus.pending;
 
-  @observable
+  @computed
   bool get saving => saveUserResult.status == FutureStatus.pending;
 
   //action:---------------------------------------------------------------------
@@ -65,15 +68,20 @@ abstract class _QuestionStore with Store{
 
     future.then((questions) {
       questionList = questions;
+      //Default set
+      questionList ??= QuestionList(message: '', size: 0, questions: []);
+
     }).catchError((error){
       if (error is DioException) {
         if (error.response?.statusCode == 401){
-
+          isAuthorized = false;
+          return;
         }
         else {
 
         }
       }
+      print("Error: $error");
       questionList = QuestionList(message: '', size: 0, questions: []);
       _errorStore.errorMessage = DioExceptionUtil.handleError(error);
     });
@@ -111,5 +119,4 @@ abstract class _QuestionStore with Store{
   void setQuestionsUid(String uid){
     questionsUid = uid;
   }
-
 }

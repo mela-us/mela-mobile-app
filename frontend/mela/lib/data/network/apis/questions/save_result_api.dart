@@ -13,7 +13,6 @@ class SaveResultApi{
         EndpointsConst.saveResult,
         options: Options(headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer token',
         }),
         data: param.toJson(),
       );

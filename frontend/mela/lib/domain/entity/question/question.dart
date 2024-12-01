@@ -24,13 +24,13 @@ class Question{
   factory Question.fromJson(Map<String, dynamic> json) {
     return Question(
       questionId: json['questionId'],
-      ordinalNumber: json['ordinalNumber'],
-      content: json['content'],
-      questionType: json['questionType'],
+      ordinalNumber: json['ordinalNumber'] ?? 0,
+      content: json['content'] ?? "",
+      questionType: json['questionType'] ?? "",
       options: (json['options'] as List<dynamic>)
           .map((o) => Option.fromJson(o))
           .toList(),
-      blankAnswer: json['blank_answer'],
+      blankAnswer: json['blankAnswer'],
       guide: json['guide'],
     );
   }

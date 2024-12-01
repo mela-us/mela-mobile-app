@@ -15,6 +15,12 @@ mixin _$QuestionStore on _QuestionStore, Store {
   bool get loading => (_$loadingComputed ??=
           Computed<bool>(() => super.loading, name: '_QuestionStore.loading'))
       .value;
+  Computed<bool>? _$savingComputed;
+
+  @override
+  bool get saving => (_$savingComputed ??=
+          Computed<bool>(() => super.saving, name: '_QuestionStore.saving'))
+      .value;
 
   late final _$fetchQuestionsFutureAtom =
       Atom(name: '_QuestionStore.fetchQuestionsFuture', context: context);
@@ -30,6 +36,22 @@ mixin _$QuestionStore on _QuestionStore, Store {
     _$fetchQuestionsFutureAtom.reportWrite(value, super.fetchQuestionsFuture,
         () {
       super.fetchQuestionsFuture = value;
+    });
+  }
+
+  late final _$saveUserResultAtom =
+      Atom(name: '_QuestionStore.saveUserResult', context: context);
+
+  @override
+  ObservableFuture<int?> get saveUserResult {
+    _$saveUserResultAtom.reportRead();
+    return super.saveUserResult;
+  }
+
+  @override
+  set saveUserResult(ObservableFuture<int?> value) {
+    _$saveUserResultAtom.reportWrite(value, super.saveUserResult, () {
+      super.saveUserResult = value;
     });
   }
 
@@ -65,18 +87,34 @@ mixin _$QuestionStore on _QuestionStore, Store {
     });
   }
 
-  late final _$questionUidAtom =
-      Atom(name: '_QuestionStore.questionUid', context: context);
+  late final _$isAuthorizedAtom =
+      Atom(name: '_QuestionStore.isAuthorized', context: context);
+
+  @override
+  bool get isAuthorized {
+    _$isAuthorizedAtom.reportRead();
+    return super.isAuthorized;
+  }
+
+  @override
+  set isAuthorized(bool value) {
+    _$isAuthorizedAtom.reportWrite(value, super.isAuthorized, () {
+      super.isAuthorized = value;
+    });
+  }
+
+  late final _$questionsUidAtom =
+      Atom(name: '_QuestionStore.questionsUid', context: context);
 
   @override
   String get questionsUid {
-    _$questionUidAtom.reportRead();
+    _$questionsUidAtom.reportRead();
     return super.questionsUid;
   }
 
   @override
   set questionsUid(String value) {
-    _$questionUidAtom.reportWrite(value, super.questionsUid, () {
+    _$questionsUidAtom.reportWrite(value, super.questionsUid, () {
       super.questionsUid = value;
     });
   }
@@ -105,6 +143,15 @@ mixin _$QuestionStore on _QuestionStore, Store {
     return _$getQuestionsAsyncAction.run(() => super.getQuestions());
   }
 
+  late final _$submitAnswerAsyncAction =
+      AsyncAction('_QuestionStore.submitAnswer', context: context);
+
+  @override
+  Future<dynamic> submitAnswer(int correct, DateTime start, DateTime end) {
+    return _$submitAnswerAsyncAction
+        .run(() => super.submitAnswer(correct, start, end));
+  }
+
   late final _$_QuestionStoreActionController =
       ActionController(name: '_QuestionStore', context: context);
 
@@ -120,14 +167,28 @@ mixin _$QuestionStore on _QuestionStore, Store {
   }
 
   @override
+  void setQuestionsUid(String uid) {
+    final _$actionInfo = _$_QuestionStoreActionController.startAction(
+        name: '_QuestionStore.setQuestionsUid');
+    try {
+      return super.setQuestionsUid(uid);
+    } finally {
+      _$_QuestionStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 fetchQuestionsFuture: ${fetchQuestionsFuture},
+saveUserResult: ${saveUserResult},
 questionList: ${questionList},
 success: ${success},
-questionUid: ${questionsUid},
+isAuthorized: ${isAuthorized},
+questionsUid: ${questionsUid},
 isQuit: ${isQuit},
-loading: ${loading}
+loading: ${loading},
+saving: ${saving}
     ''';
   }
 }

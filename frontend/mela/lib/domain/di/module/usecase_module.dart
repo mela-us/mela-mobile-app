@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:mela/data/network/apis/questions/save_result_api.dart';
 import 'package:mela/domain/repository/lecture/lecture_repository.dart';
-import 'package:mela/domain/repository/post/post_repository.dart';
 import 'package:mela/domain/repository/user/user_repository.dart';
 import 'package:mela/domain/repository/user_register/user_signup_repostiory.dart';
 
@@ -25,7 +24,9 @@ import '../../repository/search/search_repository.dart';
 import '../../repository/topic/topic_repository.dart';
 import '../../repository/user_login/user_login_repository.dart';
 
+import '../../usecase/lecture/get_divided_lecture_usecase.dart';
 import '../../usecase/lecture/get_lectures_are_learning_usecase.dart';
+import '../../usecase/lecture/get_levels_usecase.dart';
 import '../../usecase/question/get_questions_usecase.dart';
 import '../../usecase/search/get_history_search_list.dart';
 import '../../usecase/user_login/is_logged_in_usecase.dart';
@@ -39,10 +40,6 @@ import 'package:mela/domain/usecase/stat/get_detailed_progress_usecase.dart';
 
 class UseCaseModule {
   static Future<void> configureUseCaseModuleInjection() async {
-    //post:---------------------------------------------------------------------
-    getIt.registerSingleton<GetPostUseCase>(
-        GetPostUseCase(getIt<PostRepository>()));
-
     // user:--------------------------------------------------------------------
     getIt.registerSingleton<GetUserInfoUseCase>(
         GetUserInfoUseCase(getIt<UserRepository>()));
@@ -71,11 +68,14 @@ class UseCaseModule {
 
     // question:----------------------------------------------------------------
     getIt.registerSingleton<GetQuestionsUseCase>(
-      GetQuestionsUseCase(getIt<QuestionRepository>()),
+      GetQuestionsUseCase(
+          getIt<QuestionRepository>(), getIt<RefreshAccessTokenUsecase>()
+      ),
     );
 
-    getIt.registerSingleton<SubmitResultUseCase>(
-      SubmitResultUseCase(getIt<SaveResultApi>()),
+    getIt.registerSingleton<SubmitResultUseCase>(SubmitResultUseCase(
+          getIt<SaveResultApi>(), getIt<RefreshAccessTokenUsecase>()
+      ),
     );
 
     /// topic:------------------------------------------------------------------

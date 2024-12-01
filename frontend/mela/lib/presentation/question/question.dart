@@ -89,6 +89,14 @@ class _QuestionScreenState extends State<QuestionScreen> {
       _questionStore.getQuestions();
     }
 
+    reaction((_) => _questionStore.isAuthorized, (flag) {
+      if (!flag) {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          Routes.loginScreen, (route) => false
+        );
+      }
+    });
+
     reaction((_) => _questionStore.questionList, (questions){
       if (questions != null){
         //can't be null here

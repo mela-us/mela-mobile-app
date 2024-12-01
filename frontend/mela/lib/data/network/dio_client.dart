@@ -44,13 +44,6 @@ class DioClient {
     ProgressCallback? onReceiveProgress,
   }) async {
     try {
-      //print('\n=== REQUEST INFO ===');
-      // print('URL: ${_dio.options.baseUrl}$uri');
-      // print('Method: GET');
-      // print('Headers: ${_dio.options.headers}');
-      // print('Query Parameters: $queryParameters');
-      // print('Options: ${options?.toString()}');
-      //_dio.options.headers['Content-Type'] = 'application/json';
       final Response response = await _dio.get(
         uri,
         queryParameters: queryParameters,
@@ -58,10 +51,6 @@ class DioClient {
         cancelToken: cancelToken,
         onReceiveProgress: onReceiveProgress,
       );
-      // print("------------>DioClient: get luc sau");
-      // print("Actual Request Headers: ${response.requestOptions.headers}");
-      //print(response.data);
-
       if (response.statusCode != 200) {
         throw getResponseStatus(response.statusCode);
       }
