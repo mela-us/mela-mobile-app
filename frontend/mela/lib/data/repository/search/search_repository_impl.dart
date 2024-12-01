@@ -22,6 +22,7 @@ class SearchRepositoryImpl extends SearchRepository {
 
   @override
   Future<void> addHistorySearch(HistorySearch historySearch) {
+    print("=============AddHistorySearch_IMPL");
     return _historyDataSource.insert(historySearch);
   }
 

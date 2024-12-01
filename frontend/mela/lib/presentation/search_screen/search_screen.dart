@@ -3,7 +3,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/core/widgets/progress_indicator_widget.dart';
 import 'package:mela/di/service_locator.dart';
-import 'package:mela/domain/entity/history_search/history_search.dart';
 import 'package:mela/presentation/filter_screen/store/filter_store.dart';
 import 'package:mela/presentation/lectures_in_topic_screen/widgets/lecture_item.dart';
 import 'package:mela/presentation/search_screen/widgets/search_bar.dart';
@@ -60,12 +59,12 @@ class _SearchScreenState extends State<SearchScreen> {
     _unAuthorizedReactionDisposer();
   }
 
-  void handleHistoryItemClick(String searchText) {
+  Future handleHistoryItemClick(String searchText) async {
     // Update the search bar text
-    // print("searchBarKey.currentState is not null");
+    print("searchBarKey.currentState is not null $searchText");
     searchBarKey.currentState?.controller.text = searchText;
     // Perform the search
-    searchBarKey.currentState?.performSearch(searchText);
+    await searchBarKey.currentState?.performSearch(searchText);
   }
 
   @override
@@ -148,10 +147,7 @@ class _SearchScreenState extends State<SearchScreen> {
             child: Observer(builder: (context) {
               //List history search
               if (!_searchStore.isSearched) {
-                print("Lúc BUILD LẠI TRONG SearchScreen");
-                for (HistorySearch historySearch in _searchStore.searchHistory!) {
-                  print(historySearch.searchText);
-                }
+                //print("Lúc BUILD LẠI TRONG SearchScreen");
                 return _searchStore.isLoadingHistorySearch
                     ? AbsorbPointer(
                         absorbing: true,
@@ -170,7 +166,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       )
                     : ListView.builder(
                         itemCount: _searchStore.searchHistory!.length,
-                        itemBuilder: (context, index) {
+                        itemBuilder: (_, index) {
                           return Container(
                               height: 40,
                               padding:
@@ -181,14 +177,29 @@ class _SearchScreenState extends State<SearchScreen> {
                                 children: [
                                   Expanded(
                                     child: GestureDetector(
-                                      onTap: () {
-                                        // handleHistoryItemClick(
-                                        //     _searchStore.searchHistory![index].searchText);
+                                      onTap: () async {
+                                     
+                                     
+                                        String searchText = _searchStore
+                                            .searchHistory![index].searchText;
+
+                                    //Must have searchText, not use handleHistoryItemClick with
+                                    // _searchStore.searchHistory![index].searchText  
+                                    //because eg have a,b,c,d when delete in index 2 => searchText = c, 
+                                     //mobx will rebuild and searchHistory now have a,b,d
+                                     //so it continue do await handleHistoryItemClick() at index =2, 
+                                     //_searchStore.searchHistory![2].searchText = d and display in handleHistoryItemClick is d => not correct, 
+                                     //correct must be searchText = c
+
+                                        await _searchStore.deleteHistorySearch(
+                                            _searchStore.searchHistory![index]);
+                                        await handleHistoryItemClick(
+                                           searchText);
                                       },
                                       child: Text(
                                         _searchStore
                                             .searchHistory![index].searchText,
-                                        style: TextStyle(fontSize: 12),
+                                        style: const TextStyle(fontSize: 12),
                                         softWrap: true,
                                         maxLines: null,
                                         overflow: TextOverflow.visible,
@@ -196,7 +207,10 @@ class _SearchScreenState extends State<SearchScreen> {
                                     ),
                                   ),
                                   InkWell(
-                                    onTap: () {},
+                                    onTap: () async {
+                                      await _searchStore.deleteHistorySearch(
+                                          _searchStore.searchHistory![index]);
+                                    },
                                     child: const Icon(
                                       Icons.close,
                                       size: 14,

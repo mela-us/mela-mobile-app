@@ -9,8 +9,14 @@ class HistoryDataSource {
 
   HistoryDataSource(this._sembastClient);
 
-  Future<int> insert(HistorySearch history) async {
-    return await _historyStore.add(_sembastClient.database, history.toMap());
+  Future<void> insert(HistorySearch history) async {
+    //test
+    // print("------------------->History added IN DB Trc khi thêm");
+    // await getAllHistory();
+    await _historyStore.add(_sembastClient.database, history.toMap());
+    //test
+    // print("------------------->History added IN DB Sau khi them");
+    // await getAllHistory();
   }
 
   Future<List<HistorySearch>> getAllHistory() async {
@@ -19,18 +25,29 @@ class HistoryDataSource {
       finder: Finder(sortOrders: [SortOrder('id', false)]),
     );
 
-    return recordSnapshots.map((snapshot) {
+    final histories = recordSnapshots.map((snapshot) {
       final history = HistorySearch.fromMap(snapshot.value);
       return history;
     }).toList();
+    //test
+    // print("History get IN DB");
+    // for (HistorySearch history in histories) {
+    //   print(history.id.toString() + "--------" + history.searchText);
+    // }
+    return histories;
   }
 
-  Future<int> delete(HistorySearch history) async {
-    final finder = Finder(filter: Filter.byKey(history.id));
-    return await _historyStore.delete(
+  Future<void> delete(HistorySearch history) async {
+    // print("------------------->History delete IN DB Trc xoa thêm");
+    // await getAllHistory();
+    final finder = Finder(filter: Filter.equals('id', history.id));
+    await _historyStore.delete(
       _sembastClient.database,
       finder: finder,
     );
+    //test
+    // print("------------------------>History Deleted IN DB sua khi xoa");
+    // await getAllHistory();
   }
 
   Future deleteAll() async {

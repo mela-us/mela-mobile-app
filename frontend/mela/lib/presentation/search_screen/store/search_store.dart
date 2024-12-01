@@ -84,15 +84,7 @@ abstract class _SearchStore with Store {
 
   @action
   Future addHistorySearch(HistorySearch historySearch) async {
-    print("Lúc thêm vào trc");
-    for(HistorySearch historySearch in searchHistory!){
-      print(historySearch.searchText);
-    }
     searchHistory?.insert(0, historySearch);
-    print("Lúc thêm sau");
-    for(HistorySearch historySearch in searchHistory!){
-      print(historySearch.searchText);
-    }
     await _addHistorySearchUsecase.call(params: historySearch);
   }
 
@@ -104,7 +96,7 @@ abstract class _SearchStore with Store {
 
   @action
   Future deleteHistorySearch(HistorySearch historySearch) async {
-    searchHistory?.remove(historySearch);
+    searchHistory = List.from(searchHistory!)..remove(historySearch);
     await _deleteHistorySearchUsecase.call(params: historySearch);
   }
 
