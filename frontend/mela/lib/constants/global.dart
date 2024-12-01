@@ -17,34 +17,34 @@ class Global {
   static double PracticeRightPadding = 34;
 
   //Course:---------------------------------------------------------------------
-  static List<Topic> getTopics() {
-    return [
-      Topic(
-          topicId: 0,
-          topicName: "Số học",
-          imageTopicPath: "assets/images/topics/sohoc.png"),
-      Topic(
-          topicId: 0,
-          topicName: "Đại số",
-          imageTopicPath: "assets/images/topics/daiso.png"),
-      Topic(
-          topicId: 0,
-          topicName: "Hình học",
-          imageTopicPath: "assets/images/topics/hinhhoc.png"),
-      Topic(
-          topicId: 0,
-          topicName: "Xác suất và thống kê",
-          imageTopicPath: "assets/images/topics/xstk.png"),
-      Topic(
-          topicId: 0,
-          topicName: "Tổ hợp",
-          imageTopicPath: "assets/images/topics/tohop.png"),
-      Topic(
-          topicId: 0,
-          topicName: "Tư duy",
-          imageTopicPath: "assets/images/topics/tuduy.png"),
-    ];
-  }
+  // static List<Topic> getTopics() {
+  //   return [
+  //     Topic(
+  //         topicId: 0,
+  //         topicName: "Số học",
+  //         imageTopicPath: "assets/images/topics/sohoc.png"),
+  //     Topic(
+  //         topicId: 0,
+  //         topicName: "Đại số",
+  //         imageTopicPath: "assets/images/topics/daiso.png"),
+  //     Topic(
+  //         topicId: 0,
+  //         topicName: "Hình học",
+  //         imageTopicPath: "assets/images/topics/hinhhoc.png"),
+  //     Topic(
+  //         topicId: 0,
+  //         topicName: "Xác suất và thống kê",
+  //         imageTopicPath: "assets/images/topics/xstk.png"),
+  //     Topic(
+  //         topicId: 0,
+  //         topicName: "Tổ hợp",
+  //         imageTopicPath: "assets/images/topics/tohop.png"),
+  //     Topic(
+  //         topicId: 0,
+  //         topicName: "Tư duy",
+  //         imageTopicPath: "assets/images/topics/tuduy.png"),
+  //   ];
+  // }
 
   //Questions:------------------------------------------------------------------
   // static List<Question> questions = [
@@ -106,120 +106,120 @@ class Global {
   // ];
 
   //Topic:----------------------------------------------------------------------
-  static List<Lecture> getLecturesIsLearning() {
-    return [
-      Lecture(
-          lectureId: 0,
-          levelId: 0,
-          topicId: 0,
-          lectureName: "Lý thuyết đồng dư",
-          lectureDescription: "Mô tả bài học chi tiết",
-          lectureContent: "Nội dung bài học"),
-      Lecture(
-          lectureId: 2,
-          levelId: 0,
-          topicId: 0,
-          lectureName: "Hàm Euler, hàm số học",
-          lectureDescription: "Mô tả bài học",
-          lectureContent: "Nội dung bài học"),
-      Lecture(
-          lectureId: 5,
-          levelId: 0,
-          topicId: 0,
-          lectureName: "Lý thuyết chia hết",
-          lectureDescription: "Mô tả bài học",
-          lectureContent: "Nội dung bài học"),
-    ];
-  }
+  // static List<Lecture> getLecturesIsLearning() {
+  //   return [
+  //     Lecture(
+  //         lectureId: 0,
+  //         levelId: 0,
+  //         topicId: 0,
+  //         lectureName: "Lý thuyết đồng dư",
+  //         lectureDescription: "Mô tả bài học chi tiết",
+  //         lectureContent: "Nội dung bài học"),
+  //     Lecture(
+  //         lectureId: 2,
+  //         levelId: 0,
+  //         topicId: 0,
+  //         lectureName: "Hàm Euler, hàm số học",
+  //         lectureDescription: "Mô tả bài học",
+  //         lectureContent: "Nội dung bài học"),
+  //     Lecture(
+  //         lectureId: 5,
+  //         levelId: 0,
+  //         topicId: 0,
+  //         lectureName: "Lý thuyết chia hết",
+  //         lectureDescription: "Mô tả bài học",
+  //         lectureContent: "Nội dung bài học"),
+  //   ];
+  // }
 
   //Topic:----------------------------------------------------------------------
-  static List<Lecture> getLecturesInTopicAndLevel(levelId, topicId) {
-    return [
-      Lecture(
-          lectureId: 0,
-          levelId: 0,
-          topicId: 0,
-          lectureName: "Lý thuyết đồng dư",
-          lectureDescription: "Mô tả bài học chi tiết",
-          lectureContent: "Nội dung bài học"),
-      Lecture(
-          lectureId: 1,
-          levelId: 0,
-          topicId: 0,
-          lectureName: "Hàm Euler, hàm số học",
-          lectureDescription: "Mô tả bài học",
-          lectureContent: "Nội dung bài học"),
-      Lecture(
-          lectureId: 2,
-          levelId: 0,
-          topicId: 0,
-          lectureName: "Lý thuyết chia hết",
-          lectureDescription: "Mô tả bài học",
-          lectureContent: "Nội dung bài học"),
-      Lecture(
-          lectureId: 3,
-          levelId: 0,
-          topicId: 0,
-          lectureName: "Lý thuyết đồng dư",
-          lectureDescription: "Mô tả bài học chi tiết",
-          lectureContent: "Nội dung bài học"),
-      Lecture(
-          lectureId: 4,
-          levelId: 0,
-          topicId: 0,
-          lectureName: "Hàm Euler, hàm số học",
-          lectureDescription: "Mô tả bài học",
-          lectureContent: "Nội dung bài học"),
-      Lecture(
-          lectureId: 5,
-          levelId: 0,
-          topicId: 0,
-          lectureName: "Lý thuyết chia hết",
-          lectureDescription: "Mô tả bài học",
-          lectureContent: "Nội dung bài học"),
-      Lecture(
-          lectureId: 6,
-          levelId: 0,
-          topicId: 0,
-          lectureName: "Lý thuyết đồng dư",
-          lectureDescription: "Mô tả bài học chi tiết",
-          lectureContent: "Nội dung bài học"),
-      Lecture(
-          lectureId: 7,
-          levelId: 0,
-          topicId: 0,
-          lectureName: "Hàm Euler, hàm số học",
-          lectureDescription: "Mô tả bài học",
-          lectureContent: "Nội dung bài học"),
-      Lecture(
-          lectureId: 8,
-          levelId: 0,
-          topicId: 0,
-          lectureName: "Lý thuyết chia hết",
-          lectureDescription: "Mô tả bài học",
-          lectureContent: "Nội dung bài học"),
-    ];
-  }
+  // static List<Lecture> getLecturesInTopicAndLevel(levelId, topicId) {
+  //   return [
+  //     Lecture(
+  //         lectureId: 0,
+  //         levelId: 0,
+  //         topicId: 0,
+  //         lectureName: "Lý thuyết đồng dư",
+  //         lectureDescription: "Mô tả bài học chi tiết",
+  //         lectureContent: "Nội dung bài học"),
+  //     Lecture(
+  //         lectureId: 1,
+  //         levelId: 0,
+  //         topicId: 0,
+  //         lectureName: "Hàm Euler, hàm số học",
+  //         lectureDescription: "Mô tả bài học",
+  //         lectureContent: "Nội dung bài học"),
+  //     Lecture(
+  //         lectureId: 2,
+  //         levelId: 0,
+  //         topicId: 0,
+  //         lectureName: "Lý thuyết chia hết",
+  //         lectureDescription: "Mô tả bài học",
+  //         lectureContent: "Nội dung bài học"),
+  //     Lecture(
+  //         lectureId: 3,
+  //         levelId: 0,
+  //         topicId: 0,
+  //         lectureName: "Lý thuyết đồng dư",
+  //         lectureDescription: "Mô tả bài học chi tiết",
+  //         lectureContent: "Nội dung bài học"),
+  //     Lecture(
+  //         lectureId: 4,
+  //         levelId: 0,
+  //         topicId: 0,
+  //         lectureName: "Hàm Euler, hàm số học",
+  //         lectureDescription: "Mô tả bài học",
+  //         lectureContent: "Nội dung bài học"),
+  //     Lecture(
+  //         lectureId: 5,
+  //         levelId: 0,
+  //         topicId: 0,
+  //         lectureName: "Lý thuyết chia hết",
+  //         lectureDescription: "Mô tả bài học",
+  //         lectureContent: "Nội dung bài học"),
+  //     Lecture(
+  //         lectureId: 6,
+  //         levelId: 0,
+  //         topicId: 0,
+  //         lectureName: "Lý thuyết đồng dư",
+  //         lectureDescription: "Mô tả bài học chi tiết",
+  //         lectureContent: "Nội dung bài học"),
+  //     Lecture(
+  //         lectureId: 7,
+  //         levelId: 0,
+  //         topicId: 0,
+  //         lectureName: "Hàm Euler, hàm số học",
+  //         lectureDescription: "Mô tả bài học",
+  //         lectureContent: "Nội dung bài học"),
+  //     Lecture(
+  //         lectureId: 8,
+  //         levelId: 0,
+  //         topicId: 0,
+  //         lectureName: "Lý thuyết chia hết",
+  //         lectureDescription: "Mô tả bài học",
+  //         lectureContent: "Nội dung bài học"),
+  //   ];
+  // }
 
-  static List<Exercise> getExercisesInLecture(lectureId) {
-    return [
-      Exercise(
-        exerciseId: 0,
-        lectureId: 0,
-        exerciseName: "Bài tập 1",
-      ),
-      Exercise(
-        exerciseId: 1,
-        lectureId: 0,
-        exerciseName: "Bài tập 2",
-      ),
-      Exercise(
-        exerciseId: 2,
-        lectureId: 0,
-        exerciseName: "Bài tập 3",
-      ),
-    ];
-  }
+  // static List<Exercise> getExercisesInLecture(lectureId) {
+  //   return [
+  //     Exercise(
+  //       exerciseId: 0,
+  //       lectureId: 0,
+  //       exerciseName: "Bài tập 1",
+  //     ),
+  //     Exercise(
+  //       exerciseId: 1,
+  //       lectureId: 0,
+  //       exerciseName: "Bài tập 2",
+  //     ),
+  //     Exercise(
+  //       exerciseId: 2,
+  //       lectureId: 0,
+  //       exerciseName: "Bài tập 3",
+  //     ),
+  //   ];
+  // }
 
   static List<Progress> progressList = [
       Progress(id: '1', topicName: 'Số học', division: 'Trung học', current: 3, total: 10),

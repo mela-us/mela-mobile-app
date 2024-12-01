@@ -49,6 +49,22 @@ mixin _$ExerciseStore on _ExerciseStore, Store {
     });
   }
 
+  late final _$isUnAuthorizedAtom =
+      Atom(name: '_ExerciseStore.isUnAuthorized', context: context);
+
+  @override
+  bool get isUnAuthorized {
+    _$isUnAuthorizedAtom.reportRead();
+    return super.isUnAuthorized;
+  }
+
+  @override
+  set isUnAuthorized(bool value) {
+    _$isUnAuthorizedAtom.reportWrite(value, super.isUnAuthorized, () {
+      super.isUnAuthorized = value;
+    });
+  }
+
   late final _$exerciseListAtom =
       Atom(name: '_ExerciseStore.exerciseList', context: context);
 
@@ -62,6 +78,22 @@ mixin _$ExerciseStore on _ExerciseStore, Store {
   set exerciseList(ExerciseList? value) {
     _$exerciseListAtom.reportWrite(value, super.exerciseList, () {
       super.exerciseList = value;
+    });
+  }
+
+  late final _$dividedLectureListAtom =
+      Atom(name: '_ExerciseStore.dividedLectureList', context: context);
+
+  @override
+  DividedLectureList? get dividedLectureList {
+    _$dividedLectureListAtom.reportRead();
+    return super.dividedLectureList;
+  }
+
+  @override
+  set dividedLectureList(DividedLectureList? value) {
+    _$dividedLectureListAtom.reportWrite(value, super.dividedLectureList, () {
+      super.dividedLectureList = value;
     });
   }
 
@@ -82,6 +114,23 @@ mixin _$ExerciseStore on _ExerciseStore, Store {
     });
   }
 
+  late final _$fetchDividedLecturesFutureAtom =
+      Atom(name: '_ExerciseStore.fetchDividedLecturesFuture', context: context);
+
+  @override
+  ObservableFuture<DividedLectureList?> get fetchDividedLecturesFuture {
+    _$fetchDividedLecturesFutureAtom.reportRead();
+    return super.fetchDividedLecturesFuture;
+  }
+
+  @override
+  set fetchDividedLecturesFuture(ObservableFuture<DividedLectureList?> value) {
+    _$fetchDividedLecturesFutureAtom
+        .reportWrite(value, super.fetchDividedLecturesFuture, () {
+      super.fetchDividedLecturesFuture = value;
+    });
+  }
+
   late final _$getExercisesByLectureIdAsyncAction =
       AsyncAction('_ExerciseStore.getExercisesByLectureId', context: context);
 
@@ -89,6 +138,16 @@ mixin _$ExerciseStore on _ExerciseStore, Store {
   Future<dynamic> getExercisesByLectureId() {
     return _$getExercisesByLectureIdAsyncAction
         .run(() => super.getExercisesByLectureId());
+  }
+
+  late final _$getDividedLecturesByLectureIdAsyncAction = AsyncAction(
+      '_ExerciseStore.getDividedLecturesByLectureId',
+      context: context);
+
+  @override
+  Future<dynamic> getDividedLecturesByLectureId() {
+    return _$getDividedLecturesByLectureIdAsyncAction
+        .run(() => super.getDividedLecturesByLectureId());
   }
 
   late final _$_ExerciseStoreActionController =
@@ -121,8 +180,11 @@ mixin _$ExerciseStore on _ExerciseStore, Store {
     return '''
 currentLecture: ${currentLecture},
 errorString: ${errorString},
+isUnAuthorized: ${isUnAuthorized},
 exerciseList: ${exerciseList},
+dividedLectureList: ${dividedLectureList},
 fetchExercisesFuture: ${fetchExercisesFuture},
+fetchDividedLecturesFuture: ${fetchDividedLecturesFuture},
 isGetExercisesLoading: ${isGetExercisesLoading}
     ''';
   }

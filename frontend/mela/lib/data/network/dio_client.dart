@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:mela/constants/enum.dart';
 import 'package:mela/core/data/network/dio/configs/dio_configs.dart';
-
-import '../../constants/enum.dart';
 
 class DioClient {
   // dio instance
@@ -11,11 +10,11 @@ class DioClient {
   // injecting dio instance
   DioClient({required this.dioConfigs})
       : _dio = Dio()
-    ..options.baseUrl = dioConfigs.baseUrl
-    ..options.connectTimeout =
-    Duration(milliseconds: dioConfigs.connectionTimeout)
-    ..options.receiveTimeout =
-    Duration(milliseconds: dioConfigs.receiveTimeout);
+          ..options.baseUrl = dioConfigs.baseUrl
+          ..options.connectTimeout =
+              Duration(milliseconds: dioConfigs.connectionTimeout)
+          ..options.receiveTimeout =
+              Duration(milliseconds: dioConfigs.receiveTimeout);
 
   Dio get dio => _dio;
 
@@ -27,24 +26,31 @@ class DioClient {
   //Until
   ResponseStatus getResponseStatus(int? statusCode) {
     if (statusCode == 401) {
-      return ResponseStatus.unauthorized;
+      return ResponseStatus.UNAUTHORIZED;
     }
     if (statusCode == 400) {
-      return ResponseStatus.bad_request;
+      return ResponseStatus.BAD_REQUEST;
     }
     //....
-    return ResponseStatus.unknown;
+    return ResponseStatus.UNKNOWN;
   }
 
   // Get:-----------------------------------------------------------------------
   Future<dynamic> get(
-      String uri, {
-        Map<String, dynamic>? queryParameters,
-        Options? options,
-        CancelToken? cancelToken,
-        ProgressCallback? onReceiveProgress,
-      }) async {
+    String uri, {
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onReceiveProgress,
+  }) async {
     try {
+      //print('\n=== REQUEST INFO ===');
+      // print('URL: ${_dio.options.baseUrl}$uri');
+      // print('Method: GET');
+      // print('Headers: ${_dio.options.headers}');
+      // print('Query Parameters: $queryParameters');
+      // print('Options: ${options?.toString()}');
+      //_dio.options.headers['Content-Type'] = 'application/json';
       final Response response = await _dio.get(
         uri,
         queryParameters: queryParameters,
@@ -52,26 +58,31 @@ class DioClient {
         cancelToken: cancelToken,
         onReceiveProgress: onReceiveProgress,
       );
-      print(response.statusCode);
-      return response.data;
+      // print("------------>DioClient: get luc sau");
+      // print("Actual Request Headers: ${response.requestOptions.headers}");
+      //print(response.data);
 
+      if (response.statusCode != 200) {
+        throw getResponseStatus(response.statusCode);
+      }
+      //200 OK
+      return response.data;
     } catch (e) {
-      if (e is DioException) print("Error ${e.response?.statusCode}");
-      print("Error 2: $e");
+      //cat error above or other exception dio eg timeout....
       rethrow;
     }
   }
 
   // Post:----------------------------------------------------------------------
   Future<dynamic> post(
-      String uri, {
-        data,
-        Map<String, dynamic>? queryParameters,
-        Options? options,
-        CancelToken? cancelToken,
-        ProgressCallback? onSendProgress,
-        ProgressCallback? onReceiveProgress,
-      }) async {
+    String uri, {
+    data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
     try {
       final Response response = await _dio.post(
         uri,
@@ -82,30 +93,30 @@ class DioClient {
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
-      //Only for register account
-      if (response.statusCode == 201) {
-        return response.data;
-      }
-      if (response.statusCode != 200) {
-        throw getResponseStatus(response.statusCode);
-      }
+      // //Only for register account
+      // if (response.statusCode == 201) {
+      //   return response.data;
+      // }
+      // if (response.statusCode != 200) {
+      //   throw getResponseStatus(response.statusCode);
+      // }
       return response.data;
     } catch (e) {
-      //cat unauthorized above or other exception dio eg timeout....
+      //cat unauthorized above or other exception dio eg timeout...
       rethrow;
     }
   }
 
   // Put:-----------------------------------------------------------------------
   Future<dynamic> put(
-      String uri, {
-        data,
-        Map<String, dynamic>? queryParameters,
-        Options? options,
-        CancelToken? cancelToken,
-        ProgressCallback? onSendProgress,
-        ProgressCallback? onReceiveProgress,
-      }) async {
+    String uri, {
+    data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
     try {
       final Response response = await _dio.put(
         uri,
@@ -116,9 +127,6 @@ class DioClient {
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
-      if (response.statusCode != 200) {
-        throw getResponseStatus(response.statusCode);
-      }
       return response.data;
     } catch (e) {
       rethrow;
@@ -127,14 +135,14 @@ class DioClient {
 
   // Delete:--------------------------------------------------------------------
   Future<dynamic> delete(
-      String uri, {
-        data,
-        Map<String, dynamic>? queryParameters,
-        Options? options,
-        CancelToken? cancelToken,
-        ProgressCallback? onSendProgress,
-        ProgressCallback? onReceiveProgress,
-      }) async {
+    String uri, {
+    data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
     try {
       final Response response = await _dio.delete(
         uri,
@@ -143,9 +151,6 @@ class DioClient {
         options: options,
         cancelToken: cancelToken,
       );
-      if (response.statusCode != 200) {
-        throw getResponseStatus(response.statusCode);
-      }
       return response.data;
     } catch (e) {
       rethrow;

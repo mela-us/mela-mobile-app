@@ -33,8 +33,5 @@ class SignupUseCase implements UseCase<void, SignupParams>{
   Future<void> call({required SignupParams params}) {
     return _userSignUpRepository.signup(params);
   }
-
-
-
   
 }

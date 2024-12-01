@@ -1,8 +1,15 @@
 import 'dart:async';
 
+import 'package:http/http.dart';
 import 'package:mela/core/stores/error/error_store.dart';
 import 'package:mela/core/stores/form/form_store.dart';
+import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
+import 'package:mela/domain/usecase/lecture/get_levels_usecase.dart';
+import 'package:mela/domain/usecase/post/get_post_usecase.dart';
 import 'package:mela/domain/usecase/question/get_questions_usecase.dart';
+import 'package:mela/domain/usecase/user_login/save_access_token_usecase.dart';
+import 'package:mela/domain/usecase/user_login/save_refresh_token_usecase.dart';
+import 'package:mela/presentation/post/store/post_store.dart';
 import 'package:mela/domain/usecase/question/submit_result_usecase.dart';
 
 
@@ -61,12 +68,16 @@ class StoreModule {
     //     getIt<ErrorStore>(),
     //   ),
     // );
+    getIt.registerSingleton<PostStore>(PostStore(getIt<GetPostUseCase>(), getIt<ErrorStore>()));
 
     getIt.registerSingleton<UserLoginStore>(
       UserLoginStore(
         getIt<IsLoggedInUseCase>(),
         getIt<SaveLoginStatusUseCase>(),
         getIt<LoginUseCase>(),
+        getIt<SaveAccessTokenUsecase>(),
+        getIt<SaveRefreshTokenUsecase>(),
+        getIt<ErrorStore>(),
       ),
     );
     //UserSignupStore
@@ -79,21 +90,25 @@ class StoreModule {
     getIt.registerSingleton<LoginOrSignupStore>(
       LoginOrSignupStore(),
     );
-    getIt.registerSingleton<ExerciseStore>(
-      ExerciseStore(getIt<GetExercisesUseCase>()),
-    );
 
     getIt.registerSingleton<LectureStore>(
       LectureStore(
         getIt<GetLecturesUsecase>(),
         getIt<GetLecturesAreLearningUsecase>(),
+        getIt<GetLevelsUsecase>(),
+        getIt<GetDividedLectureUsecase>(),
       ),
+    );
+    //After LectureStore because ExerciseStore use LectureStore
+        getIt.registerSingleton<ExerciseStore>(
+      ExerciseStore(getIt<GetExercisesUseCase>()),
     );
 
     getIt.registerSingleton<SearchStore>(SearchStore(
         getIt<GetHistorySearchList>(), getIt<GetSearchLecturesResult>()));
     getIt.registerSingleton<FilterStore>(FilterStore());
 
+    //After LectureStore because TopicStore use LectureStore
     getIt.registerSingleton<TopicStore>(TopicStore(getIt<GetTopicsUsecase>()));
 
 

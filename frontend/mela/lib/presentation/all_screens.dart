@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mela/di/service_locator.dart';
+import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
 import 'package:mela/presentation/stats/stats.dart';
 import 'package:mela/presentation/personal/personal.dart';
 
@@ -13,6 +15,7 @@ class AllScreens extends StatefulWidget {
 
 class _AllScreensState extends State<AllScreens> {
   // Index for the currently selected tab
+  final _topicStore = getIt<TopicStore>();
   int _currentIndex = 0;
 
   // List of screens for each tab
@@ -25,6 +28,8 @@ class _AllScreensState extends State<AllScreens> {
 
   void onTabTapped(int index) {
     setState(() {
+      //eg: turnoff wifi,have errorString in _topicStore, change other tab, then turn on wifi, go back coureses screen, it will need to set errorString to empty
+      _topicStore.resetErrorString();
       _currentIndex = index;
     });
   }
@@ -32,12 +37,10 @@ class _AllScreensState extends State<AllScreens> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_currentIndex],
-      bottomNavigationBar: CustomNavigationBar(
-        currentIndex: _currentIndex,
-        screens: _screens,
-        onTap: onTabTapped
-      )
-    );
+        body: _screens[_currentIndex],
+        bottomNavigationBar: CustomNavigationBar(
+            currentIndex: _currentIndex,
+            screens: _screens,
+            onTap: onTabTapped));
   }
 }

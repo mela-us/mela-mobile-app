@@ -132,6 +132,7 @@ class __FormContentState extends State<_FormContent> {
 
             //Email TextField
             TextFormField(
+              controller: _emailController,
               validator: (value) {
                 // add email validation
                 if (value == null || value.isEmpty) {
@@ -167,14 +168,15 @@ class __FormContentState extends State<_FormContent> {
             //Password TextField
             Observer(builder: (context) {
               return TextFormField(
+                controller: _passwordController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Vui lòng nhập dữ liệu';
                   }
 
-                  if (value.length < 6) {
-                    return 'Mật khẩu ít nhất 6 kí tự';
-                  }
+                  // if (value.length < 6) {
+                  //   return 'Mật khẩu ít nhất 6 kí tự';
+                  // }
                   return null;
                 },
                 obscureText: !_userSignupStore.isPasswordVisible,
@@ -256,16 +258,20 @@ class __FormContentState extends State<_FormContent> {
                   }
                   if (_formKey.currentState?.validate() ?? false) {
                     try {
+                      print("sdsdsdsds");
+                      print(_emailController.text);
                       await _userSignupStore.signUp(
                         _emailController.text,
                         _passwordController.text,
                       );
+                      _emailController.clear();
+                      _passwordController.clear();
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Đăng ký thành công')),
                       );
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('${e.toString()}')),
+                        SnackBar(content: Text(e.toString())),
                       );
                     }
                   }

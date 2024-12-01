@@ -1,19 +1,32 @@
 class Lecture {
-  final int lectureId;
-  final int levelId;
-  final int topicId;
+  final String lectureId;
+  final String levelId;
+  final String topicId;
   final String lectureName;
   final String lectureDescription;
-  final String lectureContent;
+  final int totalExercises;
+  final int totalPassExercises;
 
   Lecture({
     required this.lectureId,
     required this.levelId,
     required this.topicId,
     required this.lectureName,
-    required this.lectureContent,
     required this.lectureDescription,
-
+    required this.totalExercises,
+    required this.totalPassExercises,
   });
-  double get progress => 0.7;
+  double get progress => totalPassExercises / totalExercises;
+
+  factory Lecture.fromJson(Map<String, dynamic> json) {
+    return Lecture(
+      lectureId: json['lectureId'],
+      levelId: json['levelId'],
+      topicId: json['topicId'],
+      lectureName: json['name'],
+      lectureDescription: json['description'],
+      totalExercises: json['totalExercises'],
+      totalPassExercises: json['totalPassExercises'],
+    );
+  }
 }

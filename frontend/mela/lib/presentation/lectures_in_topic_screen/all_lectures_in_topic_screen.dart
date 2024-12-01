@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
-import 'package:mela/constants/route_observer.dart';
 import 'package:mela/core/widgets/progress_indicator_widget.dart';
 import 'package:mela/di/service_locator.dart';
+import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
 import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
+import 'package:mobx/mobx.dart';
 import '../../utils/routes/routes.dart';
 import 'widgets/lectures_in_topic_and_level.dart';
 
@@ -16,66 +17,85 @@ class AllLecturesInTopicScreen extends StatefulWidget {
       _AllLecturesInTopicScreenState();
 }
 
-class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen>
-    with RouteAware {
+class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen> {
   final LectureStore _lectureStore = getIt<LectureStore>();
+  final TopicStore _topicStore = getIt<TopicStore>();
+  late final ReactionDisposer _unAuthorizedReactionDisposer;
+  @override
+  void initState() {
+    super.initState();
+    //routeObserver.subscribe(this, ModalRoute.of(context));
+
+    //for only refresh token expired
+    _unAuthorizedReactionDisposer = reaction(
+      (_) => _lectureStore.isUnAuthorized,
+      (value) {
+        if (value) {
+          _lectureStore.isUnAuthorized = false;
+          _lectureStore.resetErrorString();
+          //Remove all routes in stack
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              Routes.loginOrSignupScreen, (route) => false);
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _unAuthorizedReactionDisposer();
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
+
     if (!_lectureStore.isGetLecturesLoading) {
       _lectureStore.getListLectureByTopicIdAndLevelId();
     }
   }
 
   @override
-  void dispose() {
-    routeObserver.unsubscribe(this);
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    print("FlutterSa: AllLecturesInTopicScreen");
+    print("AllLecturesInTopicScreen");
     return DefaultTabController(
       length: 3,
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title: Observer(builder: (context) {
-            // print("Lecture TopicId");
-            // print(_lectureStore.toppicId);
-            return _lectureStore.errorString.isEmpty
-                ? Text(
-                    _lectureStore.currentTopic!.topicName,
-                    style: Theme.of(context)
-                        .textTheme
-                        .heading
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
-                  )
-                : SizedBox.shrink();
-          }),
+          title: Text(
+            _lectureStore.currentTopic!.topicName,
+            style: Theme.of(context)
+                .textTheme
+                .heading
+                .copyWith(color: Theme.of(context).colorScheme.primary),
+          ),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.black),
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () {
               Navigator.of(context).pop();
-              // print("FlutterSa<------: trc khi back ${_lectureStore.toppicId}");
-              // _lectureStore.resetTopicId();
+              //_lectureStore.resetTopic();
               _lectureStore.resetErrorString();
-              // print("FlutterSa<------: sau khi back ${_lectureStore.toppicId}");
             },
           ),
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 10),
-              child: IconButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(Routes.searchScreen);
-                },
-                icon: const Icon(Icons.search),
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
+              child: Observer(builder: (context) {
+                if (_lectureStore.errorString.isNotEmpty ||
+                    _lectureStore.lectureList == null) {
+                  return const SizedBox.shrink();
+                }
+                return IconButton(
+                  onPressed: () {
+                    _lectureStore.resetErrorString();
+                    Navigator.of(context).pushNamed(Routes.searchScreen);
+                  },
+                  icon: const Icon(Icons.search),
+                  color: Theme.of(context).colorScheme.onPrimary,
+                );
+              }),
             )
           ],
           bottom: TabBar(
@@ -112,11 +132,18 @@ class _AllLecturesInTopicScreenState extends State<AllLecturesInTopicScreen>
                   ),
                 )
               : TabBarView(
-                  children: _lectureStore.errorString.isEmpty
+                  children: (_lectureStore.errorString.isEmpty &&
+                          _lectureStore.lectureList != null)
                       ? [
-                          LecturesInTopicAndLevel(levelId: 0),
-                          LecturesInTopicAndLevel(levelId: 1),
-                          LecturesInTopicAndLevel(levelId: 2),
+                          LecturesInTopicAndLevel(
+                              levelId: _topicStore
+                                  .levelList!.levelList[0].levelId),
+                          LecturesInTopicAndLevel(
+                              levelId: _topicStore
+                                  .levelList!.levelList[1].levelId),
+                          LecturesInTopicAndLevel(
+                              levelId: _topicStore
+                                  .levelList!.levelList[2].levelId),
                         ]
                       : [
                           Center(

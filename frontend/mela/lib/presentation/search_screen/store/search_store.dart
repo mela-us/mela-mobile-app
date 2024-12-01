@@ -1,6 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:mela/domain/entity/lecture/lecture_list.dart';
 import 'package:mela/domain/usecase/search/get_history_search_list.dart';
 import 'package:mela/domain/usecase/search/get_search_lectures_result.dart';
+import 'package:mela/utils/dio/dio_error_util.dart';
 import 'package:mobx/mobx.dart';
 
 // Include generated file
@@ -22,6 +24,9 @@ abstract class _SearchStore with Store {
 
   @observable
   bool isFiltered = false;
+
+  @observable
+  bool isUnAuthorized = false;
 
   @observable
   String errorString = '';
@@ -59,7 +64,7 @@ abstract class _SearchStore with Store {
       this.searchHistory = value;
     }).catchError((onError) {
       this.searchHistory = null;
-      print(onError);
+      //errorString = onError.toString();
     });
   }
 
@@ -70,38 +75,27 @@ abstract class _SearchStore with Store {
 
     try {
       final value = await future;
-      this.lecturesAfterSearching = value;
-      this.errorString = '';
-
-      // Kiểm tra null trước khi sử dụng toán tử '!'
-      // print(
-      //     "----->length of lecturesAfterSearching: ${lecturesAfterSearching!.lectures.length}");
-
+      lecturesAfterSearching = value;
       updateLectureAfterSeachingAndFiltering(value);
-
-      // Debug
-      // print("*****Lecture trong getLecture by levelId****");
-      // _lectureStore.lectureList?.lectures.forEach((element) {
-      //   print("Lecture trong getLecture by levelId: ${element.lectureName}");
-      // });
     } catch (onError) {
-      this.lecturesAfterSearching = null;
+      lecturesAfterSearching = null;
       updateLectureAfterSeachingAndFiltering(null);
-      print(onError);
-      this.errorString = onError.toString();
+
+      if (onError is DioException) {
+        if (onError.response?.statusCode == 401) {
+          isUnAuthorized = true;
+          return;
+        }
+        errorString = DioExceptionUtil.handleError(onError);
+      } else {
+        errorString = "Có lỗi, thử lại sau";
+      }
     }
   }
 
   @action
   void updateLectureAfterSeachingAndFiltering(LectureList? value) {
-    // print("Chieu dai cua  list luc truoc: ");
-    // if (lecturesAfterSearchingAndFiltering != null) {
-    //   print(lecturesAfterSearchingAndFiltering!.lectures.length);
-    // }
-
     lecturesAfterSearchingAndFiltering = value;
-    // print("Chieu dai cua  list luc sau: ");
-    // print(lecturesAfterSearchingAndFiltering!.lectures.length);
   }
 
   @action

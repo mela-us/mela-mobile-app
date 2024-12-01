@@ -53,13 +53,13 @@ mixin _$UserLoginStore on _UserLoginStore, Store {
       Atom(name: '_UserLoginStore.loginFuture', context: context);
 
   @override
-  ObservableFuture<User?> get loginFuture {
+  ObservableFuture<TokenModel?> get loginFuture {
     _$loginFutureAtom.reportRead();
     return super.loginFuture;
   }
 
   @override
-  set loginFuture(ObservableFuture<User?> value) {
+  set loginFuture(ObservableFuture<TokenModel?> value) {
     _$loginFutureAtom.reportWrite(value, super.loginFuture, () {
       super.loginFuture = value;
     });

@@ -11,10 +11,10 @@ enum QuitOverlayResponse{
 }
 
 enum ResponseStatus{
-  ok,
-  similar,
-  unauthorized,
-  error,
-  bad_request,
-  unknown
+  OK,
+  SIMILAR,
+  UNAUTHORIZED,
+  ERROR,
+  BAD_REQUEST,
+  UNKNOWN
 }
