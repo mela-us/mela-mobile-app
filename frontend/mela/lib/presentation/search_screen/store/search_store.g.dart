@@ -92,13 +92,13 @@ mixin _$SearchStore on _SearchStore, Store {
       Atom(name: '_SearchStore.searchHistory', context: context);
 
   @override
-  List<String>? get searchHistory {
+  List<HistorySearch>? get searchHistory {
     _$searchHistoryAtom.reportRead();
     return super.searchHistory;
   }
 
   @override
-  set searchHistory(List<String>? value) {
+  set searchHistory(List<HistorySearch>? value) {
     _$searchHistoryAtom.reportWrite(value, super.searchHistory, () {
       super.searchHistory = value;
     });
@@ -160,13 +160,13 @@ mixin _$SearchStore on _SearchStore, Store {
       Atom(name: '_SearchStore.fetchHistorySearchFuture', context: context);
 
   @override
-  ObservableFuture<List<String>?> get fetchHistorySearchFuture {
+  ObservableFuture<List<HistorySearch>?> get fetchHistorySearchFuture {
     _$fetchHistorySearchFutureAtom.reportRead();
     return super.fetchHistorySearchFuture;
   }
 
   @override
-  set fetchHistorySearchFuture(ObservableFuture<List<String>?> value) {
+  set fetchHistorySearchFuture(ObservableFuture<List<HistorySearch>?> value) {
     _$fetchHistorySearchFutureAtom
         .reportWrite(value, super.fetchHistorySearchFuture, () {
       super.fetchHistorySearchFuture = value;

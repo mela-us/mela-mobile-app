@@ -178,10 +178,10 @@ class _SearchScreenState extends State<SearchScreen> {
                                     child: GestureDetector(
                                       onTap: () {
                                         handleHistoryItemClick(
-                                            _searchStore.searchHistory![index]);
+                                            _searchStore.searchHistory![index].searchText);
                                       },
                                       child: Text(
-                                        _searchStore.searchHistory![index],
+                                        _searchStore.searchHistory![index].searchText,
                                         style: TextStyle(fontSize: 12),
                                         softWrap: true,
                                         maxLines: null,

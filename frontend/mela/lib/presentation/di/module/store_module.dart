@@ -19,8 +19,8 @@ import '../../../di/service_locator.dart';
 import '../../../domain/usecase/user/get_user_info_usecase.dart';
 import '../../question/store/question_store.dart';
 import 'package:mela/domain/usecase/exercise/get_exercises_usecase.dart';
-import 'package:mela/domain/usecase/search/get_history_search_list.dart';
-import 'package:mela/domain/usecase/search/get_search_lectures_result.dart';
+import 'package:mela/domain/usecase/search/get_history_search_list_usecase.dart';
+import 'package:mela/domain/usecase/search/get_search_lectures_result_usecase.dart';
 import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
 import 'package:mela/presentation/divided_lectures_and_exercises_screen/store/exercise_store.dart';
 import 'package:mela/presentation/filter_screen/store/filter_store.dart';
@@ -104,7 +104,7 @@ class StoreModule {
     );
 
     getIt.registerSingleton<SearchStore>(SearchStore(
-        getIt<GetHistorySearchList>(), getIt<GetSearchLecturesResult>()));
+        getIt<GetHistorySearchListUsecase>(), getIt<GetSearchLecturesResultUsecase>()));
     getIt.registerSingleton<FilterStore>(FilterStore());
 
     //After LectureStore because TopicStore use LectureStore

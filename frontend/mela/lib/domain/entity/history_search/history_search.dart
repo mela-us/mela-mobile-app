@@ -1,18 +1,23 @@
 class HistorySearch {
-  int? id;
+  final int id;
   final String searchText;
 
-  HistorySearch({this.id, required this.searchText});
+  HistorySearch({
+    required this.id,
+    required this.searchText,
+  });
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'searchText': searchText,
     };
   }
 
-  static HistorySearch fromMap(Map<String, dynamic> map) {
+  factory HistorySearch.fromMap(Map<String, dynamic> map) {
     return HistorySearch(
-      searchText: map['searchText'] as String,
+      id: map['id'],
+      searchText: map['searchText'],
     );
   }
 }

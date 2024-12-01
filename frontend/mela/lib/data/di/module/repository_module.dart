@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:mela/data/local/datasources/history_search/history_search_datasource.dart';
 import 'package:mela/data/network/apis/exercises/exercise_api.dart';
 import 'package:mela/data/network/apis/lectures/lecture_api.dart';
 import 'package:mela/data/network/apis/login_signup/login_api.dart';
@@ -80,7 +81,7 @@ class RepositoryModule {
         ExerciseRepositoryImpl(getIt<ExerciseApi>()));
 
     getIt.registerSingleton<SearchRepository>(
-        SearchRepositoryImpl(getIt<SearchApi>()));
+        SearchRepositoryImpl(getIt<SearchApi>(), getIt<HistoryDataSource>()));
 
     getIt.registerSingleton<StatRepository>(
         StatRepositoryImpl() as StatRepository);
