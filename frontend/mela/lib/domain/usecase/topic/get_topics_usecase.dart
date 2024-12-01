@@ -24,7 +24,7 @@ class GetTopicsUsecase extends UseCase<TopicList, void> {
       if (e is DioException) {
         //eg accessToken is expired
         if (e.response?.statusCode == 401) {
-          bool isRefreshTokenSuccess =
+          bool isRefreshTokenSuccess =  
               await _refreshAccessTokenUsecase.call(params: null);
           if (isRefreshTokenSuccess) {
             //not use return _lectureRepository.getLectures(params); in here beacause if do it
