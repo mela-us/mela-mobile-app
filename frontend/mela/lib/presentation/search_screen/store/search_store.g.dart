@@ -56,6 +56,22 @@ mixin _$SearchStore on _SearchStore, Store {
     });
   }
 
+  late final _$isUnAuthorizedAtom =
+      Atom(name: '_SearchStore.isUnAuthorized', context: context);
+
+  @override
+  bool get isUnAuthorized {
+    _$isUnAuthorizedAtom.reportRead();
+    return super.isUnAuthorized;
+  }
+
+  @override
+  set isUnAuthorized(bool value) {
+    _$isUnAuthorizedAtom.reportWrite(value, super.isUnAuthorized, () {
+      super.isUnAuthorized = value;
+    });
+  }
+
   late final _$errorStringAtom =
       Atom(name: '_SearchStore.errorString', context: context);
 
@@ -238,6 +254,7 @@ mixin _$SearchStore on _SearchStore, Store {
     return '''
 isSearched: ${isSearched},
 isFiltered: ${isFiltered},
+isUnAuthorized: ${isUnAuthorized},
 errorString: ${errorString},
 searchHistory: ${searchHistory},
 lecturesAfterSearchingAndFiltering: ${lecturesAfterSearchingAndFiltering},

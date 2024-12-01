@@ -3,29 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/domain/entity/stat/detailed_progress.dart';
 import '../../../di/service_locator.dart';
+import '../../../domain/entity/stat/progress.dart';
 import '../../../themes/default/colors_standards.dart';
 import '../store/stats_store.dart';
 import 'package:intl/intl.dart';
 
 class BarChartWidget extends StatelessWidget {
-  final String topicName;
-  final String division;
+  final Progress item;
   //
   final StatisticsStore store = getIt<StatisticsStore>();
   //
-  BarChartWidget({super.key, required this.topicName, required this.division});
+  BarChartWidget({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
-    List<DetailedProgress>? list = store.detailedProgressList?.detailedProgressList;
-    //filter by division and topic name
-    List<DetailedProgress>? filteredList = list?.where(
-            (progress) => progress.division == division && progress.topicName == topicName
-    ).toList();
+    //
+    List<DetailedProgress>? list = item.last7Days?.detailedProgressList;
     //
     DateTime now = DateTime.now();
     DateTime sevenDaysToNow = now.subtract(const Duration(days: 7));
-    filteredList = filteredList?.where(
+    List<DetailedProgress>? filteredList = list?.where(
             (progress) {
           final dateString = progress.date;
           if (dateString != null) {
@@ -53,7 +50,7 @@ class BarChartWidget extends StatelessWidget {
     String dateString = DateFormat('yyyy-MM-dd').format(time);
     return list.firstWhere(
             (progress) => progress.date == dateString,
-            orElse: () => DetailedProgress(topicName: "NA", division: "NA", date: "NA", count: 0)).count?.toDouble();
+            orElse: () => DetailedProgress(date: "NA", count: 0, correctCount: 0)).count?.toDouble();
   }
 
   String dateOfWeekConverter(DateTime time) {

@@ -167,14 +167,12 @@ class PersonalInfo extends StatefulWidget {
   final String name;
   final String email;
   final String dob;
-  final String password;
 
   const PersonalInfo({
     super.key,
     required this.name,
     required this.email,
     required this.dob,
-    required this.password,
   });
 
   @override
@@ -262,13 +260,12 @@ class _PersonalInfoState extends State<PersonalInfo> {
                         ),
                       ),
                       Observer(
-                        builder: (_) => ListTile(
+                        builder: (_) => const ListTile(
                           title: Text("Mật khẩu"),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(widget.password
-                                  .replaceAll(RegExp(r'.'), '*')),
+                              Text("********"),
                               SizedBox(width: 8.0),
                               Icon(Icons.arrow_forward_ios, size: 18.0),
                             ],

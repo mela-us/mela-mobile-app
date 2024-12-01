@@ -4,5 +4,4 @@ import '../../entity/stat/detailed_progress_list.dart';
 abstract class StatRepository{
   Future<ProgressList> getProgressList();
   Future<DetailedProgressList> getDetailedProgressList();
-  Future<ProgressList> updateProgressList(ProgressList newProgressList);
 }

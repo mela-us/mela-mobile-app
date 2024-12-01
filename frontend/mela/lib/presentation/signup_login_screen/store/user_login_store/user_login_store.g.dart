@@ -16,6 +16,13 @@ mixin _$UserLoginStore on _UserLoginStore, Store {
       (_$isLoadingComputed ??= Computed<bool>(() => super.isLoading,
               name: '_UserLoginStore.isLoading'))
           .value;
+  Computed<bool>? _$isSetLoginLoadingComputed;
+
+  @override
+  bool get isSetLoginLoading => (_$isSetLoginLoadingComputed ??= Computed<bool>(
+          () => super.isSetLoginLoading,
+          name: '_UserLoginStore.isSetLoginLoading'))
+      .value;
 
   late final _$isLoggedInAtom =
       Atom(name: '_UserLoginStore.isLoggedIn', context: context);
@@ -65,6 +72,30 @@ mixin _$UserLoginStore on _UserLoginStore, Store {
     });
   }
 
+  late final _$setIsLoginFutureAtom =
+      Atom(name: '_UserLoginStore.setIsLoginFuture', context: context);
+
+  @override
+  ObservableFuture<void> get setIsLoginFuture {
+    _$setIsLoginFutureAtom.reportRead();
+    return super.setIsLoginFuture;
+  }
+
+  @override
+  set setIsLoginFuture(ObservableFuture<void> value) {
+    _$setIsLoginFutureAtom.reportWrite(value, super.setIsLoginFuture, () {
+      super.setIsLoginFuture = value;
+    });
+  }
+
+  late final _$setIsLoginAsyncAction =
+      AsyncAction('_UserLoginStore.setIsLogin', context: context);
+
+  @override
+  Future setIsLogin() {
+    return _$setIsLoginAsyncAction.run(() => super.setIsLogin());
+  }
+
   late final _$loginAsyncAction =
       AsyncAction('_UserLoginStore.login', context: context);
 
@@ -104,7 +135,9 @@ mixin _$UserLoginStore on _UserLoginStore, Store {
 isLoggedIn: ${isLoggedIn},
 isPasswordVisible: ${isPasswordVisible},
 loginFuture: ${loginFuture},
-isLoading: ${isLoading}
+setIsLoginFuture: ${setIsLoginFuture},
+isLoading: ${isLoading},
+isSetLoginLoading: ${isSetLoginLoading}
     ''';
   }
 }

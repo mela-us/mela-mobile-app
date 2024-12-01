@@ -7,6 +7,7 @@ import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_levels_usecase.dart';
 import 'package:mela/domain/usecase/post/get_post_usecase.dart';
 import 'package:mela/domain/usecase/question/get_questions_usecase.dart';
+import 'package:mela/domain/usecase/user/logout_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_access_token_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_refresh_token_usecase.dart';
 import 'package:mela/presentation/post/store/post_store.dart';
@@ -143,6 +144,7 @@ class StoreModule {
     getIt.registerSingleton<PersonalStore>(
       PersonalStore(
         getIt<GetUserInfoUseCase>(),
+        getIt<LogoutUseCase>(),
         getIt<ErrorStore>(),
       ),
     );

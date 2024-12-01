@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:mela/data/network/apis/user/logout_api.dart';
 import 'package:mela/data/repository/question/question_repository_impl.dart';
 import 'package:mela/data/repository/setting/setting_repository_impl.dart';
 import 'package:mela/data/repository/stat/stat_search_impl.dart';
@@ -23,6 +24,14 @@ import 'package:mela/domain/repository/user_register/user_signup_repostiory.dart
 import '../../../domain/repository/lecture/lecture_repository.dart';
 import '../../../domain/repository/search/search_repository.dart';
 
+import '../../network/apis/exercises/exercise_api.dart';
+import '../../network/apis/lectures/lecture_api.dart';
+import '../../network/apis/login_signup/login_api.dart';
+import '../../network/apis/login_signup/refresh_access_token_api.dart';
+import '../../network/apis/login_signup/signup_api.dart';
+import '../../network/apis/searchs/search_api.dart';
+import '../../network/apis/stats/stats_api.dart';
+import '../../network/apis/topics/topic_api.dart';
 import '../../repository/topic/topic_repository_impl.dart';
 import '../../repository/user_login/user_login_repository_impl.dart';
 import '../../repository/user_signup/user_signup_repository_impl.dart';
@@ -49,7 +58,8 @@ class RepositoryModule {
     ));
     //UserInfor:
     getIt.registerSingleton<UserRepository>(
-        UserRepositoryImpl(getIt<SharedPreferenceHelper>()));
+        UserRepositoryImpl(getIt<LogoutApi>(), getIt<SharedPreferenceHelper>())
+    );
 
     //Setting:------------------------------------------------------------------
     getIt.registerSingleton<SettingRepository>(SettingRepositoryImpl(
@@ -83,9 +93,10 @@ class RepositoryModule {
 
     //STATS-------------------------
     getIt.registerSingleton<StatRepository>(
-        StatRepositoryImpl() as StatRepository);
+        StatRepositoryImpl(getIt<StatsApi>()));
     getIt.registerSingleton<StatSearchRepository>(
         StatSearchRepositoryImpl() as StatSearchRepository);
+
     //Practice De
     getIt.registerSingleton<QuestionRepository>(
         QuestionRepositoryImpl() as QuestionRepository);

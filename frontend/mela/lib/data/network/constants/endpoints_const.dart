@@ -15,6 +15,7 @@ class EndpointsConst {
   static const String getPosts = "/posts";
   static const String login = "/api/login";
   static const String signup = "/api/register";
+  static const String logout = "/api/logout";
   static const String refreshAccessToken = "/api/refresh-token";
   static const String getTopics = "/api/topics";
   static const String getLectures = "/api/lectures";
@@ -23,4 +24,6 @@ class EndpointsConst {
   static const String getDividedLectures = "/api/lectures/:lectureId/sections";
   static const String getExercises = "/api/lectures/:lectureId/exercises";
   static const String getLecturesSearch = "/api/lectures/search";
+  static const String getStats = "/api/statistics";
+  static const String getUser = "/api/profile";
 }

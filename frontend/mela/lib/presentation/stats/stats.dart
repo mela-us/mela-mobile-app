@@ -112,9 +112,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     );
   }
   //
-  List<Progress> filterProgressByDivision(String division) {
+  List<Progress> filterProgressByDivision(String levelName) {
     List<Progress>? list = _store.progressList?.progressList;
-    return list?.where((progress) => progress.division == division).toList() ?? [];
+    return list?.where((progress) => progress.levelName == levelName).toList() ?? [];
   }
 }
 

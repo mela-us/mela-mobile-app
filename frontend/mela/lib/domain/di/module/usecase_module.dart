@@ -32,6 +32,7 @@ import '../../usecase/lecture/get_lectures_are_learning_usecase.dart';
 import '../../usecase/question/get_questions_usecase.dart';
 import '../../usecase/search/get_history_search_list.dart';
 import '../../usecase/stat/update_stat_search_history_usecase.dart';
+import '../../usecase/user/logout_usecase.dart';
 import '../../usecase/user_login/is_logged_in_usecase.dart';
 import '../../usecase/user_login/login_usecase.dart';
 import '../../usecase/user_login/save_login_in_status_usecase.dart';
@@ -50,6 +51,9 @@ class UseCaseModule {
     // user:--------------------------------------------------------------------
     getIt.registerSingleton<GetUserInfoUseCase>(
         GetUserInfoUseCase(getIt<UserRepository>()));
+    getIt.registerSingleton<LogoutUseCase>(
+        LogoutUseCase(getIt<UserRepository>())
+    );
     // user login:--------------------------------------------------------------
     getIt.registerSingleton<IsLoggedInUseCase>(
       IsLoggedInUseCase(getIt<UserLoginRepository>()),
@@ -111,7 +115,7 @@ class UseCaseModule {
 
     //stats:--------------------------------------------------------------------
     getIt.registerSingleton<GetProgressListUseCase>(
-      GetProgressListUseCase(getIt<StatRepository>()),
+      GetProgressListUseCase(getIt<StatRepository>(), getIt<RefreshAccessTokenUsecase>()),
     );
     getIt.registerSingleton<GetDetailedProgressListUseCase>(
       GetDetailedProgressListUseCase(getIt<StatRepository>()),

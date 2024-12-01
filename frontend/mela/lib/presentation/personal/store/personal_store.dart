@@ -3,6 +3,7 @@ import 'package:mela/domain/usecase/user/get_user_info_usecase.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../core/stores/error/error_store.dart';
+import '../../../domain/usecase/user/logout_usecase.dart';
 import '../../../utils/dio/dio_error_util.dart';
 
 part 'personal_store.g.dart';
@@ -14,10 +15,12 @@ abstract class _PersonalStore with Store {
   //Constructor:----------------------------------------------------------------
   _PersonalStore(
       this._getUserInfoUseCase,
+      this._logoutUseCase,
       this._errorStore
       );
   //UseCase:--------------------------------------------------------------------
   final GetUserInfoUseCase _getUserInfoUseCase;
+  final LogoutUseCase _logoutUseCase;
   //Store:----------------------------------------------------------------------
   final ErrorStore _errorStore;
 
@@ -34,7 +37,7 @@ abstract class _PersonalStore with Store {
   User? user;
   //
   @observable
-  bool success = false;
+  bool logout_success = false;
   //loading
   @computed
   bool get progressLoading => fetchFuture.status == FutureStatus.pending;
@@ -51,6 +54,17 @@ abstract class _PersonalStore with Store {
       user = temp;
     }).catchError((error) {
       _errorStore.errorMessage = DioExceptionUtil.handleError(error);
+    });
+  }
+
+  @action
+  Future logout() async {
+    final future = _logoutUseCase.call(params: null);
+    future.then((temp) {
+      logout_success = true;
+    }).catchError((error) {
+      _errorStore.errorMessage = DioExceptionUtil.handleError(error);
+      logout_success = false;
     });
   }
 }

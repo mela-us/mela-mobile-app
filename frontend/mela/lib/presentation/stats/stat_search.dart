@@ -202,8 +202,8 @@ class _StatSearchScreenState extends State<StatSearchScreen> {
     //filter by search text section
     List<Progress>? list = _statisticsStore.progressList?.progressList;
     list = list?.where((progress) =>
-      progress.division!.toLowerCase().contains(searchText) ||
-          progress.topicName!.toLowerCase().contains(searchText)
+      //progress.levelName!.toLowerCase().contains(searchText) ||
+      progress.topicName!.toLowerCase().contains(searchText)
     ).toList() ?? [];
 
     //modify list from the filter screen

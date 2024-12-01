@@ -46,7 +46,7 @@ class _ExpandableItemState extends State<ExpandableItem> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '${widget.item.topicName} ${widget.item.current!}/${widget.item.total!}',
+                        '${widget.item.topicName} ${widget.item.totalCorrect!}/${widget.item.total!}',
                         style: Theme.of(context).textTheme.normal
                             .copyWith(color: Colors.black),
                       ),
@@ -62,7 +62,7 @@ class _ExpandableItemState extends State<ExpandableItem> {
                     padding: const EdgeInsets.only(left: 25.0, right: 25.0, bottom: 1.0),
                     child: LinearProgressIndicator(
                       minHeight: 12,
-                      value: widget.item.current! * 1.0 / widget.item.total!,
+                      value: widget.item.totalCorrect! * 1.0 / widget.item.total!,
                       color: Theme.of(context).colorScheme.buttonYesBgOrText,
                       backgroundColor: Theme.of(context).colorScheme.textInBg1.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(10.0),
@@ -85,7 +85,7 @@ class _ExpandableItemState extends State<ExpandableItem> {
                         .copyWith(color: Theme.of(context).colorScheme.textInBg1),
                   ),
                   SizedBox(height: 8),
-                  BarChartWidget(topicName: "Số học", division: "Trung học"),
+                  BarChartWidget(item: widget.item),
                   SizedBox(height: 8),
                 ],
               ),
