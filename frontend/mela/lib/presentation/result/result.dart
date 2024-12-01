@@ -31,8 +31,8 @@ class _ResultScreenState extends State<ResultScreen> {
     if (!_questionStore.saving) {
       _questionStore.submitAnswer(
           getCorrect(),
-          DateTime.now(),
-          DateTime.now().subtract(_timerStore.elapsedTime)
+          DateTime.now().subtract(_timerStore.elapsedTime),
+          DateTime.now()
       );
     }
 
