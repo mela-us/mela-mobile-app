@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:mela/data/repository/question/question_repository_impl.dart';
 import 'package:mela/data/repository/setting/setting_repository_impl.dart';
 import 'package:mela/data/repository/stat/stat_search_impl.dart';
+import 'package:mela/data/securestorage/secure_storage_helper.dart';
 import 'package:mela/data/sharedpref/shared_preference_helper.dart';
+import 'package:mela/domain/entity/topic/topic.dart';
 import 'package:mela/domain/repository/question/question_repository.dart';
 import 'package:mela/domain/repository/setting/setting_repository.dart';
 import 'package:mela/domain/repository/stat/stat_search_repository.dart';
@@ -41,7 +43,10 @@ import '../../repository/stat/stat_repository_impl.dart';
 class RepositoryModule {
   static Future<void> configureRepositoryModuleInjection() async {
     // repository:--------------------------------------------------------------
-
+    getIt.registerSingleton<PostRepository>(PostRepositoryImpl(
+      getIt<PostApi>(),
+      getIt<PostDataSource>(),
+    ));
     //UserInfor:
     getIt.registerSingleton<UserRepository>(
         UserRepositoryImpl(getIt<SharedPreferenceHelper>()));
@@ -55,20 +60,26 @@ class RepositoryModule {
 
     getIt.registerSingleton<UserLoginRepository>(UserLoginRepositoryImpl(
       getIt<SharedPreferenceHelper>(),
+      getIt<SecureStorageHelper>(),
+      getIt<LoginApi>(),
+      getIt<RefreshAccessTokenApi>(),
     ));
-    getIt.registerSingleton<UserSignUpRepository>(UserSignupRepositoryImpl());
+    getIt.registerSingleton<UserSignUpRepository>(
+        UserSignupRepositoryImpl(getIt<SignupApi>()));
 
     //Content Deli:-------------------------------------------------------------
 
-    getIt.registerSingleton<TopicRepository>(TopicRepositoryImpl());
-    getIt.registerSingleton<LectureRepository>(LectureRepositoryImpl());
-    getIt.registerSingleton<ExerciseRepository>(ExerciseRepositoryImpl());
-    getIt.registerSingleton<SearchRepository>(SearchRepositoryImpl());
+    getIt.registerSingleton<TopicRepository>(
+        TopicRepositoryImpl(getIt<TopicApi>()));
 
-    getIt.registerSingleton<PostRepository>(PostRepositoryImpl(
-      getIt<PostApi>(),
-      getIt<PostDataSource>(),
-    ) as PostRepository);
+    getIt.registerSingleton<LectureRepository>(
+        LectureRepositoryImpl(getIt<LectureApi>()));
+
+    getIt.registerSingleton<ExerciseRepository>(
+        ExerciseRepositoryImpl(getIt<ExerciseApi>()));
+
+    getIt.registerSingleton<SearchRepository>(
+        SearchRepositoryImpl(getIt<SearchApi>()));
 
     //STATS-------------------------
     getIt.registerSingleton<StatRepository>(

@@ -50,9 +50,9 @@ class LectureItem extends StatelessWidget {
                   CircleAvatar(
                     backgroundColor: Colors.white,
                     radius: 16,
-                    child: Text(lecture.lectureId.toString(),
-                        style: Theme.of(context).textTheme.normal.copyWith(
-                            color: Theme.of(context).colorScheme.secondary)),
+                    child: Text('${(lecture.progress*100).toStringAsFixed(0)}%',
+                        style: Theme.of(context).textTheme.miniCaption.copyWith(
+                            color: Theme.of(context).colorScheme.secondary,fontSize: 10)),
                   ),
                 ],
               ),

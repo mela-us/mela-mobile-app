@@ -1,6 +1,7 @@
 //---Version 1:
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
 import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
 
 import '../../../di/service_locator.dart';
@@ -12,12 +13,14 @@ class TopicItem extends StatelessWidget {
   TopicItem({super.key, required this.topic});
 
   final LectureStore _lectureStore = getIt<LectureStore>();
+  final TopicStore _topicStore = getIt<TopicStore>();
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
+      onTap: () {
         _lectureStore.setCurrentTopic(topic);
+        _topicStore.resetErrorString();
         Navigator.of(context).pushNamed(Routes.allLecturesInTopicScreen);
       },
       child: Container(
@@ -26,7 +29,7 @@ class TopicItem extends StatelessWidget {
         padding: const EdgeInsets.all(0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             //Logo topic
@@ -34,7 +37,9 @@ class TopicItem extends StatelessWidget {
               width: 55,
               height: 55,
               child: Image.asset(
-                topic.imageTopicPath,
+                topic.imageTopicPath.isEmpty
+                    ? 'assets/images/topics/daiso.png'
+                    : topic.imageTopicPath,
                 fit: BoxFit.contain,
               ),
             ),

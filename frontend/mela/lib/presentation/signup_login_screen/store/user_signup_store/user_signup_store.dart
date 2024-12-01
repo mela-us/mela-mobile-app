@@ -1,3 +1,6 @@
+import 'package:dio/dio.dart';
+import 'package:mela/constants/enum.dart';
+import 'package:mela/utils/dio/dio_error_util.dart';
 import 'package:mobx/mobx.dart';
 import '../../../../domain/usecase/user_signup/signup_usecase.dart';
 
@@ -43,7 +46,14 @@ abstract class _UserSignupStore with Store {
       isSignupSuccessful = true;
     } catch (e) {
       isSignupSuccessful = false;
-      throw e;
+      if (e is DioException) {
+        if (e.response?.statusCode == 400) {
+          throw "Tài khoản đã tồn tại";
+        }
+        throw DioExceptionUtil.handleError(e);
+      } else {
+        throw "Có lỗi. Thử lại sau";
+      }
     }
   }
 
@@ -51,6 +61,7 @@ abstract class _UserSignupStore with Store {
   void togglePasswordVisibility() {
     isPasswordVisible = !isPasswordVisible;
   }
+
   @action
   void toggleAccepted() {
     isAccepted = !isAccepted;

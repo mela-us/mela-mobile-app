@@ -1,7 +1,7 @@
 import 'dart:async';
 
 //Data:-------------------------------------------------------------------------
-import 'package:mela/core/data/network/dio/dio_client.dart';
+import 'package:mela/data/network/dio_client.dart';
 import 'package:mela/data/network/rest_client.dart';
 
 //Domain:-----------------------------------------------------------------------
@@ -23,10 +23,14 @@ class PostApi {
   /// Returns list of post in response
   Future<PostList> getPosts() async {
     try {
-      final res = await _dioClient.dio.get(EndpointsConst.getPosts);
-      return PostList.fromJson(res.data);
+      //print("------------->PostApi: getPosts");
+      final res = await _dioClient.get(EndpointsConst.getPosts);
+      
+      return PostList.fromJson(res);
     } catch (e) {
-      print(_restClient.toString());
+      print("-------------->PostApi: getPosts: Error");
+      print(e.runtimeType);
+      //print(_restClient.toString());
       rethrow;
     }
 

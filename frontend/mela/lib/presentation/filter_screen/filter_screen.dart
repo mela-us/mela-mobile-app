@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:http/http.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/lecture/lecture_list.dart';
+import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
 import 'package:mela/presentation/filter_screen/store/filter_store.dart';
 import 'package:mela/presentation/filter_screen/widgets/checkbox_row.dart';
 import 'package:mela/presentation/search_screen/store/search_store.dart';
@@ -21,6 +23,7 @@ class _FilterScreenState extends State<FilterScreen> {
   final TextEditingController endController = TextEditingController();
   final SearchStore _searchStore = getIt<SearchStore>();
   LectureList filteredLectures = LectureList(lectures: []);
+  final TopicStore _topicStore = getIt<TopicStore>();
   final List<Map<String, dynamic>> rangeChoices = [
     {"label": "0%-50%", "start": 0.0, "end": 50.0},
     {"label": "20%-80%", "start": 20.0, "end": 80.0},
@@ -48,8 +51,8 @@ class _FilterScreenState extends State<FilterScreen> {
         lectures: []); //Must have to create new filterList to pass to filterList in SeachStore
     //add all lectures that match the filter range progress to filteredLectures
     for (var lecture in _searchStore.lecturesAfterSearching!.lectures) {
-      if (lecture.progress >= _filterStore.startPercentage &&
-          lecture.progress <= _filterStore.endPercentage) {
+      if (lecture.progress * 100.0 >= _filterStore.startPercentage &&
+          lecture.progress * 100.0 <= _filterStore.endPercentage) {
         filteredLectures.lectures.add(lecture);
       }
     }
@@ -62,16 +65,16 @@ class _FilterScreenState extends State<FilterScreen> {
         _filterStore.isSecondarySelected ||
         _filterStore.isHighSchoolSelected) {
       if (!_filterStore.isPrimarySelected) {
-        filteredLectures.lectures
-            .removeWhere((lecture) => lecture.levelId == 0);
+        filteredLectures.lectures.removeWhere((lecture) =>
+            lecture.levelId == _topicStore.levelList!.levelList[0].levelId);
       }
       if (!_filterStore.isSecondarySelected) {
-        filteredLectures.lectures
-            .removeWhere((lecture) => lecture.levelId == 1);
+        filteredLectures.lectures.removeWhere((lecture) =>
+            lecture.levelId == _topicStore.levelList!.levelList[1].levelId);
       }
       if (!_filterStore.isHighSchoolSelected) {
-        filteredLectures.lectures
-            .removeWhere((lecture) => lecture.levelId == 2);
+        filteredLectures.lectures.removeWhere((lecture) =>
+            lecture.levelId == _topicStore.levelList!.levelList[2].levelId);
       }
     }
 
@@ -84,11 +87,11 @@ class _FilterScreenState extends State<FilterScreen> {
       }
       if (!_filterStore.isInProgressSelected) {
         filteredLectures.lectures.removeWhere(
-            (lecture) => lecture.progress > 0 && lecture.progress < 100);
+            (lecture) => lecture.progress > 0.0 && lecture.progress < 1);
       }
       if (!_filterStore.isCompletedSelected) {
         filteredLectures.lectures
-            .removeWhere((lecture) => lecture.progress == 100);
+            .removeWhere((lecture) => lecture.progress == 1);
       }
     }
     _searchStore.updateLectureAfterSeachingAndFiltering(filteredLectures);
@@ -99,11 +102,12 @@ class _FilterScreenState extends State<FilterScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              if (!_filterStore.isFilterButtonPressed) {
-                _filterStore.resetFilter();
-              }
+              //if the filter button ("Button Áp dụng") is not pressed, reset the filter
+              // if (!_filterStore.isFilterButtonPressed) {
+              //   _filterStore.resetFilter();
+              // }
               Navigator.pop(context);
             }),
         title: Text("Lọc",
@@ -210,15 +214,17 @@ class _FilterScreenState extends State<FilterScreen> {
                     )
                   : Container(),
 
-                //Button Áp dụng
+              //Button Áp dụng
               FilterButton(
                 textButton: "Áp dụng",
                 onPressed: () {
-                  if(_filterStore.startPercentage>_filterStore.endPercentage){
-                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Giá trị % "Từ" phải nhỏ hơn')),
-                      );
-                      return;
+                  if (_filterStore.startPercentage >
+                      _filterStore.endPercentage) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Giá trị % "Từ" phải nhỏ hơn')),
+                    );
+                    return;
                   }
                   filterLectures();
                   _filterStore.setIsFilteredButtonPressed(true);

@@ -50,27 +50,50 @@ class __FormContentState extends State<_FormContent> {
 
   //disposers:-----------------------------------------------------------------
   late final ReactionDisposer _loginReactionDisposer;
+  late final ReactionDisposer _errorLoginReactionDisposer;
   @override
   void initState() {
     super.initState();
 
     _loginReactionDisposer =
         reaction((_) => _userLoginStore.isLoggedIn, (bool success) {
-          // print("---------------------------------------->LoginScreen1 ${_userLoginStore.isLoggedIn ? "true" : "false"}");
+      print(
+          "---------------------------------------->LoginScreen1 ${_userLoginStore.isLoggedIn ? "true" : "false"}");
       if (success) {
-        // print("---------------------------------------->LoginScreen2 ${_userLoginStore.isLoggedIn ? "true" : "false"}");
+        print(
+            "---------------------------------------->LoginScreen2 ${_userLoginStore.isLoggedIn ? "true" : "false"}");
         Navigator.of(context).pushNamedAndRemoveUntil(
             Routes.allScreens, (Route<dynamic> route) => false);
-            _userLoginStore.resetSettingForLogin();
+        _userLoginStore.resetSettingForLogin();
+      }
+    });
+    _errorLoginReactionDisposer = reaction(
+        (_) => _userLoginStore.errorStore.errorMessage, (String errorMessage) {
+      if (errorMessage.isNotEmpty) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(errorMessage)));
       }
     });
   }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    //for logout from another screen when refreshToken is expired
+    print("}}}}}}}}}}}}}}}-------}}}}}}}}}}}}}}}");
+   if (!_userLoginStore.isSetLoginLoading) {
+    print("}}}}}}}}}}}}}}}}*****}}}}}}}}}}}}}}");
+      _userLoginStore.setIsLogin();
+    }
+    
+  }
+ 
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     _loginReactionDisposer();
+    _errorLoginReactionDisposer();
     super.dispose();
   }
 
@@ -82,7 +105,9 @@ class __FormContentState extends State<_FormContent> {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          buildContentInLoginScreen(),
+          Observer(builder: (context) {
+            return buildContentInLoginScreen();
+          }),
           Observer(
             builder: (context) {
               return Visibility(
@@ -111,6 +136,11 @@ class __FormContentState extends State<_FormContent> {
   }
 
   Widget buildContentInLoginScreen() {
+    if (_userLoginStore.isSetLoginLoading) {
+      return const Center(
+        child: CustomProgressIndicatorWidget(),
+      );
+    }
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
       constraints: const BoxConstraints(maxWidth: 380),
@@ -180,9 +210,9 @@ class __FormContentState extends State<_FormContent> {
                       return 'Vui lòng nhập dữ liệu';
                     }
 
-                    if (value.length < 6) {
-                      return 'Mật khẩu phải có ít nhất 6 kí tự';
-                    }
+                    // if (value.length < 6) {
+                    //   return 'Mật khẩu phải có ít nhất 6 kí tự';
+                    // }
                     return null;
                   },
                   obscureText: !_userLoginStore.isPasswordVisible,
@@ -238,6 +268,8 @@ class __FormContentState extends State<_FormContent> {
                         _emailController.text,
                         _passwordController.text,
                       );
+                      _emailController.clear();
+                      _passwordController.clear();
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -261,8 +293,7 @@ class __FormContentState extends State<_FormContent> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ThirdPartyButton(
-                    pathLogo: Assets.googleIcon, onPressed: () {}),
+                ThirdPartyButton(pathLogo: Assets.googleIcon, onPressed: () {}),
                 const SizedBox(width: 20),
                 ThirdPartyButton(
                     pathLogo: Assets.facebookIcon, onPressed: () {}),

@@ -1,16 +1,22 @@
-
 import 'package:event_bus/event_bus.dart';
+import 'package:mela/data/network/apis/exercises/exercise_api.dart';
+import 'package:mela/data/network/apis/login_signup/login_api.dart';
+import 'package:mela/data/network/apis/login_signup/refresh_access_token_api.dart';
+import 'package:mela/data/network/apis/searchs/search_api.dart';
+import 'package:mela/data/network/apis/topics/topic_api.dart';
+import 'package:mela/data/network/dio_client.dart';
+import 'package:mela/data/securestorage/secure_storage_helper.dart';
 
 import '../../../core/data/network/dio/configs/dio_configs.dart';
-import '../../../core/data/network/dio/dio_client.dart';
 import '../../../core/data/network/dio/interceptors/auth_interceptor.dart';
 import '../../../core/data/network/dio/interceptors/logging_interceptor.dart';
 import '../../../di/service_locator.dart';
+import '../../network/apis/lectures/lecture_api.dart';
+import '../../network/apis/login_signup/signup_api.dart';
 import '../../network/apis/posts/post_api.dart';
 import '../../network/constants/endpoints_const.dart';
 import '../../network/interceptors/error_interceptor.dart';
 import '../../network/rest_client.dart';
-import '../../sharedpref/shared_preference_helper.dart';
 
 class NetworkModule {
   static Future<void> configureNetworkModuleInjection() async {
@@ -22,7 +28,7 @@ class NetworkModule {
     getIt.registerSingleton<ErrorInterceptor>(ErrorInterceptor(getIt()));
     getIt.registerSingleton<AuthInterceptor>(
       AuthInterceptor(
-        accessToken: () async => await getIt<SharedPreferenceHelper>().authToken,
+        accessToken: () async => await getIt<SecureStorageHelper>().accessToken,
       ),
     );
 
@@ -34,7 +40,7 @@ class NetworkModule {
       const DioConfigs(
         baseUrl: EndpointsConst.baseUrl,
         connectionTimeout: EndpointsConst.connectionTimeout,
-        receiveTimeout:EndpointsConst.receiveTimeout,
+        receiveTimeout: EndpointsConst.receiveTimeout,
       ),
     );
     getIt.registerSingleton<DioClient>(
@@ -43,12 +49,20 @@ class NetworkModule {
           [
             getIt<AuthInterceptor>(),
             getIt<ErrorInterceptor>(),
-            getIt<LoggingInterceptor>(),
+            //getIt<LoggingInterceptor>(),
           ],
         ),
     );
 
     // api's:-------------------------------------------------------------------
     getIt.registerSingleton(PostApi(getIt<DioClient>(), getIt<RestClient>()));
+    getIt.registerSingleton<LoginApi>(LoginApi(getIt<DioClient>()));
+    getIt.registerSingleton<SignupApi>(SignupApi(getIt<DioClient>()));
+    getIt.registerSingleton<RefreshAccessTokenApi>(
+        RefreshAccessTokenApi(getIt<DioClient>()));
+    getIt.registerSingleton<TopicApi>(TopicApi(getIt<DioClient>()));
+    getIt.registerSingleton<LectureApi>(LectureApi(getIt<DioClient>()));
+    getIt.registerSingleton<ExerciseApi>(ExerciseApi(getIt<DioClient>()));
+    getIt.registerSingleton<SearchApi>(SearchApi(getIt<DioClient>()));
   }
 }

@@ -27,7 +27,14 @@ class _PostListScreenState extends State<PostListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildBody();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          AppLocalizations.of(context).translate('home_tv_posts'),
+        ),
+      ),
+      body: _buildBody(),
+    );
   }
 
   // body methods:--------------------------------------------------------------

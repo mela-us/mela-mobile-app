@@ -10,6 +10,7 @@ import 'package:mela/presentation/search_screen/search_screen.dart';
 import '../../presentation/all_screens.dart';
 import '../../presentation/courses_screen/courses_screen.dart';
 import '../../presentation/filter_screen/filter_screen.dart';
+import '../../presentation/signup_login_screen/login_or_signup_screen.dart';
 import '../../presentation/signup_login_screen/login_screen.dart';
 import '../../presentation/signup_login_screen/signup_screen.dart';
 
@@ -24,9 +25,11 @@ class Routes {
   //static variables
   static const String splash = '/splash';
   static const String loginScreen = '/login';
+  static const String loginOrSignupScreen = '/login_or_signup';
   static const String coursesScreen = '/courses_screen';
   static const String signupScreen = '/signup';
-  static const String allLecturesInTopicScreen = '/all_lectures_in_topic_screen';
+  static const String allLecturesInTopicScreen =
+      '/all_lectures_in_topic_screen';
   static const String dividedLecturesAndExercisesScreen =
       '/divided_lectures_and_exercises_screen';
   static const String searchScreen = '/search_screen';
@@ -41,23 +44,23 @@ class Routes {
   static const String allScreens = '/all_screens';
 
   static final routes = <String, WidgetBuilder>{
-    loginScreen: (BuildContext context) => LoginScreen(),
-    signupScreen: (BuildContext context) => SignUpScreen(),
-    coursesScreen: (BuildContext context) => CoursesScreen(),
+    loginScreen: (BuildContext context) => const LoginScreen(),
+    signupScreen: (BuildContext context) => const SignUpScreen(),
+    loginOrSignupScreen: (BuildContext context) => LoginOrSignupScreen(),
+    coursesScreen: (BuildContext context) => const CoursesScreen(),
     allLecturesInTopicScreen: (BuildContext context) =>
         AllLecturesInTopicScreen(),
     dividedLecturesAndExercisesScreen: (BuildContext context) =>
         DividedLecturesAndExercisesScreen(),
-    searchScreen: (BuildContext context) => SearchScreen(),
+    searchScreen: (BuildContext context) => const SearchScreen(),
     filterScreen: (BuildContext context) => FilterScreen(),
     question: (BuildContext context) => QuestionScreen(),
     result: (BuildContext context) => ResultScreen(),
     review: (BuildContext context) => ReviewScreen(),
-    personal: (BuildContext context) => PersonalScreen(),
+    personal: (BuildContext context) => const PersonalScreen(),
     stats: (BuildContext context) => StatisticsScreen(),
     searchStats: (BuildContext context) => StatSearchScreen(),
     filterStats: (BuildContext context) => FilterStatScreen(),
     allScreens: (BuildContext context) => AllScreens(),
   };
 }
-
