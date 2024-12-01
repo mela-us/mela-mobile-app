@@ -88,7 +88,7 @@ abstract class _UserLoginStore with Store {
 
   //use for refreshToken expired and set isLoggedIn=new value in share preferences
   @action
-  void setIsLogin() async {
+  Future setIsLogin() async {
     final future = _isLoggedInUseCase.call(params: null);
 
     setIsLoginFuture = ObservableFuture(future);
