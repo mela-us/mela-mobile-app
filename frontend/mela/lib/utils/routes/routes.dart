@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mela/presentation/forgot_password_screen/create_new_password_in_forgot_password_screen.dart';
 import 'package:mela/presentation/forgot_password_screen/enter_email_in_forgot_password_screen.dart';
 import 'package:mela/presentation/forgot_password_screen/enter_otp_in_forgot_password_screen.dart';
 import 'package:mela/presentation/question/question.dart';
@@ -30,6 +31,8 @@ class Routes {
       '/enter_email_in_forgot_password_screen';
   static const String enterOTPInForgotPasswordScreen =
       '/enter_otp_in_forgot_password_screen';
+  static const String createNewPasswordInForgotPasswordScreen =
+      '/create_new_password_in_forgot_password_screen';
   static const String coursesScreen = '/courses_screen';
   static const String signupScreen = '/signup';
   static const String allLecturesInTopicScreen =
@@ -52,7 +55,9 @@ class Routes {
     enterEmailInForgotPasswordScreen: (BuildContext context) =>
         EnterEmailInForgotPasswordScreen(),
     enterOTPInForgotPasswordScreen: (BuildContext context) =>
-        EnterOTPInFogotPasswordScreen(),
+        const EnterOTPInForgotPasswordScreen(),
+    createNewPasswordInForgotPasswordScreen: (BuildContext context) =>
+        CreateNewPasswordInForgotPasswordScreen(),
     coursesScreen: (BuildContext context) => const CoursesScreen(),
     allLecturesInTopicScreen: (BuildContext context) =>
         AllLecturesInTopicScreen(),

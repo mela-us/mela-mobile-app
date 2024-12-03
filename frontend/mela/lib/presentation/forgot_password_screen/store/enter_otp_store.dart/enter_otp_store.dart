@@ -52,7 +52,7 @@ abstract class _EnterOTPStore with Store {
   @action
   Future<void> verifyOTP() async {
     final future =
-        _verifyOTPUseCase.call(params: OTPParams(email: 'a@g.c', otp: otp));
+        _verifyOTPUseCase.call(params: OTPParams(email: _enterEmailStore.email, otp: otp));
     verifyOTPFuture = ObservableFuture(future);
     try {
       tokenResetPasswordFromSever = await future;

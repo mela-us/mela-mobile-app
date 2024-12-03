@@ -3,21 +3,22 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/forgot_password_screen/store/enter_email_store/enter_email_store.dart';
 import 'package:mela/presentation/forgot_password_screen/store/enter_otp_store.dart/enter_otp_store.dart';
+import 'package:mela/utils/routes/routes.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/core/widgets/progress_indicator_widget.dart';
 import 'package:mela/presentation/forgot_password_screen/widgets/button_in_forgot.dart';
 
-class EnterOTPInFogotPasswordScreen extends StatefulWidget {
-  const EnterOTPInFogotPasswordScreen({super.key});
+class EnterOTPInForgotPasswordScreen extends StatefulWidget {
+  const EnterOTPInForgotPasswordScreen({super.key});
 
   @override
-  State<EnterOTPInFogotPasswordScreen> createState() =>
-      _EnterOTPInFogotPasswordScreenState();
+  State<EnterOTPInForgotPasswordScreen> createState() =>
+      _EnterOTPInForgotPasswordScreen();
 }
 
-class _EnterOTPInFogotPasswordScreenState
-    extends State<EnterOTPInFogotPasswordScreen> {
+class _EnterOTPInForgotPasswordScreen
+    extends State<EnterOTPInForgotPasswordScreen> {
   final TextEditingController _otpController = TextEditingController();
   final EnterOTPStore _otpStore = getIt<EnterOTPStore>();
   final EnterEmailStore _enterEmailStore = getIt<EnterEmailStore>();
@@ -136,7 +137,9 @@ class _EnterOTPInFogotPasswordScreenState
                         return;
                       }
                       await _otpStore.verifyOTP();
-                      // Navigate to next screen on success
+                      _otpController.clear();
+                      Navigator.of(context).pushNamed(
+                          Routes.createNewPasswordInForgotPasswordScreen);
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Verification failed: $e')),
