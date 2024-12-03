@@ -1,11 +1,15 @@
 import 'dart:async';
 
+import 'package:mela/domain/repository/forgot_password/forgot_password_repository.dart';
 import 'package:mela/domain/repository/lecture/lecture_repository.dart';
 import 'package:mela/domain/repository/post/post_repository.dart';
 import 'package:mela/domain/repository/user/user_repository.dart';
 import 'package:mela/domain/repository/user_register/user_signup_repostiory.dart';
 
 import 'package:mela/domain/usecase/exercise/get_exercises_usecase.dart';
+import 'package:mela/domain/usecase/forgot_password/change_password_usecase.dart';
+import 'package:mela/domain/usecase/forgot_password/verify_exist_email_usecase.dart';
+import 'package:mela/domain/usecase/forgot_password/verify_otp_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_lectures_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_levels_usecase.dart';
@@ -112,7 +116,7 @@ class UseCaseModule {
 
     getIt.registerSingleton<AddHistorySearchUsecase>(
         AddHistorySearchUsecase(getIt<SearchRepository>()));
-        
+
     getIt.registerSingleton<DeleteHistorySearchUsecase>(
         DeleteHistorySearchUsecase(getIt<SearchRepository>()));
 
@@ -126,5 +130,13 @@ class UseCaseModule {
     getIt.registerSingleton<GetDetailedProgressListUseCase>(
       GetDetailedProgressListUseCase(getIt<StatRepository>()),
     );
+
+    //forgot password:----------------------------------------------------------
+    getIt.registerSingleton<VerifyExistEmailUseCase>(
+        VerifyExistEmailUseCase(getIt<ForgotPasswordRepository>()));
+    getIt.registerSingleton<VerifyOTPUseCase>(
+        VerifyOTPUseCase(getIt<ForgotPasswordRepository>()));
+    getIt.registerSingleton<ChangePasswordUseCase>(
+        ChangePasswordUseCase(getIt<ForgotPasswordRepository>()));
   }
 }

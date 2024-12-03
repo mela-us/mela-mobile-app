@@ -75,18 +75,17 @@ class __FormContentState extends State<_FormContent> {
       }
     });
   }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     //for logout from another screen when refreshToken is expired
     print("}}}}}}}}}}}}}}}-------}}}}}}}}}}}}}}}");
-   if (!_userLoginStore.isSetLoginLoading) {
-    print("}}}}}}}}}}}}}}}}*****}}}}}}}}}}}}}}");
+    if (!_userLoginStore.isSetLoginLoading) {
+      print("}}}}}}}}}}}}}}}}*****}}}}}}}}}}}}}}");
       _userLoginStore.setIsLogin();
     }
-    
   }
- 
 
   @override
   void dispose() {
@@ -246,7 +245,10 @@ class __FormContentState extends State<_FormContent> {
 
             //Forgot password
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context)
+                    .pushNamed(Routes.enterEmailInForgotPasswordScreen);
+              },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

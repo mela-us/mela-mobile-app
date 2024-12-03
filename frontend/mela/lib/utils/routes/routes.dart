@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mela/presentation/forgot_password_screen/enter_email_in_forgot_password_screen.dart';
+import 'package:mela/presentation/forgot_password_screen/enter_otp_in_forgot_password_screen.dart';
 import 'package:mela/presentation/question/question.dart';
 import 'package:mela/presentation/result/result.dart';
 import 'package:mela/presentation/review/review.dart';
@@ -24,6 +26,10 @@ class Routes {
   static const String splash = '/splash';
   static const String loginScreen = '/login';
   static const String loginOrSignupScreen = '/login_or_signup';
+  static const String enterEmailInForgotPasswordScreen =
+      '/enter_email_in_forgot_password_screen';
+  static const String enterOTPInForgotPasswordScreen =
+      '/enter_otp_in_forgot_password_screen';
   static const String coursesScreen = '/courses_screen';
   static const String signupScreen = '/signup';
   static const String allLecturesInTopicScreen =
@@ -43,6 +49,10 @@ class Routes {
     loginScreen: (BuildContext context) => const LoginScreen(),
     signupScreen: (BuildContext context) => const SignUpScreen(),
     loginOrSignupScreen: (BuildContext context) => LoginOrSignupScreen(),
+    enterEmailInForgotPasswordScreen: (BuildContext context) =>
+        EnterEmailInForgotPasswordScreen(),
+    enterOTPInForgotPasswordScreen: (BuildContext context) =>
+        EnterOTPInFogotPasswordScreen(),
     coursesScreen: (BuildContext context) => const CoursesScreen(),
     allLecturesInTopicScreen: (BuildContext context) =>
         AllLecturesInTopicScreen(),

@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:http/http.dart';
 import 'package:mela/core/stores/error/error_store.dart';
 import 'package:mela/core/stores/form/form_store.dart';
+import 'package:mela/domain/usecase/forgot_password/verify_exist_email_usecase.dart';
+import 'package:mela/domain/usecase/forgot_password/verify_otp_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_levels_usecase.dart';
 import 'package:mela/domain/usecase/post/get_post_usecase.dart';
@@ -12,6 +14,8 @@ import 'package:mela/domain/usecase/search/delete_all_history_search_usecase.dar
 import 'package:mela/domain/usecase/search/delete_history_search_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_access_token_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_refresh_token_usecase.dart';
+import 'package:mela/presentation/forgot_password_screen/store/enter_email_store/enter_email_store.dart';
+import 'package:mela/presentation/forgot_password_screen/store/enter_otp_store.dart/enter_otp_store.dart';
 import 'package:mela/presentation/post/store/post_store.dart';
 
 import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
@@ -139,5 +143,10 @@ class StoreModule {
         getIt<ErrorStore>(),
       ),
     );
+    //Forgot password
+    getIt.registerSingleton<EnterEmailStore>(
+        EnterEmailStore(getIt<VerifyExistEmailUseCase>()));
+    getIt.registerSingleton<EnterOTPStore>(
+        EnterOTPStore(getIt<VerifyOTPUseCase>()));
   }
 }
