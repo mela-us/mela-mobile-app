@@ -16,11 +16,11 @@ public class OtpServiceImpl implements OtpService {
 
     private static final int OTP_EXPIRY_MINUTES = 5;
 
-    private final Random random = new Random();
-
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private final OtpRepository otpRepository;
+
+    private final Random random = new Random();
 
     @Override
     public String generateOtpCode(int length) {

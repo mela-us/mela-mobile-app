@@ -1,4 +1,3 @@
-
 package com.hcmus.mela.exercise.service;
 
 import com.hcmus.mela.exercise.dto.dto.ExerciseResultDto;
@@ -7,17 +6,22 @@ import com.hcmus.mela.exercise.dto.response.ExerciseResultResponse;
 import com.hcmus.mela.exercise.mapper.ExerciseResultMapper;
 import com.hcmus.mela.exercise.model.Exercise;
 import com.hcmus.mela.exercise.model.ExerciseResult;
+import com.hcmus.mela.exercise.model.ExerciseResultCount;
 import com.hcmus.mela.exercise.model.ExerciseStatus;
 import com.hcmus.mela.exercise.repository.ExerciseRepository;
 import com.hcmus.mela.exercise.repository.ExerciseResultRepository;
 import com.hcmus.mela.lecture.model.Lecture;
-import com.hcmus.mela.lecture.service.LectureService;
+import com.hcmus.mela.lecture.service.LectureDetailService;
 import com.hcmus.mela.utils.GeneralMessageAccessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.*;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.LimitOperation;
+import org.springframework.data.mongodb.core.aggregation.SortOperation;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,7 +36,7 @@ public class ExerciseResultServiceImpl implements ExerciseResultService {
     private final GeneralMessageAccessor generalMessageAccessor;
     private final ExerciseResultRepository exerciseResultRepository;
     private final ExerciseRepository exerciseRepository;
-    private final LectureService lectureService;
+    private final LectureDetailService lectureDetailService;
 
     private final MongoTemplate mongoTemplate;
 
@@ -77,7 +81,7 @@ public class ExerciseResultServiceImpl implements ExerciseResultService {
 
         exerciseResult.setLectureId(exercise.getLectureId());
 
-        final Lecture lecture = lectureService.getLectureById(exercise.getLectureId());
+        final Lecture lecture = lectureDetailService.getLectureById(exercise.getLectureId());
 
         exerciseResult.setTopicId(lecture.getTopicId());
 
@@ -88,7 +92,7 @@ public class ExerciseResultServiceImpl implements ExerciseResultService {
         ExerciseStatus status = ExerciseStatus.IN_PROGRESS;
         if (exerciseResultRequest.getTotalAnswers() == 0) {
             status = ExerciseStatus.NOT_START;
-        } else if (exerciseResultRequest.getTotalCorrectAnswers() >= 0.8*exerciseResultRequest.getTotalAnswers()) {
+        } else if (exerciseResultRequest.getTotalCorrectAnswers() >= 0.8 * exerciseResultRequest.getTotalAnswers()) {
             status = ExerciseStatus.PASS;
         }
         exerciseResult.setStatus(status);
@@ -102,5 +106,23 @@ public class ExerciseResultServiceImpl implements ExerciseResultService {
         log.info("Exercise {} result saved successfully!", exercise.getExerciseId());
 
         return new ExerciseResultResponse(saveResultSuccessMessage);
+    }
+
+    @Override
+    public List<ExerciseResultCount> countTotalPassExerciseOfLectures(UUID userId) {
+        Aggregation aggregation = Aggregation.newAggregation(
+                Aggregation.match(new Criteria().andOperator(
+                        Criteria.where("user_id").is(userId),
+                        Criteria.where("status").is(ExerciseStatus.PASS.name())
+                )),
+                Aggregation.group("lecture_id").addToSet("exercise_id").as("exercises"),
+                Aggregation.project("_id").and("exercises").size().as("total")
+        );
+        AggregationResults<ExerciseResultCount> result = mongoTemplate.aggregate(
+                aggregation,
+                "exercise_results",
+                ExerciseResultCount.class
+        );
+        return result.getMappedResults();
     }
 }

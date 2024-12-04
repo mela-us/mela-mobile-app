@@ -1,7 +1,7 @@
 package com.hcmus.mela.lecture.controller;
 
 import com.hcmus.mela.lecture.dto.response.GetLevelsResponse;
-import com.hcmus.mela.lecture.service.LevelServiceImpl;
+import com.hcmus.mela.lecture.service.LevelService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/levels")
 public class LevelController {
 
-    private final LevelServiceImpl levelService;
+    private final LevelService levelService;
 
     @GetMapping
     @Operation(tags = "Level Service", description = "Get all levels.")

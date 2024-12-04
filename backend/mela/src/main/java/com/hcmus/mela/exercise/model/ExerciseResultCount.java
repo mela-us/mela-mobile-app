@@ -1,4 +1,4 @@
-package com.hcmus.mela.lecture.model;
+package com.hcmus.mela.exercise.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +10,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LectureExerciseTotal {
+public class ExerciseResultCount {
 
     @Id
     private UUID lectureId;

@@ -1,17 +1,16 @@
 package com.hcmus.mela.auth.service;
 
+import com.hcmus.mela.auth.dto.dto.EmailDetailsDto;
 import com.hcmus.mela.auth.dto.request.ForgotPasswordRequest;
 import com.hcmus.mela.auth.dto.request.OtpConfirmationRequest;
 import com.hcmus.mela.auth.dto.request.ResetPasswordRequest;
 import com.hcmus.mela.auth.dto.response.ForgotPasswordResponse;
 import com.hcmus.mela.auth.dto.response.OtpConfirmationResponse;
 import com.hcmus.mela.auth.dto.response.ResetPasswordResponse;
-import com.hcmus.mela.auth.dto.dto.EmailDetailsDto;
 import com.hcmus.mela.auth.exception.exception.ForgotPasswordException;
 import com.hcmus.mela.auth.exception.exception.InvalidTokenException;
 import com.hcmus.mela.auth.exception.exception.UserNotFoundException;
 import com.hcmus.mela.auth.model.User;
-import com.hcmus.mela.auth.repository.UserRepository;
 import com.hcmus.mela.auth.security.jwt.JwtTokenForgotPasswordService;
 import com.hcmus.mela.utils.ExceptionMessageAccessor;
 import com.hcmus.mela.utils.GeneralMessageAccessor;
@@ -22,29 +21,31 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ForgotPasswordServiceImpl implements ForgotPasswordService{
+public class ForgotPasswordServiceImpl implements ForgotPasswordService {
 
     private final ExceptionMessageAccessor exceptionMessageAccessor;
 
     private final GeneralMessageAccessor generalMessageAccessor;
 
-    private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
 
-    private final UserRepository userRepository;
+    private final OtpService otpService;
 
-    private final OtpServiceImpl otpService;
-
-    private final EmailServiceImpl emailService;
+    private final EmailService emailService;
 
     private final JwtTokenForgotPasswordService jwtTokenForgotPasswordService;
 
     @Override
     public ForgotPasswordResponse sendOtpCodeByEmail(ForgotPasswordRequest forgotPasswordRequest) {
-        User user = userRepository.findByUsername(forgotPasswordRequest.getUsername());
+        User user = userService.findByUsername(forgotPasswordRequest.getUsername());
         if (user == null) {
             throw new UserNotFoundException(
-                "Sending otp via email failed! "
-                + exceptionMessageAccessor.getMessage(null, "username_not_found", forgotPasswordRequest.getUsername())
+                    "Sending otp via email failed! "
+                            + exceptionMessageAccessor.getMessage(
+                            null,
+                            "username_not_found",
+                            forgotPasswordRequest.getUsername()
+                    )
             );
         }
 
@@ -59,7 +60,11 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService{
         otpService.cacheOtpCode(otpCode, user);
         emailService.sendSimpleMail(details);
         return new ForgotPasswordResponse(
-                generalMessageAccessor.getMessage(null, "send_email_success", forgotPasswordRequest.getUsername())
+                generalMessageAccessor.getMessage(
+                        null,
+                        "send_email_success",
+                        forgotPasswordRequest.getUsername()
+                )
         );
     }
 
@@ -71,19 +76,29 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService{
             otpConfirmationResponse.setUsername(otpConfirmationRequest.getUsername());
             otpConfirmationResponse.setToken(token);
             otpConfirmationResponse.setMessage(
-                    generalMessageAccessor.getMessage(null, "otp_validation_success")
+                    generalMessageAccessor.getMessage(
+                            null,
+                            "otp_validation_success"
+                    )
             );
             return otpConfirmationResponse;
         }
         throw new ForgotPasswordException(
-                exceptionMessageAccessor.getMessage(null, "otp_validation_fail", otpConfirmationRequest.getOtpCode())
+                exceptionMessageAccessor.getMessage(
+                        null,
+                        "otp_validation_fail",
+                        otpConfirmationRequest.getOtpCode()
+                )
         );
     }
 
     @Override
     public ResetPasswordResponse resetPassword(ResetPasswordRequest resetPasswordRequest) {
-        if (jwtTokenForgotPasswordService.validateToken(resetPasswordRequest.getToken(), resetPasswordRequest.getUsername())) {
-            userServiceImpl.updatePassword(resetPasswordRequest.getUsername(), resetPasswordRequest.getNewPassword());
+        if (jwtTokenForgotPasswordService.validateToken(
+                resetPasswordRequest.getToken(),
+                resetPasswordRequest.getUsername()
+        )) {
+            userService.updatePassword(resetPasswordRequest.getUsername(), resetPasswordRequest.getNewPassword());
             return new ResetPasswordResponse(
                     generalMessageAccessor.getMessage(null, "reset_pw_success")
             );

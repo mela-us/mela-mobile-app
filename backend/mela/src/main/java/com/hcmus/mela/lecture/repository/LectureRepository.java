@@ -14,7 +14,5 @@ public interface LectureRepository {
     List<Lecture> findLecturesByKeyword(String keyword);
 
     List<Lecture> findLectureByRecent(Integer size);
-
-    Lecture findLectureSectionsByLecture(UUID lectureId);
 }
 

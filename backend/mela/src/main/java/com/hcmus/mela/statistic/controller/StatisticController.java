@@ -1,7 +1,7 @@
 package com.hcmus.mela.statistic.controller;
 
 import com.hcmus.mela.statistic.dto.response.GetStatisticsResponse;
-import com.hcmus.mela.statistic.service.StatisticServiceImpl;
+import com.hcmus.mela.statistic.service.StatisticService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/statistics")
 public class StatisticController {
 
-    private final StatisticServiceImpl statisticService;
+    private final StatisticService statisticService;
 
     @GetMapping
     @Operation(tags = "Statistic Service", description = "Get all statistics.")

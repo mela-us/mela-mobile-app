@@ -6,7 +6,7 @@ import com.hcmus.mela.auth.dto.request.ResetPasswordRequest;
 import com.hcmus.mela.auth.dto.response.ForgotPasswordResponse;
 import com.hcmus.mela.auth.dto.response.OtpConfirmationResponse;
 import com.hcmus.mela.auth.dto.response.ResetPasswordResponse;
-import com.hcmus.mela.auth.service.ForgotPasswordServiceImpl;
+import com.hcmus.mela.auth.service.ForgotPasswordService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/forgot-password")
 public class ForgotPasswordController {
 
-    private final ForgotPasswordServiceImpl forgotPasswordService;
+    private final ForgotPasswordService forgotPasswordService;
 
     @PostMapping
     @Operation(tags = "Forgot Password Service", description = "You can enter your email to receive otp via the email.")

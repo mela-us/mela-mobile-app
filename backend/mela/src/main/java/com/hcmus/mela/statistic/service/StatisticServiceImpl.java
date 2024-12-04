@@ -10,7 +10,6 @@ import com.hcmus.mela.statistic.mapper.QuestionStatsMapper;
 import com.hcmus.mela.statistic.model.DailyQuestionStats;
 import com.hcmus.mela.statistic.model.QuestionStats;
 import com.hcmus.mela.statistic.repository.StatisticRepository;
-import com.hcmus.mela.utils.ExceptionMessageAccessor;
 import com.hcmus.mela.utils.GeneralMessageAccessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,8 +24,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class StatisticServiceImpl implements StatisticService {
-
-    private final ExceptionMessageAccessor exceptionMessageAccessor;
 
     private final GeneralMessageAccessor generalMessageAccessor;
 

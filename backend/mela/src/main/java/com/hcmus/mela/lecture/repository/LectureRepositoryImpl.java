@@ -19,27 +19,11 @@ public class LectureRepositoryImpl implements LectureRepository {
 
     private final MongoTemplate mongoTemplate;
 
-//    @Override
-//    public List<Lecture> findLecturesByTopic(UUID topicId) {
-//        Aggregation aggregation = Aggregation.newAggregation(
-//                Aggregation.match(Criteria.where("topic_id").is(topicId)),
-//                Aggregation.project("_id", "level_id", "topic_id", "name", "description")
-//        );
-//        AggregationResults<Lecture> result = mongoTemplate.aggregate(
-//                aggregation,
-//                "lectures",
-//                Lecture.class
-//        );
-//        return result.getMappedResults();
-//    }
-
-
     @Override
     public Lecture findById(UUID lectureId) {
         Query query = new Query(Criteria.where("_id").is(lectureId));
         return mongoTemplate.findOne(query, Lecture.class, "lectures");
     }
-
 
     @Override
     public List<Lecture> findLecturesByTopic(UUID topicId) {
@@ -103,19 +87,6 @@ public class LectureRepositoryImpl implements LectureRepository {
                 Lecture.class
         );
         return result.getMappedResults();
-    }
-
-    @Override
-    public Lecture findLectureSectionsByLecture(UUID lectureId) {
-        Aggregation aggregation = Aggregation.newAggregation(
-                Aggregation.match(Criteria.where("_id").is(lectureId))
-        );
-        AggregationResults<Lecture> result = mongoTemplate.aggregate(
-                aggregation,
-                "lectures",
-                Lecture.class
-        );
-        return result.getMappedResults().isEmpty() ? null : result.getMappedResults().get(0);
     }
 }
 
