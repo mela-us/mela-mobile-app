@@ -3,8 +3,6 @@ import 'package:mela/data/local/constants/db_constants.dart';
 import 'package:mela/domain/entity/post/post.dart';
 import 'package:mela/domain/entity/post/post_list.dart';
 import 'package:sembast/sembast.dart';
-import '../../../../core/data/local/sembast/sembast_client.dart';
-import '../../constants/db_constants.dart';
 
 class PostDataSource {
   // A Store with int keys and Map<String, dynamic> values.

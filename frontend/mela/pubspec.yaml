@@ -10,6 +10,7 @@ dependencies:
 
   flutter:
     sdk: flutter
+
   # A
   another_flushbar: ^1.12.29
   # B
@@ -44,6 +45,7 @@ dependencies:
   # P
   provider: ^6.1.2
   path_provider: ^2.0.14
+  pin_code_fields: ^8.0.1
   # Q
   # R
   # S

@@ -7,10 +7,10 @@ import '../../../core/domain/usecase/use_case.dart';
 import '../../entity/lecture/lecture_list.dart';
 import '../../repository/search/search_repository.dart';
 
-class GetSearchLecturesResult extends UseCase<LectureList, String> {
+class GetSearchLecturesResultUsecase extends UseCase<LectureList, String> {
   final SearchRepository _searchRepository;
   final RefreshAccessTokenUsecase _refreshAccessTokenUsecase;
-  GetSearchLecturesResult(
+  GetSearchLecturesResultUsecase(
       this._searchRepository, this._refreshAccessTokenUsecase);
 
   @override

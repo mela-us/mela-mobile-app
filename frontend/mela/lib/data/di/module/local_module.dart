@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mela/core/data/local/sembast/sembast_client.dart';
 import 'package:mela/data/local/constants/db_constants.dart';
+import 'package:mela/data/local/datasources/history_search/history_search_datasource.dart';
 import 'package:mela/data/local/datasources/post/post_datasource.dart';
 import 'package:mela/data/securestorage/secure_storage_helper.dart';
 import 'package:mela/data/sharedpref/shared_preference_helper.dart';
@@ -22,11 +23,10 @@ class LocalModule {
     );
     //Secure Storage:-----------------------------------------------------------
     getIt.registerSingleton<FlutterSecureStorage>(
-        FlutterSecureStorage(),
+      FlutterSecureStorage(),
     );
-    getIt.registerSingleton<SecureStorageHelper>(SecureStorageHelper(
-      getIt.get<FlutterSecureStorage>())
-    );
+    getIt.registerSingleton<SecureStorageHelper>(
+        SecureStorageHelper(getIt.get<FlutterSecureStorage>()));
 
     // database:----------------------------------------------------------------
 
@@ -42,5 +42,7 @@ class LocalModule {
     // data sources:------------------------------------------------------------
     getIt.registerSingleton(
         PostDataSource(await getIt.getAsync<SembastClient>()));
+    getIt.registerSingleton<HistoryDataSource>(
+        HistoryDataSource(await getIt.getAsync<SembastClient>()));
   }
 }

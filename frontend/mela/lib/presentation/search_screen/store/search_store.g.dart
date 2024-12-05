@@ -92,13 +92,13 @@ mixin _$SearchStore on _SearchStore, Store {
       Atom(name: '_SearchStore.searchHistory', context: context);
 
   @override
-  List<String>? get searchHistory {
+  List<HistorySearch>? get searchHistory {
     _$searchHistoryAtom.reportRead();
     return super.searchHistory;
   }
 
   @override
-  set searchHistory(List<String>? value) {
+  set searchHistory(List<HistorySearch>? value) {
     _$searchHistoryAtom.reportWrite(value, super.searchHistory, () {
       super.searchHistory = value;
     });
@@ -160,13 +160,13 @@ mixin _$SearchStore on _SearchStore, Store {
       Atom(name: '_SearchStore.fetchHistorySearchFuture', context: context);
 
   @override
-  ObservableFuture<List<String>?> get fetchHistorySearchFuture {
+  ObservableFuture<List<HistorySearch>?> get fetchHistorySearchFuture {
     _$fetchHistorySearchFutureAtom.reportRead();
     return super.fetchHistorySearchFuture;
   }
 
   @override
-  set fetchHistorySearchFuture(ObservableFuture<List<String>?> value) {
+  set fetchHistorySearchFuture(ObservableFuture<List<HistorySearch>?> value) {
     _$fetchHistorySearchFutureAtom
         .reportWrite(value, super.fetchHistorySearchFuture, () {
       super.fetchHistorySearchFuture = value;
@@ -180,6 +180,33 @@ mixin _$SearchStore on _SearchStore, Store {
   Future<dynamic> getHistorySearchList() {
     return _$getHistorySearchListAsyncAction
         .run(() => super.getHistorySearchList());
+  }
+
+  late final _$addHistorySearchAsyncAction =
+      AsyncAction('_SearchStore.addHistorySearch', context: context);
+
+  @override
+  Future<dynamic> addHistorySearch(HistorySearch historySearch) {
+    return _$addHistorySearchAsyncAction
+        .run(() => super.addHistorySearch(historySearch));
+  }
+
+  late final _$deleteAllHistorySearchAsyncAction =
+      AsyncAction('_SearchStore.deleteAllHistorySearch', context: context);
+
+  @override
+  Future<dynamic> deleteAllHistorySearch() {
+    return _$deleteAllHistorySearchAsyncAction
+        .run(() => super.deleteAllHistorySearch());
+  }
+
+  late final _$deleteHistorySearchAsyncAction =
+      AsyncAction('_SearchStore.deleteHistorySearch', context: context);
+
+  @override
+  Future<dynamic> deleteHistorySearch(HistorySearch historySearch) {
+    return _$deleteHistorySearchAsyncAction
+        .run(() => super.deleteHistorySearch(historySearch));
   }
 
   late final _$getLecturesAfterSearchAsyncAction =

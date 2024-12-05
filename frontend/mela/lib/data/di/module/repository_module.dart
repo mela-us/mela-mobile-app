@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:mela/data/local/datasources/history_search/history_search_datasource.dart';
 import 'package:mela/data/network/apis/questions/questions_api.dart';
 import 'package:mela/data/network/apis/exercises/exercise_api.dart';
 import 'package:mela/data/network/apis/lectures/lecture_api.dart';
@@ -13,6 +14,7 @@ import 'package:mela/data/repository/setting/setting_repository_impl.dart';
 import 'package:mela/data/securestorage/secure_storage_helper.dart';
 import 'package:mela/data/sharedpref/shared_preference_helper.dart';
 import 'package:mela/domain/entity/topic/topic.dart';
+import 'package:mela/domain/repository/forgot_password/forgot_password_repository.dart';
 import 'package:mela/domain/repository/question/question_repository.dart';
 import 'package:mela/domain/repository/setting/setting_repository.dart';
 
@@ -29,6 +31,7 @@ import 'package:mela/domain/repository/user_register/user_signup_repostiory.dart
 import '../../../domain/repository/lecture/lecture_repository.dart';
 import '../../../domain/repository/search/search_repository.dart';
 
+import '../../repository/forgot_password/forgot_password_repository_impl.dart';
 import '../../repository/topic/topic_repository_impl.dart';
 import '../../repository/user_login/user_login_repository_impl.dart';
 import '../../repository/user_signup/user_signup_repository_impl.dart';
@@ -72,6 +75,8 @@ class RepositoryModule {
     ));
     getIt.registerSingleton<UserSignUpRepository>(
         UserSignupRepositoryImpl(getIt<SignupApi>()));
+    getIt.registerSingleton<ForgotPasswordRepository>(
+        ForgotPasswordRepositoryImpl());
 
     //Content Deli:-------------------------------------------------------------
 
@@ -85,7 +90,7 @@ class RepositoryModule {
         ExerciseRepositoryImpl(getIt<ExerciseApi>()));
 
     getIt.registerSingleton<SearchRepository>(
-        SearchRepositoryImpl(getIt<SearchApi>()));
+        SearchRepositoryImpl(getIt<SearchApi>(), getIt<HistoryDataSource>()));
 
     getIt.registerSingleton<StatRepository>(
         StatRepositoryImpl() as StatRepository);
