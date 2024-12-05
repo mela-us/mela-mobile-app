@@ -3,6 +3,7 @@ import 'package:mela/presentation/signup_login_screen/login_or_signup_screen.dar
 import '../../constants/assets.dart';
 import '../../constants/app_theme.dart';
 import '../../di/service_locator.dart';
+import '../signup_login_screen/store/user_login_store/user_login_store.dart';
 import 'store/personal_store.dart';
 import 'personal_info.dart';
 import 'widgets/signout_dialog.dart';
@@ -18,6 +19,7 @@ class PersonalScreen extends StatefulWidget {
 class _PersonalScreenState extends State<PersonalScreen> {
   //Stores:---------------------------------------------------------------------
   final PersonalStore _store = getIt<PersonalStore>();
+  final UserLoginStore _loginStore = getIt<UserLoginStore>();
   //State set:------------------------------------------------------------------
 
   @override
@@ -204,6 +206,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
         return LogoutConfirmationDialog(
           onLogout: () {
             _store.logout();
+            _loginStore.logout();
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => LoginOrSignupScreen()), // Màn hình đăng nhập
               (Route<dynamic> route) {

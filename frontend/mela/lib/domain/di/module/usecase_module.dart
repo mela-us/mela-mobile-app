@@ -47,13 +47,6 @@ class UseCaseModule {
     //post:---------------------------------------------------------------------
     getIt.registerSingleton<GetPostUseCase>(
         GetPostUseCase(getIt<PostRepository>()));
-
-    // user:--------------------------------------------------------------------
-    getIt.registerSingleton<GetUserInfoUseCase>(
-        GetUserInfoUseCase(getIt<UserRepository>()));
-    getIt.registerSingleton<LogoutUseCase>(
-        LogoutUseCase(getIt<UserRepository>())
-    );
     // user login:--------------------------------------------------------------
     getIt.registerSingleton<IsLoggedInUseCase>(
       IsLoggedInUseCase(getIt<UserLoginRepository>()),
@@ -126,6 +119,13 @@ class UseCaseModule {
     );
     getIt.registerSingleton<UpdateStatSearchHistoryUseCase>(
       UpdateStatSearchHistoryUseCase(getIt<StatSearchRepository>()),
+    );
+    // user:--------------------------------------------------------------------
+    getIt.registerSingleton<GetUserInfoUseCase>(
+        GetUserInfoUseCase(getIt<UserRepository>(), getIt<RefreshAccessTokenUsecase>()));
+
+    getIt.registerSingleton<LogoutUseCase>(
+        LogoutUseCase(getIt<UserRepository>())
     );
   }
 

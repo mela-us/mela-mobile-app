@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:mela/data/network/apis/user/logout_api.dart';
+import 'package:mela/data/network/apis/user/user_info_api.dart';
 import 'package:mela/data/repository/question/question_repository_impl.dart';
 import 'package:mela/data/repository/setting/setting_repository_impl.dart';
 import 'package:mela/data/repository/stat/stat_search_impl.dart';
@@ -58,7 +59,11 @@ class RepositoryModule {
     ));
     //UserInfor:
     getIt.registerSingleton<UserRepository>(
-        UserRepositoryImpl(getIt<LogoutApi>(), getIt<SharedPreferenceHelper>())
+        UserRepositoryImpl(
+            getIt<LogoutApi>(),
+            getIt<UserInfoApi>(),
+            getIt<SecureStorageHelper>()
+        )
     );
 
     //Setting:------------------------------------------------------------------
