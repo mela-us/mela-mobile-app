@@ -5,6 +5,7 @@ import 'package:mela/core/widgets/progress_indicator_widget.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/forgot_password_screen/store/enter_email_store/enter_email_store.dart';
 import 'package:mela/presentation/forgot_password_screen/widgets/button_in_forgot.dart';
+import 'package:mela/utils/check_inputs/check_input.dart';
 import 'package:mela/utils/routes/routes.dart';
 
 class EnterEmailInForgotPasswordScreen extends StatelessWidget {
@@ -49,19 +50,7 @@ class EnterEmailInForgotPasswordScreen extends StatelessWidget {
                     TextFormField(
                       controller: _emailController,
                       validator: (value) {
-                        // add email validation
-                        if (value == null || value.isEmpty) {
-                          return 'Vui lòng nhập dữ liệu';
-                        }
-
-                        bool emailValid = RegExp(
-                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                            .hasMatch(value);
-                        if (!emailValid) {
-                          return 'Nhập địa chỉ email phù hợp';
-                        }
-
-                        return null;
+                        return CheckInput.validateEmail(value);
                       },
                       decoration: InputDecoration(
                         hintText: 'Nhập địa chỉ email',
@@ -95,7 +84,7 @@ class EnterEmailInForgotPasswordScreen extends StatelessWidget {
                               }
                             } catch (e) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Loi: ${e.toString()}')),
+                                SnackBar(content: Text(e.toString())),
                               );
                             }
                           }

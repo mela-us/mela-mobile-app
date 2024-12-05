@@ -10,6 +10,13 @@ class CreateNewPasswordParams {
     required this.newPassword,
     required this.token,
   });
+  Map<String, dynamic> toJson() {
+    return {
+      'username': username,
+      'newPassword': newPassword,
+      'token': token,
+    };
+  }
 }
 
 class CreateNewPasswordUsecase extends UseCase<void, CreateNewPasswordParams> {

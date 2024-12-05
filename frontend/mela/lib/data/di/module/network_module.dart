@@ -1,5 +1,6 @@
 import 'package:event_bus/event_bus.dart';
 import 'package:mela/data/network/apis/exercises/exercise_api.dart';
+import 'package:mela/data/network/apis/forgot_password/forgot_password_api.dart';
 import 'package:mela/data/network/apis/login_signup/login_api.dart';
 import 'package:mela/data/network/apis/login_signup/refresh_access_token_api.dart';
 import 'package:mela/data/network/apis/searchs/search_api.dart';
@@ -64,5 +65,6 @@ class NetworkModule {
     getIt.registerSingleton<LectureApi>(LectureApi(getIt<DioClient>()));
     getIt.registerSingleton<ExerciseApi>(ExerciseApi(getIt<DioClient>()));
     getIt.registerSingleton<SearchApi>(SearchApi(getIt<DioClient>()));
+    getIt.registerSingleton<ForgotPasswordApi>(ForgotPasswordApi(getIt<DioClient>()));
   }
 }

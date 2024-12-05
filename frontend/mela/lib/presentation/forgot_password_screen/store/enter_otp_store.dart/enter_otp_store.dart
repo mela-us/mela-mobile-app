@@ -19,7 +19,7 @@ abstract class _EnterOTPStore with Store {
   String tokenResetPasswordFromSever = "";
 
   @observable
-  int timeLeft = 10;
+  int timeLeft = 60;
 
   @observable
   bool canResend = false;
@@ -36,7 +36,7 @@ abstract class _EnterOTPStore with Store {
 
   @action
   void startTimer() {
-    timeLeft = 10;
+    timeLeft = 60;
     canResend = false;
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -57,7 +57,7 @@ abstract class _EnterOTPStore with Store {
     try {
       tokenResetPasswordFromSever = await future;
     } catch (e) {
-      throw e;
+      throw "Xác thực thất bại. Thử lại";
     }
   }
 

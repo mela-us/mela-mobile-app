@@ -75,14 +75,14 @@ class _EnterOTPInForgotPasswordScreen
                 //Pin code field
                 PinCodeTextField(
                   appContext: context,
-                  length: 4,
+                  length: 6,
                   controller: _otpController,
                   keyboardType: TextInputType.number,
                   pinTheme: PinTheme(
                     shape: PinCodeFieldShape.box,
                     borderRadius: BorderRadius.circular(8),
                     fieldHeight: 60,
-                    fieldWidth: 70,
+                    fieldWidth: 44,
                     activeFillColor: Theme.of(context).colorScheme.onTertiary,
                     inactiveFillColor: Theme.of(context).colorScheme.onTertiary,
                     selectedFillColor: Theme.of(context).colorScheme.onTertiary,
@@ -129,10 +129,10 @@ class _EnterOTPInForgotPasswordScreen
                   textButton: "Xác nhận",
                   onPressed: () async {
                     try {
-                      if (_otpStore.otp.length != 4) {
+                      if (_otpStore.otp.length != 6) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                              content: Text('Vui lòng nhập đủ 4 chữ số')),
+                              content: Text('Vui lòng nhập đủ 6 chữ số')),
                         );
                         return;
                       }
@@ -142,7 +142,7 @@ class _EnterOTPInForgotPasswordScreen
                           Routes.createNewPasswordInForgotPasswordScreen);
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Verification failed: $e')),
+                        SnackBar(content: Text(e.toString())),
                       );
                     }
                   },
