@@ -13,6 +13,7 @@ import 'package:mela/utils/locale/app_localization.dart';
 import 'package:mela/utils/routes/routes.dart';
 
 import '../../constants/enum.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 class ReviewScreen extends StatefulWidget {
   ReviewScreen({super.key});
@@ -145,11 +146,27 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
                     const SizedBox(height: 3.0),
 
-                    Text(
-                      questions[_singleQuestionStore.currentIndex].content,
-                      style: Theme.of(context).textTheme.questionStyle
-                          .copyWith(color: Theme.of(context)
-                          .colorScheme.inputTitleText),
+                    // Text(
+                    //   questions[_singleQuestionStore.currentIndex].content,
+                    //   style: Theme.of(context).textTheme.questionStyle
+                    //       .copyWith(color: Theme.of(context)
+                    //       .colorScheme.inputTitleText),
+                    // ),
+                    Html(
+                      data:questions[_singleQuestionStore.currentIndex].content,
+                      style: {
+                        "*": Style.fromTextStyle(
+                            Theme.of(context).textTheme.questionStyle
+                                .copyWith(color: Theme.of(context)
+                                .colorScheme.inputTitleText),
+                        ).merge(
+                         Style(
+                           padding: HtmlPaddings.all(0),
+                           margin: Margins.all(0),
+                           display: Display.inline,
+                         )
+                        )
+                      },
                     ),
                   ],
                 ),
@@ -333,11 +350,24 @@ class _ReviewScreenState extends State<ReviewScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Flexible(
-            child: Text(
-              text,
-              softWrap: true,
-              style: Theme.of(context).textTheme.normal
-                  .copyWith(color: textColor),
+            // child: Text(
+            //   text,
+            //   softWrap: true,
+            //   style: Theme.of(context).textTheme.normal
+            //       .copyWith(color: textColor),
+            // ),
+            child: Html(
+              data: text,
+              style: {
+                "p": Style.fromTextStyle(
+                    Theme.of(context).textTheme.normal
+                        .copyWith(color: textColor),
+                ).merge(
+                    Style(
+                      display: Display.inline,
+                    )
+                )
+              },
             ),
           ),
           Icon(
