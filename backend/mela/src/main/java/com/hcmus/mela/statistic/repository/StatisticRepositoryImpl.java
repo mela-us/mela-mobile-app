@@ -48,6 +48,7 @@ public class StatisticRepositoryImpl implements StatisticRepository {
     public List<DailyQuestionStats> getDailyQuestionStatsLast7Days(UUID userId) {
         LocalDate currentDate = LocalDate.now();
         LocalDate date6DaysAgo = currentDate.minusDays(6);
+        currentDate = currentDate.plusDays(1);
 
         Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.match(Criteria.where("user_id").is(userId)),
