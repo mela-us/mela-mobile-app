@@ -24,13 +24,9 @@ class GetProgressListUseCase extends UseCase<ProgressList, void>{
           bool isRefreshTokenSuccess =
               await _refreshAccessTokenUsecase.call(params: null);
           if (isRefreshTokenSuccess) {
-            //not use return _lectureRepository.getLectures(params); in here beacause if do it
-            //it have a DioException, so we should call recursive
             print("----------->E1: $e");
             return await call(params: null);
           }
-          //Call logout, logout will delete token in secure storage, shared preference.....
-          //.................
         }
         print("----------->E2: $e");
         rethrow;

@@ -12,6 +12,6 @@ class StatsApi {
       EndpointsConst.getStats,
     );
     print(responseData);
-    return ProgressList.fromJson(responseData['data']);
+    return ProgressList.fromJson(responseData);
   }
 }
