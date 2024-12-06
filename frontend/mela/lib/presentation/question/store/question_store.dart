@@ -120,4 +120,8 @@ abstract class _QuestionStore with Store{
   void setQuestionsUid(String uid){
     questionsUid = uid;
   }
+  @action
+  void handleLogout(){
+
+  }
 }

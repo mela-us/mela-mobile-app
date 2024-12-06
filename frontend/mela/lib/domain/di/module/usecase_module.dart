@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:http/http.dart';
 import 'package:mela/domain/repository/lecture/lecture_repository.dart';
 import 'package:mela/domain/repository/post/post_repository.dart';
 import 'package:mela/domain/repository/user/user_repository.dart';
@@ -84,12 +85,18 @@ class UseCaseModule {
     // question:----------------------------------------------------------------
     getIt.registerSingleton<GetQuestionsUseCase>(
       GetQuestionsUseCase(
-          getIt<QuestionRepository>(), getIt<RefreshAccessTokenUsecase>()),
+          getIt<QuestionRepository>(),
+          getIt<RefreshAccessTokenUsecase>(),
+          getIt<LogoutUseCase>()
+      ),
     );
 
     getIt.registerSingleton<SubmitResultUseCase>(
       SubmitResultUseCase(
-          getIt<SaveResultApi>(), getIt<RefreshAccessTokenUsecase>()),
+          getIt<SaveResultApi>(),
+          getIt<RefreshAccessTokenUsecase>(),
+          getIt<LogoutUseCase>()
+      ),
     );
 
     /// topic:------------------------------------------------------------------

@@ -1,7 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:mela/constants/enum.dart';
 import 'package:mela/domain/entity/lecture/lecture_list.dart';
-import 'package:mela/domain/entity/level/level_list.dart';
 import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_lectures_are_learning_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_lectures_usecase.dart';

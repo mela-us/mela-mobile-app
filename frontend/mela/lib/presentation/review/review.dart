@@ -39,7 +39,10 @@ class _ReviewScreenState extends State<ReviewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const PracticeAppBar(previousScreenRoute: null),
+        appBar: PracticeAppBar(pressedBack: () {
+          Navigator.of(context).pop();
+          },
+        ),
         body: _buildBody(),
         bottomNavigationBar: _buildQuestionList(),
     );

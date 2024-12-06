@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:mela/constants/enum.dart';
 import 'package:mela/domain/entity/lecture/lecture_list.dart';
 import 'package:mela/domain/entity/level/level_list.dart';
 import 'package:mela/domain/entity/topic/topic.dart';

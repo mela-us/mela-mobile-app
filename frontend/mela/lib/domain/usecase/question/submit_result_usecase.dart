@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:mela/core/domain/usecase/use_case.dart';
 import 'package:mela/data/network/apis/questions/save_result_api.dart';
+import 'package:mela/domain/usecase/user/logout_usecase.dart';
 import 'package:mela/domain/usecase/user_login/refresh_access_token_usecase.dart';
 
 import '../../params/question/submit_result_params.dart';
@@ -10,8 +11,10 @@ import '../../params/question/submit_result_params.dart';
 class SubmitResultUseCase extends UseCase<int, SubmitResultParams>{
   final SaveResultApi _saveApi;
   final RefreshAccessTokenUsecase _refreshAccessTokenUsecase;
+  final LogoutUseCase _logoutUseCase;
 
-  SubmitResultUseCase(this._saveApi, this._refreshAccessTokenUsecase);
+  SubmitResultUseCase(
+      this._saveApi, this._refreshAccessTokenUsecase, this._logoutUseCase);
   @override
   Future<int> call({required SubmitResultParams params}) async {
     try {
@@ -25,6 +28,7 @@ class SubmitResultUseCase extends UseCase<int, SubmitResultParams>{
             return call(params: params);
           }
           else {
+            await _logoutUseCase.call(params: null);
             rethrow;
           }
         }

@@ -5,8 +5,8 @@ import 'package:mela/utils/locale/app_localization.dart';
 import '../../constants/assets.dart';
 
 class PracticeAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String? previousScreenRoute;
-  const PracticeAppBar({super.key, required this.previousScreenRoute});
+  final VoidCallback pressedBack;
+  const PracticeAppBar({super.key, required this.pressedBack, });
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class PracticeAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   Widget _buildBackButton(BuildContext context){
     return GestureDetector(
-      onTap: () => _backPreviousScreen(context),
+      onTap: pressedBack,
       child: Image.asset(
         Assets.arrow_back_longer,
         width: 26,
@@ -63,13 +63,6 @@ class PracticeAppBar extends StatelessWidget implements PreferredSizeWidget {
 
 
   void _backPreviousScreen(BuildContext context){
-    if (previousScreenRoute != null){
-      //Has previous screen closed
-      Navigator.of(context).pushReplacementNamed(previousScreenRoute!);
-    }
-    else {
-      //Has previous screen not closed
-      Navigator.of(context).pop();
-    }
+    pressedBack;
   }
 }
