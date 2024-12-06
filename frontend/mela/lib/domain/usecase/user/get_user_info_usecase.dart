@@ -1,15 +1,36 @@
+import 'package:dio/dio.dart';
 import 'package:mela/domain/entity/user/user.dart';
 
 import '../../../core/domain/usecase/use_case.dart';
 import '../../repository/user/user_repository.dart';
+import '../user_login/refresh_access_token_usecase.dart';
 
 class GetUserInfoUseCase implements UseCase<User, void> {
   final UserRepository _userRepository;
+  final RefreshAccessTokenUsecase _refreshAccessTokenUsecase;
 
-  GetUserInfoUseCase(this._userRepository);
+  GetUserInfoUseCase(this._userRepository, this._refreshAccessTokenUsecase);
 
   @override
-  Future<User> call({required void params}) async {
-    return await _userRepository.getUserInfo();
+  Future<User> call({required params}) async {
+    try {
+      return await _userRepository.getUserInfo();
+    } catch (e) {
+      if (e is DioException) {
+        //eg accessToken is expired
+        if (e.response?.statusCode == 401) {
+          bool isRefreshTokenSuccess =
+          await _refreshAccessTokenUsecase.call(params: null);
+          if (isRefreshTokenSuccess) {
+            print("----------->E1: $e");
+            return await call(params: null);
+          }
+        }
+        print("----------->E2: $e");
+        rethrow;
+      }
+      print("----------->E3: $e");
+      rethrow;
+    }
   }
 }

@@ -1,14 +1,11 @@
 import 'package:event_bus/event_bus.dart';
 import 'package:mela/data/network/apis/exercises/exercise_api.dart';
-import 'package:mela/data/network/apis/forgot_password/forgot_password_api.dart';
 import 'package:mela/data/network/apis/login_signup/login_api.dart';
 import 'package:mela/data/network/apis/login_signup/refresh_access_token_api.dart';
 import 'package:mela/data/network/apis/searchs/search_api.dart';
 import 'package:mela/data/network/apis/topics/topic_api.dart';
 import 'package:mela/data/network/dio_client.dart';
 import 'package:mela/data/securestorage/secure_storage_helper.dart';
-import 'package:mela/data/network/apis/questions/questions_api.dart';
-import 'package:mela/data/network/apis/questions/save_result_api.dart';
 
 import '../../../core/data/network/dio/configs/dio_configs.dart';
 import '../../../core/data/network/dio/interceptors/auth_interceptor.dart';
@@ -62,7 +59,8 @@ class NetworkModule {
     getIt.registerSingleton<LoginApi>(LoginApi(getIt<DioClient>()));
     getIt.registerSingleton<SignupApi>(SignupApi(getIt<DioClient>()));
     getIt.registerSingleton<RefreshAccessTokenApi>(
-        RefreshAccessTokenApi(getIt<DioClient>()));
+        RefreshAccessTokenApi(getIt<DioClient>())
+    );
     getIt.registerSingleton<TopicApi>(TopicApi(getIt<DioClient>()));
     getIt.registerSingleton<LectureApi>(LectureApi(getIt<DioClient>()));
     getIt.registerSingleton<ExerciseApi>(ExerciseApi(getIt<DioClient>()));
@@ -70,5 +68,8 @@ class NetworkModule {
     getIt.registerSingleton(QuestionsApi(getIt<DioClient>()));
     getIt.registerSingleton(SaveResultApi(getIt<DioClient>()));
     getIt.registerSingleton<ForgotPasswordApi>(ForgotPasswordApi(getIt<DioClient>()));
+    getIt.registerSingleton<StatsApi>(StatsApi(getIt<DioClient>()));
+    getIt.registerSingleton<UserInfoApi>(UserInfoApi(getIt<DioClient>()));
+    getIt.registerSingleton<LogoutApi>(LogoutApi(getIt<DioClient>()));
   }
 }

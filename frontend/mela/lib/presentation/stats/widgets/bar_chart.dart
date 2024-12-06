@@ -2,28 +2,27 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/domain/entity/stat/detailed_progress.dart';
+import '../../../di/service_locator.dart';
+import '../../../domain/entity/stat/progress.dart';
 import '../../../themes/default/colors_standards.dart';
 import '../store/stats_store.dart';
 import 'package:intl/intl.dart';
 
 class BarChartWidget extends StatelessWidget {
-  final StatisticsStore store;
-  final String topicName;
-  final String division;
+  final Progress item;
   //
-  const BarChartWidget({super.key, required this.store, required this.topicName, required this.division});
+  final StatisticsStore store = getIt<StatisticsStore>();
+  //
+  BarChartWidget({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
-    List<DetailedProgress>? list = store.detailedProgressList?.detailedProgressList;
-    //filter by division and topic name
-    List<DetailedProgress>? filteredList = list?.where(
-            (progress) => progress.division == division && progress.topicName == topicName
-    ).toList();
+    //
+    List<DetailedProgress>? list = item.last7Days?.detailedProgressList;
     //
     DateTime now = DateTime.now();
     DateTime sevenDaysToNow = now.subtract(const Duration(days: 7));
-    filteredList = filteredList?.where(
+    List<DetailedProgress>? filteredList = list?.where(
             (progress) {
           final dateString = progress.date;
           if (dateString != null) {
@@ -47,14 +46,14 @@ class BarChartWidget extends StatelessWidget {
     );
   }
 
-  double? CountInDate(List<DetailedProgress> list, DateTime time) {
-    String dateString = DateFormat('dd/MM/yyyy').format(time);
+  double? countInDate(List<DetailedProgress> list, DateTime time) {
+    String dateString = DateFormat('yyyy-MM-dd').format(time);
     return list.firstWhere(
             (progress) => progress.date == dateString,
-            orElse: () => DetailedProgress(topicName: "NA", division: "NA", date: "NA", count: 0)).count?.toDouble();
+            orElse: () => DetailedProgress(date: "NA", count: 0, correctCount: 0)).count?.toDouble();
   }
 
-  String DateOfWeekConverter(DateTime time) {
+  String dateOfWeekConverter(DateTime time) {
     switch (time.weekday) {
       case 1:
         return 'T2';
@@ -84,7 +83,7 @@ class BarChartWidget extends StatelessWidget {
             barRods: [
               BarChartRodData(
                 fromY: 0,
-                toY: CountInDate(filteredList!, now.subtract(const Duration(days: 6))) ?? 0,
+                toY: countInDate(filteredList!, now.subtract(const Duration(days: 6))) ?? 0,
                 color: ColorsStandards.buttonYesColor1,
               ),
             ],
@@ -94,7 +93,7 @@ class BarChartWidget extends StatelessWidget {
             barRods: [
               BarChartRodData(
                 fromY: 0,
-                toY: CountInDate(filteredList!, now.subtract(const Duration(days: 5))) ?? 0,
+                toY: countInDate(filteredList!, now.subtract(const Duration(days: 5))) ?? 0,
                 color: ColorsStandards.buttonYesColor1,
               ),
             ],
@@ -104,7 +103,7 @@ class BarChartWidget extends StatelessWidget {
             barRods: [
               BarChartRodData(
                 fromY: 0,
-                toY: CountInDate(filteredList!, now.subtract(const Duration(days: 4))) ?? 0,
+                toY: countInDate(filteredList!, now.subtract(const Duration(days: 4))) ?? 0,
                 color: ColorsStandards.buttonYesColor1,
               ),
             ],
@@ -114,7 +113,7 @@ class BarChartWidget extends StatelessWidget {
             barRods: [
               BarChartRodData(
                 fromY: 0,
-                toY: CountInDate(filteredList!, now.subtract(const Duration(days: 3))) ?? 0,
+                toY: countInDate(filteredList!, now.subtract(const Duration(days: 3))) ?? 0,
                 color: ColorsStandards.buttonYesColor1,
               ),
             ],
@@ -124,7 +123,7 @@ class BarChartWidget extends StatelessWidget {
             barRods: [
               BarChartRodData(
                 fromY: 0,
-                toY: CountInDate(filteredList!, now.subtract(const Duration(days: 2))) ?? 0,
+                toY: countInDate(filteredList!, now.subtract(const Duration(days: 2))) ?? 0,
                 color: ColorsStandards.buttonYesColor1,
               ),
             ],
@@ -134,7 +133,7 @@ class BarChartWidget extends StatelessWidget {
             barRods: [
               BarChartRodData(
                 fromY: 0,
-                toY: CountInDate(filteredList!, now.subtract(const Duration(days: 1))) ?? 0,
+                toY: countInDate(filteredList!, now.subtract(const Duration(days: 1))) ?? 0,
                 color: ColorsStandards.buttonYesColor1,
               ),
             ],
@@ -144,7 +143,7 @@ class BarChartWidget extends StatelessWidget {
             barRods: [
               BarChartRodData(
                 fromY: 0,
-                toY: CountInDate(filteredList!, now) ?? 0,
+                toY: countInDate(filteredList!, now) ?? 0,
                 color: ColorsStandards.buttonYesColor1,
               ),
             ],
@@ -160,22 +159,22 @@ class BarChartWidget extends StatelessWidget {
                 String label;
                 switch (value.toInt()) {
                   case 0:
-                    label = DateOfWeekConverter(now.subtract(const Duration(days: 6)));
+                    label = dateOfWeekConverter(now.subtract(const Duration(days: 6)));
                     break;
                   case 1:
-                    label = DateOfWeekConverter(now.subtract(const Duration(days: 5)));
+                    label = dateOfWeekConverter(now.subtract(const Duration(days: 5)));
                     break;
                   case 2:
-                    label = DateOfWeekConverter(now.subtract(const Duration(days: 4)));
+                    label = dateOfWeekConverter(now.subtract(const Duration(days: 4)));
                     break;
                   case 3:
-                    label = DateOfWeekConverter(now.subtract(const Duration(days: 3)));
+                    label = dateOfWeekConverter(now.subtract(const Duration(days: 3)));
                     break;
                   case 4:
-                    label = DateOfWeekConverter(now.subtract(const Duration(days: 2)));
+                    label = dateOfWeekConverter(now.subtract(const Duration(days: 2)));
                     break;
                   case 5:
-                    label = DateOfWeekConverter(now.subtract(const Duration(days: 1)));
+                    label = dateOfWeekConverter(now.subtract(const Duration(days: 1)));
                     break;
                   case 6:
                     label = 'Nay';

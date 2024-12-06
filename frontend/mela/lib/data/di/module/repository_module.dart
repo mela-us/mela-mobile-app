@@ -10,14 +10,18 @@ import 'package:mela/data/network/apis/login_signup/refresh_access_token_api.dar
 import 'package:mela/data/network/apis/login_signup/signup_api.dart';
 import 'package:mela/data/network/apis/searchs/search_api.dart';
 import 'package:mela/data/network/apis/topics/topic_api.dart';
+import 'package:mela/data/network/apis/user/logout_api.dart';
+import 'package:mela/data/network/apis/user/user_info_api.dart';
 import 'package:mela/data/repository/question/question_repository_impl.dart';
 import 'package:mela/data/repository/setting/setting_repository_impl.dart';
+import 'package:mela/data/repository/stat/stat_search_impl.dart';
 import 'package:mela/data/securestorage/secure_storage_helper.dart';
 import 'package:mela/data/sharedpref/shared_preference_helper.dart';
 import 'package:mela/domain/entity/topic/topic.dart';
 import 'package:mela/domain/repository/forgot_password/forgot_password_repository.dart';
 import 'package:mela/domain/repository/question/question_repository.dart';
 import 'package:mela/domain/repository/setting/setting_repository.dart';
+import 'package:mela/domain/repository/stat/stat_search_repository.dart';
 
 import '../../../di/service_locator.dart';
 import 'package:mela/data/repository/exercise/exercise_repository_impl.dart';
@@ -39,15 +43,11 @@ import '../../repository/user_signup/user_signup_repository_impl.dart';
 import 'package:mela/data/local/datasources/post/post_datasource.dart';
 import 'package:mela/data/network/apis/posts/post_api.dart';
 import 'package:mela/data/repository/post/post_repository_impl.dart';
-import 'package:mela/data/repository/setting/setting_repository_impl.dart';
 import 'package:mela/data/repository/user/user_repository_impl.dart';
-import 'package:mela/data/sharedpref/shared_preference_helper.dart';
 import 'package:mela/domain/repository/post/post_repository.dart';
-import 'package:mela/domain/repository/setting/setting_repository.dart';
 import 'package:mela/domain/repository/stat/stat_repository.dart';
 import 'package:mela/domain/repository/user/user_repository.dart';
 
-import '../../../di/service_locator.dart';
 import '../../repository/stat/stat_repository_impl.dart';
 
 class RepositoryModule {
@@ -59,7 +59,12 @@ class RepositoryModule {
     ));
     //UserInfor:
     getIt.registerSingleton<UserRepository>(
-        UserRepositoryImpl(getIt<SharedPreferenceHelper>()));
+        UserRepositoryImpl(
+            getIt<LogoutApi>(),
+            getIt<UserInfoApi>(),
+            getIt<SecureStorageHelper>()
+        )
+    );
 
     //Setting:------------------------------------------------------------------
     getIt.registerSingleton<SettingRepository>(SettingRepositoryImpl(
@@ -93,8 +98,12 @@ class RepositoryModule {
     getIt.registerSingleton<SearchRepository>(
         SearchRepositoryImpl(getIt<SearchApi>(), getIt<HistoryDataSource>()));
 
+    //STATS-------------------------
     getIt.registerSingleton<StatRepository>(
-        StatRepositoryImpl() as StatRepository);
+        StatRepositoryImpl(getIt<StatsApi>()));
+    getIt.registerSingleton<StatSearchRepository>(
+        StatSearchRepositoryImpl() as StatSearchRepository);
+
     //Practice De
     getIt.registerSingleton<QuestionRepository>(
         QuestionRepositoryImpl(

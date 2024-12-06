@@ -18,6 +18,8 @@ import '../../presentation/signup_login_screen/login_screen.dart';
 import '../../presentation/signup_login_screen/signup_screen.dart';
 
 import '../../presentation/personal/personal.dart';
+import '../../presentation/stats/stat_filter.dart';
+import '../../presentation/stats/stat_search.dart';
 import '../../presentation/stats/stats.dart';
 
 class Routes {
@@ -46,6 +48,8 @@ class Routes {
   static const String review = '/review';
   static const String personal = '/personal';
   static const String stats = '/stats';
+  static const String searchStats = '/search_stats';
+  static const String filterStats = '/filter_stats';
   static const String allScreens = '/all_screens';
 
   static final routes = <String, WidgetBuilder>{
@@ -70,6 +74,8 @@ class Routes {
     review: (BuildContext context) => ReviewScreen(),
     personal: (BuildContext context) => const PersonalScreen(),
     stats: (BuildContext context) => StatisticsScreen(),
+    searchStats: (BuildContext context) => StatSearchScreen(),
+    filterStats: (BuildContext context) => FilterStatScreen(),
     allScreens: (BuildContext context) => AllScreens(),
   };
 }

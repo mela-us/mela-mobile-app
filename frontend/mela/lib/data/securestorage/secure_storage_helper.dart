@@ -28,6 +28,11 @@ class SecureStorageHelper{
     await _secureStorage.delete(key: key);
   }
 
+  Future<void> deleteTokens() async{
+    await _secureStorage.delete(key: SecureStorageConst.accessToken);
+    await _secureStorage.delete(key: SecureStorageConst.refreshToken);
+  }
+
   Future<void> deleteAll() async{
     await _secureStorage.deleteAll();
   }

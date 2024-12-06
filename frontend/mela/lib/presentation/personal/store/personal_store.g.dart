@@ -55,19 +55,19 @@ mixin _$PersonalStore on _PersonalStore, Store {
     });
   }
 
-  late final _$successAtom =
-      Atom(name: '_PersonalStore.success', context: context);
+  late final _$logout_successAtom =
+      Atom(name: '_PersonalStore.logout_success', context: context);
 
   @override
-  bool get success {
-    _$successAtom.reportRead();
-    return super.success;
+  bool get logout_success {
+    _$logout_successAtom.reportRead();
+    return super.logout_success;
   }
 
   @override
-  set success(bool value) {
-    _$successAtom.reportWrite(value, super.success, () {
-      super.success = value;
+  set logout_success(bool value) {
+    _$logout_successAtom.reportWrite(value, super.logout_success, () {
+      super.logout_success = value;
     });
   }
 
@@ -79,12 +79,20 @@ mixin _$PersonalStore on _PersonalStore, Store {
     return _$getUserInfoAsyncAction.run(() => super.getUserInfo());
   }
 
+  late final _$logoutAsyncAction =
+      AsyncAction('_PersonalStore.logout', context: context);
+
+  @override
+  Future<dynamic> logout() {
+    return _$logoutAsyncAction.run(() => super.logout());
+  }
+
   @override
   String toString() {
     return '''
 fetchFuture: ${fetchFuture},
 user: ${user},
-success: ${success},
+logout_success: ${logout_success},
 progressLoading: ${progressLoading},
 detailedProgressLoading: ${detailedProgressLoading}
     ''';

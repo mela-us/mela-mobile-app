@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mela/presentation/signup_login_screen/login_or_signup_screen.dart';
 import '../../constants/assets.dart';
 import '../../constants/app_theme.dart';
 import '../../di/service_locator.dart';
+import '../signup_login_screen/store/user_login_store/user_login_store.dart';
 import 'store/personal_store.dart';
 import 'personal_info.dart';
 import 'widgets/signout_dialog.dart';
@@ -17,6 +19,7 @@ class PersonalScreen extends StatefulWidget {
 class _PersonalScreenState extends State<PersonalScreen> {
   //Stores:---------------------------------------------------------------------
   final PersonalStore _store = getIt<PersonalStore>();
+  final UserLoginStore _loginStore = getIt<UserLoginStore>();
   //State set:------------------------------------------------------------------
 
   @override
@@ -95,7 +98,6 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                 name: _store.user?.name ?? 'Người học không tên',
                                 email: _store.user?.email ?? '',
                                 dob: _store.user?.dob ?? '',
-                                password: _store.user?.password ?? '',
                               ),
                             ),
                           );
@@ -203,8 +205,14 @@ class _PersonalScreenState extends State<PersonalScreen> {
       builder: (BuildContext context) {
         return LogoutConfirmationDialog(
           onLogout: () {
-            Navigator.of(context).pop();
-            // implement logout
+            _store.logout();
+            _loginStore.logout();
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => LoginOrSignupScreen()), // Màn hình đăng nhập
+              (Route<dynamic> route) {
+                return false;
+              },
+            );
           },
           onCancel: () {
             Navigator.of(context).pop();

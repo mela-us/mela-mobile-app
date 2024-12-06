@@ -18,6 +18,7 @@ class EndpointsConst {
   static const String getPosts = "/posts";
   static const String login = "/api/login";
   static const String signup = "/api/register";
+  static const String logout = "/api/logout";
   static const String refreshAccessToken = "/api/refresh-token";
   static const String getTopics = "/api/topics";
   static const String getLectures = "/api/lectures";
@@ -29,4 +30,6 @@ class EndpointsConst {
   static const String forgotPasswordSendEmail = "/api/forgot-password";
   static const String forgotPasswordVerifyOTP = "/api/forgot-password/validate-otp";
   static const String forgotPasswordCreateNewPassword = "/api/forgot-password/reset-password";
+  static const String getStats = "/api/statistics";
+  static const String getUser = "/api/profile";
 }

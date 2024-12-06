@@ -8,11 +8,8 @@ class DetailedProgressList{
   });
 
   factory DetailedProgressList.fromJson(List<dynamic> json) {
-    List<DetailedProgress> list = <DetailedProgress>[];
-    list = json.map((progress) => DetailedProgress.fromMap(progress)).toList();
-
     return DetailedProgressList(
-      detailedProgressList: list,
+      detailedProgressList: json.map((item) => DetailedProgress.fromMap(item)).toList(),
     );
   }
 }

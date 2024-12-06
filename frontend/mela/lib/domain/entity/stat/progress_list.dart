@@ -7,12 +7,11 @@ class ProgressList{
     this.progressList,
   });
 
-  factory ProgressList.fromJson(List<dynamic> json) {
-    List<Progress> list = <Progress>[];
-    list = json.map((progress) => Progress.fromMap(progress)).toList();
-
+  factory ProgressList.fromJson(Map<String, dynamic> json) {
     return ProgressList(
-      progressList: list,
+      progressList: (json['data'] as List)
+          .map((entry) => Progress.fromJson(entry))
+          .toList(),
     );
   }
 }

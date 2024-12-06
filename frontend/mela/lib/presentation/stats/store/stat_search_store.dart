@@ -3,7 +3,7 @@ import 'package:mela/domain/usecase/stat/get_stat_search_history_usecase.dart';
 import 'package:mobx/mobx.dart';
 import '../../../di/service_locator.dart';
 import '../../../domain/entity/stat/progress_list.dart';
-import '../../../domain/usecase/stat/get_stat_search_result_usecase.dart';
+import '../../../domain/usecase/stat/update_stat_search_history_usecase.dart';
 // Include generated file
 part 'stat_search_store.g.dart';
 
@@ -13,84 +13,70 @@ class StatSearchStore = _StatSearchStore with _$StatSearchStore;
 abstract class _StatSearchStore with Store {
   //UseCase
   GetStatSearchHistoryUseCase _getStatSearchHistoryUseCase;
-  GetStatSearchResultUseCase _getStatSearchResultUseCase;
+  UpdateStatSearchHistoryUseCase _updateStatSearchHistoryUseCase;
 
   //Constructor
-  _StatSearchStore(this._getStatSearchResultUseCase, this._getStatSearchHistoryUseCase);
+  _StatSearchStore(this._getStatSearchHistoryUseCase, this._updateStatSearchHistoryUseCase);
 
   @observable
-  bool isSearched = false; //check press enter to search or not
+  bool isSearched = false; //check typing search done
 
   @observable
-  bool isFiltered = false;
+  bool isFiltered = false; //check applied filter
 
   @observable
   String errorString = '';
 
   @observable
-  List<String>? searchHistory;
+  ObservableList<String> searchHistory = ObservableList<String>();
 
-  @observable
-  ProgressList? listAfterSearchingAndFiltering;
-
-  @observable
-  ProgressList?
-  listAfterSearching;
-
-  @computed
-  bool get isLoadingSearch =>
-      fetchAfterSearchingFuture.status == FutureStatus.pending;
   @computed
   bool get isLoadingHistorySearch =>
       fetchHistorySearchFuture.status == FutureStatus.pending;
 
   @observable
-  ObservableFuture<ProgressList?> fetchAfterSearchingFuture =
-  ObservableFuture<ProgressList?>(ObservableFuture.value(null));
-
-  @observable
   ObservableFuture<List<String>?> fetchHistorySearchFuture =
   ObservableFuture<List<String>?>(ObservableFuture.value(null));
+
+  @observable
+  ObservableFuture<void> fetchUpdateHistory =
+  ObservableFuture<void>(ObservableFuture.value(null));
 
   @action
   Future getStatSearchHistory() async {
     final future = _getStatSearchHistoryUseCase.call(params: null);
     fetchHistorySearchFuture = ObservableFuture(future);
     future.then((value) {
-      this.searchHistory = value;
+      searchHistory = ObservableList.of(value ?? []);
     }).catchError((onError) {
-      this.searchHistory = null;
+      searchHistory = ObservableList<String>();
       print(onError);
     });
   }
 
   @action
-  Future getAfterSearch(String txtSearching) async {
-    final future = _getStatSearchResultUseCase.call(params: txtSearching);
-    fetchAfterSearchingFuture = ObservableFuture(future);
-
-    try {
-      final value = await future;
-      this.listAfterSearching = value;
-      this.errorString = '';
-    } catch (onError) {
-      this.listAfterSearching = null;
-      updateAfterSeachingAndFiltering(null);
+  Future updateStatSearchHistory() async {
+    final future = _updateStatSearchHistoryUseCase.call(params: searchHistory);
+    fetchUpdateHistory = ObservableFuture(future);
+    future.then((value) {
+    }).catchError((onError) {
       print(onError);
-      this.errorString = onError.toString();
-    }
+    });
   }
 
   @action
-  void updateAfterSeachingAndFiltering(ProgressList? value) {
-    // print("Chieu dai cua  list luc truoc: ");
-    // if (lecturesAfterSearchingAndFiltering != null) {
-    //   print(lecturesAfterSearchingAndFiltering!.lectures.length);
-    // }
+  void removeSearchHistoryItem(int index) {
+    if (index >= 0 && index < searchHistory.length) {
+      searchHistory.removeAt(index);
+    }
+    updateStatSearchHistory();
+  }
 
-    listAfterSearchingAndFiltering = value;
-    // print("Chieu dai cua  list luc sau: ");
-    // print(lecturesAfterSearchingAndFiltering!.lectures.length);
+  @action
+  void addSearchHistoryItem(String item) {
+    if (searchHistory.contains(item)) return;
+    searchHistory.insert(0, item);
+    updateStatSearchHistory();
   }
 
   @action
@@ -112,4 +98,5 @@ abstract class _StatSearchStore with Store {
   void resetErrorString() {
     errorString = '';
   }
+
 }
