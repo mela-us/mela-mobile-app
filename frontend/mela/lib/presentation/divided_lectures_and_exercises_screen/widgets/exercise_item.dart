@@ -56,9 +56,9 @@ class ExerciseItem extends StatelessWidget {
                   Image.asset(currentExercise.imageExercisePath,
                       width: 60, height: 60),
                   const SizedBox(height: 8),
-                  currentExercise.bestResult.status != null
+                  currentExercise.bestResult != null
                       ? Text(
-                          '${currentExercise.bestResult.totalCorrectAnswers} / ${currentExercise.totalQuestions}',
+                          '${currentExercise.bestResult!.totalCorrectAnswers} / ${currentExercise.totalQuestions}',
                           style: Theme.of(context)
                               .textTheme
                               .miniCaption
@@ -116,7 +116,7 @@ class ExerciseItem extends StatelessWidget {
                             .normal
                             .copyWith(color: Colors.black),
                       ),
-                      currentExercise.bestResult.status != null
+                      currentExercise.bestResult != null
                           ? Text(
                               currentExercise.statusExercise
                                   ? "Đạt"
