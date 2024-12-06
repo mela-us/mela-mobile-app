@@ -1,5 +1,6 @@
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/dimens.dart';
@@ -284,13 +285,29 @@ class _QuestionScreenState extends State<QuestionScreen> {
                     ),
                     const SizedBox(height: 3.0),
 
-                    Text(
-                      getCurrentQuestion()!.content,
-                      style: Theme.of(context).textTheme.questionStyle
-                          .copyWith(
-                          color: Theme.of(context)
-                              .colorScheme.inputTitleText
-                      ),
+                    // Text(
+                    //   getCurrentQuestion()!.content,
+                    //   style: Theme.of(context).textTheme.questionStyle
+                    //       .copyWith(
+                    //       color: Theme.of(context)
+                    //           .colorScheme.inputTitleText
+                    //   ),
+                    // ),
+                    Html(
+                      data: "<html>${getCurrentQuestion()!.content}</html>",
+                      style: {
+                        "*": Style.fromTextStyle(
+                            Theme.of(context).textTheme.questionStyle
+                                .copyWith(
+                                color: Theme.of(context)
+                                    .colorScheme.inputTitleText
+                            ),
+                        ).merge(
+                            Style(
+                              display: Display.inline,
+                            )
+                        )
+                      },
                     ),
                   ],
                 ),
@@ -398,13 +415,21 @@ class _QuestionScreenState extends State<QuestionScreen> {
       child: RadioListTile<String>(
         title: Align(
           alignment: Alignment.centerLeft,
-          child: Text(
-            getCurrentQuestion()!.options.isEmpty ?
-            'null' :
-            makeChoiceFromIndex(index)+
-                getCurrentQuestion()!.options[index].content,
-            style: Theme.of(context).textTheme.normal
-                .copyWith(color: Theme.of(context).colorScheme.inputText),
+          child: getCurrentQuestion()!.options.isEmpty ?
+          const Text('null') :
+          Html(
+            data: "<html>${makeChoiceFromIndex(index)+
+                getCurrentQuestion()!.options[index].content}</html>",
+            style: {
+              "*": Style.fromTextStyle(
+                  Theme.of(context).textTheme.normal
+                      .copyWith(color: Theme.of(context).colorScheme.inputText)
+              ).merge(
+                  Style(
+                    display: Display.inline,
+                  )
+              )
+            },
           ),
         ),
         shape: RoundedRectangleBorder(

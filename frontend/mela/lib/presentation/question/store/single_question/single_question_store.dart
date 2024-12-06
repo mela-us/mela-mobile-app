@@ -38,8 +38,6 @@ abstract class _SingleQuestionStore with Store {
     currentQuizAnswer = value;
   }
 
-
-
   //Computed:-------------------------------------------------------------------
   @computed
   String get currentAnswer => _userAnswers[_questionIndex];

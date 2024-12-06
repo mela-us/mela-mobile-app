@@ -305,7 +305,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
   Widget _buildQuizTile(
       String quizChoice, int index, String userAnswer, String questionAnswer){
     String choiceKey = convertNumberToLetter(index);
-    String newQuizContent = '$choiceKey. $quizChoice';
+    String newQuizContent = "$choiceKey .$quizChoice";
     if (choiceKey == questionAnswer){
       //correct
       return _buildSingleAnswerView(
@@ -357,9 +357,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
             //       .copyWith(color: textColor),
             // ),
             child: Html(
-              data: text,
+              data: "<html>$text</html>",
               style: {
-                "p": Style.fromTextStyle(
+                "*": Style.fromTextStyle(
                     Theme.of(context).textTheme.normal
                         .copyWith(color: textColor),
                 ).merge(
