@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:mela/core/domain/usecase/use_case.dart';
+import 'package:mela/domain/usecase/user/logout_usecase.dart';
 import 'package:mela/domain/usecase/user_login/refresh_access_token_usecase.dart';
 
 import '../../entity/exercise/exercise_list.dart';
@@ -9,8 +10,9 @@ import '../../repository/exercise/exercise_repository.dart';
 
 class GetExercisesUseCase extends UseCase<ExerciseList, String> {
   final ExerciseRepository _exerciseRepository;
-  RefreshAccessTokenUsecase _refreshAccessTokenUsecase;
-  GetExercisesUseCase(this._exerciseRepository, this._refreshAccessTokenUsecase);
+  final RefreshAccessTokenUsecase _refreshAccessTokenUsecase;
+  final LogoutUseCase _logoutUseCase; 
+  GetExercisesUseCase(this._exerciseRepository, this._refreshAccessTokenUsecase, this._logoutUseCase);
 
   @override
   Future<ExerciseList> call({required String params}) async {
@@ -29,7 +31,8 @@ class GetExercisesUseCase extends UseCase<ExerciseList, String> {
             return await call(params: params);
           }
           //Call logout, logout will delete token in secure storage, shared preference.....
-
+          await _logoutUseCase.call(params: null);
+          rethrow;
           //.................
         }
         print("----------->E2: $e");

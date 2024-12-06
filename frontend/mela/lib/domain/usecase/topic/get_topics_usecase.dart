@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:mela/core/domain/usecase/use_case.dart';
 import 'package:mela/domain/entity/topic/topic_list.dart';
+import 'package:mela/domain/usecase/user/logout_usecase.dart';
 import 'package:mela/domain/usecase/user_login/refresh_access_token_usecase.dart';
 
 import '../../repository/topic/topic_repository.dart';
@@ -10,8 +11,9 @@ import '../../repository/topic/topic_repository.dart';
 class GetTopicsUsecase extends UseCase<TopicList, void> {
   final TopicRepository _topicRepository;
   final RefreshAccessTokenUsecase _refreshAccessTokenUsecase;
+  final LogoutUseCase _logoutUseCase;
 
-  GetTopicsUsecase(this._topicRepository, this._refreshAccessTokenUsecase);
+  GetTopicsUsecase(this._topicRepository, this._refreshAccessTokenUsecase, this._logoutUseCase);
 
   //params is type dynamic so it can pass by null
   @override
@@ -32,6 +34,8 @@ class GetTopicsUsecase extends UseCase<TopicList, void> {
             return await call(params: null);
           }
           //Call logout, logout will delete token in secure storage, shared preference.....
+          await _logoutUseCase.call(params: null);
+          rethrow;
           //.................
         }
         print("----------->E2: $e");

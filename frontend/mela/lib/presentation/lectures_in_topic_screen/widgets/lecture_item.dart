@@ -20,7 +20,19 @@ class LectureItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         _exerciseStore.setCurrentLecture(lecture);
-        Navigator.of(context).pushNamed(Routes.dividedLecturesAndExercisesScreen);
+        //Navigator.of(context).pushNamed(Routes.dividedLecturesAndExercisesScreen);
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          Routes.dividedLecturesAndExercisesScreen,
+          (route) {
+            final routeName = route.settings.name;
+            //if user at search screen, remove search, filter screen
+            //if user at lecture in topic screen, not remove this screen
+            // Return false to remove search and filter screens
+            // Return true to keep other screens
+            return routeName != Routes.searchScreen &&
+                routeName != Routes.filterScreen;
+          },
+        );
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
@@ -50,9 +62,11 @@ class LectureItem extends StatelessWidget {
                   CircleAvatar(
                     backgroundColor: Colors.white,
                     radius: 16,
-                    child: Text('${(lecture.progress*100).toStringAsFixed(0)}%',
+                    child: Text(
+                        '${(lecture.progress * 100).toStringAsFixed(0)}%',
                         style: Theme.of(context).textTheme.miniCaption.copyWith(
-                            color: Theme.of(context).colorScheme.secondary,fontSize: 10)),
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontSize: 10)),
                   ),
                 ],
               ),

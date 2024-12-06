@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:mela/core/domain/usecase/use_case.dart';
 import 'package:mela/domain/repository/lecture/lecture_repository.dart';
+import 'package:mela/domain/usecase/user/logout_usecase.dart';
 import 'package:mela/domain/usecase/user_login/refresh_access_token_usecase.dart';
 
 import '../../entity/level/level_list.dart';
@@ -8,10 +9,11 @@ import '../../entity/level/level_list.dart';
 class GetLevelsUsecase extends UseCase<LevelList, void> {
   final LectureRepository _lectureRepository;
   final RefreshAccessTokenUsecase _refreshAccessTokenUsecase;
-  GetLevelsUsecase(this._lectureRepository, this._refreshAccessTokenUsecase);
+  final LogoutUseCase _logoutUseCase;
+  GetLevelsUsecase(this._lectureRepository, this._refreshAccessTokenUsecase,
+      this._logoutUseCase);
   @override
   Future<LevelList> call({required void params}) async {
-
     try {
       return await _lectureRepository.getLevels();
     } catch (e) {
@@ -27,7 +29,8 @@ class GetLevelsUsecase extends UseCase<LevelList, void> {
             return await call(params: null);
           }
           //Call logout, logout will delete token in secure storage, shared preference.....
-
+          await _logoutUseCase.call(params: null);
+          rethrow;
           //.................
         }
         print("----------->E2: $e");

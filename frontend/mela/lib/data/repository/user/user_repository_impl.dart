@@ -17,9 +17,10 @@ class UserRepositoryImpl extends UserRepository {
   final UserInfoApi _userInfoApi;
   // shared pref object
   final SecureStorageHelper _secureStorageHelper;
+  final SharedPreferenceHelper _sharedPrefsHelper;
 
   // constructor
-  UserRepositoryImpl(this._logoutApi, this._userInfoApi, this._secureStorageHelper);
+  UserRepositoryImpl(this._logoutApi, this._userInfoApi, this._secureStorageHelper, this._sharedPrefsHelper);
 
   @override
   Future<User> getUserInfo() async {
@@ -51,6 +52,7 @@ class UserRepositoryImpl extends UserRepository {
     //delete accessTokens and refreshToken
     await _secureStorageHelper.saveAccessToken("");
     await _secureStorageHelper.saveRefreshToken("");
+    await _sharedPrefsHelper.saveIsLoggedIn(false);
 
     return _logoutApi.logout(tokens);
   }

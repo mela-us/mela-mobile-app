@@ -63,7 +63,8 @@ class RepositoryModule {
         UserRepositoryImpl(
             getIt<LogoutApi>(),
             getIt<UserInfoApi>(),
-            getIt<SecureStorageHelper>()
+            getIt<SecureStorageHelper>(),
+            getIt<SharedPreferenceHelper>()
         )
     );
 

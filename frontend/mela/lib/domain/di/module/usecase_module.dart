@@ -75,6 +75,8 @@ class UseCaseModule {
         SaveRefreshTokenUsecase(getIt<UserLoginRepository>()));
     getIt.registerSingleton<RefreshAccessTokenUsecase>(
         RefreshAccessTokenUsecase(getIt<UserLoginRepository>()));
+    getIt.registerSingleton<LogoutUseCase>(
+        LogoutUseCase(getIt<UserRepository>()));
     //user signup:--------------------------------------------------------------
     getIt.registerSingleton<SignupUseCase>(
       SignupUseCase(getIt<UserSignUpRepository>()),
@@ -82,46 +84,55 @@ class UseCaseModule {
     // question:----------------------------------------------------------------
     getIt.registerSingleton<GetQuestionsUseCase>(
       GetQuestionsUseCase(
-          getIt<QuestionRepository>(), getIt<RefreshAccessTokenUsecase>()
-      ),
+          getIt<QuestionRepository>(), getIt<RefreshAccessTokenUsecase>()),
     );
 
-    getIt.registerSingleton<SubmitResultUseCase>(SubmitResultUseCase(
-          getIt<SaveResultApi>(), getIt<RefreshAccessTokenUsecase>()
-      ),
+    getIt.registerSingleton<SubmitResultUseCase>(
+      SubmitResultUseCase(
+          getIt<SaveResultApi>(), getIt<RefreshAccessTokenUsecase>()),
     );
+
     /// topic:------------------------------------------------------------------
     getIt.registerSingleton<GetTopicsUsecase>(GetTopicsUsecase(
-        getIt<TopicRepository>(), getIt<RefreshAccessTokenUsecase>()));
+        getIt<TopicRepository>(),
+        getIt<RefreshAccessTokenUsecase>(),
+        getIt<LogoutUseCase>()));
 
     getIt.registerSingleton<FindTopicByIdUsecase>(
         FindTopicByIdUsecase(getIt<TopicRepository>()));
 
-
     //lecture:--------------------------------------------------------------------
     getIt.registerSingleton<GetLecturesUsecase>(GetLecturesUsecase(
-        getIt<LectureRepository>(), getIt<RefreshAccessTokenUsecase>()));
+        getIt<LectureRepository>(),
+        getIt<RefreshAccessTokenUsecase>(),
+        getIt<LogoutUseCase>()));
 
     getIt.registerSingleton<GetLecturesAreLearningUsecase>(
-        GetLecturesAreLearningUsecase(
-            getIt<LectureRepository>(), getIt<RefreshAccessTokenUsecase>()));
+        GetLecturesAreLearningUsecase(getIt<LectureRepository>(),
+            getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()));
 
     getIt.registerSingleton<GetLevelsUsecase>(GetLevelsUsecase(
-        getIt<LectureRepository>(), getIt<RefreshAccessTokenUsecase>()));
+        getIt<LectureRepository>(),
+        getIt<RefreshAccessTokenUsecase>(),
+        getIt<LogoutUseCase>()));
 
     getIt.registerSingleton<GetDividedLectureUsecase>(GetDividedLectureUsecase(
-        getIt<LectureRepository>(), getIt<RefreshAccessTokenUsecase>()));
+        getIt<LectureRepository>(),
+        getIt<RefreshAccessTokenUsecase>(),
+        getIt<LogoutUseCase>()));
 
     ///exercise:--------------------------------------------------------------------
     getIt.registerSingleton<GetExercisesUseCase>(GetExercisesUseCase(
-        getIt<ExerciseRepository>(), getIt<RefreshAccessTokenUsecase>()));
+        getIt<ExerciseRepository>(),
+        getIt<RefreshAccessTokenUsecase>(),
+        getIt<LogoutUseCase>()));
 
     //search:--------------------------------------------------------------------
     getIt.registerSingleton<GetHistorySearchListUsecase>(
         GetHistorySearchListUsecase(getIt<SearchRepository>()));
     getIt.registerSingleton<GetSearchLecturesResultUsecase>(
-        GetSearchLecturesResultUsecase(
-            getIt<SearchRepository>(), getIt<RefreshAccessTokenUsecase>()));
+        GetSearchLecturesResultUsecase(getIt<SearchRepository>(),
+            getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()));
 
     getIt.registerSingleton<AddHistorySearchUsecase>(
         AddHistorySearchUsecase(getIt<SearchRepository>()));
@@ -135,9 +146,7 @@ class UseCaseModule {
     //stats:--------------------------------------------------------------------
     getIt.registerSingleton<GetProgressListUseCase>(
       GetProgressListUseCase(
-          getIt<StatRepository>(),
-          getIt<RefreshAccessTokenUsecase>()
-      ),
+          getIt<StatRepository>(), getIt<RefreshAccessTokenUsecase>()),
     );
     getIt.registerSingleton<GetDetailedProgressListUseCase>(
       GetDetailedProgressListUseCase(getIt<StatRepository>()),
@@ -150,12 +159,8 @@ class UseCaseModule {
       UpdateStatSearchHistoryUseCase(getIt<StatSearchRepository>()),
     );
     // user:--------------------------------------------------------------------
-    getIt.registerSingleton<GetUserInfoUseCase>(
-        GetUserInfoUseCase(getIt<UserRepository>(), getIt<RefreshAccessTokenUsecase>()));
-
-    getIt.registerSingleton<LogoutUseCase>(
-        LogoutUseCase(getIt<UserRepository>())
-    );
+    getIt.registerSingleton<GetUserInfoUseCase>(GetUserInfoUseCase(
+        getIt<UserRepository>(), getIt<RefreshAccessTokenUsecase>()));
 
     //forgot password:----------------------------------------------------------
     getIt.registerSingleton<VerifyExistEmailUseCase>(
@@ -168,6 +173,4 @@ class UseCaseModule {
 
   // I brought register for user info and logout to the back as RefreshAccessTokenUsecase HAS to be registered first
   // toi dem register user ra sau boi vi RefreshAccessTokenUsecase phai duoc dang ky truoc khi dang ky getUserInfo
-
 }
-
