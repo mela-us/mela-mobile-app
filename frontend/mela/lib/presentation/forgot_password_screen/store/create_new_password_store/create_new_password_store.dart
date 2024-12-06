@@ -58,7 +58,7 @@ abstract class _CreateNewPasswordStore with Store {
       await future;
     } catch (onError) {
       //error
-      throw onError.toString();
+      throw "Thay đổi mật khẩu thất bại. Thử lại";
     }
   }
 }

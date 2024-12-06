@@ -12,7 +12,7 @@ class DioExceptionUtil {
         case DioExceptionType.connectionError:
         case DioExceptionType.connectionTimeout:
         case DioExceptionType.unknown:
-          errorDescription = "Connection timeout with API server";
+          errorDescription = "Kiểm tra kết nối mạng. Thử lại sau";
           break;
         case DioExceptionType.receiveTimeout:
           errorDescription = "Receive timeout in connection with API server";

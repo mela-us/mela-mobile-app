@@ -6,6 +6,7 @@ import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/forgot_password_screen/store/create_new_password_store/create_new_password_store.dart';
 import 'package:mela/presentation/forgot_password_screen/store/enter_otp_store.dart/enter_otp_store.dart';
 import 'package:mela/presentation/forgot_password_screen/widgets/button_in_forgot.dart';
+import 'package:mela/utils/check_inputs/check_input.dart';
 import 'package:mela/utils/routes/routes.dart';
 
 class CreateNewPasswordInForgotPasswordScreen extends StatelessWidget {
@@ -16,7 +17,8 @@ class CreateNewPasswordInForgotPasswordScreen extends StatelessWidget {
       TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final EnterOTPStore _enterOTPStore = getIt<EnterOTPStore>();
-  final CreateNewPasswordStore _createNewPasswordStore = getIt<CreateNewPasswordStore>();
+  final CreateNewPasswordStore _createNewPasswordStore =
+      getIt<CreateNewPasswordStore>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,16 +58,10 @@ class CreateNewPasswordInForgotPasswordScreen extends StatelessWidget {
                         return TextFormField(
                           controller: _passwordController,
                           validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Vui lòng nhập dữ liệu';
-                            }
-
-                            // if (value.length < 6) {
-                            //   return 'Mật khẩu phải có ít nhất 6 kí tự';
-                            // }
-                            return null;
+                            return CheckInput.validatePassword(value);
                           },
-                          obscureText: !_createNewPasswordStore.isPasswordVisible,
+                          obscureText:
+                              !_createNewPasswordStore.isPasswordVisible,
                           decoration: InputDecoration(
                             hintText: 'Nhập mật khẩu của bạn',
                             prefixIcon: Icon(Icons.lock_outline_rounded,
@@ -78,9 +74,10 @@ class CreateNewPasswordInForgotPasswordScreen extends StatelessWidget {
                             fillColor: Theme.of(context).colorScheme.onTertiary,
                             filled: true,
                             suffixIcon: IconButton(
-                              icon: Icon(_createNewPasswordStore.isPasswordVisible
-                                  ? Icons.visibility_off
-                                  : Icons.visibility),
+                              icon: Icon(
+                                  _createNewPasswordStore.isPasswordVisible
+                                      ? Icons.visibility_off
+                                      : Icons.visibility),
                               onPressed: () => _createNewPasswordStore
                                   .togglePasswordVisibility(),
                             ),
@@ -99,17 +96,10 @@ class CreateNewPasswordInForgotPasswordScreen extends StatelessWidget {
                         return TextFormField(
                           controller: _confirmedPasswordController,
                           validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Vui lòng nhập dữ liệu';
-                            }
-
-                            // if (value.length < 6) {
-                            //   return 'Mật khẩu phải có ít nhất 6 kí tự';
-                            // }
-                            return null;
+                            return CheckInput.validatePassword(value);
                           },
-                          obscureText:
-                              !_createNewPasswordStore.isConfirmedPasswordVisible,
+                          obscureText: !_createNewPasswordStore
+                              .isConfirmedPasswordVisible,
                           decoration: InputDecoration(
                             hintText: 'Nhập lại mật khẩu của bạn',
                             prefixIcon: Icon(Icons.lock_outline_rounded,
@@ -166,7 +156,7 @@ class CreateNewPasswordInForgotPasswordScreen extends StatelessWidget {
                               }
                             } catch (e) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Loi: ${e.toString()}')),
+                                SnackBar(content: Text(e.toString())),
                               );
                             }
                           }

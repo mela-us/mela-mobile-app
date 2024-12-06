@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/presentation/signup_login_screen/store/login_or_signup_store/login_or_signup_store.dart';
+import 'package:mela/utils/check_inputs/check_input.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../constants/assets.dart';
@@ -134,19 +135,7 @@ class __FormContentState extends State<_FormContent> {
             TextFormField(
               controller: _emailController,
               validator: (value) {
-                // add email validation
-                if (value == null || value.isEmpty) {
-                  return 'Vui lòng nhập dữ liệu';
-                }
-
-                bool emailValid = RegExp(
-                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                    .hasMatch(value);
-                if (!emailValid) {
-                  return 'Nhập địa chỉ email phù hợp';
-                }
-
-                return null;
+                return CheckInput.validateEmail(value);
               },
               decoration: InputDecoration(
                 hintText: 'Nhập địa chỉ email',
@@ -170,14 +159,7 @@ class __FormContentState extends State<_FormContent> {
               return TextFormField(
                 controller: _passwordController,
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Vui lòng nhập dữ liệu';
-                  }
-
-                  // if (value.length < 6) {
-                  //   return 'Mật khẩu ít nhất 6 kí tự';
-                  // }
-                  return null;
+                  return CheckInput.validatePassword(value);
                 },
                 obscureText: !_userSignupStore.isPasswordVisible,
                 decoration: InputDecoration(
@@ -258,8 +240,6 @@ class __FormContentState extends State<_FormContent> {
                   }
                   if (_formKey.currentState?.validate() ?? false) {
                     try {
-                      print("sdsdsdsds");
-                      print(_emailController.text);
                       await _userSignupStore.signUp(
                         _emailController.text,
                         _passwordController.text,
@@ -290,8 +270,7 @@ class __FormContentState extends State<_FormContent> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ThirdPartyButton(
-                    pathLogo: Assets.googleIcon, onPressed: () {}),
+                ThirdPartyButton(pathLogo: Assets.googleIcon, onPressed: () {}),
                 const SizedBox(width: 20),
                 ThirdPartyButton(
                     pathLogo: Assets.facebookIcon, onPressed: () {}),

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:mela/data/local/datasources/history_search/history_search_datasource.dart';
 import 'package:mela/data/network/apis/questions/questions_api.dart';
 import 'package:mela/data/network/apis/exercises/exercise_api.dart';
+import 'package:mela/data/network/apis/forgot_password/forgot_password_api.dart';
 import 'package:mela/data/network/apis/lectures/lecture_api.dart';
 import 'package:mela/data/network/apis/login_signup/login_api.dart';
 import 'package:mela/data/network/apis/login_signup/refresh_access_token_api.dart';
@@ -76,7 +77,7 @@ class RepositoryModule {
     getIt.registerSingleton<UserSignUpRepository>(
         UserSignupRepositoryImpl(getIt<SignupApi>()));
     getIt.registerSingleton<ForgotPasswordRepository>(
-        ForgotPasswordRepositoryImpl());
+        ForgotPasswordRepositoryImpl(getIt<ForgotPasswordApi>()));
 
     //Content Deli:-------------------------------------------------------------
 

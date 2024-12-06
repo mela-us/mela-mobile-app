@@ -33,7 +33,7 @@ abstract class _EnterEmailStore with Store {
     } catch (onError) {
       //error
       print("Vao enter email 5");
-      throw onError.toString();
+      throw "Email không tồn tại trong hệ thống";
     }
   }
 }

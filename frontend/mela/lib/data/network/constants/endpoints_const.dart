@@ -26,4 +26,7 @@ class EndpointsConst {
   static const String getDividedLectures = "/api/lectures/:lectureId/sections";
   static const String getExercises = "/api/lectures/:lectureId/exercises";
   static const String getLecturesSearch = "/api/lectures/search";
+  static const String forgotPasswordSendEmail = "/api/forgot-password";
+  static const String forgotPasswordVerifyOTP = "/api/forgot-password/validate-otp";
+  static const String forgotPasswordCreateNewPassword = "/api/forgot-password/reset-password";
 }
