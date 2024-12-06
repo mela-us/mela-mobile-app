@@ -57,11 +57,12 @@ abstract class _StatisticsStore with Store {
   Future getProgressList() async {
     final future = _getProgressListUseCase.call(params: null);
     fetchProgressFuture = ObservableFuture(future);
-
     future.then((list) {
       progressList = list;
+      success = true;
     }).catchError((error) {
       _errorStore.errorMessage = DioExceptionUtil.handleError(error);
+      success = false;
     });
   }
 

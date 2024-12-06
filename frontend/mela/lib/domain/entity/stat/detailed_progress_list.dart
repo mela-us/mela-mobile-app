@@ -1,15 +1,18 @@
 import 'detailed_progress.dart';
 
-class DetailedProgressList{
+class DetailedProgressList {
   final List<DetailedProgress>? detailedProgressList;
 
-  DetailedProgressList({
-    this.detailedProgressList,
-  });
+  DetailedProgressList({this.detailedProgressList});
 
   factory DetailedProgressList.fromJson(List<dynamic> json) {
-    return DetailedProgressList(
-      detailedProgressList: json.map((item) => DetailedProgress.fromMap(item)).toList(),
-    );
+    try {
+      List<DetailedProgress> list = json
+          .map((item) => DetailedProgress.fromMap(item as Map<String, dynamic>))
+          .toList();
+      return DetailedProgressList(detailedProgressList: list);
+    } catch (e) {
+      return DetailedProgressList(detailedProgressList: []);
+    }
   }
 }

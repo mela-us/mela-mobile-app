@@ -15,6 +15,14 @@ class BarChartWidget extends StatelessWidget {
   //
   BarChartWidget({super.key, required this.item});
 
+  int getMax() {
+    List<DetailedProgress>? list = item.last7Days?.detailedProgressList ?? [];
+    List<int?> stats = list.map((item) => item.count).toList();
+    int? temp = stats.reduce((a, b) => a! > b! ? a : b) ?? 0;
+    if (temp > 5) return temp;
+    return 5;
+  }
+
   @override
   Widget build(BuildContext context) {
     //
@@ -26,7 +34,8 @@ class BarChartWidget extends StatelessWidget {
             (progress) {
           final dateString = progress.date;
           if (dateString != null) {
-            DateTime itemDate = DateFormat("dd/MM/yyyy").parse(dateString);
+            //DateTime itemDate = DateFormat("dd-MM-yyyy").parse(dateString);
+            DateTime itemDate = DateFormat("yyyy-MM-dd").parse(dateString);
             return itemDate.isBefore(now) && itemDate.isAfter(sevenDaysToNow);
           } else {
             return false;
@@ -34,7 +43,7 @@ class BarChartWidget extends StatelessWidget {
         }
     ).toList();
     return SizedBox(
-      height: 150,
+      height: 200,
       child: Observer(
         builder: (context) {
           if (store.detailedProgressLoading) {
@@ -77,78 +86,27 @@ class BarChartWidget extends StatelessWidget {
   Widget MakeBarChart(List<DetailedProgress>? filteredList, DateTime now) {
     return BarChart(
       BarChartData(
-        barGroups: [
-          BarChartGroupData(
-            x: 0,
+        barGroups: List.generate(7, (index) {
+          DateTime day = now.subtract(Duration(days: 6 - index));
+          double count = countInDate(filteredList ?? [], day) ?? 0;
+
+          return BarChartGroupData(
+            x: index,
             barRods: [
               BarChartRodData(
                 fromY: 0,
-                toY: countInDate(filteredList!, now.subtract(const Duration(days: 6))) ?? 0,
+                toY: count,
+                width: 18, // Độ rộng của cột
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(6),  // Đỉnh tròn
+                  topRight: Radius.circular(6), // Đỉnh tròn
+                ),
                 color: ColorsStandards.buttonYesColor1,
               ),
             ],
-          ),
-          BarChartGroupData(
-            x: 1,
-            barRods: [
-              BarChartRodData(
-                fromY: 0,
-                toY: countInDate(filteredList!, now.subtract(const Duration(days: 5))) ?? 0,
-                color: ColorsStandards.buttonYesColor1,
-              ),
-            ],
-          ),
-          BarChartGroupData(
-            x: 2,
-            barRods: [
-              BarChartRodData(
-                fromY: 0,
-                toY: countInDate(filteredList!, now.subtract(const Duration(days: 4))) ?? 0,
-                color: ColorsStandards.buttonYesColor1,
-              ),
-            ],
-          ),
-          BarChartGroupData(
-            x: 3,
-            barRods: [
-              BarChartRodData(
-                fromY: 0,
-                toY: countInDate(filteredList!, now.subtract(const Duration(days: 3))) ?? 0,
-                color: ColorsStandards.buttonYesColor1,
-              ),
-            ],
-          ),
-          BarChartGroupData(
-            x: 4,
-            barRods: [
-              BarChartRodData(
-                fromY: 0,
-                toY: countInDate(filteredList!, now.subtract(const Duration(days: 2))) ?? 0,
-                color: ColorsStandards.buttonYesColor1,
-              ),
-            ],
-          ),
-          BarChartGroupData(
-            x: 5,
-            barRods: [
-              BarChartRodData(
-                fromY: 0,
-                toY: countInDate(filteredList!, now.subtract(const Duration(days: 1))) ?? 0,
-                color: ColorsStandards.buttonYesColor1,
-              ),
-            ],
-          ),
-          BarChartGroupData(
-            x: 6,
-            barRods: [
-              BarChartRodData(
-                fromY: 0,
-                toY: countInDate(filteredList!, now) ?? 0,
-                color: ColorsStandards.buttonYesColor1,
-              ),
-            ],
-          ),
-        ],
+            showingTooltipIndicators: count > 0 ? [0] : [], // Chỉ hiển thị tooltip khi giá trị > 0
+          );
+        }),
         titlesData: FlTitlesData(
           show: true,
           bottomTitles: AxisTitles(
@@ -187,39 +145,41 @@ class BarChartWidget extends StatelessWidget {
             ),
           ),
           leftTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 40,
-              getTitlesWidget: (value, meta) {
-                String label;
-                if (value == 0) {
-                  label = '0';
-                } else if (value == 1) {
-                  label = '1';
-                } else if (value == 2) {
-                  label = '2';
-                } else if (value == 3) {
-                  label = '3';
-                } else if (value == 4) {
-                  label = '4';
-                } else if (value == 5) {
-                  label = '5';
-                } else {
-                  label = '';
-                }
-                return Text(label);
-              },
-            ),
+            sideTitles: SideTitles(showTitles: false),
           ),
           topTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: false), // Ẩn nhãn trên cùng
+            sideTitles: SideTitles(showTitles: false),
           ),
           rightTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: false), // Ẩn nhãn bên phải
+            sideTitles: SideTitles(showTitles: false),
           ),
         ),
-        maxY: 5, // Đặt giá trị tối đa cho cột y
+        maxY: getMax() + 2.0, // Đặt giá trị tối đa cho cột y
         gridData: const FlGridData(show: true, drawHorizontalLine: true, horizontalInterval: 1),
+        barTouchData: BarTouchData(
+          enabled: true,
+          touchTooltipData: BarTouchTooltipData(
+            getTooltipColor: (groupIndex) {
+              return Colors.transparent;
+            },
+            tooltipMargin: 1,
+            tooltipPadding: EdgeInsets.zero,
+            tooltipBorder: BorderSide.none,
+            getTooltipItem: (group, groupIndex, rod, rodIndex) {
+              if (rod.toY == 0) {
+                return null;
+              }
+              return BarTooltipItem(
+                rod.toY.toStringAsFixed(0),
+                const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
+              );
+            },
+          ),
+        ),
       ),
     );
   }
