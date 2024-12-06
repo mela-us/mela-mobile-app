@@ -13,13 +13,13 @@ import 'package:mela/domain/usecase/forgot_password/verify_otp_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_lectures_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_levels_usecase.dart';
-import 'package:mela/domain/usecase/post/get_post_usecase.dart';
+
 import 'package:mela/domain/usecase/search/add_history_search_usecase.dart';
 import 'package:mela/domain/usecase/search/delete_all_history_search_usecase.dart';
 import 'package:mela/domain/usecase/search/delete_history_search_usecase.dart';
 import 'package:mela/domain/usecase/search/get_search_lectures_result_usecase.dart';
 import 'package:mela/domain/usecase/question/submit_result_usecase.dart';
-import 'package:mela/domain/usecase/search/get_search_lectures_result.dart';
+
 import 'package:mela/domain/usecase/topic/find_topic_by_id_usecase.dart';
 import 'package:mela/domain/usecase/topic/get_topics_usecase.dart';
 import 'package:mela/domain/usecase/user/get_user_info_usecase.dart';
@@ -35,9 +35,7 @@ import '../../repository/search/search_repository.dart';
 import '../../repository/topic/topic_repository.dart';
 import '../../repository/user_login/user_login_repository.dart';
 
-import '../../usecase/lecture/get_divided_lecture_usecase.dart';
 import '../../usecase/lecture/get_lectures_are_learning_usecase.dart';
-import '../../usecase/lecture/get_levels_usecase.dart';
 import '../../usecase/question/get_questions_usecase.dart';
 import '../../usecase/search/get_history_search_list_usecase.dart';
 import '../../usecase/user_login/is_logged_in_usecase.dart';

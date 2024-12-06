@@ -17,7 +17,16 @@ import 'package:mela/presentation/question/store/single_question/single_question
 import 'package:mela/presentation/question/store/timer/timer_store.dart';
 
 import '../../../di/service_locator.dart';
+import '../../../domain/usecase/forgot_password/create_new_password_usecase.dart';
+import '../../../domain/usecase/forgot_password/verify_exist_email_usecase.dart';
+import '../../../domain/usecase/forgot_password/verify_otp_usecase.dart';
+import '../../../domain/usecase/search/add_history_search_usecase.dart';
+import '../../../domain/usecase/search/delete_all_history_search_usecase.dart';
+import '../../../domain/usecase/search/delete_history_search_usecase.dart';
 import '../../../domain/usecase/user/get_user_info_usecase.dart';
+import '../../forgot_password_screen/store/create_new_password_store/create_new_password_store.dart';
+import '../../forgot_password_screen/store/enter_email_store/enter_email_store.dart';
+import '../../forgot_password_screen/store/enter_otp_store.dart/enter_otp_store.dart';
 import '../../question/store/question_store.dart';
 import 'package:mela/domain/usecase/exercise/get_exercises_usecase.dart';
 import 'package:mela/domain/usecase/search/get_history_search_list_usecase.dart';
@@ -59,18 +68,6 @@ class StoreModule {
     );
 
     // stores:------------------------------------------------------------------
-    // getIt.registerSingleton<UserStore>(
-    //   UserStore(
-    //     getIt<IsLoggedInUseCase>(),
-    //     getIt<SaveLoginStatusUseCase>(),
-    //     getIt<LoginUseCase>(),
-    //     getIt<FormErrorStore>(),
-    //     getIt<ErrorStore>(),
-    //   ),
-    // );
-    getIt.registerSingleton<PostStore>(
-        PostStore(getIt<GetPostUseCase>(), getIt<ErrorStore>()));
-
     getIt.registerSingleton<UserLoginStore>(
       UserLoginStore(
         getIt<IsLoggedInUseCase>(),
@@ -116,8 +113,6 @@ class StoreModule {
 
     //After LectureStore because TopicStore use LectureStore
     getIt.registerSingleton<TopicStore>(TopicStore(getIt<GetTopicsUsecase>()));
-
-    getIt.registerSingleton<SingleQuestionStore>(SingleQuestionStore());
 
     getIt.registerSingleton<SingleQuestionStore>(
       SingleQuestionStore(
