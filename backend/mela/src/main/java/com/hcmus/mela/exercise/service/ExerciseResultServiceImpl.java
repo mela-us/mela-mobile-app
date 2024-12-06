@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.*;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,11 +47,14 @@ public class ExerciseResultServiceImpl implements ExerciseResultService {
 
     @Override
     public ExerciseResultDto getBestExerciseResult(UUID userId, UUID exerciseId) {
+        MatchOperation matchStage = Aggregation.match(Criteria.where("user_id").is(userId).and("exercise_id").is(exerciseId));
+        
         SortOperation sortStage = Aggregation.sort(Sort.Direction.DESC, "total_correct_answers");
 
         LimitOperation limitStage = Aggregation.limit(1);
 
         Aggregation aggregation = Aggregation.newAggregation(
+                matchStage,
                 sortStage,
                 limitStage
         );
