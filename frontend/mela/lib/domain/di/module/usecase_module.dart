@@ -153,7 +153,7 @@ class UseCaseModule {
     //stats:--------------------------------------------------------------------
     getIt.registerSingleton<GetProgressListUseCase>(
       GetProgressListUseCase(
-          getIt<StatRepository>(), getIt<RefreshAccessTokenUsecase>()),
+          getIt<StatRepository>(), getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()),
     );
     getIt.registerSingleton<GetDetailedProgressListUseCase>(
       GetDetailedProgressListUseCase(getIt<StatRepository>()),
@@ -167,7 +167,7 @@ class UseCaseModule {
     );
     // user:--------------------------------------------------------------------
     getIt.registerSingleton<GetUserInfoUseCase>(GetUserInfoUseCase(
-        getIt<UserRepository>(), getIt<RefreshAccessTokenUsecase>()));
+        getIt<UserRepository>(), getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()));
 
     //forgot password:----------------------------------------------------------
     getIt.registerSingleton<VerifyExistEmailUseCase>(
@@ -177,7 +177,4 @@ class UseCaseModule {
     getIt.registerSingleton<CreateNewPasswordUsecase>(
         CreateNewPasswordUsecase(getIt<ForgotPasswordRepository>()));
   }
-
-  // I brought register for user info and logout to the back as RefreshAccessTokenUsecase HAS to be registered first
-  // toi dem register user ra sau boi vi RefreshAccessTokenUsecase phai duoc dang ky truoc khi dang ky getUserInfo
 }

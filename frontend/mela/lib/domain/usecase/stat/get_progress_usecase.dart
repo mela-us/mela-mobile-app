@@ -5,13 +5,15 @@ import 'package:mela/core/domain/usecase/use_case.dart';
 import 'package:mela/domain/entity/stat/progress_list.dart';
 import 'package:mela/domain/repository/stat/stat_repository.dart';
 
+import '../user/logout_usecase.dart';
 import '../user_login/refresh_access_token_usecase.dart';
 
 class GetProgressListUseCase extends UseCase<ProgressList, void>{
   final StatRepository _statRepository;
   final RefreshAccessTokenUsecase _refreshAccessTokenUsecase;
+  final LogoutUseCase _logoutUseCase;
 
-  GetProgressListUseCase(this._statRepository, this._refreshAccessTokenUsecase);
+  GetProgressListUseCase(this._statRepository, this._refreshAccessTokenUsecase, this._logoutUseCase);
 
   @override
   Future<ProgressList> call({required params}) async {
@@ -27,6 +29,8 @@ class GetProgressListUseCase extends UseCase<ProgressList, void>{
             print("----------->E1: $e");
             return await call(params: null);
           }
+          await _logoutUseCase.call(params: null);
+          rethrow;
         }
         print("----------->E2: $e");
         rethrow;
