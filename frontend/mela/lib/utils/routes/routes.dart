@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mela/presentation/forgot_password_screen/create_new_password_in_forgot_password_screen.dart';
 import 'package:mela/presentation/forgot_password_screen/enter_email_in_forgot_password_screen.dart';
 import 'package:mela/presentation/forgot_password_screen/enter_otp_in_forgot_password_screen.dart';
+import 'package:mela/presentation/home_screen/home_screen.dart';
 import 'package:mela/presentation/question/question.dart';
 import 'package:mela/presentation/result/result.dart';
 import 'package:mela/presentation/review/review.dart';
@@ -50,6 +51,7 @@ class Routes {
   static const String stats = '/stats';
   static const String searchStats = '/search_stats';
   static const String filterStats = '/filter_stats';
+  static const String homeScreen = "/home_screen";
   static const String allScreens = '/all_screens';
 
   static final routes = <String, WidgetBuilder>{
@@ -62,7 +64,8 @@ class Routes {
         const EnterOTPInForgotPasswordScreen(),
     createNewPasswordInForgotPasswordScreen: (BuildContext context) =>
         CreateNewPasswordInForgotPasswordScreen(),
-    coursesScreen: (BuildContext context) => const CoursesScreen(),
+    //coursesScreen: (BuildContext context) => const CoursesScreen(),
+    homeScreen: (BuildContext context) => const HomeScreen(),
     allLecturesInTopicScreen: (BuildContext context) =>
         AllLecturesInTopicScreen(),
     dividedLecturesAndExercisesScreen: (BuildContext context) =>

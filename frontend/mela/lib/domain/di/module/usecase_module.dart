@@ -1,7 +1,6 @@
 import 'dart:async';
-
-import 'package:http/http.dart';
 import 'package:mela/domain/repository/lecture/lecture_repository.dart';
+import 'package:mela/domain/repository/level/level_repository.dart';
 import 'package:mela/domain/repository/post/post_repository.dart';
 import 'package:mela/domain/repository/user/user_repository.dart';
 import 'package:mela/domain/repository/user_register/user_signup_repostiory.dart';
@@ -9,7 +8,7 @@ import 'package:mela/domain/repository/user_register/user_signup_repostiory.dart
 import 'package:mela/domain/usecase/exercise/get_exercises_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_lectures_usecase.dart';
-import 'package:mela/domain/usecase/lecture/get_levels_usecase.dart';
+import 'package:mela/domain/usecase/level/get_level_list_usecase.dart';
 import 'package:mela/domain/usecase/post/get_post_usecase.dart';
 import 'package:mela/domain/usecase/topic/find_topic_by_id_usecase.dart';
 import 'package:mela/domain/usecase/topic/get_topics_usecase.dart';
@@ -84,19 +83,13 @@ class UseCaseModule {
     );
     // question:----------------------------------------------------------------
     getIt.registerSingleton<GetQuestionsUseCase>(
-      GetQuestionsUseCase(
-          getIt<QuestionRepository>(),
-          getIt<RefreshAccessTokenUsecase>(),
-          getIt<LogoutUseCase>()
-      ),
+      GetQuestionsUseCase(getIt<QuestionRepository>(),
+          getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()),
     );
 
     getIt.registerSingleton<SubmitResultUseCase>(
-      SubmitResultUseCase(
-          getIt<SaveResultApi>(),
-          getIt<RefreshAccessTokenUsecase>(),
-          getIt<LogoutUseCase>()
-      ),
+      SubmitResultUseCase(getIt<SaveResultApi>(),
+          getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()),
     );
 
     /// topic:------------------------------------------------------------------
@@ -107,6 +100,12 @@ class UseCaseModule {
 
     getIt.registerSingleton<FindTopicByIdUsecase>(
         FindTopicByIdUsecase(getIt<TopicRepository>()));
+        
+    //level:--------------------------------------------------------------------
+    getIt.registerSingleton<GetLevelListUsecase>(GetLevelListUsecase(
+        getIt<LevelRepository>(),
+        getIt<RefreshAccessTokenUsecase>(),
+        getIt<LogoutUseCase>()));
 
     //lecture:--------------------------------------------------------------------
     getIt.registerSingleton<GetLecturesUsecase>(GetLecturesUsecase(
@@ -117,11 +116,6 @@ class UseCaseModule {
     getIt.registerSingleton<GetLecturesAreLearningUsecase>(
         GetLecturesAreLearningUsecase(getIt<LectureRepository>(),
             getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()));
-
-    getIt.registerSingleton<GetLevelsUsecase>(GetLevelsUsecase(
-        getIt<LectureRepository>(),
-        getIt<RefreshAccessTokenUsecase>(),
-        getIt<LogoutUseCase>()));
 
     getIt.registerSingleton<GetDividedLectureUsecase>(GetDividedLectureUsecase(
         getIt<LectureRepository>(),
@@ -152,8 +146,8 @@ class UseCaseModule {
 
     //stats:--------------------------------------------------------------------
     getIt.registerSingleton<GetProgressListUseCase>(
-      GetProgressListUseCase(
-          getIt<StatRepository>(), getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()),
+      GetProgressListUseCase(getIt<StatRepository>(),
+          getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()),
     );
     getIt.registerSingleton<GetDetailedProgressListUseCase>(
       GetDetailedProgressListUseCase(getIt<StatRepository>()),
@@ -167,7 +161,9 @@ class UseCaseModule {
     );
     // user:--------------------------------------------------------------------
     getIt.registerSingleton<GetUserInfoUseCase>(GetUserInfoUseCase(
-        getIt<UserRepository>(), getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()));
+        getIt<UserRepository>(),
+        getIt<RefreshAccessTokenUsecase>(),
+        getIt<LogoutUseCase>()));
 
     //forgot password:----------------------------------------------------------
     getIt.registerSingleton<VerifyExistEmailUseCase>(

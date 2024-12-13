@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'topic_store.dart';
+part of 'level_store.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -8,32 +8,16 @@ part of 'topic_store.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$TopicStore on _TopicStore, Store {
+mixin _$LevelStore on _LevelStore, Store {
   Computed<bool>? _$loadingComputed;
 
   @override
   bool get loading => (_$loadingComputed ??=
-          Computed<bool>(() => super.loading, name: '_TopicStore.loading'))
+          Computed<bool>(() => super.loading, name: '_LevelStore.loading'))
       .value;
 
-  late final _$topicListAtom =
-      Atom(name: '_TopicStore.topicList', context: context);
-
-  @override
-  TopicList? get topicList {
-    _$topicListAtom.reportRead();
-    return super.topicList;
-  }
-
-  @override
-  set topicList(TopicList? value) {
-    _$topicListAtom.reportWrite(value, super.topicList, () {
-      super.topicList = value;
-    });
-  }
-
   late final _$lecturesAreLearningListAtom =
-      Atom(name: '_TopicStore.lecturesAreLearningList', context: context);
+      Atom(name: '_LevelStore.lecturesAreLearningList', context: context);
 
   @override
   LectureList? get lecturesAreLearningList {
@@ -50,7 +34,7 @@ mixin _$TopicStore on _TopicStore, Store {
   }
 
   late final _$levelListAtom =
-      Atom(name: '_TopicStore.levelList', context: context);
+      Atom(name: '_LevelStore.levelList', context: context);
 
   @override
   LevelList? get levelList {
@@ -66,7 +50,7 @@ mixin _$TopicStore on _TopicStore, Store {
   }
 
   late final _$errorStringAtom =
-      Atom(name: '_TopicStore.errorString', context: context);
+      Atom(name: '_LevelStore.errorString', context: context);
 
   @override
   String get errorString {
@@ -82,7 +66,7 @@ mixin _$TopicStore on _TopicStore, Store {
   }
 
   late final _$isUnAuthorizedAtom =
-      Atom(name: '_TopicStore.isUnAuthorized', context: context);
+      Atom(name: '_LevelStore.isUnAuthorized', context: context);
 
   @override
   bool get isUnAuthorized {
@@ -97,24 +81,8 @@ mixin _$TopicStore on _TopicStore, Store {
     });
   }
 
-  late final _$fetchTopicsFutureAtom =
-      Atom(name: '_TopicStore.fetchTopicsFuture', context: context);
-
-  @override
-  ObservableFuture<TopicList?> get fetchTopicsFuture {
-    _$fetchTopicsFutureAtom.reportRead();
-    return super.fetchTopicsFuture;
-  }
-
-  @override
-  set fetchTopicsFuture(ObservableFuture<TopicList?> value) {
-    _$fetchTopicsFutureAtom.reportWrite(value, super.fetchTopicsFuture, () {
-      super.fetchTopicsFuture = value;
-    });
-  }
-
   late final _$fetchLecturesAreLearningFutureAtom = Atom(
-      name: '_TopicStore.fetchLecturesAreLearningFuture', context: context);
+      name: '_LevelStore.fetchLecturesAreLearningFuture', context: context);
 
   @override
   ObservableFuture<LectureList?> get fetchLecturesAreLearningFuture {
@@ -131,7 +99,7 @@ mixin _$TopicStore on _TopicStore, Store {
   }
 
   late final _$fetchLevelsFutureAtom =
-      Atom(name: '_TopicStore.fetchLevelsFuture', context: context);
+      Atom(name: '_LevelStore.fetchLevelsFuture', context: context);
 
   @override
   ObservableFuture<LevelList?> get fetchLevelsFuture {
@@ -146,37 +114,44 @@ mixin _$TopicStore on _TopicStore, Store {
     });
   }
 
-  late final _$getTopicsAsyncAction =
-      AsyncAction('_TopicStore.getTopics', context: context);
+  late final _$getAreLearningLecturesAsyncAction =
+      AsyncAction('_LevelStore.getAreLearningLectures', context: context);
 
   @override
-  Future<dynamic> getTopics() {
-    return _$getTopicsAsyncAction.run(() => super.getTopics());
+  Future<dynamic> getAreLearningLectures() {
+    return _$getAreLearningLecturesAsyncAction
+        .run(() => super.getAreLearningLectures());
   }
 
-  late final _$_TopicStoreActionController =
-      ActionController(name: '_TopicStore', context: context);
+  late final _$getLevelsAsyncAction =
+      AsyncAction('_LevelStore.getLevels', context: context);
+
+  @override
+  Future<dynamic> getLevels() {
+    return _$getLevelsAsyncAction.run(() => super.getLevels());
+  }
+
+  late final _$_LevelStoreActionController =
+      ActionController(name: '_LevelStore', context: context);
 
   @override
   void resetErrorString() {
-    final _$actionInfo = _$_TopicStoreActionController.startAction(
-        name: '_TopicStore.resetErrorString');
+    final _$actionInfo = _$_LevelStoreActionController.startAction(
+        name: '_LevelStore.resetErrorString');
     try {
       return super.resetErrorString();
     } finally {
-      _$_TopicStoreActionController.endAction(_$actionInfo);
+      _$_LevelStoreActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   String toString() {
     return '''
-topicList: ${topicList},
 lecturesAreLearningList: ${lecturesAreLearningList},
 levelList: ${levelList},
 errorString: ${errorString},
 isUnAuthorized: ${isUnAuthorized},
-fetchTopicsFuture: ${fetchTopicsFuture},
 fetchLecturesAreLearningFuture: ${fetchLecturesAreLearningFuture},
 fetchLevelsFuture: ${fetchLevelsFuture},
 loading: ${loading}

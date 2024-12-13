@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:mela/data/local/datasources/history_search/history_search_datasource.dart';
+import 'package:mela/data/network/apis/level/level_api.dart';
 import 'package:mela/data/network/apis/questions/questions_api.dart';
 import 'package:mela/data/network/apis/exercises/exercise_api.dart';
 import 'package:mela/data/network/apis/forgot_password/forgot_password_api.dart';
@@ -12,13 +13,14 @@ import 'package:mela/data/network/apis/searchs/search_api.dart';
 import 'package:mela/data/network/apis/topics/topic_api.dart';
 import 'package:mela/data/network/apis/user/logout_api.dart';
 import 'package:mela/data/network/apis/user/user_info_api.dart';
+import 'package:mela/data/repository/level/level_repository_impl.dart';
 import 'package:mela/data/repository/question/question_repository_impl.dart';
 import 'package:mela/data/repository/setting/setting_repository_impl.dart';
 import 'package:mela/data/repository/stat/stat_search_impl.dart';
 import 'package:mela/data/securestorage/secure_storage_helper.dart';
 import 'package:mela/data/sharedpref/shared_preference_helper.dart';
-import 'package:mela/domain/entity/topic/topic.dart';
 import 'package:mela/domain/repository/forgot_password/forgot_password_repository.dart';
+import 'package:mela/domain/repository/level/level_repository.dart';
 import 'package:mela/domain/repository/question/question_repository.dart';
 import 'package:mela/domain/repository/setting/setting_repository.dart';
 import 'package:mela/domain/repository/stat/stat_search_repository.dart';
@@ -59,14 +61,11 @@ class RepositoryModule {
       getIt<PostDataSource>(),
     ));
     //UserInfor:
-    getIt.registerSingleton<UserRepository>(
-        UserRepositoryImpl(
-            getIt<LogoutApi>(),
-            getIt<UserInfoApi>(),
-            getIt<SecureStorageHelper>(),
-            getIt<SharedPreferenceHelper>()
-        )
-    );
+    getIt.registerSingleton<UserRepository>(UserRepositoryImpl(
+        getIt<LogoutApi>(),
+        getIt<UserInfoApi>(),
+        getIt<SecureStorageHelper>(),
+        getIt<SharedPreferenceHelper>()));
 
     //Setting:------------------------------------------------------------------
     getIt.registerSingleton<SettingRepository>(SettingRepositoryImpl(
@@ -90,6 +89,8 @@ class RepositoryModule {
 
     getIt.registerSingleton<TopicRepository>(
         TopicRepositoryImpl(getIt<TopicApi>()));
+    getIt.registerSingleton<LevelRepository>(
+        LevelRepositoryImpl(getIt<LevelApi>()));
 
     getIt.registerSingleton<LectureRepository>(
         LectureRepositoryImpl(getIt<LectureApi>()));
@@ -107,9 +108,8 @@ class RepositoryModule {
         StatSearchRepositoryImpl() as StatSearchRepository);
 
     //Practice De
-    getIt.registerSingleton<QuestionRepository>(
-        QuestionRepositoryImpl(
-          getIt<QuestionsApi>(),
-        ) as QuestionRepository);
+    getIt.registerSingleton<QuestionRepository>(QuestionRepositoryImpl(
+      getIt<QuestionsApi>(),
+    ) as QuestionRepository);
   }
 }

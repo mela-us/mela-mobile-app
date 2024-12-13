@@ -1,21 +1,23 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:mela/core/domain/usecase/use_case.dart';
-import 'package:mela/domain/repository/lecture/lecture_repository.dart';
+import 'package:mela/domain/entity/level/level_list.dart';
+import 'package:mela/domain/repository/level/level_repository.dart';
 import 'package:mela/domain/usecase/user/logout_usecase.dart';
 import 'package:mela/domain/usecase/user_login/refresh_access_token_usecase.dart';
 
-import '../../entity/level/level_list.dart';
-
-class GetLevelsUsecase extends UseCase<LevelList, void> {
-  final LectureRepository _lectureRepository;
+class GetLevelListUsecase extends UseCase<void, LevelList> {
+  final LevelRepository _levelRepository;
   final RefreshAccessTokenUsecase _refreshAccessTokenUsecase;
   final LogoutUseCase _logoutUseCase;
-  GetLevelsUsecase(this._lectureRepository, this._refreshAccessTokenUsecase,
+  GetLevelListUsecase(this._levelRepository, this._refreshAccessTokenUsecase,
       this._logoutUseCase);
   @override
   Future<LevelList> call({required void params}) async {
+    //it not use accessToken so do not need to refresh accessToken
     try {
-      return await _lectureRepository.getLevels();
+      return await _levelRepository.getLevels();
     } catch (e) {
       if (e is DioException) {
         //eg accessToken is expired

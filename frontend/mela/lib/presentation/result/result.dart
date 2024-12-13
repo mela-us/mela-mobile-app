@@ -61,7 +61,7 @@ class _ResultScreenState extends State<ResultScreen> {
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.appBackground,
           appBar: PracticeAppBar(pressedBack: () async {
-            await _topicStore.getAreLearningLectures();
+            //await _topicStore.getAreLearningLectures();
             if (_lectureStore.currentTopic != null){
               await _lectureStore.getListLectureByTopicIdAndLevelId();
             }

@@ -8,12 +8,6 @@ class LectureApi {
   DioClient _dioClient;
   LectureApi(this._dioClient);
 
-  Future<LevelList> getLevels() async {
-    print("================================ở getLevels API");
-    final responseData = await _dioClient.get(EndpointsConst.getLevels);
-    return LevelList.fromJson(responseData['data']);
-  }
-
   Future<LectureList> getLectures(String topicId) async {
     print("================================ở getLectures API");
     final responseData = await _dioClient
@@ -22,20 +16,11 @@ class LectureApi {
     return LectureList.fromJson(responseData['data']);
   }
 
-  Future<LectureList> getLecturesAreLearning() async {
-    print("================================ở getLectureAreLearning API");
-    final responseData = await _dioClient.get(
-        EndpointsConst.getLecturesAreLearning,
-        queryParameters: {'size': 3});
-    return LectureList.fromJson(responseData['data']);
-  }
-
   Future<DividedLectureList> getDividedLectures(String lectureId) async {
     print("================================ở getDividedLectured API");
     final url =
         EndpointsConst.getDividedLectures.replaceAll(':lectureId', lectureId);
-    final responseData =
-        await _dioClient.get(url);
+    final responseData = await _dioClient.get(url);
 
     //convert data
     List<dynamic> json = responseData['data'];
@@ -46,5 +31,13 @@ class LectureApi {
     // print("responseData: ${json}");
 
     return DividedLectureList.fromJson(json);
+  }
+
+  Future<LectureList> getLecturesAreLearning() async {
+    print("================================ở getLectureAreLearning API");
+    final responseData = await _dioClient.get(
+        EndpointsConst.getLecturesAreLearning,
+        queryParameters: {'size': 3});
+    return LectureList.fromJson(responseData['data']);
   }
 }

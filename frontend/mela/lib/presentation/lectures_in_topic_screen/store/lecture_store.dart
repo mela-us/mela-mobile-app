@@ -3,7 +3,6 @@ import 'package:mela/domain/entity/lecture/lecture_list.dart';
 import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_lectures_are_learning_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_lectures_usecase.dart';
-import 'package:mela/domain/usecase/lecture/get_levels_usecase.dart';
 import 'package:mela/utils/dio/dio_error_util.dart';
 import 'package:mobx/mobx.dart';
 
@@ -15,12 +14,10 @@ class LectureStore = _LectureStore with _$LectureStore;
 abstract class _LectureStore with Store {
   //usecase--------------
   GetLecturesUsecase _getLecturesUsecase;
-  GetLecturesAreLearningUsecase getLecturesAreLearningUsecase;
   GetDividedLectureUsecase getDividedLectureUsecase; //use in topicstore
 
-  GetLevelsUsecase getLevelsUsecase;
-  _LectureStore(this._getLecturesUsecase, this.getLecturesAreLearningUsecase,
-      this.getLevelsUsecase, this.getDividedLectureUsecase);
+  _LectureStore(this._getLecturesUsecase,
+    this.getDividedLectureUsecase);
 
 //obserbale
   @observable

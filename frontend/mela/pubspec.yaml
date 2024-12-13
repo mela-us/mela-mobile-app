@@ -81,7 +81,7 @@ flutter:
   assets:
     - assets/fonts/
     - assets/images/
-    - assets/images/topics/
+    - assets/images/grades/
     - assets/icons/
     - assets/icons/arrow_back_longer.png
     - assets/icons/clock.png
