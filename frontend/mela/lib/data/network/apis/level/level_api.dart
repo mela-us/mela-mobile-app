@@ -15,7 +15,7 @@ class LevelApi {
     LevelList demo = LevelList(
       levelList: [
         Level(
-          levelId: "1",
+          levelId: "b1d0d171-d4f2-4768-a66c-3104840c94b4",
           levelName: "Grade 1",
           levelImagePath: "assets/images/grades/grade1.png",
         ),
@@ -40,7 +40,7 @@ class LevelApi {
           levelImagePath: "assets/images/grades/grade5.png",
         ),
         Level(
-          levelId: "6",
+          levelId: "3b0a7190-1cdb-4362-87d0-15532436b8ad",
           levelName: "Grade 6",
           levelImagePath: "assets/images/grades/grade6.png",
         ),

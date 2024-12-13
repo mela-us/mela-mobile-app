@@ -14,8 +14,6 @@ import 'package:mela/utils/routes/routes.dart';
 import '../constants/route_observer.dart';
 import '../di/service_locator.dart';
 
-import 'courses_screen/courses_screen.dart';
-
 import 'signup_login_screen/store/user_login_store/user_login_store.dart';
 
 

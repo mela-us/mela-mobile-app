@@ -2,6 +2,8 @@ class Exercise {
   String exerciseId;
   String exerciseName;
   String lectureId;
+  String topicId;
+  String levelId;
   int ordinalNumber;
   int totalQuestions;
   BestResult? bestResult;
@@ -11,6 +13,8 @@ class Exercise {
     required this.lectureId,
     required this.ordinalNumber,
     required this.totalQuestions,
+    required this.topicId,
+    required this.levelId,
     this.bestResult,
   });
   get exerciseUid => exerciseId;
@@ -23,6 +27,8 @@ class Exercise {
         lectureId: json["lectureId"],
         ordinalNumber: json["ordinalNumber"],
         totalQuestions: json["totalQuestions"],
+        topicId: json["topicId"] ?? "206eb409-4078-40b1-9024-185b2c360645",// Default topicId
+        levelId: json["levelId"] ?? "b1d0d171-d4f2-4768-a66c-3104840c94b4",// Default levelId
         bestResult: json["bestResult"] != null
             ? BestResult.fromJson(json["bestResult"])
             : null,
@@ -34,6 +40,8 @@ class Exercise {
         "lectureId": lectureId,
         "ordinalNumber": ordinalNumber,
         "totalQuestions": totalQuestions,
+        "topicId": topicId,
+        "levelId": levelId,
         "bestResult": bestResult?.toJson(),
       };
 }

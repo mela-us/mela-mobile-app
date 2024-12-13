@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:http/http.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/lecture/lecture_list.dart';
-import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
 import 'package:mela/presentation/filter_screen/store/filter_store.dart';
 import 'package:mela/presentation/filter_screen/widgets/checkbox_row.dart';
+import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 import 'package:mela/presentation/search_screen/store/search_store.dart';
 
 import 'widgets/filter_button.dart';
@@ -23,7 +22,7 @@ class _FilterScreenState extends State<FilterScreen> {
   final TextEditingController endController = TextEditingController();
   final SearchStore _searchStore = getIt<SearchStore>();
   LectureList filteredLectures = LectureList(lectures: []);
-  final TopicStore _topicStore = getIt<TopicStore>();
+  final LevelStore _levelStore = getIt<LevelStore>();
   final List<Map<String, dynamic>> rangeChoices = [
     {"label": "0%-50%", "start": 0.0, "end": 50.0},
     {"label": "20%-80%", "start": 20.0, "end": 80.0},
@@ -66,15 +65,15 @@ class _FilterScreenState extends State<FilterScreen> {
         _filterStore.isHighSchoolSelected) {
       if (!_filterStore.isPrimarySelected) {
         filteredLectures.lectures.removeWhere((lecture) =>
-            lecture.levelId == _topicStore.levelList!.levelList[0].levelId);
+            lecture.levelId == _levelStore.levelList!.levelList[0].levelId);
       }
       if (!_filterStore.isSecondarySelected) {
         filteredLectures.lectures.removeWhere((lecture) =>
-            lecture.levelId == _topicStore.levelList!.levelList[1].levelId);
+            lecture.levelId == _levelStore.levelList!.levelList[1].levelId);
       }
       if (!_filterStore.isHighSchoolSelected) {
         filteredLectures.lectures.removeWhere((lecture) =>
-            lecture.levelId == _topicStore.levelList!.levelList[2].levelId);
+            lecture.levelId == _levelStore.levelList!.levelList[2].levelId);
       }
     }
 

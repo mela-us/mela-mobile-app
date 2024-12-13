@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
-import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
-import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
+import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 import 'package:mela/presentation/question/store/question_store.dart';
 import 'package:mela/utils/routes/routes.dart';
 
 import '../../../domain/entity/exercise/exercise.dart';
 
 class ExerciseItem extends StatelessWidget {
-  final _topicStore = getIt<TopicStore>();
-  final _lectureStore = getIt<LectureStore>();
+  final _levelStore= getIt<LevelStore>();
   final _questionStore = getIt<QuestionStore>();
   final Exercise currentExercise;
 
@@ -20,20 +18,10 @@ class ExerciseItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //Navigator from all_lectures_screen
-    String topicName = _topicStore.getTopicNameByIdInTopicStore(
-        _lectureStore.getTopicIdInLectures(currentExercise.lectureId));
-    String levelName = _topicStore.getLevelNameInTopicStore(_lectureStore
-        .getLevelIdByLectureIdInLectures(currentExercise.lectureId));
-
-    //Navigator from courses_screen
-    if (topicName.isEmpty || levelName.isEmpty) {
-      topicName = _topicStore.getTopicNameByIdInTopicStore(_topicStore
-          .getTopicIdInAreLearningLectures(currentExercise.lectureId));
-      levelName = _topicStore.getLevelNameInTopicStore(
-          _topicStore.getLevelIdByLectureIdInAreLearningLectures(
-              currentExercise.lectureId));
-    }
+    String topicName =
+        _levelStore.getTopicNameById(currentExercise.topicId);
+    String levelName =
+        _levelStore.getLevelNameById(currentExercise.levelId);
     return GestureDetector(
       onTap: () {
         _questionStore.setQuestionsUid(currentExercise.exerciseId);

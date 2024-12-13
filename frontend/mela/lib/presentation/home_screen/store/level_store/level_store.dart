@@ -130,49 +130,30 @@ abstract class _LevelStore with Store {
   }
 
   //Untils--------------------------------------------------------------
-  //Use in exercise
-  String getTopicIdInAreLearningLectures(String lectureId) {
-    if (lecturesAreLearningList == null) return "";
-
-    for (var lecture in lecturesAreLearningList!.lectures) {
-      if (lecture.lectureId == lectureId) {
-        return lecture.topicId;
-      }
+  String getLevelNameById(String levelId) {
+    if (levelList == null) return "Null";
+    print("----------12345--------------$levelId");
+    for (var level in levelList!.levelList) {
+      print("level.levelId: ${level.levelId} voi name ${level.levelName}");
     }
-
-    return "";
-  }
-
-  String getLevelIdByLectureIdInAreLearningLectures(String lectureId) {
-    if (lecturesAreLearningList == null) return "";
-
-    for (var lecture in lecturesAreLearningList!.lectures) {
-      if (lecture.lectureId == lectureId) {
-        return lecture.levelId;
-      }
-    }
-
-    return "";
-  }
-
-  // String getTopicNameByIdInTopicStore(String topicId) {
-  //   if (topicList == null) return "";
-  //   for (Topic topic in topicList!.topics) {
-  //     if (topic.topicId == topicId) {
-  //       return topic.topicName;
-  //     }
-  //   }
-  //   return "";
-  // }
-
-  String getLevelNameInTopicStore(String levelId) {
-    if (levelList == null) return "";
-
     for (var level in levelList!.levelList) {
       if (level.levelId == levelId) {
         return level.levelName;
       }
     }
-    return "";
+
+    return "Default";
+  }
+
+  String getTopicNameById(String topicId) {
+    if (topicList == null) return "Null";
+
+    for (var topic in topicList!.topics) {
+      if (topic.topicId == topicId) {
+        return topic.topicName;
+      }
+    }
+
+    return "Default";
   }
 }

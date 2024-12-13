@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mela/di/service_locator.dart';
-import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
 import 'package:mela/presentation/home_screen/home_screen.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 import 'package:mela/presentation/stats/stats.dart';
@@ -8,7 +7,6 @@ import 'package:mela/presentation/personal/personal.dart';
 
 import '../core/widgets/custom_navigation_bar.dart';
 import 'chat/chat_screen.dart';
-import 'courses_screen/courses_screen.dart';
 
 class AllScreens extends StatefulWidget {
   @override

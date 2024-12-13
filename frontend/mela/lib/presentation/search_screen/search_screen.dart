@@ -4,8 +4,8 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/core/widgets/progress_indicator_widget.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/filter_screen/store/filter_store.dart';
-import 'package:mela/presentation/lectures_in_topic_screen/widgets/lecture_item.dart';
 import 'package:mela/presentation/search_screen/widgets/search_bar.dart';
+import 'package:mela/presentation/topic_lecture_in_level_screen/widgets/lecture_item.dart';
 import 'package:mela/utils/routes/routes.dart';
 import 'package:mobx/mobx.dart';
 

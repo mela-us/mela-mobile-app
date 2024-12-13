@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/content_in_divided_lecture_screen/content_in_divided_lecture_screen.dart';
-import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
-import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
+import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 
 import '../../../domain/entity/divided_lecture/divided_lecture.dart';
 
 class DividedLectureItem extends StatelessWidget {
   final DividedLecture currentDividedLecture;
-  final TopicStore _topicStore = getIt<TopicStore>();
-  final LectureStore _lectureStore = getIt<LectureStore>();
+  final LevelStore _levelStore = getIt<LevelStore>();
 
   DividedLectureItem({
     required this.currentDividedLecture,
@@ -18,20 +16,11 @@ class DividedLectureItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //Navigator from all_lectures_screen
-    String topicName = _topicStore.getTopicNameByIdInTopicStore(
-        _lectureStore.getTopicIdInLectures(currentDividedLecture.lectureId));
-    String levelName = _topicStore.getLevelNameInTopicStore(_lectureStore
-        .getLevelIdByLectureIdInLectures(currentDividedLecture.lectureId));
+    String topicName =
+        _levelStore.getTopicNameById(currentDividedLecture.topicId);
+    String levelName =
+        _levelStore.getLevelNameById(currentDividedLecture.levelId);
 
-    //Navigator from courses_screen
-    if (topicName.isEmpty || levelName.isEmpty) {
-      topicName = _topicStore.getTopicNameByIdInTopicStore(_topicStore
-          .getTopicIdInAreLearningLectures(currentDividedLecture.lectureId));
-      levelName = _topicStore.getLevelNameInTopicStore(
-          _topicStore.getLevelIdByLectureIdInAreLearningLectures(
-              currentDividedLecture.lectureId));
-    }
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16, left: 16, right: 16),

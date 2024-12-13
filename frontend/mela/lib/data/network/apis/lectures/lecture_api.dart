@@ -25,6 +25,8 @@ class LectureApi {
     List<dynamic> json = responseData['data'];
     json.forEach((dividedLecture) {
       dividedLecture['lectureId'] = lectureId;
+      dividedLecture['topicId'] = responseData["lecture"]["topicId"];
+      dividedLecture['levelId'] = responseData["lecture"]["levelId"];
     });
     // print("================================ResponseData LectureApi=====================with lectureId= $lectureId");
     // print("responseData: ${json}");

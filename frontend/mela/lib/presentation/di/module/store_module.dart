@@ -36,13 +36,11 @@ import '../../question/store/question_store.dart';
 import 'package:mela/domain/usecase/exercise/get_exercises_usecase.dart';
 import 'package:mela/domain/usecase/search/get_history_search_list_usecase.dart';
 import 'package:mela/domain/usecase/search/get_search_lectures_result_usecase.dart';
-import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
 import 'package:mela/presentation/divided_lectures_and_exercises_screen/store/exercise_store.dart';
 import 'package:mela/presentation/filter_screen/store/filter_store.dart';
 import 'package:mela/presentation/search_screen/store/search_store.dart';
 
 import '../../../domain/usecase/lecture/get_lectures_are_learning_usecase.dart';
-import '../../../domain/usecase/lecture/get_lectures_usecase.dart';
 
 import '../../../domain/usecase/topic/get_topics_usecase.dart';
 import '../../../domain/usecase/user_login/is_logged_in_usecase.dart';
@@ -50,7 +48,6 @@ import '../../../domain/usecase/user_login/login_usecase.dart';
 import '../../../domain/usecase/user_login/save_login_in_status_usecase.dart';
 import '../../../domain/usecase/user_signup/signup_usecase.dart';
 
-import '../../lectures_in_topic_screen/store/lecture_store.dart';
 import '../../signup_login_screen/store/login_or_signup_store/login_or_signup_store.dart';
 import '../../signup_login_screen/store/user_login_store/user_login_store.dart';
 import '../../signup_login_screen/store/user_signup_store/user_signup_store.dart';
@@ -97,17 +94,10 @@ class StoreModule {
       LoginOrSignupStore(),
     );
 
-    //LectureStore:-----------------------------------------------------------------
-    getIt.registerSingleton<LectureStore>(
-      LectureStore(
-        getIt<GetLecturesUsecase>(),
-        getIt<GetDividedLectureUsecase>(),
-      ),
-    );
-
     //After LectureStore because ExerciseStore use LectureStore
     getIt.registerSingleton<ExerciseStore>(
-      ExerciseStore(getIt<GetExercisesUseCase>()),
+      ExerciseStore(
+          getIt<GetExercisesUseCase>(), getIt<GetDividedLectureUsecase>()),
     );
 
     //LevelStore: -----------------------------------------------------------------
@@ -136,8 +126,6 @@ class StoreModule {
     ));
     getIt.registerSingleton<FilterStore>(FilterStore());
 
-    //After LectureStore because TopicStore use LectureStore
-    getIt.registerSingleton<TopicStore>(TopicStore(getIt<GetTopicsUsecase>()));
 
     //QuestionStore
     getIt.registerSingleton<SingleQuestionStore>(SingleQuestionStore());

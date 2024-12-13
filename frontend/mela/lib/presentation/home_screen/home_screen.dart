@@ -9,7 +9,7 @@ import 'package:mobx/mobx.dart';
 import '../../di/service_locator.dart';
 import '../../themes/default/colors_standards.dart';
 import '../../utils/routes/routes.dart';
-import '../lectures_in_topic_screen/widgets/lecture_item.dart';
+import '../topic_lecture_in_level_screen/widgets/lecture_item.dart';
 import 'widgets/cover_image_widget.dart';
 
 class HomeScreen extends StatefulWidget {
