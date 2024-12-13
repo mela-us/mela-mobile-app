@@ -2,9 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/domain/entity/level/level.dart';
-import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
-import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
+import 'package:mela/presentation/topic_lecture_in_level_screen/store/topic_lecture_store.dart';
 
 import '../../../di/service_locator.dart';
 import '../../../utils/routes/routes.dart';
@@ -13,16 +12,16 @@ class LevelItem extends StatelessWidget {
   final Level level;
   LevelItem({super.key, required this.level});
 
-  final LectureStore _lectureStore = getIt<LectureStore>();
+  final TopicLectureStore _topicLectureStore = getIt<TopicLectureStore>();
   final LevelStore _levelStore = getIt<LevelStore>();
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // _lectureStore.setCurrentTopic(topic);
-        // _levelStore.resetErrorString();
-        // Navigator.of(context).pushNamed(Routes.allLecturesInTopicScreen);
+        _topicLectureStore.setCurrentLevel(level);
+        _levelStore.resetErrorString();
+        Navigator.of(context).pushNamed(Routes.topicLectureInLevelScreen);
       },
       child: Container(
         width: double.infinity,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/core/widgets/progress_indicator_widget.dart';
-import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 import 'package:mela/presentation/home_screen/widgets/level_item.dart';
 import 'package:mobx/mobx.dart';
@@ -52,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // check to see if already called api
     if (!_levelStore.loading) {
       _levelStore.getLevels();
+      _levelStore.getTopics();
       _levelStore.getAreLearningLectures();
     }
   }
@@ -80,6 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Observer(builder: (context) {
             if (_levelStore.errorString.isNotEmpty ||
                 _levelStore.lecturesAreLearningList == null ||
+                _levelStore.topicList == null ||
                 _levelStore.levelList == null) {
               return const SizedBox.shrink();
             }
@@ -117,6 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
           //print("^^^^^^^^^^^^^^^^^^ErrorString in Courses_Screen 3: ${_topicStore.errorString}");
           if (_levelStore.errorString.isNotEmpty ||
               _levelStore.lecturesAreLearningList == null ||
+               _levelStore.topicList == null ||
               _levelStore.levelList == null) {
             return Center(
               child: Text(_levelStore.errorString,
@@ -134,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     //Cover Image Introduction
                     const CoverImageWidget(),
                     const SizedBox(height: 15),
-                    //Topics Grid
+                    //Levels Grid
                     GridView.builder(
                       padding: EdgeInsets.zero,
                       physics: const NeverScrollableScrollPhysics(),
@@ -156,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
 
                     const SizedBox(height: 15),
-                    //Text "Chủ đề đang học"
+                    //Text "lectures đang học"
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Row(
@@ -172,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             width: 10,
                           ),
                           Text(
-                            "Chủ đề đang học",
+                            "Bài giảng đang học",
                             style: Theme.of(context)
                                 .textTheme
                                 .subTitle

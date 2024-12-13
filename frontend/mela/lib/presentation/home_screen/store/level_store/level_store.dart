@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:mela/domain/entity/lecture/lecture_list.dart';
 import 'package:mela/domain/entity/level/level_list.dart';
+import 'package:mela/domain/entity/topic/topic_list.dart';
 import 'package:mela/domain/usecase/lecture/get_lectures_are_learning_usecase.dart';
 import 'package:mela/domain/usecase/level/get_level_list_usecase.dart';
+import 'package:mela/domain/usecase/topic/get_topics_usecase.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../../utils/dio/dio_error_util.dart';
@@ -16,6 +18,10 @@ abstract class _LevelStore with Store {
   //UseCase
   GetLevelListUsecase _getLevelListUsecase;
   GetLecturesAreLearningUsecase _getLecturesAreLearningUsecase;
+  GetTopicsUsecase _getTopicsUsecase;
+
+  @observable
+  TopicList? topicList;
 
   @observable
   LectureList? lecturesAreLearningList;
@@ -32,11 +38,13 @@ abstract class _LevelStore with Store {
 
   @computed
   bool get loading =>
+      fetchTopicsFuture.status == FutureStatus.pending ||
       fetchLecturesAreLearningFuture.status == FutureStatus.pending ||
       fetchLevelsFuture.status == FutureStatus.pending;
 
   //Constructor
-  _LevelStore(this._getLevelListUsecase, this._getLecturesAreLearningUsecase);
+  _LevelStore(this._getLevelListUsecase, this._getLecturesAreLearningUsecase,
+      this._getTopicsUsecase);
 
   @observable
   ObservableFuture<LectureList?> fetchLecturesAreLearningFuture =
@@ -46,6 +54,11 @@ abstract class _LevelStore with Store {
   ObservableFuture<LevelList?> fetchLevelsFuture =
       ObservableFuture<LevelList?>(ObservableFuture.value(null));
 
+  @observable
+  ObservableFuture<TopicList?> fetchTopicsFuture =
+      ObservableFuture<TopicList?>(ObservableFuture.value(null));
+
+  //Actions: -----------------------------------------------------------------------------------------------------------
   @action
   Future getAreLearningLectures() async {
     final future = _getLecturesAreLearningUsecase.call(params: null);
@@ -85,6 +98,30 @@ abstract class _LevelStore with Store {
         errorString = "Có lỗi, thử lại sau";
       }
     });
+  }
+
+  @action
+  Future getTopics() async {
+    final future = _getTopicsUsecase.call(params: null);
+    fetchTopicsFuture = ObservableFuture(future);
+
+    try {
+      //print("Vao get topic in topic store");
+      topicList = await future;
+      print(topicList);
+      //this.errorString = '';
+    } catch (onError) {
+      topicList = null;
+      if (onError is DioException) {
+        if (onError.response?.statusCode == 401) {
+          isUnAuthorized = true;
+          return;
+        }
+        errorString = DioExceptionUtil.handleError(onError);
+      } else {
+        errorString = "Có lỗi, thử lại sau";
+      }
+    }
   }
 
   @action

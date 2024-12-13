@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'package:mela/domain/entity/topic/topic.dart';
 import 'package:mela/domain/repository/lecture/lecture_repository.dart';
 import 'package:mela/domain/repository/level/level_repository.dart';
 import 'package:mela/domain/repository/post/post_repository.dart';
+import 'package:mela/domain/repository/topic_lecture/topic_lecture_repository.dart';
 import 'package:mela/domain/repository/user/user_repository.dart';
 import 'package:mela/domain/repository/user_register/user_signup_repostiory.dart';
 
@@ -12,6 +14,7 @@ import 'package:mela/domain/usecase/level/get_level_list_usecase.dart';
 import 'package:mela/domain/usecase/post/get_post_usecase.dart';
 import 'package:mela/domain/usecase/topic/find_topic_by_id_usecase.dart';
 import 'package:mela/domain/usecase/topic/get_topics_usecase.dart';
+import 'package:mela/domain/usecase/topic_lecture/get_topic_lecture_usecase.dart';
 import 'package:mela/domain/usecase/user/get_user_info_usecase.dart';
 import 'package:mela/domain/usecase/user_login/refresh_access_token_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_access_token_usecase.dart';
@@ -100,10 +103,15 @@ class UseCaseModule {
 
     getIt.registerSingleton<FindTopicByIdUsecase>(
         FindTopicByIdUsecase(getIt<TopicRepository>()));
-        
+
     //level:--------------------------------------------------------------------
     getIt.registerSingleton<GetLevelListUsecase>(GetLevelListUsecase(
         getIt<LevelRepository>(),
+        getIt<RefreshAccessTokenUsecase>(),
+        getIt<LogoutUseCase>()));
+    //topicLecture:--------------------------------------------------------------------
+    getIt.registerSingleton<GetTopicLectureUsecase>(GetTopicLectureUsecase(
+        getIt<TopicLectureRepository>(),
         getIt<RefreshAccessTokenUsecase>(),
         getIt<LogoutUseCase>()));
 

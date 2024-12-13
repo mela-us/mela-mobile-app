@@ -10,9 +10,9 @@ import 'package:mela/presentation/review/review.dart';
 import 'package:mela/presentation/divided_lectures_and_exercises_screen/divided_lectures_and_exercises_screen.dart';
 import 'package:mela/presentation/lectures_in_topic_screen/all_lectures_in_topic_screen.dart';
 import 'package:mela/presentation/search_screen/search_screen.dart';
+import 'package:mela/presentation/topic_lecture_in_level_screen/topic_lecture_in_level_screen.dart';
 
 import '../../presentation/all_screens.dart';
-import '../../presentation/courses_screen/courses_screen.dart';
 import '../../presentation/filter_screen/filter_screen.dart';
 import '../../presentation/signup_login_screen/login_or_signup_screen.dart';
 import '../../presentation/signup_login_screen/login_screen.dart';
@@ -40,6 +40,7 @@ class Routes {
   static const String signupScreen = '/signup';
   static const String allLecturesInTopicScreen =
       '/all_lectures_in_topic_screen';
+  static const String topicLectureInLevelScreen= '/topic_lecture_in_level_screen';
   static const String dividedLecturesAndExercisesScreen =
       '/divided_lectures_and_exercises_screen';
   static const String searchScreen = '/search_screen';
@@ -68,6 +69,7 @@ class Routes {
     homeScreen: (BuildContext context) => const HomeScreen(),
     allLecturesInTopicScreen: (BuildContext context) =>
         AllLecturesInTopicScreen(),
+    topicLectureInLevelScreen: (BuildContext context) => TopicLectureInLevelScreen(),
     dividedLecturesAndExercisesScreen: (BuildContext context) =>
         DividedLecturesAndExercisesScreen(),
     searchScreen: (BuildContext context) => const SearchScreen(),

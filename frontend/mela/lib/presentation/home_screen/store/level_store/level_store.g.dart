@@ -16,6 +16,22 @@ mixin _$LevelStore on _LevelStore, Store {
           Computed<bool>(() => super.loading, name: '_LevelStore.loading'))
       .value;
 
+  late final _$topicListAtom =
+      Atom(name: '_LevelStore.topicList', context: context);
+
+  @override
+  TopicList? get topicList {
+    _$topicListAtom.reportRead();
+    return super.topicList;
+  }
+
+  @override
+  set topicList(TopicList? value) {
+    _$topicListAtom.reportWrite(value, super.topicList, () {
+      super.topicList = value;
+    });
+  }
+
   late final _$lecturesAreLearningListAtom =
       Atom(name: '_LevelStore.lecturesAreLearningList', context: context);
 
@@ -114,6 +130,22 @@ mixin _$LevelStore on _LevelStore, Store {
     });
   }
 
+  late final _$fetchTopicsFutureAtom =
+      Atom(name: '_LevelStore.fetchTopicsFuture', context: context);
+
+  @override
+  ObservableFuture<TopicList?> get fetchTopicsFuture {
+    _$fetchTopicsFutureAtom.reportRead();
+    return super.fetchTopicsFuture;
+  }
+
+  @override
+  set fetchTopicsFuture(ObservableFuture<TopicList?> value) {
+    _$fetchTopicsFutureAtom.reportWrite(value, super.fetchTopicsFuture, () {
+      super.fetchTopicsFuture = value;
+    });
+  }
+
   late final _$getAreLearningLecturesAsyncAction =
       AsyncAction('_LevelStore.getAreLearningLectures', context: context);
 
@@ -129,6 +161,14 @@ mixin _$LevelStore on _LevelStore, Store {
   @override
   Future<dynamic> getLevels() {
     return _$getLevelsAsyncAction.run(() => super.getLevels());
+  }
+
+  late final _$getTopicsAsyncAction =
+      AsyncAction('_LevelStore.getTopics', context: context);
+
+  @override
+  Future<dynamic> getTopics() {
+    return _$getTopicsAsyncAction.run(() => super.getTopics());
   }
 
   late final _$_LevelStoreActionController =
@@ -148,12 +188,14 @@ mixin _$LevelStore on _LevelStore, Store {
   @override
   String toString() {
     return '''
+topicList: ${topicList},
 lecturesAreLearningList: ${lecturesAreLearningList},
 levelList: ${levelList},
 errorString: ${errorString},
 isUnAuthorized: ${isUnAuthorized},
 fetchLecturesAreLearningFuture: ${fetchLecturesAreLearningFuture},
 fetchLevelsFuture: ${fetchLevelsFuture},
+fetchTopicsFuture: ${fetchTopicsFuture},
 loading: ${loading}
     ''';
   }

@@ -10,6 +10,7 @@ import 'package:mela/data/network/apis/login_signup/login_api.dart';
 import 'package:mela/data/network/apis/login_signup/refresh_access_token_api.dart';
 import 'package:mela/data/network/apis/login_signup/signup_api.dart';
 import 'package:mela/data/network/apis/searchs/search_api.dart';
+import 'package:mela/data/network/apis/topic_lecture/topic_lecture_api.dart';
 import 'package:mela/data/network/apis/topics/topic_api.dart';
 import 'package:mela/data/network/apis/user/logout_api.dart';
 import 'package:mela/data/network/apis/user/user_info_api.dart';
@@ -17,6 +18,7 @@ import 'package:mela/data/repository/level/level_repository_impl.dart';
 import 'package:mela/data/repository/question/question_repository_impl.dart';
 import 'package:mela/data/repository/setting/setting_repository_impl.dart';
 import 'package:mela/data/repository/stat/stat_search_impl.dart';
+import 'package:mela/data/repository/topic_lecture/topic_lecture_repository_impl.dart';
 import 'package:mela/data/securestorage/secure_storage_helper.dart';
 import 'package:mela/data/sharedpref/shared_preference_helper.dart';
 import 'package:mela/domain/repository/forgot_password/forgot_password_repository.dart';
@@ -24,6 +26,7 @@ import 'package:mela/domain/repository/level/level_repository.dart';
 import 'package:mela/domain/repository/question/question_repository.dart';
 import 'package:mela/domain/repository/setting/setting_repository.dart';
 import 'package:mela/domain/repository/stat/stat_search_repository.dart';
+import 'package:mela/domain/repository/topic_lecture/topic_lecture_repository.dart';
 
 import '../../../di/service_locator.dart';
 import 'package:mela/data/repository/exercise/exercise_repository_impl.dart';
@@ -91,6 +94,8 @@ class RepositoryModule {
         TopicRepositoryImpl(getIt<TopicApi>()));
     getIt.registerSingleton<LevelRepository>(
         LevelRepositoryImpl(getIt<LevelApi>()));
+    getIt.registerSingleton<TopicLectureRepository>(
+        TopicLectureRepositoryImpl(getIt<TopicLectureApi>()));
 
     getIt.registerSingleton<LectureRepository>(
         LectureRepositoryImpl(getIt<LectureApi>()));
