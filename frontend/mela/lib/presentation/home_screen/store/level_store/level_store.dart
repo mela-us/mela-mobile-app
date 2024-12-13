@@ -132,10 +132,10 @@ abstract class _LevelStore with Store {
   //Untils--------------------------------------------------------------
   String getLevelNameById(String levelId) {
     if (levelList == null) return "Null";
-    print("----------12345--------------$levelId");
-    for (var level in levelList!.levelList) {
-      print("level.levelId: ${level.levelId} voi name ${level.levelName}");
-    }
+    // print("----------12345--------------$levelId");
+    // for (var level in levelList!.levelList) {
+    //   print("level.levelId: ${level.levelId} voi name ${level.levelName}");
+    // }
     for (var level in levelList!.levelList) {
       if (level.levelId == levelId) {
         return level.levelName;

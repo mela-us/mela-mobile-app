@@ -4,6 +4,7 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/core/widgets/progress_indicator_widget.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/topic_lecture_in_level_screen/store/topic_lecture_store.dart';
+import 'package:mela/presentation/topic_lecture_in_level_screen/widgets/general_infor.dart';
 import 'package:mela/presentation/topic_lecture_in_level_screen/widgets/topic_lecture_listview.dart';
 import 'package:mobx/mobx.dart';
 import '../../utils/routes/routes.dart';
@@ -133,11 +134,7 @@ class _TopicLectureInLevelScreenState extends State<TopicLectureInLevelScreen> {
               : TabBarView(
                   children: (_topicLectureStore.errorString.isEmpty &&
                           _topicLectureStore.topicLectureInLevelList != null)
-                      ? [
-                          Text(
-                              "Thông tin chung của khối lớp ${_topicLectureStore.currentLevel!.levelName}"),
-                          TopicLectureListview()
-                        ]
+                      ? [GeneralInfor(), TopicLectureListview()]
                       : [
                           Center(
                             child: Text(

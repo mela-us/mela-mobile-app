@@ -15,6 +15,8 @@ class TopicLectureListview extends StatelessWidget {
           .topicLectureInLevelList!.topicLectureInLevelList.length,
       itemBuilder: (context, index) {
         return LecturesInTopic(
+            topicId: topicLectureStore.topicLectureInLevelList!
+                .topicLectureInLevelList[index].topicId,
             topicName: topicLectureStore.topicLectureInLevelList!
                 .topicLectureInLevelList[index].topicName,
             lectureList: topicLectureStore.topicLectureInLevelList!

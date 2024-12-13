@@ -2,21 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/divided_lectures_and_exercises_screen/store/exercise_store.dart';
+import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 
 import '../../../domain/entity/lecture/lecture.dart';
 import '../../../utils/routes/routes.dart';
 
 class LectureItem extends StatelessWidget {
   final Lecture lecture;
-
-  const LectureItem({
+  final _levelStore = getIt<LevelStore>();
+  final _exerciseStore = getIt<ExerciseStore>();
+  LectureItem({
     Key? key,
     required this.lecture,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    ExerciseStore _exerciseStore = getIt<ExerciseStore>();
+    String topicName = _levelStore.getTopicNameById(lecture.topicId);
+    String levelName = _levelStore.getLevelNameById(lecture.levelId);
     return GestureDetector(
       onTap: () {
         _exerciseStore.setCurrentLecture(lecture);
@@ -82,10 +85,19 @@ class LectureItem extends StatelessWidget {
                           color: Theme.of(context).colorScheme.primary),
                     ),
                     const SizedBox(height: 8),
+                    // Topic name + level name
+                    Text(
+                      '$topicName - $levelName',
+                      style: Theme.of(context)
+                          .textTheme
+                          .subTitle
+                          .copyWith(color: Colors.orange,fontSize: 12),
+                    ),
+                    const SizedBox(height: 8),
                     Text(
                       lecture.lectureDescription,
                       style: Theme.of(context).textTheme.normal.copyWith(
-                          color: Theme.of(context).colorScheme.secondary),
+                          color: Theme.of(context).colorScheme.secondary, fontSize: 10),
                     ),
                   ],
                 ),
@@ -100,7 +112,7 @@ class LectureItem extends StatelessWidget {
                   ),
                   child: Icon(
                     Icons.play_arrow,
-                    size: 20,
+                    size: 24,
                     color: Theme.of(context).colorScheme.onTertiary,
                   )), // Play icon
             ],
