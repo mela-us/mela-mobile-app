@@ -46,6 +46,8 @@ abstract class _UserSignupStore with Store {
       isSignupSuccessful = true;
     } catch (e) {
       isSignupSuccessful = false;
+      print("-----********* Error in UserSignupStore");
+      print(e.toString());
       if (e is DioException) {
         if (e.response?.statusCode == 400) {
           throw "Tài khoản đã tồn tại";

@@ -8,7 +8,6 @@ import 'package:mela/presentation/topic_lecture_in_level_screen/widgets/general_
 import 'package:mela/presentation/topic_lecture_in_level_screen/widgets/topic_lecture_listview.dart';
 import 'package:mobx/mobx.dart';
 import '../../utils/routes/routes.dart';
-import 'widgets/lectures_in_topic.dart';
 
 class TopicLectureInLevelScreen extends StatefulWidget {
   TopicLectureInLevelScreen({super.key});

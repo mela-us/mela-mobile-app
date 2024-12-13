@@ -80,7 +80,6 @@ class StoreModule {
         getIt<LoginUseCase>(),
         getIt<SaveAccessTokenUsecase>(),
         getIt<SaveRefreshTokenUsecase>(),
-        getIt<ErrorStore>(),
       ),
     );
     //UserSignupStore

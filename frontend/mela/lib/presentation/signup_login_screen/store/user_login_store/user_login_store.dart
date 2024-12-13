@@ -22,7 +22,6 @@ abstract class _UserLoginStore with Store {
     this._loginUseCase,
     this._saveAccessTokenUsecase,
     this._saveRefreshTokenUsecase,
-    this.errorStore,
   ) {
     // // setting up disposers
     // _setupDisposers();
@@ -39,7 +38,6 @@ abstract class _UserLoginStore with Store {
   final LoginUseCase _loginUseCase;
   final SaveAccessTokenUsecase _saveAccessTokenUsecase;
   final SaveRefreshTokenUsecase _saveRefreshTokenUsecase;
-  final ErrorStore errorStore;
 
   //Error
 
@@ -111,7 +109,6 @@ abstract class _UserLoginStore with Store {
         await _saveLoginStatusUseCase.call(params: true);
         await _saveAccessTokenUsecase.call(params: value.accessToken);
         await _saveRefreshTokenUsecase.call(params: value.refreshToken);
-        errorStore.reset("");
         print("-----********* Sau khi login thanh cong in UserLoginStore");
         print(value.accessToken);
         print(value.refreshToken);
@@ -119,15 +116,15 @@ abstract class _UserLoginStore with Store {
       }
     }).catchError((e) {
       this.isLoggedIn = false;
-      //print("-----********* Error in UserLoginStore");
+      print("-----********* Error in UserLoginStore");
+      print(e.toString());
       if (e is DioException) {
         if (e.response?.statusCode == 401) {
-          errorStore.errorMessage = "Mật khẩu hoặc tài khoản không hợp lệ";
-          return;
+          throw "Mật khẩu hoặc tài khoản không hợp lệ";
         }
-        errorStore.errorMessage = DioExceptionUtil.handleError(e);
+        throw DioExceptionUtil.handleError(e);
       } else {
-        errorStore.errorMessage = "Có lỗi, thử lại sau";
+        throw "Có lỗi, thử lại sau";
       }
     });
   }
