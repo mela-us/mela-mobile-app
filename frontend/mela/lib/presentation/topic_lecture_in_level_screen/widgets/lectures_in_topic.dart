@@ -47,8 +47,8 @@ class LecturesInTopic extends StatelessWidget {
           //mainAxisSize: MainAxisSize.min,
           leading: Image.asset(
             getIconTopicPath(),
-            width: 40,
-            height: 40,
+            width: 26,
+            height: 26,
           ),
           backgroundColor: Theme.of(context).colorScheme.onSecondary,
           childrenPadding: const EdgeInsets.only(bottom: 6),
