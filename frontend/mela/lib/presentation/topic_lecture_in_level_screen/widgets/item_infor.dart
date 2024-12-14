@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 
 class ItemInfor extends StatelessWidget {
-  String title;
-  String content;
-  ItemInfor({super.key, required this.title, required this.content});
+  final String title;
+  final String content;
+  const ItemInfor({super.key, required this.title, required this.content});
 
   @override
   Widget build(BuildContext context) {

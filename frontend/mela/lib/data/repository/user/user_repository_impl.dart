@@ -4,9 +4,9 @@ import 'package:mela/data/network/apis/user/user_info_api.dart';
 import 'package:mela/domain/repository/user/user_repository.dart';
 import 'package:mela/data/sharedpref/shared_preference_helper.dart';
 
-import '../../../di/service_locator.dart';
 import '../../../domain/entity/user/token_model.dart';
 import '../../../domain/entity/user/user.dart';
+// ignore: duplicate_import
 import '../../../domain/entity/user/user.dart';
 import '../../network/apis/user/logout_api.dart';
 import '../../securestorage/secure_storage_helper.dart';

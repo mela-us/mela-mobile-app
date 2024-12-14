@@ -16,7 +16,6 @@ import '../../../di/service_locator.dart';
 import '../../network/apis/forgot_password/forgot_password_api.dart';
 import '../../network/apis/lectures/lecture_api.dart';
 import '../../network/apis/login_signup/signup_api.dart';
-import '../../network/apis/posts/post_api.dart';
 import '../../network/apis/questions/questions_api.dart';
 import '../../network/apis/questions/save_result_api.dart';
 import '../../network/apis/stats/stats_api.dart';
@@ -57,13 +56,12 @@ class NetworkModule {
           [
             getIt<AuthInterceptor>(),
             getIt<ErrorInterceptor>(),
-            //getIt<LoggingInterceptor>(),
+            getIt<LoggingInterceptor>(),
           ],
         ),
     );
 
     // api's:-------------------------------------------------------------------
-    getIt.registerSingleton(PostApi(getIt<DioClient>(), getIt<RestClient>()));
     getIt.registerSingleton<LoginApi>(LoginApi(getIt<DioClient>()));
     getIt.registerSingleton<SignupApi>(SignupApi(getIt<DioClient>()));
     getIt.registerSingleton<RefreshAccessTokenApi>(

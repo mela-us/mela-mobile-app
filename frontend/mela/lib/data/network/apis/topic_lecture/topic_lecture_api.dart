@@ -1,4 +1,3 @@
-import 'package:mela/data/network/constants/endpoints_const.dart';
 import 'package:mela/data/network/dio_client.dart';
 import 'package:mela/domain/entity/lecture/lecture.dart';
 import 'package:mela/domain/entity/lecture/lecture_list.dart';

@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:mela/constants/enum.dart';
 import 'package:mela/utils/dio/dio_error_util.dart';
 import 'package:mobx/mobx.dart';
 import '../../../../domain/usecase/user_signup/signup_usecase.dart';

@@ -10,7 +10,6 @@ import 'package:mela/presentation/question/store/question_store.dart';
 import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
 import 'package:mela/presentation/review/widgets/list_item_tile_widget.dart';
 import 'package:mela/utils/locale/app_localization.dart';
-import 'package:mela/utils/routes/routes.dart';
 
 import '../../constants/enum.dart';
 import 'package:flutter_html/flutter_html.dart';

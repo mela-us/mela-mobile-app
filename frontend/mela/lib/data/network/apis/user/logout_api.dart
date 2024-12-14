@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:mela/data/network/constants/endpoints_const.dart';
 import 'package:mela/data/network/dio_client.dart';
 import 'package:mela/domain/entity/user/token_model.dart';
-import 'package:mela/domain/usecase/user_login/login_usecase.dart';
 
 class LogoutApi {
   final DioClient _dioClient;

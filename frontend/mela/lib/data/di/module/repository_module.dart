@@ -46,11 +46,7 @@ import '../../repository/forgot_password/forgot_password_repository_impl.dart';
 import '../../repository/topic/topic_repository_impl.dart';
 import '../../repository/user_login/user_login_repository_impl.dart';
 import '../../repository/user_signup/user_signup_repository_impl.dart';
-import 'package:mela/data/local/datasources/post/post_datasource.dart';
-import 'package:mela/data/network/apis/posts/post_api.dart';
-import 'package:mela/data/repository/post/post_repository_impl.dart';
 import 'package:mela/data/repository/user/user_repository_impl.dart';
-import 'package:mela/domain/repository/post/post_repository.dart';
 import 'package:mela/domain/repository/stat/stat_repository.dart';
 import 'package:mela/domain/repository/user/user_repository.dart';
 
@@ -59,10 +55,6 @@ import '../../repository/stat/stat_repository_impl.dart';
 class RepositoryModule {
   static Future<void> configureRepositoryModuleInjection() async {
     // repository:--------------------------------------------------------------
-    getIt.registerSingleton<PostRepository>(PostRepositoryImpl(
-      getIt<PostApi>(),
-      getIt<PostDataSource>(),
-    ));
     //UserInfor:
     getIt.registerSingleton<UserRepository>(UserRepositoryImpl(
         getIt<LogoutApi>(),

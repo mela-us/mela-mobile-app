@@ -6,7 +6,7 @@ import 'package:mela/presentation/topic_lecture_in_level_screen/widgets/item_inf
 class GeneralInfor extends StatelessWidget {
   GeneralInfor({super.key});
   
-  TopicLectureStore _topicLectureStore = getIt<TopicLectureStore>();
+  final TopicLectureStore _topicLectureStore = getIt<TopicLectureStore>();
 
   String getInforForStructureGrade() {
     String result = "- Các chủ đề:";

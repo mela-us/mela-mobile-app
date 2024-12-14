@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 
 class CheckboxRow extends StatelessWidget {
-  String label;
-  bool isSelected;
-  Function() onToggle;
-  CheckboxRow(
+  final String label;
+  final bool isSelected;
+  final Function() onToggle;
+  const CheckboxRow(
       {super.key,
       required this.label,
       required this.isSelected,

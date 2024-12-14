@@ -17,6 +17,7 @@ class AuthInterceptor extends Interceptor {
       ) async {
     //print("Vao onRequest AuthInterceptor");
     final String token = await accessToken() ?? '';
+    //print("--------------------->Token: $token");
     if (token.isNotEmpty) {
       options.headers.putIfAbsent('Authorization', () => 'Bearer $token');
     }

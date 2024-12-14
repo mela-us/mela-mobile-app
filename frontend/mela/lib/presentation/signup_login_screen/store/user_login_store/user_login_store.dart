@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:mela/core/stores/error/error_store.dart';
 import 'package:mela/domain/entity/user/token_model.dart';
 import 'package:mela/domain/usecase/user_login/is_logged_in_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_access_token_usecase.dart';
@@ -25,10 +24,11 @@ abstract class _UserLoginStore with Store {
   ) {
     // // setting up disposers
     // _setupDisposers();
-
+    print("-----********|||||||||||| UserLoginStore");
     // checking if user is logged in share preference --> for myapp.dart
     _isLoggedInUseCase.call(params: null).then((value) async {
       isLoggedIn = value;
+      print("-----******** is logged in in UserLoginStore $value");
     });
   }
 
@@ -91,6 +91,7 @@ abstract class _UserLoginStore with Store {
 
     await future.then((value) async {
       isLoggedIn = value;
+      print("-----=========== is logged in in UserLoginStore $value");
     });
   }
 
