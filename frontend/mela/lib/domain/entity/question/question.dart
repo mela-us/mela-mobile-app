@@ -73,7 +73,7 @@ class Question{
   String correctQuizKey(){
     for (Option o in options){
       if (o.isCorrect) {
-        return numberToChar(o.ordinalNumber -1);
+        return numberToChar(o.ordinalNumber);
       }
     }
     return '';

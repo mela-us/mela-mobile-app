@@ -50,7 +50,7 @@ class LecturesInTopic extends StatelessWidget {
             width: 26,
             height: 26,
           ),
-          backgroundColor: Theme.of(context).colorScheme.onSecondary,
+          backgroundColor: const Color.fromARGB(255, 238, 237, 237),
           childrenPadding: const EdgeInsets.only(bottom: 6),
           title: Text(
             topicName,
