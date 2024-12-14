@@ -2,7 +2,6 @@ import 'package:mela/domain/entity/stat/progress_list.dart';
 import 'package:mela/domain/entity/stat/detailed_progress_list.dart';
 //import 'package:mela/domain/entity/stat/progress.dart';
 import 'package:mela/domain/repository/stat/stat_repository.dart';
-import '../../../constants/global.dart';
 import '../../network/apis/stats/stats_api.dart';
 
 class StatRepositoryImpl extends StatRepository{

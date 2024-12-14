@@ -1,19 +1,17 @@
 import 'dart:async';
-
-import 'package:http/http.dart';
 import 'package:mela/core/stores/error/error_store.dart';
 import 'package:mela/core/stores/form/form_store.dart';
 import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
-import 'package:mela/domain/usecase/lecture/get_levels_usecase.dart';
-import 'package:mela/domain/usecase/post/get_post_usecase.dart';
+import 'package:mela/domain/usecase/level/get_level_list_usecase.dart';
 import 'package:mela/domain/usecase/question/get_questions_usecase.dart';
+import 'package:mela/domain/usecase/topic_lecture/get_topic_lecture_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_access_token_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_refresh_token_usecase.dart';
-import 'package:mela/presentation/post/store/post_store.dart';
-
+import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 
 import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
 import 'package:mela/presentation/question/store/timer/timer_store.dart';
+import 'package:mela/presentation/topic_lecture_in_level_screen/store/topic_lecture_store.dart';
 
 import '../../../di/service_locator.dart';
 import '../../../domain/usecase/forgot_password/create_new_password_usecase.dart';
@@ -34,14 +32,11 @@ import '../../question/store/question_store.dart';
 import 'package:mela/domain/usecase/exercise/get_exercises_usecase.dart';
 import 'package:mela/domain/usecase/search/get_history_search_list_usecase.dart';
 import 'package:mela/domain/usecase/search/get_search_lectures_result_usecase.dart';
-import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
 import 'package:mela/presentation/divided_lectures_and_exercises_screen/store/exercise_store.dart';
 import 'package:mela/presentation/filter_screen/store/filter_store.dart';
 import 'package:mela/presentation/search_screen/store/search_store.dart';
 
-
 import '../../../domain/usecase/lecture/get_lectures_are_learning_usecase.dart';
-import '../../../domain/usecase/lecture/get_lectures_usecase.dart';
 
 import '../../../domain/usecase/topic/get_topics_usecase.dart';
 import '../../../domain/usecase/user_login/is_logged_in_usecase.dart';
@@ -49,7 +44,6 @@ import '../../../domain/usecase/user_login/login_usecase.dart';
 import '../../../domain/usecase/user_login/save_login_in_status_usecase.dart';
 import '../../../domain/usecase/user_signup/signup_usecase.dart';
 
-import '../../lectures_in_topic_screen/store/lecture_store.dart';
 import '../../signup_login_screen/store/login_or_signup_store/login_or_signup_store.dart';
 import '../../signup_login_screen/store/user_login_store/user_login_store.dart';
 import '../../signup_login_screen/store/user_signup_store/user_signup_store.dart';
@@ -63,7 +57,6 @@ import 'package:mela/presentation/personal/store/personal_store.dart';
 import '../../stats/store/stat_filter_store.dart';
 import '../../stats/store/stat_search_store.dart';
 
-
 class StoreModule {
   static Future<void> configureStoreModuleInjection() async {
     // factories:---------------------------------------------------------------
@@ -74,6 +67,8 @@ class StoreModule {
     );
 
     // stores:------------------------------------------------------------------
+
+    //UserLoginStore
     getIt.registerSingleton<UserLoginStore>(
       UserLoginStore(
         getIt<IsLoggedInUseCase>(),
@@ -81,7 +76,6 @@ class StoreModule {
         getIt<LoginUseCase>(),
         getIt<SaveAccessTokenUsecase>(),
         getIt<SaveRefreshTokenUsecase>(),
-        getIt<ErrorStore>(),
       ),
     );
     //UserSignupStore
@@ -95,19 +89,29 @@ class StoreModule {
       LoginOrSignupStore(),
     );
 
-    getIt.registerSingleton<LectureStore>(
-      LectureStore(
-        getIt<GetLecturesUsecase>(),
-        getIt<GetLecturesAreLearningUsecase>(),
-        getIt<GetLevelsUsecase>(),
-        getIt<GetDividedLectureUsecase>(),
-      ),
-    );
     //After LectureStore because ExerciseStore use LectureStore
     getIt.registerSingleton<ExerciseStore>(
-      ExerciseStore(getIt<GetExercisesUseCase>()),
+      ExerciseStore(
+          getIt<GetExercisesUseCase>(), getIt<GetDividedLectureUsecase>()),
     );
 
+    //LevelStore: -----------------------------------------------------------------
+    getIt.registerSingleton<LevelStore>(
+      LevelStore(
+        getIt<GetLevelListUsecase>(),
+        getIt<GetLecturesAreLearningUsecase>(),
+        getIt<GetTopicsUsecase>(),
+      ),
+    );
+
+    //TopicLectureStore:-----------------------------------------------------------------
+    getIt.registerSingleton<TopicLectureStore>(
+      TopicLectureStore(
+        getIt<GetTopicLectureUsecase>(),
+      ),
+    );
+
+    //SearchStore:-----------------------------------------------------------------
     getIt.registerSingleton<SearchStore>(SearchStore(
       getIt<GetHistorySearchListUsecase>(),
       getIt<GetSearchLecturesResultUsecase>(),
@@ -117,25 +121,19 @@ class StoreModule {
     ));
     getIt.registerSingleton<FilterStore>(FilterStore());
 
-    //After LectureStore because TopicStore use LectureStore
-    getIt.registerSingleton<TopicStore>(TopicStore(getIt<GetTopicsUsecase>()));
 
+    //QuestionStore
+    getIt.registerSingleton<SingleQuestionStore>(SingleQuestionStore());
 
-    getIt.registerSingleton<SingleQuestionStore>(
-      SingleQuestionStore(
-      )
-    );
-
-    getIt.registerSingleton<QuestionStore>(
-      QuestionStore(
-        getIt<GetQuestionsUseCase>(),
-        getIt<ErrorStore>(),
-        getIt<SubmitResultUseCase>(),
-      )
-    );
+    getIt.registerSingleton<QuestionStore>(QuestionStore(
+      getIt<GetQuestionsUseCase>(),
+      getIt<ErrorStore>(),
+      getIt<SubmitResultUseCase>(),
+    ));
 
     getIt.registerSingleton<TimerStore>(TimerStore());
 
+    //StatisticsStore
     getIt.registerSingleton<StatisticsStore>(
       StatisticsStore(
         getIt<GetProgressListUseCase>(),
@@ -144,6 +142,7 @@ class StoreModule {
       ),
     );
 
+    //PersonalStore
     getIt.registerSingleton<PersonalStore>(
       PersonalStore(
         getIt<GetUserInfoUseCase>(),
@@ -151,6 +150,7 @@ class StoreModule {
         getIt<ErrorStore>(),
       ),
     );
+
     //Forgot password
     getIt.registerSingleton<EnterEmailStore>(
         EnterEmailStore(getIt<VerifyExistEmailUseCase>()));
@@ -166,11 +166,9 @@ class StoreModule {
       ),
     );
 
+    //StatFilterStore
     getIt.registerSingleton<StatFilterStore>(
-      StatFilterStore(
-      ),
+      StatFilterStore(),
     );
   }
 }
-
-

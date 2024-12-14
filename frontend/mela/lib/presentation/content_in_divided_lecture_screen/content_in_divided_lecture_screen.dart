@@ -1,36 +1,176 @@
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/domain/entity/divided_lecture/divided_lecture.dart';
-import 'package:flutter_html/flutter_html.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
-class ContentInDividedLectureScreen extends StatelessWidget {
+// class ContentInDividedLectureScreen extends StatelessWidget {
+//   final DividedLecture currentDividedLecture;
+//   const ContentInDividedLectureScreen(
+//       {super.key, required this.currentDividedLecture});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text(
+//           currentDividedLecture.dividedLectureName,
+//           style: Theme.of(context)
+//               .textTheme
+//               .heading
+//               .copyWith(color: Theme.of(context).colorScheme.primary),
+//         ),
+//         leading: IconButton(
+//           icon: Icon(Icons.arrow_back),
+//           onPressed: () {
+//             Navigator.of(context).pop();
+//           },
+//         ),
+//       ),
+//       body: Container(
+//         padding: const EdgeInsets.all(16),
+//         child: SfPdfViewer.network(
+//         "https://mela-storage-dev.s3.ap-southeast-1.amazonaws.com/lectures/pdfs/CD1.I.1Quy_lu%E1%BA%ADt_d%C3%A3y_s%E1%BB%91_timo1.pdf",
+//         canShowScrollHead: true,
+//         enableDoubleTapZooming: true,
+//       ),
+//       ),
+//     );
+//   }
+// }
+
+class ContentInDividedLectureScreen extends StatefulWidget {
   final DividedLecture currentDividedLecture;
+
   const ContentInDividedLectureScreen(
       {super.key, required this.currentDividedLecture});
+
+  @override
+  State<ContentInDividedLectureScreen> createState() =>
+      _ContentInDividedLectureScreenState();
+}
+
+class _ContentInDividedLectureScreenState
+    extends State<ContentInDividedLectureScreen> {
+  late PdfViewerController _pdfViewerController;
+  int _totalPages = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pdfViewerController = PdfViewerController();
+  }
+
+  @override
+  void dispose() {
+    _pdfViewerController.dispose();
+    super.dispose();
+  }
+
+  void _showPageSelectionDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        int selectedPage = _pdfViewerController.pageNumber;
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Text('Đi đến trang',
+              style: Theme.of(context)
+                  .textTheme
+                  .title
+                  .copyWith(color: Theme.of(context).colorScheme.primary)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'Trang từ (1-$_totalPages)',
+                  labelStyle: Theme.of(context).textTheme.subHeading.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 16),
+                  border: const OutlineInputBorder(),
+                ),
+                onChanged: (value) {
+                  if (value.isNotEmpty) {
+                    selectedPage = int.parse(value);
+                  }
+                },
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Hủy',
+                  style: Theme.of(context)
+                      .textTheme
+                      .subHeading
+                      .copyWith(color: Theme.of(context).colorScheme.primary)),
+            ),
+            GestureDetector(
+              onTap: () {
+                if (selectedPage >= 1 && selectedPage <= _totalPages) {
+                  _pdfViewerController.jumpToPage(selectedPage);
+                  Navigator.pop(context);
+                }
+              },
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 34, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.tertiary,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text('Đi',
+                    style: Theme.of(context).textTheme.subHeading.copyWith(
+                        color: Theme.of(context).colorScheme.onTertiary)),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          currentDividedLecture.dividedLectureName,
+          widget.currentDividedLecture.dividedLectureName,
           style: Theme.of(context)
               .textTheme
               .heading
               .copyWith(color: Theme.of(context).colorScheme.primary),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
         ),
+        actions: [
+          IconButton(
+            onPressed: _showPageSelectionDialog,
+            icon: Icon(
+              Icons.plagiarism_rounded,
+              color: Theme.of(context).colorScheme.primary,
+              size: 28,
+            ),
+          ),
+        ],
       ),
       body: Container(
         padding: const EdgeInsets.all(16),
-        child: Html(data:"<!DOCTYPE html><html lang=\"vi\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Lý thuyết số mũ ngắn</title></head><body><h1>Lý thuyết số mũ ngắn</h1><p>Số mũ ngắn là một cách viết rút gọn phép nhân của một số với chính nó nhiều lần.</p><p><strong>Ví dụ:</strong></p><p><code>2<sup>3</sup> = 2 × 2 × 2 = 8</code></p><p>Trong đó, \"2\" là cơ số và \"3\" là số mũ. Số mũ cho biết số lần nhân cơ số với chính nó.</p><p>Số mũ cũng có thể có các tính chất toán học như:</p><ul><li><strong>Cộng số mũ:</strong> <code>a^m × a^n = a^(m+n)</code></li><li><strong>Nhân với số mũ:</strong> <code>(a^m)^n = a^(m×n)</code></li><li><strong>Số mũ âm:</strong> <code>a^(-n) = 1/a^n</code></li></ul></body></html>"),
-        // child: SingleChildScrollView(
-        //     child: Html(data: currentDividedLecture.contentInDividedLecture)),
+        child: SfPdfViewer.network(
+          "https://mela-storage-dev.s3.ap-southeast-1.amazonaws.com/lectures/pdfs/CD1.I.1Quy_lu%E1%BA%ADt_d%C3%A3y_s%E1%BB%91_timo1.pdf",
+          controller: _pdfViewerController,
+          canShowScrollHead: false,
+          enableDoubleTapZooming: true,
+          onDocumentLoaded: (PdfDocumentLoadedDetails details) {
+            _totalPages = details.document.pages.count;
+          },
+        ),
       ),
     );
   }

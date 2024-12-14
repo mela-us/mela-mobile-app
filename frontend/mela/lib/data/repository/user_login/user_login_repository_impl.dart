@@ -31,7 +31,17 @@ class UserLoginRepositoryImpl extends UserLoginRepository {
       _sharedPrefsHelper.saveIsLoggedIn(value);
 
   @override
-  Future<bool> get isLoggedIn => _sharedPrefsHelper.isLoggedIn;
+  Future<bool> get isLoggedIn async {
+    if (await _sharedPrefsHelper.isFirstTimeRunApp) {
+      await _secureStorageHelper.deleteAll();
+      await _sharedPrefsHelper.saveIsFirstTimeRunApp(false);
+    }
+    //Test
+    // String token = await _secureStorageHelper.accessToken ?? "ABCD-+-+";
+    // print("++++++++++++++===============Token: $token");
+
+    return _sharedPrefsHelper.isLoggedIn;
+  }
 
   @override
   Future<void> saveAccessToken(String accessToken) {

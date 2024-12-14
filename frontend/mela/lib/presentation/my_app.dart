@@ -7,14 +7,11 @@ import 'package:mela/constants/strings.dart';
 import 'package:mela/domain/entity/post/post_list.dart';
 import 'package:mela/presentation/all_screens.dart';
 import 'package:mela/presentation/personal/personal.dart';
-import 'package:mela/presentation/post/post_list.dart';
 import 'package:mela/presentation/signup_login_screen/login_or_signup_screen.dart';
 import 'package:mela/presentation/stats/stats.dart';
 import 'package:mela/utils/routes/routes.dart';
 import '../constants/route_observer.dart';
 import '../di/service_locator.dart';
-
-import 'courses_screen/courses_screen.dart';
 
 import 'signup_login_screen/store/user_login_store/user_login_store.dart';
 

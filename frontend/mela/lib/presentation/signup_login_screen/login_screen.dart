@@ -51,7 +51,6 @@ class __FormContentState extends State<_FormContent> {
 
   //disposers:-----------------------------------------------------------------
   late final ReactionDisposer _loginReactionDisposer;
-  late final ReactionDisposer _errorLoginReactionDisposer;
   @override
   void initState() {
     super.initState();
@@ -68,13 +67,13 @@ class __FormContentState extends State<_FormContent> {
         _userLoginStore.resetSettingForLogin();
       }
     });
-    _errorLoginReactionDisposer = reaction(
-        (_) => _userLoginStore.errorStore.errorMessage, (String errorMessage) {
-      if (errorMessage.isNotEmpty) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(errorMessage)));
-      }
-    });
+    // _errorLoginReactionDisposer = reaction(
+    //     (_) => _userLoginStore.errorStore.errorMessage, (String errorMessage) {
+    //   if (errorMessage.isNotEmpty) {
+    //     ScaffoldMessenger.of(context)
+    //         .showSnackBar(SnackBar(content: Text(errorMessage)));
+    //   }
+    // });
   }
 
   @override
@@ -93,7 +92,7 @@ class __FormContentState extends State<_FormContent> {
     _emailController.dispose();
     _passwordController.dispose();
     _loginReactionDisposer();
-    _errorLoginReactionDisposer();
+    // _errorLoginReactionDisposer();
     super.dispose();
   }
 
@@ -257,7 +256,7 @@ class __FormContentState extends State<_FormContent> {
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                            content: Text('Login failed: ${e.toString()}')),
+                            content: Text(e.toString())),
                       );
                     }
                   }

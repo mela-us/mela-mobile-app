@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:http/http.dart';
 import 'package:mela/domain/usecase/stat/get_stat_search_history_usecase.dart';
 import 'package:mobx/mobx.dart';

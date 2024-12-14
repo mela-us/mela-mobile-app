@@ -2,7 +2,6 @@ import 'dart:async';
 
 
 import 'package:mela/domain/entity/user/token_model.dart';
-import 'package:mela/domain/entity/user/user.dart';
 
 import '../../usecase/user_login/login_usecase.dart';
 

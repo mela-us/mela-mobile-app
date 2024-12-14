@@ -10,7 +10,7 @@ class Topic {
       topicId: json['topicId'],
       topicName: json['name'],
       imageTopicPath: json['imageUrl'],
-      descriptionTopic: json['description'],
+      descriptionTopic: json['description']??"",
     );
   }
   Map<String, dynamic> toJson() {

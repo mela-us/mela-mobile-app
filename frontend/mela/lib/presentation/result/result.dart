@@ -2,21 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/core/widgets/practice_app_bar_widget.dart';
-import 'package:mela/domain/entity/exercise/exercise.dart';
-import 'package:mela/presentation/courses_screen/store/topic_store/topic_store.dart';
 import 'package:mela/presentation/divided_lectures_and_exercises_screen/store/exercise_store.dart';
+import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 import 'package:mela/presentation/question/store/question_store.dart';
 import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
 import 'package:mela/presentation/question/store/timer/timer_store.dart';
+import 'package:mela/presentation/topic_lecture_in_level_screen/store/topic_lecture_store.dart';
 import 'package:mela/utils/locale/app_localization.dart';
 import 'package:mela/utils/routes/routes.dart';
-import 'package:mobx/mobx.dart';
 
 import '../../constants/assets.dart';
 import '../../core/widgets/progress_indicator_widget.dart';
 import '../../di/service_locator.dart';
 import '../../domain/entity/question/question.dart';
-import '../lectures_in_topic_screen/store/lecture_store.dart';
 
 class ResultScreen extends StatefulWidget{
   ResultScreen({super.key});
@@ -29,8 +27,8 @@ class _ResultScreenState extends State<ResultScreen> {
   final QuestionStore _questionStore = getIt<QuestionStore>();
   final SingleQuestionStore _singleQuestionStore = getIt<SingleQuestionStore>();
   final TimerStore _timerStore = getIt<TimerStore>();
-  final LectureStore _lectureStore = getIt<LectureStore>();
-  final TopicStore _topicStore = getIt<TopicStore>();
+  final TopicLectureStore _topicLectureStore = getIt<TopicLectureStore>();
+  final LevelStore _levelStore = getIt<LevelStore>();
   final ExerciseStore _exerciseStore = getIt<ExerciseStore>();
 
   @override
@@ -53,17 +51,17 @@ class _ResultScreenState extends State<ResultScreen> {
         if (_questionStore.saving) {
           return const CustomProgressIndicatorWidget();
         }
-        else if (_topicStore.loading ||
-            _lectureStore.isGetLecturesLoading ||
+        else if (_levelStore.loading ||
+            _topicLectureStore.isGetTopicLectureLoading ||
             _exerciseStore.isGetExercisesLoading) {
           return const CustomProgressIndicatorWidget();
         }
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.appBackground,
           appBar: PracticeAppBar(pressedBack: () async {
-            await _topicStore.getAreLearningLectures();
-            if (_lectureStore.currentTopic != null){
-              await _lectureStore.getListLectureByTopicIdAndLevelId();
+            //await _topicStore.getAreLearningLectures();
+            if (_topicLectureStore.currentLevel != null){
+              await _topicLectureStore.getListTopicLectureInLevel();
             }
             if (_exerciseStore.currentLecture != null){
               await _exerciseStore.getExercisesByLectureId();

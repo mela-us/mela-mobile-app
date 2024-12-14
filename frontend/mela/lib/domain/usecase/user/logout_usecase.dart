@@ -1,8 +1,9 @@
+// ignore_for_file: unused_import
+
 import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:mela/core/domain/usecase/use_case.dart';
-import 'package:mela/domain/entity/stat/progress_list.dart';
 import 'package:mela/domain/repository/stat/stat_repository.dart';
 import 'package:mela/domain/repository/user/user_repository.dart';
 

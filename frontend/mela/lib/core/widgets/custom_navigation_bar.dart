@@ -19,7 +19,8 @@ class CustomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Theme.of(context).colorScheme.appBackground,
-      height: 60,
+      padding: const EdgeInsets.only(bottom: 12),
+      height: 68,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

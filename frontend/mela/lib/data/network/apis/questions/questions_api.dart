@@ -1,13 +1,11 @@
 import 'dart:async';
 
 //Data:-------------------------------------------------------------------------
-import 'package:dio/dio.dart';
 
 //Domain:-----------------------------------------------------------------------
 import 'package:mela/domain/entity/question/question_list.dart';
 
 //Other:------------------------------------------------------------------------
-import '../../../../domain/entity/question/question.dart';
 import '../../constants/endpoints_const.dart';
 import '../../dio_client.dart';
 

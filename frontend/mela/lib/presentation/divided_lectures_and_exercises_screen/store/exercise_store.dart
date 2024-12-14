@@ -1,9 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:mela/constants/enum.dart';
-import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/divided_lecture/divided_lecture_list.dart';
 import 'package:mela/domain/entity/exercise/exercise_list.dart';
-import 'package:mela/presentation/lectures_in_topic_screen/store/lecture_store.dart';
+import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
 import 'package:mela/utils/dio/dio_error_util.dart';
 import 'package:mobx/mobx.dart';
 
@@ -14,11 +12,11 @@ part 'exercise_store.g.dart';
 class ExerciseStore = _ExerciseStore with _$ExerciseStore;
 
 abstract class _ExerciseStore with Store {
-  LectureStore _lectureStore = getIt<LectureStore>();
   //usecase--------------
   GetExercisesUseCase _getExercisesUsecase;
+  GetDividedLectureUsecase _getDividedLectureUsecase;
 
-  _ExerciseStore(this._getExercisesUsecase);
+  _ExerciseStore(this._getExercisesUsecase, this._getDividedLectureUsecase);
 
 //obserbale
   @observable
@@ -75,7 +73,7 @@ abstract class _ExerciseStore with Store {
 
   @action
   Future getDividedLecturesByLectureId() async {
-    final future = _lectureStore.getDividedLectureUsecase
+    final future = _getDividedLectureUsecase
         .call(params: this.currentLecture!.lectureId);
     fetchDividedLecturesFuture = ObservableFuture(future);
     await future.then((value) {

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 
-import '../../core/stores/error/error_store.dart';
 import '../../domain/entity/stat/progress.dart';
 import '../../utils/routes/routes.dart';
 import 'widgets/expandable_list.dart';
@@ -23,7 +22,7 @@ class StatisticsScreen extends StatefulWidget {
 class _StatisticsScreenState extends State<StatisticsScreen> {
   //Stores:---------------------------------------------------------------------
   final StatisticsStore _store = getIt<StatisticsStore>();
-  final ErrorStore _errorStore = getIt<ErrorStore>();
+  // final ErrorStore _errorStore = getIt<ErrorStore>();
   //State set:------------------------------------------------------------------
 
   @override

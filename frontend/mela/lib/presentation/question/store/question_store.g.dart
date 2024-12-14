@@ -178,6 +178,17 @@ mixin _$QuestionStore on _QuestionStore, Store {
   }
 
   @override
+  void handleLogout() {
+    final _$actionInfo = _$_QuestionStoreActionController.startAction(
+        name: '_QuestionStore.handleLogout');
+    try {
+      return super.handleLogout();
+    } finally {
+      _$_QuestionStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 fetchQuestionsFuture: ${fetchQuestionsFuture},

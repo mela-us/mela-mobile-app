@@ -33,6 +33,17 @@ class SharedPreferenceHelper {
     return _sharedPreference.setBool(PreferencesConst.is_logged_in, value);
   }
 
+  // First time run app:--------------------------------------------------------
+  Future<bool> get isFirstTimeRunApp async {
+    return _sharedPreference.getBool(PreferencesConst.is_first_time_run_app) ??
+        true;
+  }
+
+  Future<bool> saveIsFirstTimeRunApp(bool value) async {
+    return _sharedPreference.setBool(
+        PreferencesConst.is_first_time_run_app, value);
+  }
+
   // Theme:------------------------------------------------------
   bool get isDarkMode {
     return _sharedPreference.getBool(PreferencesConst.is_dark_mode) ?? false;
@@ -48,6 +59,7 @@ class SharedPreferenceHelper {
   }
 
   Future<void> changeLanguage(String language) {
-    return _sharedPreference.setString(PreferencesConst.current_language, language);
+    return _sharedPreference.setString(
+        PreferencesConst.current_language, language);
   }
 }
