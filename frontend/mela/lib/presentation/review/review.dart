@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_math_fork/flutter_math.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/dimens.dart';
@@ -87,7 +88,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
             ),
 
             // SizedBox(height: 17),
-            _buildExplainView('Phần giải thích cho đáp án nằm ở đây'),
+            _buildExplainView(questions[_singleQuestionStore.currentIndex].guide),
             const SizedBox(height: 17),
           ],
         ),
@@ -149,28 +150,77 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
                     const SizedBox(height: 3.0),
 
+                    Flexible(child: Html(
+                      shrinkWrap: true,
+                      data: "<html>${questions[_singleQuestionStore.currentIndex].content}</html>",
+                      extensions: [
+                        TagExtension(
+                            tagsToExtend: {"latex"},
+                            builder: (extensionContext) {
+                              String latexCode = extensionContext.innerHtml ??
+                                  "";
+                              print("Latex: $latexCode");
+                              return SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Math.tex(
+                                  latexCode,
+                                  mathStyle: MathStyle.display,
+                                  textStyle: extensionContext.style
+                                      ?.generateTextStyle(),
+                                  onErrorFallback: (FlutterMathException e) {
+                                    return Text(e.message);
+                                  },
+                                ),
+                              );
+                            }
+                        ),
+                      ],
+                      style: {
+                        "*": Style.fromTextStyle(
+                          Theme
+                              .of(context)
+                              .textTheme
+                              .questionStyle
+                              .copyWith(
+                              color: Theme
+                                  .of(context)
+                                  .colorScheme
+                                  .inputTitleText
+                          ),
+                        ).merge(
+                            Style(
+                              display: Display.inline,
+                              textOverflow: TextOverflow.clip,
+                              padding: HtmlPaddings.all(0),
+                              margin: Margins.all(0),
+                            )
+                        )
+                      },
+                    ),
+                    ),
+
                     // Text(
                     //   questions[_singleQuestionStore.currentIndex].content,
                     //   style: Theme.of(context).textTheme.questionStyle
                     //       .copyWith(color: Theme.of(context)
                     //       .colorScheme.inputTitleText),
                     // ),
-                    Html(
-                      data:questions[_singleQuestionStore.currentIndex].content,
-                      style: {
-                        "*": Style.fromTextStyle(
-                            Theme.of(context).textTheme.questionStyle
-                                .copyWith(color: Theme.of(context)
-                                .colorScheme.inputTitleText),
-                        ).merge(
-                         Style(
-                           padding: HtmlPaddings.all(0),
-                           margin: Margins.all(0),
-                           display: Display.inline,
-                         )
-                        )
-                      },
-                    ),
+
+                    // Html(
+                    //   data:questions[_singleQuestionStore.currentIndex].content,
+                    //   style: {
+                    //     "*": Style.fromTextStyle(
+                    //         Theme.of(context).textTheme.questionStyle
+                    //             .copyWith(color: Theme.of(context)
+                    //             .colorScheme.inputTitleText),
+                    //     ).merge(
+                    //      Style(
+                    //
+                    //        display: Display.inline,
+                    //      )
+                    //     )
+                    //   },
+                    // ),
                   ],
                 ),
               ),
@@ -181,7 +231,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     );
   }
 
-  Widget _buildExplainView(String content){
+  Widget _buildExplainView(String content) {
     return Row(
       children: [
         Expanded(
@@ -200,15 +250,61 @@ class _ReviewScreenState extends State<ReviewScreen> {
                   children: [
                     Text(
                       AppLocalizations.of(context).translate('review_solution'),
-                      style: Theme.of(context).textTheme.subTitle
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .subTitle
                           .copyWith(color: const Color(0xFFFF6B00)),
                     ),
                     const SizedBox(height: 3.0),
 
-                    Text(
-                      content,
-                      style: Theme.of(context).textTheme.questionStyle.copyWith(
-                          color: Theme.of(context).colorScheme.inputTitleText),
+                    Flexible(
+                      child: Html(
+                        shrinkWrap: true,
+                        data: "<html>$content</html>",
+                        extensions: [
+                          TagExtension(
+                              tagsToExtend: {"latex"},
+                              builder: (extensionContext) {
+                                String latexCode = extensionContext.innerHtml;
+                                print("Latex: $latexCode");
+                                return SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Math.tex(
+                                    latexCode,
+                                    mathStyle: MathStyle.display,
+                                    textStyle: extensionContext.style
+                                        ?.generateTextStyle(),
+                                    onErrorFallback: (FlutterMathException e) {
+                                      return Text(e.message);
+                                    },
+                                  ),
+                                );
+                              }
+                          ),
+                        ],
+                        style: {
+                          "*": Style.fromTextStyle(
+                            Theme
+                                .of(context)
+                                .textTheme
+                                .questionStyle
+                                .copyWith(
+                                color: Theme
+                                    .of(context)
+                                    .colorScheme
+                                    .inputTitleText
+                            ),
+                          ).merge(
+                              Style(
+                                display: Display.inline,
+                                textOverflow: TextOverflow.clip,
+                                padding: HtmlPaddings.all(0),
+                                margin: Margins.all(0),
+                              )
+                          )
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -291,6 +387,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         itemBuilder: (context, index) {
+          print("Correct key ${question.correctQuizKey()}");
           return  Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: _buildQuizTile(
@@ -360,7 +457,30 @@ class _ReviewScreenState extends State<ReviewScreen> {
             //       .copyWith(color: textColor),
             // ),
             child: Html(
+              shrinkWrap: true,
               data: "<html>$text</html>",
+              extensions: [
+                TagExtension(
+                    tagsToExtend: {"latex"},
+                    builder: (extensionContext) {
+                      String latexCode = extensionContext.innerHtml ??
+                          "";
+                      print("Latex: $latexCode");
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Math.tex(
+                          latexCode,
+                          mathStyle: MathStyle.display,
+                          textStyle: extensionContext.style
+                              ?.generateTextStyle(),
+                          onErrorFallback: (FlutterMathException e) {
+                            return Text(e.message);
+                          },
+                        ),
+                      );
+                    }
+                ),
+              ],
               style: {
                 "*": Style.fromTextStyle(
                     Theme.of(context).textTheme.normal
@@ -368,6 +488,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 ).merge(
                     Style(
                       display: Display.inline,
+                      textOverflow: TextOverflow.clip
                     )
                 )
               },

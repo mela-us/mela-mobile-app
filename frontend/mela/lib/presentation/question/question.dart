@@ -1,6 +1,8 @@
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_math_fork/flutter_math.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/dimens.dart';
@@ -259,7 +261,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
     );
   }
 
-  Widget _buildQuestionContent(){
+  Widget _buildQuestionContent() {
     return Row(
       children: [
         Expanded(
@@ -279,8 +281,11 @@ class _QuestionScreenState extends State<QuestionScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Câu ${_singleQuestionStore.currentIndex+1}:',
-                      style: Theme.of(context).textTheme.subTitle
+                      'Câu ${_singleQuestionStore.currentIndex + 1}:',
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .subTitle
                           .copyWith(color: const Color(0xFFFF6B00)),
                     ),
                     const SizedBox(height: 3.0),
@@ -293,21 +298,54 @@ class _QuestionScreenState extends State<QuestionScreen> {
                     //           .colorScheme.inputTitleText
                     //   ),
                     // ),
-                    Html(
+                    // Flexible(
+                    //   child: ,
+                    // ),
+                    Flexible(child: Html(
+                      shrinkWrap: true,
                       data: "<html>${getCurrentQuestion()!.content}</html>",
+                      extensions: [
+                        TagExtension(
+                            tagsToExtend: {"latex"},
+                            builder: (extensionContext) {
+                              String latexCode = extensionContext.innerHtml ??
+                                  "";
+                              print("Latex: $latexCode");
+                              return SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Math.tex(
+                                  latexCode,
+                                  mathStyle: MathStyle.display,
+                                  textStyle: extensionContext.style
+                                      ?.generateTextStyle(),
+                                  onErrorFallback: (FlutterMathException e) {
+                                    return Text(e.message);
+                                  },
+                                ),
+                              );
+                            }
+                        ),
+                      ],
                       style: {
                         "*": Style.fromTextStyle(
-                            Theme.of(context).textTheme.questionStyle
-                                .copyWith(
-                                color: Theme.of(context)
-                                    .colorScheme.inputTitleText
-                            ),
+                          Theme
+                              .of(context)
+                              .textTheme
+                              .questionStyle
+                              .copyWith(
+                              color: Theme
+                                  .of(context)
+                                  .colorScheme
+                                  .inputTitleText
+                          ),
                         ).merge(
                             Style(
                               display: Display.inline,
+                              textOverflow: TextOverflow.clip,
                             )
                         )
                       },
+                    ),
                     ),
                   ],
                 ),
@@ -418,8 +456,26 @@ class _QuestionScreenState extends State<QuestionScreen> {
           child: getCurrentQuestion()!.options.isEmpty ?
           const Text('null') :
           Html(
+            shrinkWrap: true,
             data: "<html>${makeChoiceFromIndex(index)+
                 getCurrentQuestion()!.options[index].content}</html>",
+            extensions: [
+              TagExtension(
+                  tagsToExtend: {"latex"},
+                  builder: (extensionContext) {
+                    String latexCode = extensionContext.innerHtml ??
+                        "";
+                    return Math.tex(
+                      latexCode,
+                      mathStyle: MathStyle.display,
+                      textStyle: extensionContext.style?.generateTextStyle(),
+                      onErrorFallback: (FlutterMathException e) {
+                        return Text(e.message);
+                      },
+                    );
+                  }
+              ),
+            ],
             style: {
               "*": Style.fromTextStyle(
                   Theme.of(context).textTheme.normal
@@ -427,6 +483,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
               ).merge(
                   Style(
                     display: Display.inline,
+                    textOverflow: TextOverflow.clip,
                   )
               )
             },
