@@ -4,9 +4,12 @@ import com.hcmus.mela.auth.security.jwt.JwtTokenService;
 import com.hcmus.mela.exercise.model.ExerciseResultCount;
 import com.hcmus.mela.exercise.service.ExerciseResultService;
 import com.hcmus.mela.lecture.dto.dto.LectureDetailDto;
+import com.hcmus.mela.lecture.dto.dto.LecturesByTopicDto;
+import com.hcmus.mela.lecture.dto.response.GetLecturesByLevelResponse;
 import com.hcmus.mela.lecture.dto.response.GetLecturesResponse;
 import com.hcmus.mela.lecture.exception.exception.AsyncException;
 import com.hcmus.mela.lecture.mapper.LectureMapper;
+import com.hcmus.mela.lecture.mapper.TopicMapper;
 import com.hcmus.mela.lecture.model.Lecture;
 import com.hcmus.mela.lecture.repository.LectureRepository;
 import com.hcmus.mela.utils.GeneralMessageAccessor;
@@ -30,6 +33,8 @@ public class LectureListServiceImpl implements LectureListService {
     private final LectureRepository lectureRepository;
 
     private final ExerciseResultService exerciseResultService;
+
+    private final TopicService topicService;
 
     private final JwtTokenService jwtTokenService;
 
@@ -65,6 +70,41 @@ public class LectureListServiceImpl implements LectureListService {
         } catch (InterruptedException | ExecutionException e) {
             throw new AsyncException(e.getMessage());
         }
+    }
+
+    public GetLecturesByLevelResponse getLecturesByLevel(String authorizationHeader, UUID levelId) {
+        UUID userId = jwtTokenService.getUserIdFromToken(
+                jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader)
+        );
+
+        List<ExerciseResultCount> passExerciseTotals = exerciseResultService.countTotalPassExerciseOfLectures(userId);
+        Map<UUID, Integer> passExerciseTotalsMap = passExerciseTotals.stream()
+                .collect(Collectors.toMap(ExerciseResultCount::getLectureId, ExerciseResultCount::getTotal));
+
+        List<LecturesByTopicDto> lecturesByTopicDtos = topicService.getTopics().stream()
+                .map(TopicMapper.INSTANCE::topicToLecturesByTopicDto)
+                .collect(Collectors.toList());
+        for (LecturesByTopicDto lecturesByTopicDto : lecturesByTopicDtos) {
+            List<LectureDetailDto> lectureDetailDtos = lectureRepository
+                    .findLecturesByTopicAndLevel(lecturesByTopicDto.getTopicId(), levelId).stream()
+                    .map(LectureMapper.INSTANCE::lectureToLectureDetailDto)
+                    .toList();
+            lecturesByTopicDto.setLectures(lectureDetailDtos);
+            for (LectureDetailDto lectureDetailDto : lecturesByTopicDto.getLectures()) {
+                lectureDetailDto.setTotalPassExercises(
+                        passExerciseTotalsMap.getOrDefault(lectureDetailDto.getLectureId(), 0)
+                );
+            }
+        }
+        lecturesByTopicDtos = lecturesByTopicDtos.stream()
+                .filter(lecturesByTopicDto -> !lecturesByTopicDto.getLectures().isEmpty())
+                .toList();
+
+        return new GetLecturesByLevelResponse(
+                generalMessageAccessor.getMessage(null, "get_lectures_success"),
+                lecturesByTopicDtos.size(),
+                lecturesByTopicDtos
+        );
     }
 
     @Override
@@ -108,7 +148,7 @@ public class LectureListServiceImpl implements LectureListService {
         );
 
         CompletableFuture<List<Lecture>> getLectureTask = CompletableFuture.supplyAsync(() -> {
-            return lectureRepository.findLectureByRecent(size);
+            return lectureRepository.findLecturesByRecent(userId, size);
         });
         CompletableFuture<List<ExerciseResultCount>> getTotalPassExerciseTask = CompletableFuture.supplyAsync(() -> {
             return exerciseResultService.countTotalPassExerciseOfLectures(userId);
@@ -139,7 +179,8 @@ public class LectureListServiceImpl implements LectureListService {
             List<Lecture> lectures,
             List<ExerciseResultCount> passExerciseTotals
     ) {
-        Map<UUID, Integer> passExerciseTotalsMap = passExerciseTotals.stream()
+        Map<UUID, Integer> passExerciseTotalsMap = passExerciseTotals
+                .stream()
                 .collect(Collectors.toMap(ExerciseResultCount::getLectureId, ExerciseResultCount::getTotal));
 
         List<LectureDetailDto> lectureDetailDtos = new ArrayList<>();

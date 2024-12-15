@@ -21,6 +21,8 @@ public class LectureDetailDto {
 
     private String name;
 
+    private Integer ordinalNumber;
+
     private String description;
 
     private Integer totalExercises;

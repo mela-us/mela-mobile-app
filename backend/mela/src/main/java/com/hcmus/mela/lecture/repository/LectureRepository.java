@@ -11,8 +11,10 @@ public interface LectureRepository {
 
     List<Lecture> findLecturesByTopic(UUID topicId);
 
+    List<Lecture> findLecturesByTopicAndLevel(UUID topicId, UUID levelId);
+
     List<Lecture> findLecturesByKeyword(String keyword);
 
-    List<Lecture> findLectureByRecent(Integer size);
+    List<Lecture> findLecturesByRecent(UUID userId, Integer size);
 }
 

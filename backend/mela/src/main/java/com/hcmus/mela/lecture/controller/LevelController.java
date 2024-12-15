@@ -20,6 +20,6 @@ public class LevelController {
     @Operation(tags = "Level Service", description = "Get all levels.")
     public ResponseEntity<GetLevelsResponse> getLevelsRequest() {
 
-        return ResponseEntity.ok(levelService.getAllLevels());
+        return ResponseEntity.ok(levelService.getLevelsResponse());
     }
 }

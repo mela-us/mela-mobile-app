@@ -19,16 +19,21 @@ public class TopicServiceImpl implements TopicService {
 
     private final GeneralMessageAccessor generalMessageAccessor;
 
-    public GetTopicsResponse getAllTopics() {
+    public GetTopicsResponse getTopicsResponse() {
         GetTopicsResponse response = new GetTopicsResponse();
         List<Topic> topics = topicRepository.findAll();
 
         response.setMessage(generalMessageAccessor.getMessage(null, "get_topics_success"));
         response.setTotal(topics.size());
-        response.setData(topics.stream().map(
-                TopicMapper.INSTANCE::topicToTopicDto
-        ).collect(Collectors.toList()));
+        response.setData(
+                topics.stream().map(TopicMapper.INSTANCE::topicToTopicDto).collect(Collectors.toList())
+        );
 
         return response;
+    }
+
+    @Override
+    public List<Topic> getTopics() {
+        return topicRepository.findAll();
     }
 }
