@@ -20,8 +20,6 @@ public class Topic {
 
     private String name;
 
-    private String description;
-
     @Field("image_url")
     private String imageUrl;
 }

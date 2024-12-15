@@ -19,15 +19,15 @@ public class LevelServiceImpl implements LevelService {
 
     private final GeneralMessageAccessor generalMessageAccessor;
 
-    public GetLevelsResponse getAllLevels() {
+    public GetLevelsResponse getLevelsResponse() {
         GetLevelsResponse response = new GetLevelsResponse();
         List<Level> levels = levelRepository.findAll();
 
         response.setMessage(generalMessageAccessor.getMessage(null, "get_levels_success"));
         response.setTotal(levels.size());
-        response.setData(levels.stream().map(
-                LevelMapper.INSTANCE::levelToLevelDto
-        ).collect(Collectors.toList()));
+        response.setData(
+                levels.stream().map(LevelMapper.INSTANCE::levelToLevelDto).collect(Collectors.toList())
+        );
 
         return response;
     }

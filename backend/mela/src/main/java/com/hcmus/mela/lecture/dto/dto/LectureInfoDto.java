@@ -20,4 +20,6 @@ public class LectureInfoDto {
     private UUID levelId;
 
     private String name;
+
+    private Integer ordinalNumber;
 }

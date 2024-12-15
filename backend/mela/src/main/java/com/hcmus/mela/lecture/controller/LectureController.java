@@ -1,6 +1,7 @@
 package com.hcmus.mela.lecture.controller;
 
 import com.hcmus.mela.lecture.dto.response.GetLectureSectionsResponse;
+import com.hcmus.mela.lecture.dto.response.GetLecturesByLevelResponse;
 import com.hcmus.mela.lecture.dto.response.GetLecturesResponse;
 import com.hcmus.mela.lecture.service.LectureDetailService;
 import com.hcmus.mela.lecture.service.LectureListService;
@@ -21,16 +22,16 @@ public class LectureController {
     private final LectureDetailService lectureDetailService;
 
     @GetMapping
-    @Operation(tags = "Lecture Service", description = "Get lectures with specific topic id")
-    public ResponseEntity<GetLecturesResponse> getLecturesByTopicRequest(
-            @RequestParam(value = "topicId") String topicId,
+    @Operation(tags = "Lecture Service", description = "Get lectures with specific level id")
+    public ResponseEntity<GetLecturesByLevelResponse> getLecturesByLevelRequest(
+            @RequestParam(value = "levelId") String levelId,
             @RequestHeader("Authorization") String authorizationHeader
     ) {
-        return ResponseEntity.ok(lectureListService.getLecturesByTopic(authorizationHeader, UUID.fromString(topicId)));
+        return ResponseEntity.ok(lectureListService.getLecturesByLevel(authorizationHeader, UUID.fromString(levelId)));
     }
 
     @GetMapping("/search")
-    @Operation(tags = "Lecture Service", description = "Get lectures with keyword.")
+    @Operation(tags = "Lecture Service", description = "Get lectures by keyword.")
     public ResponseEntity<GetLecturesResponse> getLecturesByKeywordRequest(
             @RequestParam(value = "q") String keyword,
             @RequestHeader("Authorization") String authorizationHeader

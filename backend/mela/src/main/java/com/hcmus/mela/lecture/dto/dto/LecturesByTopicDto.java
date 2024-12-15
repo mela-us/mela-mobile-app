@@ -5,17 +5,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LevelDto {
+public class LecturesByTopicDto {
 
-    private UUID levelId;
+    private UUID topicId;
 
-    private String name;
+    private String topicName;
 
-    private String imageUrl;
+    private List<LectureDetailDto> lectures;
 }

@@ -20,6 +20,6 @@ public class TopicController {
     @Operation(tags = "Topic Service", description = "Get all topics.")
     public ResponseEntity<GetTopicsResponse> getTopicsRequest() {
 
-        return ResponseEntity.ok(topicService.getAllTopics());
+        return ResponseEntity.ok(topicService.getTopicsResponse());
     }
 }

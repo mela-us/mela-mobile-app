@@ -27,13 +27,16 @@ public class Lecture {
 
     private String name;
 
+    @Field("ordinal_number")
+    private Integer ordinalNumber;
+
     private String description;
+
+    private List<LectureSection> sections;
 
     @Field("total_exercises")
     private Integer totalExercises;
 
     @Field("total_pass_exercises")
     private Integer totalPassExercises;
-
-    private List<LectureSection> sections;
 }
