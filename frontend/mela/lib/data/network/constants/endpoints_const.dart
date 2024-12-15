@@ -20,6 +20,7 @@ class EndpointsConst {
   static const String signup = "/api/register";
   static const String logout = "/api/logout";
   static const String refreshAccessToken = "/api/refresh-token";
+  static const String getTopicLectureInLevel = "/api/lectures";
   static const String getTopics = "/api/topics";
   static const String getLectures = "/api/lectures";
   static const String getLecturesAreLearning = "/api/lectures/recent";

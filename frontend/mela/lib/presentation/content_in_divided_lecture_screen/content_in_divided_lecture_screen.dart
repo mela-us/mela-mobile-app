@@ -3,41 +3,6 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/domain/entity/divided_lecture/divided_lecture.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
-// class ContentInDividedLectureScreen extends StatelessWidget {
-//   final DividedLecture currentDividedLecture;
-//   const ContentInDividedLectureScreen(
-//       {super.key, required this.currentDividedLecture});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(
-//           currentDividedLecture.dividedLectureName,
-//           style: Theme.of(context)
-//               .textTheme
-//               .heading
-//               .copyWith(color: Theme.of(context).colorScheme.primary),
-//         ),
-//         leading: IconButton(
-//           icon: Icon(Icons.arrow_back),
-//           onPressed: () {
-//             Navigator.of(context).pop();
-//           },
-//         ),
-//       ),
-//       body: Container(
-//         padding: const EdgeInsets.all(16),
-//         child: SfPdfViewer.network(
-//         "https://mela-storage-dev.s3.ap-southeast-1.amazonaws.com/lectures/pdfs/CD1.I.1Quy_lu%E1%BA%ADt_d%C3%A3y_s%E1%BB%91_timo1.pdf",
-//         canShowScrollHead: true,
-//         enableDoubleTapZooming: true,
-//       ),
-//       ),
-//     );
-//   }
-// }
-
 class ContentInDividedLectureScreen extends StatefulWidget {
   final DividedLecture currentDividedLecture;
 
@@ -162,14 +127,16 @@ class _ContentInDividedLectureScreenState
       ),
       body: Container(
         padding: const EdgeInsets.all(16),
+        color: Theme.of(context).colorScheme.appBackground,
         child: SfPdfViewer.network(
-          "https://mela-storage-dev.s3.ap-southeast-1.amazonaws.com/lectures/pdfs/CD1.I.1Quy_lu%E1%BA%ADt_d%C3%A3y_s%E1%BB%91_timo1.pdf",
+          "https://mela-storage-dev.s3.ap-southeast-1.amazonaws.com/${widget.currentDividedLecture.urlContentInDividedLecture}",
           controller: _pdfViewerController,
           canShowScrollHead: false,
           enableDoubleTapZooming: true,
           onDocumentLoaded: (PdfDocumentLoadedDetails details) {
             _totalPages = details.document.pages.count;
           },
+          
         ),
       ),
     );

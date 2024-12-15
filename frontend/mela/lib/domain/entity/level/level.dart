@@ -7,7 +7,7 @@ class Level {
     return Level(
       levelId: json['levelId'],
       levelName: json['name'],
-      levelImagePath: json['url'],
+      levelImagePath: json['imageUrl'],
     );
   }
 }

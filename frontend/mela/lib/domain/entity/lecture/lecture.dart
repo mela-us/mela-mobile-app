@@ -3,6 +3,7 @@ class Lecture {
   final String levelId;
   final String topicId;
   final String lectureName;
+  final int ordinalNumber;
   final String lectureDescription;
   final int totalExercises;
   final int totalPassExercises;
@@ -12,6 +13,7 @@ class Lecture {
     required this.levelId,
     required this.topicId,
     required this.lectureName,
+    required this.ordinalNumber,
     required this.lectureDescription,
     required this.totalExercises,
     required this.totalPassExercises,
@@ -24,6 +26,7 @@ class Lecture {
       levelId: json['levelId'],
       topicId: json['topicId'],
       lectureName: json['name'],
+      ordinalNumber: json['ordinalNumber'] ?? 0,
       lectureDescription: json['description'],
       totalExercises: json['totalExercises'],
       totalPassExercises: json['totalPassExercises'],

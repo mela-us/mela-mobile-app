@@ -17,6 +17,7 @@ class LectureRepositoryImpl extends LectureRepository {
         lectureId: "0",
         levelId: "0",
         topicId: "0",
+        ordinalNumber: 1,
         lectureName: "Lý thuyết đồng dư",
         lectureDescription: "Mô tả bài học chi tiết",
         totalExercises: 4,

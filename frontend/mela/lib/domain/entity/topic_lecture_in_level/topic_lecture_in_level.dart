@@ -13,7 +13,7 @@ class TopicLectureInLevel {
     return TopicLectureInLevel(
       topicId: json['topicId'],
       topicName: json['topicName'],
-      lectureList: LectureList.fromJson(json['lectureList']),
+      lectureList: LectureList.fromJson(json['lectures']),
     );
   }
 }
