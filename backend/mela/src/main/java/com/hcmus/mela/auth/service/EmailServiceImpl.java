@@ -5,6 +5,7 @@ import com.hcmus.mela.auth.exception.exception.ForgotPasswordException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,9 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService{
+
+    @Value("${spring.mail.username}")
+    private String mailUsername;
 
     private final JavaMailSender javaMailSender;
 
@@ -34,6 +38,7 @@ public class EmailServiceImpl implements EmailService{
         MimeMessage message = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom(mailUsername);
             helper.setTo(details.getRecipient());
             helper.setSubject(details.getSubject());
             helper.setText(details.getMsgBody(), true);
