@@ -246,6 +246,7 @@ class __FormContentState extends State<_FormContent> {
                 textButton: "Đăng nhập",
                 onPressed: () async {
                   if (_formKey.currentState?.validate() ?? false) {
+                    FocusScope.of(context).unfocus();
                     try {
                       await _userLoginStore.login(
                         _emailController.text,

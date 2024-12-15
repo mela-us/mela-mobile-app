@@ -228,6 +228,7 @@ class __FormContentState extends State<_FormContent> {
             ButtonLoginOrSignUp(
                 textButton: "Đăng ký",
                 onPressed: () async {
+                  FocusScope.of(context).unfocus();
                   if (!_userSignupStore.isAccepted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
