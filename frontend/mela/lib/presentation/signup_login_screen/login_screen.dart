@@ -270,26 +270,26 @@ class __FormContentState extends State<_FormContent> {
                   }
                 }),
 
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Hoặc tiếp tục với',
-                    style: Theme.of(context).textTheme.normal.copyWith(
-                        color: Theme.of(context).colorScheme.secondary)),
-              ],
-            ),
-            const SizedBox(height: 16),
-            //Sign Up by Third Party
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ThirdPartyButton(pathLogo: Assets.googleIcon, onPressed: () {}),
-                const SizedBox(width: 20),
-                ThirdPartyButton(
-                    pathLogo: Assets.facebookIcon, onPressed: () {}),
-              ],
-            ),
+            // const SizedBox(height: 16),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     Text('Hoặc tiếp tục với',
+            //         style: Theme.of(context).textTheme.normal.copyWith(
+            //             color: Theme.of(context).colorScheme.secondary)),
+            //   ],
+            // ),
+            // const SizedBox(height: 16),
+            // //Sign Up by Third Party
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     ThirdPartyButton(pathLogo: Assets.googleIcon, onPressed: () {}),
+            //     const SizedBox(width: 20),
+            //     ThirdPartyButton(
+            //         pathLogo: Assets.facebookIcon, onPressed: () {}),
+            //   ],
+            // ),
             const SizedBox(height: 30),
 
             //Return sign up

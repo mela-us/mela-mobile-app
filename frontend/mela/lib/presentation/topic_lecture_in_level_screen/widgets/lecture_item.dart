@@ -97,7 +97,7 @@ class LectureItem extends StatelessWidget {
                     Text(
                       lecture.lectureDescription,
                       style: Theme.of(context).textTheme.normal.copyWith(
-                          color: Theme.of(context).colorScheme.secondary, fontSize: 10),
+                          color: Theme.of(context).colorScheme.secondary, fontSize: 12),
                     ),
                   ],
                 ),
