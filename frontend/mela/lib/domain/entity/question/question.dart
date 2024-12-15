@@ -36,6 +36,11 @@ class Question{
   }
 
   bool isCorrect(String userAnswer){
+    if (options.isEmpty) {
+      if (userAnswer == blankAnswer) return true;
+      return false;
+    }
+    //option not empty
     if (userAnswer.length == 1) {
       int answerOrd = charToNumber(userAnswer);
       print ("answer Ord: $answerOrd");
@@ -46,8 +51,6 @@ class Question{
         return false;
       }
     }
-
-    if (userAnswer == blankAnswer) return true;
     return false;
   }
 

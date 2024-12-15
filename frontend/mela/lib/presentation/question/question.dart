@@ -568,9 +568,11 @@ class _QuestionScreenState extends State<QuestionScreen> {
                  child: QuestionListOverlay(
                      isSubmitted: (bool submit) {
                        if (!submit) {
+
                          questionListOverlay.remove();
                        }
                        else {
+                         _singleQuestionStore.printAllAnswer();
                          questionListOverlay.remove();
                          Navigator.of(context)
                              .pushReplacementNamed(Routes.result);

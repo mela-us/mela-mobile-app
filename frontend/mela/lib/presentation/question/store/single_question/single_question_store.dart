@@ -38,6 +38,12 @@ abstract class _SingleQuestionStore with Store {
     currentQuizAnswer = value;
   }
 
+  void printAllAnswer(){
+    for (String answer in _userAnswers) {
+      print('$answer');
+    }
+  }
+
   //Computed:-------------------------------------------------------------------
   @computed
   String get currentAnswer => _userAnswers[_questionIndex];
