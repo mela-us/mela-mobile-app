@@ -13,7 +13,8 @@ import '../../../utils/locale/app_localization.dart';
 import '../store/question_store.dart';
 
 class QuestionAppBar extends StatefulWidget implements PreferredSizeWidget{
-  const QuestionAppBar({super.key});
+  final OverlayEntry questionListOverlay;
+  const QuestionAppBar({super.key, required this.questionListOverlay});
 
   @override
   State<QuestionAppBar> createState() => _QuestionAppBarState();
@@ -28,6 +29,8 @@ class _QuestionAppBarState extends State<QuestionAppBar> {
   final QuestionStore _questionStore = getIt<QuestionStore>();
 
   late OverlayEntry quitDialogOverlay;
+  late OverlayEntry _questionListOverlay;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -103,7 +106,7 @@ class _QuestionAppBarState extends State<QuestionAppBar> {
   Widget _buildClockTimer(BuildContext context){
     return Observer(builder: (_) =>
         Padding(
-          padding: const EdgeInsets.only(right: Dimens.practiceRightContainer),
+          padding: const EdgeInsets.only(right: 0),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -137,6 +140,23 @@ class _QuestionAppBarState extends State<QuestionAppBar> {
     );
   }
 
+  Widget _buildQuestionList(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 3),
+      child: IconButton(
+        onPressed: _listButtonPressedEvent,
+        icon: Icon(
+          Icons.list_outlined,
+          size: 30,
+          color: Theme
+              .of(context)
+              .colorScheme
+              .buttonYesBgOrText,
+        ),
+      ),
+    );
+  }
+
   //Support methods:------------------------------------------------------------
   String getHour(Duration elapsedTime){
     return elapsedTime.inHours.toString().padLeft(2, '0');
@@ -152,7 +172,11 @@ class _QuestionAppBarState extends State<QuestionAppBar> {
 
   List<Widget> _buildAction(BuildContext context) {
     return [
+
       _buildClockTimer(context),
+      const SizedBox(width: 10),
+      _buildQuestionList(context),
+      const SizedBox(width: Dimens.practiceRightContainer-7)
     ];
   }
 
@@ -161,6 +185,11 @@ class _QuestionAppBarState extends State<QuestionAppBar> {
   void _backPreviousScreen(BuildContext context) {
     Overlay.of(context).insert(quitDialogOverlay);
   }
+
+  void _listButtonPressedEvent() {
+    Overlay.of(context).insert(_questionListOverlay);
+  }
+
 
   //Initialize overlay dialog:--------------------------------------------------
   void _initQuitDialog(){
@@ -181,6 +210,7 @@ class _QuestionAppBarState extends State<QuestionAppBar> {
           );
         }
     );
+    _questionListOverlay = widget.questionListOverlay;
   }
 }
 

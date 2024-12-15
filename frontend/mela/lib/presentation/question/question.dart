@@ -141,11 +141,13 @@ class _QuestionScreenState extends State<QuestionScreen> {
                 .of(context)
                 .colorScheme
                 .appBackground,
-            appBar: const QuestionAppBar(),
+            appBar: QuestionAppBar(
+              questionListOverlay: questionListOverlay,
+            ),
             body: SingleChildScrollView(
               child: _buildMainBody(),
             ),
-            floatingActionButton: _buildFAB(context),
+            // floatingActionButton: _buildFAB(context),
           );
         }
       },
