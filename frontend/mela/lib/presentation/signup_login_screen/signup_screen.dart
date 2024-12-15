@@ -46,6 +46,8 @@ class __FormContentState extends State<_FormContent> {
   //controllers:-----------------------------------------------------------------
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final FocusNode _emailFocus = FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
 
   //disposers:-----------------------------------------------------------------
   late final ReactionDisposer _signupReactionDisposer;
@@ -63,6 +65,8 @@ class __FormContentState extends State<_FormContent> {
 
   @override
   void dispose() {
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
     _signupReactionDisposer();
     _emailController.dispose();
     _passwordController.dispose();
@@ -134,6 +138,7 @@ class __FormContentState extends State<_FormContent> {
             //Email TextField
             TextFormField(
               controller: _emailController,
+              focusNode: _emailFocus,
               validator: (value) {
                 return CheckInput.validateEmail(value);
               },
@@ -158,6 +163,7 @@ class __FormContentState extends State<_FormContent> {
             Observer(builder: (context) {
               return TextFormField(
                 controller: _passwordController,
+                focusNode: _passwordFocus,
                 validator: (value) {
                   return CheckInput.validatePassword(value);
                 },
@@ -228,7 +234,8 @@ class __FormContentState extends State<_FormContent> {
             ButtonLoginOrSignUp(
                 textButton: "Đăng ký",
                 onPressed: () async {
-                  FocusScope.of(context).unfocus();
+                  _emailFocus.unfocus();
+                  _passwordFocus.unfocus();
                   if (!_userSignupStore.isAccepted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
