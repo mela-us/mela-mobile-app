@@ -16,6 +16,10 @@ public class ExerciseDto {
 
     private UUID lectureId;
 
+    private UUID topicId;
+
+    private UUID levelId;
+
     private String exerciseName;
 
     private Integer ordinalNumber;

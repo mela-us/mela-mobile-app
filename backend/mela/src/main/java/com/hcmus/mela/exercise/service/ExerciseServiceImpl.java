@@ -11,10 +11,11 @@ import com.hcmus.mela.exercise.model.Exercise;
 import com.hcmus.mela.exercise.model.Question;
 import com.hcmus.mela.exercise.repository.ExerciseRepository;
 import com.hcmus.mela.exercise.mapper.ExerciseMapper;
+import com.hcmus.mela.lecture.model.Lecture;
+import com.hcmus.mela.lecture.service.LectureDetailService;
 import com.hcmus.mela.utils.GeneralMessageAccessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 
@@ -33,6 +34,7 @@ public class ExerciseServiceImpl implements ExerciseService {
     private final ExerciseValidationService exerciseValidationService;
     private final GeneralMessageAccessor generalMessageAccessor;
     private final ExerciseResultService exerciseResultService;
+    private final LectureDetailService lectureDetailService;
 
     @Override
     public Exercise findByExerciseId(UUID exerciseId) {
@@ -50,7 +52,6 @@ public class ExerciseServiceImpl implements ExerciseService {
         exerciseValidationService.validateExercise(exerciseRequest);
 
         final UUID exerciseId = exerciseRequest.getExerciseId();
-        final UUID userId = exerciseRequest.getUserId();
 
         Exercise exercise = findByExerciseId(exerciseId);
 
@@ -82,6 +83,8 @@ public class ExerciseServiceImpl implements ExerciseService {
 
         List<Exercise> exercises = findAllExercisesInLecture(lectureId);
 
+        Lecture lecture = lectureDetailService.getLectureById(lectureId);
+
         List<ExerciseDto> exerciseDtos = new ArrayList<>();
 
         for(Exercise exercise: exercises) {
@@ -91,6 +94,11 @@ public class ExerciseServiceImpl implements ExerciseService {
             final Integer numberOfQuestions = exercise.getQuestions().size();
 
             ExerciseDto exerciseDto = ExerciseMapper.INSTANCE.convertToExerciseDto(exercise);
+
+            exerciseDto.setTopicId(lecture.getTopicId());
+
+            exerciseDto.setLevelId(lecture.getLevelId());
+
             ExerciseResultDto exerciseResultDto = exerciseResultService.getBestExerciseResult(userId, exerciseId);
 
             exerciseDto.setTotalQuestions(numberOfQuestions);
