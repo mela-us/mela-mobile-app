@@ -44,6 +44,31 @@ class _FilterScreenState extends State<FilterScreen> {
     super.dispose();
   }
 
+  bool isStudentAtPrimary(String levelId) {
+    if (levelId == _levelStore.levelList!.levelList[0].levelId ||
+        levelId == _levelStore.levelList!.levelList[1].levelId ||
+        levelId == _levelStore.levelList!.levelList[2].levelId ||
+        levelId == _levelStore.levelList!.levelList[3].levelId ||
+        levelId == _levelStore.levelList!.levelList[4].levelId) {
+      return true;
+    }
+    return false;
+  }
+
+  bool isStudentAtSecondary(String levelId) {
+    if (levelId == _levelStore.levelList!.levelList[5].levelId ||
+        levelId == _levelStore.levelList!.levelList[6].levelId ||
+        levelId == _levelStore.levelList!.levelList[7].levelId ||
+        levelId == _levelStore.levelList!.levelList[8].levelId) {
+      return true;
+    }
+    return false;
+  }
+
+  bool isStudentAtHighSchool(String levelId) {
+    return false;
+  }
+
   void filterLectures() {
     filteredLectures.lectures.clear();
     filteredLectures = LectureList(
@@ -64,16 +89,16 @@ class _FilterScreenState extends State<FilterScreen> {
         _filterStore.isSecondarySelected ||
         _filterStore.isHighSchoolSelected) {
       if (!_filterStore.isPrimarySelected) {
-        filteredLectures.lectures.removeWhere((lecture) =>
-            lecture.levelId == _levelStore.levelList!.levelList[0].levelId);
+        filteredLectures.lectures
+            .removeWhere((lecture) => isStudentAtPrimary(lecture.levelId));
       }
       if (!_filterStore.isSecondarySelected) {
-        filteredLectures.lectures.removeWhere((lecture) =>
-            lecture.levelId == _levelStore.levelList!.levelList[1].levelId);
+        filteredLectures.lectures
+            .removeWhere((lecture) => isStudentAtSecondary(lecture.levelId));
       }
       if (!_filterStore.isHighSchoolSelected) {
-        filteredLectures.lectures.removeWhere((lecture) =>
-            lecture.levelId == _levelStore.levelList!.levelList[2].levelId);
+        filteredLectures.lectures
+            .removeWhere((lecture) => isStudentAtHighSchool(lecture.levelId));
       }
     }
 

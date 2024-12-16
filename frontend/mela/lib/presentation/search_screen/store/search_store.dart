@@ -149,4 +149,13 @@ abstract class _SearchStore with Store {
   void resetErrorString() {
     errorString = '';
   }
+  @action
+  void resetAllInSearch(){
+    isSearched = false;
+    isFiltered = false;
+    errorString = '';
+    searchHistory = List.empty();
+    lecturesAfterSearchingAndFiltering = null;
+    lecturesAfterSearching = null;
+  }
 }

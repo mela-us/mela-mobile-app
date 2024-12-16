@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/divided_lectures_and_exercises_screen/store/exercise_store.dart';
+import 'package:mela/presentation/filter_screen/store/filter_store.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
+import 'package:mela/presentation/search_screen/store/search_store.dart';
 
 import '../../../domain/entity/lecture/lecture.dart';
 import '../../../utils/routes/routes.dart';
@@ -11,6 +13,8 @@ class LectureItem extends StatelessWidget {
   final Lecture lecture;
   final _levelStore = getIt<LevelStore>();
   final _exerciseStore = getIt<ExerciseStore>();
+  final _searchStore = getIt<SearchStore>();
+  final _filterStore = getIt<FilterStore>();
   LectureItem({
     Key? key,
     required this.lecture,
@@ -32,8 +36,12 @@ class LectureItem extends StatelessWidget {
             //if user at lecture in topic screen, not remove this screen
             // Return false to remove search and filter screens
             // Return true to keep other screens
-            return routeName != Routes.searchScreen &&
-                routeName != Routes.filterScreen;
+            if(routeName == Routes.searchScreen || routeName == Routes.filterScreen){
+              _searchStore.resetAllInSearch();
+              _filterStore.resetFilter();
+              return false;
+            }
+            return true;
           },
         );
       },

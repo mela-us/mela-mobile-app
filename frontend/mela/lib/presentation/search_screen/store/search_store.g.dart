@@ -277,6 +277,17 @@ mixin _$SearchStore on _SearchStore, Store {
   }
 
   @override
+  void resetAllInSearch() {
+    final _$actionInfo = _$_SearchStoreActionController.startAction(
+        name: '_SearchStore.resetAllInSearch');
+    try {
+      return super.resetAllInSearch();
+    } finally {
+      _$_SearchStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isSearched: ${isSearched},
