@@ -58,6 +58,8 @@ abstract class _ExerciseStore with Store {
       print("*********exerciseList trong exercise store");
       print(exerciseList);
     }).catchError((onError) {
+      print("*********onError trong exercise store");
+      print(onError.toString());
       exerciseList = null;
       if (onError is DioException) {
         if (onError.response?.statusCode == 401) {
@@ -73,8 +75,8 @@ abstract class _ExerciseStore with Store {
 
   @action
   Future getDividedLecturesByLectureId() async {
-    final future = _getDividedLectureUsecase
-        .call(params: this.currentLecture!.lectureId);
+    final future =
+        _getDividedLectureUsecase.call(params: this.currentLecture!.lectureId);
     fetchDividedLecturesFuture = ObservableFuture(future);
     await future.then((value) {
       dividedLectureList = value;

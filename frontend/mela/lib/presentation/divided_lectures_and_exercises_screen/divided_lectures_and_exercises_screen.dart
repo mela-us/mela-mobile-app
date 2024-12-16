@@ -32,7 +32,9 @@ class _DividedLecturesAndExercisesScreenState
     _unAuthorizedReactionDisposer = reaction(
       (_) => _exerciseStore.isUnAuthorized,
       (value) {
+        print("isUnAuthorized in DivideLecture: $value");
         if (value) {
+          print("----------->isUnAuthorized DivideLecture: $value");
           _exerciseStore.isUnAuthorized = false;
           _exerciseStore.resetErrorString();
           //Remove all routes in stack

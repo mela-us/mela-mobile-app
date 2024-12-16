@@ -21,7 +21,6 @@ class DividedLectureItem extends StatelessWidget {
     String levelName =
         _levelStore.getLevelNameById(currentDividedLecture.levelId);
 
-
     return Container(
       margin: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
       padding: const EdgeInsets.all(16),
@@ -51,35 +50,33 @@ class DividedLectureItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Divided Lecture name
+                  Text(
+                    currentDividedLecture.dividedLectureName,
+                    style: Theme.of(context)
+                        .textTheme
+                        .title
+                        .copyWith(color: Theme.of(context).colorScheme.primary,fontSize: 18),
+                  ),
+                  const SizedBox(height: 6),
                   // Topic name + level name
                   Text(
                     '$topicName - $levelName',
                     style: Theme.of(context)
                         .textTheme
                         .subTitle
-                        .copyWith(color: Colors.orange),
+                        .copyWith(color: Colors.orange, fontSize: 14),
                   ),
 
-                  const SizedBox(height: 4),
-                  // Divided Lecture name
-                  Text(
-                    currentDividedLecture.dividedLectureName,
-                    style: Theme.of(context)
-                        .textTheme
-                        .subHeading
-                        .copyWith(color: Colors.black),
-                  ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 6),
                   // pages + origin
                   Text(
-                    '${currentDividedLecture.pages} trang | ${currentDividedLecture.origin}',
-                    style: Theme.of(context)
-                        .textTheme
-                        .normal
-                        .copyWith(color: Colors.black),
+                    'Nguồn: ${currentDividedLecture.origin}',
+                    style: Theme.of(context).textTheme.normal.copyWith(
+                          color: Theme.of(context).colorScheme.secondary, fontSize: 14),
                   ),
 
-                  const SizedBox(width: 16),
+                  const SizedBox(width: 6),
                 ],
               ),
             ),

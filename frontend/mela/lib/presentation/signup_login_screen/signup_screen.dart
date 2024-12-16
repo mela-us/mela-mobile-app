@@ -46,6 +46,8 @@ class __FormContentState extends State<_FormContent> {
   //controllers:-----------------------------------------------------------------
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final FocusNode _emailFocus = FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
 
   //disposers:-----------------------------------------------------------------
   late final ReactionDisposer _signupReactionDisposer;
@@ -63,6 +65,8 @@ class __FormContentState extends State<_FormContent> {
 
   @override
   void dispose() {
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
     _signupReactionDisposer();
     _emailController.dispose();
     _passwordController.dispose();
@@ -134,6 +138,7 @@ class __FormContentState extends State<_FormContent> {
             //Email TextField
             TextFormField(
               controller: _emailController,
+              focusNode: _emailFocus,
               validator: (value) {
                 return CheckInput.validateEmail(value);
               },
@@ -158,6 +163,7 @@ class __FormContentState extends State<_FormContent> {
             Observer(builder: (context) {
               return TextFormField(
                 controller: _passwordController,
+                focusNode: _passwordFocus,
                 validator: (value) {
                   return CheckInput.validatePassword(value);
                 },
@@ -228,7 +234,8 @@ class __FormContentState extends State<_FormContent> {
             ButtonLoginOrSignUp(
                 textButton: "Đăng ký",
                 onPressed: () async {
-                  FocusScope.of(context).unfocus();
+                  _emailFocus.unfocus();
+                  _passwordFocus.unfocus();
                   if (!_userSignupStore.isAccepted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -257,26 +264,26 @@ class __FormContentState extends State<_FormContent> {
                     }
                   }
                 }),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Hoặc tiếp tục với",
-                    style: Theme.of(context).textTheme.normal.copyWith(
-                        color: Theme.of(context).colorScheme.secondary)),
-              ],
-            ),
-            const SizedBox(height: 16),
-            //Sign Up by Third Party
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ThirdPartyButton(pathLogo: Assets.googleIcon, onPressed: () {}),
-                const SizedBox(width: 20),
-                ThirdPartyButton(
-                    pathLogo: Assets.facebookIcon, onPressed: () {}),
-              ],
-            ),
+            // const SizedBox(height: 16),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     Text("Hoặc tiếp tục với",
+            //         style: Theme.of(context).textTheme.normal.copyWith(
+            //             color: Theme.of(context).colorScheme.secondary)),
+            //   ],
+            // ),
+            // const SizedBox(height: 16),
+            // //Sign Up by Third Party
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     ThirdPartyButton(pathLogo: Assets.googleIcon, onPressed: () {}),
+            //     const SizedBox(width: 20),
+            //     ThirdPartyButton(
+            //         pathLogo: Assets.facebookIcon, onPressed: () {}),
+            //   ],
+            // ),
             const SizedBox(height: 30),
 
             //Return login

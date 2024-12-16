@@ -46,6 +46,8 @@ class __FormContentState extends State<_FormContent> {
   //controllers:-----------------------------------------------------------------
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final FocusNode _emailFocus = FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -80,7 +82,7 @@ class __FormContentState extends State<_FormContent> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     //for logout from another screen when refreshToken is expired
-    print("}}}}}}}}}}}}}}}-------}}}}}}}}}}}}}}}");
+    print("Vao did change dependencies");
     if (!_userLoginStore.isSetLoginLoading) {
       print("}}}}}}}}}}}}}}}}*****}}}}}}}}}}}}}}");
       _userLoginStore.setIsLogin();
@@ -89,6 +91,8 @@ class __FormContentState extends State<_FormContent> {
 
   @override
   void dispose() {
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _loginReactionDisposer();
@@ -167,6 +171,7 @@ class __FormContentState extends State<_FormContent> {
             //Email TextField
             TextFormField(
               controller: _emailController,
+              focusNode: _emailFocus,
               validator: (value) {
                 return CheckInput.validateEmail(value);
               },
@@ -192,6 +197,7 @@ class __FormContentState extends State<_FormContent> {
               builder: (context) {
                 return TextFormField(
                   controller: _passwordController,
+                  focusNode: _passwordFocus,
                   validator: (value) {
                     return CheckInput.validatePassword(value);
                   },
@@ -245,8 +251,10 @@ class __FormContentState extends State<_FormContent> {
             ButtonLoginOrSignUp(
                 textButton: "Đăng nhập",
                 onPressed: () async {
+                  _emailFocus.unfocus();
+                  _passwordFocus.unfocus();
                   if (_formKey.currentState?.validate() ?? false) {
-                    FocusScope.of(context).unfocus();
+                    //FocusScope.of(context).unfocus();
                     try {
                       await _userLoginStore.login(
                         _emailController.text,
@@ -256,33 +264,32 @@ class __FormContentState extends State<_FormContent> {
                       _passwordController.clear();
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                            content: Text(e.toString())),
+                        SnackBar(content: Text(e.toString())),
                       );
                     }
                   }
                 }),
 
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Hoặc tiếp tục với',
-                    style: Theme.of(context).textTheme.normal.copyWith(
-                        color: Theme.of(context).colorScheme.secondary)),
-              ],
-            ),
-            const SizedBox(height: 16),
-            //Sign Up by Third Party
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ThirdPartyButton(pathLogo: Assets.googleIcon, onPressed: () {}),
-                const SizedBox(width: 20),
-                ThirdPartyButton(
-                    pathLogo: Assets.facebookIcon, onPressed: () {}),
-              ],
-            ),
+            // const SizedBox(height: 16),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     Text('Hoặc tiếp tục với',
+            //         style: Theme.of(context).textTheme.normal.copyWith(
+            //             color: Theme.of(context).colorScheme.secondary)),
+            //   ],
+            // ),
+            // const SizedBox(height: 16),
+            // //Sign Up by Third Party
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     ThirdPartyButton(pathLogo: Assets.googleIcon, onPressed: () {}),
+            //     const SizedBox(width: 20),
+            //     ThirdPartyButton(
+            //         pathLogo: Assets.facebookIcon, onPressed: () {}),
+            //   ],
+            // ),
             const SizedBox(height: 30),
 
             //Return sign up

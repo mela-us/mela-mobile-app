@@ -93,11 +93,11 @@ class LectureItem extends StatelessWidget {
                           .subTitle
                           .copyWith(color: Colors.orange,fontSize: 12),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height:  10),
                     Text(
                       lecture.lectureDescription,
                       style: Theme.of(context).textTheme.normal.copyWith(
-                          color: Theme.of(context).colorScheme.secondary, fontSize: 10),
+                          color: Theme.of(context).colorScheme.secondary, fontSize: 12),
                     ),
                   ],
                 ),
