@@ -26,6 +26,16 @@ class LecturesInTopic extends StatelessWidget {
     return "assets/images/topics/default_topic.png";
   }
 
+  int numberCompletedLectures() {
+    int count = 0;
+    for (var lecture in lectureList.lectures) {
+      if (lecture.totalExercises == lecture.totalPassExercises) {
+        count++;
+      }
+    }
+    return count;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (lectureList.lectures.isEmpty) {
@@ -52,11 +62,23 @@ class LecturesInTopic extends StatelessWidget {
           ),
           backgroundColor: const Color.fromARGB(255, 238, 237, 237),
           childrenPadding: const EdgeInsets.only(bottom: 6),
-          title: Text(
-            topicName,
-            style: Theme.of(context).textTheme.subTitle.copyWith(
-                color: Theme.of(context).colorScheme.inversePrimary,
-                fontSize: 16),
+          title: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  "$topicName",
+                  style: Theme.of(context).textTheme.subTitle.copyWith(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      fontSize: 16),
+                ),
+              ),
+              Text(
+                  "${numberCompletedLectures().toString()}/${lectureList.lectures.length} bài học",
+                  style: Theme.of(context).textTheme.subTitle.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 12),
+                  ),
+            ],
           ),
           children: [
             Column(

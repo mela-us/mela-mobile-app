@@ -55,7 +55,7 @@ class DividedLectureItem extends StatelessWidget {
                     currentDividedLecture.dividedLectureName,
                     style: Theme.of(context)
                         .textTheme
-                        .title
+                        .subTitle
                         .copyWith(color: Theme.of(context).colorScheme.primary,fontSize: 18),
                   ),
                   const SizedBox(height: 6),

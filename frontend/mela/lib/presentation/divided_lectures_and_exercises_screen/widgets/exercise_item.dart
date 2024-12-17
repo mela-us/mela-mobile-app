@@ -64,7 +64,7 @@ class ExerciseItem extends StatelessWidget {
                   // Exercise name
                   Text(
                     currentExercise.exerciseName,
-                    style: Theme.of(context).textTheme.title.copyWith(
+                    style: Theme.of(context).textTheme.subTitle.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                         fontSize: 18),
                   ),
