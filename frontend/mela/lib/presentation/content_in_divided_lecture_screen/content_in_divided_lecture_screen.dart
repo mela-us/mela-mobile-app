@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/domain/entity/divided_lecture/divided_lecture.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:syncfusion_flutter_core/theme.dart';
 
 class ContentInDividedLectureScreen extends StatefulWidget {
   final DividedLecture currentDividedLecture;
@@ -101,6 +102,8 @@ class _ContentInDividedLectureScreenState
 
   @override
   Widget build(BuildContext context) {
+    print("===============ContentInDividedLectureScreen");
+    print(widget.currentDividedLecture.urlContentInDividedLecture);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -125,18 +128,40 @@ class _ContentInDividedLectureScreenState
           ),
         ],
       ),
-      body: Container(
-        padding: const EdgeInsets.all(16),
-        color: Theme.of(context).colorScheme.appBackground,
-        child: SfPdfViewer.network(
-          "https://mela-storage-dev.s3.ap-southeast-1.amazonaws.com/${widget.currentDividedLecture.urlContentInDividedLecture}",
-          controller: _pdfViewerController,
-          canShowScrollHead: false,
-          enableDoubleTapZooming: true,
-          onDocumentLoaded: (PdfDocumentLoadedDetails details) {
-            _totalPages = details.document.pages.count;
-          },
-          
+      body: Center(
+        child: Container(
+          margin:
+              const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 16),
+          padding: const EdgeInsets.all(4),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(6),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.18),
+                spreadRadius: 2,
+                blurRadius: 2,
+                offset: const Offset(0, 0),
+              ),
+            ],
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: SfPdfViewerTheme(
+            data: SfPdfViewerThemeData(
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              progressBarColor: Theme.of(context).colorScheme.primary,
+            ),
+            child: SfPdfViewer.network(
+              pageSpacing: 4,
+              "https://mela-storage-dev.s3.ap-southeast-1.amazonaws.com/${widget.currentDividedLecture.urlContentInDividedLecture}",
+              controller: _pdfViewerController,
+              canShowScrollHead: false,
+              enableDoubleTapZooming: true,
+              onDocumentLoaded: (PdfDocumentLoadedDetails details) {
+                _totalPages = details.document.pages.count;
+              },
+            ),
+          ),
         ),
       ),
     );
