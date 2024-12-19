@@ -12,7 +12,7 @@ dependencies:
     sdk: flutter
 
   # A
-  another_flushbar: ^1.12.29
+  # another_flushbar: ^1.12.29
   # B
   # C
   cupertino_icons: ^1.0.5
@@ -30,7 +30,7 @@ dependencies:
   flutter_math_fork: ^0.7.2
   # G
   get_it: ^7.2.0
-  google_fonts: ^4.0.3
+  # google_fonts: ^4.0.3
   # H
   http: ^1.2.2
   # I
