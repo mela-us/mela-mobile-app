@@ -5,22 +5,22 @@ class CheckInput {
     }
 
     if (password.length < 8) {
-      return 'Mật khẩu phải có ít nhất 8 kí tự';
+      return 'Phải có ít nhất 8 kí tự';
     }
     if (!RegExp(r'[A-Z]').hasMatch(password)) {
-      return 'Mật khẩu phải chứa ít nhất 1 chữ in hoa';
+      return 'Phải chứa ít nhất 1 chữ in hoa';
     }
 
     if (!RegExp(r'[a-z]').hasMatch(password)) {
-      return 'Mật khẩu phải chứa ít nhất 1 chữ thường';
+      return 'Phải chứa ít nhất 1 chữ thường';
     }
 
     if (!RegExp(r'\d').hasMatch(password)) {
-      return 'Mật khẩu phải chứa ít nhất 1 chữ số';
+      return 'Phải chứa ít nhất 1 chữ số';
     }
 
-    if (!RegExp(r'[@$!%*?&]').hasMatch(password)) {
-      return 'Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt (@\$!%*?&)';
+    if (!RegExp(r'[@$!%*?&#]').hasMatch(password)) {
+      return 'Phải chứa ký tự đặc biệt (@\$!%*?&#)';
     }
 
     return null;
