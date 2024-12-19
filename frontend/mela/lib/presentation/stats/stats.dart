@@ -51,20 +51,11 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Set cứng danh sách tab bar
     final List<String> levelNames = ["Lớp 1", "Lớp 2", "Lớp 3", "Lớp 4", "Lớp 5"];
-    final Map<String, List<Progress>> filteredLists = {
-      for (var levelName in levelNames)
-        levelName: filterProgressByDivision(levelName),
-    };
-
-    // Filter out empty lists
-    final List<String> nonEmptyLevels = filteredLists.entries
-        .where((entry) => entry.value.isNotEmpty)
-        .map((entry) => entry.key)
-        .toList();
 
     return DefaultTabController(
-      length: nonEmptyLevels.length,
+      length: levelNames.length, // Đặt số lượng tab cứng
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -86,39 +77,35 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 icon: const Icon(Icons.search),
                 color: Theme.of(context).colorScheme.onPrimary,
               ),
-            )
+            ),
           ],
-          bottom: nonEmptyLevels.isNotEmpty
-              ? PreferredSize(
-            preferredSize: Size.fromHeight(50),
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(50),
             child: Align(
-              alignment: nonEmptyLevels.length <= 3
+              alignment: levelNames.length <= 3
                   ? Alignment.center // Center tabs when few
                   : Alignment.centerLeft, // Default for scrollable
               child: TabBar(
-                isScrollable: nonEmptyLevels.length > 3,
+                isScrollable: levelNames.length > 3,
                 labelColor: Theme.of(context).colorScheme.tertiary,
-                unselectedLabelColor:
-                Theme.of(context).colorScheme.onSecondary,
+                unselectedLabelColor: Theme.of(context).colorScheme.onSecondary,
                 dividerColor: Colors.transparent,
                 overlayColor: WidgetStateProperty.all(Colors.transparent),
                 indicator: UnderlineTabIndicator(
                   borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.tertiary,
-                      width: 2),
+                    color: Theme.of(context).colorScheme.tertiary,
+                    width: 2,
+                  ),
                 ),
-                tabs: nonEmptyLevels
-                    .map((levelName) => Tab(text: levelName))
-                    .toList(),
+                tabs: levelNames.map((levelName) => Tab(text: levelName)).toList(),
               ),
             ),
-          )
-              : null,
+          ),
         ),
         body: Observer(
           builder: (context) {
             if (_store.progressLoading) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
             if (!_store.success) {
               return Center(
@@ -130,31 +117,38 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       .copyWith(color: Theme.of(context).colorScheme.textInBg1),
                 ),
               );
-            } else if (nonEmptyLevels.isEmpty) {
-              return Center(
-                child: Text(
-                  "Không có dữ liệu để hiển thị",
-                  style: Theme.of(context)
-                      .textTheme
-                      .subTitle
-                      .copyWith(color: Theme.of(context).colorScheme.textInBg1),
-                ),
-              );
-            } else {
-              return TabBarView(
-                children: nonEmptyLevels
-                    .map((levelName) =>
-                    ExpandableList(list: filteredLists[levelName]!))
-                    .toList(),
-              );
             }
+
+            // Lọc danh sách theo `levelName` hoặc trả về danh sách rỗng
+            final Map<String, List<Progress>> filteredLists = {
+              for (var levelName in levelNames)
+                levelName: filterProgressByDivision(levelName),
+            };
+
+            return TabBarView(
+              children: levelNames.map((levelName) {
+                final list = filteredLists[levelName];
+                if (list!.isEmpty) {
+                  return Center(
+                    child: Text(
+                      "Không có dữ liệu cho $levelName",
+                      style: Theme.of(context)
+                          .textTheme
+                          .subTitle
+                          .copyWith(color: Theme.of(context).colorScheme.textInBg1),
+                    ),
+                  );
+                } else {
+                  return ExpandableList(list: list);
+                }
+              }).toList(),
+            );
           },
         ),
         backgroundColor: Theme.of(context).colorScheme.appBackground,
       ),
     );
   }
-
 
   //
   List<Progress> filterProgressByDivision(String levelName) {
