@@ -51,8 +51,20 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> levelNames = ["Lớp 1", "Lớp 2", "Lớp 3", "Lớp 4", "Lớp 5"];
+    final Map<String, List<Progress>> filteredLists = {
+      for (var levelName in levelNames)
+        levelName: filterProgressByDivision(levelName),
+    };
+
+    // Filter out empty lists
+    final List<String> nonEmptyLevels = filteredLists.entries
+        .where((entry) => entry.value.isNotEmpty)
+        .map((entry) => entry.key)
+        .toList();
+
     return DefaultTabController(
-      length: 3,
+      length: nonEmptyLevels.length,
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -76,21 +88,32 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               ),
             )
           ],
-          bottom: TabBar(
-            labelColor: Theme.of(context).colorScheme.tertiary,
-            unselectedLabelColor: Theme.of(context).colorScheme.onSecondary,
-            dividerColor: Colors.transparent,
-            overlayColor: WidgetStateProperty.all(Colors.transparent),
-            indicator: UnderlineTabIndicator(
-              borderSide: BorderSide(
-                  color: Theme.of(context).colorScheme.tertiary, width: 2),
+          bottom: nonEmptyLevels.isNotEmpty
+              ? PreferredSize(
+            preferredSize: Size.fromHeight(50),
+            child: Align(
+              alignment: nonEmptyLevels.length <= 3
+                  ? Alignment.center // Center tabs when few
+                  : Alignment.centerLeft, // Default for scrollable
+              child: TabBar(
+                isScrollable: nonEmptyLevels.length > 3,
+                labelColor: Theme.of(context).colorScheme.tertiary,
+                unselectedLabelColor:
+                Theme.of(context).colorScheme.onSecondary,
+                dividerColor: Colors.transparent,
+                overlayColor: WidgetStateProperty.all(Colors.transparent),
+                indicator: UnderlineTabIndicator(
+                  borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.tertiary,
+                      width: 2),
+                ),
+                tabs: nonEmptyLevels
+                    .map((levelName) => Tab(text: levelName))
+                    .toList(),
+              ),
             ),
-            tabs: const [
-              Tab(text: "Tiểu học"),
-              Tab(text: "Trung học"),
-              Tab(text: "Phổ thông"),
-            ],
-          ),
+          )
+              : null,
         ),
         body: Observer(
           builder: (context) {
@@ -101,18 +124,28 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               return Center(
                 child: Text(
                   "Đã xảy ra lỗi",
-                  style: Theme.of(context).textTheme.subTitle
+                  style: Theme.of(context)
+                      .textTheme
+                      .subTitle
                       .copyWith(color: Theme.of(context).colorScheme.textInBg1),
                 ),
               );
-            }
-            else {
+            } else if (nonEmptyLevels.isEmpty) {
+              return Center(
+                child: Text(
+                  "Không có dữ liệu để hiển thị",
+                  style: Theme.of(context)
+                      .textTheme
+                      .subTitle
+                      .copyWith(color: Theme.of(context).colorScheme.textInBg1),
+                ),
+              );
+            } else {
               return TabBarView(
-              children: [
-                  ExpandableList(list: filterProgressByDivision("Tiểu học")),
-                  ExpandableList(list: filterProgressByDivision("Trung học")),
-                  ExpandableList(list: filterProgressByDivision("Phổ thông")),
-                ],
+                children: nonEmptyLevels
+                    .map((levelName) =>
+                    ExpandableList(list: filteredLists[levelName]!))
+                    .toList(),
               );
             }
           },
@@ -121,6 +154,8 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
       ),
     );
   }
+
+
   //
   List<Progress> filterProgressByDivision(String levelName) {
     List<Progress>? list = _store.progressList?.progressList;

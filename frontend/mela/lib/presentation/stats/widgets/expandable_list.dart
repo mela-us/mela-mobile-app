@@ -1,7 +1,6 @@
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/domain/entity/stat/progress.dart';
-import '../store/stats_store.dart';
 import 'package:flutter/material.dart';
 import 'expandable_item.dart';
 
@@ -25,11 +24,28 @@ class ExpandableList extends StatelessWidget {
           );
         }
 
-        return ListView.builder(
-          itemCount: list!.length,
-          itemBuilder: (context, index) {
-            return ExpandableItem(item: list![index]);
-          },
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Center(
+                child: Text(
+                  "Thống kê Số câu đúng / Số câu đã làm",
+                  style: Theme.of(context).textTheme.miniCaption
+                      .copyWith(color: Theme.of(context).colorScheme.textInBg1),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: list!.length,
+                itemBuilder: (context, index) {
+                  return ExpandableItem(item: list![index]);
+                },
+              ),
+            ),
+          ],
         );
       },
     );
