@@ -18,18 +18,20 @@ class LecturesInTopic extends StatelessWidget {
       required this.lectureList});
 
   Widget getIconTopic() {
-    // for (var topic in _levelStore.topicList!.topics) {
-    //   if (topic.topicId == topicId && topic.imageTopicPath != "") {
-    //     return Image(
-    //       image: NetworkImage(topic.imageTopicPath),
-    //       fit: BoxFit.contain,
-    //     );
-    //   }
-    // }
+    for (var topic in _levelStore.topicList!.topics) {
+      if (topic.topicId == topicId && topic.imageTopicPath != "") {
+        return Image(
+          image: NetworkImage(topic.imageTopicPath),
+          width: 28,
+          height: 28,
+          fit: BoxFit.contain,
+        );
+      }
+    }
     return const Image(
       image: AssetImage("assets/images/topics/default_topic.png"),
-      width: 26,
-      height: 26,
+      width: 28,
+      height: 28,
       fit: BoxFit.contain,
     );
   }
