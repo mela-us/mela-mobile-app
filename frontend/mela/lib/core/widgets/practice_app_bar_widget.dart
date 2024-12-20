@@ -11,6 +11,7 @@ class PracticeAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      scrolledUnderElevation: 0,
       title: _buildTitle(context),
       backgroundColor: Theme.of(context).colorScheme.appBackground,
       actions: _buildAction(),

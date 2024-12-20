@@ -18,12 +18,14 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: _FormContent(),
+            physics: MediaQuery.of(context).viewInsets.bottom > 0
+            ? const BouncingScrollPhysics()
+            : const NeverScrollableScrollPhysics(),
+            child: const _FormContent(),
           ),
         ),
       ),

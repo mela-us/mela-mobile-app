@@ -69,6 +69,7 @@ class _DividedLecturesAndExercisesScreenState
       appBar:
           //AppBar
           AppBar(
+        scrolledUnderElevation: 0,
         title: Text(
           _exerciseStore.currentLecture!.lectureName,
           style: Theme.of(context)
@@ -103,7 +104,7 @@ class _DividedLecturesAndExercisesScreenState
                 unselectedLabelColor: Theme.of(context).colorScheme.primary,
                 overlayColor: WidgetStateProperty.all(Colors.transparent),
                 indicator: BoxDecoration(
-                  color: Theme.of(context).colorScheme.inversePrimary,
+                  color: Theme.of(context).colorScheme.tertiary,
                   borderRadius: BorderRadius.circular(40),
                 ),
                 dividerColor: Colors.transparent,

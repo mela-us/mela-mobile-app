@@ -55,17 +55,17 @@ class LecturesInTopic extends StatelessWidget {
       return const Center(child: Text("Không có bài giảng"));
     }
     return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10, top: 6),
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 6,bottom: 4),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(10),
           color: Theme.of(context).colorScheme.onTertiary,
         ),
         child: ExpansionTile(
           shape: RoundedRectangleBorder(
               side: BorderSide.none,
               borderRadius:
-                  BorderRadius.circular(20) // Removes border or divider effect
+                  BorderRadius.circular(10) // Removes border or divider effect
               ),
           //mainAxisSize: MainAxisSize.min,
           leading: getIconTopic(),

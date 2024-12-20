@@ -73,44 +73,63 @@ class SearchingBarState extends State<SearchingBar> {
     if (!_searchStore.isSearched) {
       return const SizedBox.shrink();
     }
-
-    Color buttonColor = _searchStore.isFiltered
-        ? Theme.of(context).colorScheme.tertiary
-        : Theme.of(context).colorScheme.onTertiary;
-
-    Color iconColor = _searchStore.isFiltered
-        ? Theme.of(context).colorScheme.onTertiary
-        : Theme.of(context).colorScheme.tertiary;
-
-    BoxBorder? border;
-    if (!_searchStore.isFiltered) {
-      border = Border.all(
-        color: Theme.of(context).colorScheme.tertiary,
-        width: 1,
-      );
-    }
-
-    return Container(
-      padding: const EdgeInsets.all(0),
-      margin: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: buttonColor,
-        //color: Colors.red,
-        borderRadius: BorderRadius.circular(8),
-        border: border,
-      ),
-      child: IconButton(
-        padding: const EdgeInsets.all(0),
-        icon: Icon(
-          Icons.tune,
-          color: iconColor,
-          size: 24,
-        ),
-        onPressed: () {
+    return Padding(
+      padding: const EdgeInsets.only(right: 8.0),
+      child: GestureDetector(
+        onTap: () {
           Navigator.of(context).pushNamed(Routes.filterScreen);
         },
+        child: !_searchStore.isFiltered
+            ? Image.asset(
+                'assets/images/is_not_filter.png',
+                width: 38,
+                height: 38,
+              )
+            : Image.asset(
+                'assets/images/is_filtered.png',
+                width: 38,
+                height: 38,
+              ),
       ),
     );
+
+    // Color buttonColor = _searchStore.isFiltered
+    //     ? Theme.of(context).colorScheme.tertiary
+    //     : Theme.of(context).colorScheme.onTertiary;
+
+    // Color iconColor = _searchStore.isFiltered
+    //     ? Theme.of(context).colorScheme.onTertiary
+    //     : Theme.of(context).colorScheme.tertiary;
+
+    // BoxBorder? border;
+    // if (!_searchStore.isFiltered) {
+    //   border = Border.all(
+    //     color: Theme.of(context).colorScheme.tertiary,
+    //     width: 1,
+    //   );
+    // }
+
+    // return Container(
+    //   padding: const EdgeInsets.all(0),
+    //   margin: const EdgeInsets.all(8),
+    //   decoration: BoxDecoration(
+    //     color: buttonColor,
+    //     //color: Colors.red,
+    //     borderRadius: BorderRadius.circular(8),
+    //     border: border,
+    //   ),
+    //   child: IconButton(
+    //     padding: const EdgeInsets.all(0),
+    //     icon: Icon(
+    //       Icons.tune,
+    //       color: iconColor,
+    //       size: 24,
+    //     ),
+    //     onPressed: () {
+    //       Navigator.of(context).pushNamed(Routes.filterScreen);
+    //     },
+    //   ),
+    // );
   }
 
   @override
@@ -121,12 +140,19 @@ class SearchingBarState extends State<SearchingBar> {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.onTertiary,
           borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
+              blurRadius: 6,
+              offset: const Offset(3, 5),
+            ),
+          ],
         ),
         child: Padding(
           padding: const EdgeInsets.only(left: 10),
           child: Row(
             children: [
-              const Icon(Icons.search, size: 30),
+              const Icon(Icons.search, size: 20),
               const SizedBox(width: 10),
               Expanded(
                 child: TextField(

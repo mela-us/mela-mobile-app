@@ -58,6 +58,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
       length: levelNames.length, // Đặt số lượng tab cứng
       child: Scaffold(
         appBar: AppBar(
+          scrolledUnderElevation: 0,
           automaticallyImplyLeading: false,
           backgroundColor: Theme.of(context).colorScheme.appBackground,
           elevation: 0,

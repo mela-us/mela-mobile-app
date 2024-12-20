@@ -22,19 +22,22 @@ class TopicLectureListview extends StatelessWidget {
         ),
       );
     }
-    return ListView.builder(
-      // shrinkWrap: true,
-      itemCount: topicLectureStore
-          .topicLectureInLevelList!.topicLectureInLevelList.length,
-      itemBuilder: (context, index) {
-        return LecturesInTopic(
-            topicId: topicLectureStore.topicLectureInLevelList!
-                .topicLectureInLevelList[index].topicId,
-            topicName: topicLectureStore.topicLectureInLevelList!
-                .topicLectureInLevelList[index].topicName,
-            lectureList: topicLectureStore.topicLectureInLevelList!
-                .topicLectureInLevelList[index].lectureList);
-      },
+    return Padding(
+      padding: const EdgeInsets.only(top: 10.0),
+      child: ListView.builder(
+        // shrinkWrap: true,
+        itemCount: topicLectureStore
+            .topicLectureInLevelList!.topicLectureInLevelList.length,
+        itemBuilder: (context, index) {
+          return LecturesInTopic(
+              topicId: topicLectureStore.topicLectureInLevelList!
+                  .topicLectureInLevelList[index].topicId,
+              topicName: topicLectureStore.topicLectureInLevelList!
+                  .topicLectureInLevelList[index].topicName,
+              lectureList: topicLectureStore.topicLectureInLevelList!
+                  .topicLectureInLevelList[index].lectureList);
+        },
+      ),
     );
   }
 }

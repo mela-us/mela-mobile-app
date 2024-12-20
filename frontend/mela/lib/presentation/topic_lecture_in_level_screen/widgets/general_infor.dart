@@ -24,35 +24,38 @@ class GeneralInfor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Container(
-          padding:
-              const EdgeInsets.only(top: 10, right: 18, left: 18, bottom: 10),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.onTertiary,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              ItemInfor(
-                  title: "Mô tả chung",
-                  content:
-                      "- Khóa học hoàn toàn miễn phí và dành cho học sinh ${_topicLectureStore.currentLevel!.levelName}.\n- Khóa học bao gồm nhiều chủ đề và bài học khác nhau từ cơ bản đến nâng cao."),
-              ItemInfor(
-                  title: "Mục tiêu khóa học",
-                  content:
-                      "- Học sinh của ${_topicLectureStore.currentLevel!.levelName} có thể nắm rõ được kiến thức cơ bản và nâng cao của từng bài giảng và ôn tập lại với các bài tập."),
-              ItemInfor(
-                  title: "Cấu trúc khóa học",
-                  content: getInforForStructureGrade()),
-              ItemInfor(
-                  title: "Liên hệ hỗ trợ",
-                  content: "datnmathelearning2025@gmail.com"),
-            ],
+    return Padding(
+      padding: const EdgeInsets.only(top: 10.0),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Container(
+            padding:
+                const EdgeInsets.only(top: 10, right: 18, left: 18, bottom: 10),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.onTertiary,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ItemInfor(
+                    title: "Mô tả chung",
+                    content:
+                        "- Khóa học hoàn toàn miễn phí và dành cho học sinh ${_topicLectureStore.currentLevel!.levelName}.\n- Khóa học bao gồm nhiều chủ đề và bài học khác nhau từ cơ bản đến nâng cao."),
+                ItemInfor(
+                    title: "Mục tiêu khóa học",
+                    content:
+                        "- Học sinh của ${_topicLectureStore.currentLevel!.levelName} có thể nắm rõ được kiến thức cơ bản và nâng cao của từng bài giảng và ôn tập lại với các bài tập."),
+                ItemInfor(
+                    title: "Cấu trúc khóa học",
+                    content: getInforForStructureGrade()),
+                ItemInfor(
+                    title: "Liên hệ hỗ trợ",
+                    content: "datnmathelearning2025@gmail.com"),
+              ],
+            ),
           ),
         ),
       ),

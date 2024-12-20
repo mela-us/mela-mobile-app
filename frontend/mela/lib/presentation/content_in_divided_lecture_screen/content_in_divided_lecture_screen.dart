@@ -106,6 +106,7 @@ class _ContentInDividedLectureScreenState
     print(widget.currentDividedLecture.urlContentInDividedLecture);
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         title: Text(
           widget.currentDividedLecture.dividedLectureName,
           style: Theme.of(context)

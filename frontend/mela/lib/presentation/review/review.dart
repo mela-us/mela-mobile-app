@@ -39,18 +39,19 @@ class _ReviewScreenState extends State<ReviewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PracticeAppBar(pressedBack: () {
+      appBar: PracticeAppBar(
+        pressedBack: () {
           Navigator.of(context).pop();
-          },
-        ),
-        body: _buildBody(),
-        bottomNavigationBar: _buildQuestionList(),
+        },
+      ),
+      body: _buildBody(),
+      bottomNavigationBar: _buildQuestionList(),
     );
   }
 
   //Build Components:-----------------------------------------------------------
-  Widget _buildBody(){
-    return Observer(builder: (context){
+  Widget _buildBody() {
+    return Observer(builder: (context) {
       return SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,34 +61,42 @@ class _ReviewScreenState extends State<ReviewScreen> {
             const SizedBox(height: 27),
 
             Padding(
-                padding: const EdgeInsets.only(left: Dimens.practiceLeftContainer),
-                child: Text(
-                  AppLocalizations.of(context).translate('review_ask'),
-                  style: Theme.of(context).textTheme.subTitle
-                      .copyWith(color: Theme.of(context).colorScheme.textInBg2),
-                ),
+              padding:
+                  const EdgeInsets.only(left: Dimens.practiceLeftContainer),
+              child: Text(
+                AppLocalizations.of(context).translate('review_ask'),
+                style: Theme.of(context)
+                    .textTheme
+                    .subTitle
+                    .copyWith(color: Theme.of(context).colorScheme.textInBg2),
+              ),
             ),
 
             const SizedBox(height: 17),
 
-            isQuizQuestion(questions[_singleQuestionStore.currentIndex])?
-            _buildQuizAnswer() : _buildFillAnswer(),
+            isQuizQuestion(questions[_singleQuestionStore.currentIndex])
+                ? _buildQuizAnswer()
+                : _buildFillAnswer(),
 
-            isQuizQuestion(questions[_singleQuestionStore.currentIndex])?
-            const SizedBox(height: 15): const SizedBox(height: 27),
-
+            isQuizQuestion(questions[_singleQuestionStore.currentIndex])
+                ? const SizedBox(height: 15)
+                : const SizedBox(height: 27),
 
             Padding(
-              padding: const EdgeInsets.only(left: Dimens.practiceLeftContainer),
+              padding:
+                  const EdgeInsets.only(left: Dimens.practiceLeftContainer),
               child: Text(
                 AppLocalizations.of(context).translate('review_explain'),
-                style: Theme.of(context).textTheme.subTitle
+                style: Theme.of(context)
+                    .textTheme
+                    .subTitle
                     .copyWith(color: Theme.of(context).colorScheme.textInBg2),
               ),
             ),
 
             // SizedBox(height: 17),
-            _buildExplainView(questions[_singleQuestionStore.currentIndex].guide),
+            _buildExplainView(
+                questions[_singleQuestionStore.currentIndex].guide),
             const SizedBox(height: 17),
           ],
         ),
@@ -95,7 +104,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     });
   }
 
-  Widget _buildQuestionList(){
+  Widget _buildQuestionList() {
     return Container(
       height: Dimens.listOverlayHeight,
       color: Colors.white,
@@ -105,17 +114,16 @@ class _ReviewScreenState extends State<ReviewScreen> {
         scrollDirection: Axis.horizontal,
         shrinkWrap: true,
         itemBuilder: (context, i) {
-          return Observer(builder: (context){
+          return Observer(builder: (context) {
             return InkWell(
               borderRadius: BorderRadius.circular(90),
-              onTap: (){
+              onTap: () {
                 _singleQuestionStore.changeQuestion(i);
               },
               child: ListItemTile(
-                  status: getStatus(
-                      questions[i], _singleQuestionStore.userAnswers[i]
-                  ),
-                  index: i,
+                status: getStatus(
+                    questions[i], _singleQuestionStore.userAnswers[i]),
+                index: i,
               ),
             );
           });
@@ -123,8 +131,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
       ),
     );
   }
+
   //Build Items:----------------------------------------------------------------
-  Widget _buildQuestionWidget(){
+  Widget _buildQuestionWidget() {
     return Row(
       children: [
         Expanded(
@@ -143,59 +152,54 @@ class _ReviewScreenState extends State<ReviewScreen> {
                   children: [
                     Text(
                       'Câu ${_singleQuestionStore.currentIndex + 1}',
-                      style: Theme.of(context).textTheme.subTitle
+                      style: Theme.of(context)
+                          .textTheme
+                          .subTitle
                           .copyWith(color: const Color(0xFFFF6B00)),
                     ),
 
                     const SizedBox(height: 3.0),
 
-                    Flexible(child: Html(
-                      shrinkWrap: true,
-                      data: "<html>${questions[_singleQuestionStore.currentIndex].content}</html>",
-                      extensions: [
-                        TagExtension(
-                            tagsToExtend: {"latex"},
-                            builder: (extensionContext) {
-                              String latexCode = extensionContext.innerHtml ??
-                                  "";
-                              print("Latex: $latexCode");
-                              return SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Math.tex(
-                                  latexCode,
-                                  mathStyle: MathStyle.display,
-                                  textStyle: extensionContext.style
-                                      ?.generateTextStyle(),
-                                  onErrorFallback: (FlutterMathException e) {
-                                    return Text(e.message);
-                                  },
-                                ),
-                              );
-                            }
-                        ),
-                      ],
-                      style: {
-                        "*": Style.fromTextStyle(
-                          Theme
-                              .of(context)
-                              .textTheme
-                              .questionStyle
-                              .copyWith(
-                              color: Theme
-                                  .of(context)
-                                  .colorScheme
-                                  .inputTitleText
-                          ),
-                        ).merge(
-                            Style(
-                              display: Display.inline,
-                              textOverflow: TextOverflow.clip,
-                              padding: HtmlPaddings.all(0),
-                              margin: Margins.all(0),
-                            )
-                        )
-                      },
-                    ),
+                    Flexible(
+                      child: Html(
+                        shrinkWrap: true,
+                        data:
+                            "<html>${questions[_singleQuestionStore.currentIndex].content}</html>",
+                        extensions: [
+                          TagExtension(
+                              tagsToExtend: {"latex"},
+                              builder: (extensionContext) {
+                                String latexCode =
+                                    extensionContext.innerHtml ?? "";
+                                print("Latex: $latexCode");
+                                return SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Math.tex(
+                                    latexCode,
+                                    mathStyle: MathStyle.display,
+                                    textStyle: extensionContext.style
+                                        ?.generateTextStyle(),
+                                    onErrorFallback: (FlutterMathException e) {
+                                      return Text(e.message);
+                                    },
+                                  ),
+                                );
+                              }),
+                        ],
+                        style: {
+                          "*": Style.fromTextStyle(
+                            Theme.of(context).textTheme.questionStyle.copyWith(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .inputTitleText),
+                          ).merge(Style(
+                            display: Display.inline,
+                            textOverflow: TextOverflow.clip,
+                            padding: HtmlPaddings.all(0),
+                            margin: Margins.all(0),
+                          ))
+                        },
+                      ),
                     ),
 
                     // Text(
@@ -250,14 +254,12 @@ class _ReviewScreenState extends State<ReviewScreen> {
                   children: [
                     Text(
                       AppLocalizations.of(context).translate('review_solution'),
-                      style: Theme
-                          .of(context)
+                      style: Theme.of(context)
                           .textTheme
                           .subTitle
                           .copyWith(color: const Color(0xFFFF6B00)),
                     ),
                     const SizedBox(height: 3.0),
-
                     Flexible(
                       child: Html(
                         shrinkWrap: true,
@@ -280,29 +282,20 @@ class _ReviewScreenState extends State<ReviewScreen> {
                                     },
                                   ),
                                 );
-                              }
-                          ),
+                              }),
                         ],
                         style: {
                           "*": Style.fromTextStyle(
-                            Theme
-                                .of(context)
-                                .textTheme
-                                .questionStyle
-                                .copyWith(
-                                color: Theme
-                                    .of(context)
+                            Theme.of(context).textTheme.questionStyle.copyWith(
+                                color: Theme.of(context)
                                     .colorScheme
-                                    .inputTitleText
-                            ),
-                          ).merge(
-                              Style(
-                                display: Display.inline,
-                                textOverflow: TextOverflow.clip,
-                                padding: HtmlPaddings.all(0),
-                                margin: Margins.all(0),
-                              )
-                          )
+                                    .inputTitleText),
+                          ).merge(Style(
+                            display: Display.inline,
+                            textOverflow: TextOverflow.clip,
+                            padding: HtmlPaddings.all(0),
+                            margin: Margins.all(0),
+                          ))
                         },
                       ),
                     ),
@@ -316,13 +309,13 @@ class _ReviewScreenState extends State<ReviewScreen> {
     );
   }
 
-  Widget _buildFillAnswer(){
+  Widget _buildFillAnswer() {
     Question question = questions[_singleQuestionStore.currentIndex];
-    String userAnswer = _singleQuestionStore
-        .userAnswers[_singleQuestionStore.currentIndex];
+    String userAnswer =
+        _singleQuestionStore.userAnswers[_singleQuestionStore.currentIndex];
 
     //answer is correct
-    if (isAnswerCorrect(question, userAnswer)){
+    if (isAnswerCorrect(question, userAnswer)) {
       return _buildCorrectFill(userAnswer);
     }
     //answer is incorrect
@@ -331,8 +324,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     }
   }
 
-
-  Widget _buildCorrectFill(String answer){
+  Widget _buildCorrectFill(String answer) {
     return Container(
       margin: Layout.practiceContainerPadding,
       decoration: const BoxDecoration(
@@ -342,18 +334,16 @@ class _ReviewScreenState extends State<ReviewScreen> {
           answer,
           Theme.of(context).colorScheme.buttonCorrect,
           Theme.of(context).colorScheme.buttonChooseBackground,
-          Icons.check_circle
-      ),
+          Icons.check_circle),
     );
   }
 
-  Widget _buildIncorrectFill(String correctAnswer, String answer){
+  Widget _buildIncorrectFill(String correctAnswer, String answer) {
     return Container(
         margin: Layout.practiceContainerPadding,
         decoration: const BoxDecoration(
           color: Colors.transparent,
         ),
-
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -361,24 +351,21 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 answer,
                 Theme.of(context).colorScheme.buttonIncorrect,
                 const Color(0xFFD32F2F),
-                Icons.cancel
-            ),
+                Icons.cancel),
             const SizedBox(height: 12),
             _buildSingleAnswerView(
                 correctAnswer,
                 Theme.of(context).colorScheme.buttonCorrect,
                 Theme.of(context).colorScheme.buttonChooseBackground,
-                Icons.check_circle
-            )
+                Icons.check_circle)
           ],
-        )
-    );
+        ));
   }
 
   Widget _buildQuizAnswer() {
     Question question = questions[_singleQuestionStore.currentIndex];
-    String userAnswer = _singleQuestionStore
-        .userAnswers[_singleQuestionStore.currentIndex];
+    String userAnswer =
+        _singleQuestionStore.userAnswers[_singleQuestionStore.currentIndex];
 
     return Container(
       padding: Layout.practiceContainerPadding,
@@ -388,7 +375,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
         shrinkWrap: true,
         itemBuilder: (context, index) {
           print("Correct key ${question.correctQuizKey()}");
-          return  Padding(
+          return Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: _buildQuizTile(
               question.options[index].content,
@@ -403,35 +390,29 @@ class _ReviewScreenState extends State<ReviewScreen> {
   }
 
   Widget _buildQuizTile(
-      String quizChoice, int index, String userAnswer, String questionAnswer){
+      String quizChoice, int index, String userAnswer, String questionAnswer) {
     String choiceKey = convertNumberToLetter(index);
     String newQuizContent = "$choiceKey .$quizChoice";
-    if (choiceKey == questionAnswer){
+    if (choiceKey == questionAnswer) {
       //correct
       return _buildSingleAnswerView(
           newQuizContent,
           Theme.of(context).colorScheme.buttonCorrect,
           Theme.of(context).colorScheme.buttonChooseBackground,
-          Icons.check_circle
-      );
+          Icons.check_circle);
     }
 
-    if (choiceKey == userAnswer){
+    if (choiceKey == userAnswer) {
       //incorrect
       return _buildSingleAnswerView(
           newQuizContent,
           Theme.of(context).colorScheme.buttonIncorrect,
           const Color(0xFFD32F2F),
-          Icons.cancel
-      );
+          Icons.cancel);
     }
     //neutral
-    return _buildSingleAnswerView(
-        newQuizContent,
-        Colors.white,
-        Theme.of(context).colorScheme.inputText,
-        Icons.circle_outlined
-    );
+    return _buildSingleAnswerView(newQuizContent, Colors.white,
+        Theme.of(context).colorScheme.inputText, Icons.circle_outlined);
   }
 
   Widget _buildSingleAnswerView(
@@ -463,34 +444,27 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 TagExtension(
                     tagsToExtend: {"latex"},
                     builder: (extensionContext) {
-                      String latexCode = extensionContext.innerHtml ??
-                          "";
+                      String latexCode = extensionContext.innerHtml ?? "";
                       print("Latex: $latexCode");
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Math.tex(
                           latexCode,
                           mathStyle: MathStyle.display,
-                          textStyle: extensionContext.style
-                              ?.generateTextStyle(),
+                          textStyle:
+                              extensionContext.style?.generateTextStyle(),
                           onErrorFallback: (FlutterMathException e) {
                             return Text(e.message);
                           },
                         ),
                       );
-                    }
-                ),
+                    }),
               ],
               style: {
                 "*": Style.fromTextStyle(
-                    Theme.of(context).textTheme.normal
-                        .copyWith(color: textColor),
-                ).merge(
-                    Style(
-                      display: Display.inline,
-                      textOverflow: TextOverflow.clip
-                    )
-                )
+                  Theme.of(context).textTheme.normal.copyWith(color: textColor),
+                ).merge(Style(
+                    display: Display.inline, textOverflow: TextOverflow.clip))
               },
             ),
           ),
@@ -504,7 +478,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
     );
   }
 
-
   BoxDecoration decorationWithShadow = BoxDecoration(
     color: Colors.white,
     borderRadius: BorderRadius.circular(Dimens.textContainerRadius),
@@ -514,12 +487,12 @@ class _ReviewScreenState extends State<ReviewScreen> {
   );
 
   //Others:---------------------------------------------------------------------
-  int getIndexFromLetter(String key){
+  int getIndexFromLetter(String key) {
     return key.codeUnitAt(0) - 'A'.codeUnitAt(0);
   }
 
-  bool isQuizQuestion(Question question){
-    if (question.options.isEmpty){
+  bool isQuizQuestion(Question question) {
+    if (question.options.isEmpty) {
       return false;
     }
     return true;
@@ -529,18 +502,20 @@ class _ReviewScreenState extends State<ReviewScreen> {
     return '${String.fromCharCode(index + 65)}. ';
   }
 
-  String getAnswerFromIndex(int index){
+  String getAnswerFromIndex(int index) {
     return String.fromCharCode(index + 65);
   }
-  bool isAnswerCorrect(Question question, String answer){
+
+  bool isAnswerCorrect(Question question, String answer) {
     if (question.isCorrect(answer)) return true;
     return false;
   }
-  String convertNumberToLetter(int number){
+
+  String convertNumberToLetter(int number) {
     return String.fromCharCode(number + 65);
   }
 
-  AnswerStatus getStatus(Question q, String a){
+  AnswerStatus getStatus(Question q, String a) {
     if (a.isEmpty) return AnswerStatus.noAnswer;
     if (q.isCorrect(a)) return AnswerStatus.correct;
     return AnswerStatus.incorrect;

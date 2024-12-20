@@ -68,6 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
     //print("^^^^^^^^^^^^^^^^^^ErrorString in Courses_Screen1: ${_topicStore.errorString}");
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         title: Padding(
           padding: const EdgeInsets.only(left: 10),
           child: Text("MELA",

@@ -12,14 +12,19 @@ class CustomProgressIndicatorWidget extends StatelessWidget {
       child: Container(
         height: 100,
         constraints: const BoxConstraints.expand(),
-        decoration: const BoxDecoration(
-            color: Color.fromARGB(100, 105, 105, 105)),
+        decoration: BoxDecoration(
+            color: Theme.of(context)
+                            .colorScheme
+                            .surface),
         child: FittedBox(
           fit: BoxFit.none,
           child: SizedBox(
             height: 100,
             width: 100,
             child: Card(
+              color: Theme.of(context)
+                            .colorScheme
+                            .onSecondary.withOpacity(0.002),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0)),
               child: const Padding(

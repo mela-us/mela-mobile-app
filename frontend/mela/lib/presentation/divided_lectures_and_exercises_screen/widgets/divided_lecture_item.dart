@@ -27,6 +27,13 @@ class DividedLectureItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(3, 5),
+          ),
+        ],
       ),
       child: GestureDetector(
         onTap: () {
@@ -66,14 +73,6 @@ class DividedLectureItem extends StatelessWidget {
                         .textTheme
                         .subTitle
                         .copyWith(color: Colors.orange, fontSize: 14),
-                  ),
-
-                  const SizedBox(height: 6),
-                  // pages + origin
-                  Text(
-                    'Nguồn: ${currentDividedLecture.origin}',
-                    style: Theme.of(context).textTheme.normal.copyWith(
-                          color: Theme.of(context).colorScheme.secondary, fontSize: 14),
                   ),
 
                   const SizedBox(width: 6),

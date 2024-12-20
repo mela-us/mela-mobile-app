@@ -71,6 +71,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         title: Text("Tìm kiếm",
             style: Theme.of(context)
                 .textTheme
@@ -106,7 +107,7 @@ class _SearchScreenState extends State<SearchScreen> {
           Observer(builder: (context) {
             if (!_searchStore.isSearched) {
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 28,vertical: 12),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -138,7 +139,7 @@ class _SearchScreenState extends State<SearchScreen> {
             if (_searchStore.errorString.isEmpty &&
                 _searchStore.lecturesAfterSearchingAndFiltering != null) {
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 28,vertical: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -254,14 +255,17 @@ class _SearchScreenState extends State<SearchScreen> {
               }
 
               ///List lectures after searching
-              return ListView.builder(
-                itemCount: _searchStore
-                    .lecturesAfterSearchingAndFiltering!.lectures.length,
-                itemBuilder: (context, index) {
-                  return LectureItem(
-                      lecture: _searchStore
-                          .lecturesAfterSearchingAndFiltering!.lectures[index]);
-                },
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: ListView.builder(
+                  itemCount: _searchStore
+                      .lecturesAfterSearchingAndFiltering!.lectures.length,
+                  itemBuilder: (context, index) {
+                    return LectureItem(
+                        lecture: _searchStore
+                            .lecturesAfterSearchingAndFiltering!.lectures[index]);
+                  },
+                ),
               );
             }),
           ),

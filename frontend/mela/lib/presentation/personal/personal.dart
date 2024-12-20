@@ -50,6 +50,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.appBackground,
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         title: Text(
           'Cá nhân',
           style: Theme.of(context).textTheme.heading

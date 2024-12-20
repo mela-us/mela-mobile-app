@@ -63,6 +63,7 @@ class _TopicLectureInLevelScreenState extends State<TopicLectureInLevelScreen> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          scrolledUnderElevation: 0,
           elevation: 0,
           title: Text(
             _topicLectureStore.currentLevel!.levelName,
@@ -123,8 +124,7 @@ class _TopicLectureInLevelScreenState extends State<TopicLectureInLevelScreen> {
                       Container(
                         color: Theme.of(context)
                             .colorScheme
-                            .surface
-                            .withOpacity(0.2),
+                            .surface,
                       ),
                       const CustomProgressIndicatorWidget(),
                     ],
