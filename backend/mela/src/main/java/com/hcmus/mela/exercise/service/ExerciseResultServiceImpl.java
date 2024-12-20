@@ -15,10 +15,6 @@ import com.hcmus.mela.lecture.service.LectureDetailService;
 import com.hcmus.mela.utils.GeneralMessageAccessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.*;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,8 +31,6 @@ public class ExerciseResultServiceImpl implements ExerciseResultService {
     private final ExerciseRepository exerciseRepository;
     private final LectureDetailService lectureDetailService;
 
-    private final MongoTemplate mongoTemplate;
-
     @Override
     public List<ExerciseResult> findAllByUserIdAndExerciseId(UUID userId, UUID exerciseId) {
         return exerciseResultRepository.findAllByUserIdAndExerciseId(userId, exerciseId);
@@ -44,31 +38,14 @@ public class ExerciseResultServiceImpl implements ExerciseResultService {
 
     @Override
     public ExerciseResultDto getBestExerciseResult(UUID userId, UUID exerciseId) {
-        MatchOperation matchStage = Aggregation.match(Criteria.where("user_id").is(userId).and("exercise_id").is(exerciseId));
-        
-        SortOperation sortStage = Aggregation.sort(Sort.Direction.DESC, "total_correct_answers");
-
-        LimitOperation limitStage = Aggregation.limit(1);
-
-        Aggregation aggregation = Aggregation.newAggregation(
-                matchStage,
-                sortStage,
-                limitStage
-        );
-
-        List<ExerciseResult> results = mongoTemplate.aggregate(
-                aggregation,
-                "exercise_results",
-                ExerciseResult.class
-        ).getMappedResults();
-
-        if (results.isEmpty()) {
+        ExerciseResult bestResult = exerciseResultRepository.getBestExerciseResult(userId, exerciseId);
+        if (bestResult == null) {
             return null;
         }
 
         final String resultSuccessMessage = generalMessageAccessor.getMessage(null, RESULTS_FOUND, exerciseId, userId);
         log.info(resultSuccessMessage);
-        return ExerciseResultMapper.INSTANCE.convertToExerciseResultDto(results.get(0));
+        return ExerciseResultMapper.INSTANCE.convertToExerciseResultDto(bestResult);
     }
 
     @Override
@@ -110,19 +87,6 @@ public class ExerciseResultServiceImpl implements ExerciseResultService {
 
     @Override
     public List<ExerciseResultCount> countTotalPassExerciseOfLectures(UUID userId) {
-        Aggregation aggregation = Aggregation.newAggregation(
-                Aggregation.match(new Criteria().andOperator(
-                        Criteria.where("user_id").is(userId),
-                        Criteria.where("status").is(ExerciseStatus.PASS.name())
-                )),
-                Aggregation.group("lecture_id").addToSet("exercise_id").as("exercises"),
-                Aggregation.project("_id").and("exercises").size().as("total")
-        );
-        AggregationResults<ExerciseResultCount> result = mongoTemplate.aggregate(
-                aggregation,
-                "exercise_results",
-                ExerciseResultCount.class
-        );
-        return result.getMappedResults();
+        return exerciseResultRepository.countTotalPassExerciseOfLectures(userId);
     }
 }
