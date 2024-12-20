@@ -231,6 +231,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
   }
 
   Widget _buildExplainView(String content) {
+    print(content);
     return Row(
       children: [
         Expanded(

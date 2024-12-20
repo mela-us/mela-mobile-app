@@ -517,10 +517,15 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
   void _continueButtonPressedEvent() {
     if (_singleQuestionStore.currentIndex <
-          _questionStore.questionList!.questions!.length-1) {
-
-      _singleQuestionStore.changeQuestion(_singleQuestionStore.currentIndex+1);
+          _questionStore.questionList!.questions!.length) {
+      int index =  _singleQuestionStore.currentIndex + 1;
+      if (index == _questionStore.questionList!.questions!.length){
+        Overlay.of(context).insert(questionListOverlay);
+        return;
+      }
+      _singleQuestionStore.changeQuestion(index);
     }
+
   }
 
   //Others:---------------------------------------------------------------------
