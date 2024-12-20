@@ -20,6 +20,8 @@ class LecturesInTopic extends StatelessWidget {
   Widget getIconTopic() {
     for (var topic in _levelStore.topicList!.topics) {
       if (topic.topicId == topicId && topic.imageTopicPath != "") {
+        print("+++++++++++++++++++++++++++++");
+        print(topic.imageTopicPath);
         return Image(
           image: NetworkImage(topic.imageTopicPath),
           width: 28,
