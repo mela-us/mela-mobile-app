@@ -82,7 +82,7 @@ class ExerciseItem extends StatelessWidget {
                   const SizedBox(height: 8),
                   // Number of questions + type of questions
                   Text(
-                    '${currentExercise.totalQuestions} câu | ${currentExercise.typeQuestion}',
+                    'Số câu: ${currentExercise.totalQuestions} câu',
                     style: Theme.of(context).textTheme.subTitle.copyWith(
                         color: Theme.of(context).colorScheme.secondary,
                         fontSize: 14),
