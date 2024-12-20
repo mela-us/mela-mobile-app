@@ -32,14 +32,14 @@ class LevelItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            //Logo topic
+            //Logo level
             SizedBox(
               width: 55,
               height: 55,
-              child: Image.asset(
-                level.levelImagePath.isEmpty
-                    ? 'assets/images/grades/grade1.png'
-                    : level.levelImagePath,
+              child: Image(
+                image: level.levelImagePath.isEmpty
+                    ? const AssetImage('assets/images/grades/default_level.png')
+                    : NetworkImage(level.levelImagePath),
                 fit: BoxFit.contain,
               ),
             ),

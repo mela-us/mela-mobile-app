@@ -17,19 +17,28 @@ class LecturesInTopic extends StatelessWidget {
       required this.topicName,
       required this.lectureList});
 
-  String getIconTopicPath() {
-    for (var topic in _levelStore.topicList!.topics) {
-      if (topic.topicId == topicId && topic.imageTopicPath != "") {
-        return topic.imageTopicPath;
-      }
-    }
-    return "assets/images/topics/default_topic.png";
+  Widget getIconTopic() {
+    // for (var topic in _levelStore.topicList!.topics) {
+    //   if (topic.topicId == topicId && topic.imageTopicPath != "") {
+    //     return Image(
+    //       image: NetworkImage(topic.imageTopicPath),
+    //       fit: BoxFit.contain,
+    //     );
+    //   }
+    // }
+    return const Image(
+      image: AssetImage("assets/images/topics/default_topic.png"),
+      width: 26,
+      height: 26,
+      fit: BoxFit.contain,
+    );
   }
 
   int numberCompletedLectures() {
     int count = 0;
     for (var lecture in lectureList.lectures) {
-      if (lecture.totalExercises == lecture.totalPassExercises) {
+      if (lecture.totalExercises == lecture.totalPassExercises &&
+          lecture.totalExercises != 0) {
         count++;
       }
     }
@@ -55,11 +64,7 @@ class LecturesInTopic extends StatelessWidget {
                   BorderRadius.circular(20) // Removes border or divider effect
               ),
           //mainAxisSize: MainAxisSize.min,
-          leading: Image.asset(
-            getIconTopicPath(),
-            width: 26,
-            height: 26,
-          ),
+          leading: getIconTopic(),
           backgroundColor: const Color.fromARGB(255, 238, 237, 237),
           childrenPadding: const EdgeInsets.only(bottom: 6),
           title: Row(
@@ -73,11 +78,10 @@ class LecturesInTopic extends StatelessWidget {
                 ),
               ),
               Text(
-                  "${numberCompletedLectures().toString()}/${lectureList.lectures.length} bài học",
-                  style: Theme.of(context).textTheme.subTitle.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: 12),
-                  ),
+                "${numberCompletedLectures().toString()}/${lectureList.lectures.length} bài học",
+                style: Theme.of(context).textTheme.subTitle.copyWith(
+                    color: Theme.of(context).colorScheme.primary, fontSize: 12),
+              ),
             ],
           ),
           children: [

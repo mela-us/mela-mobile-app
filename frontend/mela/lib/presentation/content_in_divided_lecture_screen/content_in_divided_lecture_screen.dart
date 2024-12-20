@@ -153,7 +153,7 @@ class _ContentInDividedLectureScreenState
             ),
             child: SfPdfViewer.network(
               pageSpacing: 4,
-              "https://mela-storage-dev.s3.ap-southeast-1.amazonaws.com/${widget.currentDividedLecture.urlContentInDividedLecture}",
+              widget.currentDividedLecture.urlContentInDividedLecture,
               controller: _pdfViewerController,
               canShowScrollHead: false,
               enableDoubleTapZooming: true,

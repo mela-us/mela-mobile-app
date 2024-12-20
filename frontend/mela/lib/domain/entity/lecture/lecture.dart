@@ -18,7 +18,8 @@ class Lecture {
     required this.totalExercises,
     required this.totalPassExercises,
   });
-  double get progress => totalPassExercises / totalExercises;
+  double get progress =>
+      totalExercises == 0 ? 0.0 : totalPassExercises / totalExercises;
 
   factory Lecture.fromJson(Map<String, dynamic> json) {
     return Lecture(
