@@ -34,11 +34,11 @@ public class JwtTokenManager {
     }
 
     public String generateAccessToken(User user) {
-        return generateToken(user, jwtProperties.getAccessTokenExpirationMinute() * 500);
+        return generateToken(user, jwtProperties.getAccessTokenExpirationMinute() * 60 * 1000);
     }
 
     public String generateRefreshToken(User user) {
-        return generateToken(user, jwtProperties.getRefreshTokenExpirationDay() * 500);
+        return generateToken(user, jwtProperties.getRefreshTokenExpirationDay() * 24 * 60 * 60 * 1000);
     }
 
     public UUID getUserIdFromToken(String token) {
