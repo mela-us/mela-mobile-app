@@ -77,7 +77,11 @@ dev_dependencies:
   mobx_codegen: ^2.2.0
   build_runner: ^2.3.3
   analyzer: ^5.10.0
-
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/images/logo.png"
 
 flutter:
   uses-material-design: true
