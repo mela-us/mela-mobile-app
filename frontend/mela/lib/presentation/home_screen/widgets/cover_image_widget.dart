@@ -25,7 +25,7 @@ class CoverImageWidget extends StatelessWidget {
           child: Column(
             children: [
               Image.asset(
-                'assets/images/cover.png',
+                'assets/images/cover.jpeg',
                 width: 384,
                 height: 257,
                 fit: BoxFit.cover,
@@ -35,7 +35,7 @@ class CoverImageWidget extends StatelessWidget {
         ),
         // Layer 2: Button "Học toán hàng ngày với Mela"
         Positioned(
-          bottom: 15,
+          bottom: 10,
           child: SizedBox(
             width: 250,
             height: 34,
