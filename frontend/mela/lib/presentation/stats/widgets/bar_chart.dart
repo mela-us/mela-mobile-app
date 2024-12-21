@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mela/constants/app_theme.dart';
 import 'package:mela/domain/entity/stat/detailed_progress.dart';
 import '../../../di/service_locator.dart';
 import '../../../domain/entity/stat/progress.dart';
@@ -10,38 +11,31 @@ import 'package:intl/intl.dart';
 
 class BarChartWidget extends StatelessWidget {
   final Progress item;
-  //
   final StatisticsStore store = getIt<StatisticsStore>();
-  //
+
   BarChartWidget({super.key, required this.item});
 
   int getMax() {
     List<DetailedProgress>? list = item.last7Days?.detailedProgressList ?? [];
     List<int?> stats = list.map((item) => item.count).toList();
     int? temp = stats.reduce((a, b) => a! > b! ? a : b) ?? 0;
-    if (temp > 5) return temp;
-    return 5;
+    return temp > 5 ? temp : 5;
   }
 
   @override
   Widget build(BuildContext context) {
-    //
     List<DetailedProgress>? list = item.last7Days?.detailedProgressList;
-    //
     DateTime now = DateTime.now();
     DateTime sevenDaysToNow = now.subtract(const Duration(days: 7));
-    List<DetailedProgress>? filteredList = list?.where(
-            (progress) {
-          final dateString = progress.date;
-          if (dateString != null) {
-            //DateTime itemDate = DateFormat("dd-MM-yyyy").parse(dateString);
-            DateTime itemDate = DateFormat("yyyy-MM-dd").parse(dateString);
-            return itemDate.isBefore(now) && itemDate.isAfter(sevenDaysToNow);
-          } else {
-            return false;
-          }
-        }
-    ).toList();
+    List<DetailedProgress>? filteredList = list?.where((progress) {
+      final dateString = progress.date;
+      if (dateString != null) {
+        DateTime itemDate = DateFormat("yyyy-MM-dd").parse(dateString);
+        return itemDate.isBefore(now) && itemDate.isAfter(sevenDaysToNow);
+      }
+      return false;
+    }).toList();
+
     return SizedBox(
       height: 200,
       child: Observer(
@@ -49,7 +43,7 @@ class BarChartWidget extends StatelessWidget {
           if (store.detailedProgressLoading) {
             return Center(child: CircularProgressIndicator());
           }
-          return MakeBarChart(filteredList, now);
+          return MakeBarChart(filteredList, now, context);
         },
       ),
     );
@@ -58,8 +52,9 @@ class BarChartWidget extends StatelessWidget {
   double? countInDate(List<DetailedProgress> list, DateTime time) {
     String dateString = DateFormat('yyyy-MM-dd').format(time);
     return list.firstWhere(
-            (progress) => progress.date == dateString,
-            orElse: () => DetailedProgress(date: "NA", count: 0, correctCount: 0)).count?.toDouble();
+          (progress) => progress.date == dateString,
+      orElse: () => DetailedProgress(date: "NA", count: 0, correctCount: 0),
+    ).count?.toDouble();
   }
 
   String dateOfWeekConverter(DateTime time) {
@@ -83,7 +78,7 @@ class BarChartWidget extends StatelessWidget {
     }
   }
 
-  Widget MakeBarChart(List<DetailedProgress>? filteredList, DateTime now) {
+  Widget MakeBarChart(List<DetailedProgress>? filteredList, DateTime now, BuildContext context) {
     return BarChart(
       BarChartData(
         barGroups: List.generate(7, (index) {
@@ -96,15 +91,17 @@ class BarChartWidget extends StatelessWidget {
               BarChartRodData(
                 fromY: 0,
                 toY: count,
-                width: 18, // Độ rộng của cột
+                width: 28,
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(6),  // Đỉnh tròn
-                  topRight: Radius.circular(6), // Đỉnh tròn
+                  topLeft: Radius.circular(14),
+                  topRight: Radius.circular(14),
                 ),
-                color: ColorsStandards.buttonYesColor1,
+                color: index == 6
+                    ? ColorsStandards.buttonYesColor1
+                    : Colors.grey[400],
               ),
             ],
-            showingTooltipIndicators: count > 0 ? [0] : [], // Chỉ hiển thị tooltip khi giá trị > 0
+            showingTooltipIndicators: count > 0 ? [0] : [],
           );
         }),
         titlesData: FlTitlesData(
@@ -140,12 +137,25 @@ class BarChartWidget extends StatelessWidget {
                   default:
                     label = '';
                 }
-                return Text(label);
+                return Text(
+                  label,
+                  style: Theme.of(context).textTheme.subTitle
+                      .copyWith(color: Theme.of(context).colorScheme.textInBg2),
+                );
               },
             ),
           ),
           leftTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: false),
+            sideTitles: SideTitles(
+              showTitles: true,
+              interval: 2,
+              getTitlesWidget: (value, meta) => Center(
+                child: Text(
+                  value.toInt().toString(),
+                  style: TextStyle(color: Colors.grey[400]),
+                ),
+              ),
+            ),
           ),
           topTitles: AxisTitles(
             sideTitles: SideTitles(showTitles: false),
@@ -154,14 +164,22 @@ class BarChartWidget extends StatelessWidget {
             sideTitles: SideTitles(showTitles: false),
           ),
         ),
-        maxY: getMax() + 2.0, // Đặt giá trị tối đa cho cột y
-        gridData: const FlGridData(show: true, drawHorizontalLine: true, horizontalInterval: 1),
+        maxY: getMax() + 2.0,
+        gridData: FlGridData(
+          show: true,
+          drawHorizontalLine: true,
+          horizontalInterval: 2,
+          getDrawingHorizontalLine: (value) => FlLine(
+            color: Colors.grey[200],
+            strokeWidth: 1,
+          ),
+          drawVerticalLine: false,
+        ),
+        borderData: FlBorderData(show: false),
         barTouchData: BarTouchData(
           enabled: true,
           touchTooltipData: BarTouchTooltipData(
-            getTooltipColor: (groupIndex) {
-              return Colors.transparent;
-            },
+            getTooltipColor: (groupIndex) => Colors.transparent,
             tooltipMargin: 1,
             tooltipPadding: EdgeInsets.zero,
             tooltipBorder: BorderSide.none,
@@ -179,6 +197,15 @@ class BarChartWidget extends StatelessWidget {
               );
             },
           ),
+        ),
+        extraLinesData: ExtraLinesData(
+          horizontalLines: [
+            HorizontalLine(
+              y: 0,
+              color: Colors.grey[200],
+              strokeWidth: 1,
+            ),
+          ],
         ),
       ),
     );

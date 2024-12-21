@@ -41,7 +41,12 @@ class ExpandableList extends StatelessWidget {
               child: ListView.builder(
                 itemCount: list!.length,
                 itemBuilder: (context, index) {
-                  return ExpandableItem(item: list![index]);
+                  return Column(
+                    children: [
+                      ExpandableItem(item: list![index]),
+                      const SizedBox(height: 10),
+                    ],
+                  );
                 },
               ),
             ),

@@ -28,6 +28,7 @@ class _ExpandableItemState extends State<ExpandableItem> {
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+      elevation: 5.0,
       color: !_isExpanded ? Colors.white : Theme.of(context).colorScheme.appBackground,
       child: Column(
         children: [
@@ -61,10 +62,10 @@ class _ExpandableItemState extends State<ExpandableItem> {
                   Padding(
                     padding: const EdgeInsets.only(left: 25.0, right: 25.0, bottom: 1.0),
                     child: LinearProgressIndicator(
-                      minHeight: 12,
+                      minHeight: 13,
                       value: widget.item.totalCorrect! * 1.0 / widget.item.total!,
                       color: Theme.of(context).colorScheme.buttonYesBgOrText,
-                      backgroundColor: Theme.of(context).colorScheme.textInBg1.withOpacity(0.2),
+                      backgroundColor: Theme.of(context).colorScheme.textInBg1.withOpacity(0.08),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
@@ -80,9 +81,9 @@ class _ExpandableItemState extends State<ExpandableItem> {
                 children: [
                   SizedBox(height: 8),
                   Text(
-                    'Bài tập đã hoàn thành (7 ngày gần đây)',
+                    'BÀI TẬP ĐÃ HOÀN THÀNH',
                     style: Theme.of(context).textTheme.subTitle
-                        .copyWith(color: Theme.of(context).colorScheme.textInBg1),
+                        .copyWith(color: Theme.of(context).colorScheme.textInBg2),
                   ),
                   SizedBox(height: 8),
                   BarChartWidget(item: widget.item),
