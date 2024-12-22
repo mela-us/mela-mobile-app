@@ -3,7 +3,6 @@ package com.hcmus.mela.statistic.repository;
 import com.hcmus.mela.statistic.model.DailyQuestionStats;
 import com.hcmus.mela.statistic.model.QuestionStats;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+import java.time.ZoneId;
 
 @Repository
 @RequiredArgsConstructor
@@ -47,7 +47,8 @@ public class StatisticRepositoryImpl implements StatisticRepository {
 
     @Override
     public List<DailyQuestionStats> getDailyQuestionStatsLast7Days(UUID userId) {
-        LocalDate currentDate = LocalDate.now();
+        ZoneId vietnamZone = ZoneId.of("Asia/Ho_Chi_Minh");
+        LocalDate currentDate = LocalDate.now(vietnamZone);
         LocalDate date6DaysAgo = currentDate.minusDays(6);
         currentDate = currentDate.plusDays(1);
 
