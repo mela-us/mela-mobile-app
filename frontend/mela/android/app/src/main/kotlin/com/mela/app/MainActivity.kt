@@ -1,4 +1,4 @@
-package com.example.mela
+package com.mela.app
 
 import io.flutter.embedding.android.FlutterActivity
 
