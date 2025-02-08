@@ -56,4 +56,8 @@ public class JwtTokenService {
     public String extractTokenFromAuthorizationHeader(String authorizationHeader) {
         return authorizationHeader.replace(SecurityConstants.TOKEN_PREFIX, Strings.EMPTY);
     }
+
+    public UUID getUserIdFromAuthorizationHeader(String authorizationHeader) {
+        return jwtTokenManager.getUserIdFromToken(extractTokenFromAuthorizationHeader(authorizationHeader));
+    }
 }

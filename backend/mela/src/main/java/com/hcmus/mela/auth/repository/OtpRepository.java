@@ -10,4 +10,8 @@ public interface OtpRepository extends JpaRepository<Otp, UUID> {
     Otp findByUser(User user);
 
     Otp findByUserUsername(String username);
+
+    void deleteByUser(User user);
+
+    void deleteByUser_UserId(UUID userUserId);
 }

@@ -2,11 +2,15 @@ package com.hcmus.mela.auth.service;
 
 import com.hcmus.mela.auth.model.User;
 
+import java.util.UUID;
+
 public interface OtpService {
 
-    public String generateOtpCode(int length);
+    String generateOtpCode(int length);
 
-    public void cacheOtpCode(String otpCode, User user);
+    void cacheOtpCode(String otpCode, User user);
 
-    public boolean validateOtpOfUser(String otpCode, String username);
+    boolean validateOtpOfUser(String otpCode, String username);
+
+    void deleteOtpCodeByUserId(UUID userId);
 }

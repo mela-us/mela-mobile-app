@@ -1,7 +1,8 @@
 package com.hcmus.mela.user.service;
 
 import com.hcmus.mela.auth.security.jwt.JwtTokenService;
-import com.hcmus.mela.auth.security.utils.SecurityConstants;
+import com.hcmus.mela.auth.service.OtpService;
+import com.hcmus.mela.auth.service.TokenStoreService;
 import com.hcmus.mela.user.dto.request.*;
 import com.hcmus.mela.user.dto.response.*;
 import com.hcmus.mela.user.exception.exception.InvalidTokenException;
@@ -11,9 +12,9 @@ import com.hcmus.mela.user.model.User;
 import com.hcmus.mela.user.repository.UserRepository;
 import com.hcmus.mela.utils.ExceptionMessageAccessor;
 import com.hcmus.mela.utils.GeneralMessageAccessor;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,6 +27,10 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    private final OtpService otpService;
+
+    private final TokenStoreService tokenStoreService;
+
     private final JwtTokenService jwtTokenService;
 
     private final GeneralMessageAccessor generalMessageAccessor;
@@ -35,17 +40,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UpdateProfileResponse updateProfile(UpdateProfileRequest updateProfileRequest, String authorizationHeader) {
 
-        final String accessToken = authorizationHeader.replace(SecurityConstants.TOKEN_PREFIX, Strings.EMPTY);
-
-        final UUID userId = jwtTokenService.getUserIdFromToken(accessToken);
-
-        // Check valid token
-        final boolean validToken = jwtTokenService.validateToken(accessToken);
-
-        if (!validToken) {
-            final String invalidToken = exceptionMessageAccessor.getMessage(null, "invalid_token");
-            throw new InvalidTokenException(invalidToken);
-        }
+        final UUID userId = jwtTokenService.getUserIdFromAuthorizationHeader(authorizationHeader);
 
         User user = userRepository.findById(userId).orElse(null);
 
@@ -85,9 +80,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public GetUserProfileResponse getUserProfile(String authorizationHeader) {
 
-        final String accessToken = authorizationHeader.replace(SecurityConstants.TOKEN_PREFIX, Strings.EMPTY);
-
-        final UUID userId = jwtTokenService.getUserIdFromToken(accessToken);
+        final UUID userId = jwtTokenService.getUserIdFromAuthorizationHeader(authorizationHeader);
 
         User user = userRepository.findById(userId).orElse(null);
 
@@ -97,5 +90,26 @@ public class UserServiceImpl implements UserService {
         }
 
         return UserMapper.INSTANCE.convertToGetUserProfileResponse(user);
+    }
+
+    @Transactional
+    @Override
+    public void deleteAccount(DeleteAccountRequest deleteAccountRequest, String authorizationHeader) {
+
+            final UUID userId = jwtTokenService.getUserIdFromAuthorizationHeader(authorizationHeader);
+
+            User user = userRepository.findById(userId).orElse(null);
+
+            if (user == null) {
+                final String userNotFound = exceptionMessageAccessor.getMessage(null, "user_not_found");
+                throw new InvalidTokenException(userNotFound);
+            }
+
+            otpService.deleteOtpCodeByUserId(userId);
+
+            userRepository.delete(user);
+
+            tokenStoreService.storeAccessToken(deleteAccountRequest.getAccessToken());
+            tokenStoreService.storeRefreshToken(deleteAccountRequest.getRefreshToken());
     }
 }

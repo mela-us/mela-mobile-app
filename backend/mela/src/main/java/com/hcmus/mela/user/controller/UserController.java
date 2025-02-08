@@ -79,11 +79,12 @@ public class UserController {
     @Operation(
             tags = "User Service",
             description = "API endpoint to delete user account.")
-    public ResponseEntity<Void> deleteAccount(
+    public ResponseEntity<Map<String, String>> deleteAccount(
+            @RequestBody @Valid DeleteAccountRequest deleteAccountRequest,
             @RequestHeader("Authorization") String authorizationHeader) {
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        userService.deleteAccount(deleteAccountRequest, authorizationHeader);
+
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "User account deleted successfully."));
     }
-
-
 }
