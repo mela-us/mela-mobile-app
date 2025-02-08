@@ -1,7 +1,7 @@
 package com.hcmus.mela.auth.service;
 
-import com.hcmus.mela.auth.model.Otp;
 import com.hcmus.mela.auth.model.User;
+import com.hcmus.mela.auth.model.Otp;
 import com.hcmus.mela.auth.repository.OtpRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

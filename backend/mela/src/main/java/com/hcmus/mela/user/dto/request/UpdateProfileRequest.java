@@ -1,4 +1,4 @@
-package com.hcmus.mela.auth.dto.request;
+package com.hcmus.mela.user.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
