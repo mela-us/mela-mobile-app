@@ -1,7 +1,6 @@
 package com.hcmus.mela.configuration;
 
 import com.hcmus.mela.user.service.AwsS3ServiceImpl;
-import com.hcmus.mela.user.service.AzureServiceImpl;
 import com.hcmus.mela.user.service.StorageService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -47,11 +46,5 @@ public class AwsS3Configuration {
     @ConditionalOnProperty(name = "storage.provider", havingValue = "s3")
     public StorageService s3StorageService(S3Presigner presigner, @Value("${aws.s3.bucket-name}") String bucketName) {
         return new AwsS3ServiceImpl(presigner, bucketName);
-    }
-
-    @Bean
-    @ConditionalOnProperty(name = "storage.provider", havingValue = "azure")
-    public StorageService azureStorageService() {
-        return new AzureServiceImpl();
     }
 }
