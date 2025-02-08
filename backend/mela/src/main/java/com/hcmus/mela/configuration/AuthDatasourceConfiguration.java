@@ -22,16 +22,15 @@ import java.util.Objects;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        entityManagerFactoryRef = "authEntityMangerFactoryBean",
-        basePackages = {"com.hcmus.mela.auth.repository"},
-        transactionManagerRef = "authTransactionManager"
+        entityManagerFactoryRef = "entityMangerFactoryBean",
+        basePackages = {"com.hcmus.mela.auth.repository", "com.hcmus.mela.user.repository"}
 )
 @AllArgsConstructor
 public class AuthDatasourceConfiguration {
     private Environment environment;
 
     // Configuring the data source for the second database
-    @Bean(name = "secondDataSource")
+    @Bean(name = "authDataSource")
     @Primary
     public DataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -45,11 +44,11 @@ public class AuthDatasourceConfiguration {
 
     // Configuring the entity manager factory for the second database
     @Primary
-    @Bean(name = "authEntityMangerFactoryBean")
+    @Bean(name = "entityMangerFactoryBean")
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(){
         LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
         bean.setDataSource(dataSource());
-        bean.setPackagesToScan("com.hcmus.mela.auth.model");
+        bean.setPackagesToScan("com.hcmus.mela.auth.model", "com.hcmus.mela.user.model");
 
         JpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
         bean.setJpaVendorAdapter(adapter);
@@ -63,7 +62,7 @@ public class AuthDatasourceConfiguration {
     }
 
     // Configuring the platform transaction manager for the second database
-    @Bean(name = "authTransactionManager")
+    @Bean(name = "transactionManager")
     @Primary
     public PlatformTransactionManager transactionManager(){
         JpaTransactionManager manager = new JpaTransactionManager();

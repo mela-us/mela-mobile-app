@@ -1,4 +1,4 @@
-package com.hcmus.mela.auth.dto.response;
+package com.hcmus.mela.user.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,4 +19,5 @@ public class GetUserProfileResponse {
 
     private LocalDate birthday;
 
+    private String imageUrl;
 }

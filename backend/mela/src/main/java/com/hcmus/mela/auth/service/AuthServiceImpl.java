@@ -6,33 +6,30 @@ import com.hcmus.mela.auth.exception.exception.InvalidTokenException;
 import com.hcmus.mela.auth.exception.exception.RegistrationException;
 import com.hcmus.mela.auth.model.User;
 import com.hcmus.mela.auth.model.UserRole;
-import com.hcmus.mela.auth.repository.UserRepository;
+import com.hcmus.mela.auth.repository.AuthRepository;
 import com.hcmus.mela.auth.security.jwt.JwtTokenService;
-import com.hcmus.mela.auth.security.mapper.UserMapper;
-import com.hcmus.mela.auth.security.utils.SecurityConstants;
+import com.hcmus.mela.auth.mapper.UserMapper;
 import com.hcmus.mela.utils.ExceptionMessageAccessor;
 import com.hcmus.mela.utils.GeneralMessageAccessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class AuthServiceImpl implements AuthService {
 
     private static final String REGISTRATION_SUCCESSFUL = "registration_successful";
 
     private static final String USERNAME_ALREADY_EXISTS = "username_already_exists";
 
-    private final UserRepository userRepository;
+    private final AuthRepository authRepository;
 
     private final AuthenticationManager authenticationManager;
 
@@ -49,7 +46,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByUsername(String username) {
 
-        return userRepository.findByUsername(username);
+        return authRepository.findByUsername(username);
     }
 
     @Override
@@ -57,7 +54,7 @@ public class UserServiceImpl implements UserService {
 
         final String username = registrationRequest.getUsername();
 
-        final boolean existsByUsername = userRepository.existsByUsername(username);
+        final boolean existsByUsername = authRepository.existsByUsername(username);
 
         if (existsByUsername) {
 
@@ -73,7 +70,7 @@ public class UserServiceImpl implements UserService {
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(user.getCreatedAt());
 
-        userRepository.save(user);
+        authRepository.save(user);
 
         final String registrationSuccessMessage = generalMessageAccessor.getMessage(null, REGISTRATION_SUCCESSFUL, username);
 
@@ -88,58 +85,8 @@ public class UserServiceImpl implements UserService {
         if (user != null) {
             user.setPassword(bCryptPasswordEncoder.encode(newPassword));
             user.setUpdatedAt(LocalDateTime.now());
-            userRepository.save(user);
+            authRepository.save(user);
         }
-    }
-
-    @Override
-    public UpdateProfileResponse updateProfile(UpdateProfileRequest updateProfileRequest, String authorizationHeader) {
-
-        final String accessToken = authorizationHeader.replace(SecurityConstants.TOKEN_PREFIX, Strings.EMPTY);
-
-        final UUID userId = jwtTokenService.getUserIdFromToken(accessToken);
-
-        // Check valid token
-        final boolean validToken = jwtTokenService.validateToken(accessToken);
-
-        if (!validToken) {
-            final String invalidToken = exceptionMessageAccessor.getMessage(null, "invalid_token");
-            throw new InvalidTokenException(invalidToken);
-        }
-
-        User user = userRepository.findById(userId).orElse(null);
-
-        if (user == null) {
-            final String userNotFound = exceptionMessageAccessor.getMessage(null, "user_not_found");
-            throw new InvalidTokenException(userNotFound);
-        }
-        user.setBirthday(updateProfileRequest.getBirthday());
-        user.setFullname(updateProfileRequest.getFullname());
-        user.setImageUrl(updateProfileRequest.getImageUrl());
-        user.setUpdatedAt(LocalDateTime.now());
-
-        userRepository.save(user);
-
-        final String updatedSuccessfully = generalMessageAccessor.getMessage(null, "update_user_successful");
-
-        return new UpdateProfileResponse(updatedSuccessfully);
-    }
-
-    @Override
-    public GetUserProfileResponse getUserProfile(String authorizationHeader) {
-
-        final String accessToken = authorizationHeader.replace(SecurityConstants.TOKEN_PREFIX, Strings.EMPTY);
-
-        final UUID userId = jwtTokenService.getUserIdFromToken(accessToken);
-
-        User user = userRepository.findById(userId).orElse(null);
-
-        if (user == null) {
-            final String userNotFound = exceptionMessageAccessor.getMessage(null, "user_not_found");
-            throw new InvalidTokenException(userNotFound);
-        }
-
-        return UserMapper.INSTANCE.convertToGetUserProfileResponse(user);
     }
 
     @Override
@@ -157,7 +104,7 @@ public class UserServiceImpl implements UserService {
 
         final String username = jwtTokenService.getUsernameFromToken(refreshToken);
 
-        final User user = userRepository.findByUsername(username);
+        final User user = authRepository.findByUsername(username);
 
         if (validToken) {
             return new RefreshTokenResponse(jwtTokenService.generateRefreshToken(user));
@@ -177,7 +124,7 @@ public class UserServiceImpl implements UserService {
 
         authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
-        final User user = userRepository.findByUsername(username);
+        final User user = authRepository.findByUsername(username);
 
         final String accessToken = jwtTokenService.generateAccessToken(user);
         final String refreshToken = jwtTokenService.generateRefreshToken(user);

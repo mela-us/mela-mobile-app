@@ -27,7 +27,7 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
 
     private final GeneralMessageAccessor generalMessageAccessor;
 
-    private final UserService userService;
+    private final AuthService authService;
 
     private final OtpService otpService;
 
@@ -37,7 +37,7 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
 
     @Override
     public ForgotPasswordResponse sendOtpCodeByEmail(ForgotPasswordRequest forgotPasswordRequest) {
-        User user = userService.findByUsername(forgotPasswordRequest.getUsername());
+        User user = authService.findByUsername(forgotPasswordRequest.getUsername());
         if (user == null) {
             throw new UserNotFoundException(
                     "Sending otp via email failed! "
@@ -98,7 +98,7 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
                 resetPasswordRequest.getToken(),
                 resetPasswordRequest.getUsername()
         )) {
-            userService.updatePassword(resetPasswordRequest.getUsername(), resetPasswordRequest.getNewPassword());
+            authService.updatePassword(resetPasswordRequest.getUsername(), resetPasswordRequest.getNewPassword());
             return new ResetPasswordResponse(
                     generalMessageAccessor.getMessage(null, "reset_pw_success")
             );

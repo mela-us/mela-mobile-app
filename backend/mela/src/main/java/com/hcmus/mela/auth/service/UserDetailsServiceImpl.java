@@ -1,7 +1,8 @@
 package com.hcmus.mela.auth.service;
 
+import com.hcmus.mela.auth.model.User;
 import com.hcmus.mela.auth.model.UserRole;
-import com.hcmus.mela.auth.repository.UserRepository;
+import com.hcmus.mela.auth.repository.AuthRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,12 +21,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private static final String USERNAME_OR_PASSWORD_INVALID = "Invalid username or password.";
 
-    private final UserRepository userRepository;
+    private final AuthRepository authRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) {
 
-        final com.hcmus.mela.auth.model.User user = userRepository.findByUsername(username);
+        final User user = authRepository.findByUsername(username);
 
         if (Objects.isNull(user)) {
             throw new UsernameNotFoundException(USERNAME_OR_PASSWORD_INVALID);

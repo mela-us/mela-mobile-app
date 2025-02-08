@@ -1,4 +1,4 @@
-package com.hcmus.mela.auth.model;
+package com.hcmus.mela.user.model;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@Entity(name = "AuthUser")
+@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

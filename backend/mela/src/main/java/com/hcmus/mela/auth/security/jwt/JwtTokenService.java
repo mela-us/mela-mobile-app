@@ -1,7 +1,7 @@
 package com.hcmus.mela.auth.security.jwt;
 
 import com.hcmus.mela.auth.model.User;
-import com.hcmus.mela.auth.repository.UserRepository;
+import com.hcmus.mela.auth.repository.AuthRepository;
 import com.hcmus.mela.auth.security.utils.SecurityConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class JwtTokenService {
 
-    private final UserRepository userRepository;
+    private final AuthRepository authRepository;
 
     private final JwtTokenManager jwtTokenManager;
 
@@ -32,7 +32,7 @@ public class JwtTokenService {
 
         final String username = getUsernameFromToken(token);
 
-        User user = userRepository.findByUsername(username);
+        User user = authRepository.findByUsername(username);
 
         return jwtTokenManager.validateToken(token, user.getUsername());
     }
@@ -55,5 +55,9 @@ public class JwtTokenService {
 
     public String extractTokenFromAuthorizationHeader(String authorizationHeader) {
         return authorizationHeader.replace(SecurityConstants.TOKEN_PREFIX, Strings.EMPTY);
+    }
+
+    public UUID getUserIdFromAuthorizationHeader(String authorizationHeader) {
+        return jwtTokenManager.getUserIdFromToken(extractTokenFromAuthorizationHeader(authorizationHeader));
     }
 }

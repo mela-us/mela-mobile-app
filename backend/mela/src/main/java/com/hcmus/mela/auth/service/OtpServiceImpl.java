@@ -1,7 +1,7 @@
 package com.hcmus.mela.auth.service;
 
-import com.hcmus.mela.auth.model.Otp;
 import com.hcmus.mela.auth.model.User;
+import com.hcmus.mela.auth.model.Otp;
 import com.hcmus.mela.auth.repository.OtpRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Random;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -56,5 +57,10 @@ public class OtpServiceImpl implements OtpService {
         }
         otpRepository.deleteById(otp.getOtpId());
         return true;
+    }
+
+    @Override
+    public void deleteOtpCodeByUserId(UUID userId) {
+        otpRepository.deleteByUser_UserId(userId);
     }
 }

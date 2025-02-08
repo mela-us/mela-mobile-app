@@ -1,10 +1,10 @@
-package com.hcmus.mela.auth.exception.advice;
+package com.hcmus.mela.user.exception.advice;
 
-import com.hcmus.mela.auth.controller.UserController;
-import com.hcmus.mela.auth.exception.exception.InvalidTokenException;
-import com.hcmus.mela.auth.exception.exception.RegistrationException;
-import com.hcmus.mela.auth.exception.exception.UserNotFoundException;
-import com.hcmus.mela.auth.exception.response.ApiExceptionResponse;
+import com.hcmus.mela.user.controller.UserController;
+import com.hcmus.mela.user.exception.exception.InvalidTokenException;
+import com.hcmus.mela.user.exception.exception.UserNotFoundException;
+import com.hcmus.mela.user.exception.exception.EmptyUpdateDataException;
+import com.hcmus.mela.user.exception.response.ApiExceptionResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -31,14 +31,6 @@ public class UserControllerAdvice {
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
-    @ExceptionHandler(RegistrationException.class)
-    ResponseEntity<ApiExceptionResponse> handleLoginException(RegistrationException exception) {
-
-        final ApiExceptionResponse response = new ApiExceptionResponse(exception.getErrorMessage(), HttpStatus.BAD_REQUEST, LocalDateTime.now());
-
-        return ResponseEntity.status(response.getStatus()).body(response);
-    }
-
     @ExceptionHandler(BadCredentialsException.class)
     ResponseEntity<ApiExceptionResponse> handleLoginException(BadCredentialsException exception) {
 
@@ -46,5 +38,14 @@ public class UserControllerAdvice {
 
         return ResponseEntity.status(response.getStatus()).body(response);
     }
+
+    @ExceptionHandler(EmptyUpdateDataException.class)
+    ResponseEntity<ApiExceptionResponse> handleEmptyUpdateDataException(EmptyUpdateDataException exception) {
+
+        final ApiExceptionResponse response = new ApiExceptionResponse(exception.getErrorMessage(), HttpStatus.BAD_REQUEST, LocalDateTime.now());
+
+        return ResponseEntity.status(response.getStatus()).body(response);
+    }
+
 
 }

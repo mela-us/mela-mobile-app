@@ -1,7 +1,6 @@
-package com.hcmus.mela.auth.security.mapper;
+package com.hcmus.mela.auth.mapper;
 
 import com.hcmus.mela.auth.dto.request.RegistrationRequest;
-import com.hcmus.mela.auth.dto.response.GetUserProfileResponse;
 import com.hcmus.mela.auth.dto.dto.AuthenticatedUserDto;
 import com.hcmus.mela.auth.model.User;
 import org.mapstruct.Mapper;
@@ -19,5 +18,4 @@ public interface UserMapper {
 
     User convertToUser(AuthenticatedUserDto authenticatedUserDto);
 
-    GetUserProfileResponse convertToGetUserProfileResponse(User user);
 }
