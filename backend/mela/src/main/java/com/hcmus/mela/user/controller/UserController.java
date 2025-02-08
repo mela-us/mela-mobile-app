@@ -26,7 +26,7 @@ public class UserController {
 
     private final JwtTokenService jwtTokenService;
 
-    @RequestMapping(value = "/users/profile/upload-url", method = RequestMethod.GET)
+    @RequestMapping(value = "/users/profile/upload-image-url", method = RequestMethod.GET)
     @Operation(
             tags = "User Service",
             description = "API endpoint to get pre-signed URL for uploading user profile image.")
