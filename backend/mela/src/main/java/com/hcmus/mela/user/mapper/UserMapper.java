@@ -9,8 +9,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
-
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
-
+    
     GetUserProfileResponse convertToGetUserProfileResponse(User user);
 }
