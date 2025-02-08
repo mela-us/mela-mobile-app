@@ -5,6 +5,6 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class RegistrationException extends RuntimeException {
+public class EmptyUpdateDataException extends RuntimeException {
     private final String errorMessage;
 }

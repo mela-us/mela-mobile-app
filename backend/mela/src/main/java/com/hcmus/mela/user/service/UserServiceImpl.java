@@ -5,6 +5,7 @@ import com.hcmus.mela.auth.security.utils.SecurityConstants;
 import com.hcmus.mela.user.dto.request.*;
 import com.hcmus.mela.user.dto.response.*;
 import com.hcmus.mela.user.exception.exception.InvalidTokenException;
+import com.hcmus.mela.user.exception.exception.EmptyUpdateDataException;
 import com.hcmus.mela.user.mapper.UserMapper;
 import com.hcmus.mela.user.model.User;
 import com.hcmus.mela.user.repository.UserRepository;
@@ -52,9 +53,26 @@ public class UserServiceImpl implements UserService {
             final String userNotFound = exceptionMessageAccessor.getMessage(null, "user_not_found");
             throw new InvalidTokenException(userNotFound);
         }
-        user.setBirthday(updateProfileRequest.getBirthday());
-        user.setFullname(updateProfileRequest.getFullname());
-        user.setImageUrl(updateProfileRequest.getImageUrl());
+
+        if (updateProfileRequest.getBirthday() == null &&
+                updateProfileRequest.getFullname() == null &&
+                updateProfileRequest.getImageUrl() == null) {
+            final String noDataToUpdate = exceptionMessageAccessor.getMessage(null, "no_data_to_update");
+            throw new EmptyUpdateDataException(noDataToUpdate);
+        }
+
+        if (updateProfileRequest.getBirthday() != null) {
+            user.setBirthday(updateProfileRequest.getBirthday());
+        }
+
+        if (updateProfileRequest.getFullname() != null) {
+            user.setFullname(updateProfileRequest.getFullname());
+        }
+
+        if (updateProfileRequest.getImageUrl() != null) {
+            user.setImageUrl(updateProfileRequest.getImageUrl());
+        }
+
         user.setUpdatedAt(LocalDateTime.now());
 
         userRepository.save(user);

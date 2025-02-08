@@ -6,6 +6,7 @@ import com.hcmus.mela.user.dto.response.*;
 import com.hcmus.mela.user.service.StorageService;
 import com.hcmus.mela.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +55,7 @@ public class UserController {
             tags = "User Service",
             description = "API endpoint to update user profile.")
     public ResponseEntity<UpdateProfileResponse> updateProfile(
-            @RequestBody UpdateProfileRequest updateProfileRequest,
+            @RequestBody @Valid UpdateProfileRequest updateProfileRequest,
             @RequestHeader("Authorization") String authorizationHeader) {
 
         final UpdateProfileResponse updateProfileResponse = userService.updateProfile(updateProfileRequest, authorizationHeader);
