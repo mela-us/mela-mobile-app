@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:mela/data/network/constants/endpoints_const.dart';
 import 'package:mela/data/network/dio_client.dart';
 import 'package:mela/domain/entity/user/user.dart';
@@ -17,7 +20,7 @@ class UserInfoApi {
   Future<String> updateName(String name) async {
     print("================================ở updateUser API");
     var body = {
-      "name": name,
+      "fullname": name,
     };
 
     final responseData = await _dioClient.put(
@@ -25,7 +28,7 @@ class UserInfoApi {
       data: body,
     );
     print(responseData);
-    return responseData;
+    return responseData["message"];
   }
 
   Future<String> updateBirthday(String birthday) async {
@@ -38,12 +41,12 @@ class UserInfoApi {
       data: body,
     );
     print(responseData);
-    return responseData;
+    return responseData["message"];
   }
 
-  Future<String> updateImage(String image) async {
+  Future<String> updateImage(File imageFile, String uploadUrl) async {
     var body = {
-      "imageUrl": image,
+    "imageUrl" : uploadUrl,
     };
     print("================================ở updateUser API");
     final responseData = await _dioClient.put(
@@ -51,6 +54,15 @@ class UserInfoApi {
       data: body,
     );
     print(responseData);
-    return responseData;
+    return responseData["message"];
+  }
+
+  Future<String> getImageUpdatePresign() async {
+    print("================================ở getImageUpdatePresign API");
+    final responseData = await _dioClient.get(
+      EndpointsConst.getImageUpdatePresign,
+    );
+    print(responseData);
+    return responseData["preSignedUrl"];
   }
 }

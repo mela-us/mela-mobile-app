@@ -1,5 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/di/service_locator.dart';
+import 'package:mela/presentation/personal/store/personal_store.dart';
+import 'package:mela/utils/routes/routes.dart';
 
 import '../../../themes/default/colors_standards.dart';
 import '../widgets/back_dialog.dart';
@@ -16,6 +20,7 @@ class EditNameScreen extends StatefulWidget {
 
 class _EditNameScreenState extends State<EditNameScreen> {
   late TextEditingController _controller;
+  final PersonalStore _personalStore = getIt<PersonalStore>();
   bool isValid = false;
 
   @override
@@ -87,7 +92,21 @@ class _EditNameScreenState extends State<EditNameScreen> {
             SaveChangeButton(
               textButton: "Lưu",
               onPressed: isValid ? () async {
-                //TODO: onPressed handling
+                try {
+                  await _personalStore.updateName(_controller.text);
+                  await _personalStore.getUserInfo();
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                } catch (e) {
+                  if (e is DioException) {
+                    if (e.response?.statusCode == 401) {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          Routes.loginScreen, (route) => false
+                      );
+                    }
+                  }
+                  print(e.toString());
+                }
               } : null,
               backgroundColor: isValid ? Theme.of(context).colorScheme.primary : Colors.grey,
             ),
@@ -103,7 +122,7 @@ class _EditNameScreenState extends State<EditNameScreen> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return BackDialog(
-          onConfirm: () {
+          onConfirm: () async{
             //TODO: edit info logic
             Navigator.of(context).pop();
             Navigator.of(context).pop();

@@ -1,5 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/di/service_locator.dart';
+import 'package:mela/presentation/personal/store/personal_store.dart';
+import 'package:mela/utils/routes/routes.dart';
 
 import '../../../themes/default/colors_standards.dart';
 import '../widgets/back_dialog.dart';
@@ -17,6 +21,7 @@ class EditBirthdateScreen extends StatefulWidget {
 class _EditBirthdateScreenState extends State<EditBirthdateScreen> {
   late TextEditingController _controller;
   bool isValid = false;
+  final PersonalStore _personalStore = getIt<PersonalStore>();
 
   @override
   void initState() {
@@ -86,10 +91,14 @@ class _EditBirthdateScreenState extends State<EditBirthdateScreen> {
         ),
         title: Text(
           "Ngày sinh",
-          style: Theme.of(context)
+          style: Theme
+              .of(context)
               .textTheme
               .subHeading
-              .copyWith(color: Theme.of(context).colorScheme.primary),
+              .copyWith(color: Theme
+              .of(context)
+              .colorScheme
+              .primary),
         ),
       ),
       body: Padding(
@@ -108,7 +117,10 @@ class _EditBirthdateScreenState extends State<EditBirthdateScreen> {
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide.none,
                     ),
-                    fillColor: Theme.of(context).colorScheme.onTertiary,
+                    fillColor: Theme
+                        .of(context)
+                        .colorScheme
+                        .onTertiary,
                     filled: true,
                     errorStyle: const TextStyle(
                       color: Colors.red,
@@ -125,8 +137,26 @@ class _EditBirthdateScreenState extends State<EditBirthdateScreen> {
               onPressed: isValid ? () async {
                 String finalBirthdate = _controller.text; // Lưu ngày sinh dưới dạng chuỗi
                 //TODO: Xử lý finalBirthdate
+                try {
+                  await _personalStore.updateBirthday(finalBirthdate);
+                  await _personalStore.getUserInfo();
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                } catch (e) {
+                  if (e is DioException) {
+                    if (e.response?.statusCode == 401) {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          Routes.loginScreen, (route) => false
+                      );
+                    }
+                  }
+                  print(e.toString());
+                }
               } : null,
-              backgroundColor: isValid ? Theme.of(context).colorScheme.primary : Colors.grey,
+              backgroundColor: isValid ? Theme
+                  .of(context)
+                  .colorScheme
+                  .primary : Colors.grey,
             ),
           ],
         ),

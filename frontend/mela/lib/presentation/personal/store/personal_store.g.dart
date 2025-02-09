@@ -55,6 +55,22 @@ mixin _$PersonalStore on _PersonalStore, Store {
     });
   }
 
+  late final _$isLoadingAtom =
+      Atom(name: '_PersonalStore.isLoading', context: context);
+
+  @override
+  bool get isLoading {
+    _$isLoadingAtom.reportRead();
+    return super.isLoading;
+  }
+
+  @override
+  set isLoading(bool value) {
+    _$isLoadingAtom.reportWrite(value, super.isLoading, () {
+      super.isLoading = value;
+    });
+  }
+
   late final _$logout_successAtom =
       Atom(name: '_PersonalStore.logout_success', context: context);
 
@@ -79,6 +95,31 @@ mixin _$PersonalStore on _PersonalStore, Store {
     return _$getUserInfoAsyncAction.run(() => super.getUserInfo());
   }
 
+  late final _$updateNameAsyncAction =
+      AsyncAction('_PersonalStore.updateName', context: context);
+
+  @override
+  Future<bool> updateName(String name) {
+    return _$updateNameAsyncAction.run(() => super.updateName(name));
+  }
+
+  late final _$updateBirthdayAsyncAction =
+      AsyncAction('_PersonalStore.updateBirthday', context: context);
+
+  @override
+  Future<bool> updateBirthday(String birthday) {
+    return _$updateBirthdayAsyncAction
+        .run(() => super.updateBirthday(birthday));
+  }
+
+  late final _$updateImageAsyncAction =
+      AsyncAction('_PersonalStore.updateImage', context: context);
+
+  @override
+  Future<bool> updateImage(File image) {
+    return _$updateImageAsyncAction.run(() => super.updateImage(image));
+  }
+
   late final _$logoutAsyncAction =
       AsyncAction('_PersonalStore.logout', context: context);
 
@@ -92,6 +133,7 @@ mixin _$PersonalStore on _PersonalStore, Store {
     return '''
 fetchFuture: ${fetchFuture},
 user: ${user},
+isLoading: ${isLoading},
 logout_success: ${logout_success},
 progressLoading: ${progressLoading},
 detailedProgressLoading: ${detailedProgressLoading}

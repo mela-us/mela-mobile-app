@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 
 import 'package:mela/data/network/apis/user/user_info_api.dart';
 import 'package:mela/domain/repository/user/user_repository.dart';
@@ -46,17 +48,34 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<String> updateBirthday(String birthday) {
+  Future<String> updateBirthday(String birthday) async {
     return _userInfoApi.updateBirthday(birthday);
   }
 
   @override
-  Future<String> updateImage(String image) {
-    return _userInfoApi.updateImage(image);
+  Future<String> updateImage(File image, String uploadUrl) async{
+    var request = await http.put(
+      Uri.parse(uploadUrl),
+      body: image.readAsBytesSync(),
+      headers: {
+        'Content-Type': 'image/jpeg',
+      },
+    );
+    if (request.statusCode == 200) {
+      return _userInfoApi.updateImage(image, uploadUrl);
+    }
+    else {
+      throw Exception("Failed to upload image: ${request.statusCode}");
+    }
   }
 
   @override
   Future<String> updateName(String name) {
     return _userInfoApi.updateName(name);
+  }
+
+  @override
+  Future<String> getImageUpdatePresign() {
+    return _userInfoApi.getImageUpdatePresign();
   }
 }

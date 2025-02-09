@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:mela/domain/entity/user/user.dart';
 
@@ -8,7 +9,10 @@ abstract class UserRepository {
 
   Future<String> updateName(String name);
   Future<String> updateBirthday(String birthday);
-  Future<String> updateImage(String image);
+
+  Future<String> updateImage(File image, String uploadUrl);
+
+  Future<String> getImageUpdatePresign();
 
   Future<bool> logout();
 }

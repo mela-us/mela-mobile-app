@@ -34,4 +34,5 @@ class EndpointsConst {
   static const String getStats = "/api/statistics";
   static const String getUser = "/api/users/profile";
   static const String updateUser = "/api/users/profile";
+  static const String getImageUpdatePresign = "/api/users/profile/upload-image-url";
 }
