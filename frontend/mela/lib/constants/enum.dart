@@ -18,3 +18,9 @@ enum ResponseStatus{
   BAD_REQUEST,
   UNKNOWN
 }
+
+enum UpdateField{
+  name,
+  image,
+  birthday
+}

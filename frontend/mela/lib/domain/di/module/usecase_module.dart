@@ -13,6 +13,7 @@ import 'package:mela/domain/usecase/topic/find_topic_by_id_usecase.dart';
 import 'package:mela/domain/usecase/topic/get_topics_usecase.dart';
 import 'package:mela/domain/usecase/topic_lecture/get_topic_lecture_usecase.dart';
 import 'package:mela/domain/usecase/user/get_user_info_usecase.dart';
+import 'package:mela/domain/usecase/user/update_user_usecase.dart';
 import 'package:mela/domain/usecase/user_login/refresh_access_token_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_access_token_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_refresh_token_usecase.dart';
@@ -166,6 +167,12 @@ class UseCaseModule {
         getIt<UserRepository>(),
         getIt<RefreshAccessTokenUsecase>(),
         getIt<LogoutUseCase>()));
+
+    getIt.registerSingleton<UpdateUserUsecase>(UpdateUserUsecase(
+        getIt<UserRepository>(),
+        getIt<RefreshAccessTokenUsecase>(),
+        getIt<LogoutUseCase>())
+    );
 
     //forgot password:----------------------------------------------------------
     getIt.registerSingleton<VerifyExistEmailUseCase>(

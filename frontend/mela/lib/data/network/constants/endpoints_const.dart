@@ -6,7 +6,7 @@ class EndpointsConst {
   static const String saveResult = "/api/exercises/save";
   // base url
   //static const String baseUrl = "http://jsonplaceholder.typicode.com";
-  static const String baseUrl = "https://api.mela.guru";
+  static const String baseUrl = "https://api.dev.mela.guru";
 
   // receiveTimeout
   static const int receiveTimeout = 15000;
@@ -32,5 +32,6 @@ class EndpointsConst {
   static const String forgotPasswordVerifyOTP = "/api/forgot-password/validate-otp";
   static const String forgotPasswordCreateNewPassword = "/api/forgot-password/reset-password";
   static const String getStats = "/api/statistics";
-  static const String getUser = "/api/profile";
+  static const String getUser = "/api/users/profile";
+  static const String updateUser = "/api/users/profile";
 }

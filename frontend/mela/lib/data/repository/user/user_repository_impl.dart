@@ -24,19 +24,7 @@ class UserRepositoryImpl extends UserRepository {
 
   @override
   Future<User> getUserInfo() async {
-    // return User(
-    //     id: '128736',
-    //     name: 'Anh Long',
-    //     email: 'anhlong@gmail.com',
-    //     dob: '01/01/2003',
-    // );
     return _userInfoApi.getUser();
-  }
-
-  @override
-  Future<User> updateUserInfo(User newUser) {
-    // TODO: implement updateUserInfo
-    throw UnimplementedError();
   }
 
   @override
@@ -55,5 +43,20 @@ class UserRepositoryImpl extends UserRepository {
     await _sharedPrefsHelper.saveIsLoggedIn(false);
 
     return _logoutApi.logout(tokens);
+  }
+
+  @override
+  Future<String> updateBirthday(String birthday) {
+    return _userInfoApi.updateBirthday(birthday);
+  }
+
+  @override
+  Future<String> updateImage(String image) {
+    return _userInfoApi.updateImage(image);
+  }
+
+  @override
+  Future<String> updateName(String name) {
+    return _userInfoApi.updateName(name);
   }
 }
