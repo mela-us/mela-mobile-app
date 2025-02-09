@@ -73,7 +73,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16.0),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(
                         color: Colors.black26,
                         blurRadius: 8.0,
@@ -85,7 +85,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                     children: [
                       ListTile(
                         leading: Image.asset(Assets.personal_info, width: 18, height: 18),
-                        trailing: Icon(Icons.arrow_forward_ios, size: 18.0),
+                        trailing: const Icon(Icons.arrow_forward_ios, size: 18.0),
                         title: Text(
                           'Thông tin cá nhân',
                           style: Theme.of(context).textTheme.buttonStyle
@@ -106,7 +106,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                       ),
                       ListTile(
                         leading: Image.asset(Assets.personal_language, width: 18, height: 18),
-                        trailing: Icon(Icons.arrow_forward_ios, size: 18.0),
+                        trailing: const Icon(Icons.arrow_forward_ios, size: 18.0),
                         title: Text(
                           'Ngôn ngữ',
                           style: Theme.of(context).textTheme.buttonStyle
@@ -130,7 +130,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                       ),
                       ListTile(
                         leading: Image.asset(Assets.personal_term, width: 18, height: 18),
-                        trailing: Icon(Icons.arrow_forward_ios, size: 18.0),
+                        trailing: const Icon(Icons.arrow_forward_ios, size: 18.0),
                         title: Text(
                           'Các điều khoản',
                           style: Theme.of(context).textTheme.buttonStyle

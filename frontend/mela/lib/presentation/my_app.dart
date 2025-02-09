@@ -1,12 +1,16 @@
 // ignore_for_file: unused_import
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/strings.dart';
 import 'package:mela/domain/entity/post/post_list.dart';
 import 'package:mela/presentation/all_screens.dart';
+import 'package:mela/presentation/personal/edit_screens/edit_birthdate_screen.dart';
+import 'package:mela/presentation/personal/edit_screens/edit_name_screen.dart';
 import 'package:mela/presentation/personal/personal.dart';
+import 'package:mela/presentation/personal/personal_info.dart';
 import 'package:mela/presentation/signup_login_screen/login_or_signup_screen.dart';
 import 'package:mela/presentation/stats/stats.dart';
 import 'package:mela/utils/routes/routes.dart';
@@ -43,12 +47,18 @@ class MyApp extends StatelessWidget {
           localizationsDelegates: [
             // A class which loads the translations from JSON files
             AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
             // Built-in localization of basic text for Material widgets
             ///GlobalMaterialLocalizations.delegate,
             // Built-in localization for text direction LTR/RTL
             ///GlobalWidgetsLocalizations.delegate,
             // Built-in localization of basic text for Cupertino widgets
             ///GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('vi', ''), // Vietnamese
           ],
           // home: _userStore.isLoggedIn ? HomeScreen() : LoginScreen(),
           // locale: Locale(_languageStore.locale),
@@ -66,7 +76,7 @@ class MyApp extends StatelessWidget {
           //   GlobalCupertinoLocalizations.delegate,
           // ],
           home: _userStore.isLoggedIn ? AllScreens() : LoginOrSignupScreen(),
-          //  home: AllScreens(),
+          //home: PersonalInfo(name: "Phan Nhan",dob: "11-08-2003",email: "phantrinhanbt@gmail.com")
         );
       },
     );

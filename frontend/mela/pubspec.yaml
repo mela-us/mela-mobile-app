@@ -10,6 +10,8 @@ dependencies:
 
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   # A
   # another_flushbar: ^1.12.29
