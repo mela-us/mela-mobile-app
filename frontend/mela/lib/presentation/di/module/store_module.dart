@@ -24,6 +24,7 @@ import '../../../domain/usecase/search/delete_all_history_search_usecase.dart';
 import '../../../domain/usecase/search/delete_history_search_usecase.dart';
 import '../../../domain/usecase/stat/get_stat_search_history_usecase.dart';
 import '../../../domain/usecase/stat/update_stat_search_history_usecase.dart';
+import '../../../domain/usecase/user/delete_user_usecase.dart';
 import '../../../domain/usecase/user/get_user_info_usecase.dart';
 import '../../../domain/usecase/user/logout_usecase.dart';
 import '../../forgot_password_screen/store/create_new_password_store/create_new_password_store.dart';
@@ -150,6 +151,7 @@ class StoreModule {
         getIt<LogoutUseCase>(),
         getIt<ErrorStore>(),
         getIt<UpdateUserUsecase>(),
+        getIt<DeleteAccountUseCase>(),
       ),
     );
 

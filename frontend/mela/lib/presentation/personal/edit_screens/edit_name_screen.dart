@@ -6,13 +6,18 @@ import 'package:mela/presentation/personal/store/personal_store.dart';
 import 'package:mela/utils/routes/routes.dart';
 
 import '../../../themes/default/colors_standards.dart';
+import '../personal_info.dart';
 import '../widgets/back_dialog.dart';
 import '../widgets/save_change_button.dart';
 
 class EditNameScreen extends StatefulWidget {
   final String name;
+  final String email;
+  final String dob;
+  final String? imageUrl;
 
-  const EditNameScreen({super.key, required this.name});
+
+  const EditNameScreen({super.key, required this.name, required this.email, required this.dob, this.imageUrl});
 
   @override
   _EditNameScreenState createState() => _EditNameScreenState();
@@ -56,7 +61,7 @@ class _EditNameScreenState extends State<EditNameScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            _showLogoutConfirmationDialog(context);
+            _showBackConfirmationDialog(context);
           },
         ),
         title: Text(
@@ -97,6 +102,16 @@ class _EditNameScreenState extends State<EditNameScreen> {
                   await _personalStore.getUserInfo();
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => PersonalInfo(
+                        name: _controller.text,
+                        email: widget.email,
+                        dob: widget.dob,
+                        imageUrl: widget.imageUrl,
+                      ),
+                    ),
+                  );
                 } catch (e) {
                   if (e is DioException) {
                     if (e.response?.statusCode == 401) {
@@ -116,14 +131,13 @@ class _EditNameScreenState extends State<EditNameScreen> {
     );
   }
 
-  void _showLogoutConfirmationDialog(BuildContext context) {
+  void _showBackConfirmationDialog(BuildContext context) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return BackDialog(
           onConfirm: () async{
-            //TODO: edit info logic
             Navigator.of(context).pop();
             Navigator.of(context).pop();
             //pop twice until back to personal info

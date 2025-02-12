@@ -12,6 +12,7 @@ import 'package:mela/data/network/apis/login_signup/signup_api.dart';
 import 'package:mela/data/network/apis/searchs/search_api.dart';
 import 'package:mela/data/network/apis/topic_lecture/topic_lecture_api.dart';
 import 'package:mela/data/network/apis/topics/topic_api.dart';
+import 'package:mela/data/network/apis/user/delete_account_api.dart';
 import 'package:mela/data/network/apis/user/logout_api.dart';
 import 'package:mela/data/network/apis/user/user_info_api.dart';
 import 'package:mela/data/repository/level/level_repository_impl.dart';
@@ -59,8 +60,10 @@ class RepositoryModule {
     getIt.registerSingleton<UserRepository>(UserRepositoryImpl(
         getIt<LogoutApi>(),
         getIt<UserInfoApi>(),
+        getIt<DeleteAccountApi>(),
         getIt<SecureStorageHelper>(),
-        getIt<SharedPreferenceHelper>()));
+        getIt<SharedPreferenceHelper>())
+    );
 
     //Setting:------------------------------------------------------------------
     getIt.registerSingleton<SettingRepository>(SettingRepositoryImpl(

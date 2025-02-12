@@ -51,7 +51,7 @@ class _EditEmailScreenState extends State<EditEmailScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            _showLogoutConfirmationDialog(context);
+            _showBackConfirmationDialog(context);
           },
         ),
         title: Text(
@@ -98,7 +98,7 @@ class _EditEmailScreenState extends State<EditEmailScreen> {
     );
   }
 
-  void _showLogoutConfirmationDialog(BuildContext context) {
+  void _showBackConfirmationDialog(BuildContext context) {
     showDialog(
       context: context,
       barrierDismissible: false,

@@ -154,7 +154,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                       ),
                       ListTile(
                         leading: Image.asset(Assets.personal_signout, width: 18, height: 18),
-                        trailing: Icon(Icons.arrow_forward_ios, size: 18.0),
+                        trailing: const Icon(Icons.arrow_forward_ios, size: 18.0),
                         title: Text(
                           'Đăng xuất',
                           style: Theme.of(context).textTheme.buttonStyle

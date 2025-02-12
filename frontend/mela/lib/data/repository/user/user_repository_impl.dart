@@ -10,6 +10,7 @@ import '../../../domain/entity/user/token_model.dart';
 import '../../../domain/entity/user/user.dart';
 // ignore: duplicate_import
 import '../../../domain/entity/user/user.dart';
+import '../../network/apis/user/delete_account_api.dart';
 import '../../network/apis/user/logout_api.dart';
 import '../../securestorage/secure_storage_helper.dart';
 
@@ -17,12 +18,13 @@ class UserRepositoryImpl extends UserRepository {
 
   final LogoutApi _logoutApi;
   final UserInfoApi _userInfoApi;
+  final DeleteAccountApi _deleteAccountApi;
   // shared pref object
   final SecureStorageHelper _secureStorageHelper;
   final SharedPreferenceHelper _sharedPrefsHelper;
 
   // constructor
-  UserRepositoryImpl(this._logoutApi, this._userInfoApi, this._secureStorageHelper, this._sharedPrefsHelper);
+  UserRepositoryImpl(this._logoutApi, this._userInfoApi, this._deleteAccountApi, this._secureStorageHelper, this._sharedPrefsHelper);
 
   @override
   Future<User> getUserInfo() async {
@@ -77,5 +79,19 @@ class UserRepositoryImpl extends UserRepository {
   @override
   Future<String> getImageUpdatePresign() {
     return _userInfoApi.getImageUpdatePresign();
+  }
+
+  @override
+  Future<bool> deleteAccount() async {
+    //CLEAR TOKENS JUST LIKE LOGGING OUT
+    String accessToken = await _secureStorageHelper.accessToken ?? "";
+    String refreshToken = await _secureStorageHelper.refreshToken ?? "";
+
+    TokenModel tokens = TokenModel(
+        accessToken: accessToken,
+        refreshToken: refreshToken
+    );
+
+    return await _deleteAccountApi.deleteAccount(tokens);
   }
 }

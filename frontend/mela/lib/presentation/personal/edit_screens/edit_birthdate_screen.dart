@@ -6,13 +6,17 @@ import 'package:mela/presentation/personal/store/personal_store.dart';
 import 'package:mela/utils/routes/routes.dart';
 
 import '../../../themes/default/colors_standards.dart';
+import '../personal_info.dart';
 import '../widgets/back_dialog.dart';
 import '../widgets/save_change_button.dart';
 
 class EditBirthdateScreen extends StatefulWidget {
-  final String birthdate; //dd-MM-yyyy
+  final String name;
+  final String email;
+  final String dob;
+  final String? imageUrl; //dd-MM-yyyy
 
-  const EditBirthdateScreen({super.key, required this.birthdate});
+  const EditBirthdateScreen({super.key, required this.name, required this.email, required this.dob, this.imageUrl});
 
   @override
   _EditBirthdateScreenState createState() => _EditBirthdateScreenState();
@@ -26,7 +30,7 @@ class _EditBirthdateScreenState extends State<EditBirthdateScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: widget.birthdate);
+    _controller = TextEditingController(text: widget.dob);
     _controller.addListener(_validateInput);
   }
 
@@ -86,7 +90,7 @@ class _EditBirthdateScreenState extends State<EditBirthdateScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            _showLogoutConfirmationDialog(context);
+            _showBackConfirmationDialog(context);
           },
         ),
         title: Text(
@@ -142,6 +146,16 @@ class _EditBirthdateScreenState extends State<EditBirthdateScreen> {
                   await _personalStore.getUserInfo();
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => PersonalInfo(
+                        name: widget.name,
+                        email: widget.email,
+                        dob: finalBirthdate,
+                        imageUrl: widget.imageUrl,
+                      ),
+                    ),
+                  );
                 } catch (e) {
                   if (e is DioException) {
                     if (e.response?.statusCode == 401) {
@@ -164,7 +178,7 @@ class _EditBirthdateScreenState extends State<EditBirthdateScreen> {
     );
   }
 
-  void _showLogoutConfirmationDialog(BuildContext context) {
+  void _showBackConfirmationDialog(BuildContext context) {
     showDialog(
       context: context,
       barrierDismissible: false,

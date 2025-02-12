@@ -43,6 +43,7 @@ import '../../usecase/search/get_history_search_list_usecase.dart';
 import '../../usecase/search/get_search_lectures_result_usecase.dart';
 import '../../usecase/stat/get_stat_search_history_usecase.dart';
 import '../../usecase/stat/update_stat_search_history_usecase.dart';
+import '../../usecase/user/delete_user_usecase.dart';
 import '../../usecase/user/logout_usecase.dart';
 import '../../usecase/user_login/is_logged_in_usecase.dart';
 import '../../usecase/user_login/login_usecase.dart';
@@ -182,6 +183,13 @@ class UseCaseModule {
         getIt<GetUploadPresignUseCase>())
     );
 
+    getIt.registerSingleton<DeleteAccountUseCase>(
+        DeleteAccountUseCase(
+          getIt<UserRepository>(),
+          getIt<LogoutUseCase>(),
+          getIt<RefreshAccessTokenUsecase>(),
+        )
+    );
     //forgot password:----------------------------------------------------------
     getIt.registerSingleton<VerifyExistEmailUseCase>(
         VerifyExistEmailUseCase(getIt<ForgotPasswordRepository>()));

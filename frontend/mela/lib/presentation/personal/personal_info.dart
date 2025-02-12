@@ -1,12 +1,16 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/presentation/personal/store/personal_store.dart';
 import 'package:mela/presentation/personal/widgets/delete_account_dialog.dart';
+import '../../di/service_locator.dart';
 import '../../themes/default/colors_standards.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
+import '../../utils/routes/routes.dart';
 import 'edit_screens/edit_birthdate_screen.dart';
 import 'edit_screens/edit_name_screen.dart';
 
@@ -32,6 +36,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
   File? _image; //for uploaded image
   late ImageProvider _profileImage; //can be _image or can be passed from imageURL
   bool defaultImage = false; //flag for default avatar image
+  final PersonalStore _personalStore = getIt<PersonalStore>();
 
   final ImagePicker _picker = ImagePicker(); //image picker
 
@@ -44,7 +49,12 @@ class _PersonalInfoState extends State<PersonalInfo> {
   void _navigateToEditName() {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => EditNameScreen(name: widget.name),
+        builder: (context) => EditNameScreen(
+          name: widget.name,
+          email: widget.email,
+          dob: widget.dob,
+          imageUrl: widget.imageUrl,
+        ),
       ),
     );
   }
@@ -60,7 +70,12 @@ class _PersonalInfoState extends State<PersonalInfo> {
   void _navigateToEditBirthdate() {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => EditBirthdateScreen(birthdate: widget.dob),
+        builder: (context) => EditBirthdateScreen(
+          name: widget.name,
+          email: widget.email,
+          dob: widget.dob,
+          imageUrl: widget.imageUrl,
+        ),
       ),
     );
   }
@@ -71,9 +86,24 @@ class _PersonalInfoState extends State<PersonalInfo> {
       context: context,
       builder: (BuildContext context) {
         return DeleteAccountConfirmationDialog(
-          onDelete: () {
-            //TODO: add delete account logic
-            Navigator.of(context).pop(); // Đóng hộp thoại
+          onDelete: () async {
+            try {
+              final success = await _personalStore.deleteAccount();
+              if (success) {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    Routes.loginScreen, (route) => false
+                );
+              }
+            } catch (e) {
+              if (e is DioException) {
+                if (e.response?.statusCode == 401) {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      Routes.loginScreen, (route) => false
+                  );
+                }
+              }
+              print(e.toString());
+            }
           },
           onCancel: () {
             Navigator.of(context).pop(); // Đóng hộp thoại
@@ -150,6 +180,12 @@ class _PersonalInfoState extends State<PersonalInfo> {
           ],
         );
       },
+    );
+  }
+
+  void _showImageUpdatingNotAvailable() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: const Text("Chức năng này hiện không khả dụng cho đến phiên bản sau!")),
     );
   }
 
@@ -324,7 +360,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                           width: 30,
                           height: 30,
                         ),
-                        onPressed: _showImagePickerOptions,
+                        onPressed: _showImageUpdatingNotAvailable, //_showImagePickerOptions,
                       ),
                     ),
                   ],

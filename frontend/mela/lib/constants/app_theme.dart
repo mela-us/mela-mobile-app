@@ -191,7 +191,7 @@ extension CustomTextTheme on TextTheme {
 extension CustomColorTheme on ColorScheme{
   Color get appBackground => const Color(0xFFF5F9FF);
   Color get textInBg1 => const Color(0xFF202244);
-  Color get textInBg2 => const Color(0xFF545454);
+  Color get textInBg2 => const Color(0xFF7F7F7F);
   Color get dialogBackground => const Color(0xFF202244);
 
   Color get buttonStroke => const Color(0xFFD6DCE1);

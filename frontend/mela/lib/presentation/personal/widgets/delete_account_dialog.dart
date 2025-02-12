@@ -6,10 +6,10 @@ class DeleteAccountConfirmationDialog extends StatefulWidget {
   final VoidCallback onCancel;
 
   const DeleteAccountConfirmationDialog({
-    Key? key,
+    super.key,
     required this.onDelete,
     required this.onCancel,
-  }) : super(key: key);
+  });
 
   @override
   _DeleteAccountConfirmationDialogState createState() => _DeleteAccountConfirmationDialogState();

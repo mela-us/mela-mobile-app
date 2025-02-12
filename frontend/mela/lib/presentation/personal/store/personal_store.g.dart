@@ -120,6 +120,14 @@ mixin _$PersonalStore on _PersonalStore, Store {
     return _$updateImageAsyncAction.run(() => super.updateImage(image));
   }
 
+  late final _$deleteAccountAsyncAction =
+      AsyncAction('_PersonalStore.deleteAccount', context: context);
+
+  @override
+  Future<bool> deleteAccount() {
+    return _$deleteAccountAsyncAction.run(() => super.deleteAccount());
+  }
+
   late final _$logoutAsyncAction =
       AsyncAction('_PersonalStore.logout', context: context);
 

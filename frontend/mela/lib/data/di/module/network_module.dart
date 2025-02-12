@@ -6,6 +6,7 @@ import 'package:mela/data/network/apis/login_signup/refresh_access_token_api.dar
 import 'package:mela/data/network/apis/searchs/search_api.dart';
 import 'package:mela/data/network/apis/topic_lecture/topic_lecture_api.dart';
 import 'package:mela/data/network/apis/topics/topic_api.dart';
+import 'package:mela/data/network/apis/user/delete_account_api.dart';
 import 'package:mela/data/network/dio_client.dart';
 import 'package:mela/data/securestorage/secure_storage_helper.dart';
 
@@ -80,5 +81,6 @@ class NetworkModule {
     getIt.registerSingleton<StatsApi>(StatsApi(getIt<DioClient>()));
     getIt.registerSingleton<UserInfoApi>(UserInfoApi(getIt<DioClient>()));
     getIt.registerSingleton<LogoutApi>(LogoutApi(getIt<DioClient>()));
+    getIt.registerSingleton<DeleteAccountApi>(DeleteAccountApi(getIt<DioClient>()));
   }
 }

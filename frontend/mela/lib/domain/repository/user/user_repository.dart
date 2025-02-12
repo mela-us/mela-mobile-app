@@ -15,4 +15,6 @@ abstract class UserRepository {
   Future<String> getImageUpdatePresign();
 
   Future<bool> logout();
+
+  Future<bool> deleteAccount();
 }
