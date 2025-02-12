@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
           //     ? AppThemeData.darkThemeData
           //     : AppThemeData.lightThemeData,
           routes: Routes.routes,
-          localizationsDelegates: [
+          localizationsDelegates: const [
             // A class which loads the translations from JSON files
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
@@ -75,8 +75,13 @@ class MyApp extends StatelessWidget {
           //   // Built-in localization of basic text for Cupertino widgets
           //   GlobalCupertinoLocalizations.delegate,
           // ],
-          home: _userStore.isLoggedIn ? AllScreens() : LoginOrSignupScreen(),
-          //home: PersonalInfo(name: "Phan Nhan",dob: "11-08-2003",email: "phantrinhanbt@gmail.com")
+          //home: _userStore.isLoggedIn ? AllScreens() : LoginOrSignupScreen(),
+          home: const PersonalInfo(
+              name: "Phan Nhan",
+              dob: "11-08-2003",
+              email: "phantrinhanbt@gmail.com",
+              imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjgATTypseTuJakR9oTeQKXtxq0kh6Ez7ueg&s",
+          ),
         );
       },
     );

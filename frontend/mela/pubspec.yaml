@@ -37,6 +37,7 @@ dependencies:
   http: ^1.2.2
   # I
   intl: ^0.19.0
+  image_picker: ^1.0.7
   # J
   json_serializable: ^6.6.1
   # K

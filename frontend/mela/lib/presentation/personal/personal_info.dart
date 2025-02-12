@@ -1,23 +1,27 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/presentation/personal/widgets/delete_account_dialog.dart';
 import '../../themes/default/colors_standards.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import 'edit_screens/edit_birthdate_screen.dart';
-import 'edit_screens/edit_email_screen.dart';
 import 'edit_screens/edit_name_screen.dart';
 
 class PersonalInfo extends StatefulWidget {
   final String name;
   final String email;
   final String dob;
+  final String? imageUrl;
 
   const PersonalInfo({
     super.key,
     required this.name,
     required this.email,
     required this.dob,
+    this.imageUrl,
   });
 
   @override
@@ -25,9 +29,15 @@ class PersonalInfo extends StatefulWidget {
 }
 
 class _PersonalInfoState extends State<PersonalInfo> {
+  File? _image; //for uploaded image
+  final ImagePicker _picker = ImagePicker();
+  late ImageProvider _profileImage; //can be _image or can be passed from imageURL
+  bool defaultImage = false; //flag for default avatar image
+
   @override
   void initState() {
     super.initState();
+    _setProfileImage();
   }
 
   // Hàm điều hướng đến màn hình chỉnh sửa
@@ -39,12 +49,12 @@ class _PersonalInfoState extends State<PersonalInfo> {
     );
   }
 
-  void _navigateToEditEmail() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => EditEmailScreen(email: widget.email),
-      ),
-    );
+  void _navigateToEditEmail() { //not yet available for email editing
+    // Navigator.of(context).push(
+    //   MaterialPageRoute(
+    //     builder: (context) => EditEmailScreen(email: widget.email),
+    //   ),
+    // );
   }
 
   void _navigateToEditBirthdate() {
@@ -68,6 +78,76 @@ class _PersonalInfoState extends State<PersonalInfo> {
           onCancel: () {
             Navigator.of(context).pop(); // Đóng hộp thoại
           },
+        );
+      },
+    );
+  }
+
+  void _setProfileImage() {
+    if (_image != null) {
+      _profileImage = FileImage(_image!);
+      defaultImage = false;
+    } else if (widget.imageUrl != null && widget.imageUrl!.isNotEmpty && !defaultImage) {
+      _profileImage = NetworkImage(widget.imageUrl!);
+      defaultImage = false;
+    } else {
+      _profileImage = const AssetImage('assets/icons/default_profile_pic.png');
+      defaultImage = true;
+    }
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await _picker.pickImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+        _setProfileImage();
+      });
+      //TODO: call update image
+    }
+  }
+
+  void _removeImage() {
+    setState(() {
+      _image = null;
+      defaultImage = true;
+      _setProfileImage();
+    });
+    //TODO: call delete image
+  }
+
+  void _showImagePickerOptions() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text("Chụp ảnh mới"),
+              onTap: () {
+                Navigator.pop(context);
+                _pickImage(ImageSource.camera);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text("Chọn ảnh từ thư viện"),
+              onTap: () {
+                Navigator.pop(context);
+                _pickImage(ImageSource.gallery);
+              },
+            ),
+            if (_image != null || !defaultImage)
+              ListTile(
+                leading: const Icon(Icons.delete, color: Colors.red),
+                title: const Text("Xóa ảnh đại diện", style: TextStyle(color: Colors.red)),
+                onTap: () {
+                  Navigator.pop(context);
+                  _removeImage();
+                },
+              ),
+          ],
         );
       },
     );
@@ -126,7 +206,13 @@ class _PersonalInfoState extends State<PersonalInfo> {
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text(widget.name),
+                                Text(
+                                  widget.name,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .content
+                                      .copyWith(color: Theme.of(context).colorScheme.primary),
+                                ),
                                 const SizedBox(width: 8.0),
                                 const Icon(Icons.arrow_forward_ios, size: 18.0),
                               ],
@@ -143,14 +229,20 @@ class _PersonalInfoState extends State<PersonalInfo> {
                               style: Theme.of(context)
                                   .textTheme
                                   .subHeading
-                                  .copyWith(color: Theme.of(context).colorScheme.primary),
+                                  .copyWith(color: Theme.of(context).colorScheme.textInBg2),
                             ),
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text(widget.email),
-                                const SizedBox(width: 8.0),
-                                const Icon(Icons.arrow_forward_ios, size: 18.0),
+                                Text(
+                                  widget.email,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .content
+                                      .copyWith(color: Theme.of(context).colorScheme.primary),
+                                ),
+                                //const SizedBox(width: 8.0),
+                                //const Icon(Icons.arrow_forward_ios, size: 18.0),
                               ],
                             ),
                           ),
@@ -170,7 +262,13 @@ class _PersonalInfoState extends State<PersonalInfo> {
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text(widget.dob),
+                                Text(
+                                  widget.dob,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .content
+                                      .copyWith(color: Theme.of(context).colorScheme.primary),
+                                ),
                                 const SizedBox(width: 8.0),
                                 const Icon(Icons.arrow_forward_ios, size: 18.0),
                               ],
@@ -209,8 +307,8 @@ class _PersonalInfoState extends State<PersonalInfo> {
                   children: [
                     Column(
                       children: [
-                        const CircleAvatar(
-                          backgroundImage: AssetImage('assets/icons/default_profile_pic.png'),
+                        CircleAvatar(
+                          backgroundImage: _profileImage,
                           radius: 50.0,
                         ),
                         const SizedBox(height: 5.0),
@@ -218,15 +316,15 @@ class _PersonalInfoState extends State<PersonalInfo> {
                       ],
                     ),
                     Positioned(
-                      bottom: 35,
-                      right: 0,
-                      child: Padding(
-                        padding: const EdgeInsets.all(0.0),
-                        child: Image.asset(
+                      bottom: 15,
+                      right: -3,
+                      child: IconButton(
+                        icon: Image.asset(
                           "assets/icons/upload_profile_pic.png",
-                          width: 35,
-                          height: 35,
+                          width: 30,
+                          height: 30,
                         ),
+                        onPressed: _showImagePickerOptions,
                       ),
                     ),
                   ],
