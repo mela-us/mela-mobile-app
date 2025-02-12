@@ -30,9 +30,10 @@ class PersonalInfo extends StatefulWidget {
 
 class _PersonalInfoState extends State<PersonalInfo> {
   File? _image; //for uploaded image
-  final ImagePicker _picker = ImagePicker();
   late ImageProvider _profileImage; //can be _image or can be passed from imageURL
   bool defaultImage = false; //flag for default avatar image
+
+  final ImagePicker _picker = ImagePicker(); //image picker
 
   @override
   void initState() {
@@ -40,7 +41,6 @@ class _PersonalInfoState extends State<PersonalInfo> {
     _setProfileImage();
   }
 
-  // Hàm điều hướng đến màn hình chỉnh sửa
   void _navigateToEditName() {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -287,11 +287,11 @@ class _PersonalInfoState extends State<PersonalInfo> {
                                   .subHeading
                                   .copyWith(color: Colors.redAccent),
                             ),
-                            trailing: Row(
+                            trailing: const Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const SizedBox(width: 8.0),
-                                const Icon(Icons.arrow_forward_ios, size: 18.0),
+                                SizedBox(width: 8.0),
+                                Icon(Icons.arrow_forward_ios, size: 18.0),
                               ],
                             ),
                           ),
@@ -312,7 +312,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                           radius: 50.0,
                         ),
                         const SizedBox(height: 5.0),
-                        Observer(builder: (_) => Text("")),
+                        Observer(builder: (_) => const Text("")),
                       ],
                     ),
                     Positioned(
