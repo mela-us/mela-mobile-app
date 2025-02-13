@@ -90,7 +90,7 @@ class _EditBirthdateScreenState extends State<EditBirthdateScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            _showBackConfirmationDialog(context);
+            _showBackConfirmationDialog(context, _controller.text.trim());
           },
         ),
         title: Text(
@@ -178,7 +178,8 @@ class _EditBirthdateScreenState extends State<EditBirthdateScreen> {
     );
   }
 
-  void _showBackConfirmationDialog(BuildContext context) {
+  void _showBackConfirmationDialog(BuildContext context, String input) {
+    if (input == widget.dob) return;
     showDialog(
       context: context,
       barrierDismissible: false,

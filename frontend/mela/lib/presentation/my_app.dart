@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
           //     ? AppThemeData.darkThemeData
           //     : AppThemeData.lightThemeData,
           routes: Routes.routes,
-          localizationsDelegates: const [
+          localizationsDelegates: [
             // A class which loads the translations from JSON files
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
@@ -57,9 +57,10 @@ class MyApp extends StatelessWidget {
             // Built-in localization of basic text for Cupertino widgets
             ///GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: const [
-            Locale('vi', ''), // Vietnamese
-          ],
+          // supportedLocales: [
+          //   Locale('vi', ''), // Vietnamese
+          //   Locale('en', ''), // English
+          // ],
           // home: _userStore.isLoggedIn ? HomeScreen() : LoginScreen(),
           // locale: Locale(_languageStore.locale),
           // supportedLocales: _languageStore.supportedLanguages

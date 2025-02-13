@@ -61,7 +61,7 @@ class _EditNameScreenState extends State<EditNameScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            _showBackConfirmationDialog(context);
+            _showBackConfirmationDialog(context, _controller.text.trim());
           },
         ),
         title: Text(
@@ -131,7 +131,8 @@ class _EditNameScreenState extends State<EditNameScreen> {
     );
   }
 
-  void _showBackConfirmationDialog(BuildContext context) {
+  void _showBackConfirmationDialog(BuildContext context, String input) {
+    if (input == widget.name) return;
     showDialog(
       context: context,
       barrierDismissible: false,
