@@ -1,7 +1,7 @@
 class NetworkConstants {
   NetworkConstants._();
 
-  static const String baseUrl = "https://api.dev.mela.guru";
+  static const String baseUrl = "https://api.mela.guru";
 
   // receiveTimeout
   static const int receiveTimeout = 15000;
