@@ -179,7 +179,10 @@ class _EditBirthdateScreenState extends State<EditBirthdateScreen> {
   }
 
   void _showBackConfirmationDialog(BuildContext context, String input) {
-    if (input == widget.dob) return;
+    if (input == widget.dob) {
+      Navigator.of(context).pop();
+      return;
+    }
     showDialog(
       context: context,
       barrierDismissible: false,

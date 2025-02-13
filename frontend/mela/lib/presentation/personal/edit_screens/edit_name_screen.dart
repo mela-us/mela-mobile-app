@@ -132,7 +132,10 @@ class _EditNameScreenState extends State<EditNameScreen> {
   }
 
   void _showBackConfirmationDialog(BuildContext context, String input) {
-    if (input == widget.name) return;
+    if (input == widget.name) {
+      Navigator.of(context).pop();
+      return;
+    }
     showDialog(
       context: context,
       barrierDismissible: false,
