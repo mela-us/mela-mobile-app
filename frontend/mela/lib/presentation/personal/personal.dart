@@ -17,6 +17,7 @@ class PersonalScreen extends StatefulWidget {
 }
 
 class _PersonalScreenState extends State<PersonalScreen> {
+  late ImageProvider _profileImage;
   //Stores:---------------------------------------------------------------------
   final PersonalStore _store = getIt<PersonalStore>();
   final UserLoginStore _loginStore = getIt<UserLoginStore>();
@@ -92,16 +93,19 @@ class _PersonalScreenState extends State<PersonalScreen> {
                               .copyWith(color: Theme.of(context).colorScheme.textInBg1),
                         ),
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PersonalInfo(
-                                name: _store.user?.name ?? 'Người học không tên',
-                                email: _store.user?.email ?? '',
-                                dob: _store.user?.dob ?? '',
+                          if (!_store.progressLoading) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PersonalInfo(
+                                  name: _store.user?.name ?? 'Người học không tên',
+                                  email: _store.user?.email ?? '',
+                                  dob: _store.user?.dob ?? '',
+                                  imageUrl: _store.user?.imageUrl ?? '',
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          }
                         },
                       ),
                       ListTile(
@@ -161,7 +165,9 @@ class _PersonalScreenState extends State<PersonalScreen> {
                               .copyWith(color: Theme.of(context).colorScheme.textInBg1),
                         ),
                         onTap: () {
-                          _showLogoutConfirmationDialog(context);
+                          if (!_store.progressLoading) {
+                            _showLogoutConfirmationDialog(context);
+                          }
                         },
                       ),
                     ],
@@ -172,15 +178,40 @@ class _PersonalScreenState extends State<PersonalScreen> {
                 top: 0,
                 child: Column(
                   children: [
-                    CircleAvatar(
-                      backgroundImage: AssetImage(Assets.default_profile_pic),
-                      radius: 50.0,
-                    ),
-                    SizedBox(height: 5.0),
                     Observer(
                       builder: (context) {
-                        if (_store.progressLoading || _store.detailedProgressLoading) {
-                          return Center(child: CircularProgressIndicator());
+                        //If loading, return default avatar with progress indicator
+                        if (_store.progressLoading) {
+                          return Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              CircleAvatar(
+                                backgroundImage: AssetImage(Assets.default_profile_pic),
+                                radius: 50.0,
+                              ),
+                              const Center(child: CircularProgressIndicator()),
+                            ],
+                          );
+                        }
+                        //If not loading, return the avatar as it is in url
+                        final url = _store.user?.imageUrl ?? '';
+                        print("===================UI got url: $url");
+                        if (url.isNotEmpty) {
+                          _profileImage = NetworkImage(url);
+                        } else {
+                          _profileImage = const AssetImage('assets/icons/default_profile_pic.png');
+                        }
+                        return CircleAvatar(
+                          backgroundImage: _profileImage,
+                          radius: 50.0,
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 5.0),
+                    Observer(
+                      builder: (context) {
+                        if (_store.progressLoading) {
+                          return const Center(child: CircularProgressIndicator());
                         }
                         return Text(
                           _store.user?.name ?? 'Người học không tên',

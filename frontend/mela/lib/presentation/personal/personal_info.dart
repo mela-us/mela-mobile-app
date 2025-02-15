@@ -132,8 +132,10 @@ class _PersonalInfoState extends State<PersonalInfo> {
       setState(() {
         _image = File(pickedFile.path);
         _setProfileImage();
+        //
       });
-      //TODO: call update image
+      await _personalStore.updateImage(File(pickedFile.path));
+      await _personalStore.getUserInfo();
     }
   }
 
