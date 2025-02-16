@@ -1,11 +1,10 @@
 package com.hcmus.mela.user.service;
 
 import org.springframework.beans.factory.annotation.Value;
-import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
-import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;
 
-import java.net.URL;
 import java.time.Duration;
 
 public class AwsS3ServiceImpl implements StorageService {
@@ -22,19 +21,19 @@ public class AwsS3ServiceImpl implements StorageService {
 
     @Override
     public String generatePreSignedUrl(String fileName) {
-        PresignedGetObjectRequest presignedRequest = presigner.presignGetObject(r -> r
+        PresignedPutObjectRequest presignedRequest = presigner.presignPutObject(r -> r
                 .signatureDuration(Duration.ofMinutes(5))
-                .getObjectRequest(GetObjectRequest.builder()
+                .putObjectRequest(PutObjectRequest.builder()
                         .bucket(bucketName)
-                        .key(USER_IMAGE_FOLDER + fileName + ".jpg")
+                        .key(USER_IMAGE_FOLDER + fileName)
                         .build()));
 
-        URL url = presignedRequest.url();
-        return url.toString();
+        return presignedRequest.url().toString();
     }
+
 
     @Override
     public String getImageUrl(String fileName) {
-        return "https://" + bucketName + ".s3.amazonaws.com/" + USER_IMAGE_FOLDER + fileName + ".jpg";
+        return "https://" + bucketName + ".s3.amazonaws.com/" + USER_IMAGE_FOLDER + fileName;
     }
 }
