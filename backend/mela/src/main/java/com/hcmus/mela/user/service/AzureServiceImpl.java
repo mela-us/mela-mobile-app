@@ -17,11 +17,10 @@ public class AzureServiceImpl implements StorageService {
 
     private static final String USER_CONTAINER = "users";
     private static final String USER_IMAGE_FOLDER = "images";
-    private static final String EXTENSION = ".jpg";
 
     public BlobClient getBlobClient(String fileName) {
         return blobServiceClient.getBlobContainerClient(USER_CONTAINER)
-                .getBlobClient(USER_IMAGE_FOLDER + "/" + fileName + EXTENSION);
+                .getBlobClient(USER_IMAGE_FOLDER + "/" + fileName);
     }
 
     public String getBlobUrl(String fileName) {
@@ -31,7 +30,6 @@ public class AzureServiceImpl implements StorageService {
     @Override
     public String generatePreSignedUrl(String fileName) {
         BlobSasPermission permissions = new BlobSasPermission()
-                .setReadPermission(true)
                 .setWritePermission(true)
                 .setDeletePermission(true);
 
