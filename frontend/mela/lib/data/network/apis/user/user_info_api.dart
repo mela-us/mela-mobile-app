@@ -63,6 +63,6 @@ class UserInfoApi {
       EndpointsConst.getImageUpdatePresign,
     );
     print(responseData);
-    return responseData["preSignedUrl"];
+    return "${responseData["preSignedUrl"]} ${responseData["imageUrl"]}";
   }
 }

@@ -10,7 +10,7 @@ abstract class UserRepository {
   Future<String> updateName(String name);
   Future<String> updateBirthday(String birthday);
 
-  Future<String> updateImage(File image, String uploadUrl);
+  Future<String> updateImage(File image, String urls);
 
   Future<String> getImageUpdatePresign();
 

@@ -118,7 +118,7 @@ abstract class _PersonalStore with Store {
   Future<bool> updateImage(File image) async {
     try {
       isLoading = true;
-      await _updateUserUsecase.call(params: UserUpdateParam(image, field: UpdateField.name, value:""));
+      await _updateUserUsecase.call(params: UserUpdateParam(image, field: UpdateField.image, value:""));
       return true;
     } catch (e) {
       if (e is DioException) {

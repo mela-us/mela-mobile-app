@@ -44,6 +44,7 @@ dependencies:
   # L
   # M
   mobx: ^2.1.4
+  mime: ^1.0.0
   # N
   # O
   # P

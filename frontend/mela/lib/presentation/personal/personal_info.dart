@@ -128,24 +128,47 @@ class _PersonalInfoState extends State<PersonalInfo> {
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
+    final temp = _image;
     if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-        _setProfileImage();
-        //
-      });
-      await _personalStore.updateImage(File(pickedFile.path));
-      await _personalStore.getUserInfo();
+      try {
+        _showSnackBar("Đang tải ảnh lên...");
+        await _personalStore.updateImage(File(pickedFile.path));
+        await _personalStore.getUserInfo();
+        setState(() {
+          _image = File(pickedFile.path);
+          _setProfileImage();
+          //
+        });
+        _showSnackBar("Ảnh đại diện đã được cập nhật...");
+      } catch (e) {
+        _showSnackBar("Không thể tải ảnh của bạn!");
+        setState(() {
+          _image = temp;
+          _setProfileImage();
+          //
+        });
+      }
     }
   }
 
-  void _removeImage() {
+  Future<void> _removeImage() async {
+    final temp = _image;
     setState(() {
       _image = null;
       defaultImage = true;
       _setProfileImage();
     });
-    //TODO: call delete image
+    try {
+      await _personalStore.updateImage(File(""));
+      await _personalStore.getUserInfo();
+    } catch (e) {
+      _showSnackBar("Không thể xóa ảnh của bạn!");
+      setState(() {
+        _image = temp;
+        _setProfileImage();
+        //
+      });
+    }
   }
 
   void _showImagePickerOptions() {
@@ -170,24 +193,24 @@ class _PersonalInfoState extends State<PersonalInfo> {
                 _pickImage(ImageSource.gallery);
               },
             ),
-            if (_image != null || !defaultImage)
-              ListTile(
-                leading: const Icon(Icons.delete, color: Colors.red),
-                title: const Text("Xóa ảnh đại diện", style: TextStyle(color: Colors.red)),
-                onTap: () {
-                  Navigator.pop(context);
-                  _removeImage();
-                },
-              ),
+            // if (_image != null || !defaultImage)
+            //   ListTile(
+            //     leading: const Icon(Icons.delete, color: Colors.red),
+            //     title: const Text("Xóa ảnh đại diện", style: TextStyle(color: Colors.red)),
+            //     onTap: () {
+            //       Navigator.pop(context);
+            //       _removeImage();
+            //     },
+            //   ),
           ],
         );
       },
     );
   }
 
-  void _showImageUpdatingNotAvailable() {
+  void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: const Text("Chức năng này hiện không khả dụng cho đến phiên bản sau!")),
+      SnackBar(content: Text(message)),
     );
   }
 
@@ -216,7 +239,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                 child: Container(
                   width: double.infinity,
                   height: 310.0,
-                  padding: const EdgeInsets.only(top: 70.0, left: 5.0, right: 5.0),
+                  padding: const EdgeInsets.only(top: 40.0, left: 5.0, right: 5.0),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16.0),
@@ -362,7 +385,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                           width: 30,
                           height: 30,
                         ),
-                        onPressed: _showImageUpdatingNotAvailable, //_showImagePickerOptions,
+                        onPressed: _showImagePickerOptions, //_showImagePickerOptions,
                       ),
                     ),
                   ],

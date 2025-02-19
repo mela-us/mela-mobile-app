@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:mime/mime.dart';
 
 import 'package:mela/data/network/apis/user/user_info_api.dart';
 import 'package:mela/domain/repository/user/user_repository.dart';
@@ -55,16 +56,28 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<String> updateImage(File image, String uploadUrl) async{
+  Future<String> updateImage(File image, String urls) async{
+    //
+    String contentType = lookupMimeType(image.path) ?? "application/octet-stream";
+    //get urls
+    List<String> separated = urls.split(" ");
+    final uploadUrl = separated[0];
+    final imageUrl = separated[1];
+    print("UploadURL: $uploadUrl");
+    print("ImageURL: $imageUrl");
+    //
     var request = await http.put(
       Uri.parse(uploadUrl),
-      body: image.readAsBytesSync(),
+      body: await image.readAsBytes(),
       headers: {
-        'Content-Type': 'image/jpeg',
+        'x-ms-blob-type': 'BlockBlob',
+        'Content-Type': contentType
+        //'Content-Type': 'image/jpeg',
       },
     );
-    if (request.statusCode == 200) {
-      return _userInfoApi.updateImage(image, uploadUrl);
+    print(request.body.toString());
+    if (request.statusCode == 200 || request.statusCode == 201) {
+      return _userInfoApi.updateImage(image, imageUrl);
     }
     else {
       throw Exception("Failed to upload image: ${request.statusCode}");
