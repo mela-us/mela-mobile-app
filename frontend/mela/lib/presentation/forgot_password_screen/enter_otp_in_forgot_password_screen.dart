@@ -138,6 +138,8 @@ class _EnterOTPInForgotPasswordScreen
                       }
                       await _otpStore.verifyOTP();
                       _otpController.clear();
+                      //pop this screen and navigate to create new password screen
+                      Navigator.pop(context);
                       Navigator.of(context).pushNamed(
                           Routes.createNewPasswordInForgotPasswordScreen);
                     } catch (e) {

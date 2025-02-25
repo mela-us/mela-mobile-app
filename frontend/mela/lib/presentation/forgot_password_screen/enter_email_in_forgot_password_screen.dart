@@ -12,7 +12,6 @@ class EnterEmailInForgotPasswordScreen extends StatelessWidget {
   EnterEmailInForgotPasswordScreen({super.key});
   //controllers:-----------------------------------------------------------------
   final TextEditingController _emailController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final EnterEmailStore _enterEmailStore = getIt<EnterEmailStore>();
   @override
   Widget build(BuildContext context) {
@@ -25,6 +24,7 @@ class EnterEmailInForgotPasswordScreen extends StatelessWidget {
                   .copyWith(color: Theme.of(context).colorScheme.primary)),
           leading: IconButton(
             onPressed: () {
+              _enterEmailStore.reset();
               Navigator.pop(context);
             },
             icon: const Icon(Icons.arrow_back),
@@ -34,9 +34,8 @@ class EnterEmailInForgotPasswordScreen extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             //Main Content
-            Form(
-              key: _formKey,
-              child: Padding(
+            Observer(
+              builder: (_) => Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -49,9 +48,7 @@ class EnterEmailInForgotPasswordScreen extends StatelessWidget {
                     //Email TextField
                     TextFormField(
                       controller: _emailController,
-                      validator: (value) {
-                        return CheckInput.validateEmail(value);
-                      },
+                      onChanged: (value) => _enterEmailStore.setEmail(value),
                       decoration: InputDecoration(
                         hintText: 'Nhập địa chỉ email',
                         prefixIcon: const Icon(Icons.email_outlined, size: 25),
@@ -61,6 +58,9 @@ class EnterEmailInForgotPasswordScreen extends StatelessWidget {
                         ),
                         fillColor: Theme.of(context).colorScheme.onTertiary,
                         filled: true,
+                        errorText: _enterEmailStore.emailError.isNotEmpty
+                            ? _enterEmailStore.emailError
+                            : null,
                         errorStyle: const TextStyle(
                           color: Colors.red,
                           fontSize: 14,
@@ -71,7 +71,9 @@ class EnterEmailInForgotPasswordScreen extends StatelessWidget {
                     ButtonInForgot(
                         textButton: "Tiếp tục",
                         onPressed: () async {
-                          if (_formKey.currentState?.validate() ?? false) {
+                          _enterEmailStore.setEmail(_emailController.text);
+
+                          if (_enterEmailStore.emailError.isEmpty) {
                             FocusScope.of(context).unfocus();
                             try {
                               //call to be to get verify email in db or not ?
