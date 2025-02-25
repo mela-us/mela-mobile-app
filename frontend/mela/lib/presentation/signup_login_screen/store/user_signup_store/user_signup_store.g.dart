@@ -81,6 +81,70 @@ mixin _$UserSignupStore on _UserSignupStore, Store {
     });
   }
 
+  late final _$emailAtom =
+      Atom(name: '_UserSignupStore.email', context: context);
+
+  @override
+  String get email {
+    _$emailAtom.reportRead();
+    return super.email;
+  }
+
+  @override
+  set email(String value) {
+    _$emailAtom.reportWrite(value, super.email, () {
+      super.email = value;
+    });
+  }
+
+  late final _$passwordAtom =
+      Atom(name: '_UserSignupStore.password', context: context);
+
+  @override
+  String get password {
+    _$passwordAtom.reportRead();
+    return super.password;
+  }
+
+  @override
+  set password(String value) {
+    _$passwordAtom.reportWrite(value, super.password, () {
+      super.password = value;
+    });
+  }
+
+  late final _$emailErrorAtom =
+      Atom(name: '_UserSignupStore.emailError', context: context);
+
+  @override
+  String get emailError {
+    _$emailErrorAtom.reportRead();
+    return super.emailError;
+  }
+
+  @override
+  set emailError(String value) {
+    _$emailErrorAtom.reportWrite(value, super.emailError, () {
+      super.emailError = value;
+    });
+  }
+
+  late final _$passwordErrorAtom =
+      Atom(name: '_UserSignupStore.passwordError', context: context);
+
+  @override
+  String get passwordError {
+    _$passwordErrorAtom.reportRead();
+    return super.passwordError;
+  }
+
+  @override
+  set passwordError(String value) {
+    _$passwordErrorAtom.reportWrite(value, super.passwordError, () {
+      super.passwordError = value;
+    });
+  }
+
   late final _$signUpAsyncAction =
       AsyncAction('_UserSignupStore.signUp', context: context);
 
@@ -91,6 +155,28 @@ mixin _$UserSignupStore on _UserSignupStore, Store {
 
   late final _$_UserSignupStoreActionController =
       ActionController(name: '_UserSignupStore', context: context);
+
+  @override
+  void setEmail(String value) {
+    final _$actionInfo = _$_UserSignupStoreActionController.startAction(
+        name: '_UserSignupStore.setEmail');
+    try {
+      return super.setEmail(value);
+    } finally {
+      _$_UserSignupStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setPassword(String value) {
+    final _$actionInfo = _$_UserSignupStoreActionController.startAction(
+        name: '_UserSignupStore.setPassword');
+    try {
+      return super.setPassword(value);
+    } finally {
+      _$_UserSignupStoreActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void togglePasswordVisibility() {
@@ -132,6 +218,10 @@ isSignupSuccessful: ${isSignupSuccessful},
 isPasswordVisible: ${isPasswordVisible},
 isAccepted: ${isAccepted},
 signUpFuture: ${signUpFuture},
+email: ${email},
+password: ${password},
+emailError: ${emailError},
+passwordError: ${passwordError},
 isSignupLoading: ${isSignupLoading}
     ''';
   }

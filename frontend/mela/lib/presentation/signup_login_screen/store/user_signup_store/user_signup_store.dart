@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:mela/utils/check_inputs/check_input.dart';
 import 'package:mela/utils/dio/dio_error_util.dart';
 import 'package:mobx/mobx.dart';
 import '../../../../domain/usecase/user_signup/signup_usecase.dart';
@@ -58,6 +59,31 @@ abstract class _UserSignupStore with Store {
     }
   }
 
+  // This for showing error message when user typing immediately
+  @observable
+  String email = '';
+
+  @observable
+  String password = '';
+
+  @observable
+  String emailError = '';
+
+  @observable
+  String passwordError = '';
+
+  @action
+  void setEmail(String value) {
+    email = value;
+    emailError = CheckInput.validateEmail(value) ?? '';
+  }
+
+  @action
+  void setPassword(String value) {
+    password = value;
+    passwordError = CheckInput.validatePassword(value) ?? '';
+  }
+
   @action
   void togglePasswordVisibility() {
     isPasswordVisible = !isPasswordVisible;
@@ -75,5 +101,9 @@ abstract class _UserSignupStore with Store {
     isAccepted = false;
     isPasswordVisible = false;
     isSignupSuccessful = false;
+    email = '';
+    password = '';
+    emailError = '';
+    passwordError = '';
   }
 }

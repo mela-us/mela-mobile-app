@@ -5,12 +5,10 @@ import 'package:mela/presentation/signup_login_screen/store/login_or_signup_stor
 import 'package:mela/utils/check_inputs/check_input.dart';
 import 'package:mobx/mobx.dart';
 
-import '../../constants/assets.dart';
 import '../../core/widgets/progress_indicator_widget.dart';
 import '../../di/service_locator.dart';
 import 'store/user_signup_store/user_signup_store.dart';
 import 'widgets/login_or_sign_up_button.dart';
-import 'widgets/third_party_button.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -23,7 +21,7 @@ class SignUpScreen extends StatelessWidget {
           // Added Center widget here
           child: SingleChildScrollView(
             physics: MediaQuery.of(context).viewInsets.bottom > 0
-                ? const BouncingScrollPhysics()
+                ? const ClampingScrollPhysics()
                 : const NeverScrollableScrollPhysics(),
             child: const _FormContent(),
           ),
@@ -75,8 +73,6 @@ class __FormContentState extends State<_FormContent> {
     super.dispose();
   }
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -116,29 +112,29 @@ class __FormContentState extends State<_FormContent> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
       constraints: const BoxConstraints(maxWidth: 380),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //Title and Subtitle
-            Text('Đăng ký tài khoản',
-                style: Theme.of(context)
-                    .textTheme
-                    .bigTitle
-                    .copyWith(color: Theme.of(context).colorScheme.primary)),
-            const SizedBox(height: 5),
-            Text('Tạo tài khoản để bắt đầu hành trình học tập với Mela',
-                style: Theme.of(context)
-                    .textTheme
-                    .subTitle
-                    .copyWith(color: Theme.of(context).colorScheme.secondary)),
-            const SizedBox(height: 35),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          //Title and Subtitle
+          Text('Đăng ký tài khoản',
+              style: Theme.of(context)
+                  .textTheme
+                  .bigTitle
+                  .copyWith(color: Theme.of(context).colorScheme.primary)),
+          const SizedBox(height: 5),
+          Text('Tạo tài khoản để bắt đầu học tập với Mela',
+              style: Theme.of(context)
+                  .textTheme
+                  .subTitle
+                  .copyWith(color: Theme.of(context).colorScheme.secondary)),
+          const SizedBox(height: 35),
 
-            //Email TextField
-            TextFormField(
+          //Email TextField
+          Observer(
+            builder: (context) => TextFormField(
+              onChanged: (value) => _userSignupStore.setEmail(value),
               controller: _emailController,
               focusNode: _emailFocus,
               validator: (value) {
@@ -153,55 +149,67 @@ class __FormContentState extends State<_FormContent> {
                 ),
                 fillColor: Theme.of(context).colorScheme.onTertiary,
                 filled: true,
+                errorText: _userSignupStore.emailError.isNotEmpty
+                    ? _userSignupStore.emailError
+                    : null,
                 errorStyle: const TextStyle(
                   color: Colors.red,
                   fontSize: 14,
+                  overflow: TextOverflow.visible,
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+          ),
+          const SizedBox(height: 16),
 
-            //Password TextField
-            Observer(builder: (context) {
-              return TextFormField(
-                controller: _passwordController,
-                focusNode: _passwordFocus,
-                validator: (value) {
-                  return CheckInput.validatePassword(value);
-                },
-                obscureText: !_userSignupStore.isPasswordVisible,
-                decoration: InputDecoration(
-                  hintText: 'Nhập mật khẩu của bạn',
-                  prefixIcon: Icon(Icons.lock_outline_rounded,
-                      size: 25, color: Theme.of(context).colorScheme.secondary),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
-                  fillColor: Theme.of(context).colorScheme.onTertiary,
-                  filled: true,
-                  suffixIcon: IconButton(
-                      icon: Icon(_userSignupStore.isPasswordVisible
-                          ? Icons.visibility_off
-                          : Icons.visibility),
-                      onPressed: () {
-                        _userSignupStore.togglePasswordVisibility();
-                      }),
-                  errorStyle: const TextStyle(
-                    color: Colors.red,
-                    fontSize: 14,
-                  ),
+          //Password TextField
+          Observer(builder: (context) {
+            return TextFormField(
+              onChanged: (value) => _userSignupStore.setPassword(value),
+              controller: _passwordController,
+              focusNode: _passwordFocus,
+              validator: (value) {
+                return CheckInput.validatePassword(value);
+              },
+              obscureText: !_userSignupStore.isPasswordVisible,
+              decoration: InputDecoration(
+                hintText: 'Nhập mật khẩu của bạn',
+                prefixIcon: Icon(Icons.lock_outline_rounded,
+                    size: 25, color: Theme.of(context).colorScheme.secondary),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
                 ),
-              );
-            }),
-            const SizedBox(height: 16),
+                fillColor: Theme.of(context).colorScheme.onTertiary,
+                filled: true,
+                suffixIcon: IconButton(
+                    icon: Icon(_userSignupStore.isPasswordVisible
+                        ? Icons.visibility_off
+                        : Icons.visibility),
+                    onPressed: () {
+                      _userSignupStore.togglePasswordVisibility();
+                    }),
+                errorText: _userSignupStore.passwordError.isNotEmpty
+                    ? _userSignupStore.passwordError
+                    : null,
+                errorStyle: const TextStyle(
+                  color: Colors.red,
+                  fontSize: 14,
+                  overflow: TextOverflow.visible,
+                ),
+              ),
+            );
+          }),
+          const SizedBox(height: 12),
 
-            //Accept Terms and Conditions
-            Observer(
-              builder: (context) => GestureDetector(
-                onTap: () {
-                  _userSignupStore.toggleAccepted();
-                },
+          //Accept Terms and Conditions
+          Observer(
+            builder: (context) => GestureDetector(
+              onTap: () {
+                _userSignupStore.toggleAccepted();
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Row(
                   children: [
                     Container(
@@ -220,7 +228,7 @@ class __FormContentState extends State<_FormContent> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 6),
+                    const SizedBox(width: 4),
                     Expanded(
                       child: Text("Chấp nhận các Điều khoản và Điều kiện",
                           style: Theme.of(context).textTheme.normal.copyWith(
@@ -230,88 +238,92 @@ class __FormContentState extends State<_FormContent> {
                 ),
               ),
             ),
-            const SizedBox(height: 30),
+          ),
+          const SizedBox(height: 30),
 
-            //Button Signup
-            ButtonLoginOrSignUp(
-                textButton: "Đăng ký",
-                onPressed: () async {
-                  _emailFocus.unfocus();
-                  _passwordFocus.unfocus();
-                  if (!_userSignupStore.isAccepted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content:
-                            Text('Vui lòng chấp nhận điều khoản và điều kiện'),
-                        duration: const Duration(seconds: 1, milliseconds: 500),
-                      ),
+          //Button Signup
+          ButtonLoginOrSignUp(
+              textButton: "Đăng ký",
+              onPressed: () async {
+                _emailFocus.unfocus();
+                _passwordFocus.unfocus();
+                if (!_userSignupStore.isAccepted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content:
+                          Text('Vui lòng chấp nhận điều khoản và điều kiện'),
+                      duration: const Duration(seconds: 1, milliseconds: 500),
+                    ),
+                  );
+                  return;
+                }
+                _userSignupStore.setEmail(_emailController.text);
+                _userSignupStore.setPassword(_passwordController.text);
+
+                if (_userSignupStore.emailError.isEmpty &&
+                    _userSignupStore.passwordError.isEmpty) {
+                  try {
+                    await _userSignupStore.signUp(
+                      _emailController.text,
+                      _passwordController.text,
                     );
-                    return;
+                    _emailController.clear();
+                    _passwordController.clear();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Đăng ký thành công')),
+                    );
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(e.toString())),
+                    );
                   }
-                  if (_formKey.currentState?.validate() ?? false) {
-                    try {
-                      await _userSignupStore.signUp(
-                        _emailController.text,
-                        _passwordController.text,
-                      );
-                      _emailController.clear();
-                      _passwordController.clear();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Đăng ký thành công')),
-                      );
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(e.toString())),
-                      );
-                    }
-                  }
-                }),
-            // const SizedBox(height: 16),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: [
-            //     Text("Hoặc tiếp tục với",
-            //         style: Theme.of(context).textTheme.normal.copyWith(
-            //             color: Theme.of(context).colorScheme.secondary)),
-            //   ],
-            // ),
-            // const SizedBox(height: 16),
-            // //Sign Up by Third Party
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: [
-            //     ThirdPartyButton(pathLogo: Assets.googleIcon, onPressed: () {}),
-            //     const SizedBox(width: 20),
-            //     ThirdPartyButton(
-            //         pathLogo: Assets.facebookIcon, onPressed: () {}),
-            //   ],
-            // ),
-            const SizedBox(height: 30),
+                }
+              }),
+          // const SizedBox(height: 16),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: [
+          //     Text("Hoặc tiếp tục với",
+          //         style: Theme.of(context).textTheme.normal.copyWith(
+          //             color: Theme.of(context).colorScheme.secondary)),
+          //   ],
+          // ),
+          // const SizedBox(height: 16),
+          // //Sign Up by Third Party
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: [
+          //     ThirdPartyButton(pathLogo: Assets.googleIcon, onPressed: () {}),
+          //     const SizedBox(width: 20),
+          //     ThirdPartyButton(
+          //         pathLogo: Assets.facebookIcon, onPressed: () {}),
+          //   ],
+          // ),
+          const SizedBox(height: 30),
 
-            //Return login
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Đã có tài khoản?",
+          //Return login
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Đã có tài khoản?",
+                  style: Theme.of(context).textTheme.subTitle.copyWith(
+                      color: Theme.of(context).colorScheme.secondary)),
+              const SizedBox(
+                width: 4,
+              ),
+              GestureDetector(
+                onTap: () {
+                  _loginOrSignupStore.toggleChangeScreen();
+                  _userSignupStore.resetSettingForSignnup();
+                },
+                child: Text("ĐĂNG NHẬP",
                     style: Theme.of(context).textTheme.subTitle.copyWith(
-                        color: Theme.of(context).colorScheme.secondary)),
-                const SizedBox(
-                  width: 4,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    _loginOrSignupStore.toggleChangeScreen();
-                    _userSignupStore.resetSettingForSignnup();
-                  },
-                  child: Text("ĐĂNG NHẬP",
-                      style: Theme.of(context).textTheme.subTitle.copyWith(
-                          color: Theme.of(context).colorScheme.tertiary,
-                          decoration: TextDecoration.underline)),
-                )
-              ],
-            )
-          ],
-        ),
+                        color: Theme.of(context).colorScheme.tertiary,
+                        decoration: TextDecoration.underline)),
+              )
+            ],
+          )
+        ],
       ),
     );
   }
