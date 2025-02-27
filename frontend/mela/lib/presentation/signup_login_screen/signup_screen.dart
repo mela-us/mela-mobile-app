@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/presentation/signup_login_screen/store/login_or_signup_store/login_or_signup_store.dart';
+import 'package:mela/presentation/signup_login_screen/store/user_login_store/user_login_store.dart';
 import 'package:mela/utils/check_inputs/check_input.dart';
+import 'package:mela/utils/routes/routes.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../core/widgets/progress_indicator_widget.dart';
@@ -41,6 +43,7 @@ class _FormContent extends StatefulWidget {
 class __FormContentState extends State<_FormContent> {
   //stores:---------------------------------------------------------------------
   final UserSignupStore _userSignupStore = getIt<UserSignupStore>();
+  final UserLoginStore _userLoginStore = getIt<UserLoginStore>();
   final LoginOrSignupStore _loginOrSignupStore = getIt<LoginOrSignupStore>();
 
   //controllers:-----------------------------------------------------------------
@@ -54,10 +57,10 @@ class __FormContentState extends State<_FormContent> {
   @override
   void initState() {
     super.initState();
-    _signupReactionDisposer =
-        reaction((_) => _userSignupStore.isSignupSuccessful, (bool success) {
+    _signupReactionDisposer = reaction(
+        (_) => _userSignupStore.isSignupSuccessful, (bool success) async {
       if (success) {
-        _loginOrSignupStore.toggleChangeScreen();
+        // _loginOrSignupStore.toggleChangeScreen();
         _userSignupStore.resetSettingForSignnup();
       }
     });
@@ -85,7 +88,7 @@ class __FormContentState extends State<_FormContent> {
             Observer(
               builder: (context) {
                 return Visibility(
-                  visible: _userSignupStore.isSignupLoading,
+                  visible: _userSignupStore.isSignupLoading || _userLoginStore.isLoading,
                   child: AbsorbPointer(
                     absorbing: true,
                     child: Stack(
@@ -272,8 +275,16 @@ class __FormContentState extends State<_FormContent> {
                       _emailController.text,
                       _passwordController.text,
                     );
+
+                    await _userLoginStore.login(
+                      _emailController.text,
+                      _passwordController.text,
+                    );
                     _emailController.clear();
                     _passwordController.clear();
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        Routes.allScreens, (Route<dynamic> route) => false);
+
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Đăng ký thành công')),
                     );
@@ -318,6 +329,7 @@ class __FormContentState extends State<_FormContent> {
               ),
               GestureDetector(
                 onTap: () {
+                  print("Tapped in signup screen");
                   _loginOrSignupStore.toggleChangeScreen();
                   _userSignupStore.resetSettingForSignnup();
                 },

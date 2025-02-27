@@ -319,6 +319,7 @@ class __FormContentState extends State<_FormContent> {
               ),
               GestureDetector(
                 onTap: () {
+                  print("Tapped in LoginScreen");
                   _loginOrSignupStore.toggleChangeScreen();
                   _userLoginStore.resetSettingForLogin();
                 },

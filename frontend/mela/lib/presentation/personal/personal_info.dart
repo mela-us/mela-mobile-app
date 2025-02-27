@@ -34,7 +34,8 @@ class PersonalInfo extends StatefulWidget {
 
 class _PersonalInfoState extends State<PersonalInfo> {
   File? _image; //for uploaded image
-  late ImageProvider _profileImage; //can be _image or can be passed from imageURL
+  late ImageProvider
+      _profileImage; //can be _image or can be passed from imageURL
   bool defaultImage = false; //flag for default avatar image
   final PersonalStore _personalStore = getIt<PersonalStore>();
 
@@ -59,7 +60,8 @@ class _PersonalInfoState extends State<PersonalInfo> {
     );
   }
 
-  void _navigateToEditEmail() { //not yet available for email editing
+  void _navigateToEditEmail() {
+    //not yet available for email editing
     // Navigator.of(context).push(
     //   MaterialPageRoute(
     //     builder: (context) => EditEmailScreen(email: widget.email),
@@ -91,15 +93,13 @@ class _PersonalInfoState extends State<PersonalInfo> {
               final success = await _personalStore.deleteAccount();
               if (success) {
                 Navigator.of(context).pushNamedAndRemoveUntil(
-                    Routes.loginScreen, (route) => false
-                );
+                    Routes.loginOrSignupScreen, (route) => false);
               }
             } catch (e) {
               if (e is DioException) {
                 if (e.response?.statusCode == 401) {
                   Navigator.of(context).pushNamedAndRemoveUntil(
-                      Routes.loginScreen, (route) => false
-                  );
+                      Routes.loginOrSignupScreen, (route) => false);
                 }
               }
               print(e.toString());
@@ -117,7 +117,9 @@ class _PersonalInfoState extends State<PersonalInfo> {
     if (_image != null) {
       _profileImage = FileImage(_image!);
       defaultImage = false;
-    } else if (widget.imageUrl != null && widget.imageUrl!.isNotEmpty && !defaultImage) {
+    } else if (widget.imageUrl != null &&
+        widget.imageUrl!.isNotEmpty &&
+        !defaultImage) {
       _profileImage = NetworkImage(widget.imageUrl!);
       defaultImage = false;
     } else {
@@ -235,11 +237,13 @@ class _PersonalInfoState extends State<PersonalInfo> {
             alignment: Alignment.topCenter,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 70.0, left: 20.0, right: 20.0),
+                padding:
+                    const EdgeInsets.only(top: 70.0, left: 20.0, right: 20.0),
                 child: Container(
                   width: double.infinity,
                   height: 310.0,
-                  padding: const EdgeInsets.only(top: 40.0, left: 5.0, right: 5.0),
+                  padding:
+                      const EdgeInsets.only(top: 40.0, left: 5.0, right: 5.0),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16.0),
@@ -262,7 +266,10 @@ class _PersonalInfoState extends State<PersonalInfo> {
                               style: Theme.of(context)
                                   .textTheme
                                   .subHeading
-                                  .copyWith(color: Theme.of(context).colorScheme.primary),
+                                  .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
                             ),
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
@@ -272,7 +279,10 @@ class _PersonalInfoState extends State<PersonalInfo> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .content
-                                      .copyWith(color: Theme.of(context).colorScheme.primary),
+                                      .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
                                 ),
                                 const SizedBox(width: 8.0),
                                 const Icon(Icons.arrow_forward_ios, size: 18.0),
@@ -290,7 +300,10 @@ class _PersonalInfoState extends State<PersonalInfo> {
                               style: Theme.of(context)
                                   .textTheme
                                   .subHeading
-                                  .copyWith(color: Theme.of(context).colorScheme.textInBg2),
+                                  .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .textInBg2),
                             ),
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
@@ -300,7 +313,10 @@ class _PersonalInfoState extends State<PersonalInfo> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .content
-                                      .copyWith(color: Theme.of(context).colorScheme.primary),
+                                      .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
                                 ),
                                 //const SizedBox(width: 8.0),
                                 //const Icon(Icons.arrow_forward_ios, size: 18.0),
@@ -318,7 +334,10 @@ class _PersonalInfoState extends State<PersonalInfo> {
                               style: Theme.of(context)
                                   .textTheme
                                   .subHeading
-                                  .copyWith(color: Theme.of(context).colorScheme.primary),
+                                  .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
                             ),
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
@@ -328,7 +347,10 @@ class _PersonalInfoState extends State<PersonalInfo> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .content
-                                      .copyWith(color: Theme.of(context).colorScheme.primary),
+                                      .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
                                 ),
                                 const SizedBox(width: 8.0),
                                 const Icon(Icons.arrow_forward_ios, size: 18.0),
@@ -338,7 +360,8 @@ class _PersonalInfoState extends State<PersonalInfo> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: _showDeleteAccountDialog, // Gọi hàm hiển thị hộp thoại
+                        onTap:
+                            _showDeleteAccountDialog, // Gọi hàm hiển thị hộp thoại
                         child: Observer(
                           builder: (_) => ListTile(
                             title: Text(
@@ -385,7 +408,8 @@ class _PersonalInfoState extends State<PersonalInfo> {
                           width: 30,
                           height: 30,
                         ),
-                        onPressed: _showImagePickerOptions, //_showImagePickerOptions,
+                        onPressed:
+                            _showImagePickerOptions, //_showImagePickerOptions,
                       ),
                     ),
                   ],

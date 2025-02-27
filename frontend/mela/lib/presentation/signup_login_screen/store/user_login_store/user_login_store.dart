@@ -136,15 +136,15 @@ abstract class _UserLoginStore with Store {
         await _saveLoginStatusUseCase.call(params: true);
         await _saveAccessTokenUsecase.call(params: value.accessToken);
         await _saveRefreshTokenUsecase.call(params: value.refreshToken);
-        print("-----********* Sau khi login thanh cong in UserLoginStore");
-        print(value.accessToken);
-        print(value.refreshToken);
+        // print("-----********* Sau khi login thanh cong in UserLoginStore");
+        // print(value.accessToken);
+        // print(value.refreshToken);
         this.isLoggedIn = true;
       }
     }).catchError((e) {
       this.isLoggedIn = false;
       print("-----********* Error in UserLoginStore");
-      print(e.toString());
+      // print(e.toString());
       if (e is DioException) {
         if (e.response?.statusCode == 401) {
           throw "Mật khẩu hoặc tài khoản không hợp lệ";
