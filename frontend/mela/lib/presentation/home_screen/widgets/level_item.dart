@@ -39,7 +39,8 @@ class LevelItem extends StatelessWidget {
               child: Image(
                 image: level.levelImagePath.isEmpty
                     ? const AssetImage('assets/images/grades/default_level.png')
-                    : NetworkImage(level.levelImagePath),
+                    : NetworkImage(level.levelImagePath)
+                        as ImageProvider<Object>,
                 fit: BoxFit.contain,
               ),
             ),

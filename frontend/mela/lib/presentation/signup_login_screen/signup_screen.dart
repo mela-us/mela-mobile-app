@@ -142,6 +142,8 @@ class __FormContentState extends State<_FormContent> {
               },
               decoration: InputDecoration(
                 hintText: 'Nhập địa chỉ email',
+                hintStyle: Theme.of(context).textTheme.subHeading.copyWith(
+                    color: Theme.of(context).colorScheme.primary, fontSize: 16),
                 prefixIcon: const Icon(Icons.email_outlined, size: 25),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -174,6 +176,8 @@ class __FormContentState extends State<_FormContent> {
               obscureText: !_userSignupStore.isPasswordVisible,
               decoration: InputDecoration(
                 hintText: 'Nhập mật khẩu của bạn',
+                hintStyle: Theme.of(context).textTheme.subHeading.copyWith(
+                    color: Theme.of(context).colorScheme.primary, fontSize: 16),
                 prefixIcon: Icon(Icons.lock_outline_rounded,
                     size: 25, color: Theme.of(context).colorScheme.secondary),
                 border: OutlineInputBorder(
@@ -208,8 +212,9 @@ class __FormContentState extends State<_FormContent> {
               onTap: () {
                 _userSignupStore.toggleAccepted();
               },
-              child: Padding(
+              child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 8),
+                color: Colors.transparent,
                 child: Row(
                   children: [
                     Container(
@@ -228,7 +233,7 @@ class __FormContentState extends State<_FormContent> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 4),
+                    const SizedBox(width: 6),
                     Expanded(
                       child: Text("Chấp nhận các Điều khoản và Điều kiện",
                           style: Theme.of(context).textTheme.normal.copyWith(

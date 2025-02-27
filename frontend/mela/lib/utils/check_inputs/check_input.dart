@@ -28,6 +28,7 @@ class CheckInput {
 
     return null;
   }
+
   static String? validateEmail(String? email) {
     if (email == null || email.isEmpty) {
       return 'Vui lòng nhập dữ liệu';
@@ -39,6 +40,18 @@ class CheckInput {
 
     if (!emailValid) {
       return 'Nhập địa chỉ email phù hợp';
+    }
+
+    return null;
+  }
+
+  static String? validateConfirmedPassword(
+      String? password, String? confirmedPassword) {
+    if (confirmedPassword == null || confirmedPassword.isEmpty) {
+      return 'Vui lòng nhập dữ liệu';
+    }
+    if (password != confirmedPassword) {
+      return 'Mật khẩu không khớp';
     }
 
     return null;
