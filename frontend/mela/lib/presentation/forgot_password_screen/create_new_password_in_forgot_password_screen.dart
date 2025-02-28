@@ -68,6 +68,12 @@ class CreateNewPasswordInForgotPasswordScreen extends StatelessWidget {
                         obscureText: !_createNewPasswordStore.isPasswordVisible,
                         decoration: InputDecoration(
                           hintText: 'Nhập mật khẩu của bạn',
+                          hintStyle: Theme.of(context)
+                              .textTheme
+                              .subHeading
+                              .copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontSize: 16),
                           prefixIcon: Icon(Icons.lock_outline_rounded,
                               size: 25,
                               color: Theme.of(context).colorScheme.secondary),
@@ -113,6 +119,12 @@ class CreateNewPasswordInForgotPasswordScreen extends StatelessWidget {
                             !_createNewPasswordStore.isConfirmedPasswordVisible,
                         decoration: InputDecoration(
                           hintText: 'Nhập lại mật khẩu của bạn',
+                          hintStyle: Theme.of(context)
+                              .textTheme
+                              .subHeading
+                              .copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontSize: 16),
                           prefixIcon: Icon(Icons.lock_outline_rounded,
                               size: 25,
                               color: Theme.of(context).colorScheme.secondary),

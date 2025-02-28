@@ -51,6 +51,12 @@ class EnterEmailInForgotPasswordScreen extends StatelessWidget {
                       onChanged: (value) => _enterEmailStore.setEmail(value),
                       decoration: InputDecoration(
                         hintText: 'Nhập địa chỉ email',
+                        hintStyle: Theme.of(context)
+                            .textTheme
+                            .subHeading
+                            .copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontSize: 16),
                         prefixIcon: const Icon(Icons.email_outlined, size: 25),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),

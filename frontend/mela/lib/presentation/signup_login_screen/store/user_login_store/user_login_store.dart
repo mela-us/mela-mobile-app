@@ -70,14 +70,13 @@ abstract class _UserLoginStore with Store {
   @observable
   ObservableFuture<void> setIsLoginFuture = ObservableFuture.value(null);
 
-  @computed
-  bool get isLoading => loginFuture.status == FutureStatus.pending;
+  // @computed
+  // bool get isLoading => loginFuture.status == FutureStatus.pending;
 
   @computed
   bool get isSetLoginLoading => setIsLoginFuture.status == FutureStatus.pending;
 
-
- // This for showing error message when user typing immediately
+  // This for showing error message when user typing immediately
   @observable
   String email = '';
 
@@ -89,6 +88,9 @@ abstract class _UserLoginStore with Store {
 
   @observable
   String passwordError = '';
+
+  @observable
+  bool isLoadingLogin = false;
 
   @action
   void setEmail(String value) {
@@ -106,6 +108,11 @@ abstract class _UserLoginStore with Store {
   @action
   void togglePasswordVisibility() {
     isPasswordVisible = !isPasswordVisible;
+  }
+
+  @action
+  void setLoadingLogin(bool value) {
+    isLoadingLogin = value;
   }
 
   //use for refreshToken expired and set isLoggedIn=new value in share preferences

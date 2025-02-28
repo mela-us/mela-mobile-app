@@ -9,13 +9,6 @@ part of 'user_login_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$UserLoginStore on _UserLoginStore, Store {
-  Computed<bool>? _$isLoadingComputed;
-
-  @override
-  bool get isLoading =>
-      (_$isLoadingComputed ??= Computed<bool>(() => super.isLoading,
-              name: '_UserLoginStore.isLoading'))
-          .value;
   Computed<bool>? _$isSetLoginLoadingComputed;
 
   @override
@@ -152,6 +145,22 @@ mixin _$UserLoginStore on _UserLoginStore, Store {
     });
   }
 
+  late final _$isLoadingLoginAtom =
+      Atom(name: '_UserLoginStore.isLoadingLogin', context: context);
+
+  @override
+  bool get isLoadingLogin {
+    _$isLoadingLoginAtom.reportRead();
+    return super.isLoadingLogin;
+  }
+
+  @override
+  set isLoadingLogin(bool value) {
+    _$isLoadingLoginAtom.reportWrite(value, super.isLoadingLogin, () {
+      super.isLoadingLogin = value;
+    });
+  }
+
   late final _$setIsLoginAsyncAction =
       AsyncAction('_UserLoginStore.setIsLogin', context: context);
 
@@ -205,6 +214,17 @@ mixin _$UserLoginStore on _UserLoginStore, Store {
   }
 
   @override
+  void setLoadingLogin(bool value) {
+    final _$actionInfo = _$_UserLoginStoreActionController.startAction(
+        name: '_UserLoginStore.setLoadingLogin');
+    try {
+      return super.setLoadingLogin(value);
+    } finally {
+      _$_UserLoginStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void resetSettingForLogin() {
     final _$actionInfo = _$_UserLoginStoreActionController.startAction(
         name: '_UserLoginStore.resetSettingForLogin');
@@ -226,7 +246,7 @@ email: ${email},
 password: ${password},
 emailError: ${emailError},
 passwordError: ${passwordError},
-isLoading: ${isLoading},
+isLoadingLogin: ${isLoadingLogin},
 isSetLoginLoading: ${isSetLoginLoading}
     ''';
   }

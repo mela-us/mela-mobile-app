@@ -61,7 +61,6 @@ class __FormContentState extends State<_FormContent> {
         (_) => _userSignupStore.isSignupSuccessful, (bool success) async {
       if (success) {
         // _loginOrSignupStore.toggleChangeScreen();
-        _userSignupStore.resetSettingForSignnup();
       }
     });
   }
@@ -88,7 +87,8 @@ class __FormContentState extends State<_FormContent> {
             Observer(
               builder: (context) {
                 return Visibility(
-                  visible: _userSignupStore.isSignupLoading || _userLoginStore.isLoading,
+                  visible: _userSignupStore.isSignupLoading ||
+                      _userLoginStore.isLoadingLogin,
                   child: AbsorbPointer(
                     absorbing: true,
                     child: Stack(
@@ -253,48 +253,66 @@ class __FormContentState extends State<_FormContent> {
           ButtonLoginOrSignUp(
               textButton: "Đăng ký",
               onPressed: () async {
+                _userSignupStore.setPassword(_passwordController.text);
+                _userSignupStore.setEmail(_emailController.text);
+
                 _emailFocus.unfocus();
                 _passwordFocus.unfocus();
+
                 if (!_userSignupStore.isAccepted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content:
                           Text('Vui lòng chấp nhận điều khoản và điều kiện'),
-                      duration: const Duration(seconds: 1, milliseconds: 500),
+                      duration: Duration(seconds: 0, milliseconds: 800),
                     ),
                   );
                   return;
                 }
-                _userSignupStore.setEmail(_emailController.text);
-                _userSignupStore.setPassword(_passwordController.text);
 
                 if (_userSignupStore.emailError.isEmpty &&
                     _userSignupStore.passwordError.isEmpty) {
                   try {
+                    _userSignupStore.setIsSignupLoading(true);
+
+                    // First signup
                     await _userSignupStore.signUp(
                       _emailController.text,
                       _passwordController.text,
                     );
 
+                    // Then login
                     await _userLoginStore.login(
                       _emailController.text,
                       _passwordController.text,
                     );
+
+                    // Clean up
+                    _userSignupStore.resetSettingForSignnup();
                     _emailController.clear();
                     _passwordController.clear();
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        Routes.allScreens, (Route<dynamic> route) => false);
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Đăng ký thành công')),
-                    );
+                    // Add delay for smooth transition
+                    await Future.delayed(const Duration(milliseconds: 300));
+
+                    if (mounted) {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          Routes.allScreens, (Route<dynamic> route) => false);
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Đăng ký thành công'),  duration: Duration(seconds: 0, milliseconds: 800),),
+                      );
+                    }
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(e.toString())),
+                      SnackBar(content: Text(e.toString()),  duration: const Duration(seconds: 0, milliseconds: 800),),
                     );
+                  } finally {
+                    _userSignupStore.setIsSignupLoading(false);
                   }
                 }
               }),
+
           // const SizedBox(height: 16),
           // Row(
           //   mainAxisAlignment: MainAxisAlignment.center,

@@ -64,9 +64,6 @@ class __FormContentState extends State<_FormContent> {
       if (success) {
         print(
             "---------------------------------------->LoginScreen2 ${_userLoginStore.isLoggedIn ? "true" : "false"}");
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            Routes.allScreens, (Route<dynamic> route) => false);
-        _userLoginStore.resetSettingForLogin();
       }
     });
     // _errorLoginReactionDisposer = reaction(
@@ -116,7 +113,7 @@ class __FormContentState extends State<_FormContent> {
           Observer(
             builder: (context) {
               return Visibility(
-                visible: _userLoginStore.isLoading,
+                visible: _userLoginStore.isLoadingLogin,
                 child: AbsorbPointer(
                   absorbing: true,
                   child: Stack(
@@ -231,11 +228,6 @@ class __FormContentState extends State<_FormContent> {
             ),
           ),
 
-          // Observer(
-          //   builder: (context) {
-          //     return
-          //   },
-          // ),
           const SizedBox(height: 12),
 
           //Forgot password
@@ -262,27 +254,73 @@ class __FormContentState extends State<_FormContent> {
           ButtonLoginOrSignUp(
               textButton: "Đăng nhập",
               onPressed: () async {
-                _emailFocus.unfocus();
-                _passwordFocus.unfocus();
+                //set to check enter button without data first time
                 _userLoginStore.setEmail(_emailController.text);
                 _userLoginStore.setPassword(_passwordController.text);
-
                 if (_userLoginStore.emailError.isEmpty &&
                     _userLoginStore.passwordError.isEmpty) {
-                  //FocusScope.of(context).unfocus();
+                  _emailFocus.unfocus();
+                  _passwordFocus.unfocus();
+
                   try {
+                    _userLoginStore.setLoadingLogin(true);
                     await _userLoginStore.login(
                       _emailController.text,
                       _passwordController.text,
                     );
-                    _emailController.clear();
-                    _passwordController.clear();
+
+      
+                    if (_userLoginStore.isLoggedIn) {
+                      // Clean up after successful login
+                      _userLoginStore.resetSettingForLogin();
+                      _emailController.clear();
+                      _passwordController.clear();
+
+                      // Add a small delay before navigation
+                      await Future.delayed(const Duration(milliseconds: 300));
+
+                      if (mounted) {
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                          Routes.allScreens,
+                          (Route<dynamic> route) => false,
+                        );
+                      }
+                    }
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(e.toString())),
+                      SnackBar(content: Text(e.toString()), duration: const Duration(milliseconds: 800),),
+                      
                     );
+                  } finally {
+                    _userLoginStore.setLoadingLogin(false);
                   }
                 }
+                // _userLoginStore.setLoadingLogin(true);
+                // _emailFocus.unfocus();
+                // _passwordFocus.unfocus();
+                // _userLoginStore.setEmail(_emailController.text);
+                // _userLoginStore.setPassword(_passwordController.text);
+
+                // if (_userLoginStore.emailError.isEmpty &&
+                //     _userLoginStore.passwordError.isEmpty) {
+                //   //FocusScope.of(context).unfocus();
+                //   try {
+                //     await _userLoginStore.login(
+                //       _emailController.text,
+                //       _passwordController.text,
+                //     );
+                //     _userLoginStore.resetSettingForLogin();
+                //     _emailController.clear();
+                //     _passwordController.clear();
+                //     Navigator.of(context).pushNamedAndRemoveUntil(
+                //         Routes.allScreens, (Route<dynamic> route) => false);
+                //   } catch (e) {
+                //     ScaffoldMessenger.of(context).showSnackBar(
+                //       SnackBar(content: Text(e.toString())),
+                //     );
+                //   }
+                //   _userLoginStore.setLoadingLogin(false);
+                // }
               }),
 
           // const SizedBox(height: 16),

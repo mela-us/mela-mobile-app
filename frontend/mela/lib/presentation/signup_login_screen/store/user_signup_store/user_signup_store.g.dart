@@ -9,14 +9,6 @@ part of 'user_signup_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$UserSignupStore on _UserSignupStore, Store {
-  Computed<bool>? _$isSignupLoadingComputed;
-
-  @override
-  bool get isSignupLoading =>
-      (_$isSignupLoadingComputed ??= Computed<bool>(() => super.isSignupLoading,
-              name: '_UserSignupStore.isSignupLoading'))
-          .value;
-
   late final _$isSignupSuccessfulAtom =
       Atom(name: '_UserSignupStore.isSignupSuccessful', context: context);
 
@@ -78,6 +70,22 @@ mixin _$UserSignupStore on _UserSignupStore, Store {
   set signUpFuture(ObservableFuture<void> value) {
     _$signUpFutureAtom.reportWrite(value, super.signUpFuture, () {
       super.signUpFuture = value;
+    });
+  }
+
+  late final _$isSignupLoadingAtom =
+      Atom(name: '_UserSignupStore.isSignupLoading', context: context);
+
+  @override
+  bool get isSignupLoading {
+    _$isSignupLoadingAtom.reportRead();
+    return super.isSignupLoading;
+  }
+
+  @override
+  set isSignupLoading(bool value) {
+    _$isSignupLoadingAtom.reportWrite(value, super.isSignupLoading, () {
+      super.isSignupLoading = value;
     });
   }
 
@@ -157,6 +165,17 @@ mixin _$UserSignupStore on _UserSignupStore, Store {
       ActionController(name: '_UserSignupStore', context: context);
 
   @override
+  void setIsSignupLoading(bool value) {
+    final _$actionInfo = _$_UserSignupStoreActionController.startAction(
+        name: '_UserSignupStore.setIsSignupLoading');
+    try {
+      return super.setIsSignupLoading(value);
+    } finally {
+      _$_UserSignupStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setEmail(String value) {
     final _$actionInfo = _$_UserSignupStoreActionController.startAction(
         name: '_UserSignupStore.setEmail');
@@ -218,11 +237,11 @@ isSignupSuccessful: ${isSignupSuccessful},
 isPasswordVisible: ${isPasswordVisible},
 isAccepted: ${isAccepted},
 signUpFuture: ${signUpFuture},
+isSignupLoading: ${isSignupLoading},
 email: ${email},
 password: ${password},
 emailError: ${emailError},
-passwordError: ${passwordError},
-isSignupLoading: ${isSignupLoading}
+passwordError: ${passwordError}
     ''';
   }
 }

@@ -28,8 +28,13 @@ abstract class _UserSignupStore with Store {
   @observable
   ObservableFuture<void> signUpFuture = ObservableFuture.value(Future.value());
 
-  @computed
-  bool get isSignupLoading => signUpFuture.status == FutureStatus.pending;
+  @observable
+  bool isSignupLoading = false;
+
+  @action
+  void setIsSignupLoading(bool value) {
+    isSignupLoading = value;
+  }
 
   //actions
   @action
