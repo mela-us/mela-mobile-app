@@ -35,6 +35,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
   final QuestionStore _questionStore = getIt<QuestionStore>();
   final SingleQuestionStore _singleQuestionStore = getIt<SingleQuestionStore>();
   late OverlayEntry questionListOverlay;
+  final FocusNode _focusNode = FocusNode();
 
   //----------------------------------------------------------------------------
   final TextEditingController _controller = TextEditingController();
@@ -124,7 +125,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
   @override
   void dispose() {
     // TODO: implement dispose
+
     super.dispose();
+
     _timerStore.stopTimer();
   }
 
@@ -143,6 +146,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
                 .appBackground,
             appBar: QuestionAppBar(
               questionListOverlay: questionListOverlay,
+              focusNode: _focusNode,
             ),
             body: SingleChildScrollView(
               child: _buildMainBody(),
@@ -335,6 +339,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
             decoration: decorationWithShadow,
             child: TextField(
               controller: _controller,
+              focusNode: _focusNode,
               decoration: InputDecoration(
                 hintText: AppLocalizations.of(context)
                     .translate('question_hint_text_field'),
@@ -367,21 +372,27 @@ class _QuestionScreenState extends State<QuestionScreen> {
     );
   }
 
-  Widget _buildNextButton(Question question){
+  Widget _buildNextButton(Question question) {
     return Padding(
-        padding: isQuizQuestion(question)?
-            const EdgeInsets.only(right: 34+9): const EdgeInsets.only(right: 9),
+        padding: isQuizQuestion(question) ?
+        const EdgeInsets.only(right: 34 + 9) : const EdgeInsets.only(right: 9),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             TextButton(
-                onPressed: () => _continueButtonPressedEvent(),
-                child: Text(
-                  AppLocalizations.of(context)
-                      .translate('question_btn_text_next'),
-                  style: Theme.of(context).textTheme.subTitle
-                      .copyWith(color: Theme.of(context).colorScheme.tertiary),
-                ),
+              onPressed: () => _continueButtonPressedEvent(),
+              child: Text(
+                AppLocalizations.of(context)
+                    .translate('question_btn_text_next'),
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .subTitle
+                    .copyWith(color: Theme
+                    .of(context)
+                    .colorScheme
+                    .tertiary),
+              ),
             )
           ],
         )
@@ -456,6 +467,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
   }
 
   void _continueButtonPressedEvent() {
+    _focusNode.unfocus();
     if (_singleQuestionStore.currentIndex <
           _questionStore.questionList!.questions!.length) {
       int index =  _singleQuestionStore.currentIndex + 1;
@@ -515,7 +527,6 @@ class _QuestionScreenState extends State<QuestionScreen> {
                  child: QuestionListOverlay(
                      isSubmitted: (bool submit) {
                        if (!submit) {
-
                          questionListOverlay.remove();
                        }
                        else {
