@@ -161,7 +161,7 @@ class _ResultScreenState extends State<ResultScreen> {
     return _buildValueContainer(
       context,
       AppLocalizations.of(context).translate('result_point_title'),
-      calculatePoint().toStringAsFixed(2),
+      "${getCorrect()}/${_questionStore.questionList!.questions!.length}",
       Theme.of(context).colorScheme.buttonChooseBackground,
     );
   }

@@ -242,17 +242,6 @@ class _QuestionScreenState extends State<QuestionScreen> {
                     ),
                     const SizedBox(height: 3.0),
 
-                    // Text(
-                    //   getCurrentQuestion()!.content,
-                    //   style: Theme.of(context).textTheme.questionStyle
-                    //       .copyWith(
-                    //       color: Theme.of(context)
-                    //           .colorScheme.inputTitleText
-                    //   ),
-                    // ),
-                    // Flexible(
-                    //   child: ,
-                    // ),
                     Flexible(child: Html(
                       shrinkWrap: true,
                       data: "<html>${getCurrentQuestion()!.content}</html>",

@@ -82,6 +82,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 ? const SizedBox(height: 15)
                 : const SizedBox(height: 27),
 
+            questions[_singleQuestionStore.currentIndex].guide.isEmpty?
+            Container():
             Padding(
               padding:
                   const EdgeInsets.only(left: Dimens.practiceLeftContainer),
@@ -95,6 +97,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
             ),
 
             // SizedBox(height: 17),
+            questions[_singleQuestionStore.currentIndex].guide.isEmpty?
+            Container():
             _buildExplainView(
                 questions[_singleQuestionStore.currentIndex].guide),
             const SizedBox(height: 17),
@@ -372,6 +376,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
       child: ListView.builder(
         itemCount: question.options.length,
         scrollDirection: Axis.vertical,
+        physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemBuilder: (context, index) {
           print("Correct key ${question.correctQuizKey()}");
