@@ -160,56 +160,6 @@ class _QuestionScreenState extends State<QuestionScreen> {
     return  _buildBodyContent(context);
   }
 
-  Widget _buildFAB(BuildContext context) {
-    return DraggableFab(
-      child: Container(
-        width: 220,
-        height: 45,
-        margin: const EdgeInsets.fromLTRB(0, 0, 19, 30),
-        child: FloatingActionButton(
-            onPressed: _listButtonPressedEvent,
-            backgroundColor: const Color(0xFF0961F5),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(Dimens.bigButtonRadius),
-            ),
-            child: Center(
-              child: Row(
-                children: [
-                  //Icon
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: Dimens.practiceLeftContainer
-                    ),
-                    child: Image.asset(
-                      Assets.select_list,
-                      width: 25,
-                      height: 25,
-                    ),
-                  ),
-
-                  //Text
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    //Text
-                    child: Text(
-                      AppLocalizations.of(context)
-                          .translate('question_btn_question_list'),
-                      style: Theme.of(context)
-                          .textTheme
-                          .buttonStyle
-                          .copyWith(color: Theme.of(context)
-                                                .colorScheme
-                                                .buttonYesTextOrBg),
-                    ),
-                  )
-                ],
-              ),
-            )
-        ),
-      ),
-    );
-  }
-
   //Build items:----------------------------------------------------------------
   BoxDecoration decorationWithShadow = BoxDecoration(
     color: Colors.white,
@@ -367,6 +317,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
             child: ListView.builder(
               itemCount: getCurrentQuestion()!.options.length,
               shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 return Observer(builder: (context) {
                   return Padding(
@@ -440,7 +391,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
                   AppLocalizations.of(context)
                       .translate('question_btn_text_next'),
                   style: Theme.of(context).textTheme.subTitle
-                      .copyWith(color: Theme.of(context).colorScheme.textInBg2),
+                      .copyWith(color: Theme.of(context).colorScheme.tertiary),
                 ),
             )
           ],
