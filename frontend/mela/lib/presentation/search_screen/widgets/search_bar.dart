@@ -158,7 +158,7 @@ class SearchingBarState extends State<SearchingBar> {
                 child: TextField(
                   controller: controller,
                   decoration: InputDecoration(
-                    hintText: 'Tìm kiếm',
+                    hintText: 'Tên chuyên đề cần tìm kiếm',
                     hintStyle: Theme.of(context).textTheme.normal.copyWith(
                           color: Theme.of(context).colorScheme.secondary,
                         ),

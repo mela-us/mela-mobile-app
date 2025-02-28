@@ -111,6 +111,10 @@ class _SearchScreenState extends State<SearchScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    _searchStore.searchHistory!.isEmpty?
+                        Text("Không có lịch sử tìm kiếm",
+                            style: Theme.of(context).textTheme.normal.copyWith(
+                                color: Theme.of(context).colorScheme.primary)):
                     Text("Lịch sử tìm kiếm",
                         style: Theme.of(context).textTheme.normal.copyWith(
                             color: Theme.of(context).colorScheme.primary)),
@@ -136,6 +140,7 @@ class _SearchScreenState extends State<SearchScreen> {
             if (_searchStore.isLoadingSearch) {
               return const SizedBox.shrink();
             }
+
             if (_searchStore.errorString.isEmpty &&
                 _searchStore.lecturesAfterSearchingAndFiltering != null) {
               return Padding(
