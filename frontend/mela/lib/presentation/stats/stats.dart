@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/core/widgets/image_progress_indicator.dart';
 
 import '../../domain/entity/stat/progress.dart';
 import '../../utils/routes/routes.dart';
@@ -22,6 +23,7 @@ class StatisticsScreen extends StatefulWidget {
 class _StatisticsScreenState extends State<StatisticsScreen> {
   //Stores:---------------------------------------------------------------------
   final StatisticsStore _store = getIt<StatisticsStore>();
+  //call to navigate to level
   // final ErrorStore _errorStore = getIt<ErrorStore>();
   //State set:------------------------------------------------------------------
 
@@ -106,7 +108,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         body: Observer(
           builder: (context) {
             if (_store.progressLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: RotatingImageIndicator());
             }
             if (!_store.success) {
               return Center(
@@ -131,13 +133,34 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 final list = filteredLists[levelName];
                 if (list!.isEmpty) {
                   return Center(
-                    child: Text(
-                      "Không có dữ liệu cho $levelName",
-                      style: Theme.of(context)
-                          .textTheme
-                          .subTitle
-                          .copyWith(color: Theme.of(context).colorScheme.textInBg1),
-                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Oops! Bạn chưa học gì ở cấp này cả! Vui lòng chuyển sang \'Chủ đề\' để học!',
+                            style: Theme.of(context).textTheme.subTitle
+                                .copyWith(color: Theme.of(context).colorScheme.textInBg1),
+                            textAlign: TextAlign.center,
+                          ),
+                          // TextButton(
+                          //   onPressed: () {
+                          //     Navigator.of(context).push(
+                          //       MaterialPageRoute(builder: (context) => const HomeScreen()),
+                          //     );
+                          //   },
+                          //   child: Text(
+                          //     'chuyển sang \'Chủ đề\' để học!',
+                          //     style: Theme.of(context).textTheme.subTitle
+                          //         .copyWith(color: Theme.of(context).colorScheme.buttonYesBgOrText),
+                          //     textAlign: TextAlign.center,
+                          //   ),
+                          // ),
+                        ],
+                      ),
+                    )
                   );
                 } else {
                   return ExpandableList(list: list);

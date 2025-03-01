@@ -3,6 +3,7 @@ import 'detailed_progress_list.dart';
 class Progress {
   String? topicName;
   String? levelName;
+  String? levelId;
   int? totalCorrect;
   int? total;
   DetailedProgressList? last7Days;
@@ -14,6 +15,7 @@ class Progress {
   Progress({
     this.topicName,
     this.levelName,
+    this.levelId,
     this.totalCorrect,
     this.total,
     this.last7Days,
@@ -23,6 +25,7 @@ class Progress {
     return Progress(
       topicName: json['topic']?['name'],
       levelName: json['level']?['name'],
+      levelId: json['level']?['levelId'],
       totalCorrect: json['totalCorrectAnswers'] as int?,
       total: json['totalAnswers'] as int?,
       last7Days: json['last7Days'] != null

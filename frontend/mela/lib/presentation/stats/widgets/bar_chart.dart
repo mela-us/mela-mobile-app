@@ -1,17 +1,24 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/domain/entity/stat/detailed_progress.dart';
 import '../../../di/service_locator.dart';
 import '../../../domain/entity/stat/progress.dart';
+import '../../../domain/entity/level/level.dart';
 import '../../../themes/default/colors_standards.dart';
+import '../../../utils/routes/routes.dart';
+import '../../home_screen/store/level_store/level_store.dart';
+import '../../topic_lecture_in_level_screen/store/topic_lecture_store.dart';
 import '../store/stats_store.dart';
 import 'package:intl/intl.dart';
 
 class BarChartWidget extends StatelessWidget {
   final Progress item;
   final StatisticsStore store = getIt<StatisticsStore>();
+
+  //call to navigate to level
+  final TopicLectureStore _topicLectureStore = getIt<TopicLectureStore>();
+  final LevelStore _levelStore = getIt<LevelStore>();
 
   BarChartWidget({super.key, required this.item});
 
@@ -24,6 +31,9 @@ class BarChartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //
+    Level level = Level(levelId: item.levelId ?? "", levelName: item.levelName ?? "", levelImagePath: "");
+    //
     List<DetailedProgress>? list = item.last7Days?.detailedProgressList;
     DateTime now = DateTime.now();
     DateTime sevenDaysToNow = now.subtract(const Duration(days: 7));
@@ -36,16 +46,45 @@ class BarChartWidget extends StatelessWidget {
       return false;
     }).toList();
 
+    if (filteredList == null) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              'Oops! 7 ngày rồi bạn không làm chủ đề này. Học tiếp nhé!',
+              style: Theme.of(context).textTheme.subTitle
+                  .copyWith(color: Theme.of(context).colorScheme.textInBg1),
+            ),
+            const SizedBox(height: 10), // Khoảng cách giữa dòng chữ và nút
+            ElevatedButton(
+              onPressed: () {
+                _topicLectureStore.setCurrentLevel(level);
+                _levelStore.resetErrorString();
+                Navigator.of(context).pushNamed(Routes.topicLectureInLevelScreen);
+              }, //Navigation to Topic
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.tertiary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6.0),
+                child: Text(
+                  'Đi nào!',
+                  style: Theme.of(context).textTheme.subHeading.copyWith(color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
     return SizedBox(
       height: 200,
-      child: Observer(
-        builder: (context) {
-          if (store.detailedProgressLoading) {
-            return Center(child: CircularProgressIndicator());
-          }
-          return MakeBarChart(filteredList, now, context);
-        },
-      ),
+      child: MakeBarChart(filteredList, now, context)
     );
   }
 

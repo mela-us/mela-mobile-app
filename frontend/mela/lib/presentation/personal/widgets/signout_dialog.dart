@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../../../constants/app_theme.dart';
 
 class LogoutConfirmationDialog extends StatelessWidget {
@@ -18,14 +19,15 @@ class LogoutConfirmationDialog extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.0),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 12.0, bottom: 10.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Bạn có chắc là muốn đăng xuất?',
+              'Bạn có chắc là bạn muốn đăng xuất?',
               style: Theme.of(context).textTheme.subHeading.copyWith(color: Colors.black),
+              textAlign: TextAlign.center,
             ),
             SizedBox(height: 16.0),
             Column(
@@ -34,26 +36,33 @@ class LogoutConfirmationDialog extends StatelessWidget {
                 ElevatedButton(
                   onPressed: onLogout,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: Theme.of(context).colorScheme.tertiary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    padding: const EdgeInsets.symmetric(vertical: 6.0),
                     child: Text(
                       'Đăng xuất',
                       style: Theme.of(context).textTheme.subHeading.copyWith(color: Colors.white),
                     ),
                   ),
                 ),
-                TextButton(
+                OutlinedButton(
                   onPressed: onCancel,
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: Colors.white), // Set border color
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                  ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    padding: const EdgeInsets.symmetric(vertical: 6.0),
                     child: Text(
                       'Hủy',
-                      style: Theme.of(context).textTheme.subHeading.copyWith(color: Colors.blue),
+                      style: Theme.of(context).textTheme.subHeading
+                          .copyWith(color: Theme.of(context).colorScheme.tertiary),
                     ),
                   ),
                 ),
@@ -62,6 +71,6 @@ class LogoutConfirmationDialog extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ).animate().fadeIn(duration: 300.ms).slideY(begin: 1, end: 0);
   }
 }

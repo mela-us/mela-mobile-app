@@ -41,4 +41,7 @@ class Assets{
 
   //Chat
   static String currently_developing_icon = "assets/icons/currently_developing_icon.png";
+
+  //Loading
+  static String loading_icon = "assets/icons/mela_load.png";
 }

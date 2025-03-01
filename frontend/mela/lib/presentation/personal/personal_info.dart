@@ -47,14 +47,28 @@ class _PersonalInfoState extends State<PersonalInfo> {
   }
 
   void _navigateToEditName() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => EditNameScreen(
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => EditNameScreen(
           name: widget.name,
           email: widget.email,
           dob: widget.dob,
           imageUrl: widget.imageUrl,
         ),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0); // Bắt đầu từ bên phải
+          const end = Offset.zero; // Kết thúc ở vị trí gốc
+          const curve = Curves.easeInOut;
+
+          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          );
+        },
       ),
     );
   }
@@ -68,14 +82,28 @@ class _PersonalInfoState extends State<PersonalInfo> {
   }
 
   void _navigateToEditBirthdate() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => EditBirthdateScreen(
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => EditBirthdateScreen(
           name: widget.name,
           email: widget.email,
           dob: widget.dob,
           imageUrl: widget.imageUrl,
         ),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0); // Bắt đầu từ bên phải
+          const end = Offset.zero; // Kết thúc ở vị trí gốc
+          const curve = Curves.easeInOut;
+
+          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          );
+        },
       ),
     );
   }
@@ -229,170 +257,137 @@ class _PersonalInfoState extends State<PersonalInfo> {
         ),
       ),
       body: Center(
-        child: SizedBox(
-          height: 570.0,
-          child: Stack(
-            alignment: Alignment.topCenter,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 70.0, left: 20.0, right: 20.0),
-                child: Container(
-                  width: double.infinity,
-                  height: 310.0,
-                  padding: const EdgeInsets.only(top: 40.0, left: 5.0, right: 5.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16.0),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 8.0,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Column(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Container(
+            height: double.infinity,
+            width: double.infinity,
+            child: Column(
+              children: [
+                // Avatar and Name at the top
+                // Fixed position for Avatar and Name
+                Container(
+                  height: 160.0,
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  alignment: Alignment.center,
+                  child: Stack(
                     children: [
-                      GestureDetector(
-                        onTap: _navigateToEditName,
-                        child: Observer(
-                          builder: (_) => ListTile(
-                            title: Text(
-                              "Tên người dùng",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subHeading
-                                  .copyWith(color: Theme.of(context).colorScheme.primary),
-                            ),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  widget.name,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .content
-                                      .copyWith(color: Theme.of(context).colorScheme.primary),
+                      Column(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(30.0),
+                            child: Container(
+                              width: 100.0,
+                              height: 100.0,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: _profileImage,
+                                  fit: BoxFit.cover,
                                 ),
-                                const SizedBox(width: 8.0),
-                                const Icon(Icons.arrow_forward_ios, size: 18.0),
-                              ],
+                              ),
                             ),
                           ),
-                        ),
+                          const SizedBox(height: 5.0),
+                          Observer(builder: (_) => const Text("")),
+                        ],
                       ),
-                      GestureDetector(
-                        onTap: _navigateToEditEmail,
-                        child: Observer(
-                          builder: (_) => ListTile(
-                            title: Text(
-                              "Email",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subHeading
-                                  .copyWith(color: Theme.of(context).colorScheme.textInBg2),
-                            ),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  widget.email,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .content
-                                      .copyWith(color: Theme.of(context).colorScheme.primary),
-                                ),
-                                //const SizedBox(width: 8.0),
-                                //const Icon(Icons.arrow_forward_ios, size: 18.0),
-                              ],
-                            ),
+                      Positioned(
+                        bottom: 15,
+                        right: -3,
+                        child: IconButton(
+                          icon: Image.asset(
+                            "assets/icons/upload_profile_pic.png",
+                            width: 30,
+                            height: 30,
                           ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: _navigateToEditBirthdate,
-                        child: Observer(
-                          builder: (_) => ListTile(
-                            title: Text(
-                              "Ngày sinh",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subHeading
-                                  .copyWith(color: Theme.of(context).colorScheme.primary),
-                            ),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  widget.dob,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .content
-                                      .copyWith(color: Theme.of(context).colorScheme.primary),
-                                ),
-                                const SizedBox(width: 8.0),
-                                const Icon(Icons.arrow_forward_ios, size: 18.0),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: _showDeleteAccountDialog, // Gọi hàm hiển thị hộp thoại
-                        child: Observer(
-                          builder: (_) => ListTile(
-                            title: Text(
-                              "Xóa tài khoản",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subHeading
-                                  .copyWith(color: Colors.redAccent),
-                            ),
-                            trailing: const Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SizedBox(width: 8.0),
-                                Icon(Icons.arrow_forward_ios, size: 18.0),
-                              ],
-                            ),
-                          ),
+                          onPressed: _showImagePickerOptions, //_showImagePickerOptions,
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
-              Positioned(
-                top: 0,
-                child: Stack(
-                  children: [
-                    Column(
+                const SizedBox(height: 10.0), // Spacing before the list
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
                       children: [
-                        CircleAvatar(
-                          backgroundImage: _profileImage,
-                          radius: 50.0,
+                        _buildListTile(
+                            context,
+                            "Tên học viên",
+                            widget.name,
+                            _navigateToEditName
+                            , Theme.of(context).colorScheme.textInBg1
                         ),
-                        const SizedBox(height: 5.0),
-                        Observer(builder: (_) => const Text("")),
+                        _buildListTile(
+                            context,
+                            "Email",
+                            widget.email,
+                            () {}
+                            , Theme.of(context).colorScheme.textInBg2
+                        ),
+                        _buildListTile(
+                            context,
+                            "Ngày sinh",
+                            widget.dob,
+                            _navigateToEditBirthdate
+                            , Theme.of(context).colorScheme.textInBg1
+                        ),
+                        _buildListTile(
+                            context,
+                            "Xóa tài khoản",
+                            "",
+                            _showDeleteAccountDialog,
+                            Colors.red
+                        ),
                       ],
                     ),
-                    Positioned(
-                      bottom: 15,
-                      right: -3,
-                      child: IconButton(
-                        icon: Image.asset(
-                          "assets/icons/upload_profile_pic.png",
-                          width: 30,
-                          height: 30,
-                        ),
-                        onPressed: _showImagePickerOptions, //_showImagePickerOptions,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildListTile(BuildContext context, String title, String content, VoidCallback onTap, Color color) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 5.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 4.0,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(right: 0.0, left: 1.0),
+        child: ListTile(
+          leading: Text(
+              title,
+              style: Theme.of(context).textTheme.subTitle
+                  .copyWith(color: color)
+          ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                content,
+                style: Theme.of(context)
+                    .textTheme
+                    .questionStyle
+                    .copyWith(color: color),
               ),
+              //const SizedBox(width: 8.0),
+              const Icon(Icons.arrow_forward_ios_sharp, size: 18.0),
             ],
           ),
+          onTap: onTap,
         ),
       ),
     );
