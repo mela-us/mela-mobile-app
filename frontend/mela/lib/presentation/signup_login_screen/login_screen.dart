@@ -220,6 +220,7 @@ class __FormContentState extends State<_FormContent> {
               errorText: _userLoginStore.passwordError.isNotEmpty
                   ? _userLoginStore.passwordError
                   : null,
+              errorMaxLines: 10,
               errorStyle: const TextStyle(
                 color: Colors.red,
                 fontSize: 14,
@@ -269,7 +270,6 @@ class __FormContentState extends State<_FormContent> {
                       _passwordController.text,
                     );
 
-      
                     if (_userLoginStore.isLoggedIn) {
                       // Clean up after successful login
                       _userLoginStore.resetSettingForLogin();
@@ -288,8 +288,10 @@ class __FormContentState extends State<_FormContent> {
                     }
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(e.toString()), duration: const Duration(milliseconds: 800),),
-                      
+                      SnackBar(
+                        content: Text(e.toString()),
+                        duration: const Duration(milliseconds: 800),
+                      ),
                     );
                   } finally {
                     _userLoginStore.setLoadingLogin(false);

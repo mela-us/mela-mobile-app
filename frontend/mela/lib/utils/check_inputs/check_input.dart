@@ -18,8 +18,8 @@ class CheckInput {
     if (!RegExp(r'\d').hasMatch(password)) {
       errors.add('- Ít nhất 1 chữ số.');
     }
-    if (!RegExp(r'[@$!%*?&#]').hasMatch(password)) {
-      errors.add('- Ít nhất 1 ký tự đặc biệt (@\$!%*?&#).');
+    if (!RegExp(r'[@$₫!%*?&#~^()_+\-=<>[\]{},.;:/|]').hasMatch(password)) {
+      errors.add('- Ít nhất 1 ký tự đặc biệt @\$!%*?&#~^()_+-=<>[]{},.;:/|₫.');
     }
 
     if (errors.isNotEmpty) {

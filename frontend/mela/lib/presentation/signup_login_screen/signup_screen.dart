@@ -199,6 +199,7 @@ class __FormContentState extends State<_FormContent> {
                 errorText: _userSignupStore.passwordError.isNotEmpty
                     ? _userSignupStore.passwordError
                     : null,
+                errorMaxLines: 10,
                 errorStyle: const TextStyle(
                   color: Colors.red,
                   fontSize: 14,
@@ -300,12 +301,18 @@ class __FormContentState extends State<_FormContent> {
                           Routes.allScreens, (Route<dynamic> route) => false);
 
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Đăng ký thành công'),  duration: Duration(seconds: 0, milliseconds: 800),),
+                        const SnackBar(
+                          content: Text('Đăng ký thành công'),
+                          duration: Duration(seconds: 0, milliseconds: 800),
+                        ),
                       );
                     }
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(e.toString()),  duration: const Duration(seconds: 0, milliseconds: 800),),
+                      SnackBar(
+                        content: Text(e.toString()),
+                        duration: const Duration(seconds: 0, milliseconds: 800),
+                      ),
                     );
                   } finally {
                     _userSignupStore.setIsSignupLoading(false);
