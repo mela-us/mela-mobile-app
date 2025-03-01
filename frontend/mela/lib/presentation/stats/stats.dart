@@ -61,25 +61,21 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
       child: Scaffold(
         appBar: AppBar(
           scrolledUnderElevation: 0,
-          automaticallyImplyLeading: false,
-          backgroundColor: Theme.of(context).colorScheme.appBackground,
-          elevation: 0,
-          title: Text(
-            'Thống kê',
-            style: Theme.of(context).textTheme.heading.copyWith(
-              color: Theme.of(context).colorScheme.textInBg1,
-            ),
+          title: Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Text("Thống kê",
+                style: Theme.of(context)
+                    .textTheme
+                    .heading
+                    .copyWith(color: Theme.of(context).colorScheme.onPrimary)),
           ),
           actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: IconButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(Routes.searchStats);
-                },
-                icon: const Icon(Icons.search),
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(Routes.searchStats);
+              },
+              icon: const Icon(Icons.search),
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
           ],
           bottom: PreferredSize(
