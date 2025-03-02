@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
-import 'package:mela/core/widgets/progress_indicator_widget.dart';
+import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/topic_lecture_in_level_screen/store/topic_lecture_store.dart';
 import 'package:mela/presentation/topic_lecture_in_level_screen/widgets/general_infor.dart';
@@ -126,7 +126,7 @@ class _TopicLectureInLevelScreenState extends State<TopicLectureInLevelScreen> {
                             .colorScheme
                             .surface,
                       ),
-                      const CustomProgressIndicatorWidget(),
+                      const RotatingImageIndicator(),
                     ],
                   ),
                 )

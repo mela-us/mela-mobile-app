@@ -47,14 +47,28 @@ class _PersonalInfoState extends State<PersonalInfo> {
   }
 
   void _navigateToEditName() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => EditNameScreen(
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => EditNameScreen(
           name: widget.name,
           email: widget.email,
           dob: widget.dob,
           imageUrl: widget.imageUrl,
         ),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0); // Bắt đầu từ bên phải
+          const end = Offset.zero; // Kết thúc ở vị trí gốc
+          const curve = Curves.easeInOut;
+
+          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          );
+        },
       ),
     );
   }
@@ -68,14 +82,28 @@ class _PersonalInfoState extends State<PersonalInfo> {
   }
 
   void _navigateToEditBirthdate() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => EditBirthdateScreen(
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => EditBirthdateScreen(
           name: widget.name,
           email: widget.email,
           dob: widget.dob,
           imageUrl: widget.imageUrl,
         ),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0); // Bắt đầu từ bên phải
+          const end = Offset.zero; // Kết thúc ở vị trí gốc
+          const curve = Curves.easeInOut;
+
+          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          );
+        },
       ),
     );
   }
@@ -294,7 +322,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                             context,
                             "Email",
                             widget.email,
-                            () {}
+                                () {}
                             , Theme.of(context).colorScheme.textInBg2
                         ),
                         _buildListTile(
@@ -345,6 +373,21 @@ class _PersonalInfoState extends State<PersonalInfo> {
               style: Theme.of(context).textTheme.subTitle
                   .copyWith(color: color)
           ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                content,
+                style: Theme.of(context)
+                    .textTheme
+                    .questionStyle
+                    .copyWith(color: color),
+              ),
+              //const SizedBox(width: 8.0),
+              const Icon(Icons.arrow_forward_ios_sharp, size: 18.0),
+            ],
+          ),
+          onTap: onTap,
         ),
       ),
     );

@@ -7,7 +7,7 @@ import 'package:mela/utils/check_inputs/check_input.dart';
 import 'package:mela/utils/routes/routes.dart';
 import 'package:mobx/mobx.dart';
 
-import '../../core/widgets/progress_indicator_widget.dart';
+import '../../core/widgets/image_progress_indicator.dart';
 import '../../di/service_locator.dart';
 import 'store/user_signup_store/user_signup_store.dart';
 import 'widgets/login_or_sign_up_button.dart';
@@ -100,7 +100,7 @@ class __FormContentState extends State<_FormContent> {
                               .primary
                               .withOpacity(0.8),
                         ),
-                        const CustomProgressIndicatorWidget(),
+                        const RotatingImageIndicator(),
                       ],
                     ),
                   ),

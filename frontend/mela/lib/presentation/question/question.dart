@@ -1,4 +1,3 @@
-import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_math_fork/flutter_math.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/dimens.dart';
+import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/domain/entity/question/question.dart';
 import 'package:mela/presentation/question/store/question_store.dart';
 import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
@@ -16,10 +16,8 @@ import 'package:mela/utils/locale/app_localization.dart';
 import 'package:mela/utils/routes/routes.dart';
 import 'package:mobx/mobx.dart';
 
-import '../../constants/assets.dart';
 import '../../constants/enum.dart';
 import '../../constants/layout.dart';
-import '../../core/widgets/progress_indicator_widget.dart';
 import '../../di/service_locator.dart';
 
 class QuestionScreen extends StatefulWidget {
@@ -136,7 +134,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
     return Observer(
       builder: (context) {
         if (_questionStore.loading) {
-          return const CustomProgressIndicatorWidget();
+          return const RotatingImageIndicator();
         }
         else {
           return Scaffold(

@@ -6,7 +6,7 @@ import 'package:mela/presentation/divided_lectures_and_exercises_screen/store/ex
 import 'package:mela/presentation/divided_lectures_and_exercises_screen/widgets/exercise_list_item.dart';
 import 'package:mela/utils/routes/routes.dart';
 import 'package:mobx/mobx.dart';
-import '../../core/widgets/progress_indicator_widget.dart';
+import '../../core/widgets/image_progress_indicator.dart';
 import 'widgets/divided_lecture_list_item.dart';
 
 class DividedLecturesAndExercisesScreen extends StatefulWidget {
@@ -155,7 +155,7 @@ class _DividedLecturesAndExercisesScreenState
                                 .surface
                                 .withOpacity(0.8),
                           ),
-                          const CustomProgressIndicatorWidget(),
+                          const RotatingImageIndicator(),
                         ],
                       ),
                     )

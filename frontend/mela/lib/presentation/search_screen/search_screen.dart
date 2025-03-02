@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
-import 'package:mela/core/widgets/progress_indicator_widget.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/filter_screen/store/filter_store.dart';
 import 'package:mela/presentation/search_screen/widgets/search_bar.dart';
@@ -9,6 +8,7 @@ import 'package:mela/presentation/topic_lecture_in_level_screen/widgets/lecture_
 import 'package:mela/utils/routes/routes.dart';
 import 'package:mobx/mobx.dart';
 
+import '../../core/widgets/image_progress_indicator.dart';
 import 'store/search_store.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -186,7 +186,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   .surface
                                   .withOpacity(0.2),
                             ),
-                            const CustomProgressIndicatorWidget(),
+                            const RotatingImageIndicator(),
                           ],
                         ),
                       )
@@ -247,7 +247,7 @@ class _SearchScreenState extends State<SearchScreen> {
               }
 
               if (_searchStore.isLoadingSearch) {
-                return const Center(child: CustomProgressIndicatorWidget());
+                return const Center(child: RotatingImageIndicator());
               }
               if (_searchStore.errorString.isNotEmpty ||
                   _searchStore.lecturesAfterSearchingAndFiltering == null) {

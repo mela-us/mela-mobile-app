@@ -102,79 +102,79 @@ class _PersonalScreenState extends State<PersonalScreen> {
                     child: Column(
                       children: [
                         _buildListTile(
-                          context,
-                          Assets.personal_info,
-                          'Thông tin cá nhân',
-                              () {
-                            if (!_store.progressLoading) {
-                              Navigator.push(
-                                context,
-                                PageRouteBuilder(
-                                  pageBuilder: (context, animation, secondaryAnimation) => PersonalInfo(
-                                    name: _store.user?.name ?? 'Người học không tên',
-                                    email: _store.user?.email ?? '',
-                                    dob: _store.user?.dob ?? '',
-                                    imageUrl: _store.user?.imageUrl ?? '',
+                            context,
+                            Assets.personal_info,
+                            'Thông tin cá nhân',
+                                () {
+                              if (!_store.progressLoading) {
+                                Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder: (context, animation, secondaryAnimation) => PersonalInfo(
+                                      name: _store.user?.name ?? 'Người học không tên',
+                                      email: _store.user?.email ?? '',
+                                      dob: _store.user?.dob ?? '',
+                                      imageUrl: _store.user?.imageUrl ?? '',
+                                    ),
+                                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                      const begin = Offset(1.0, 0.0); // Bắt đầu từ bên phải
+                                      const end = Offset.zero; // Kết thúc ở vị trí gốc
+                                      const curve = Curves.easeInOut;
+
+                                      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                                      var offsetAnimation = animation.drive(tween);
+
+                                      return SlideTransition(
+                                        position: offsetAnimation,
+                                        child: child,
+                                      );
+                                    },
                                   ),
-                                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                    const begin = Offset(1.0, 0.0); // Bắt đầu từ bên phải
-                                    const end = Offset.zero; // Kết thúc ở vị trí gốc
-                                    const curve = Curves.easeInOut;
-
-                                    var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                                    var offsetAnimation = animation.drive(tween);
-
-                                    return SlideTransition(
-                                      position: offsetAnimation,
-                                      child: child,
-                                    );
-                                  },
-                                ),
-                              );
-                            }
-                          }, false
+                                );
+                              }
+                            }, false
                         ),
                         _buildListTile(
-                          context,
-                          Assets.personal_language,
-                          'Ngôn ngữ',
-                              () {
-                            // Navigate to language settings page
-                          }, true
+                            context,
+                            Assets.personal_language,
+                            'Ngôn ngữ',
+                                () {
+                              // Navigate to language settings page
+                            }, true
                         ),
                         _buildListTile(
-                          context,
-                          Assets.personal_darkmode,
-                          'Chế độ tối',
-                              () {
-                            // Toggle dark mode
-                          }, true
+                            context,
+                            Assets.personal_darkmode,
+                            'Chế độ tối',
+                                () {
+                              // Toggle dark mode
+                            }, true
                         ),
                         _buildListTile(
-                          context,
-                          Assets.personal_term,
-                          'Các điều khoản',
-                              () {
-                            // Navigate to terms and conditions page
-                          }, true
+                            context,
+                            Assets.personal_term,
+                            'Các điều khoản',
+                                () {
+                              // Navigate to terms and conditions page
+                            }, true
                         ),
                         _buildListTile(
-                          context,
-                          Assets.personal_support,
-                          'Trung tâm hỗ trợ',
-                              () {
-                            // Navigate to support center page
-                          }, true
+                            context,
+                            Assets.personal_support,
+                            'Trung tâm hỗ trợ',
+                                () {
+                              // Navigate to support center page
+                            }, true
                         ),
                         _buildListTile(
-                          context,
-                          Assets.personal_signout,
-                          'Đăng xuất',
-                              () {
-                            if (!_store.progressLoading) {
-                              _showLogoutConfirmationDialog(context);
-                            }
-                          }, false
+                            context,
+                            Assets.personal_signout,
+                            'Đăng xuất',
+                                () {
+                              if (!_store.progressLoading) {
+                                _showLogoutConfirmationDialog(context);
+                              }
+                            }, false
                         ),
                       ],
                     ),
@@ -210,10 +210,10 @@ class _PersonalScreenState extends State<PersonalScreen> {
           title: Text(
             title,
             style:
-              disable ? Theme.of(context).textTheme.subTitle
-                        .copyWith(color: Colors.black26)
-                      : Theme.of(context).textTheme.subTitle
-                        .copyWith(color: Theme.of(context).colorScheme.textInBg1),
+            disable ? Theme.of(context).textTheme.subTitle
+                .copyWith(color: Colors.black26)
+                : Theme.of(context).textTheme.subTitle
+                .copyWith(color: Theme.of(context).colorScheme.textInBg1),
           ),
           onTap: onTap,
         ),

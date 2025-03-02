@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/core/widgets/progress_indicator_widget.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/forgot_password_screen/store/create_new_password_store/create_new_password_store.dart';
@@ -209,7 +210,7 @@ class CreateNewPasswordInForgotPasswordScreen extends StatelessWidget {
                               .primary
                               .withOpacity(0.8),
                         ),
-                        const CustomProgressIndicatorWidget(),
+                        const RotatingImageIndicator(),
                       ],
                     ),
                   ),

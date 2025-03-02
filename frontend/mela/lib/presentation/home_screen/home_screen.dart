@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
-import 'package:mela/core/widgets/progress_indicator_widget.dart';
+import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 import 'package:mela/presentation/home_screen/widgets/level_item.dart';
 import 'package:mobx/mobx.dart';
@@ -111,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     color:
                         Theme.of(context).colorScheme.surface.withOpacity(0.8),
                   ),
-                  const CustomProgressIndicatorWidget(),
+                  const RotatingImageIndicator(),
                 ],
               ),
             );

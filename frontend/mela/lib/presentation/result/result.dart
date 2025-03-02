@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/core/widgets/practice_app_bar_widget.dart';
 import 'package:mela/presentation/divided_lectures_and_exercises_screen/store/exercise_store.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
@@ -12,7 +13,6 @@ import 'package:mela/utils/locale/app_localization.dart';
 import 'package:mela/utils/routes/routes.dart';
 
 import '../../constants/assets.dart';
-import '../../core/widgets/progress_indicator_widget.dart';
 import '../../di/service_locator.dart';
 import '../../domain/entity/question/question.dart';
 
@@ -49,12 +49,12 @@ class _ResultScreenState extends State<ResultScreen> {
     return Observer(
       builder: (context) {
         if (_questionStore.saving) {
-          return const CustomProgressIndicatorWidget();
+          return const RotatingImageIndicator();
         }
         else if (_levelStore.loading ||
             _topicLectureStore.isGetTopicLectureLoading ||
             _exerciseStore.isGetExercisesLoading) {
-          return const CustomProgressIndicatorWidget();
+          return const RotatingImageIndicator();
         }
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.appBackground,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/forgot_password_screen/store/enter_email_store/enter_email_store.dart';
 import 'package:mela/presentation/forgot_password_screen/store/enter_otp_store.dart/enter_otp_store.dart';
@@ -167,7 +168,7 @@ class _EnterOTPInForgotPasswordScreen
                           .primary
                           .withOpacity(0.8),
                     ),
-                    const CustomProgressIndicatorWidget(),
+                    const RotatingImageIndicator(),
                   ],
                 ),
               ),
