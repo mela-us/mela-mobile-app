@@ -21,7 +21,7 @@ class QuestionListOverlay extends StatelessWidget {
       color: Colors.transparent,
       child: Container(
         width: 390,
-        height: 290 + 34,
+        height: 280 + 34,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20.0),
@@ -33,7 +33,7 @@ class QuestionListOverlay extends StatelessWidget {
           children: [
             //firstLine
             _buildFirstLine(context),
-            const SizedBox(height: 10),
+            // const SizedBox(height: 0),
             _buildQuestionList(),
             _buildSubmitButton(context),
           ],
@@ -46,7 +46,7 @@ class QuestionListOverlay extends StatelessWidget {
 
   Widget _buildFirstLine(BuildContext context){
     return SizedBox(
-      height: 60,
+      height: 50,
       child: Stack(
         children: [
           Center(
@@ -74,25 +74,29 @@ class QuestionListOverlay extends StatelessWidget {
     );
   }
 
-  Widget _buildQuestionList(){
+  Widget _buildQuestionList() {
     return Container(
       padding: const EdgeInsets.symmetric(
-          horizontal: Dimens.practiceHorizontalText),
+        horizontal: Dimens.practiceHorizontalText,
+      ),
       height: 130,
-      child: SingleChildScrollView(
-        child: GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 7,
-              mainAxisSpacing: 6,
-              crossAxisSpacing: 6,
-            ),
-            itemCount: _questionStore.questionList!.questions!.length,
-            itemBuilder: (context, index) {
-              return _buildListItem(index);
-            }
-        ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [SingleChildScrollView(
+          child: GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 7,
+                mainAxisSpacing: 6,
+                crossAxisSpacing: 6,
+              ),
+              itemCount: _questionStore.questionList!.questions!.length,
+              itemBuilder: (context, index) {
+                return _buildListItem(index);
+              }
+          ),
+        ),],
       ),
     );
   }

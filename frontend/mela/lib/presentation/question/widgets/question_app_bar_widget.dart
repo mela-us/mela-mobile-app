@@ -14,7 +14,9 @@ import '../store/question_store.dart';
 
 class QuestionAppBar extends StatefulWidget implements PreferredSizeWidget{
   final OverlayEntry questionListOverlay;
-  const QuestionAppBar({super.key, required this.questionListOverlay});
+  final FocusNode focusNode;
+  const QuestionAppBar({
+    super.key, required this.questionListOverlay, required this.focusNode});
 
   @override
   State<QuestionAppBar> createState() => _QuestionAppBarState();
@@ -31,11 +33,14 @@ class _QuestionAppBarState extends State<QuestionAppBar> {
   late OverlayEntry quitDialogOverlay;
   late OverlayEntry _questionListOverlay;
 
+  late FocusNode _focusNode;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _initQuitDialog();
+    _focusNode = widget.focusNode;
   }
 
   @override
@@ -188,6 +193,7 @@ class _QuestionAppBarState extends State<QuestionAppBar> {
   }
 
   void _listButtonPressedEvent() {
+    _focusNode.unfocus();
     Overlay.of(context).insert(_questionListOverlay);
   }
 

@@ -35,6 +35,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
   final QuestionStore _questionStore = getIt<QuestionStore>();
   final SingleQuestionStore _singleQuestionStore = getIt<SingleQuestionStore>();
   late OverlayEntry questionListOverlay;
+  final FocusNode _focusNode = FocusNode();
 
   //----------------------------------------------------------------------------
   final TextEditingController _controller = TextEditingController();
@@ -124,7 +125,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
   @override
   void dispose() {
     // TODO: implement dispose
+
     super.dispose();
+
     _timerStore.stopTimer();
   }
 
@@ -143,6 +146,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
                 .appBackground,
             appBar: QuestionAppBar(
               questionListOverlay: questionListOverlay,
+              focusNode: _focusNode,
             ),
             body: SingleChildScrollView(
               child: _buildMainBody(),
@@ -158,56 +162,6 @@ class _QuestionScreenState extends State<QuestionScreen> {
   //Build components:-----------------------------------------------------------
   Widget _buildMainBody(){
     return  _buildBodyContent(context);
-  }
-
-  Widget _buildFAB(BuildContext context) {
-    return DraggableFab(
-      child: Container(
-        width: 220,
-        height: 45,
-        margin: const EdgeInsets.fromLTRB(0, 0, 19, 30),
-        child: FloatingActionButton(
-            onPressed: _listButtonPressedEvent,
-            backgroundColor: const Color(0xFF0961F5),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(Dimens.bigButtonRadius),
-            ),
-            child: Center(
-              child: Row(
-                children: [
-                  //Icon
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: Dimens.practiceLeftContainer
-                    ),
-                    child: Image.asset(
-                      Assets.select_list,
-                      width: 25,
-                      height: 25,
-                    ),
-                  ),
-
-                  //Text
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    //Text
-                    child: Text(
-                      AppLocalizations.of(context)
-                          .translate('question_btn_question_list'),
-                      style: Theme.of(context)
-                          .textTheme
-                          .buttonStyle
-                          .copyWith(color: Theme.of(context)
-                                                .colorScheme
-                                                .buttonYesTextOrBg),
-                    ),
-                  )
-                ],
-              ),
-            )
-        ),
-      ),
-    );
   }
 
   //Build items:----------------------------------------------------------------
@@ -292,17 +246,6 @@ class _QuestionScreenState extends State<QuestionScreen> {
                     ),
                     const SizedBox(height: 3.0),
 
-                    // Text(
-                    //   getCurrentQuestion()!.content,
-                    //   style: Theme.of(context).textTheme.questionStyle
-                    //       .copyWith(
-                    //       color: Theme.of(context)
-                    //           .colorScheme.inputTitleText
-                    //   ),
-                    // ),
-                    // Flexible(
-                    //   child: ,
-                    // ),
                     Flexible(child: Html(
                       shrinkWrap: true,
                       data: "<html>${getCurrentQuestion()!.content}</html>",
@@ -367,6 +310,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
             child: ListView.builder(
               itemCount: getCurrentQuestion()!.options.length,
               shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 return Observer(builder: (context) {
                   return Padding(
@@ -395,6 +339,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
             decoration: decorationWithShadow,
             child: TextField(
               controller: _controller,
+              focusNode: _focusNode,
               decoration: InputDecoration(
                 hintText: AppLocalizations.of(context)
                     .translate('question_hint_text_field'),
@@ -427,21 +372,27 @@ class _QuestionScreenState extends State<QuestionScreen> {
     );
   }
 
-  Widget _buildNextButton(Question question){
+  Widget _buildNextButton(Question question) {
     return Padding(
-        padding: isQuizQuestion(question)?
-            const EdgeInsets.only(right: 34+9): const EdgeInsets.only(right: 9),
+        padding: isQuizQuestion(question) ?
+        const EdgeInsets.only(right: 34 + 9) : const EdgeInsets.only(right: 9),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             TextButton(
-                onPressed: () => _continueButtonPressedEvent(),
-                child: Text(
-                  AppLocalizations.of(context)
-                      .translate('question_btn_text_next'),
-                  style: Theme.of(context).textTheme.subTitle
-                      .copyWith(color: Theme.of(context).colorScheme.textInBg2),
-                ),
+              onPressed: () => _continueButtonPressedEvent(),
+              child: Text(
+                AppLocalizations.of(context)
+                    .translate('question_btn_text_next'),
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .subTitle
+                    .copyWith(color: Theme
+                    .of(context)
+                    .colorScheme
+                    .tertiary),
+              ),
             )
           ],
         )
@@ -516,6 +467,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
   }
 
   void _continueButtonPressedEvent() {
+    _focusNode.unfocus();
     if (_singleQuestionStore.currentIndex <
           _questionStore.questionList!.questions!.length) {
       int index =  _singleQuestionStore.currentIndex + 1;
@@ -575,7 +527,6 @@ class _QuestionScreenState extends State<QuestionScreen> {
                  child: QuestionListOverlay(
                      isSubmitted: (bool submit) {
                        if (!submit) {
-
                          questionListOverlay.remove();
                        }
                        else {

@@ -39,7 +39,7 @@
   "result_end": "-------------------------------------------------------------------------------------",
 
   "review_start": "Below are list of strings for result",
-  "review_ask": "Đáp án của bạn:",
+  "review_ask": "Đáp án:",
   "review_explain": "Giải thích:",
   "review_solution": "Lời giải:",
   "review_end": "-------------------------------------------------------------------------------------"

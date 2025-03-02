@@ -81,7 +81,7 @@ class QuestionQuitOverlay extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 0),
+            padding: const EdgeInsets.only(right: 25),
             child: Image.asset(
               Assets.exit_image,
               width: 242,
