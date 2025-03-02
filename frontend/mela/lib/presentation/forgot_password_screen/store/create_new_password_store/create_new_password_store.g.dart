@@ -68,6 +68,39 @@ mixin _$CreateNewPasswordStore on _CreateNewPasswordStore, Store {
     });
   }
 
+  late final _$passwordErrorAtom =
+      Atom(name: '_CreateNewPasswordStore.passwordError', context: context);
+
+  @override
+  String get passwordError {
+    _$passwordErrorAtom.reportRead();
+    return super.passwordError;
+  }
+
+  @override
+  set passwordError(String value) {
+    _$passwordErrorAtom.reportWrite(value, super.passwordError, () {
+      super.passwordError = value;
+    });
+  }
+
+  late final _$confirmedPasswordErrorAtom = Atom(
+      name: '_CreateNewPasswordStore.confirmedPasswordError', context: context);
+
+  @override
+  String get confirmedPasswordError {
+    _$confirmedPasswordErrorAtom.reportRead();
+    return super.confirmedPasswordError;
+  }
+
+  @override
+  set confirmedPasswordError(String value) {
+    _$confirmedPasswordErrorAtom
+        .reportWrite(value, super.confirmedPasswordError, () {
+      super.confirmedPasswordError = value;
+    });
+  }
+
   late final _$changePasswordInForgotPasswordScreenAsyncAction = AsyncAction(
       '_CreateNewPasswordStore.changePasswordInForgotPasswordScreen',
       context: context);
@@ -80,6 +113,28 @@ mixin _$CreateNewPasswordStore on _CreateNewPasswordStore, Store {
 
   late final _$_CreateNewPasswordStoreActionController =
       ActionController(name: '_CreateNewPasswordStore', context: context);
+
+  @override
+  void setErrorPassword(String value) {
+    final _$actionInfo = _$_CreateNewPasswordStoreActionController.startAction(
+        name: '_CreateNewPasswordStore.setErrorPassword');
+    try {
+      return super.setErrorPassword(value);
+    } finally {
+      _$_CreateNewPasswordStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setErrorConfirmedPassword(String password, String confirmedPassword) {
+    final _$actionInfo = _$_CreateNewPasswordStoreActionController.startAction(
+        name: '_CreateNewPasswordStore.setErrorConfirmedPassword');
+    try {
+      return super.setErrorConfirmedPassword(password, confirmedPassword);
+    } finally {
+      _$_CreateNewPasswordStoreActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void togglePasswordVisibility() {
@@ -109,6 +164,8 @@ mixin _$CreateNewPasswordStore on _CreateNewPasswordStore, Store {
 isPasswordVisible: ${isPasswordVisible},
 isConfirmedPasswordVisible: ${isConfirmedPasswordVisible},
 changePasswordFuture: ${changePasswordFuture},
+passwordError: ${passwordError},
+confirmedPasswordError: ${confirmedPasswordError},
 isLoadingChangePassword: ${isLoadingChangePassword}
     ''';
   }

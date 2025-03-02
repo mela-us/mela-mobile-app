@@ -119,12 +119,15 @@ class _ContentInDividedLectureScreenState
           onPressed: () => Navigator.of(context).pop(),
         ),
         actions: [
-          IconButton(
-            onPressed: _showPageSelectionDialog,
-            icon: Icon(
-              Icons.plagiarism_rounded,
-              color: Theme.of(context).colorScheme.primary,
-              size: 28,
+          Padding(
+            padding: const EdgeInsets.only(right: 2),
+            child: IconButton(
+              onPressed: _showPageSelectionDialog,
+              icon: Icon(
+                Icons.find_in_page,
+                color: Theme.of(context).colorScheme.primary,
+                size: 24,
+              ),
             ),
           ),
         ],

@@ -4,6 +4,7 @@ import 'package:mela/domain/usecase/user_login/is_logged_in_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_access_token_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_login_in_status_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_refresh_token_usecase.dart';
+import 'package:mela/utils/check_inputs/check_input.dart';
 import 'package:mela/utils/dio/dio_error_util.dart';
 import 'package:mobx/mobx.dart';
 
@@ -69,11 +70,39 @@ abstract class _UserLoginStore with Store {
   @observable
   ObservableFuture<void> setIsLoginFuture = ObservableFuture.value(null);
 
-  @computed
-  bool get isLoading => loginFuture.status == FutureStatus.pending;
+  // @computed
+  // bool get isLoading => loginFuture.status == FutureStatus.pending;
 
   @computed
   bool get isSetLoginLoading => setIsLoginFuture.status == FutureStatus.pending;
+
+  // This for showing error message when user typing immediately
+  @observable
+  String email = '';
+
+  @observable
+  String password = '';
+
+  @observable
+  String emailError = '';
+
+  @observable
+  String passwordError = '';
+
+  @observable
+  bool isLoadingLogin = false;
+
+  @action
+  void setEmail(String value) {
+    email = value;
+    emailError = CheckInput.validateEmail(value) ?? '';
+  }
+
+  @action
+  void setPassword(String value) {
+    password = value;
+    passwordError = CheckInput.validatePassword(value) ?? '';
+  }
 
   // actions:-------------------------------------------------------------------
   @action
@@ -81,6 +110,10 @@ abstract class _UserLoginStore with Store {
     isPasswordVisible = !isPasswordVisible;
   }
 
+  @action
+  void setLoadingLogin(bool value) {
+    isLoadingLogin = value;
+  }
 
   //use for refreshToken expired and set isLoggedIn=new value in share preferences
   @action
@@ -110,15 +143,15 @@ abstract class _UserLoginStore with Store {
         await _saveLoginStatusUseCase.call(params: true);
         await _saveAccessTokenUsecase.call(params: value.accessToken);
         await _saveRefreshTokenUsecase.call(params: value.refreshToken);
-        print("-----********* Sau khi login thanh cong in UserLoginStore");
-        print(value.accessToken);
-        print(value.refreshToken);
+        // print("-----********* Sau khi login thanh cong in UserLoginStore");
+        // print(value.accessToken);
+        // print(value.refreshToken);
         this.isLoggedIn = true;
       }
     }).catchError((e) {
       this.isLoggedIn = false;
       print("-----********* Error in UserLoginStore");
-      print(e.toString());
+      // print(e.toString());
       if (e is DioException) {
         if (e.response?.statusCode == 401) {
           throw "Mật khẩu hoặc tài khoản không hợp lệ";
@@ -133,19 +166,18 @@ abstract class _UserLoginStore with Store {
   @action
   void resetSettingForLogin() {
     isPasswordVisible = false;
+    email = '';
+    password = '';
+    emailError = '';
+    passwordError = '';
   }
 
   void logout() async {
-
-
     isLoggedIn = false;
-
 
     await _saveLoginStatusUseCase.call(params: false);
     await _saveAccessTokenUsecase.call(params: "");
     await _saveRefreshTokenUsecase.call(params: "");
-  
-  
   }
 
   // general methods:-----------------------------------------------------------

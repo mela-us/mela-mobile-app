@@ -22,7 +22,7 @@ class PracticeNavigateAnimation extends PageRouteBuilder{
         child: child,
       );
     },
-    transitionDuration: Duration(milliseconds: 500),
+    transitionDuration: Duration(milliseconds: 800),
   );
 
 }

@@ -17,6 +17,38 @@ mixin _$EnterEmailStore on _EnterEmailStore, Store {
               name: '_EnterEmailStore.isLoadingVerifyEmail'))
       .value;
 
+  late final _$emailAtom =
+      Atom(name: '_EnterEmailStore.email', context: context);
+
+  @override
+  String get email {
+    _$emailAtom.reportRead();
+    return super.email;
+  }
+
+  @override
+  set email(String value) {
+    _$emailAtom.reportWrite(value, super.email, () {
+      super.email = value;
+    });
+  }
+
+  late final _$emailErrorAtom =
+      Atom(name: '_EnterEmailStore.emailError', context: context);
+
+  @override
+  String get emailError {
+    _$emailErrorAtom.reportRead();
+    return super.emailError;
+  }
+
+  @override
+  set emailError(String value) {
+    _$emailErrorAtom.reportWrite(value, super.emailError, () {
+      super.emailError = value;
+    });
+  }
+
   late final _$verifyEmailFutureAtom =
       Atom(name: '_EnterEmailStore.verifyEmailFuture', context: context);
 
@@ -41,9 +73,36 @@ mixin _$EnterEmailStore on _EnterEmailStore, Store {
     return _$verifyEmailAsyncAction.run(() => super.verifyEmail(emailText));
   }
 
+  late final _$_EnterEmailStoreActionController =
+      ActionController(name: '_EnterEmailStore', context: context);
+
+  @override
+  void setEmail(String value) {
+    final _$actionInfo = _$_EnterEmailStoreActionController.startAction(
+        name: '_EnterEmailStore.setEmail');
+    try {
+      return super.setEmail(value);
+    } finally {
+      _$_EnterEmailStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void reset() {
+    final _$actionInfo = _$_EnterEmailStoreActionController.startAction(
+        name: '_EnterEmailStore.reset');
+    try {
+      return super.reset();
+    } finally {
+      _$_EnterEmailStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
+email: ${email},
+emailError: ${emailError},
 verifyEmailFuture: ${verifyEmailFuture},
 isLoadingVerifyEmail: ${isLoadingVerifyEmail}
     ''';

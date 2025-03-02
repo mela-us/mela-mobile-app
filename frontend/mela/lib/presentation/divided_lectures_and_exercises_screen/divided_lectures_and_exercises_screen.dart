@@ -77,7 +77,7 @@ class _DividedLecturesAndExercisesScreenState
               .heading
               .copyWith(color: Theme.of(context).colorScheme.primary),
         ),
-        backgroundColor: Colors.transparent,
+        // backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

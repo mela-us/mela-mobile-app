@@ -1,0 +1,2 @@
+/Users/trongawesome/Nam4/DATN/AI-Assisted-Math-Learning/frontend/mela/android/app/.cxx/Debug/563p2p1e/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/trongawesome/Nam4/DATN/AI-Assisted-Math-Learning/frontend/mela/android/app/.cxx/Debug/563p2p1e/armeabi-v7a/CMakeFiles/rebuild_cache.dir

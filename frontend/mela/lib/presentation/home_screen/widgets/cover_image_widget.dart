@@ -39,21 +39,23 @@ class CoverImageWidget extends StatelessWidget {
           child: SizedBox(
             width: 250,
             height: 34,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: ColorsStandards.buttonYesColor1,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+            child: AbsorbPointer(
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: ColorsStandards.buttonYesColor1,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  padding: EdgeInsets.zero,
                 ),
-                padding: EdgeInsets.zero,
-              ),
-              child: Text(
-                'Học toán hàng ngày với Mela',
-                style: Theme.of(context)
-                    .textTheme
-                    .content
-                    .copyWith(color: Theme.of(context).colorScheme.onTertiary),
+                child: Text(
+                  'Học toán hàng ngày với Mela',
+                  style: Theme.of(context)
+                      .textTheme
+                      .content
+                      .copyWith(color: Theme.of(context).colorScheme.onTertiary),
+                ),
               ),
             ),
           ),
