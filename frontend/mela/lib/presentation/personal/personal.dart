@@ -67,7 +67,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                       final url = _store.user?.imageUrl ?? '';
                       _profileImage = url.isNotEmpty
                           ? NetworkImage(url)
-                          : const AssetImage('assets/icons/default_profile_pic.png');
+                          : const AssetImage('assets/icons/default_profile_pic.png') as ImageProvider<Object>;
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

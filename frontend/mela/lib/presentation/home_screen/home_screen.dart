@@ -119,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
           //print("^^^^^^^^^^^^^^^^^^ErrorString in Courses_Screen 3: ${_topicStore.errorString}");
           if (_levelStore.errorString.isNotEmpty ||
               _levelStore.lecturesAreLearningList == null ||
-               _levelStore.topicList == null ||
+              _levelStore.topicList == null ||
               _levelStore.levelList == null) {
             return Center(
               child: Text(_levelStore.errorString,
@@ -160,33 +160,36 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     const SizedBox(height: 15),
                     //Text "lectures đang học"
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Image.asset(
-                            'assets/images/fire.png',
-                            width: 20,
-                            height: 28,
-                            fit: BoxFit.contain,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "Bài giảng đang học",
-                            style: Theme.of(context)
-                                .textTheme
-                                .subTitle
-                                .copyWith(
-                                    color:
-                                        ColorsStandards.textColorInBackground2),
-                          )
-                        ],
+                    if (_levelStore
+                        .lecturesAreLearningList!.lectures.isNotEmpty) ...[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Image.asset(
+                              'assets/images/fire.png',
+                              width: 20,
+                              height: 28,
+                              fit: BoxFit.contain,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              "Bài giảng đang học",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subTitle
+                                  .copyWith(
+                                      color: ColorsStandards
+                                          .textColorInBackground2),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 10),
+                      const SizedBox(height: 10),
+                    ],
                     //Lectures is learning
 
                     Column(

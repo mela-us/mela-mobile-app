@@ -26,7 +26,6 @@ class QuestionListOverlay extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(20.0),
         ),
-
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -44,7 +43,7 @@ class QuestionListOverlay extends StatelessWidget {
 
   //Build items:----------------------------------------------------------------
 
-  Widget _buildFirstLine(BuildContext context){
+  Widget _buildFirstLine(BuildContext context) {
     return SizedBox(
       height: 50,
       child: Stack(
@@ -55,7 +54,9 @@ class QuestionListOverlay extends StatelessWidget {
               child: Text(
                 AppLocalizations.of(context)
                     .translate('question_title_question_list'),
-                style: Theme.of(context).textTheme.title
+                style: Theme.of(context)
+                    .textTheme
+                    .title
                     .copyWith(color: Theme.of(context).colorScheme.textInBg1),
               ),
             ),
@@ -65,10 +66,8 @@ class QuestionListOverlay extends StatelessWidget {
             top: 15,
             child: IconButton(
                 onPressed: () => isSubmitted(false),
-                icon: const Icon(Icons.close)
-            ),
+                icon: const Icon(Icons.close)),
           ),
-
         ],
       ),
     );
@@ -80,31 +79,31 @@ class QuestionListOverlay extends StatelessWidget {
         horizontal: Dimens.practiceHorizontalText,
       ),
       height: 130,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [SingleChildScrollView(
-          child: GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 7,
-                mainAxisSpacing: 6,
-                crossAxisSpacing: 6,
-              ),
-              itemCount: _questionStore.questionList!.questions!.length,
-              itemBuilder: (context, index) {
-                return _buildListItem(index);
-              }
-          ),
-        ),],
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            GridView.builder(
+                shrinkWrap: true,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 7,
+                  mainAxisSpacing: 6,
+                  crossAxisSpacing: 6,
+                ),
+                itemCount: _questionStore.questionList!.questions!.length,
+                itemBuilder: (context, index) {
+                  return _buildListItem(index);
+                }),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildListItem(int index){
-    return Observer(builder: (context){
+  Widget _buildListItem(int index) {
+    return Observer(builder: (context) {
       return GestureDetector(
-        onTap: (){
+        onTap: () {
           _singleQuestionStore.changeQuestion(index);
           isSubmitted(false);
         },
@@ -112,16 +111,17 @@ class QuestionListOverlay extends StatelessWidget {
           width: 46,
           height: 46,
           decoration: BoxDecoration(
-            color: _singleQuestionStore.userAnswers[index].isEmpty?
-            Theme.of(context).colorScheme.inputMutedText :
-            Theme.of(context).colorScheme.buttonList,
-
+            color: _singleQuestionStore.userAnswers[index].isEmpty
+                ? Theme.of(context).colorScheme.inputMutedText
+                : Theme.of(context).colorScheme.buttonList,
             shape: BoxShape.circle,
           ),
           child: Center(
             child: Text(
-              '${index+1}',
-              style: Theme.of(context).textTheme.normal
+              '${index + 1}',
+              style: Theme.of(context)
+                  .textTheme
+                  .normal
                   .copyWith(color: Theme.of(context).colorScheme.textInBg1),
             ),
           ),
@@ -130,29 +130,23 @@ class QuestionListOverlay extends StatelessWidget {
     });
   }
 
-  Widget _buildSubmitButton(BuildContext context){
+  Widget _buildSubmitButton(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.fromLTRB(
-            Dimens.practiceHorizontalText,
-            30,
-            Dimens.practiceHorizontalText,
-            0
-        ),
+        padding: const EdgeInsets.fromLTRB(Dimens.practiceHorizontalText, 30,
+            Dimens.practiceHorizontalText, 0),
         child: GestureDetector(
           onTap: () => isSubmitted(true),
           child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.buttonYesBgOrText,
-              borderRadius: BorderRadius.circular(Dimens.bigButtonRadius),
-            ),
-            child: _buildButtonContent(context)
-          ),
-        )
-    );
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.buttonYesBgOrText,
+                borderRadius: BorderRadius.circular(Dimens.bigButtonRadius),
+              ),
+              child: _buildButtonContent(context)),
+        ));
   }
 
-  Widget _buildButtonContent(BuildContext context){
+  Widget _buildButtonContent(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -161,7 +155,9 @@ class QuestionListOverlay extends StatelessWidget {
           child: Text(
             AppLocalizations.of(context)
                 .translate('question_btn_question_list_submit'),
-            style: Theme.of(context).textTheme.buttonStyle
+            style: Theme.of(context)
+                .textTheme
+                .buttonStyle
                 .copyWith(color: Colors.white),
           ),
         ),

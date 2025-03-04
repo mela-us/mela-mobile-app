@@ -18,15 +18,13 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          // Added Center widget here
-          child: SingleChildScrollView(
-            physics: MediaQuery.of(context).viewInsets.bottom > 0
-                ? const ClampingScrollPhysics()
-                : const NeverScrollableScrollPhysics(),
-            child: const _FormContent(),
-          ),
+      body: Center(
+        // Added Center widget here
+        child: SingleChildScrollView(
+          physics: MediaQuery.of(context).viewInsets.bottom > 0
+              ? const ClampingScrollPhysics()
+              : const NeverScrollableScrollPhysics(),
+          child: const _FormContent(),
         ),
       ),
     );
