@@ -12,6 +12,8 @@ import 'package:mela/presentation/home_screen/store/level_store/level_store.dart
 
 import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
 import 'package:mela/presentation/question/store/timer/timer_store.dart';
+import 'package:mela/presentation/thread_chat/store/chat_box_store/chat_box_store.dart';
+import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/topic_lecture_in_level_screen/store/topic_lecture_store.dart';
 
 import '../../../di/service_locator.dart';
@@ -123,7 +125,6 @@ class StoreModule {
     ));
     getIt.registerSingleton<FilterStore>(FilterStore());
 
-
     //QuestionStore
     getIt.registerSingleton<SingleQuestionStore>(SingleQuestionStore());
 
@@ -173,6 +174,14 @@ class StoreModule {
     //StatFilterStore
     getIt.registerSingleton<StatFilterStore>(
       StatFilterStore(),
+    );
+
+    //ChatBotStore
+    getIt.registerSingleton<ChatBoxStore>(
+      ChatBoxStore(),
+    );
+    getIt.registerSingleton<ThreadChatStore>(
+      ThreadChatStore(),
     );
   }
 }

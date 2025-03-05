@@ -1,5 +1,7 @@
 class Assets{
   Assets._();
+
+  static const String melaLogo = "assets/icons/clock.png";
   //Icons
   static String arrow_back_longer = 'assets/icons/arrow_back_longer.png';
   static String clock = 'assets/icons/clock.png';

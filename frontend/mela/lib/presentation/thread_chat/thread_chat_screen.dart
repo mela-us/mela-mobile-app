@@ -1,28 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/domain/entity/message_chat/message_chat.dart';
+import 'package:mela/presentation/thread_chat/widgets/chat_box.dart';
+import 'package:mela/presentation/thread_chat/widgets/message_chat_title.dart';
 
-class ThreadChatScreen extends StatefulWidget {
+class ThreadChatScreen extends StatelessWidget {
   const ThreadChatScreen({super.key});
 
   @override
-  State<ThreadChatScreen> createState() => _ThreadChatScreenState();
-}
-
-class _ThreadChatScreenState extends State<ThreadChatScreen> {
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: const Center(child: Text("Thread Chat Screen")),
-        appBar: //AppBar
-            AppBar(
-          scrolledUnderElevation: 0,
-          title: Text(
-            "Thread Chat",
-            style: Theme.of(context)
-                .textTheme
-                .heading
-                .copyWith(color: Theme.of(context).colorScheme.primary),
-          ),
-        ));
+      appBar: //AppBar
+          AppBar(
+        scrolledUnderElevation: 0,
+        title: Text(
+          "Thread Chat",
+          style: Theme.of(context)
+              .textTheme
+              .heading
+              .copyWith(color: Theme.of(context).colorScheme.primary),
+        ),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+              child: ListView(
+            children: [
+              //Chat Messages
+              ...List.generate(25, (index) {
+                return MessageChatTitle(
+                    currentMessage: MessageChat(
+                        message:
+                            "HelloHelloHelloHelloHello HelloHelloHelloHelloHelloHelloHelloHelloHe lloHelloHelloHelloHelloHelloHelloHelloHelloHello",
+                        isAI: index % 2 == 0));
+              }).toList(),
+            ],
+          )),
+          ChatBox(onSendMessage: () {})
+        ],
+      ),
+    );
   }
 }
