@@ -9,6 +9,7 @@ import 'package:mela/presentation/review/review.dart';
 
 import 'package:mela/presentation/divided_lectures_and_exercises_screen/divided_lectures_and_exercises_screen.dart';
 import 'package:mela/presentation/search_screen/search_screen.dart';
+import 'package:mela/presentation/thread_chat/thread_chat_screen.dart';
 import 'package:mela/presentation/topic_lecture_in_level_screen/topic_lecture_in_level_screen.dart';
 
 import '../../presentation/all_screens.dart';
@@ -53,6 +54,7 @@ class Routes {
   static const String filterStats = '/filter_stats';
   static const String homeScreen = "/home_screen";
   static const String allScreens = '/all_screens';
+  static const String threadChatScreen = '/thread_chat_screen';
 
   static final routes = <String, WidgetBuilder>{
     loginScreen: (BuildContext context) => const LoginScreen(),
@@ -80,6 +82,7 @@ class Routes {
     stats: (BuildContext context) => StatisticsScreen(),
     searchStats: (BuildContext context) => StatSearchScreen(),
     filterStats: (BuildContext context) => FilterStatScreen(),
+    threadChatScreen: (BuildContext context) => const ThreadChatScreen(),
     allScreens: (BuildContext context) => AllScreens(),
   };
 }
