@@ -9,10 +9,12 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/assets.dart';
 import 'package:mela/constants/dimens.dart';
 import 'package:mela/core/widgets/image_progress_indicator.dart';
+import 'package:mela/domain/entity/question/guide_controller.dart';
 import 'package:mela/domain/entity/question/question.dart';
 import 'package:mela/presentation/question/store/question_store.dart';
 import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
 import 'package:mela/presentation/question/store/timer/timer_store.dart';
+import 'package:mela/presentation/question/widgets/guide_bottom_sheet.dart';
 import 'package:mela/presentation/question/widgets/question_app_bar_widget.dart';
 import 'package:mela/presentation/question/widgets/question_list_overlay_widget.dart';
 import 'package:mela/utils/locale/app_localization.dart';
@@ -226,7 +228,15 @@ class _QuestionScreenState extends State<QuestionScreen> {
         height: 60,
         width: 60,
         child: FloatingActionButton(
-          onPressed: () => _listButtonPressedEvent(),
+          onPressed: () =>
+              showModalBottomSheet(
+                context: context,
+                backgroundColor: Colors.transparent,
+                isScrollControlled: true,
+                builder: (BuildContext context) {
+                  return GuideBottomSheet(screenHeight: screenHeight);
+                },
+              ),
           backgroundColor: Colors.white,
           hoverColor: Colors.white,
           splashColor: Colors.transparent,
@@ -587,6 +597,10 @@ class _QuestionScreenState extends State<QuestionScreen> {
       return border - 60;
     }
     return pos;
+  }
+
+  void showGuidance(String guide){
+
   }
 
   //Initialize overlay:---------------------------------------------------------
