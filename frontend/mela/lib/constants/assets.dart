@@ -4,6 +4,7 @@ class Assets{
   static String arrow_back_longer = 'assets/icons/arrow_back_longer.png';
   static String clock = 'assets/icons/clock.png';
   static String select_list = 'assets/icons/select_list.png';
+  static String ai_icon = 'assets/icons/ai_icon.png';
 
   //Image
   static String exit_image = 'assets/images/exit_image.png';
@@ -44,4 +45,6 @@ class Assets{
 
   //Loading
   static String loading_icon = "assets/icons/mela_load.png";
+
+
 }

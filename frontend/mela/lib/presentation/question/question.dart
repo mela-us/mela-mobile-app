@@ -1,9 +1,12 @@
+import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/constants/assets.dart';
 import 'package:mela/constants/dimens.dart';
 import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/domain/entity/question/question.dart';
@@ -34,6 +37,11 @@ class _QuestionScreenState extends State<QuestionScreen> {
   final SingleQuestionStore _singleQuestionStore = getIt<SingleQuestionStore>();
   late OverlayEntry questionListOverlay;
   final FocusNode _focusNode = FocusNode();
+  final double screenHeight = MediaQueryData.fromView(
+      WidgetsBinding.instance.platformDispatcher.views.first).size.height.toDouble();
+  final double screenWidth = MediaQueryData.fromView(
+      WidgetsBinding.instance.platformDispatcher.views.first).size.width.toDouble();
+  late Offset fabPos;
 
   //----------------------------------------------------------------------------
   final TextEditingController _controller = TextEditingController();
@@ -44,6 +52,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    fabPos = Offset(screenWidth - 60, screenHeight - 60);
 
     //Reaction to questions status.
     reaction((_) => _questionStore.loading, (loading){
@@ -131,6 +140,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Observer(
       builder: (context) {
         if (_questionStore.loading) {
@@ -149,7 +159,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
             body: SingleChildScrollView(
               child: _buildMainBody(),
             ),
-            // floatingActionButton: _buildFAB(context),
+            floatingActionButton: _buildDFAB(context),
           );
         }
       },
@@ -162,6 +172,29 @@ class _QuestionScreenState extends State<QuestionScreen> {
     return  _buildBodyContent(context);
   }
 
+  Widget _buildDFAB(BuildContext context) {
+    return Stack(
+      children: [
+        Positioned(
+            left: fabPos.dx,
+            top: fabPos.dy,
+            child: Draggable(
+                feedback: _buildFAB(context),
+                childWhenDragging: Container(),
+                onDragEnd: (details) {
+                  setState(() {
+                    fabPos = Offset(
+                        borderPositionHandler(details.offset.dx, screenWidth),
+                        borderPositionHandler(details.offset.dy, screenHeight));
+                  });
+                },
+                child: _buildFAB(context)
+          )
+        ),
+      ],
+    );
+  }
+
   //Build items:----------------------------------------------------------------
   BoxDecoration decorationWithShadow = BoxDecoration(
     color: Colors.white,
@@ -171,6 +204,43 @@ class _QuestionScreenState extends State<QuestionScreen> {
     ],
   );
 
+  Widget _buildFAB(BuildContext context) {
+    return Container(
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          border: GradientBoxBorder(
+            gradient: LinearGradient(
+                colors: [
+                  Color(0xFF31BCFF),
+                  Color(0xFF9676FF),
+                  Color(0xFFBE64FE),
+                  Color(0xFFE157CB),
+                  Color(0xFFEF5794),
+                  Color(0xFFFD683F),
+                  Color(0xFFFE7C2B),
+                  Color(0xFFFFA10B),
+                ]),
+            width: 2,
+          ),
+        ),
+        height: 60,
+        width: 60,
+        child: FloatingActionButton(
+          onPressed: () => _listButtonPressedEvent(),
+          backgroundColor: Colors.white,
+          hoverColor: Colors.white,
+          splashColor: Colors.transparent,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(90)),
+          ),
+          child: Image.asset(
+            Assets.ai_icon,
+            width: 38,
+            height: 38,
+          ),
+        )
+    );
+  }
 
   Widget _buildBodyContent(BuildContext context) {
     //TODO: Need check more for null value
@@ -507,6 +577,16 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
   String getAnswerFromIndex(int index){
     return String.fromCharCode(index + 65);
+  }
+
+  double borderPositionHandler(double pos, double border){
+    if (pos < 30){
+      return 30;
+    }
+    if (pos > border - 60){
+      return border - 60;
+    }
+    return pos;
   }
 
   //Initialize overlay:---------------------------------------------------------
