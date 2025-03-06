@@ -1,23 +1,29 @@
-import 'dart:async';
-
 import 'package:dio/dio.dart';
 import 'package:mela/core/domain/usecase/use_case.dart';
+import 'package:mela/domain/entity/exercise/exercise_list.dart';
+import 'package:mela/domain/entity/message_chat/conversation.dart';
+import 'package:mela/domain/entity/message_chat/message_chat.dart';
+import 'package:mela/domain/repository/chat/chat_repository.dart';
 import 'package:mela/domain/usecase/user/logout_usecase.dart';
 import 'package:mela/domain/usecase/user_login/refresh_access_token_usecase.dart';
 
-import '../../entity/exercise/exercise_list.dart';
-import '../../repository/exercise/exercise_repository.dart';
+class ChatRequestParams {
+  final String? conversationId;
+  final String message;
+  ChatRequestParams({required this.conversationId, required this.message});
+}
 
-class GetExercisesUseCase extends UseCase<ExerciseList, String> {
-  final ExerciseRepository _exerciseRepository;
+class SendMessageChatUsecase extends UseCase<MessageChat, ChatRequestParams> {
+  final ChatRepository _chatRepository;
   final RefreshAccessTokenUsecase _refreshAccessTokenUsecase;
-  final LogoutUseCase _logoutUseCase; 
-  GetExercisesUseCase(this._exerciseRepository, this._refreshAccessTokenUsecase, this._logoutUseCase);
+  final LogoutUseCase _logoutUseCase;
+  SendMessageChatUsecase(this._chatRepository, this._refreshAccessTokenUsecase,
+      this._logoutUseCase);
 
   @override
-  Future<ExerciseList> call({required String params}) async {
+  Future<MessageChat> call({required ChatRequestParams params}) async {
     try {
-      return await _exerciseRepository.getExercises(params);
+      return await _chatRepository.sendMessage(params);
     } catch (e) {
       if (e is DioException) {
         //eg accessToken is expired
@@ -25,8 +31,6 @@ class GetExercisesUseCase extends UseCase<ExerciseList, String> {
           bool isRefreshTokenSuccess =
               await _refreshAccessTokenUsecase.call(params: null);
           if (isRefreshTokenSuccess) {
-            //not use return _lectureRepository.getLectures(params); in here beacause if do it
-            //it have a DioException, so we should call recursive
             print("----------->E1: $e");
             return await call(params: params);
           }
@@ -41,6 +45,5 @@ class GetExercisesUseCase extends UseCase<ExerciseList, String> {
       print("----------->E3: $e");
       rethrow;
     }
-
   }
 }

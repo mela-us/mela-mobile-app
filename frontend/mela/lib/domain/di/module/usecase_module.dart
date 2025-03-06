@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'package:mela/domain/repository/chat/chat_repository.dart';
 import 'package:mela/domain/repository/lecture/lecture_repository.dart';
 import 'package:mela/domain/repository/level/level_repository.dart';
 import 'package:mela/domain/repository/topic_lecture/topic_lecture_repository.dart';
 import 'package:mela/domain/repository/user/user_repository.dart';
 import 'package:mela/domain/repository/user_register/user_signup_repostiory.dart';
+import 'package:mela/domain/usecase/chat/get_conversation_usecase.dart';
+import 'package:mela/domain/usecase/chat/send_message_chat_usecase.dart';
 
 import 'package:mela/domain/usecase/exercise/get_exercises_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
@@ -56,7 +59,6 @@ import 'package:mela/domain/usecase/stat/get_detailed_progress_usecase.dart';
 
 class UseCaseModule {
   static Future<void> configureUseCaseModuleInjection() async {
-
     // user login:--------------------------------------------------------------
     getIt.registerSingleton<IsLoggedInUseCase>(
       IsLoggedInUseCase(getIt<UserLoginRepository>()),
@@ -173,23 +175,19 @@ class UseCaseModule {
     getIt.registerSingleton<GetUploadPresignUseCase>(GetUploadPresignUseCase(
         getIt<UserRepository>(),
         getIt<RefreshAccessTokenUsecase>(),
-        getIt<LogoutUseCase>())
-    );
+        getIt<LogoutUseCase>()));
 
     getIt.registerSingleton<UpdateUserUsecase>(UpdateUserUsecase(
         getIt<UserRepository>(),
         getIt<RefreshAccessTokenUsecase>(),
         getIt<LogoutUseCase>(),
-        getIt<GetUploadPresignUseCase>())
-    );
+        getIt<GetUploadPresignUseCase>()));
 
-    getIt.registerSingleton<DeleteAccountUseCase>(
-        DeleteAccountUseCase(
-          getIt<UserRepository>(),
-          getIt<LogoutUseCase>(),
-          getIt<RefreshAccessTokenUsecase>(),
-        )
-    );
+    getIt.registerSingleton<DeleteAccountUseCase>(DeleteAccountUseCase(
+      getIt<UserRepository>(),
+      getIt<LogoutUseCase>(),
+      getIt<RefreshAccessTokenUsecase>(),
+    ));
     //forgot password:----------------------------------------------------------
     getIt.registerSingleton<VerifyExistEmailUseCase>(
         VerifyExistEmailUseCase(getIt<ForgotPasswordRepository>()));
@@ -197,6 +195,13 @@ class UseCaseModule {
         VerifyOTPUseCase(getIt<ForgotPasswordRepository>()));
     getIt.registerSingleton<CreateNewPasswordUsecase>(
         CreateNewPasswordUsecase(getIt<ForgotPasswordRepository>()));
+
+    //Chat AI
+    getIt.registerSingleton<GetConversationUsecase>(GetConversationUsecase(
+        getIt<ChatRepository>(),
+        getIt<RefreshAccessTokenUsecase>(),
+        getIt<LogoutUseCase>()));
+    getIt.registerSingleton(SendMessageChatUsecase(getIt<ChatRepository>(),
+        getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()));
   }
-  
 }

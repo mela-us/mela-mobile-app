@@ -1,4 +1,3 @@
-import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mobx/mobx.dart';
 
 part 'chat_box_store.g.dart';
@@ -11,17 +10,9 @@ abstract class _ChatBoxStore with Store {
   @observable
   bool showSendIcon = false;
 
-  @observable
-  bool isLoading = false;
-
   @action
   void setShowSendIcon(bool value) {
     showSendIcon = value;
-  }
-
-  @action
-  void setIsLoading(bool value) {
-    isLoading = value;
   }
 }
   // constructor:--------------------------------

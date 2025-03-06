@@ -25,8 +25,44 @@ mixin _$ThreadChatStore on _ThreadChatStore, Store {
     });
   }
 
+  late final _$isLoadingAtom =
+      Atom(name: '_ThreadChatStore.isLoading', context: context);
+
+  @override
+  bool get isLoading {
+    _$isLoadingAtom.reportRead();
+    return super.isLoading;
+  }
+
+  @override
+  set isLoading(bool value) {
+    _$isLoadingAtom.reportWrite(value, super.isLoading, () {
+      super.isLoading = value;
+    });
+  }
+
+  late final _$sendChatMessageAsyncAction =
+      AsyncAction('_ThreadChatStore.sendChatMessage', context: context);
+
+  @override
+  Future<void> sendChatMessage(String message) {
+    return _$sendChatMessageAsyncAction
+        .run(() => super.sendChatMessage(message));
+  }
+
   late final _$_ThreadChatStoreActionController =
       ActionController(name: '_ThreadChatStore', context: context);
+
+  @override
+  void setIsLoading(bool value) {
+    final _$actionInfo = _$_ThreadChatStoreActionController.startAction(
+        name: '_ThreadChatStore.setIsLoading');
+    try {
+      return super.setIsLoading(value);
+    } finally {
+      _$_ThreadChatStoreActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void setConversation(Conversation conversation) {
@@ -51,11 +87,11 @@ mixin _$ThreadChatStore on _ThreadChatStore, Store {
   }
 
   @override
-  void sendChatMessage(String message) {
+  void clearConversation() {
     final _$actionInfo = _$_ThreadChatStoreActionController.startAction(
-        name: '_ThreadChatStore.sendChatMessage');
+        name: '_ThreadChatStore.clearConversation');
     try {
-      return super.sendChatMessage(message);
+      return super.clearConversation();
     } finally {
       _$_ThreadChatStoreActionController.endAction(_$actionInfo);
     }
@@ -64,7 +100,8 @@ mixin _$ThreadChatStore on _ThreadChatStore, Store {
   @override
   String toString() {
     return '''
-currentConversation: ${currentConversation}
+currentConversation: ${currentConversation},
+isLoading: ${isLoading}
     ''';
   }
 }

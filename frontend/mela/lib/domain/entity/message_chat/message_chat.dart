@@ -1,5 +1,5 @@
 class MessageChat {
-  final String message;
+  final String? message;
   bool isAI;
-  MessageChat({required this.message, required this.isAI});
+  MessageChat({this.message, required this.isAI});
 }

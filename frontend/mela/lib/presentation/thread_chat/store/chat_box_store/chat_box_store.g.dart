@@ -25,22 +25,6 @@ mixin _$ChatBoxStore on _ChatBoxStore, Store {
     });
   }
 
-  late final _$isLoadingAtom =
-      Atom(name: '_ChatBoxStore.isLoading', context: context);
-
-  @override
-  bool get isLoading {
-    _$isLoadingAtom.reportRead();
-    return super.isLoading;
-  }
-
-  @override
-  set isLoading(bool value) {
-    _$isLoadingAtom.reportWrite(value, super.isLoading, () {
-      super.isLoading = value;
-    });
-  }
-
   late final _$_ChatBoxStoreActionController =
       ActionController(name: '_ChatBoxStore', context: context);
 
@@ -56,21 +40,9 @@ mixin _$ChatBoxStore on _ChatBoxStore, Store {
   }
 
   @override
-  void setIsLoading(bool value) {
-    final _$actionInfo = _$_ChatBoxStoreActionController.startAction(
-        name: '_ChatBoxStore.setIsLoading');
-    try {
-      return super.setIsLoading(value);
-    } finally {
-      _$_ChatBoxStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
-showSendIcon: ${showSendIcon},
-isLoading: ${isLoading}
+showSendIcon: ${showSendIcon}
     ''';
   }
 }

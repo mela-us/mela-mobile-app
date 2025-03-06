@@ -1,4 +1,5 @@
 import 'package:event_bus/event_bus.dart';
+import 'package:mela/data/network/apis/chat/chat_api.dart';
 import 'package:mela/data/network/apis/exercises/exercise_api.dart';
 import 'package:mela/data/network/apis/level/level_api.dart';
 import 'package:mela/data/network/apis/login_signup/login_api.dart';
@@ -81,6 +82,8 @@ class NetworkModule {
     getIt.registerSingleton<StatsApi>(StatsApi(getIt<DioClient>()));
     getIt.registerSingleton<UserInfoApi>(UserInfoApi(getIt<DioClient>()));
     getIt.registerSingleton<LogoutApi>(LogoutApi(getIt<DioClient>()));
-    getIt.registerSingleton<DeleteAccountApi>(DeleteAccountApi(getIt<DioClient>()));
+    getIt.registerSingleton<DeleteAccountApi>(
+        DeleteAccountApi(getIt<DioClient>()));
+    getIt.registerSingleton<ChatApi>(ChatApi(getIt<DioClient>()));
   }
 }

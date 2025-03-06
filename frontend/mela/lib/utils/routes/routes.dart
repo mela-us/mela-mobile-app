@@ -82,7 +82,7 @@ class Routes {
     stats: (BuildContext context) => StatisticsScreen(),
     searchStats: (BuildContext context) => StatSearchScreen(),
     filterStats: (BuildContext context) => FilterStatScreen(),
-    threadChatScreen: (BuildContext context) => const ThreadChatScreen(),
+    threadChatScreen: (BuildContext context) => ThreadChatScreen(),
     allScreens: (BuildContext context) => AllScreens(),
   };
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
-import 'package:mela/constants/assets.dart';
+import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/message_chat/message_chat.dart';
+import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 
 class MessageChatTitle extends StatelessWidget {
   final MessageChat currentMessage;
@@ -14,6 +16,7 @@ class MessageChatTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isAI = currentMessage.isAI;
+    final _threadChatStore = getIt.get<ThreadChatStore>();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Row(
@@ -41,23 +44,28 @@ class MessageChatTitle extends StatelessWidget {
                     width: 1,
                   ),
                 ),
-                child: Text(
-                  currentMessage.message,
-                  style: Theme.of(context).textTheme.normal.copyWith(
-                        color: isAI ? Colors.white : Colors.black,
+                child: currentMessage.message == null
+                    ?  Text("Loading",
+                        style: Theme.of(context).textTheme.normal.copyWith(
+                              color: Colors.white,
+                            ))
+                    : Text(
+                        currentMessage.message!,
+                        style: Theme.of(context).textTheme.normal.copyWith(
+                              color: isAI ? Colors.white : Colors.black,
+                            ),
                       ),
-                ),
               ),
 
-              //Support Icons
+              //Support Icons: Like, not like, copy
               if (isAI)
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     ...[
-                      Icon(Icons.thumb_down),
-                      Icon(Icons.thumb_up),
+                      Icon(Icons.thumb_down_alt_outlined),
+                      Icon(Icons.thumb_up_alt_outlined),
                       Icon(Icons.copy)
                     ]
                         .expand((item) => [item, const SizedBox(width: 5)])
