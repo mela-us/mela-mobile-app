@@ -64,7 +64,13 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
           children: [
             Expanded(
               child: _threadChatStore.currentConversation?.messages == null
-                  ? const Text("Start your first question")
+                  ? Center(
+                      child: const TextField(
+                        decoration: InputDecoration(
+                          hintText: "Type a message",
+                        ),
+                      ),
+                    )
                   : SingleChildScrollView(
                       controller: _scrollController,
                       child: Column(
