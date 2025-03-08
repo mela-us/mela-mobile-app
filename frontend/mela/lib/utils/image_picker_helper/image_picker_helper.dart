@@ -49,19 +49,19 @@ class ImagePickerHelper {
             toolbarTitle: 'Cropper',
             toolbarColor: Colors.deepOrange,
             toolbarWidgetColor: Colors.white,
-            aspectRatioPresets: [
-              CropAspectRatioPreset.original,
-              CropAspectRatioPreset.square,
-              // CropAspectRatioPresetCustom(),
-            ],
+            // aspectRatioPresets: [
+            //   CropAspectRatioPreset.original,
+            //   CropAspectRatioPreset.square,
+            //   // CropAspectRatioPresetCustom(),
+            // ],
           ),
           IOSUiSettings(
             title: 'Cropper',
-            aspectRatioPresets: [
-              CropAspectRatioPreset.original,
-              CropAspectRatioPreset.square,
-              // CropAspectRatioPresetCustom(), // IMPORTANT: iOS supports only one custom aspect ratio in preset list
-            ],
+            // aspectRatioPresets: [
+            //   CropAspectRatioPreset.original,
+            //   CropAspectRatioPreset.square,
+            //   // CropAspectRatioPresetCustom(), // IMPORTANT: iOS supports only one custom aspect ratio in preset list
+            // ],
           ),
         ],
       );

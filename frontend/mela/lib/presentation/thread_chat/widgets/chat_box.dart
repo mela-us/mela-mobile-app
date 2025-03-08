@@ -81,6 +81,43 @@ class _ChatBoxState extends State<ChatBox> {
     }
   }
 
+  void _showImagePickerOptions() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text("Chụp ảnh mới"),
+              onTap: () {
+                Navigator.pop(context);
+                pickImage(ImageSource.camera);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text("Chọn ảnh từ thư viện"),
+              onTap: () {
+                Navigator.pop(context);
+                pickMultiImage();
+              },
+            ),
+            // if (_image != null || !defaultImage)
+            //   ListTile(
+            //     leading: const Icon(Icons.delete, color: Colors.red),
+            //     title: const Text("Xóa ảnh đại diện", style: TextStyle(color: Colors.red)),
+            //     onTap: () {
+            //       Navigator.pop(context);
+            //       _removeImage();
+            //     },
+            //   ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Focus(
@@ -250,17 +287,17 @@ class _ChatBoxState extends State<ChatBox> {
               child: SupportItem(
                   icon: Icons.functions,
                   textSupport: "Công thức",
-                  onTap: () => pickMultiImage())),
-          Expanded(
-              child: SupportItem(
-                  icon: Icons.image,
-                  textSupport: "Hình ảnh",
                   onTap: () => pickImage(ImageSource.gallery))),
+          // Expanded(
+          //     child: SupportItem(
+          //         icon: Icons.image,
+          //         textSupport: "Hình ảnh",
+          //         onTap: () => pickImage(ImageSource.gallery))),
           Expanded(
               child: SupportItem(
                   icon: Icons.camera_alt,
                   textSupport: "Camera",
-                  onTap: () => pickImage(ImageSource.camera))),
+                  onTap: _showImagePickerOptions)),
         ],
       ),
     );
@@ -347,6 +384,4 @@ class _ChatBoxState extends State<ChatBox> {
   //     _chatBoxStore.setShowSendIcon(true);
   //   }
   // }
-
-
 }
