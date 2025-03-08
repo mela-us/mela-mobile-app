@@ -15,7 +15,18 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  List<Map<String, dynamic>> messages = [
+    {"text": "Dãy số sau tuân theo một quy luật, hãy điền các số còn thiếu: 5,10,15,...25,...,35,...,45,505, 10, 15", "isUser": true},
+    {"text": "Phân tích đề bài:\nĐề bài yêu cầu điền các số còn thiếu vào dãy số:\n5, 10, 15, ..., 25, ..., 35, ..., 45, 505, 10, 15", "isUser": false},
+    {"text": "Hướng làm:\n• Xác định công sai hoặc quy luật giữa các số.\n• Tìm công thức tổng quát nếu có.\n• Điền các số còn thiếu dựa trên quy luật.\n• Kiểm tra lại xem dãy số có lặp lại hoặc có phần riêng biệt không.\n• Xác định ý nghĩa của số 505 và số lặp lại ở cuối dãy.", "isUser": false},
+  ];
 
+  List<String> suggestions = [
+    "Chụp bài giải", "Gợi ý làm bài", "Quy luật của dãy số là gì?",
+    "Cách tìm số còn thiếu trong dãy số?", "Cách tìm công thức tổng quát?", "Kết thúc"
+  ];
+
+  bool isSelected = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -25,16 +36,24 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Theme.of(context).colorScheme.appBackground,
-        elevation: 0,
-        title: _buildTitle(context),
-      ),
-      backgroundColor: Theme.of(context).colorScheme.appBackground,
-      body: SingleChildScrollView(
-        child: _buildBody(context),
-      )
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Theme
+              .of(context)
+              .colorScheme
+              .appBackground,
+          elevation: 0,
+          title: _buildTitle(context),
+        ),
+        backgroundColor: Theme
+            .of(context)
+            .colorScheme
+            .appBackground,
+        body: isSelected ?
+        _buildBodyWithContent("Mela AI") :
+        SingleChildScrollView(
+          child: _buildDefaultBody(context),
+        )
     );
   }
 
@@ -58,7 +77,7 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
-  Widget _buildBody(BuildContext context) {
+  Widget _buildDefaultBody(BuildContext context) {
     final double screenHeight = MediaQuery
         .of(context)
         .size
@@ -170,15 +189,16 @@ class _ChatScreenState extends State<ChatScreen> {
               );
             },
             pageBuilder: (context, anim1, anim2) {
-              return const Align(
+              return Align(
                   alignment: Alignment.centerLeft,
                   // Sidebar xuất hiện từ bên phải
                   child: Material(
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(20),
                       bottomLeft: Radius.circular(20),
                     ),
-                    child: SidebarWidget(),
+                    child: SidebarWidget(
+                      onOpeningConversation: onOpenConversation),
                   )
               ); // Sidebar
             }),
@@ -342,6 +362,95 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       ),
     );
+  }
+
+  Widget _buildBodyWithContent(String title) {
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            itemCount: messages.length,
+            itemBuilder: (context, index) {
+              final msg = messages[index];
+              return Align(
+                alignment: msg['isUser'] ? Alignment.centerRight : Alignment
+                    .centerLeft,
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 4),
+                  padding: EdgeInsets.all(12),
+                  constraints: BoxConstraints(maxWidth: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.8),
+                  decoration: BoxDecoration(
+                    color: msg['isUser'] ? Colors.white : Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(color: Colors.black12,
+                          blurRadius: 3,
+                          offset: Offset(0, 2))
+                    ],
+                  ),
+                  child: Text(
+                    msg['text'],
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+
+        // Chip button
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          color: Colors.white,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: suggestions.map((text) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 4),
+                  child: ActionChip(
+                    label: Text(text),
+                    onPressed: () {},
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      side: BorderSide(color: Colors.black12),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ),
+
+        Container(
+          constraints: const BoxConstraints(
+            maxHeight: 150,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+                color: Theme
+                    .of(context)
+                    .colorScheme
+                    .secondary, width: 1), // Viền
+          ),
+          child: _buildTextField(context),
+        ),
+
+      ],
+    );
+  }
+
+  void onOpenConversation(){
+    setState(() {
+      isSelected = true;
+    });
+    print("Reached");
   }
 }
 

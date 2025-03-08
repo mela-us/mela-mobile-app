@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 
 class SidebarWidget extends StatefulWidget {
-  const SidebarWidget({super.key});
-
+  const SidebarWidget({super.key, required this.onOpeningConversation});
+  final VoidCallback onOpeningConversation;
   @override
   State<SidebarWidget> createState() => _SidebarWidgetState();
 }
@@ -18,7 +18,7 @@ class _SidebarWidgetState extends State<SidebarWidget> {
   final List<String> historyItems = [
     "Chu vi hình tròn",
     "Tìm quy luật dãy số",
-    "Phép cộng số có hai chữ số có nhớ",
+    "Phép cộng số có hai chữ số có nhớ trying to make this line overflow",
     "Quy luật hình học",
     "Tính chất chia hết cho 7"
   ];
@@ -159,7 +159,8 @@ class _SidebarWidgetState extends State<SidebarWidget> {
         padding: const EdgeInsets.only(bottom: 25),
         child: GestureDetector(
           onTap: () {
-
+            widget.onOpeningConversation();
+            Navigator.of(context).pop();
           },
           child: Text(
             item,
