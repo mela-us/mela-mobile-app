@@ -2,12 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/thread_chat/store/chat_box_store/chat_box_store.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/thread_chat/widgets/support_item.dart';
+import 'package:mela/utils/image_picker_helper/image_picker_helper.dart';
 
 class ChatBox extends StatefulWidget {
   ChatBox({super.key});
@@ -22,7 +23,7 @@ class _ChatBoxState extends State<ChatBox> {
   final _threadChatStore = getIt.get<ThreadChatStore>();
   final FocusNode _focusNode = FocusNode();
   ValueNotifier<List<File>> _imagesNotifier = ValueNotifier<List<File>>([]);
-  final ImagePicker _picker = ImagePicker();
+  final ImagePickerHelper _imagePickerHelper = ImagePickerHelper();
 
   @override
   void initState() {
@@ -50,24 +51,30 @@ class _ChatBoxState extends State<ChatBox> {
     }
   }
 
-  Future<void> _pickMultipleImages() async {
-    try {
-      final List<XFile> pickedFiles = await _picker.pickMultiImage();
-      if (pickedFiles.isNotEmpty) {
-        _imagesNotifier.value =
-            pickedFiles.map((file) => File(file.path)).toList();
-      }
-    } catch (e) {
-      print("Error picking images: $e");
-      // Optionally show a user-friendly message
-    }
-  }
-
   void _removeImage(File image) {
     _imagesNotifier.value.remove(image);
 
     //Must update the value to notify the listeners
     _imagesNotifier.value = _imagesNotifier.value.toList();
+  }
+
+  Future<void> pickImage(ImageSource imageSource) async {
+    XFile? image = await _imagePickerHelper.pickImageFromGalleryOrCamera(
+        source: imageSource);
+    if (image != null) {
+      CroppedFile? croppedFile = await _imagePickerHelper.cropImage(image);
+      if (croppedFile == null) return;
+      File imageFile = File(croppedFile.path);
+      _imagesNotifier.value = [imageFile];
+    }
+  }
+
+  Future<void> pickMultiImage() async {
+    List<XFile> images = await _imagePickerHelper.pickMultipleImages();
+    if (images.isNotEmpty) {
+      List<File> imageFiles = images.map((image) => File(image.path)).toList();
+      _imagesNotifier.value = imageFiles;
+    }
   }
 
   @override
@@ -165,7 +172,7 @@ class _ChatBoxState extends State<ChatBox> {
                             );
                     }),
               ),
-        
+
               //TextField
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -193,14 +200,14 @@ class _ChatBoxState extends State<ChatBox> {
                                 String message = _controller.text.trim();
                                 _controller.clear();
                                 _chatBoxStore.setShowSendIcon(false);
-        
+
                                 // Hide keyboard
                                 if (_focusNode.hasFocus) {
                                   _focusNode.unfocus();
                                 }
-        
+
                                 await _threadChatStore.sendChatMessage(message);
-        
+
                                 //Using for while loading response user enter new message availale
                                 if (_controller.text.isNotEmpty)
                                   _chatBoxStore.setShowSendIcon(true);
@@ -212,7 +219,7 @@ class _ChatBoxState extends State<ChatBox> {
                 ],
               ),
               const SizedBox(height: 5),
-        
+
               //Support Icons
               Padding(
                 padding: const EdgeInsets.only(bottom: 12),
@@ -223,17 +230,17 @@ class _ChatBoxState extends State<ChatBox> {
                         child: SupportItem(
                             icon: Icons.functions,
                             textSupport: "Công thức",
-                            onTap: () {})),
+                            onTap: () => pickMultiImage())),
                     Expanded(
                         child: SupportItem(
                             icon: Icons.image,
                             textSupport: "Hình ảnh",
-                            onTap: _pickMultipleImages)),
+                            onTap: () => pickImage(ImageSource.gallery))),
                     Expanded(
                         child: SupportItem(
                             icon: Icons.camera_alt,
                             textSupport: "Camera",
-                            onTap: () {})),
+                            onTap: () => pickImage(ImageSource.camera))),
                   ],
                 ),
               ),
@@ -244,4 +251,3 @@ class _ChatBoxState extends State<ChatBox> {
     );
   }
 }
-
