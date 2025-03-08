@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mela/presentation/chat/chat_screen.dart';
 import 'package:mela/presentation/forgot_password_screen/create_new_password_in_forgot_password_screen.dart';
 import 'package:mela/presentation/forgot_password_screen/enter_email_in_forgot_password_screen.dart';
 import 'package:mela/presentation/forgot_password_screen/enter_otp_in_forgot_password_screen.dart';
@@ -52,7 +53,9 @@ class Routes {
   static const String searchStats = '/search_stats';
   static const String filterStats = '/filter_stats';
   static const String homeScreen = "/home_screen";
+  static const String chat = "/chat";
   static const String allScreens = '/all_screens';
+
 
   static final routes = <String, WidgetBuilder>{
     loginScreen: (BuildContext context) => const LoginScreen(),
@@ -80,6 +83,7 @@ class Routes {
     stats: (BuildContext context) => StatisticsScreen(),
     searchStats: (BuildContext context) => StatSearchScreen(),
     filterStats: (BuildContext context) => FilterStatScreen(),
+    chat: (BuildContext context) => ChatScreen(),
     allScreens: (BuildContext context) => AllScreens(),
   };
 }

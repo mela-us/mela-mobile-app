@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/dimens.dart';
+import 'package:mela/presentation/chat/widgets/sidebar_widget.dart';
 
 import '../../constants/assets.dart';
 import '../../utils/locale/app_localization.dart';
@@ -58,13 +59,16 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
   Widget _buildBody(BuildContext context) {
-    final double screenHeight = MediaQuery.of(context).size.height;
+    final double screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
     return Padding(
       padding: EdgeInsets.fromLTRB(
           16.0,
-          (screenHeight - 610)*0.5,
+          (screenHeight - 610) * 0.5,
           16.0,
-          0
+          10
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,57 +80,53 @@ class _ChatScreenState extends State<ChatScreen> {
             children: [
               Text(
                 "Xin chào!",
-                style: Theme.of(context).textTheme.bigTitle.copyWith(
-                  color: Theme.of(context).colorScheme.headTitle
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .bigTitle
+                    .copyWith(
+                    color: Theme
+                        .of(context)
+                        .colorScheme
+                        .headTitle
                 ),
               ),
             ],
           ),
           const SizedBox(height: 15),
           Text(
-            "Mình là Mela AI, trợ giảng toán của bạn.\nBạn cần mình giúp giải quyết vấn đề gì nào?",
-            style: Theme.of(context).textTheme.aiExplainStyle.copyWith(
-              color: Theme.of(context).colorScheme.secondary
-            )
+              "Mình là Mela AI, trợ giảng toán của bạn.\nBạn cần mình giúp giải quyết vấn đề gì nào?",
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .aiExplainStyle
+                  .copyWith(
+                  color: Theme
+                      .of(context)
+                      .colorScheme
+                      .secondary
+              )
           ),
-          const SizedBox(height: 12),
-          TextField(
-            style: Theme.of(context).textTheme.questionStyle.copyWith(
-              color: Theme.of(context).colorScheme.textInBg1
-            ),
-            decoration: InputDecoration(
-              hintText: "Đặt câu hỏi toán học tại đây...",
-              alignLabelWithHint: true,
-              hintStyle: Theme.of(context).textTheme.questionStyle.copyWith(
-                color: Theme.of(context).colorScheme.secondary
+          const SizedBox(height: 15),
+          Container(
+              constraints: const BoxConstraints(
+                maxHeight: 150,
               ),
-              suffixIcon: Icon(
-                Icons.send,
-                size: 14,
-                color: Theme
-                    .of(context)
-                    .colorScheme
-                    .sendButton,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                    color: Theme
+                        .of(context)
+                        .colorScheme
+                        .secondary, width: 1), // Viền
               ),
-              filled: true,
-              fillColor: Colors.white,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(100),
-                borderSide: BorderSide(
-                  color: Theme.of(context).colorScheme.secondary,
-                  width: 0.1,
-                )
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(100),
-                borderSide: BorderSide(
-                  color: Theme.of(context).colorScheme.secondary,
-                  width: 1,
-                ),
-              ),
-            ),
+              child: _buildTextField(context),
+              // child: SingleChildScrollView(
+              //
+              // )
           ),
-          const SizedBox(height: 12),
+
+          const SizedBox(height: 15),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -135,7 +135,7 @@ class _ChatScreenState extends State<ChatScreen> {
               _buildFeatureButton(Icons.camera_alt_outlined, "Máy ảnh"),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 15),
           ListView(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -150,18 +150,39 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
-
   //Build items:----------------------------------------------------------------
   Widget _buildHistoryButton(BuildContext context){
     return GestureDetector(
-      onTap: () => {
-
+      onTap: () =>
+      { // Show sidebar
+        showGeneralDialog(
+            context: context,
+            barrierDismissible: true,
+            barrierLabel: "Sidebar",
+            transitionDuration: const Duration(milliseconds: 300),
+            transitionBuilder: (context, anim1, anim2, child) {
+              return SlideTransition(
+                position: Tween(
+                    begin: const Offset(-1, 0),
+                    end: const Offset(0, 0)
+                ).animate(anim1),
+                child: child,
+              );
+            },
+            pageBuilder: (context, anim1, anim2) {
+              return const Align(
+                  alignment: Alignment.centerLeft,
+                  // Sidebar xuất hiện từ bên phải
+                  child: Material(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      bottomLeft: Radius.circular(20),
+                    ),
+                    child: SidebarWidget(),
+                  )
+              ); // Sidebar
+            }),
       },
-      // child: Image.asset(
-      //   Assets.arrow_back_longer,
-      //   width: 26,
-      //   height: 20,
-      // ),
       child: SizedBox(
         width: 30,
         height: 30,
@@ -171,6 +192,57 @@ class _ChatScreenState extends State<ChatScreen> {
           color: Theme.of(context).colorScheme.textInBg1,
         ),
       )
+    );
+  }
+
+  Widget _buildTextField(BuildContext context) {
+    return TextField(
+      style: Theme
+          .of(context)
+          .textTheme
+          .promptTitleStyle
+          .copyWith(
+          color: Colors.black
+      ),
+      maxLines: null,
+      keyboardType: TextInputType.multiline,
+      decoration: InputDecoration(
+        hintText: "Đặt câu hỏi toán học tại đây...",
+        alignLabelWithHint: true,
+        hintStyle: Theme
+            .of(context)
+            .textTheme
+            .questionStyle
+            .copyWith(
+            color: Theme
+                .of(context)
+                .colorScheme
+                .secondary
+        ),
+        suffixIcon: IconButton(
+          onPressed: () {
+
+          },
+          icon: Icon(
+            Icons.send,
+            size: 14,
+            color: Theme
+                .of(context)
+                .colorScheme
+                .sendButton,
+          ),
+        ),
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide.none
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide.none,
+        ),
+      ),
     );
   }
 
