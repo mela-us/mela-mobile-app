@@ -1,5 +1,8 @@
+import 'dart:io';
+
 class MessageChat {
   final String? message;
   bool isAI;
-  MessageChat({this.message, required this.isAI});
+  List<File>? images;
+  MessageChat({this.message, required this.isAI, this.images});
 }

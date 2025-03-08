@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/domain/entity/message_chat/message_chat.dart';
 import 'package:mela/domain/usecase/chat/send_message_chat_usecase.dart';
@@ -33,13 +35,12 @@ abstract class _ThreadChatStore with Store {
   }
 
   @action
-  Future<void> sendChatMessage(String message) async {
+  Future<void> sendChatMessage(String message, List<File> images) async {
     currentConversation ??= Conversation(
         conversationId: "", messages: [], nameConversation: "Mela");
     currentConversation!.messages
-        .add(MessageChat(message: message, isAI: false));
-    currentConversation!.messages
-        .add(MessageChat(message: null, isAI: true));
+        .add(MessageChat(message: message, isAI: false, images: images));
+    currentConversation!.messages.add(MessageChat(message: null, isAI: true));
     //Copy with to trigger thread chat screen to update
     currentConversation = currentConversation!.copyWith();
 

@@ -206,7 +206,11 @@ class _ChatBoxState extends State<ChatBox> {
                                   _focusNode.unfocus();
                                 }
 
-                                await _threadChatStore.sendChatMessage(message);
+                                List<File> images =
+                                    _imagesNotifier.value.toList();
+                                _imagesNotifier.value = [];
+                                await _threadChatStore.sendChatMessage(
+                                    message, images);
 
                                 //Using for while loading response user enter new message availale
                                 if (_controller.text.isNotEmpty)

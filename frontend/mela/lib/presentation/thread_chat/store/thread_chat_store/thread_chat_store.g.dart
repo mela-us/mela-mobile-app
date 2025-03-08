@@ -45,9 +45,9 @@ mixin _$ThreadChatStore on _ThreadChatStore, Store {
       AsyncAction('_ThreadChatStore.sendChatMessage', context: context);
 
   @override
-  Future<void> sendChatMessage(String message) {
+  Future<void> sendChatMessage(String message, List<File> images) {
     return _$sendChatMessageAsyncAction
-        .run(() => super.sendChatMessage(message));
+        .run(() => super.sendChatMessage(message, images));
   }
 
   late final _$_ThreadChatStoreActionController =
