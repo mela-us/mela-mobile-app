@@ -16,7 +16,6 @@ class MessageChatTitle extends StatelessWidget {
     required this.currentMessage,
   });
 
-
   ///-----Images
   Widget _buildImage(BuildContext context, File image) {
     return GestureDetector(
@@ -112,9 +111,6 @@ class MessageChatTitle extends StatelessWidget {
     );
   }
 
-
-
-
   //---Message
   Widget _buildMessage(BuildContext context) {
     bool isAI = currentMessage.isAI;
@@ -162,13 +158,18 @@ class MessageChatTitle extends StatelessWidget {
             children: [
               //Grid Images
               if (currentMessage.images != null &&
-                  currentMessage.images!.isNotEmpty)
+                  currentMessage.images!.isNotEmpty) ...[
                 _buildGridImages(context),
+                const SizedBox(height: 5)
+              ],
               //Message
               _buildMessage(context),
 
               //Support Icons: Like, not like, copy
-              if (isAI)
+              if (isAI) ...[
+                const SizedBox(
+                  height: 5,
+                ),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -181,7 +182,8 @@ class MessageChatTitle extends StatelessWidget {
                         .expand((item) => [item, const SizedBox(width: 5)])
                         .toList(),
                   ],
-                )
+                ),
+              ]
             ],
           ),
         ],
