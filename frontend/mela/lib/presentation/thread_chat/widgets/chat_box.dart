@@ -4,15 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:math_keyboard/math_keyboard.dart';
+import 'package:mela/constants/app_theme.dart';
+// import 'package:math_keyboard/math_keyboard.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/thread_chat/store/chat_box_store/chat_box_store.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
+import 'package:mela/presentation/thread_chat/thread_chat_screen.dart';
 import 'package:mela/presentation/thread_chat/widgets/support_item.dart';
 import 'package:mela/utils/image_picker_helper/image_picker_helper.dart';
 
 class ChatBox extends StatefulWidget {
-  ChatBox({super.key});
+  bool isFirstChatScreen;
+  ChatBox({super.key, this.isFirstChatScreen = false});
 
   @override
   _ChatBoxState createState() => _ChatBoxState();
@@ -20,8 +23,8 @@ class ChatBox extends StatefulWidget {
 
 class _ChatBoxState extends State<ChatBox> {
   final TextEditingController _controller = TextEditingController();
-  late final _controllerMath = MathFieldEditingController();
-  bool _isMathMode = false;
+  // late final _controllerMath = MathFieldEditingController();
+  // bool _isMathMode = false;
   final _chatBoxStore = getIt.get<ChatBoxStore>();
   final _threadChatStore = getIt.get<ThreadChatStore>();
   final FocusNode _focusNode = FocusNode();
@@ -55,6 +58,7 @@ class _ChatBoxState extends State<ChatBox> {
     }
   }
 
+  //Remove Image in the list
   void _removeImage(File image) {
     _imagesNotifier.value.remove(image);
 
@@ -129,12 +133,35 @@ class _ChatBoxState extends State<ChatBox> {
           decoration: BoxDecoration(
             color: Colors.white54,
             border: _focusNode.hasFocus
-                ? Border.all(color: Colors.red, width: 1)
-                : Border.all(color: Colors.green, width: 1),
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(15),
-              topRight: Radius.circular(15),
-            ),
+                ? widget.isFirstChatScreen
+                    ? Border.all(
+                        color: Theme.of(context).colorScheme.textInBg1,
+                        width: 2)
+                    : Border(
+                        top: BorderSide(
+                          color:
+                              Theme.of(context).colorScheme.textInBg1,
+                          width: 2,
+                        ),
+                        left: BorderSide(
+                          color:
+                              Theme.of(context).colorScheme.textInBg1,
+                          width: 2,
+                        ),
+                        right: BorderSide(
+                          color:
+                              Theme.of(context).colorScheme.textInBg1,
+                          width: 2,
+                        ),
+                      )
+                : Border.all(
+                    color: Theme.of(context).colorScheme.textInBg1, width: 1),
+            borderRadius: !widget.isFirstChatScreen
+                ? const BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15),
+                  )
+                : const BorderRadius.all(Radius.circular(15)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -252,6 +279,13 @@ class _ChatBoxState extends State<ChatBox> {
                 ? IconButton(
                     icon: const Icon(Icons.send),
                     onPressed: () async {
+                      if (widget.isFirstChatScreen) {
+                        // widget.isFirstChatScreen = false;
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ThreadChatScreen(),
+                        ));
+                      }
+
                       String message = _controller.text.trim();
                       _controller.clear();
                       _chatBoxStore.setShowSendIcon(false);
@@ -279,7 +313,9 @@ class _ChatBoxState extends State<ChatBox> {
 
   Widget _buildSupportIcons() {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: widget.isFirstChatScreen
+          ? const EdgeInsets.only(bottom: 6)
+          : const EdgeInsets.only(bottom: 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

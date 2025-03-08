@@ -39,6 +39,13 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            _threadChatStore.clearConversation();
+            Navigator.of(context).pop();
+          },
+        ),
         actions: [
           IconButton(
             onPressed: () {
