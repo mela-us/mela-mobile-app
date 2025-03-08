@@ -10,12 +10,10 @@ class ChatApi {
   Future<MessageChat> sendMessageChat(ChatRequestParams params) async {
     print("================================ ở sendMessageAI API");
     await Future.delayed(const Duration(seconds: 2));
-    return MessageChat(message: """This is answer from AI flutter: ================================ ở sendMessageAI API
-flutter: ================================ ở sendMessageAI API
-flutter: ================================ ở sendMessageAI API
-flutter: ================================ ở sendMessageAI API
-flutter: ================================ ở sendMessageAI API
-flutter: ================================ ở sendMessageAI API""", isAI: true);
+    return MessageChat(
+        message:
+            """This is answer from AI Mela.\nPhân tích đề bài:\nĐề bài yêu cầu điền các số còn thiếu vào dãy số:\n5, 10, 15, ..., 25, ..., 35, ..., 45, 505, 10, 15.\nHướng làm:\n• Xác định công sai hoặc quy luật giữa các số.\n• Tìm công thức tổng quát nếu có.\n• Điền các số còn thiếu dựa trên quy luật.\n• Kiểm tra lại xem dãy số có lặp lại hoặc có phần riêng biệt không.\n• Xác định ý nghĩa của số 505 và số lặp lại ở cuối dãy.""",
+        isAI: true);
     // print(
     //     "================================********==================");
     // print("a=: ${a}");n

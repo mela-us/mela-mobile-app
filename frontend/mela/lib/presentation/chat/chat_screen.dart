@@ -87,7 +87,8 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget _buildDefaultBody(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
     return Padding(
-      padding: EdgeInsets.fromLTRB(16.0, (screenHeight - 610) * 0.5, 16.0, 10),
+      // padding: EdgeInsets.fromLTRB(16.0, (screenHeight - 610) * 0.5, 16.0, 10),
+      padding: const EdgeInsets.fromLTRB(16.0, 40, 16.0, 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.end,
@@ -150,7 +151,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     );
                   },
                   pageBuilder: (context, anim1, anim2) {
-                    return Align(
+                    return const Align(
                         alignment: Alignment.centerLeft,
                         // Sidebar xuất hiện từ bên phải
                         child: Material(
@@ -158,8 +159,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             topLeft: Radius.circular(20),
                             bottomLeft: Radius.circular(20),
                           ),
-                          child: SidebarWidget(
-                              onOpeningConversation: onOpenConversation),
+                          child: SidebarWidget(),
                         )); // Sidebar
                   }),
             },

@@ -122,10 +122,14 @@ class MessageChatTitle extends StatelessWidget {
         // margin: const EdgeInsets.symmetric(vertical: 5),
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         decoration: BoxDecoration(
-          color: isAI ? Theme.of(context).colorScheme.textInBg1 : Theme.of(context).colorScheme.buttonNoBorder,
+          color: isAI
+              ? Theme.of(context).colorScheme.textInBg1.withOpacity(0.9)
+              : Theme.of(context).colorScheme.buttonNoBorder,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: isAI ? Theme.of(context).colorScheme.textInBg1 : Theme.of(context).colorScheme.buttonNoBorder,
+            color: isAI
+                ? Theme.of(context).colorScheme.textInBg1.withOpacity(0.9)
+                : Theme.of(context).colorScheme.buttonNoBorder,
             width: 1,
           ),
         ),
@@ -170,9 +174,6 @@ class MessageChatTitle extends StatelessWidget {
 
               //Support Icons: Like, not like, copy
               if (isAI) ...[
-                const SizedBox(
-                  height: 5,
-                ),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -186,7 +187,8 @@ class MessageChatTitle extends StatelessWidget {
                         .toList(),
                   ],
                 ),
-              ]
+              ],
+              const SizedBox(height: 8),
             ],
           ),
         ],

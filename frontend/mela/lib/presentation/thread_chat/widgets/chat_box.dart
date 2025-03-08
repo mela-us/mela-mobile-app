@@ -12,6 +12,7 @@ import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_cha
 import 'package:mela/presentation/thread_chat/thread_chat_screen.dart';
 import 'package:mela/presentation/thread_chat/widgets/support_item.dart';
 import 'package:mela/utils/image_picker_helper/image_picker_helper.dart';
+import 'package:mela/utils/routes/routes.dart';
 
 class ChatBox extends StatefulWidget {
   bool isFirstChatScreen;
@@ -139,18 +140,15 @@ class _ChatBoxState extends State<ChatBox> {
                         width: 2)
                     : Border(
                         top: BorderSide(
-                          color:
-                              Theme.of(context).colorScheme.textInBg1,
+                          color: Theme.of(context).colorScheme.textInBg1,
                           width: 2,
                         ),
                         left: BorderSide(
-                          color:
-                              Theme.of(context).colorScheme.textInBg1,
+                          color: Theme.of(context).colorScheme.textInBg1,
                           width: 2,
                         ),
                         right: BorderSide(
-                          color:
-                              Theme.of(context).colorScheme.textInBg1,
+                          color: Theme.of(context).colorScheme.textInBg1,
                           width: 2,
                         ),
                       )
@@ -175,6 +173,7 @@ class _ChatBoxState extends State<ChatBox> {
 
               //Support Icons
               _buildSupportIcons(),
+              
             ],
           ),
         ),
@@ -267,7 +266,11 @@ class _ChatBoxState extends State<ChatBox> {
               maxLines: 3,
               minLines: 1,
               decoration: const InputDecoration(
-                hintText: "Type a message",
+                hintText: "Hãy cho Mela biết thắc mắc của bạn để có thể giải đáp",
+                hintStyle: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 14,
+                ),
                 border: InputBorder.none,
               ),
             ),
@@ -281,9 +284,8 @@ class _ChatBoxState extends State<ChatBox> {
                     onPressed: () async {
                       if (widget.isFirstChatScreen) {
                         // widget.isFirstChatScreen = false;
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ThreadChatScreen(),
-                        ));
+                        Navigator.of(context)
+                            .pushNamed(Routes.threadChatScreen);
                       }
 
                       String message = _controller.text.trim();
