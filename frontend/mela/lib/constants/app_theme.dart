@@ -186,6 +186,21 @@ extension CustomTextTheme on TextTheme {
   TextStyle get miniCaption => labelSmall!;
   TextStyle get buttonStyle => titleSmall!;
   TextStyle get questionStyle => displaySmall!;
+  TextStyle get aiExplainStyle => const TextStyle(
+    fontSize: 16,
+    fontFamily: 'Mulish',
+    fontWeight: FontWeight.w500
+  );
+  TextStyle get promptTitleStyle => const TextStyle(
+    fontSize: 14,
+    fontFamily: 'Mulish',
+    fontWeight: FontWeight.w400
+  );
+  TextStyle get contentBold => const TextStyle(
+    fontSize: 16,
+    fontFamily: 'Mulish',
+    fontWeight: FontWeight.bold
+  );
 }
 
 extension CustomColorTheme on ColorScheme{
@@ -219,5 +234,10 @@ extension CustomColorTheme on ColorScheme{
   Color get inputTitleText => const Color(0xFF393939);
   Color get inputMutedText => const Color(0xFFE9E9E9);
   Color get inputHintText => const Color(0xFFB4BDC4);
+
+  //Newly added
+  Color get sendButton => const Color(0xFF404040);
+  Color get headTitle => const Color(0xFF2E2E2E);
+  Color get timelineTitle => const Color (0xFF1F1F1F);
 }
 

@@ -114,30 +114,37 @@ class MessageChatTitle extends StatelessWidget {
   //---Message
   Widget _buildMessage(BuildContext context) {
     bool isAI = currentMessage.isAI;
-    return Container(
-      constraints:
-          BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),
-      // margin: const EdgeInsets.symmetric(vertical: 5),
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-      decoration: BoxDecoration(
-        color: isAI ? Theme.of(context).colorScheme.primary : Colors.grey,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: isAI ? Theme.of(context).colorScheme.primary : Colors.grey,
-          width: 1,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Container(
+        constraints:
+            BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),
+        // margin: const EdgeInsets.symmetric(vertical: 5),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        decoration: BoxDecoration(
+          color: isAI
+              ? Theme.of(context).colorScheme.textInBg1.withOpacity(0.9)
+              : Theme.of(context).colorScheme.buttonNoBorder,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: isAI
+                ? Theme.of(context).colorScheme.textInBg1.withOpacity(0.9)
+                : Theme.of(context).colorScheme.buttonNoBorder,
+            width: 1,
+          ),
         ),
+        child: currentMessage.message == null
+            ? LoadingAnimationWidget.staggeredDotsWave(
+                color: Colors.white,
+                size: 20,
+              )
+            : Text(
+                currentMessage.message!,
+                style: Theme.of(context).textTheme.normal.copyWith(
+                      color: isAI ? Colors.white : Colors.black,
+                    ),
+              ),
       ),
-      child: currentMessage.message == null
-          ? LoadingAnimationWidget.staggeredDotsWave(
-              color: Colors.white,
-              size: 20,
-            )
-          : Text(
-              currentMessage.message!,
-              style: Theme.of(context).textTheme.normal.copyWith(
-                    color: isAI ? Colors.white : Colors.black,
-                  ),
-            ),
     );
   }
 
@@ -167,9 +174,6 @@ class MessageChatTitle extends StatelessWidget {
 
               //Support Icons: Like, not like, copy
               if (isAI) ...[
-                const SizedBox(
-                  height: 5,
-                ),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -183,7 +187,8 @@ class MessageChatTitle extends StatelessWidget {
                         .toList(),
                   ],
                 ),
-              ]
+              ],
+              const SizedBox(height: 8),
             ],
           ),
         ],
