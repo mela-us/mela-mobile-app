@@ -14,29 +14,19 @@ class ExpandableList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) {
-        if (list == null || list!.isEmpty) {
-          return Center(
-            child: Text(
-              "Không có dữ liệu",
-              style: Theme.of(context).textTheme.subTitle
-                  .copyWith(color: Theme.of(context).colorScheme.textInBg1),
-            ),
-          );
-        }
-
         return Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Center(
-                child: Text(
-                  "Thống kê Số câu đúng / Số câu đã làm",
-                  style: Theme.of(context).textTheme.miniCaption
-                      .copyWith(color: Theme.of(context).colorScheme.textInBg1),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(vertical: 16.0),
+            //   child: Center(
+            //     child: Text(
+            //       "Thống kê Số câu đúng / Số câu đã làm",
+            //       style: Theme.of(context).textTheme.miniCaption
+            //           .copyWith(color: Theme.of(context).colorScheme.textInBg1),
+            //       textAlign: TextAlign.center,
+            //     ),
+            //   ),
+            // ),
             Expanded(
               child: ListView.builder(
                 itemCount: list!.length,

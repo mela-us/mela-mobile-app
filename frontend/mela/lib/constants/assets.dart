@@ -30,8 +30,10 @@ class Assets{
   static String default_profile_pic = "assets/icons/default_profile_pic.png";
 
   //Stats
-  static String  stats_hide = 'assets/icons/stats_hide.png';
-  static String  stats_show = 'assets/icons/stats_show.png';
+  static String stats_hide = 'assets/icons/stats_hide.png';
+  static String stats_show = 'assets/icons/stats_show.png';
+  static String stats_gain = 'assets/icons/mela_gain.png';
+  static String stats_drop = 'assets/icons/mela_drop.png';
 
   //Navigation
   static String nav_topic = "assets/icons/nav_topic.png";

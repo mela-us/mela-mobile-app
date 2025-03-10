@@ -136,7 +136,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'Oops! Bạn chưa học gì ở cấp này cả! Vui lòng chuyển sang \'Chủ đề\' để học!',
+                            'Oops! Bạn chưa làm bài tập gì cả! Vui lòng chuyển sang \'Chủ đề\' để học và làm bài tập!',
                             style: Theme.of(context).textTheme.subTitle
                                 .copyWith(color: Theme.of(context).colorScheme.textInBg1),
                             textAlign: TextAlign.center,

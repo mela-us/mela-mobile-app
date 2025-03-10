@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mela/domain/entity/stat/progress.dart';
 
-import '../../../di/service_locator.dart';
-import '../store/stats_store.dart';
-
-import 'bar_chart.dart';
+import 'chart_widget.dart';
 
 import '../../../constants/assets.dart';
 import '../../../constants/app_theme.dart';
+import 'line_chart_widget.dart';
 
 
 class ExpandableItem extends StatefulWidget {
   final Progress item;
-
-  final StatisticsStore store = getIt<StatisticsStore>();
 
   ExpandableItem({super.key, required this.item});
 
@@ -27,7 +23,7 @@ class _ExpandableItemState extends State<ExpandableItem> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
       elevation: 5.0,
       color: !_isExpanded ? Colors.white : Theme.of(context).colorScheme.appBackground,
       child: Column(
@@ -46,28 +42,64 @@ class _ExpandableItemState extends State<ExpandableItem> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        '${widget.item.topicName} ${widget.item.totalCorrect!}/${widget.item.total!}',
-                        style: Theme.of(context).textTheme.normal
-                            .copyWith(color: Colors.black),
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          maxWidth: 150,
+                          minWidth: 150,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text( //Tên bài tập
+                              'Luyện tập 1',
+                              style: Theme.of(context).textTheme.title
+                                  .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+                            ),
+                            Text( //Tên bài học
+                              'Bài học 1',
+                              style: Theme.of(context).textTheme.normal
+                                  .copyWith(color: Theme.of(context).colorScheme.textInBg1),
+                            ),
+                            Text( //Tên chủ đề
+                              '${widget.item.topicName}',
+                              style: Theme.of(context).textTheme.normal
+                                  .copyWith(color: Theme.of(context).colorScheme.textInBg2),
+                            ),
+                          ],
+                        ),
                       ),
-                      Image.asset(
-                        _isExpanded ? Assets.stats_hide : Assets.stats_show,
-                        width: 18,
-                        height: 18,
-                      )
+                      Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(//date
+                              '08-03-2025',
+                              style: Theme.of(context).textTheme.normal
+                                  .copyWith(color: Theme.of(context).colorScheme.textInBg1),
+                            ),
+                            Text(//score
+                              '8.5',
+                              style: Theme.of(context).textTheme.bigTitle
+                                  .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+                            ),
+                          ]
+                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Image.asset(
+                              Assets.stats_gain,
+                              width: 21,
+                              height: 21,
+                            ),
+                            const SizedBox(width: 5),
+                            Image.asset(
+                              _isExpanded ? Assets.stats_hide : Assets.stats_show,
+                              width: 16,
+                              height: 16,
+                            )
+                          ]
+                      ),
                     ],
-                  ),
-                  const SizedBox(height: 3),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 25.0, right: 25.0, bottom: 1.0),
-                    child: LinearProgressIndicator(
-                      minHeight: 13,
-                      value: widget.item.totalCorrect! * 1.0 / widget.item.total!,
-                      color: Theme.of(context).colorScheme.buttonYesBgOrText,
-                      backgroundColor: Theme.of(context).colorScheme.textInBg1.withOpacity(0.08),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
                   ),
                 ],
               ),
@@ -79,14 +111,8 @@ class _ExpandableItemState extends State<ExpandableItem> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 8),
-                  Text(
-                    'BÀI TẬP ĐÃ HOÀN THÀNH',
-                    style: Theme.of(context).textTheme.subTitle
-                        .copyWith(color: Theme.of(context).colorScheme.textInBg2),
-                  ),
-                  SizedBox(height: 8),
-                  BarChartWidget(item: widget.item),
+                  SizedBox(height: 1),
+                  LineChartWidget(),
                   SizedBox(height: 8),
                 ],
               ),

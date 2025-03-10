@@ -12,7 +12,7 @@ import '../../topic_lecture_in_level_screen/store/topic_lecture_store.dart';
 import '../store/stats_store.dart';
 import 'package:intl/intl.dart';
 
-class BarChartWidget extends StatelessWidget {
+class ChartWidget extends StatelessWidget {
   final Progress item;
   final StatisticsStore store = getIt<StatisticsStore>();
 
@@ -20,7 +20,7 @@ class BarChartWidget extends StatelessWidget {
   final TopicLectureStore _topicLectureStore = getIt<TopicLectureStore>();
   final LevelStore _levelStore = getIt<LevelStore>();
 
-  BarChartWidget({super.key, required this.item});
+  ChartWidget({super.key, required this.item});
 
   int getMax() {
     List<DetailedProgress>? list = item.last7Days?.detailedProgressList ?? [];
@@ -46,16 +46,17 @@ class BarChartWidget extends StatelessWidget {
       return false;
     }).toList();
 
-    if (filteredList == null) {
+    if (filteredList == null || filteredList!.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              'Oops! 7 ngày rồi bạn không làm chủ đề này. Học tiếp nhé!',
+              'Oops! 7 ngày rồi bạn không làm\nchủ đề này. Học tiếp nhé!',
               style: Theme.of(context).textTheme.subTitle
                   .copyWith(color: Theme.of(context).colorScheme.textInBg1),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 10), // Khoảng cách giữa dòng chữ và nút
             ElevatedButton(
