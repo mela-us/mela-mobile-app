@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/constants/assets.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/message_chat/message_chat.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
@@ -118,31 +120,62 @@ class MessageChatTitle extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 10),
       child: Container(
         constraints:
-            BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),
+            BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.85),
         // margin: const EdgeInsets.symmetric(vertical: 5),
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         decoration: BoxDecoration(
-          color: isAI
-              ? Theme.of(context).colorScheme.textInBg1.withOpacity(0.9)
-              : Theme.of(context).colorScheme.buttonNoBorder,
+          gradient: isAI
+              ? LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Theme.of(context).colorScheme.secondaryContainer.withOpacity(1),
+                    Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.3),
+                  ],
+                )
+              : LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Theme.of(context)
+                        .colorScheme
+                        .buttonYesBgOrText
+                        .withOpacity(0.6),
+                    Theme.of(context)
+                        .colorScheme
+                        .buttonYesBgOrText
+                        .withOpacity(0.9),
+                  ],
+                ),
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: isAI
-                ? Theme.of(context).colorScheme.textInBg1.withOpacity(0.9)
-                : Theme.of(context).colorScheme.buttonNoBorder,
-            width: 1,
-          ),
+          boxShadow: [
+            BoxShadow(
+                color: isAI
+                    ? Theme.of(context).colorScheme.textInBg1.withOpacity(0.1)
+                    : Theme.of(context).colorScheme.buttonNoBorder,
+                spreadRadius: 1.5,
+                blurRadius: 1,
+                offset: isAI ? const Offset(3, 6) : const Offset(0, 0)),
+          ],
         ),
         child: currentMessage.message == null
             ? LoadingAnimationWidget.staggeredDotsWave(
-                color: Colors.white,
-                size: 20,
+                color: Theme.of(context).colorScheme.buttonYesBgOrText,
+                size: 28,
               )
             : Text(
                 currentMessage.message!,
-                style: Theme.of(context).textTheme.normal.copyWith(
-                      color: isAI ? Colors.white : Colors.black,
-                    ),
+                style: isAI
+                    ? Theme.of(context).textTheme.content.copyWith(
+                        color: Colors.black,
+                        fontSize: 17,
+                        letterSpacing: 0.7,
+                        height: 1.8)
+                    : const TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                        letterSpacing: 0.7,
+                        height: 1.8),
               ),
       ),
     );
@@ -179,9 +212,23 @@ class MessageChatTitle extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     ...[
-                      Icon(Icons.thumb_down_alt_outlined),
-                      Icon(Icons.thumb_up_alt_outlined),
-                      Icon(Icons.copy)
+                      SvgPicture.asset(
+                        Assets.like,
+                        // color: Theme.of(context).colorScheme.primary,
+                        width: 20,
+                      ),
+                      const SizedBox(width: 5),
+                      SvgPicture.asset(
+                        Assets.unlike,
+                        // color: Theme.of(context).colorScheme.primary,
+                        width: 20,
+                      ),
+                      const SizedBox(width: 5),
+                      SvgPicture.asset(
+                        Assets.copy,
+                        // color: Theme.of(context).colorScheme.primary,
+                        width: 20,
+                      ),
                     ]
                         .expand((item) => [item, const SizedBox(width: 5)])
                         .toList(),

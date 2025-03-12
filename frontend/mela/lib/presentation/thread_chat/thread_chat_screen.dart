@@ -52,8 +52,8 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
               _threadChatStore.clearConversation();
             },
             icon: Icon(
-              Icons.add_circle,
-              color: Theme.of(context).colorScheme.primary,
+              Icons.add_circle_outline,
+              color: Theme.of(context).colorScheme.buttonYesBgOrText,
             ),
           )
         ],

@@ -8,6 +8,11 @@ class Assets{
   static String select_list = 'assets/icons/select_list.png';
   static String ai_icon = 'assets/icons/ai_icon.png';
 
+  //Chat AI icons
+  static const String like = "assets/icons/like.svg";
+  static const String unlike = "assets/icons/unlike.svg";
+  static const String copy = "assets/icons/copy.svg";
+
   //Image
   static String exit_image = 'assets/images/exit_image.png';
   static String result_image = 'assets/images/result_image.png';

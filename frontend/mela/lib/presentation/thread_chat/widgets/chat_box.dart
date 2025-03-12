@@ -81,6 +81,14 @@ class _ChatBoxState extends State<ChatBox> {
   Future<void> pickMultiImage() async {
     List<XFile> images = await _imagePickerHelper.pickMultipleImages();
     if (images.isNotEmpty) {
+      if (images.length == 1) {
+        CroppedFile? croppedFile =
+            await _imagePickerHelper.cropImage(images[0]);
+        if (croppedFile == null) return;
+        File imageFile = File(croppedFile.path);
+        _imagesNotifier.value = [imageFile];
+        return;
+      }
       List<File> imageFiles = images.map((image) => File(image.path)).toList();
       _imagesNotifier.value = imageFiles;
     }
@@ -130,36 +138,31 @@ class _ChatBoxState extends State<ChatBox> {
       child: GestureDetector(
         onTap: () => _focusNode.requestFocus(),
         child: Container(
-          margin: const EdgeInsets.only(top: 5),
+          margin: widget.isFirstChatScreen ? null : const EdgeInsets.all(5),
+          
           decoration: BoxDecoration(
-            color: Colors.white54,
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 1,
+                blurRadius: 1,
+                offset: const Offset(3, 5),
+              ),
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 1,
+                blurRadius: 1,
+                offset: const Offset(-3, 5),
+              ),
+            ],
             border: _focusNode.hasFocus
-                ? widget.isFirstChatScreen
-                    ? Border.all(
-                        color: Theme.of(context).colorScheme.textInBg1,
-                        width: 2)
-                    : Border(
-                        top: BorderSide(
-                          color: Theme.of(context).colorScheme.textInBg1,
-                          width: 2,
-                        ),
-                        left: BorderSide(
-                          color: Theme.of(context).colorScheme.textInBg1,
-                          width: 2,
-                        ),
-                        right: BorderSide(
-                          color: Theme.of(context).colorScheme.textInBg1,
-                          width: 2,
-                        ),
-                      )
-                : Border.all(
-                    color: Theme.of(context).colorScheme.textInBg1, width: 1),
-            borderRadius: !widget.isFirstChatScreen
-                ? const BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                    topRight: Radius.circular(15),
-                  )
-                : const BorderRadius.all(Radius.circular(15)),
+                ? Border.all(
+                    color: Theme.of(context).colorScheme.buttonYesBgOrText,
+                    strokeAlign: BorderSide.strokeAlignOutside,
+                    width: 1.5)
+                : null,
+            borderRadius: const BorderRadius.all(Radius.circular(15)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,7 +176,6 @@ class _ChatBoxState extends State<ChatBox> {
 
               //Support Icons
               _buildSupportIcons(),
-              
             ],
           ),
         ),
@@ -266,10 +268,10 @@ class _ChatBoxState extends State<ChatBox> {
               maxLines: 3,
               minLines: 1,
               decoration: const InputDecoration(
-                hintText: "Hãy cho Mela biết thắc mắc của bạn để có thể giải đáp",
+                hintText: "Hãy cho Mela biết thắc mắc của bạn",
                 hintStyle: TextStyle(
                   color: Colors.grey,
-                  fontSize: 14,
+                  fontSize: 16,
                 ),
                 border: InputBorder.none,
               ),
@@ -280,7 +282,9 @@ class _ChatBoxState extends State<ChatBox> {
           builder: (_) {
             return _chatBoxStore.showSendIcon
                 ? IconButton(
-                    icon: const Icon(Icons.send),
+                    icon: Icon(Icons.send,
+                        color: Theme.of(context).colorScheme.buttonYesBgOrText,
+                        size: 24),
                     onPressed: () async {
                       if (widget.isFirstChatScreen) {
                         // widget.isFirstChatScreen = false;
@@ -313,113 +317,90 @@ class _ChatBoxState extends State<ChatBox> {
     );
   }
 
+  // Widget _buildSupportIcons() {
+  //   return Padding(
+  //     padding: widget.isFirstChatScreen
+  //         ? const EdgeInsets.only(bottom: 6)
+  //         : const EdgeInsets.only(bottom: 12),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //       children: [
+
+  //         Expanded(
+  //             child: SupportItem(
+  //                 icon: Icons.functions,
+  //                 textSupport: "Công thức",
+  //                 onTap: () => pickImage(ImageSource.gallery))),
+  //         Expanded(
+  //             child: SupportItem(
+  //                 icon: Icons.camera_alt,
+  //                 textSupport: "Camera",
+  //                 onTap: _showImagePickerOptions)),
+  //       ],
+  //     ),
+  //   );
+  // }
+
   Widget _buildSupportIcons() {
     return Padding(
-      padding: widget.isFirstChatScreen
-          ? const EdgeInsets.only(bottom: 6)
-          : const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 6),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Expanded(
-              child: SupportItem(
-                  icon: Icons.functions,
-                  textSupport: "Công thức",
-                  onTap: () => pickImage(ImageSource.gallery))),
-          // Expanded(
-          //     child: SupportItem(
-          //         icon: Icons.image,
-          //         textSupport: "Hình ảnh",
-          //         onTap: () => pickImage(ImageSource.gallery))),
-          Expanded(
-              child: SupportItem(
-                  icon: Icons.camera_alt,
-                  textSupport: "Camera",
-                  onTap: _showImagePickerOptions)),
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () {},
+                  child: Icon(
+                    Icons.functions,
+                    color: Theme.of(context)
+                        .colorScheme
+                        .buttonYesBgOrText
+                        .withOpacity(0.8),
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                GestureDetector(
+                  onTap: () => pickImage(ImageSource.camera),
+                  child: Icon(Icons.camera_alt,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .buttonYesBgOrText
+                          .withOpacity(0.8),
+                      size: 24),
+                ),
+                const SizedBox(width: 10),
+                GestureDetector(
+                  onTap: () => pickMultiImage(),
+                  child: Icon(Icons.image,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .buttonYesBgOrText
+                          .withOpacity(0.8),
+                      size: 24),
+                ),
+              ],
+            ),
+          ),
+          Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.15),
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.buttonYesBgOrText,
+                  width: 1,
+                ),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.bolt, color: Colors.amber),
+                  Text("5"),
+                ],
+              ))
         ],
       ),
     );
   }
-
-  // Widget _buildTextField() {
-  //   return Row(
-  //     crossAxisAlignment: CrossAxisAlignment.end,
-  //     children: [
-  //       Expanded(
-  //         child: Container(
-  //           padding: const EdgeInsets.symmetric(horizontal: 12),
-  //           child: Column(
-  //             children: [
-  //               _isMathMode
-  //                   ? MathField(
-  //                       controller: _controllerMath,
-  //                       onSubmitted: (value) {
-  //                         // Insert math expression at current cursor position
-  //                         final cursorPos = _controller.selection.baseOffset;
-  //                         final text = _controller.text;
-  //                         final newText = text.substring(0, cursorPos) +
-  //                             value +
-  //                             text.substring(cursorPos);
-  //                         _controller.text = newText;
-  //                         setState(() => _isMathMode = false);
-  //                       },
-  //                       decoration: InputDecoration(
-  //                         hintText: "Enter math expression",
-  //                         suffixIcon: IconButton(
-  //                           icon: Icon(Icons.keyboard_return),
-  //                           onPressed: () =>
-  //                               setState(() => _isMathMode = false),
-  //                         ),
-  //                       ),
-  //                     )
-  //                   : TextField(
-  //                       controller: _controller,
-  //                       maxLines: 3,
-  //                       minLines: 1,
-  //                       decoration: InputDecoration(
-  //                         hintText: "Type a message",
-  //                         border: InputBorder.none,
-  //                         suffixIcon: IconButton(
-  //                           icon: Icon(Icons.functions),
-  //                           onPressed: () => setState(() => _isMathMode = true),
-  //                         ),
-  //                       ),
-  //                     ),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //       Observer(
-  //         builder: (_) {
-  //           return _chatBoxStore.showSendIcon
-  //               ? IconButton(
-  //                   icon: const Icon(Icons.send),
-  //                   onPressed: () => _handleSend(),
-  //                 )
-  //               : const SizedBox();
-  //         },
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  // void _handleSend() async {
-  //   final message = _controller.text.trim();
-  //   _controller.clear();
-  //   _controllerMath.clear();
-  //   _chatBoxStore.setShowSendIcon(false);
-
-  //   if (_focusNode.hasFocus) {
-  //     _focusNode.unfocus();
-  //   }
-
-  //   final images = _imagesNotifier.value.toList();
-  //   _imagesNotifier.value = [];
-
-  //   await _threadChatStore.sendChatMessage(message, images);
-
-  //   if (_controller.text.isNotEmpty) {
-  //     _chatBoxStore.setShowSendIcon(true);
-  //   }
-  // }
 }

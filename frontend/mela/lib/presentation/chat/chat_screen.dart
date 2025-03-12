@@ -93,7 +93,7 @@ class _ChatScreenState extends State<ChatScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          const Icon(Icons.waving_hand, color: Colors.blue, size: 48),
+          Icon(Icons.waving_hand, color: Theme.of(context).colorScheme.buttonYesBgOrText, size: 48),
           const SizedBox(height: 15),
           Row(
             children: [
@@ -207,7 +207,7 @@ class _ChatScreenState extends State<ChatScreen> {
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.zero, // Bỏ bo góc
         ),
-        color: Colors.white,
+        color: Colors.white.withOpacity(0.9),
         margin: const EdgeInsets.symmetric(vertical: 0),
         child: ListTile(
           title: Text(title,

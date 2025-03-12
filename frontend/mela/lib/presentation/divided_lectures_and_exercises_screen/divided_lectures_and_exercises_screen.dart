@@ -102,7 +102,7 @@ class _DividedLecturesAndExercisesScreenState
                 controller: _tabController,
                 labelColor: Colors.white,
                 unselectedLabelColor: Theme.of(context).colorScheme.primary,
-                overlayColor: WidgetStateProperty.all(Colors.transparent),
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
                 indicator: BoxDecoration(
                   color: Theme.of(context).colorScheme.tertiary,
                   borderRadius: BorderRadius.circular(40),
