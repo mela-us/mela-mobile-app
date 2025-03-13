@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:mela/core/domain/usecase/use_case.dart';
 import 'package:mela/domain/entity/exercise/exercise_list.dart';
@@ -10,7 +12,9 @@ import 'package:mela/domain/usecase/user_login/refresh_access_token_usecase.dart
 class ChatRequestParams {
   final String? conversationId;
   final String message;
-  ChatRequestParams({required this.conversationId, required this.message});
+  final List<File?>? images;
+  ChatRequestParams(
+      {required this.conversationId, required this.message, this.images});
 }
 
 class SendMessageChatUsecase extends UseCase<MessageChat, ChatRequestParams> {

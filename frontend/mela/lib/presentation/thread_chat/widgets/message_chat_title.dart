@@ -1,14 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/assets.dart';
-import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/message_chat/message_chat.dart';
-import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 
 class MessageChatTitle extends StatelessWidget {
   final MessageChat currentMessage;
@@ -152,7 +149,7 @@ class MessageChatTitle extends StatelessWidget {
             BoxShadow(
                 color: isAI
                     ? Theme.of(context).colorScheme.textInBg1.withOpacity(0.1)
-                    : Theme.of(context).colorScheme.buttonNoBorder,
+                    : Colors.transparent,
                 spreadRadius: 1.5,
                 blurRadius: 1,
                 offset: isAI ? const Offset(3, 6) : const Offset(0, 0)),

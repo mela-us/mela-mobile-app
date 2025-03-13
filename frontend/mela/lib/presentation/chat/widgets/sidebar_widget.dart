@@ -18,24 +18,10 @@ class _SidebarWidgetState extends State<SidebarWidget> {
 
   Conversation testConversation = Conversation(
     conversationId: "conv_001",
-    nameConversation: "Math Problem Discussion",
-    messages: [
-      MessageChat(
-        message:
-            "Dãy số sau tuân theo một quy luật, hãy điền các số còn thiếu: 5,10,15,...25,...,35,...,45,505, 10, 15",
-        isAI: false, // User message
-      ),
-      MessageChat(
-        message:
-            "Phân tích đề bài:\nĐề bài yêu cầu điền các số còn thiếu vào dãy số:\n5, 10, 15, ..., 25, ..., 35, ..., 45, 505, 10, 15",
-        isAI: true, // AI response
-      ),
-      MessageChat(
-        message:
-            "Hướng làm:\n• Xác định công sai hoặc quy luật giữa các số.\n• Tìm công thức tổng quát nếu có.\n• Điền các số còn thiếu dựa trên quy luật.\n• Kiểm tra lại xem dãy số có lặp lại hoặc có phần riêng biệt không.\n• Xác định ý nghĩa của số 505 và số lặp lại ở cuối dãy.",
-        isAI: true, // AI response
-      ),
-    ],
+    dateConversation: DateTime.now(),
+    hasMore: false,
+    nameConversation: "Conversation from history",
+    messages: [],
   );
 
   final Map<String, bool> isExpanded = {

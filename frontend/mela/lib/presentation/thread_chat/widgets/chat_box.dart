@@ -7,10 +7,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mela/constants/app_theme.dart';
 // import 'package:math_keyboard/math_keyboard.dart';
 import 'package:mela/di/service_locator.dart';
+import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/presentation/thread_chat/store/chat_box_store/chat_box_store.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
-import 'package:mela/presentation/thread_chat/thread_chat_screen.dart';
-import 'package:mela/presentation/thread_chat/widgets/support_item.dart';
 import 'package:mela/utils/image_picker_helper/image_picker_helper.dart';
 import 'package:mela/utils/routes/routes.dart';
 
@@ -139,7 +138,6 @@ class _ChatBoxState extends State<ChatBox> {
         onTap: () => _focusNode.requestFocus(),
         child: Container(
           margin: widget.isFirstChatScreen ? null : const EdgeInsets.all(5),
-          
           decoration: BoxDecoration(
             color: Colors.white,
             boxShadow: [
@@ -287,7 +285,13 @@ class _ChatBoxState extends State<ChatBox> {
                         size: 24),
                     onPressed: () async {
                       if (widget.isFirstChatScreen) {
-                        // widget.isFirstChatScreen = false;
+                        _threadChatStore.setConversation(Conversation(
+                            conversationId: "",
+                            messages: [],
+                            hasMore: false,
+                            dateConversation: DateTime.now(),
+                            nameConversation: ""));
+
                         Navigator.of(context)
                             .pushNamed(Routes.threadChatScreen);
                       }
