@@ -15,6 +15,8 @@ abstract class _ThreadChatStore with Store {
   GetConversationUsecase getConversationUsecase;
   _ThreadChatStore(this.sendMessageChatUsecase, this.getConversationUsecase);
 
+  int limit = 10;
+
   @observable
   Conversation currentConversation = Conversation(
       conversationId: "",
@@ -29,6 +31,9 @@ abstract class _ThreadChatStore with Store {
   @observable
   bool isLoadingGetConversation = false;
 
+  @observable
+  bool isLoadingGetOlderMessages = false;
+
   @computed
   String get conversationName => getConversationName();
 
@@ -41,6 +46,11 @@ abstract class _ThreadChatStore with Store {
   @action
   void setIsLoadingConversation(bool value) {
     isLoadingGetConversation = value;
+  }
+
+  @action
+  void setIsLoadingGetOlderMessages(bool value) {
+    isLoadingGetOlderMessages = value;
   }
 
   @action
@@ -74,6 +84,7 @@ abstract class _ThreadChatStore with Store {
 
   @action
   void clearConversation() {
+    limit = 10;
     currentConversation = Conversation(
         conversationId: "",
         messages: [],
@@ -91,10 +102,26 @@ abstract class _ThreadChatStore with Store {
 
     setIsLoadingConversation(true);
     Conversation conversation = await getConversationUsecase.call(
-        params: currentConversation.conversationId);
-    print("Get conversation: ${conversation.nameConversation}");
+        params: GetConversationRequestParams(
+            conversationId: currentConversation.conversationId, limit: limit));
+    // print("Get conversation: ${conversation.nameConversation}");
     setConversation(conversation);
     setIsLoadingConversation(false);
+  }
+
+  @action
+  Future<void> getOlderMessages() async {
+    setIsLoadingGetOlderMessages(true);
+    limit += 10;
+    Conversation conversation = await getConversationUsecase.call(
+        params: GetConversationRequestParams(
+            conversationId: currentConversation.conversationId, limit: limit));
+    setConversation(conversation);
+    setIsLoadingGetOlderMessages(false);
+  }
+
+  void resetLimit() {
+    limit = 10;
   }
 }
   // constructor:--------------------------------

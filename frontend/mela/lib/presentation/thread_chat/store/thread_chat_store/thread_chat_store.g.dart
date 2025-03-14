@@ -66,6 +66,23 @@ mixin _$ThreadChatStore on _ThreadChatStore, Store {
     });
   }
 
+  late final _$isLoadingGetOlderMessagesAtom = Atom(
+      name: '_ThreadChatStore.isLoadingGetOlderMessages', context: context);
+
+  @override
+  bool get isLoadingGetOlderMessages {
+    _$isLoadingGetOlderMessagesAtom.reportRead();
+    return super.isLoadingGetOlderMessages;
+  }
+
+  @override
+  set isLoadingGetOlderMessages(bool value) {
+    _$isLoadingGetOlderMessagesAtom
+        .reportWrite(value, super.isLoadingGetOlderMessages, () {
+      super.isLoadingGetOlderMessages = value;
+    });
+  }
+
   late final _$sendChatMessageAsyncAction =
       AsyncAction('_ThreadChatStore.sendChatMessage', context: context);
 
@@ -81,6 +98,14 @@ mixin _$ThreadChatStore on _ThreadChatStore, Store {
   @override
   Future<void> getConversation() {
     return _$getConversationAsyncAction.run(() => super.getConversation());
+  }
+
+  late final _$getOlderMessagesAsyncAction =
+      AsyncAction('_ThreadChatStore.getOlderMessages', context: context);
+
+  @override
+  Future<void> getOlderMessages() {
+    return _$getOlderMessagesAsyncAction.run(() => super.getOlderMessages());
   }
 
   late final _$_ThreadChatStoreActionController =
@@ -103,6 +128,17 @@ mixin _$ThreadChatStore on _ThreadChatStore, Store {
         name: '_ThreadChatStore.setIsLoadingConversation');
     try {
       return super.setIsLoadingConversation(value);
+    } finally {
+      _$_ThreadChatStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setIsLoadingGetOlderMessages(bool value) {
+    final _$actionInfo = _$_ThreadChatStoreActionController.startAction(
+        name: '_ThreadChatStore.setIsLoadingGetOlderMessages');
+    try {
+      return super.setIsLoadingGetOlderMessages(value);
     } finally {
       _$_ThreadChatStoreActionController.endAction(_$actionInfo);
     }
@@ -136,6 +172,7 @@ mixin _$ThreadChatStore on _ThreadChatStore, Store {
 currentConversation: ${currentConversation},
 isLoading: ${isLoading},
 isLoadingGetConversation: ${isLoadingGetConversation},
+isLoadingGetOlderMessages: ${isLoadingGetOlderMessages},
 conversationName: ${conversationName}
     ''';
   }

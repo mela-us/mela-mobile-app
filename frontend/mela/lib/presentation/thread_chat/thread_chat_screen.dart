@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/di/service_locator.dart';
@@ -18,18 +19,56 @@ class ThreadChatScreen extends StatefulWidget {
 class _ThreadChatScreenState extends State<ThreadChatScreen> {
   final ThreadChatStore _threadChatStore = getIt.get<ThreadChatStore>();
   final ScrollController _scrollController = ScrollController();
+  late ReactionDisposer disposerSendMessage;
+  late ReactionDisposer disposerGetConversation;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-        (_) => Future.delayed(Duration(milliseconds: 100), _scrollToBottom));
+    _scrollController.addListener(_onScroll);
+
+    //For first time go to from history it will scroll to bottom
+    disposerGetConversation = reaction<bool>(
+      (_) => _threadChatStore.isLoadingGetConversation,
+      (value) {
+        if (!value) {
+          WidgetsBinding.instance
+              .addPostFrameCallback((_) => _scrollToBottom());
+        }
+      },
+    );
+    //For send message and get response from AI, it will scroll to bottom
+    disposerSendMessage = reaction<bool>(
+      (_) => _threadChatStore.isLoading,
+      (value) {
+        //not need to check value ==true because it must always loading when isLoading change
+        WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+      },
+    );
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _threadChatStore.getConversation();
+  }
+
+  @override
+  void dispose() {
+    disposerSendMessage();
+    disposerGetConversation();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+//For scroll at the top and loading get older messages
+  void _onScroll() {
+    if (_scrollController.position.pixels <= 0 &&
+        !_threadChatStore.isLoadingGetConversation &&
+        _threadChatStore.currentConversation.hasMore) {
+      print("=======================>On Scroll At the top");
+      _threadChatStore.getOlderMessages();
+    }
   }
 
   void _scrollToBottom() {
@@ -80,7 +119,6 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
         }),
       ),
       body: Observer(builder: (context) {
-        WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
         return _threadChatStore.isLoadingGetConversation
             ? AbsorbPointer(
                 absorbing: true,
@@ -106,22 +144,44 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
                           )
                         : ScrollbarTheme(
                             data: ScrollbarThemeData(
-                              thumbColor: WidgetStateProperty.all(Colors.grey),
+                              thumbColor:
+                                  MaterialStateProperty.all(Colors.grey),
                               trackColor:
-                                  WidgetStateProperty.all(Colors.yellow),
+                                  MaterialStateProperty.all(Colors.yellow),
                               radius: const Radius.circular(20),
-                              thickness: WidgetStateProperty.all(4),
+                              thickness: MaterialStateProperty.all(4),
                             ),
                             child: Scrollbar(
                               child: SingleChildScrollView(
+                                //Must use SingleChildScrollView
                                 controller: _scrollController,
-                                child: Column(
-                                  children: _threadChatStore
+                                child: Column(children: [
+                                  if (_threadChatStore
+                                      .isLoadingGetOlderMessages) ...[
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          LoadingAnimationWidget
+                                              .staggeredDotsWave(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .buttonYesBgOrText,
+                                            size: 34,
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                  ..._threadChatStore
                                       .currentConversation.messages
                                       .map((message) => MessageChatTitle(
                                           currentMessage: message))
-                                      .toList(),
-                                ),
+                                      .toList()
+                                ]),
                               ),
                             ),
                           ),
@@ -131,11 +191,5 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
               );
       }),
     );
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
   }
 }

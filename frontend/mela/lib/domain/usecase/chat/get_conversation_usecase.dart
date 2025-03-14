@@ -7,7 +7,14 @@ import 'package:mela/domain/repository/chat/chat_repository.dart';
 import 'package:mela/domain/usecase/user/logout_usecase.dart';
 import 'package:mela/domain/usecase/user_login/refresh_access_token_usecase.dart';
 
-class GetConversationUsecase extends UseCase<Conversation, String> {
+class GetConversationRequestParams {
+  final String conversationId;
+  final int limit;
+  GetConversationRequestParams(
+      {required this.conversationId, required this.limit});
+}
+
+class GetConversationUsecase extends UseCase<Conversation, GetConversationRequestParams> {
   final ChatRepository _chatRepository;
   final RefreshAccessTokenUsecase _refreshAccessTokenUsecase;
   final LogoutUseCase _logoutUseCase;
@@ -15,7 +22,7 @@ class GetConversationUsecase extends UseCase<Conversation, String> {
       this._logoutUseCase);
 
   @override
-  Future<Conversation> call({required String params}) async {
+  Future<Conversation> call({required GetConversationRequestParams params}) async {
     try {
       return await _chatRepository.getConversation(params);
     } catch (e) {

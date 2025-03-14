@@ -166,13 +166,13 @@ class MessageChatTitle extends StatelessWidget {
                     ? Theme.of(context).textTheme.content.copyWith(
                         color: Colors.black,
                         fontSize: 17,
-                        letterSpacing: 0.7,
-                        height: 1.8)
+                        letterSpacing: 0.65,
+                        height: 1.65)
                     : const TextStyle(
                         color: Colors.white,
                         fontSize: 17,
-                        letterSpacing: 0.7,
-                        height: 1.8),
+                        letterSpacing: 0.65,
+                        height: 1.65),
               ),
       ),
     );

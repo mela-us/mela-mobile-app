@@ -69,6 +69,8 @@ class AppThemeData {
     onTertiary: Color(0xFFFFFFFF), //ButtonnYesColor2 + backgroundTextFormColor
 
     surface: Color(0xFFF5F9FF), //AppBackgroundColor
+    onBackground: Color(0xFF202244), //AppBarContentColor
+    background: Color(0xFFF5F9FF),
 
     inversePrimary: Color(0xFF167F71), //backgroundButtonChooseColor
     inverseSurface: Color(0xFFE8F1FF), //backgroundButtonNoChooseColor
@@ -92,6 +94,8 @@ class AppThemeData {
     onTertiary: Color(0xFFFFFFFF), //ButtonnYesColor2 + backgroundTextFormColor
 
     surface: Color(0xFFF5F9FF), //AppBackgroundColor
+    background: Color(0xFFF5F9FF),
+    onBackground: Color(0xFF202244),
 
     inversePrimary: Color(0xFF167F71), //backgroundButtonChooseColor
     inverseSurface: Color(0xFFE8F1FF), //backgroundButtonNoChooseColor
