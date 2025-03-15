@@ -137,23 +137,25 @@ class _ChatBoxState extends State<ChatBox> {
       child: GestureDetector(
         onTap: () => _focusNode.requestFocus(),
         child: Container(
-          margin: widget.isFirstChatScreen ? null : const EdgeInsets.all(5),
+          margin: widget.isFirstChatScreen
+              ? null
+              : const EdgeInsets.fromLTRB(5, 0, 5, 5),
           decoration: BoxDecoration(
             color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
-                spreadRadius: 1,
-                blurRadius: 1,
-                offset: const Offset(3, 5),
-              ),
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
-                spreadRadius: 1,
-                blurRadius: 1,
-                offset: const Offset(-3, 5),
-              ),
-            ],
+            // boxShadow: [
+            //   BoxShadow(
+            //     color: Colors.grey.withOpacity(0.2),
+            //     spreadRadius: 1,
+            //     blurRadius: 1,
+            //     offset: const Offset(3, 5),
+            //   ),
+            //   BoxShadow(
+            //     color: Colors.grey.withOpacity(0.2),
+            //     spreadRadius: 1,
+            //     blurRadius: 1,
+            //     offset: const Offset(-3, 5),
+            //   ),
+            // ],
             border: _focusNode.hasFocus
                 ? Border.all(
                     color: Theme.of(context).colorScheme.buttonYesBgOrText,
@@ -387,22 +389,22 @@ class _ChatBoxState extends State<ChatBox> {
               ],
             ),
           ),
-          Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-              decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.15),
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.buttonYesBgOrText,
-                  width: 1,
-                ),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: const Row(
-                children: [
-                  Icon(Icons.bolt, color: Colors.amber),
-                  Text("5"),
-                ],
-              ))
+          // Container(
+          //     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+          //     decoration: BoxDecoration(
+          //       color: Colors.grey.withOpacity(0.15),
+          //       border: Border.all(
+          //         color: Theme.of(context).colorScheme.buttonYesBgOrText,
+          //         width: 1,
+          //       ),
+          //       borderRadius: BorderRadius.circular(30),
+          //     ),
+          //     child: const Row(
+          //       children: [
+          //         Icon(Icons.bolt, color: Colors.amber),
+          //         Text("5"),
+          //       ],
+          //     ))
         ],
       ),
     );
