@@ -319,6 +319,8 @@ class _ChatBoxState extends State<ChatBox> {
                 : const SizedBox();
           },
         ),
+     
+     
       ],
     );
   }
@@ -389,22 +391,22 @@ class _ChatBoxState extends State<ChatBox> {
               ],
             ),
           ),
-          // Container(
-          //     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-          //     decoration: BoxDecoration(
-          //       color: Colors.grey.withOpacity(0.15),
-          //       border: Border.all(
-          //         color: Theme.of(context).colorScheme.buttonYesBgOrText,
-          //         width: 1,
-          //       ),
-          //       borderRadius: BorderRadius.circular(30),
-          //     ),
-          //     child: const Row(
-          //       children: [
-          //         Icon(Icons.bolt, color: Colors.amber),
-          //         Text("5"),
-          //       ],
-          //     ))
+          Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.15),
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.buttonYesBgOrText,
+                  width: 1,
+                ),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.bolt, color: Colors.amber),
+                  Text("5"),
+                ],
+              ))
         ],
       ),
     );
