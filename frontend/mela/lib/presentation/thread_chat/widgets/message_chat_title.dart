@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/assets.dart';
+import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/domain/entity/message_chat/message_chat.dart';
 
 class MessageChatTitle extends StatelessWidget {
@@ -156,9 +157,21 @@ class MessageChatTitle extends StatelessWidget {
           ],
         ),
         child: currentMessage.message == null
-            ? LoadingAnimationWidget.staggeredDotsWave(
-                color: Theme.of(context).colorScheme.buttonYesBgOrText,
-                size: 28,
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                      height: 20, width: 20, child: RotatingImageIndicator()),
+                  const SizedBox(width: 6),
+                  Text("Chờ Mela một chút nhé!",
+                      style: Theme.of(context).textTheme.content.copyWith(
+                          color: Colors.grey[600],
+                          fontSize: 14,
+                          letterSpacing: 0.65,
+                          height: 1.65)),
+                ],
               )
             : Text(
                 currentMessage.message!,
