@@ -60,7 +60,7 @@ abstract class _ThreadChatStore with Store {
 
   String getConversationName() {
     return currentConversation.nameConversation.isEmpty
-        ? "Mela New Chat o get Name"
+        ? "Mela New Chat"
         : currentConversation.nameConversation;
   }
 

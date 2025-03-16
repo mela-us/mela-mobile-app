@@ -120,7 +120,7 @@ class MessageChatTitle extends StatelessWidget {
         constraints:
             BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.85),
         // margin: const EdgeInsets.symmetric(vertical: 5),
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 8),
         decoration: BoxDecoration(
           gradient: isAI
               ? null
@@ -171,7 +171,7 @@ class MessageChatTitle extends StatelessWidget {
                   const SizedBox(
                       height: 20, width: 20, child: RotatingImageIndicator()),
                   const SizedBox(width: 6),
-                  Text("Chờ Mela một chút nhé!",
+                  Text("Chờ Mela một chút nhé...",
                       style: Theme.of(context).textTheme.content.copyWith(
                           color: Colors.grey[600],
                           fontSize: 14,

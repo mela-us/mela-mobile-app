@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/constants/assets.dart';
 import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
@@ -139,9 +140,7 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
                 children: [
                   Expanded(
                     child: _threadChatStore.currentConversation.messages.isEmpty
-                        ? const Center(
-                            child: Text("Start a conversation"),
-                          )
+                        ? _buildDefaultBodyInNewConversation()
                         : ScrollbarTheme(
                             data: ScrollbarThemeData(
                               thumbColor:
@@ -190,6 +189,86 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
                 ],
               );
       }),
+    );
+  }
+
+  Widget _buildDefaultBodyInNewConversation() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 8),
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  Assets.nav_chat,
+                  width: 48,
+                  height: 48,
+                  color: Theme.of(context).colorScheme.buttonYesBgOrText,
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  "Xin chào!",
+                  style: Theme.of(context).textTheme.bigTitle.copyWith(
+                      color: Theme.of(context).colorScheme.headTitle,
+                      fontWeight: FontWeight.w600),
+                ),
+              ],
+            ),
+            const SizedBox(height: 15),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                    "Mình là Mela AI, trợ giảng toán của bạn.\nBạn cần mình giúp giải quyết vấn đề gì nào?",
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.aiExplainStyle.copyWith(
+                        color: Theme.of(context).colorScheme.secondary)),
+              ],
+            ),
+            const SizedBox(height: 15),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildItemHintQuestion(
+                      "Cách giải phương trình bậc 2 một ẩn?"),
+                  _buildItemHintQuestion("Hệ thức Vi-et là gì?"),
+                  _buildItemHintQuestion(
+                      "Cách giải phương trình bậc 3 một ẩn?"),
+                  _buildItemHintQuestion("Làm sao để tính số Fibonacci thứ n?"),
+                ],
+              ),
+            )
+          ]),
+    );
+  }
+
+  Widget _buildItemHintQuestion(String title) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      margin: const EdgeInsets.only(right: 10),
+      height: 50,
+      width: 150,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(
+          color: Colors.grey,
+        ),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Center(
+        child: Text(title,
+            textAlign: TextAlign.left,
+            style: Theme.of(context)
+                .textTheme
+                .promptTitleStyle
+                .copyWith(color: Colors.black)),
+      ),
     );
   }
 }
