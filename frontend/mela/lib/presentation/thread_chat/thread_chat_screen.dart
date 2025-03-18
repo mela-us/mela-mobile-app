@@ -151,6 +151,7 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
                               thickness: MaterialStateProperty.all(4),
                             ),
                             child: Scrollbar(
+                              controller: _scrollController,
                               child: SingleChildScrollView(
                                 //Must use SingleChildScrollView
                                 controller: _scrollController,
@@ -185,7 +186,10 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
                             ),
                           ),
                   ),
-                  ChatBox()
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: ChatBox(),
+                  )
                 ],
               );
       }),

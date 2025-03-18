@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/constants/assets.dart';
+import 'package:mela/core/services/google_sign_in_service.dart';
 import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/di/service_locator.dart';
+import 'package:mela/presentation/signup_login_screen/widgets/third_party_button.dart';
+import 'package:mela/presentation/signup_login_screen/widgets/third_party_login_widget.dart';
 import 'package:mela/utils/check_inputs/check_input.dart';
 import 'package:mobx/mobx.dart';
 
@@ -323,26 +327,39 @@ class __FormContentState extends State<_FormContent> {
                 // }
               }),
 
-          // const SizedBox(height: 16),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Hoặc tiếp tục với',
+                  style: Theme.of(context).textTheme.normal.copyWith(
+                      color: Theme.of(context).colorScheme.secondary)),
+            ],
+          ),
+          const SizedBox(height: 16),
+          //Sign Up by Third Party
           // Row(
           //   mainAxisAlignment: MainAxisAlignment.center,
           //   children: [
-          //     Text('Hoặc tiếp tục với',
-          //         style: Theme.of(context).textTheme.normal.copyWith(
-          //             color: Theme.of(context).colorScheme.secondary)),
-          //   ],
-          // ),
-          // const SizedBox(height: 16),
-          // //Sign Up by Third Party
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   children: [
-          //     ThirdPartyButton(pathLogo: Assets.googleIcon, onPressed: () {}),
-          //     const SizedBox(width: 20),
           //     ThirdPartyButton(
-          //         pathLogo: Assets.facebookIcon, onPressed: () {}),
+          //         pathLogo: Assets.googleIcon,
+          //         onPressed: () async {
+          //           final googleSignInService = GoogleSignInService();
+          //           await googleSignInService.handleSignIn();
+          //           print("Google Sign In Thanh Cong");
+          //         }),
+          //     const SizedBox(width: 20),
+          //     ThirdPartyButton(pathLogo: Assets.facebookIcon, onPressed: () {}),
           //   ],
           // ),
+          ThirdPartyLoginWidget(
+              pathLogo: Assets.googleIcon,
+              onPressed: () async {
+                final googleSignInService = GoogleSignInService();
+                await googleSignInService.handleSignIn();
+                print("Google Sign In Thanh Cong");
+              },
+              title: "Đăng nhập với Google"),
           const SizedBox(height: 30),
 
           //Return sign up
