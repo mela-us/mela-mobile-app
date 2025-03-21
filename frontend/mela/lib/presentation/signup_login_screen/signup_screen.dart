@@ -353,8 +353,50 @@ class __FormContentState extends State<_FormContent> {
               pathLogo: Assets.googleIcon,
               onPressed: () async {
                 final googleSignInService = GoogleSignInService();
-                await googleSignInService.handleSignIn();
-                print("Google Sign In Thanh Cong");
+                try {
+                  final googleLoginRequest =
+                      await googleSignInService.handleSignIn();
+                  if (googleLoginRequest?.idToken == null ||
+                      googleLoginRequest?.accessToken == null) {
+                    return;
+                  }
+                  _userLoginStore.setLoadingLogin(true);
+                  await _userLoginStore.loginWithGoogle(
+                      googleLoginRequest?.idToken,
+                      googleLoginRequest?.accessToken);
+
+                  if (_userLoginStore.isLoggedIn) {
+                    // Clean up after successful login
+                    _userLoginStore.resetSettingForLogin();
+                    _emailController.clear();
+                    _passwordController.clear();
+
+                    // Add a small delay before navigation
+                    await Future.delayed(const Duration(milliseconds: 300));
+
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Đăng nhập thành công với Google"),
+                          duration: const Duration(milliseconds: 800),
+                        ),
+                      );
+                      // Navigator.of(context).pushNamedAndRemoveUntil(
+                      //   Routes.allScreens,
+                      //   (Route<dynamic> route) => false,
+                      // );
+                    }
+                  }
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(e.toString()),
+                      duration: const Duration(milliseconds: 800),
+                    ),
+                  );
+                } finally {
+                  _userLoginStore.setLoadingLogin(false);
+                }
               },
               title: "Đăng nhập với Google"),
           const SizedBox(height: 30),

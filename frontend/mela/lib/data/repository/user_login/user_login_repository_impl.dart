@@ -5,6 +5,7 @@ import 'package:mela/data/network/apis/login_signup/refresh_access_token_api.dar
 import 'package:mela/data/securestorage/secure_storage_helper.dart';
 import 'package:mela/domain/entity/user/token_model.dart';
 import 'package:mela/domain/usecase/user_login/login_usecase.dart';
+import 'package:mela/domain/usecase/user_login/login_with_google_usecase.dart';
 
 import '../../../domain/repository/user_login/user_login_repository.dart';
 import '../../sharedpref/shared_preference_helper.dart';
@@ -58,5 +59,10 @@ class UserLoginRepositoryImpl extends UserLoginRepository {
     String refreshToken = await _secureStorageHelper.refreshToken ?? "";
     print(refreshToken);
     return _refreshAccessTokenApi.refreshAccessToken(refreshToken);
+  }
+
+  @override
+  Future<TokenModel?> loginWithGoogle(LoginWithGoogleParams params) {
+    return _loginApi.loginWithGoogle(params);
   }
 }

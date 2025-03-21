@@ -8,6 +8,7 @@ import 'package:mela/domain/usecase/level/get_level_list_usecase.dart';
 import 'package:mela/domain/usecase/question/get_questions_usecase.dart';
 import 'package:mela/domain/usecase/topic_lecture/get_topic_lecture_usecase.dart';
 import 'package:mela/domain/usecase/user/update_user_usecase.dart';
+import 'package:mela/domain/usecase/user_login/login_with_google_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_access_token_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_refresh_token_usecase.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
@@ -82,6 +83,7 @@ class StoreModule {
         getIt<LoginUseCase>(),
         getIt<SaveAccessTokenUsecase>(),
         getIt<SaveRefreshTokenUsecase>(),
+        getIt<LoginWithGoogleUseCase>(),
       ),
     );
     //UserSignupStore

@@ -177,6 +177,15 @@ mixin _$UserLoginStore on _UserLoginStore, Store {
     return _$loginAsyncAction.run(() => super.login(email, password));
   }
 
+  late final _$loginWithGoogleAsyncAction =
+      AsyncAction('_UserLoginStore.loginWithGoogle', context: context);
+
+  @override
+  Future<dynamic> loginWithGoogle(String? idToken, String? accessToken) {
+    return _$loginWithGoogleAsyncAction
+        .run(() => super.loginWithGoogle(idToken, accessToken));
+  }
+
   late final _$_UserLoginStoreActionController =
       ActionController(name: '_UserLoginStore', context: context);
 
