@@ -54,7 +54,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    fabPos = Offset(30, screenHeight - 60);
+    fabPos = Offset(50, screenHeight - 80);
 
     //Reaction to questions status.
     reaction((_) => _questionStore.loading, (loading){

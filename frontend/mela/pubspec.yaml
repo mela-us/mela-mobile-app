@@ -31,7 +31,7 @@ dependencies:
   flutter_html: ^3.0.0-beta.2
   flutter_math_fork: ^0.7.2
   flutter_animate: ^4.5.2
-  flutter_native_splash: ^2.4.4
+#  flutter_native_splash: ^2.4.4
   # G
   get_it: ^7.2.0
   gradient_borders: ^1.0.1
