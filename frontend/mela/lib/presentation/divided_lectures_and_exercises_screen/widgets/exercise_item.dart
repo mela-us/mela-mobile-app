@@ -23,7 +23,7 @@ class ExerciseItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         _questionStore.setQuestionsUid(currentExercise.exerciseId);
-        Navigator.pushNamed(context, Routes.question);
+        Navigator.of(context).pushNamed(Routes.question);
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 16, left: 16, right: 16),

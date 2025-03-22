@@ -58,6 +58,7 @@ class _MyAppState extends State<MyApp> {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        print ('Data: $data');
         int latestCount = int.parse(data["count"]);
 
         PackageInfo packageInfo  = await PackageInfo.fromPlatform();
