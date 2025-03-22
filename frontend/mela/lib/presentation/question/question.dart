@@ -277,6 +277,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
         isQuizQuestion(questions[index]) ?
         //quiz view      :      fill view
         _buildQuizView(questions[index]) : _buildFillView(questions[index]),
+
+        //spacing
+        const SizedBox(height: 30),
       ],
     );
   }
