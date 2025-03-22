@@ -49,12 +49,18 @@ class _ResultScreenState extends State<ResultScreen> {
     return Observer(
       builder: (context) {
         if (_questionStore.saving) {
-          return const RotatingImageIndicator();
+          return Scaffold(
+            backgroundColor: Theme.of(context).colorScheme.appBackground,
+            body: const Center(child: RotatingImageIndicator()),
+          );
         }
         else if (_levelStore.loading ||
             _topicLectureStore.isGetTopicLectureLoading ||
             _exerciseStore.isGetExercisesLoading) {
-          return const RotatingImageIndicator();
+          return Scaffold(
+            backgroundColor: Theme.of(context).colorScheme.appBackground,
+            body: const Center(child: RotatingImageIndicator()),
+          );
         }
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.appBackground,
