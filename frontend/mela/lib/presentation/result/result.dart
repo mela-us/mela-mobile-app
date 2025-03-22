@@ -125,22 +125,38 @@ class _ResultScreenState extends State<ResultScreen> {
 
   //Build items:----------------------------------------------------------------
   Widget _buildResultImage(){
-    return Padding(
-        padding: const EdgeInsets.only(top: 40),
-        child: Center(
-          child: Image.asset(
-            Assets.result_image,
-            height: 207.63,
-            width: 312,
-          ),
-        )
-    );
+    if (calculatePoint() >= 8){
+      return Padding(
+          padding: const EdgeInsets.only(top: 60),
+          child: Center(
+            child: Image.asset(
+              Assets.success_image,
+              height: 150,
+              width: 150,
+            ),
+          )
+      );
+    }
+    else {
+      return Padding(
+          padding: const EdgeInsets.only(top: 60),
+          child: Center(
+            child: Image.asset(
+              Assets.failure_image,
+              height: 150,
+              width: 150,
+            ),
+          )
+      );
+    }
   }
 
   Widget _buildTitle(BuildContext context){
     return Center(
       child: Text(
-        AppLocalizations.of(context).translate('result_title'),
+        calculatePoint() >= 8
+            ? AppLocalizations.of(context).translate('result_title')
+            : "Bài tập chưa đạt!!!",
         style: Theme.of(context).textTheme.title
             .copyWith(color: Theme.of(context).colorScheme.textInBg1),
       ),
@@ -150,8 +166,10 @@ class _ResultScreenState extends State<ResultScreen> {
   Widget _buildDescription(BuildContext context){
     return Center(
       child: Text(
-        AppLocalizations.of(context).translate('result_description'),
-        style: Theme.of(context).textTheme.subTitle
+        calculatePoint() >= 8
+            ? AppLocalizations.of(context).translate('result_description')
+            : "Cần đúng tối thiểu 80% số câu.",
+        style: Theme.of(context).textTheme.normal
             .copyWith(color: Theme.of(context).colorScheme.textInBg2),
       ),
     );
@@ -162,7 +180,9 @@ class _ResultScreenState extends State<ResultScreen> {
       context,
       AppLocalizations.of(context).translate('result_point_title'),
       "${getCorrect()}/${_questionStore.questionList!.questions!.length}",
-      Theme.of(context).colorScheme.buttonChooseBackground,
+        calculatePoint() >= 8 ?
+        Theme.of(context).colorScheme.buttonChooseBackground
+      : Colors.redAccent,
     );
   }
 

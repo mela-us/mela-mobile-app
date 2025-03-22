@@ -104,6 +104,7 @@ flutter:
     - assets/images/
     - assets/images/grades/
     - assets/images/topics/
+    - assets/images/result/
     - assets/images/splash/splash_screen.png
     - assets/icons/
     - assets/icons/arrow_back_longer.png
