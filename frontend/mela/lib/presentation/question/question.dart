@@ -146,7 +146,12 @@ class _QuestionScreenState extends State<QuestionScreen> {
     return Observer(
       builder: (context) {
         if (_questionStore.loading) {
-          return const RotatingImageIndicator();
+          // return const RotatingImageIndicator();
+          return Scaffold(
+            backgroundColor: Theme.of(context).colorScheme.appBackground,
+            body: const Center(child: RotatingImageIndicator()),
+          );
+
         }
         else {
           return Scaffold(
