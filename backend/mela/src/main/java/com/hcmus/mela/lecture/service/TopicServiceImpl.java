@@ -4,7 +4,7 @@ import com.hcmus.mela.lecture.dto.response.GetTopicsResponse;
 import com.hcmus.mela.lecture.mapper.TopicMapper;
 import com.hcmus.mela.lecture.model.Topic;
 import com.hcmus.mela.lecture.repository.TopicRepository;
-import com.hcmus.mela.utils.GeneralMessageAccessor;
+import com.hcmus.mela.common.utils.GeneralMessageAccessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

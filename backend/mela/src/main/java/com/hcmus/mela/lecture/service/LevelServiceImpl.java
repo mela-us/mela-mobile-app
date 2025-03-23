@@ -4,7 +4,7 @@ import com.hcmus.mela.lecture.dto.response.GetLevelsResponse;
 import com.hcmus.mela.lecture.mapper.LevelMapper;
 import com.hcmus.mela.lecture.model.Level;
 import com.hcmus.mela.lecture.repository.LevelRepository;
-import com.hcmus.mela.utils.GeneralMessageAccessor;
+import com.hcmus.mela.common.utils.GeneralMessageAccessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

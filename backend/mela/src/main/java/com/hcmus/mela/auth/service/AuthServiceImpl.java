@@ -9,8 +9,9 @@ import com.hcmus.mela.auth.model.UserRole;
 import com.hcmus.mela.auth.repository.AuthRepository;
 import com.hcmus.mela.auth.security.jwt.JwtTokenService;
 import com.hcmus.mela.auth.mapper.UserMapper;
-import com.hcmus.mela.utils.ExceptionMessageAccessor;
-import com.hcmus.mela.utils.GeneralMessageAccessor;
+import com.hcmus.mela.common.cache.RedisService;
+import com.hcmus.mela.common.utils.ExceptionMessageAccessor;
+import com.hcmus.mela.common.utils.GeneralMessageAccessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -41,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final JwtTokenService jwtTokenService;
 
-    private final TokenStoreService tokenStoreService;
+    private final RedisService redisService;
 
     @Override
     public User findByUsername(String username) {
@@ -95,7 +96,7 @@ public class AuthServiceImpl implements AuthService {
         final String refreshToken = refreshTokenRequest.getRefreshToken();
 
         // Check if the refresh token is blacklisted
-        if (tokenStoreService.isRefreshTokenBlacklisted(refreshToken)) {
+        if (redisService.isRefreshTokenBlacklisted(refreshToken)) {
             final String blacklistedTokenMessage = exceptionMessageAccessor.getMessage(null, "blacklisted_refresh_token");
             throw new InvalidTokenException(blacklistedTokenMessage);
         }
@@ -135,8 +136,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public LogoutResponse getLogoutResponse(LogoutRequest logoutRequest) {
 
-        tokenStoreService.storeAccessToken(logoutRequest.getAccessToken());
-        tokenStoreService.storeRefreshToken(logoutRequest.getRefreshToken());
+        redisService.storeAccessToken(logoutRequest.getAccessToken());
+        redisService.storeRefreshToken(logoutRequest.getRefreshToken());
 
         final String logoutSuccessMessage = generalMessageAccessor.getMessage(null, "logout_successful");
         return new LogoutResponse(logoutSuccessMessage);

@@ -1,19 +1,13 @@
 package com.hcmus.mela.exercise.service;
 
-import com.hcmus.mela.exercise.dto.request.QuestionRequest;
-import com.hcmus.mela.exercise.dto.response.QuestionResponse;
-import com.hcmus.mela.exercise.dto.dto.QuestionDto;
 import com.hcmus.mela.exercise.model.Question;
 
 import com.hcmus.mela.exercise.repository.QuestionRepository;
-import com.hcmus.mela.exercise.mapper.QuestionMapper;
-import com.hcmus.mela.utils.GeneralMessageAccessor;
+import com.hcmus.mela.common.utils.GeneralMessageAccessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Slf4j

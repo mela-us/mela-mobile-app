@@ -13,7 +13,7 @@ import com.hcmus.mela.exercise.repository.ExerciseRepository;
 import com.hcmus.mela.exercise.mapper.ExerciseMapper;
 import com.hcmus.mela.lecture.model.Lecture;
 import com.hcmus.mela.lecture.service.LectureDetailService;
-import com.hcmus.mela.utils.GeneralMessageAccessor;
+import com.hcmus.mela.common.utils.GeneralMessageAccessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

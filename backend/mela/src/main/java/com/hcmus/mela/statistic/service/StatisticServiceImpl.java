@@ -10,7 +10,7 @@ import com.hcmus.mela.statistic.mapper.QuestionStatsMapper;
 import com.hcmus.mela.statistic.model.DailyQuestionStats;
 import com.hcmus.mela.statistic.model.QuestionStats;
 import com.hcmus.mela.statistic.repository.StatisticRepository;
-import com.hcmus.mela.utils.GeneralMessageAccessor;
+import com.hcmus.mela.common.utils.GeneralMessageAccessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
