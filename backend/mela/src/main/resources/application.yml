@@ -10,6 +10,7 @@ spring:
       - classpath:configuration/Cache.properties
       - classpath:configuration/Storage.properties
       - classpath:configuration/AiClient.properties
+      - classpath:prompts/ExerciseHintPrompt.yml
 
 logging:
   level:

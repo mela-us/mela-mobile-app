@@ -1,4 +1,4 @@
-package com.hcmus.mela.ai.exercise.hint.exception.response;
+package com.hcmus.mela.ai.question.hint.exception.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
