@@ -12,11 +12,11 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 public class ConversationServiceImpl implements ConversationService {
     private static final Logger logger = LoggerFactory.getLogger(ConversationServiceImpl.class);
     private final WebClient webClient;
-    private final String aiModel;
+    private final AiClientProperties.ChatBot chatBotProperties;
 
     public ConversationServiceImpl(AiWebClient aiWebClient, AiClientProperties aiClientProperties) {
         this.webClient = aiWebClient.getWebClientForChatBot();
-        this.aiModel = aiClientProperties.getChatBot().getModel();
+        this.chatBotProperties = aiClientProperties.getChatBot();
     }
 
     @Override
@@ -35,8 +35,8 @@ public class ConversationServiceImpl implements ConversationService {
         """.formatted(aiModel);
 
             String response = webClient.post()
-                    .uri("/chat/completions")
-                    .bodyValue(requestBody)
+                    .uri(chatBotProperties.getPath())
+                    .bodyValue("{\"model\":\"" + chatBotProperties.getModel() + "\", \"messages\":[{\"role\":\"user\", \"content\":\"Hello\"}]}")
                     .retrieve()
                     .onStatus(
                             status -> status.is4xxClientError() || status.is5xxServerError(),

@@ -17,13 +17,17 @@ public class AiWebClient {
         return createWebClient(aiClientProperties.getExerciseHint().getProvider());
     }
 
+    public WebClient getWebClientForExerciseGrading() {
+        return createWebClient(aiClientProperties.getExerciseGrading().getProvider());
+    }
+
     private WebClient createWebClient(String provider) {
         AiClientProperties.Provider providerConfig = aiClientProperties.getProviders().get(provider);
         if (providerConfig == null) {
             throw new IllegalArgumentException("Unsupported AI provider: " + provider);
         }
         return WebClient.builder()
-                .baseUrl(providerConfig.getUrl())
+                .baseUrl(providerConfig.getBaseUrl())
                 .defaultHeader("Authorization", "Bearer " + providerConfig.getKey())
                 .defaultHeader("Content-Type", "application/json")
                 .build();
