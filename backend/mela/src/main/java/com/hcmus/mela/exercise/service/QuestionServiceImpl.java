@@ -27,4 +27,14 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepository.findByQuestionId(questionId);
     }
 
+    @Override
+    public String generateTerm(String level, String question, String answer) {
+        return "";
+    }
+
+    @Override
+    public String generateGuide(String level, String question, String answer) {
+        return "";
+    }
+
 }

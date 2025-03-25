@@ -32,6 +32,9 @@ public class Question {
     @Field(name = "blank_answer")
     private String blankAnswer;
 
+    @Field(name = "solution")
+    private String solution;
+
     @Field(name = "term")
     private String term;
 
