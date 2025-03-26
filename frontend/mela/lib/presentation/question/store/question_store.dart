@@ -96,6 +96,7 @@ abstract class _QuestionStore with Store{
 
   @action
   Future submitAnswer(int correct, DateTime start, DateTime end) async {
+    questionList ??= QuestionList(message: '', size: 0, questions: []);
     final future = _submitResultUseCase.call(
         params: SubmitResultParams(
             exerciseId: questionsUid,
