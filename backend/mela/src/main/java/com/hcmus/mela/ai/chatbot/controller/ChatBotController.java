@@ -1,6 +1,9 @@
 package com.hcmus.mela.ai.chatbot.controller;
 
+import com.hcmus.mela.ai.chatbot.dto.request.ChatRequest;
+import com.hcmus.mela.ai.chatbot.dto.response.ChatResponse;
 import com.hcmus.mela.ai.chatbot.service.ConversationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +14,10 @@ import org.springframework.web.bind.annotation.*;
 public class ChatBotController {
     private final ConversationService conversationService;
 
-    @PostMapping("/test-chat")
-    public ResponseEntity<String> testChat(@RequestHeader(value = "Authorization") String authorizationHeader) {
-        return ResponseEntity.ok(conversationService.testChat());
+    @PostMapping()
+    public ResponseEntity<ChatResponse> startConversation(
+            @Valid @RequestBody ChatRequest chatRequest,
+            @RequestHeader(value = "Authorization") String authorizationHeader) {
+        return ResponseEntity.ok(conversationService.identifyProblem(chatRequest));
     }
 }
