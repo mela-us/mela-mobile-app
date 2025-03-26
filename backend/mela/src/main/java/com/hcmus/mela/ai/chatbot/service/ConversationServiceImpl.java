@@ -23,20 +23,33 @@ public class ConversationServiceImpl implements ConversationService {
     public String testChat() {
         try {
             String requestBody = """
-        {
-            "model": "%s",
-            "messages": [
-                {
-                    "role": "user",
-                    "content": "Bài toán:\\n<[<img src='https://mela-storage-dev.s3.ap-southeast-1.amazonaws.com/exercises/images/lop5/K5_06.png'>]>\\n\\nBài giải:\\n<[<img src='https://mela-storage-dev.s3.ap-southeast-1.amazonaws.com/exercises/images/lop5/K5_07.png'>]>\\n\\nChọn ra 01 phương pháp giải tiêu biểu từ bài toán và bài giải, liệt kê các bước giải chính và giải thích vắn tắt từng bước giải của phương pháp giải đó; sao cho phù hợp với học sinh lớp <5> để học sinh bắt đầu giải bài toán , dựa theo bối cảnh dưới đây.\\n\\nBối cảnh: Bạn là giáo viên dạy toán lớp <class> chương trình toán phổ thông Việt Nam. Em học sinh lớp <class> cần bạn gợi ý cho bài toán mà em ấy không hiểu theo cách phù hợp, dễ hiểu nhất với học sinh lớp <5> để giúp em tìm ra cách giải bài toán\\n\\nƯu tiên phương pháp giải nằm trong chương trình học lớp <class>, phương pháp giải ngắn gọn, có áp dụng các công thức đã học trong chương trình. Câu trả lời chỉ được chứa phương pháp giải ở hàng trên cùng, tên phương pháp đặt sau cụm “Phương pháp giải:”. Mỗi hàng tiếp theo chứa từng bước giải của phương pháp đó. Tên phương pháp, tên bước giải (hoặc tên đánh số), được in đậm. Nếu bước giải không có tên thì đánh số từ 1 tới hết, nếu có tên thì không được đánh số. Giải thích vắn tắt từng bước giải đặt sau dấu hai chấm, in thường. Không được giải bài toán, không được ra đáp số. Không được thực hiện các bước tính toán."
-                }
-            ]
-        }
-        """.formatted(aiModel);
+    {
+        "model": "%s",
+        "messages": [
+            {
+                "role": "user",
+                "content": "data: Học sinh gửi bài tập dưới dạng văn bản hoặc hình ảnh. Xử lý đầu vào như sau: text: Giải thích định lý viet.
+                    conditions: {
+                        invalid_input: Nếu học sinh gửi sai định dạng (không phải văn bản hoặc hình ảnh rõ ràng), phản hồi: 'Bạn hãy gửi bài tập dưới dạng văn bản hoặc hình ảnh rõ ràng nhé!' ,
+                        valid_input: Nếu học sinh gửi đúng định dạng, tiến hành phân tích bài toán theo các phần sau:
+                    },
+                    structure: {
+                        analysis: Nhận dạng đề bài và xác định dạng bài toán.,
+                        solution_method: Đưa ra phương pháp giải chung và liệt kê các công thức áp dụng.,
+                        steps: Danh sách các bước làm, mỗi bước có tiêu đề ngắn gọn và mô tả hướng dẫn (không cung cấp kết quả, chỉ hướng dẫn dễ hiểu, mang tính khơi gợi, thúc đẩy học sinh tự suy nghĩ).,
+                        advice: Lời động viên ngắn, khuyến khích học sinh tự làm và đề nghị gửi bài để nhận nhận xét.,
+                        relative_terms: Liệt kê tối đa 5 khái niệm hoặc thuật ngữ liên quan đến dạng bài toán.
+                    },
+                    instruction: Bối cảnh: Bạn là giáo viên hoặc gia sư dạy toán thuộc chương trình tiểu học và trung học cơ sở tại Việt Nam. Học sinh cần bạn hướng dẫn một cách dễ hiểu, phù hợp với trình độ của mình.,
+                    requirement: Trình bày công thức theo chuẩn LaTeX, sử dụng tiếng Việt, luôn có kết luận cuối bài. Xưng hô với học sinh là 'bạn', còn người trả lời là 'mình'."
+            }
+        ]
+    }
+        """.formatted(chatBotProperties.getModel());
 
             String response = webClient.post()
                     .uri(chatBotProperties.getPath())
-                    .bodyValue("{\"model\":\"" + chatBotProperties.getModel() + "\", \"messages\":[{\"role\":\"user\", \"content\":\"Hello\"}]}")
+                    .bodyValue(requestBody)
                     .retrieve()
                     .onStatus(
                             status -> status.is4xxClientError() || status.is5xxServerError(),

@@ -11,6 +11,7 @@ spring:
       - classpath:configuration/Storage.properties
       - classpath:configuration/AiClient.properties
       - classpath:prompts/ExerciseHintPrompt.yml
+      - classpath:prompts/ChatBotPrompt.yml
 
 logging:
   level:
