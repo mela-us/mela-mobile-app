@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:mela/core/domain/usecase/use_case.dart';
 import 'package:mela/data/network/apis/questions/save_result_api.dart';
+import 'package:mela/data/network/constants/endpoints_const.dart';
 import 'package:mela/domain/usecase/user/logout_usecase.dart';
 import 'package:mela/domain/usecase/user_login/refresh_access_token_usecase.dart';
 
@@ -18,7 +19,7 @@ class SubmitResultUseCase extends UseCase<int, SubmitResultParams>{
   @override
   Future<int> call({required SubmitResultParams params}) async {
     try {
-      int resultCode = await _saveApi.saveResult(params);
+      int resultCode = await _saveApi.saveResult(params, EndpointsConst.saveResult);
       return resultCode;
     } catch (e){
       if (e is DioException){

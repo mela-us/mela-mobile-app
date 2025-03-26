@@ -40,7 +40,7 @@ void main() {
             (server) => server.reply(200, responsePayload),
       );
 
-      final result = await saveResultApi.saveResult(submitResultParams);
+      final result = await saveResultApi.saveResult(submitResultParams, "${EndpointsConst.saveResult}?status=200");
       expect(result, 200);
     });
 
@@ -60,7 +60,7 @@ void main() {
             (server) => server.reply(401, responsePayload),
       );
 
-      final result = await saveResultApi.saveResult(submitResultParams);
+      final result = await saveResultApi.saveResult(submitResultParams, "${EndpointsConst.saveResult}?status=401");
       expect(result, 401);
     });
 
