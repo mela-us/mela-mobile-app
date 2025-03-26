@@ -63,7 +63,5 @@ void main() {
       final result = await saveResultApi.saveResult(submitResultParams, "${EndpointsConst.saveResult}?status=401");
       expect(result, 401);
     });
-
-
   });
 }

@@ -82,6 +82,12 @@ abstract class _QuestionStore with Store{
 
         }
       }
+      else {
+        if (error == 401) {
+          isAuthorized = false;
+          return;
+        }
+      }
       print("Error: $error");
       questionList = QuestionList(message: '', size: 0, questions: []);
       _errorStore.errorMessage = DioExceptionUtil.handleError(error);
