@@ -22,8 +22,8 @@ import org.springframework.lang.NonNull;
 @EnableMongoRepositories(basePackages = {
         "com.hcmus.mela.exercise.repository",
         "com.hcmus.mela.lecture.repository",
-        "com.hcmus.mela.statistic.repository",
         "com.hcmus.mela.ai.chatbot.repository",
+        "com.hcmus.mela.history.repository"
 })
 @RequiredArgsConstructor
 public class ContentDataSourceConfiguration {

@@ -1,8 +1,5 @@
 package com.hcmus.mela.auth.security.jwt;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.hcmus.mela.common.cache.RedisService;
 import com.hcmus.mela.auth.service.UserDetailsServiceImpl;
 import com.hcmus.mela.auth.security.utils.SecurityConstants;

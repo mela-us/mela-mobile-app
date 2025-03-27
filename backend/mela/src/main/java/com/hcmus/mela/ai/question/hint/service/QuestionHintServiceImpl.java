@@ -1,7 +1,6 @@
 package com.hcmus.mela.ai.question.hint.service;
 
 import com.hcmus.mela.ai.question.hint.model.QuestionHint;
-import com.hcmus.mela.ai.question.hint.repository.QuestionHintRepository;
 import com.hcmus.mela.exercise.model.Exercise;
 import com.hcmus.mela.exercise.model.Option;
 import com.hcmus.mela.exercise.model.Question;
@@ -9,7 +8,6 @@ import com.hcmus.mela.exercise.service.ExerciseService;
 import com.hcmus.mela.exercise.service.QuestionService;
 import com.hcmus.mela.lecture.model.Lecture;
 import com.hcmus.mela.lecture.model.Level;
-import com.hcmus.mela.lecture.service.LectureDetailService;
 import com.hcmus.mela.lecture.service.LevelService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

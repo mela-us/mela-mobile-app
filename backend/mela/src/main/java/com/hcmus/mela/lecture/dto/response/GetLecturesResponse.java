@@ -1,6 +1,6 @@
 package com.hcmus.mela.lecture.dto.response;
 
-import com.hcmus.mela.lecture.dto.dto.LectureDetailDto;
+import com.hcmus.mela.lecture.dto.dto.LectureStatDetailDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,5 +18,5 @@ public class GetLecturesResponse {
 
     private Integer total;
 
-    private List<LectureDetailDto> data;
+    private List<LectureStatDetailDto> data;
 }

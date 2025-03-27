@@ -5,12 +5,10 @@ import com.hcmus.mela.exercise.dto.response.QuestionResponse;
 import com.hcmus.mela.exercise.model.Exercise;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public interface ExerciseService {
-    Exercise findByExerciseId(UUID exerciseId);
-
-    List<Exercise> findAllExercisesInLecture(UUID lectureId);
 
     QuestionResponse getExercise(ExerciseRequest exerciseRequest);
 
@@ -19,4 +17,7 @@ public interface ExerciseService {
     Integer getNumberOfQuestions(UUID exerciseId);
 
     Exercise findByQuestionId(UUID questionId);
+
+    Map<UUID, Integer> getExerciseCountForLectures(List<UUID> lectureIdList);
+
 }

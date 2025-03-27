@@ -1,5 +1,6 @@
 package com.hcmus.mela.lecture.service;
 
+import com.hcmus.mela.lecture.dto.dto.TopicDto;
 import com.hcmus.mela.lecture.dto.response.GetTopicsResponse;
 import com.hcmus.mela.lecture.mapper.TopicMapper;
 import com.hcmus.mela.lecture.model.Topic;
@@ -25,15 +26,18 @@ public class TopicServiceImpl implements TopicService {
 
         response.setMessage(generalMessageAccessor.getMessage(null, "get_topics_success"));
         response.setTotal(topics.size());
-        response.setData(
-                topics.stream().map(TopicMapper.INSTANCE::topicToTopicDto).collect(Collectors.toList())
-        );
+        response.setData(topics.stream().map(TopicMapper.INSTANCE::topicToTopicDto).collect(Collectors.toList()));
 
         return response;
     }
 
     @Override
-    public List<Topic> getTopics() {
-        return topicRepository.findAll();
+    public List<TopicDto> getTopics () {
+        List<Topic> topics = topicRepository.findAll();
+        if (!topics.isEmpty()) {
+            return topics.stream().map(TopicMapper.INSTANCE::topicToTopicDto).toList();
+        } else {
+            return null;
+        }
     }
 }

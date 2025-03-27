@@ -2,15 +2,14 @@ package com.hcmus.mela.exercise.dto.dto;
 
 
 import com.hcmus.mela.exercise.model.ExerciseStatus;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class ExerciseResultDto {
     private Integer totalCorrectAnswers;
 

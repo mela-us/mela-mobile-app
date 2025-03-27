@@ -16,6 +16,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class ExerciseValidationService {
+    
     private static final String EXERCISE_NOT_EXISTS = "exercise_id_must_exist";
 
     private static final String LECTURE_NOT_EXISTS = "lecture_id_must_exist";

@@ -16,5 +16,5 @@ public interface TopicMapper {
     TopicDto topicToTopicDto(Topic topic);
 
     @Mapping(source = "name", target = "topicName")
-    LecturesByTopicDto topicToLecturesByTopicDto(Topic topic);
+    LecturesByTopicDto topicDtoToLecturesByTopicDto(TopicDto topicDto);
 }
