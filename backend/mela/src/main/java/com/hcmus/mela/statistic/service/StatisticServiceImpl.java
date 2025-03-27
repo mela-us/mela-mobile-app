@@ -1,7 +1,7 @@
 package com.hcmus.mela.statistic.service;
 
 import com.hcmus.mela.auth.security.jwt.JwtTokenService;
-import com.hcmus.mela.lecture.exception.exception.AsyncException;
+import com.hcmus.mela.lecture.exception.AsyncException;
 import com.hcmus.mela.statistic.dto.dto.DailyQuestionStatsDto;
 import com.hcmus.mela.statistic.dto.dto.QuestionStatsDto;
 import com.hcmus.mela.statistic.dto.response.GetStatisticsResponse;

@@ -15,7 +15,7 @@ public class QuestionHintController {
     public List<String> generateTerm(@PathVariable UUID questionId,
                                      @RequestHeader(value = "Authorization") String authorizationHeader) {
 
-
+        return null;
     }
 }
 

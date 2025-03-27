@@ -1,4 +1,4 @@
-package com.hcmus.mela.ai.chatbot.exception.exception;
+package com.hcmus.mela.ai.chatbot.exception;
 
 public class ChatBotException extends RuntimeException {
     

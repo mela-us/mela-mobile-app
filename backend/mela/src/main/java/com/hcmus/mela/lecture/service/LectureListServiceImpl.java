@@ -7,7 +7,7 @@ import com.hcmus.mela.lecture.dto.dto.LectureDetailDto;
 import com.hcmus.mela.lecture.dto.dto.LecturesByTopicDto;
 import com.hcmus.mela.lecture.dto.response.GetLecturesByLevelResponse;
 import com.hcmus.mela.lecture.dto.response.GetLecturesResponse;
-import com.hcmus.mela.lecture.exception.exception.AsyncException;
+import com.hcmus.mela.lecture.exception.AsyncException;
 import com.hcmus.mela.lecture.mapper.LectureMapper;
 import com.hcmus.mela.lecture.mapper.TopicMapper;
 import com.hcmus.mela.lecture.model.Lecture;

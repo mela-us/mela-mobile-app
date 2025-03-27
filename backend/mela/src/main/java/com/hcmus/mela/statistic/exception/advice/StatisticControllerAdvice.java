@@ -1,6 +1,6 @@
 package com.hcmus.mela.statistic.exception.advice;
 
-import com.hcmus.mela.lecture.exception.exception.AsyncException;
+import com.hcmus.mela.lecture.exception.AsyncException;
 import com.hcmus.mela.statistic.controller.StatisticController;
 import com.hcmus.mela.statistic.exception.exception.StatisticException;
 import com.hcmus.mela.statistic.exception.response.ApiExceptionResponse;

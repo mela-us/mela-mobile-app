@@ -1,6 +1,6 @@
 package com.hcmus.mela.exercise.service;
 
-import com.hcmus.mela.exercise.exception.exception.ExerciseException;
+import com.hcmus.mela.exercise.exception.ExerciseException;
 import com.hcmus.mela.exercise.repository.QuestionRepository;
 import com.hcmus.mela.common.utils.ExceptionMessageAccessor;
 import lombok.RequiredArgsConstructor;

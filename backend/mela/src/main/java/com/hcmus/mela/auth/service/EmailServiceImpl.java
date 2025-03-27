@@ -1,7 +1,7 @@
 package com.hcmus.mela.auth.service;
 
 import com.hcmus.mela.auth.dto.dto.EmailDetailsDto;
-import com.hcmus.mela.auth.exception.exception.ForgotPasswordException;
+import com.hcmus.mela.auth.exception.ForgotPasswordException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;

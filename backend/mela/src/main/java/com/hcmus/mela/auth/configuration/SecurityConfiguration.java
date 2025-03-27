@@ -20,7 +20,7 @@ public class SecurityConfiguration {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    private final JwtAuthenticationEntryPoint unauthorizedHandler;
+	private final JwtAuthenticationEntryPoint unauthorizedHandler;
 
     @Bean
     public AuthenticationManager authenticationManager(final AuthenticationConfiguration authenticationConfiguration) throws Exception {
