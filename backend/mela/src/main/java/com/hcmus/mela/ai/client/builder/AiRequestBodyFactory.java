@@ -47,22 +47,23 @@ public class AiRequestBodyFactory {
     }
 
     /**
-     * Creates a request body for the chat bot feature.
+     * Creates a request body for the chatbot feature.
      *
      * @param instruction System instruction for the AI
-     * @param message List of message objects containing role and content
+     * @param textData Text content of the question
+     * @param imageUrls List of image URLs to include in the request
      * @param aiFeatureProperties Configuration properties for the AI feature
      * @return A request body object formatted for the specific AI provider
      * @throws IllegalArgumentException if the provider is not supported
      */
-    public Object createRequestBodyForChatBot(String instruction, List<Map<String, String>> message, AiFeatureProperties aiFeatureProperties) {
+    public Object createRequestBodyForChatBot(String instruction, String textData, List<String> imageUrls, AiFeatureProperties aiFeatureProperties) {
         AiRequestBodyBuilder builder = requestBodyBuilders.get(aiFeatureProperties.getProvider() + "RequestBodyBuilder");
 
         if (builder == null) {
             throw new IllegalArgumentException("Unknown provider: " + aiFeatureProperties.getProvider() + ". Available providers: " + requestBodyBuilders.keySet());
         }
 
-        return builder.buildRequestBodyForChatBot(instruction, message, aiFeatureProperties);
+        return builder.buildRequestBodyForQuestionHint(instruction, textData, imageUrls, aiFeatureProperties);
     }
 
 }
