@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public interface QuestionHintService {
 
-    List<String> generateTerm(UUID questionId, UUID exerciseId);
+    List<String> generateTerm(UUID questionId);
 
-    List<String> generateGuide(UUID questionId, UUID exerciseId);
+    List<String> generateGuide(UUID questionId);
 }

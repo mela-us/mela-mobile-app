@@ -122,4 +122,9 @@ public class ExerciseServiceImpl implements ExerciseService {
 
         return questions.size();
     }
+
+    @Override
+    public Exercise findByQuestionId(UUID questionId) {
+        return exerciseRepository.findExerciseByQuestionId(questionId);
+    }
 }

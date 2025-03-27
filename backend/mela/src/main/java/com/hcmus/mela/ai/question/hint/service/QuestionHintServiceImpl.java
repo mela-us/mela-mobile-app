@@ -35,10 +35,10 @@ public class QuestionHintServiceImpl implements QuestionHintService {
 
     private final LevelService levelService;
 
-    public List<String> generateKeys(UUID questionId, UUID exerciseId) {
+    public List<String> generateKeys(UUID questionId) {
         Question question = questionService.findByQuestionId(questionId);
 
-        Exercise exercise = exerciseService.findByExerciseId(exerciseId);
+        Exercise exercise = exerciseService.findByQuestionId(questionId);
 
         Lecture lecture = lectureDetailService.getLectureById(exercise.getLectureId());
 
@@ -98,9 +98,9 @@ public class QuestionHintServiceImpl implements QuestionHintService {
     }
 
     @Override
-    public List<String> generateTerm(UUID questionId, UUID exerciseId) {
+    public List<String> generateTerm(UUID questionId) {
 
-        List<String> keys = generateKeys(questionId, exerciseId);
+        List<String> keys = generateKeys(questionId);
 
         Map<String, String> instruction = questionHint.getTerm().get("instruction");
 
@@ -110,9 +110,9 @@ public class QuestionHintServiceImpl implements QuestionHintService {
     }
 
     @Override
-    public List<String> generateGuide(UUID questionId, UUID exerciseId) {
+    public List<String> generateGuide(UUID questionId) {
 
-        List<String> keys = generateKeys(questionId, exerciseId);
+        List<String> keys = generateKeys(questionId);
 
         Map<String, String> instruction = questionHint.getGuide().get("instruction");
 
