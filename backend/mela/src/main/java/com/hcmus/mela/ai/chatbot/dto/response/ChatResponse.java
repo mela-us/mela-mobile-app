@@ -9,5 +9,5 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ChatResponse {
-    private String body;
+    private Object body;
 }

@@ -1,24 +1,35 @@
 package com.hcmus.mela.ai.client;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import com.hcmus.mela.ai.client.builder.AiResponseFactory;
+import lombok.AllArgsConstructor;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class AiWebClient {
     private final AiClientProperties aiClientProperties;
+    private final AiResponseFactory aiResponseFactory;
 
     public WebClient getWebClientForChatBot() {
         return createWebClient(aiClientProperties.getChatBot().getProvider());
     }
 
-    public WebClient getWebClientForExerciseHint() {
-        return createWebClient(aiClientProperties.getExerciseHint().getProvider());
+    public WebClient getWebClientForQuestionHint() {
+        return createWebClient(aiClientProperties.getQuestionHint().getProvider());
     }
 
-    public WebClient getWebClientForExerciseGrading() {
-        return createWebClient(aiClientProperties.getExerciseGrading().getProvider());
+    public Object fetchAiResponse(AiClientProperties.ChatBot chatBotProperties, Object requestBody) {
+        String provider = chatBotProperties.getProvider();
+        Class<?> responseType = aiResponseFactory.getResponseType(provider);
+
+        return getWebClientForChatBot()
+                .post()
+                .uri(chatBotProperties.getPath())
+                .bodyValue(requestBody)
+                .retrieve()
+                .bodyToMono(responseType)
+                .block();
     }
 
     private WebClient createWebClient(String provider) {

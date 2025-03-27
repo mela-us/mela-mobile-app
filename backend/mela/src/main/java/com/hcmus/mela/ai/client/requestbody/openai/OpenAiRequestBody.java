@@ -1,4 +1,4 @@
-package com.hcmus.mela.ai.client.request.openai;
+package com.hcmus.mela.ai.client.requestbody.openai;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,5 +12,5 @@ public class OpenAiRequestBody {
     private String model;
     private List<Message> messages;
     private double temperature;
-    private int max_tokens;
+    private int max_completion_tokens;
 }
