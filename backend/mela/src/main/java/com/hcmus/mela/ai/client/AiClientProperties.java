@@ -14,8 +14,7 @@ import java.util.Map;
 public class AiClientProperties {
     private Map<String, Provider> providers;
     private ChatBot chatBot;
-    private ExerciseHint exerciseHint;
-    private ExerciseGrading exerciseGrading;
+    private QuestionHint questionHint;
 
     @Setter
     @Getter
@@ -26,25 +25,22 @@ public class AiClientProperties {
 
     @Setter
     @Getter
-    public static class ChatBot {
+    public static class ChatBot implements AiFeatureProperties{
         private String provider;
         private String model;
         private String path;
+        private double temperature;
+        private int maxCompletionTokens;
     }
 
     @Setter
     @Getter
-    public static class ExerciseHint {
+    public static class QuestionHint implements AiFeatureProperties{
         private String provider;
         private String model;
         private String path;
+        private double temperature;
+        private int maxCompletionTokens;
     }
 
-    @Setter
-    @Getter
-    public static class ExerciseGrading {
-        private String provider;
-        private String model;
-        private String path;
-    }
 }
