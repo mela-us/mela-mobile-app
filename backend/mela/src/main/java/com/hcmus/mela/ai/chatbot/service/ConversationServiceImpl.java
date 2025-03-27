@@ -28,7 +28,7 @@ public class ConversationServiceImpl implements ConversationService {
 
     @Override
     public ChatResponse identifyProblem(ChatRequest chatRequest) {
-        Object requestBody = aiRequestBodyFactory.createRequestBody(
+        Object requestBody = aiRequestBodyFactory.createRequestBodyForQuestionHint(
                 chatBotPrompt.getIdentifyProblem().getInstruction(),
                 chatRequest.getUserMessage(),
                 chatBotProperties);
