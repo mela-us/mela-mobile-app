@@ -17,4 +17,6 @@ public interface ExerciseService {
     ExerciseResponse getAllExercisesInLecture(ExerciseRequest exerciseRequest);
 
     Integer getNumberOfQuestions(UUID exerciseId);
+
+    Exercise findByQuestionId(UUID questionId);
 }
