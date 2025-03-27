@@ -1,24 +1,11 @@
 package com.hcmus.mela.ai.question.hint.service;
 
+import java.util.List;
+import java.util.UUID;
+
 public interface QuestionHintService {
 
-    String generateTermTask(String level);
+    List<String> generateTerm(UUID questionId, UUID exerciseId);
 
-    String generateTermData(String question, String answer);
-
-    String generateTermBackground(String level);
-
-    String generateTermRequirement(String level);
-
-    String generateTerm(String level, String answer, String question);
-
-    String generateGuideTask(String level);
-
-    String generateGuideData(String question, String answer);
-
-    String generateGuideBackground(String level);
-
-    String generateGuideRequirement(String level);
-
-    String generateGuide(String level, String answer, String question);
+    List<String> generateGuide(UUID questionId, UUID exerciseId);
 }

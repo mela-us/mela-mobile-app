@@ -1,9 +1,24 @@
 package com.hcmus.mela.ai.question.hint.service;
 
 import com.hcmus.mela.ai.question.hint.model.QuestionHint;
+import com.hcmus.mela.ai.question.hint.repository.QuestionHintRepository;
+import com.hcmus.mela.exercise.model.Exercise;
+import com.hcmus.mela.exercise.model.Option;
+import com.hcmus.mela.exercise.model.Question;
+import com.hcmus.mela.exercise.service.ExerciseService;
+import com.hcmus.mela.exercise.service.QuestionService;
+import com.hcmus.mela.lecture.model.Lecture;
+import com.hcmus.mela.lecture.model.Level;
+import com.hcmus.mela.lecture.service.LectureDetailService;
+import com.hcmus.mela.lecture.service.LevelService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -12,75 +27,97 @@ public class QuestionHintServiceImpl implements QuestionHintService {
 
     private final QuestionHint questionHint;
 
-    @Override
-    public String generateTermTask(String level) {
-        String taskTemplate = questionHint.getTerm().get("task").toString();
-        return taskTemplate.replace("{level}", level);
+    private final QuestionService questionService;
+
+    private final ExerciseService exerciseService;
+
+    private final LectureDetailService lectureDetailService;
+
+    private final LevelService levelService;
+
+    public List<String> generateKeys(UUID questionId, UUID exerciseId) {
+        Question question = questionService.findByQuestionId(questionId);
+
+        Exercise exercise = exerciseService.findByExerciseId(exerciseId);
+
+        Lecture lecture = lectureDetailService.getLectureById(exercise.getLectureId());
+
+        Level level = levelService.findLevelByLevelId(lecture.getLevelId());
+
+        List<String> keys = new ArrayList<>();
+
+        keys.add(level.getName());
+
+        keys.add(question.getContent());
+
+        String answer = "Lời giải: " + question.getGuide();
+
+        if (question.getBlankAnswer() != null) {
+            answer += ("\nĐáp án: " + question.getBlankAnswer());
+        } else {
+            answer += "\nĐáp án: ";
+
+            for (Option option : question.getOptions()) {
+                if (option.getIsCorrect()) {
+                    answer += option.getContent();
+                    break;
+                }
+            }
+        }
+
+        keys.add(answer);
+
+        return keys;
+    }
+
+    public List<String> generateTemplate(Map<String, String> instruction,
+                                         Map<String, String> userMessages,
+                                         List<String> keys) {
+        List<String> template = new ArrayList<>();
+
+        String task = instruction.get("task").replace("{level}", keys.get(0))
+                .replace("{question}", keys.get(1))
+                .replace("{answer}", keys.get(2));
+
+        String background = instruction.get("background").replace("{level}", keys.get(0))
+                .replace("{question}", keys.get(1))
+                .replace("{answer}", keys.get(2));
+
+        String requirement = instruction.get("requirement").replace("{level}", keys.get(0))
+                .replace("{question}", keys.get(1))
+                .replace("{answer}", keys.get(2));
+
+        template.add(task + "\n" + background + "\n" + requirement);
+
+        template.add(userMessages.get("data")
+                .replace("{level}", keys.get(0))
+                .replace("{question}", keys.get(1))
+                .replace("{answer}", keys.get(2)));
+
+        return template;
     }
 
     @Override
-    public String generateTermData(String question, String answer) {
-        String dataTemplate = questionHint.getTerm().get("data").toString();
-        return dataTemplate.replace("{question}", question)
-                .replace("{answer}", answer);
+    public List<String> generateTerm(UUID questionId, UUID exerciseId) {
+
+        List<String> keys = generateKeys(questionId, exerciseId);
+
+        Map<String, String> instruction = questionHint.getTerm().get("instruction");
+
+        Map<String, String> userMessages = questionHint.getTerm().get("userMessages");
+
+        return generateTemplate(instruction, userMessages, keys);
     }
 
     @Override
-    public String generateTermBackground(String level) {
-        String backgroundTemplate = questionHint.getTerm().get("background").toString();
-        return backgroundTemplate.replace("{level}", level);
-    }
+    public List<String> generateGuide(UUID questionId, UUID exerciseId) {
 
-    @Override
-    public String generateTermRequirement(String level) {
-        String requirementTemplate = questionHint.getTerm().get("requirement").toString();
-        return requirementTemplate.replace("{level}", level);
-    }
+        List<String> keys = generateKeys(questionId, exerciseId);
 
-    @Override
-    public String generateTerm(String level, String question, String answer) {
-        String term = generateTermTask(level) + "\n"
-                + generateTermData(question, answer) + "\n"
-                + generateTermBackground(level) + "\n"
-                + generateTermRequirement(level);
+        Map<String, String> instruction = questionHint.getGuide().get("instruction");
 
-        return term;
-    }
+        Map<String, String> userMessages = questionHint.getGuide().get("userMessages");
 
-    @Override
-    public String generateGuideTask(String level) {
-        String taskTemplate = questionHint.getGuide().get("task").toString();
-        return taskTemplate.replace("{level}", level);
-    }
-
-    @Override
-    public String generateGuideData(String question, String answer) {
-        String dataTemplate = questionHint.getGuide().get("data").toString();
-        return dataTemplate.replace("{question}", question)
-                .replace("{answer}", answer);
-    }
-
-    @Override
-    public String generateGuideBackground(String level) {
-        String backgroundTemplate = questionHint.getGuide().get("background").toString();
-        return backgroundTemplate.replace("{level}", level);
-    }
-
-    @Override
-    public String generateGuideRequirement(String level) {
-        String requirementTemplate = questionHint.getGuide().get("requirement").toString();
-        return requirementTemplate.replace("{level}", level);
-    }
-
-    @Override
-    public String generateGuide(String level, String answer, String question) {
-        String guide = "";
-
-        guide += generateGuideTask(level);
-        guide += generateGuideData(question, answer);
-        guide += generateGuideBackground(level);
-        guide += generateGuideRequirement(level);
-
-        return guide;
+        return generateTemplate(instruction, userMessages, keys);
     }
 }
