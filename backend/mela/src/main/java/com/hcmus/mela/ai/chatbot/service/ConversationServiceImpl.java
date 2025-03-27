@@ -8,6 +8,8 @@ import com.hcmus.mela.ai.client.AiWebClient;
 import com.hcmus.mela.ai.client.builder.AiRequestBodyFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ConversationServiceImpl implements ConversationService {
 
@@ -30,7 +32,8 @@ public class ConversationServiceImpl implements ConversationService {
     public ChatResponse identifyProblem(ChatRequest chatRequest) {
         Object requestBody = aiRequestBodyFactory.createRequestBodyForQuestionHint(
                 chatBotPrompt.getIdentifyProblem().getInstruction(),
-                chatRequest.getUserMessage(),
+                chatRequest.getText(),
+                List.of(chatRequest.getImageUrl()),
                 chatBotProperties);
 
         Object response = aiWebClient.fetchAiResponse(chatBotProperties, requestBody);

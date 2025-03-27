@@ -10,8 +10,4 @@ import java.util.List;
 public class ChatRequest {
     private String text;
     private String imageUrl;
-
-    public String getUserMessage() {
-        return text + " " + imageUrl;
-    }
 }

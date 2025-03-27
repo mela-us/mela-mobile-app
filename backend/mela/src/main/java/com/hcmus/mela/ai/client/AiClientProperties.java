@@ -7,6 +7,11 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Map;
 
+/**
+ * Configuration properties for AI clients.
+ * This class loads AI-related configuration from application properties with the "ai" prefix.
+ * It contains settings for different AI providers and features like chatbot and question hint.
+ */
 @Setter
 @Getter
 @Configuration
