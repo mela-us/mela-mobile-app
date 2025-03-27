@@ -98,6 +98,7 @@ public class ExerciseServiceImpl implements ExerciseService {
                 exerciseStatDetailDtoList);
     }
 
+
     @Override
     public Map<UUID, Integer> getExerciseCountForLectures(List<UUID> lectureIdList) {
         List<Exercise> exerciseList = exerciseRepository.findAllByLectureIdIn(lectureIdList);

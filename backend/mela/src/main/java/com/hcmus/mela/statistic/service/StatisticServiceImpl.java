@@ -127,15 +127,15 @@ public class StatisticServiceImpl implements StatisticService  {
                 exerciseActivityDto.getScoreRecords().add(scoreRecordDto);
                 exerciseActivityDto.getScoreRecords().sort((o1, o2) -> o2.getDate().compareTo(o1.getDate()));
             }
-            ScoreRecordDto lastestScoreRecord = exerciseActivityDto.getScoreRecords().get(0);
+            ScoreRecordDto latestScoreRecord = exerciseActivityDto.getScoreRecords().get(0);
 
             activityHistoryDto.setType(ActivityType.EXERCISE);
-            activityHistoryDto.setLatestDate(lastestScoreRecord.getDate());
+            activityHistoryDto.setLatestDate(latestScoreRecord.getDate());
             activityHistoryDto.setTopicName(topicNameMap.get(lectureDto.getTopicId()));
             activityHistoryDto.setLectureName(lectureDto.getName());
 
             exerciseActivityDto.setExerciseName(exerciseDto.getExerciseName());
-            exerciseActivityDto.setLatestScore(lastestScoreRecord.getScore());
+            exerciseActivityDto.setLatestScore(latestScoreRecord.getScore());
 
             activityHistoryDtoList.add(activityHistoryDto);
         }

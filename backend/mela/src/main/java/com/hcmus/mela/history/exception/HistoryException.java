@@ -1,11 +1,11 @@
-package com.hcmus.mela.statistic.exception.exception;
+package com.hcmus.mela.history.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class StatisticException extends RuntimeException {
+public class HistoryException extends RuntimeException {
 
     private final String errorMessage;
 }

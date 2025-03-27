@@ -1,9 +1,7 @@
-package com.hcmus.mela.lecture.exception;
+package com.hcmus.mela.statistic.exception;
 
 import com.hcmus.mela.common.exception.ApiErrorResponse;
-import com.hcmus.mela.lecture.controller.LectureController;
-import com.hcmus.mela.lecture.controller.LevelController;
-import com.hcmus.mela.lecture.controller.TopicController;
+import com.hcmus.mela.statistic.controller.StatisticController;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
@@ -16,12 +14,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Slf4j
-@RestControllerAdvice(basePackageClasses = {
-        LevelController.class,
-        TopicController.class,
-        LectureController.class
-})
-public class LectureExceptionHandler {
+@RestControllerAdvice(basePackageClasses = StatisticController.class)
+public class StatisticExceptionHandler {
 
     private String getRequestId() {
         String requestId = MDC.get("X-Request-Id");
@@ -31,17 +25,15 @@ public class LectureExceptionHandler {
         return requestId;
     }
 
-    @ExceptionHandler(LectureException.class)
-    ResponseEntity<ApiErrorResponse> handleMathContentException(LectureException exception, WebRequest request) {
-
+    @ExceptionHandler(StatisticException.class)
+    ResponseEntity<ApiErrorResponse> handleMathContentException(StatisticException exception, WebRequest request) {
         final ApiErrorResponse response = new ApiErrorResponse(
                 getRequestId(),
                 HttpStatus.BAD_REQUEST.value(),
-                exception.getMessage(),
+                exception.getErrorMessage(),
                 request.getDescription(false),
                 LocalDateTime.now()
         );
-
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 }

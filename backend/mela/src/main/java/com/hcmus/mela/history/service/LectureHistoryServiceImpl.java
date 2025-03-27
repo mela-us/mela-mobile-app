@@ -1,12 +1,11 @@
 package com.hcmus.mela.history.service;
 
 import com.hcmus.mela.auth.security.jwt.JwtTokenService;
-import com.hcmus.mela.history.dto.dto.ExerciseHistoryDto;
 import com.hcmus.mela.history.dto.dto.LectureHistoryDto;
 import com.hcmus.mela.history.dto.dto.RecentActivityDto;
 import com.hcmus.mela.history.dto.request.SaveLectureSectionRequest;
 import com.hcmus.mela.history.dto.response.SaveLectureSectionResponse;
-import com.hcmus.mela.history.exception.exception.HistoryException;
+import com.hcmus.mela.history.exception.HistoryException;
 import com.hcmus.mela.history.mapper.LectureHistoryMapper;
 import com.hcmus.mela.history.model.LectureCompletedSection;
 import com.hcmus.mela.history.model.LectureHistory;

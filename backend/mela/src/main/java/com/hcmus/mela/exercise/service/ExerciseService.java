@@ -14,8 +14,6 @@ public interface ExerciseService {
 
     ExerciseResponse getAllExercisesInLecture(ExerciseRequest exerciseRequest);
 
-    Integer getNumberOfQuestions(UUID exerciseId);
-
     Exercise findByQuestionId(UUID questionId);
 
     Map<UUID, Integer> getExerciseCountForLectures(List<UUID> lectureIdList);
