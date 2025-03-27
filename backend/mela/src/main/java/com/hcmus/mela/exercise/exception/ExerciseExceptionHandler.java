@@ -4,6 +4,8 @@ import com.hcmus.mela.common.exception.ApiErrorResponse;
 import com.hcmus.mela.exercise.controller.ExerciseController;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Slf4j
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice(basePackageClasses = ExerciseController.class)
 public class ExerciseExceptionHandler {
 

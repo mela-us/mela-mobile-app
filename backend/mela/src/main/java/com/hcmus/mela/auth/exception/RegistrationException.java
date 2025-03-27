@@ -1,10 +1,7 @@
 package com.hcmus.mela.auth.exception;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@Getter
-@RequiredArgsConstructor
 public class RegistrationException extends RuntimeException {
-    private final String errorMessage;
+    public RegistrationException(final String message) {
+        super(message);
+    }
 }

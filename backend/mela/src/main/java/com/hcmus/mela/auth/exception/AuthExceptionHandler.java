@@ -4,6 +4,8 @@ import com.hcmus.mela.auth.controller.AuthController;
 import com.hcmus.mela.auth.controller.ForgotPasswordController;
 import com.hcmus.mela.common.exception.ApiErrorResponse;
 import org.slf4j.MDC;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,6 +16,7 @@ import org.springframework.web.context.request.WebRequest;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice(basePackageClasses = {
         AuthController.class,
         ForgotPasswordController.class
@@ -34,7 +37,7 @@ public class AuthExceptionHandler {
         final ApiErrorResponse response = new ApiErrorResponse(
             getRequestId(),
             HttpStatus.BAD_REQUEST.value(),
-            exception.getErrorMessage(),
+            exception.getMessage(),
             request.getDescription(false),
             LocalDateTime.now()
         );
@@ -48,7 +51,7 @@ public class AuthExceptionHandler {
         final ApiErrorResponse response = new ApiErrorResponse(
                 getRequestId(),
                 HttpStatus.UNAUTHORIZED.value(),
-                exception.getErrorMessage(),
+                exception.getMessage(),
                 request.getDescription(false),
                 LocalDateTime.now()
         );
@@ -61,7 +64,7 @@ public class AuthExceptionHandler {
         final ApiErrorResponse response = new ApiErrorResponse(
                 getRequestId(),
                 HttpStatus.BAD_REQUEST.value(),
-                exception.getErrorMessage(),
+                exception.getMessage(),
                 request.getDescription(false),
                 LocalDateTime.now()
         );
@@ -87,7 +90,7 @@ public class AuthExceptionHandler {
         final ApiErrorResponse response = new ApiErrorResponse(
                 getRequestId(),
                 HttpStatus.BAD_REQUEST.value(),
-                exception.getErrorMessage(),
+                exception.getMessage(),
                 request.getDescription(false),
                 LocalDateTime.now()
         );

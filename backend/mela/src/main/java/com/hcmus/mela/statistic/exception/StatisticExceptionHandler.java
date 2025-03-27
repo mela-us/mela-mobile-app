@@ -30,7 +30,7 @@ public class StatisticExceptionHandler {
         final ApiErrorResponse response = new ApiErrorResponse(
                 getRequestId(),
                 HttpStatus.BAD_REQUEST.value(),
-                exception.getErrorMessage(),
+                exception.getMessage(),
                 request.getDescription(false),
                 LocalDateTime.now()
         );

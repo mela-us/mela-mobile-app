@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/chat-bot/conversations")
+@RequestMapping("/api/chat-bot/conversations")
 @RequiredArgsConstructor
 public class ChatBotController {
     private final ConversationService conversationService;
