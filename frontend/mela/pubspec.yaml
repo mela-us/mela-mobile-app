@@ -75,6 +75,7 @@ dependencies:
   math_keyboard: ^0.3.2
   flutter_svg: ^2.0.17
   google_sign_in: ^6.3.0
+  skeleton_text: ^3.0.1
   # Y
   # Z
 

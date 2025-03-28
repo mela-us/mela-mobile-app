@@ -7,6 +7,7 @@ import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/thread_chat/widgets/chat_box.dart';
+import 'package:mela/presentation/thread_chat/widgets/list_skeleton.dart';
 import 'package:mela/presentation/thread_chat/widgets/message_chat_title.dart';
 import 'package:mobx/mobx.dart';
 
@@ -63,12 +64,19 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
   }
 
 //For scroll at the top and loading get older messages
-  void _onScroll() {
+  void _onScroll() async {
     if (_scrollController.position.pixels <= 0 &&
-        !_threadChatStore.isLoadingGetConversation &&
+        !_threadChatStore.isLoadingGetOlderMessages &&
         _threadChatStore.currentConversation.hasMore) {
       print("=======================>On Scroll At the top");
-      _threadChatStore.getOlderMessages();
+      await _threadChatStore.getOlderMessages();
+      if (_scrollController.position.pixels <= 0) {
+        _scrollController.animateTo(
+          _scrollController.position.minScrollExtent + 20.0,
+          duration: const Duration(seconds: 1),
+          curve: Curves.easeOutExpo,
+        );
+      }
     }
   }
 
@@ -159,22 +167,14 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
                                   if (_threadChatStore
                                       .isLoadingGetOlderMessages) ...[
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 12),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          LoadingAnimationWidget
-                                              .staggeredDotsWave(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .buttonYesBgOrText,
-                                            size: 34,
-                                          )
-                                        ],
-                                      ),
-                                    )
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10, horizontal: 8),
+                                        child: ListSkeleton(
+                                            isReverse: _threadChatStore
+                                                .currentConversation
+                                                .messages
+                                                .first
+                                                .isAI))
                                   ],
                                   ..._threadChatStore
                                       .currentConversation.messages

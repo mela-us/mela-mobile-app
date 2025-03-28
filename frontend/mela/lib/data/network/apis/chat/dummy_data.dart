@@ -46,13 +46,13 @@ final List<List<MessageChat>> additionalMessages1 = [
         message:
             "Bạn có thể kiểm tra bằng cách thử chia số đó cho các số từ 2 đến căn bậc hai của nó.",
         isAI: true),
-    MessageChat(
-        message: "Có thuật toán nào hiệu quả để tìm số nguyên tố không?",
-        isAI: false),
-    MessageChat(
-        message: "Có! Một thuật toán nổi tiếng là Sàng Eratosthenes.",
-        isAI: true),
-    MessageChat(message: "Bạn có thể cho mình ví dụ không?", isAI: false),
+    // MessageChat(
+    //     message: "Có thuật toán nào hiệu quả để tìm số nguyên tố không?",
+    //     isAI: false),
+    // MessageChat(
+    //     message: "Có! Một thuật toán nổi tiếng là Sàng Eratosthenes.",
+    //     isAI: true),
+    // MessageChat(message: "Bạn có thể cho mình ví dụ không?", isAI: false),
   ],
   [
     MessageChat(
@@ -60,16 +60,16 @@ final List<List<MessageChat>> additionalMessages1 = [
             "Chắc chắn! Giả sử bạn muốn tìm tất cả số nguyên tố từ 1 đến 30.",
         isAI: true),
     MessageChat(message: "Sau đó thì sao?", isAI: false),
-    MessageChat(
-        message:
-            "Tiếp tục với số nguyên tố tiếp theo là 3 và loại bỏ bội số của nó.",
-        isAI: true),
-    MessageChat(
-        message: "Thật thú vị! Vậy thuật toán này có độ phức tạp ra sao?",
-        isAI: false),
-    MessageChat(
-        message: "Độ phức tạp của nó là O(n log log n), rất nhanh.",
-        isAI: true),
+    // MessageChat(
+    //     message:
+    //         "Tiếp tục với số nguyên tố tiếp theo là 3 và loại bỏ bội số của nó.",
+    //     isAI: true),
+    // MessageChat(
+    //     message: "Thật thú vị! Vậy thuật toán này có độ phức tạp ra sao?",
+    //     isAI: false),
+    // MessageChat(
+    //     message: "Độ phức tạp của nó là O(n log log n), rất nhanh.",
+    //     isAI: true),
   ],
   [
     MessageChat(
@@ -79,11 +79,11 @@ final List<List<MessageChat>> additionalMessages1 = [
         message:
             "Dãy Fibonacci là một chuỗi số mà mỗi số là tổng của hai số trước đó.",
         isAI: true),
-    MessageChat(message: "Làm sao để tính số Fibonacci thứ n?", isAI: false),
-    MessageChat(
-        message: "Có thể tính bằng đệ quy hoặc quy hoạch động để tối ưu.",
-        isAI: true),
-    MessageChat(message: "Quy hoạch động hoạt động như thế nào?", isAI: false),
+    // MessageChat(message: "Làm sao để tính số Fibonacci thứ n?", isAI: false),
+    // MessageChat(
+    //     message: "Có thể tính bằng đệ quy hoặc quy hoạch động để tối ưu.",
+    //     isAI: true),
+    // MessageChat(message: "Quy hoạch động hoạt động như thế nào?", isAI: false),
   ],
 ];
 
