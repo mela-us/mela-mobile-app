@@ -17,6 +17,6 @@ public class Summary {
     @Field(name = "latest_update")
     private Date latestUpdate;
 
-    @Field(name = "text")
+    @Field(name = "context")
     private String context;
 }
