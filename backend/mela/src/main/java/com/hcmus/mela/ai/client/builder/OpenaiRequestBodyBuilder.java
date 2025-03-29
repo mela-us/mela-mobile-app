@@ -1,8 +1,8 @@
 package com.hcmus.mela.ai.client.builder;
 
 import com.hcmus.mela.ai.client.config.AiFeatureProperties;
-import com.hcmus.mela.ai.client.dto.request.azure.AzureRequestBody;
-import com.hcmus.mela.ai.client.dto.request.azure.Message;
+import com.hcmus.mela.ai.client.dto.request.openai.Message;
+import com.hcmus.mela.ai.client.dto.request.openai.OpenAiRequestBody;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -12,7 +12,6 @@ import java.util.Map;
 /**
  * OpenAI-specific implementation of AiRequestBodyBuilder.
  * Formats requests according to the OpenAI API specifications.
- *
  * Note: Currently this implementation uses the same structure as Azure,
  * since OpenAI and Azure OpenAI APIs have similar request formats.
  * In the future, if differences emerge, this class should be updated.
@@ -31,7 +30,7 @@ public class OpenaiRequestBodyBuilder implements AiRequestBodyBuilder {
      * @return An AzureRequestBody object with the formatted request
      */
     @Override
-    public AzureRequestBody buildRequestBodyForQuestionHint(String instruction, String textData, List<String> imageUrls, AiFeatureProperties aiFeatureProperties) {
+    public OpenAiRequestBody buildRequestBodyForQuestionHint(String instruction, String textData, List<String> imageUrls, AiFeatureProperties aiFeatureProperties) {
         List<Map<String, Object>> contentList = new ArrayList<>();
 
         // Add text content if provided
@@ -49,7 +48,7 @@ public class OpenaiRequestBodyBuilder implements AiRequestBodyBuilder {
         }
 
         // Create the full request body with system instruction and user content
-        return new AzureRequestBody(
+        return new OpenAiRequestBody(
                 aiFeatureProperties.getModel(),
                 List.of(
                         new Message("system", instruction),
@@ -61,7 +60,7 @@ public class OpenaiRequestBodyBuilder implements AiRequestBodyBuilder {
     }
 
     /**
-     * Builds a request body for the chat bot feature using OpenAI's format.
+     * Builds a request body for the chatbot feature using OpenAI's format.
      * Note: This method is not yet implemented.
      *
      * @param instruction System instruction for the AI

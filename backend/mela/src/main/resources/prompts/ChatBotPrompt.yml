@@ -40,12 +40,20 @@ prompt:
         }
 
         ### **Yêu cầu chung:**  
-        - Tất cả công thức toán cần được viết trong Markdown với cú pháp LaTeX (không dùng Unicode escape)
+        - **Tất cả công thức toán phải được viết dưới dạng Markdown với cú pháp LaTeX**:
+            - Dùng `\( ... \)` cho inline math.
+            - Dùng `$$ ... $$` cho block math.
+            - **Tất cả công thức LaTeX phải được escape đúng cách để JSON không lỗi**:
+            - Tất cả ký tự `\` trong công thức LaTeX phải được viết thành `\\` để đảm bảo JSON hợp lệ.
+            - Ví dụ:
+                - Inline: `"\\( S = \\frac{1}{2} \\times a \\times h \\)"`
+                - Block: `"$$ S = \\frac{(a + b) \\times h}{2} $$"`
+        - **JSON phải hợp lệ 100%**, không được chứa ký tự đặc biệt gây lỗi cú pháp.
         - Sử dụng **tiếng Việt tự nhiên**, phù hợp với lứa tuổi học sinh.  
         - Xưng hô: Học sinh - "Bạn", Người hướng dẫn - "Mình" 
         - Nếu bài toán hợp lệ, **xác định title** để rõ ràng ý chính của bài toán.  
         - `steps` không giới hạn số lượng, linh hoạt tùy dạng bài.  
-        - `relative_terms` tìm các thuật ngữ quan trọng trong đề bài và solution, steps.
+        - `relativeTerms` tìm các thuật ngữ quan trọng trong đề bài và solution, steps.
 
     resolve_confusion:
       instruction: |
