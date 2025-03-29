@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Getter
@@ -22,7 +23,7 @@ public class Message {
     private String role;
 
     @Field(name = "content")
-    private List<Content> content;
+    private Map<String, Object> content;
 
     @Field(name = "timestamp")
     private Date timestamp;

@@ -1,6 +1,7 @@
 package com.hcmus.mela.ai.client.web;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hcmus.mela.ai.client.exception.ApiException;
 import com.hcmus.mela.ai.client.filter.AiResponseFilter;
@@ -59,17 +60,22 @@ public class AiWebClient {
                     .bodyValue(requestBody)
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, clientResponse ->
-                            clientResponse.bodyToMono(String.class).flatMap(body ->
-                                    Mono.error(new RuntimeException("API Error: " + clientResponse.statusCode() + "\nBody: " + body))
-                            )
+                            clientResponse.bodyToMono(String.class).flatMap(body -> {
+                                try {
+                                    JsonNode jsonNode = objectMapper.readTree(body);
+                                    String errorMessage = jsonNode.path("error").path("message").asText("Unknown error");
+                                    return Mono.error(new ApiException(clientResponse.statusCode().value(), errorMessage));
+                                } catch (Exception e) {
+                                    return Mono.error(new ApiException(clientResponse.statusCode().value(), "Error parsing API response"));
+                                }
+                            })
                     )
                     .bodyToMono(responseType)
                     .block();
         } catch (WebClientResponseException e) {
             throw new ApiException(e.getStatusCode().value(), e.getResponseBodyAsString());
-        } catch (Exception e) {
-            throw new RuntimeException("Error fetching AI response");
         }
+
 
     }
 
