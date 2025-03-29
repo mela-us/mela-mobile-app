@@ -16,7 +16,8 @@ class Assets{
   //Image
   static String exit_image = 'assets/images/exit_image.png';
   static String result_image = 'assets/images/result_image.png';
-
+  static String success_image = 'assets/images/result/success.png';
+  static String failure_image = 'assets/images/result/failure.png';
   // splash screen assets
   static const String appLogo = "assets/icons/clock.png";
 

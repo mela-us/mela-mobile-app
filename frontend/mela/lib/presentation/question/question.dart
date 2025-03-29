@@ -54,7 +54,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    fabPos = Offset(30, screenHeight - 60);
+    fabPos = Offset(50, screenHeight - 80);
 
     //Reaction to questions status.
     reaction((_) => _questionStore.loading, (loading){
@@ -146,7 +146,12 @@ class _QuestionScreenState extends State<QuestionScreen> {
     return Observer(
       builder: (context) {
         if (_questionStore.loading) {
-          return const RotatingImageIndicator();
+          // return const RotatingImageIndicator();
+          return Scaffold(
+            backgroundColor: Theme.of(context).colorScheme.appBackground,
+            body: const Center(child: RotatingImageIndicator()),
+          );
+
         }
         else {
           return Scaffold(
@@ -272,6 +277,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
         isQuizQuestion(questions[index]) ?
         //quiz view      :      fill view
         _buildQuizView(questions[index]) : _buildFillView(questions[index]),
+
+        //spacing
+        const SizedBox(height: 30),
       ],
     );
   }
