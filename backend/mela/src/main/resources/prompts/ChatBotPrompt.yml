@@ -40,7 +40,7 @@ prompt:
         }
 
         ### **Yêu cầu chung:**  
-        - Trình bày công thức bằng chuẩn **LaTeX**.  
+        - Tất cả công thức toán cần được viết trong Markdown với cú pháp LaTeX (không dùng Unicode escape)
         - Sử dụng **tiếng Việt tự nhiên**, phù hợp với lứa tuổi học sinh.  
         - Xưng hô: Học sinh - "Bạn", Người hướng dẫn - "Mình" 
         - Nếu bài toán hợp lệ, **xác định title** để rõ ràng ý chính của bài toán.  
