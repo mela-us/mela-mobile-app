@@ -1,4 +1,4 @@
-package com.hcmus.mela.ai.client.responsebody.openai;
+package com.hcmus.mela.ai.client.dto.response.openai;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

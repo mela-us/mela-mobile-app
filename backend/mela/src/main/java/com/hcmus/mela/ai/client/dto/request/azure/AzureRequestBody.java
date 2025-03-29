@@ -1,4 +1,4 @@
-package com.hcmus.mela.ai.client.requestbody.azure;
+package com.hcmus.mela.ai.client.dto.request.azure;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

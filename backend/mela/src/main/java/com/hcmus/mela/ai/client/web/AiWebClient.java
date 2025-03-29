@@ -1,8 +1,11 @@
-package com.hcmus.mela.ai.client;
+package com.hcmus.mela.ai.client.web;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hcmus.mela.ai.client.builder.AiResponseFactory;
+import com.hcmus.mela.ai.client.exception.ApiException;
+import com.hcmus.mela.ai.client.filter.AiResponseFilter;
+import com.hcmus.mela.ai.client.config.AiClientProperties;
+import com.hcmus.mela.ai.client.config.AiFeatureProperties;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -19,7 +22,7 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 public class AiWebClient {
     private final AiClientProperties aiClientProperties;
-    private final AiResponseFactory aiResponseFactory;
+    private final AiResponseFilter aiResponseFilter;
 
     public WebClient getWebClientForChatBot() {
         return createWebClient(aiClientProperties.getChatBot().getProvider());
@@ -38,7 +41,7 @@ public class AiWebClient {
      */
     public Object fetchAiResponse(AiFeatureProperties aiFeatureProperties, Object requestBody) {
         String provider = aiFeatureProperties.getProvider();
-        Class<?> responseType = aiResponseFactory.getResponseType(provider);
+        Class<?> responseType = aiResponseFilter.getResponseType(provider);
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonRequest;
         try {
@@ -63,12 +66,9 @@ public class AiWebClient {
                     .bodyToMono(responseType)
                     .block();
         } catch (WebClientResponseException e) {
-            System.err.println("HTTP Error: " + e.getStatusCode());
-            System.err.println("Response Body: " + e.getResponseBodyAsString());
-            return null;
+            throw new ApiException(e.getStatusCode().value(), e.getResponseBodyAsString());
         } catch (Exception e) {
-            System.err.println("Unexpected Error: " + e.getMessage());
-            return null;
+            throw new RuntimeException("Error fetching AI response");
         }
 
     }

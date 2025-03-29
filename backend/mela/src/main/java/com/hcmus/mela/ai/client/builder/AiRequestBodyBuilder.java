@@ -1,6 +1,6 @@
 package com.hcmus.mela.ai.client.builder;
 
-import com.hcmus.mela.ai.client.AiFeatureProperties;
+import com.hcmus.mela.ai.client.config.AiFeatureProperties;
 
 import java.util.List;
 import java.util.Map;

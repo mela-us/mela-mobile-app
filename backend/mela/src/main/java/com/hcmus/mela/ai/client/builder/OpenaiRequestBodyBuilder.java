@@ -1,8 +1,8 @@
 package com.hcmus.mela.ai.client.builder;
 
-import com.hcmus.mela.ai.client.AiFeatureProperties;
-import com.hcmus.mela.ai.client.requestbody.azure.AzureRequestBody;
-import com.hcmus.mela.ai.client.requestbody.azure.Message;
+import com.hcmus.mela.ai.client.config.AiFeatureProperties;
+import com.hcmus.mela.ai.client.dto.request.azure.AzureRequestBody;
+import com.hcmus.mela.ai.client.dto.request.azure.Message;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class OpenaiRequestBodyBuilder implements AiRequestBodyBuilder {
         return new AzureRequestBody(
                 aiFeatureProperties.getModel(),
                 List.of(
-                        new com.hcmus.mela.ai.client.requestbody.azure.Message("system", instruction),
+                        new Message("system", instruction),
                         new Message("user", contentList)
                 ),
                 aiFeatureProperties.getTemperature(),

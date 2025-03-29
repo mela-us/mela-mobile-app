@@ -1,4 +1,4 @@
-package com.hcmus.mela.ai.client;
+package com.hcmus.mela.ai.client.config;
 
 import lombok.Getter;
 import lombok.Setter;

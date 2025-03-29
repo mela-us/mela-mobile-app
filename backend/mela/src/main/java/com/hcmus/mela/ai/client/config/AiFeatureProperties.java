@@ -1,4 +1,4 @@
-package com.hcmus.mela.ai.client;
+package com.hcmus.mela.ai.client.config;
 
 /**
  * Interface defining common properties for AI feature configurations.

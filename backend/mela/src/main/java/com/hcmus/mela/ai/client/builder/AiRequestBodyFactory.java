@@ -1,6 +1,6 @@
 package com.hcmus.mela.ai.client.builder;
 
-import com.hcmus.mela.ai.client.AiFeatureProperties;
+import com.hcmus.mela.ai.client.config.AiFeatureProperties;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

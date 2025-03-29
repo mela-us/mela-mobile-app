@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,6 +20,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -55,11 +57,17 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException ex, WebRequest request) {
 
-        List<String> errorList = ex.getBindingResult().getFieldErrors().stream()
+        List<String> fieldErrors = ex.getBindingResult().getFieldErrors().stream()
                 .map(FieldError::getDefaultMessage)
-                .collect(Collectors.toList());
+                .toList();
 
-        log.warn("Validation failed: {}", errorList);
+        List<String> globalErrors = ex.getBindingResult().getGlobalErrors().stream()
+                .map(ObjectError::getDefaultMessage)
+                .toList();
+
+        List<String> errorList = new ArrayList<>();
+        errorList.addAll(fieldErrors);
+        errorList.addAll(globalErrors);
 
         final ApiErrorResponse apiErrorResponse = new ApiErrorResponse(
                 getRequestId(),

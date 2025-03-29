@@ -20,6 +20,14 @@ import java.util.UUID;
 public class RequestIdFilter implements Filter {
     private static final String REQUEST_ID_HEADER = "X-Request-Id";
 
+    public static String getRequestId() {
+        String requestId = MDC.get(REQUEST_ID_HEADER);
+        if (requestId == null) {
+            requestId = UUID.randomUUID().toString();
+        }
+        return requestId;
+    }
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
@@ -30,8 +38,6 @@ public class RequestIdFilter implements Filter {
         if (requestId == null || requestId.isEmpty()) {
             requestId = UUID.randomUUID().toString();
         }
-        // Log để kiểm tra requestId
-        System.out.println("Generated Request ID: " + requestId);
 
         // Add request id to response header
         httpResponse.setHeader(REQUEST_ID_HEADER, requestId);

@@ -1,11 +1,8 @@
-package com.hcmus.mela.ai.client.requestbody.azure;
+package com.hcmus.mela.ai.client.dto.request.azure;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
-import java.util.Map;
 
 @Getter
 @Setter

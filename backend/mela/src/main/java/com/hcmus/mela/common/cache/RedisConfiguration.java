@@ -1,4 +1,4 @@
-package com.hcmus.mela.common.configuration;
+package com.hcmus.mela.common.cache;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

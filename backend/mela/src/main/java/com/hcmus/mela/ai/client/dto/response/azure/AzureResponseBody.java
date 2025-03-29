@@ -1,4 +1,4 @@
-package com.hcmus.mela.ai.client.responsebody.azure;
+package com.hcmus.mela.ai.client.dto.response.azure;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
