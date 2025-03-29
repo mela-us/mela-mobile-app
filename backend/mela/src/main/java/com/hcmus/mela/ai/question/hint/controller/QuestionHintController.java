@@ -14,8 +14,7 @@ public class QuestionHintController {
     @GetMapping("/{questionId}/hint/term")
     public List<String> generateTerm(@PathVariable UUID questionId,
                                      @RequestHeader(value = "Authorization") String authorizationHeader) {
-
-
+        
     }
 }
 
