@@ -7,10 +7,10 @@ class SaveResultApi{
   final DioClient _dioClient;
 
   SaveResultApi(this._dioClient);
-  Future<int> saveResult(SubmitResultParams param) async{
+  Future<int> saveResult(SubmitResultParams param, String endpoint) async{
     try {
       final response = await _dioClient.post(
-        EndpointsConst.saveResult,
+        endpoint,
         options: Options(headers: {
           'Content-Type': 'application/json',
         }),

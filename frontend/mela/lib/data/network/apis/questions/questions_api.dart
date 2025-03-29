@@ -20,8 +20,15 @@ class QuestionsApi {
     final res = await _dioClient.dio.get(
       EndpointsConst.getQuestions + exerciseUid,
     );
-
-    QuestionList list = QuestionList.fromJson(res.data);
-    return list;
+    if (res.statusCode == 200) {
+      QuestionList list = QuestionList.fromJson(res.data);
+      return list;
+    }
+    else if (res.statusCode == 401) {
+      throw Exception("Unauthorized");
+    }
+    else {
+      throw Exception("Unknown error");
+    }
   }
 }

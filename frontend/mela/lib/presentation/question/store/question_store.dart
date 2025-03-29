@@ -82,6 +82,12 @@ abstract class _QuestionStore with Store{
 
         }
       }
+      else {
+        if (error == 401) {
+          isAuthorized = false;
+          return;
+        }
+      }
       print("Error: $error");
       questionList = QuestionList(message: '', size: 0, questions: []);
       _errorStore.errorMessage = DioExceptionUtil.handleError(error);
@@ -90,6 +96,7 @@ abstract class _QuestionStore with Store{
 
   @action
   Future submitAnswer(int correct, DateTime start, DateTime end) async {
+    questionList ??= QuestionList(message: '', size: 0, questions: []);
     final future = _submitResultUseCase.call(
         params: SubmitResultParams(
             exerciseId: questionsUid,

@@ -21,6 +21,7 @@ dependencies:
   # D
   draggable_fab: ^0.1.4
   dio: ^5.1.1
+
   # E
   event_bus: ^2.0.0
   # F
@@ -38,6 +39,7 @@ dependencies:
   # google_fonts: ^4.0.3
   # H
   http: ^1.2.2
+  http_mock_adapter: ^0.6.1
   # I
   intl: ^0.19.0
   image_picker: ^1.0.7
@@ -83,6 +85,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  mockito: ^5.4.4
   # The following adds the launcher icon support to your application.
   # run below mentioned commands to generate launcher icons
   # flutter packages get
