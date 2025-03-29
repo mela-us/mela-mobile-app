@@ -13,20 +13,20 @@ jobs:
     name: Run Flutter Tests
     runs-on: ubuntu-latest
 
-  steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4 #add test branch
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4 #add test branch
 
-    - name: Get to folder
-      run: cd frontend/mela
+      - name: Get to folder
+        run: cd frontend/mela
 
-    - name: Setup Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        flutter-version: 3.27.4  # You can specify the Flutter version to use
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.27.4  # You can specify the Flutter version to use
 
-    - name: Install dependencies
-      run: flutter pub get
+      - name: Install dependencies
+        run: flutter pub get
 
-    - name: Run tests
-      run: flutter test
+      - name: Run tests
+        run: flutter test
