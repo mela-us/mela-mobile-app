@@ -139,7 +139,7 @@ class StoreModule {
     getIt.registerSingleton<StatisticsStore>(
       StatisticsStore(
         getIt<GetProgressListUseCase>(),
-        getIt<GetDetailedProgressListUseCase>(),
+        getIt<GetLevelListUsecase>(),
         getIt<ErrorStore>(),
       ),
     );

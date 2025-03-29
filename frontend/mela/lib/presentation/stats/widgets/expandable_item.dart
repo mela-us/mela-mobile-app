@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mela/domain/entity/stat/progress.dart';
 
-import 'chart_widget.dart';
-
 import '../../../constants/assets.dart';
 import '../../../constants/app_theme.dart';
+import '../../../domain/entity/stat/score_record.dart';
 import 'line_chart_widget.dart';
 
 
@@ -19,9 +18,17 @@ class ExpandableItem extends StatefulWidget {
 
 class _ExpandableItemState extends State<ExpandableItem> {
   bool _isExpanded = false;
-
+  late String type;
+  late ProgressExercise? prog_ex;
+  late ProgressSection? prog_sect;
+  late List<ScoreRecord> scores;
+  
   @override
   Widget build(BuildContext context) {
+    type = widget.item.type;
+    prog_ex = widget.item.exercise;
+    prog_sect = widget.item.section;
+    scores = prog_ex?.scoreRecords ?? [];
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
       elevation: 5.0,
@@ -30,9 +37,11 @@ class _ExpandableItemState extends State<ExpandableItem> {
         children: [
           GestureDetector(
             onTap: () {
-              setState(() {
-                _isExpanded = !_isExpanded;
-              });
+              if (type != 'SECTION' && scores.length <= 1) {
+                setState(() {
+                  _isExpanded = !_isExpanded;
+                });
+              }
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
@@ -50,18 +59,20 @@ class _ExpandableItemState extends State<ExpandableItem> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text( //Tên bài tập
-                              'Luyện tập 1',
+                            Text( //Tên bài tập hoặc section
+                              (type == 'SECTION') 
+                                  ? prog_sect?.sectionName ?? "" 
+                                  : prog_ex?.exerciseName ?? "",
                               style: Theme.of(context).textTheme.title
                                   .copyWith(color: Theme.of(context).colorScheme.onPrimary),
                             ),
                             Text( //Tên bài học
-                              'Bài học 1',
+                              widget.item.lectureName ?? "",
                               style: Theme.of(context).textTheme.normal
                                   .copyWith(color: Theme.of(context).colorScheme.textInBg1),
                             ),
                             Text( //Tên chủ đề
-                              '${widget.item.topicName}',
+                              widget.item.topicName ?? "",
                               style: Theme.of(context).textTheme.normal
                                   .copyWith(color: Theme.of(context).colorScheme.textInBg2),
                             ),
@@ -71,16 +82,22 @@ class _ExpandableItemState extends State<ExpandableItem> {
                       Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(//date
-                              '08-03-2025',
+                            Text(//học bài hay làm bài?
+                              (type == 'SECTION') ? "Đã học" : "Đã làm bài",
                               style: Theme.of(context).textTheme.normal
                                   .copyWith(color: Theme.of(context).colorScheme.textInBg1),
                             ),
-                            Text(//score
-                              '8.5',
-                              style: Theme.of(context).textTheme.bigTitle
-                                  .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+                            Text(//date
+                              widget.item.latestDate,
+                              style: Theme.of(context).textTheme.normal
+                                  .copyWith(color: Theme.of(context).colorScheme.textInBg1),
                             ),
+                            if (type != 'SECTION')
+                              Text(//score
+                                "${(widget.item.exercise?.latestScore ?? 0) as String} Điểm",
+                                style: Theme.of(context).textTheme.bigTitle
+                                    .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+                              ),
                           ]
                       ),
                       Row(
@@ -92,11 +109,13 @@ class _ExpandableItemState extends State<ExpandableItem> {
                               height: 21,
                             ),
                             const SizedBox(width: 5),
-                            Image.asset(
-                              _isExpanded ? Assets.stats_hide : Assets.stats_show,
-                              width: 16,
-                              height: 16,
-                            )
+                            if (type != 'SECTION' && scores.length <= 1)
+                              Image.asset(
+                                _isExpanded ? Assets.stats_hide : Assets.stats_show,
+                                width: 16,
+                                height: 16,
+                              )
+                            else const SizedBox(width: 16, height: 16),
                           ]
                       ),
                     ],
@@ -112,7 +131,7 @@ class _ExpandableItemState extends State<ExpandableItem> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(height: 1),
-                  LineChartWidget(),
+                  LineChartWidget(scores: scores),
                   SizedBox(height: 8),
                 ],
               ),

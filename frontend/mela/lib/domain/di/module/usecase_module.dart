@@ -154,9 +154,6 @@ class UseCaseModule {
       GetProgressListUseCase(getIt<StatRepository>(),
           getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()),
     );
-    getIt.registerSingleton<GetDetailedProgressListUseCase>(
-      GetDetailedProgressListUseCase(getIt<StatRepository>()),
-    );
     //stat search---------------------------------------------------------------
     getIt.registerSingleton<GetStatSearchHistoryUseCase>(
       GetStatSearchHistoryUseCase(getIt<StatSearchRepository>()),

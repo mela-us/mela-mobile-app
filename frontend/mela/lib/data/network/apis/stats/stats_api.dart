@@ -5,7 +5,7 @@ import 'package:mela/domain/entity/stat/progress_list.dart';
 class StatsApi {
   final DioClient _dioClient;
   StatsApi(this._dioClient);
-  Future<ProgressList> getStats() async {
+  Future<ProgressList> getStats(String level) async {
     print("================================ở getStats API");
     final responseData = await _dioClient.get(
       EndpointsConst.getStats,

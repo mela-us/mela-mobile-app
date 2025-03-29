@@ -16,13 +16,6 @@ mixin _$StatisticsStore on _StatisticsStore, Store {
       (_$progressLoadingComputed ??= Computed<bool>(() => super.progressLoading,
               name: '_StatisticsStore.progressLoading'))
           .value;
-  Computed<bool>? _$detailedProgressLoadingComputed;
-
-  @override
-  bool get detailedProgressLoading => (_$detailedProgressLoadingComputed ??=
-          Computed<bool>(() => super.detailedProgressLoading,
-              name: '_StatisticsStore.detailedProgressLoading'))
-      .value;
 
   late final _$fetchProgressFutureAtom =
       Atom(name: '_StatisticsStore.fetchProgressFuture', context: context);
@@ -40,21 +33,19 @@ mixin _$StatisticsStore on _StatisticsStore, Store {
     });
   }
 
-  late final _$fetchDetailedProgressFutureAtom = Atom(
-      name: '_StatisticsStore.fetchDetailedProgressFuture', context: context);
+  late final _$fetchLevelsFutureAtom =
+      Atom(name: '_StatisticsStore.fetchLevelsFuture', context: context);
 
   @override
-  ObservableFuture<DetailedProgressList?> get fetchDetailedProgressFuture {
-    _$fetchDetailedProgressFutureAtom.reportRead();
-    return super.fetchDetailedProgressFuture;
+  ObservableFuture<LevelList?> get fetchLevelsFuture {
+    _$fetchLevelsFutureAtom.reportRead();
+    return super.fetchLevelsFuture;
   }
 
   @override
-  set fetchDetailedProgressFuture(
-      ObservableFuture<DetailedProgressList?> value) {
-    _$fetchDetailedProgressFutureAtom
-        .reportWrite(value, super.fetchDetailedProgressFuture, () {
-      super.fetchDetailedProgressFuture = value;
+  set fetchLevelsFuture(ObservableFuture<LevelList?> value) {
+    _$fetchLevelsFutureAtom.reportWrite(value, super.fetchLevelsFuture, () {
+      super.fetchLevelsFuture = value;
     });
   }
 
@@ -74,20 +65,19 @@ mixin _$StatisticsStore on _StatisticsStore, Store {
     });
   }
 
-  late final _$detailedProgressListAtom =
-      Atom(name: '_StatisticsStore.detailedProgressList', context: context);
+  late final _$levelListAtom =
+      Atom(name: '_StatisticsStore.levelList', context: context);
 
   @override
-  DetailedProgressList? get detailedProgressList {
-    _$detailedProgressListAtom.reportRead();
-    return super.detailedProgressList;
+  LevelList? get levelList {
+    _$levelListAtom.reportRead();
+    return super.levelList;
   }
 
   @override
-  set detailedProgressList(DetailedProgressList? value) {
-    _$detailedProgressListAtom.reportWrite(value, super.detailedProgressList,
-        () {
-      super.detailedProgressList = value;
+  set levelList(LevelList? value) {
+    _$levelListAtom.reportWrite(value, super.levelList, () {
+      super.levelList = value;
     });
   }
 
@@ -111,29 +101,27 @@ mixin _$StatisticsStore on _StatisticsStore, Store {
       AsyncAction('_StatisticsStore.getProgressList', context: context);
 
   @override
-  Future<dynamic> getProgressList() {
-    return _$getProgressListAsyncAction.run(() => super.getProgressList());
+  Future<dynamic> getProgressList(String level) {
+    return _$getProgressListAsyncAction.run(() => super.getProgressList(level));
   }
 
-  late final _$getDetailedProgressListAsyncAction =
-      AsyncAction('_StatisticsStore.getDetailedProgressList', context: context);
+  late final _$getLevelsAsyncAction =
+      AsyncAction('_StatisticsStore.getLevels', context: context);
 
   @override
-  Future<dynamic> getDetailedProgressList() {
-    return _$getDetailedProgressListAsyncAction
-        .run(() => super.getDetailedProgressList());
+  Future<dynamic> getLevels() {
+    return _$getLevelsAsyncAction.run(() => super.getLevels());
   }
 
   @override
   String toString() {
     return '''
 fetchProgressFuture: ${fetchProgressFuture},
-fetchDetailedProgressFuture: ${fetchDetailedProgressFuture},
+fetchLevelsFuture: ${fetchLevelsFuture},
 progressList: ${progressList},
-detailedProgressList: ${detailedProgressList},
+levelList: ${levelList},
 success: ${success},
-progressLoading: ${progressLoading},
-detailedProgressLoading: ${detailedProgressLoading}
+progressLoading: ${progressLoading}
     ''';
   }
 }

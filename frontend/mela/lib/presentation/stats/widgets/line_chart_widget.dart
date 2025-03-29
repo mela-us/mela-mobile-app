@@ -2,25 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:mela/constants/app_theme.dart';
 
-class Result {
-  final String date;
-  final double score;
+import '../../../domain/entity/stat/score_record.dart';
 
-  Result({required this.date, required this.score});
-}
 
 class LineChartWidget extends StatelessWidget {
-  final List<Result> results = [
-    Result(date: '04-01-2025', score: 7.5),
-    Result(date: '05-01-2025', score: 9.0),
-    Result(date: '08-03-2025', score: 8.0),
-    Result(date: '08-03-2025', score: 8.5),
+  final List<ScoreRecord> scores;
+
+  final test_scores = [
+    ScoreRecord(date: '05-01-2025', score: 9.0),
+    ScoreRecord(date: '04-01-2025', score: 7.5),
+    ScoreRecord(date: '08-03-2025', score: 8.0),
+    ScoreRecord(date: '08-03-2025', score: 8.5),
   ];
 
-  LineChartWidget({super.key});
+  LineChartWidget({super.key, required this.scores});
 
   @override
   Widget build(BuildContext context) {
+    //
+    scores.sort((a, b) {
+      DateTime dateA = DateTime.parse(a.date.split('-').reversed.join('-'));
+      DateTime dateB = DateTime.parse(b.date.split('-').reversed.join('-'));
+      return dateA.compareTo(dateB);
+    });
+    //
     return AspectRatio(
       aspectRatio: 1.5,
       child: Padding(
@@ -58,10 +63,10 @@ class LineChartWidget extends StatelessWidget {
                   interval: 1,
                   getTitlesWidget: (value, meta) {
                     int index = value.toInt();
-                    if (index == 0 || index == results.length - 1) {
+                    if (index == 0 || index == scores.length - 1) {
                       return Padding(
                         padding: const EdgeInsets.only(top: 4.0),
-                        child: Text(results[index].date,
+                        child: Text(scores[index].date,
                           style: Theme.of(context).textTheme.miniCaption
                               .copyWith(color: Theme.of(context).colorScheme.textInBg1),
                         ),
@@ -86,9 +91,9 @@ class LineChartWidget extends StatelessWidget {
             ),
             lineBarsData: [
               LineChartBarData(
-                spots: results.asMap().entries.map((entry) {
+                spots: scores.asMap().entries.map((entry) {
                   int index = entry.key;
-                  Result result = entry.value;
+                  ScoreRecord result = entry.value;
                   return FlSpot(index.toDouble(), result.score);
                 }).toList(),
                 isCurved: true,
@@ -110,7 +115,7 @@ class LineChartWidget extends StatelessWidget {
               touchTooltipData: LineTouchTooltipData(
                 getTooltipItems: (List<LineBarSpot> touchedSpots) {
                   return touchedSpots.map((spot) {
-                    final result = results[spot.x.toInt()];
+                    final result = scores[spot.x.toInt()];
                     return LineTooltipItem(
                       '${result.date}\nĐiểm: ${result.score}',
                       Theme.of(context).textTheme.miniCaption

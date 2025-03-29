@@ -209,18 +209,9 @@ class _StatSearchScreenState extends State<StatSearchScreen> {
     if (_filterStore.isFilterButtonPressed) {
       //sort
       if (_filterStore.isAscendingSelected) {
-        list.sort((a, b) => (a.completion).compareTo(b.completion));
+        //TODO: ascending
       } else if (_filterStore.isDescendingSelected) {
-        list.sort((b, a) => (a.completion).compareTo(b.completion));
-      }
-      //
-      bool completed = _filterStore.isCompletedSelected;
-      bool inProgress = _filterStore.isInProgressSelected;
-      if ( completed || inProgress) {
-        list = list?.where((progress) =>
-            (progress.completion == 1 && completed) ||
-            (progress.completion != 1 && inProgress)
-        ).toList() ?? [];
+        //TODO: descending
       }
     }
     return list;
