@@ -44,13 +44,6 @@ public class AiWebClient {
         String provider = aiFeatureProperties.getProvider();
         Class<?> responseType = aiResponseFilter.getResponseType(provider);
         ObjectMapper objectMapper = new ObjectMapper();
-        String jsonRequest;
-        try {
-            jsonRequest = objectMapper.writeValueAsString(requestBody);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println(jsonRequest);
 
         // Make the API request
         try {
