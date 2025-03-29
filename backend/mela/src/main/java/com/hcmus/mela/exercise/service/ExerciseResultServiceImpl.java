@@ -1,92 +1,65 @@
 package com.hcmus.mela.exercise.service;
 
-import com.hcmus.mela.exercise.dto.dto.ExerciseResultDto;
-import com.hcmus.mela.exercise.dto.request.ExerciseResultRequest;
-import com.hcmus.mela.exercise.dto.response.ExerciseResultResponse;
-import com.hcmus.mela.exercise.mapper.ExerciseResultMapper;
-import com.hcmus.mela.exercise.model.Exercise;
-import com.hcmus.mela.exercise.model.ExerciseResult;
-import com.hcmus.mela.exercise.model.ExerciseResultCount;
-import com.hcmus.mela.exercise.model.ExerciseStatus;
+import com.hcmus.mela.exercise.model.*;
 import com.hcmus.mela.exercise.repository.ExerciseRepository;
-import com.hcmus.mela.exercise.repository.ExerciseResultRepository;
-import com.hcmus.mela.lecture.model.Lecture;
-import com.hcmus.mela.lecture.service.LectureDetailService;
-import com.hcmus.mela.common.utils.GeneralMessageAccessor;
+import com.hcmus.mela.history.dto.dto.ExerciseAnswerDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ExerciseResultServiceImpl implements ExerciseResultService {
-    private static final String RESULTS_FOUND = "results_found_successful";
-    private static final String RESULT_SAVED = "result_saved_successful";
-    private final GeneralMessageAccessor generalMessageAccessor;
-    private final ExerciseResultRepository exerciseResultRepository;
+
     private final ExerciseRepository exerciseRepository;
-    private final LectureDetailService lectureDetailService;
 
     @Override
-    public List<ExerciseResult> findAllByUserIdAndExerciseId(UUID userId, UUID exerciseId) {
-        return exerciseResultRepository.findAllByUserIdAndExerciseId(userId, exerciseId);
-    }
-
-    @Override
-    public ExerciseResultDto getBestExerciseResult(UUID userId, UUID exerciseId) {
-        ExerciseResult bestResult = exerciseResultRepository.getBestExerciseResult(userId, exerciseId);
-        if (bestResult == null) {
-            return null;
+    public void checkResult(UUID exerciseId, List<ExerciseAnswerDto> exerciseAnswerDtoList) {
+        Exercise exercise = exerciseRepository.findById(exerciseId).orElse(null);
+        Map<UUID, Question> questionMap = new HashMap<>();
+        if (exercise != null) {
+            questionMap = exercise.getQuestions()
+                    .stream()
+                    .collect(Collectors.toMap(Question::getQuestionId, question -> question));
         }
+        for (ExerciseAnswerDto exerciseAnswerDto : exerciseAnswerDtoList) {
+            UUID questionId = exerciseAnswerDto.getQuestionId();
 
-        final String resultSuccessMessage = generalMessageAccessor.getMessage(null, RESULTS_FOUND, exerciseId, userId);
-        log.info(resultSuccessMessage);
-        return ExerciseResultMapper.INSTANCE.convertToExerciseResultDto(bestResult);
-    }
-
-    @Override
-    public ExerciseResultResponse saveResult(ExerciseResultRequest exerciseResultRequest, UUID userId) {
-        final ExerciseResult exerciseResult = ExerciseResultMapper.INSTANCE.convertToExerciseResult(exerciseResultRequest);
-
-        final Exercise exercise = exerciseRepository.findByExerciseId(exerciseResultRequest.getExerciseId());
-
-        exerciseResult.setUserId(userId);
-
-        exerciseResult.setLectureId(exercise.getLectureId());
-
-        final Lecture lecture = lectureDetailService.getLectureById(exercise.getLectureId());
-
-        exerciseResult.setTopicId(lecture.getTopicId());
-
-        exerciseResult.setLectureId(lecture.getLectureId());
-
-        exerciseResult.setLevelId(lecture.getLevelId());
-
-        ExerciseStatus status = ExerciseStatus.IN_PROGRESS;
-        if (exerciseResultRequest.getTotalAnswers() == 0) {
-            status = ExerciseStatus.NOT_START;
-        } else if (exerciseResultRequest.getTotalCorrectAnswers() >= 0.8 * exerciseResultRequest.getTotalAnswers()) {
-            status = ExerciseStatus.PASS;
+            Question question = questionMap.get(questionId);
+            if (question == null) {
+                exerciseAnswerDto.setIsCorrect(false);
+                continue;
+            }
+            String blankAnswer = exerciseAnswerDto.getBlankAnswer();
+            Integer selectedOption = exerciseAnswerDto.getSelectedOption();
+            List<Option> options = question.getOptions();
+            Integer correctOption = null;
+            if (options != null && !options.isEmpty()) {
+                correctOption = options
+                        .stream()
+                        .filter(Option::getIsCorrect)
+                        .findFirst()
+                        .map(Option::getOrdinalNumber)
+                        .orElse(null);
+            }
+            exerciseAnswerDto.setIsCorrect(evalAnswer(question.getBlankAnswer(), blankAnswer, correctOption, selectedOption));
         }
-        exerciseResult.setStatus(status);
-
-        exerciseResult.setExerciseResultId(UUID.randomUUID());
-
-        exerciseResultRepository.save(exerciseResult);
-
-        final String saveResultSuccessMessage = generalMessageAccessor.getMessage(null, RESULT_SAVED, userId, exercise.getExerciseId());
-
-        log.info("Exercise {} result saved successfully!", exercise.getExerciseId());
-
-        return new ExerciseResultResponse(saveResultSuccessMessage);
     }
 
-    @Override
-    public List<ExerciseResultCount> countTotalPassExerciseOfLectures(UUID userId) {
-        return exerciseResultRepository.countTotalPassExerciseOfLectures(userId);
+    private Boolean evalAnswer(String correctAnswer, String blankAnswer, Integer correctOption, Integer selectedOption) {
+        if (correctOption != null && correctOption != 0) {
+            return correctOption.equals(selectedOption);
+        }
+        if (correctAnswer != null) {
+            return correctAnswer.equals(blankAnswer);
+        }
+        return false;
     }
 }

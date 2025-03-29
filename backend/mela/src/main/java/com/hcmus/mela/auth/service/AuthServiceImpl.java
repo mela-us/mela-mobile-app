@@ -2,8 +2,8 @@ package com.hcmus.mela.auth.service;
 
 import com.hcmus.mela.auth.dto.request.*;
 import com.hcmus.mela.auth.dto.response.*;
-import com.hcmus.mela.auth.exception.exception.InvalidTokenException;
-import com.hcmus.mela.auth.exception.exception.RegistrationException;
+import com.hcmus.mela.auth.exception.InvalidTokenException;
+import com.hcmus.mela.auth.exception.RegistrationException;
 import com.hcmus.mela.auth.model.User;
 import com.hcmus.mela.auth.model.UserRole;
 import com.hcmus.mela.auth.repository.AuthRepository;

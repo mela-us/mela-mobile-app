@@ -1,15 +1,14 @@
 package com.hcmus.mela.ai.question.hint.service;
 
 import com.hcmus.mela.ai.question.hint.model.QuestionHint;
-import com.hcmus.mela.ai.question.hint.repository.QuestionHintRepository;
 import com.hcmus.mela.exercise.model.Exercise;
 import com.hcmus.mela.exercise.model.Option;
 import com.hcmus.mela.exercise.model.Question;
 import com.hcmus.mela.exercise.service.ExerciseService;
 import com.hcmus.mela.exercise.service.QuestionService;
-import com.hcmus.mela.lecture.model.Lecture;
+import com.hcmus.mela.lecture.dto.dto.LectureDto;
 import com.hcmus.mela.lecture.model.Level;
-import com.hcmus.mela.lecture.service.LectureDetailService;
+import com.hcmus.mela.lecture.service.LectureServiceImpl;
 import com.hcmus.mela.lecture.service.LevelService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +30,7 @@ public class QuestionHintServiceImpl implements QuestionHintService {
 
     private final ExerciseService exerciseService;
 
-    private final LectureDetailService lectureDetailService;
+    private final LectureServiceImpl lectureService;
 
     private final LevelService levelService;
 
@@ -40,7 +39,7 @@ public class QuestionHintServiceImpl implements QuestionHintService {
 
         Exercise exercise = exerciseService.findByQuestionId(questionId);
 
-        Lecture lecture = lectureDetailService.getLectureById(exercise.getLectureId());
+        LectureDto lecture = lectureService.getLectureById(exercise.getLectureId());
 
         Level level = levelService.findLevelByLevelId(lecture.getLevelId());
 

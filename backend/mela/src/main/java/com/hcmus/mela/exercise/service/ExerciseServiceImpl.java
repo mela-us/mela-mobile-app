@@ -1,27 +1,28 @@
 package com.hcmus.mela.exercise.service;
 
+import com.hcmus.mela.exercise.dto.dto.ExerciseDto;
+import com.hcmus.mela.exercise.dto.dto.ExerciseStatDetailDto;
 import com.hcmus.mela.exercise.dto.dto.ExerciseResultDto;
 import com.hcmus.mela.exercise.dto.dto.QuestionDto;
 import com.hcmus.mela.exercise.dto.request.ExerciseRequest;
 import com.hcmus.mela.exercise.dto.response.ExerciseResponse;
-import com.hcmus.mela.exercise.dto.dto.ExerciseDto;
 import com.hcmus.mela.exercise.dto.response.QuestionResponse;
-import com.hcmus.mela.exercise.mapper.QuestionMapper;
-import com.hcmus.mela.exercise.model.Exercise;
-import com.hcmus.mela.exercise.model.Question;
-import com.hcmus.mela.exercise.repository.ExerciseRepository;
-import com.hcmus.mela.exercise.mapper.ExerciseMapper;
-import com.hcmus.mela.lecture.model.Lecture;
-import com.hcmus.mela.lecture.service.LectureDetailService;
 import com.hcmus.mela.common.utils.GeneralMessageAccessor;
+import com.hcmus.mela.exercise.mapper.ExerciseStatDetailMapper;
+import com.hcmus.mela.exercise.model.Exercise;
+import com.hcmus.mela.exercise.repository.ExerciseRepository;
+import com.hcmus.mela.history.service.ExerciseHistoryService;
+import com.hcmus.mela.lecture.dto.dto.LectureDto;
+import com.hcmus.mela.lecture.service.LectureService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -29,98 +30,80 @@ import java.util.UUID;
 public class ExerciseServiceImpl implements ExerciseService {
 
     private static final String EXERCISE_FOUND = "exercise_found_successful";
+
     private static final String EXERCISES_FOUND = "exercises_of_lecture_found_successful";
-    private final ExerciseRepository exerciseRepository;
-    private final ExerciseValidationService exerciseValidationService;
+
     private final GeneralMessageAccessor generalMessageAccessor;
-    private final ExerciseResultService exerciseResultService;
-    private final LectureDetailService lectureDetailService;
 
-    @Override
-    public Exercise findByExerciseId(UUID exerciseId) {
+    private final ExerciseRepository exerciseRepository;
 
-        return exerciseRepository.findByExerciseId(exerciseId);
-    }
+    private final ExerciseValidationService exerciseValidationService;
 
-    @Override
-    public List<Exercise> findAllExercisesInLecture(UUID lectureId) {
-        return exerciseRepository.findAllByLectureId(lectureId);
-    }
+    private final LectureService lectureService;
+
+    private final ExerciseInfoService exerciseInfoService;
+
+    private final ExerciseHistoryService exerciseHistoryService;
 
     @Override
     public QuestionResponse getExercise(ExerciseRequest exerciseRequest) {
         exerciseValidationService.validateExercise(exerciseRequest);
 
         final UUID exerciseId = exerciseRequest.getExerciseId();
-
-        Exercise exercise = findByExerciseId(exerciseId);
-
-        List<Question> questions = exercise.getQuestions();
-        Integer numberOfQuestions = questions.size();
-
-        List<QuestionDto> questionDtos = new ArrayList<>();
-
-        for(Question question: questions) {
-
-           QuestionDto questionDto = QuestionMapper.INSTANCE.convertToQuestionDto(question);
-
-            questionDtos.add(questionDto);
+        ExerciseDto exerciseDto = exerciseInfoService.findByExerciseId(exerciseId);
+        List<QuestionDto> questionDtoList = new ArrayList<>();
+        if (exerciseDto != null) {
+            questionDtoList = exerciseDto.getQuestions();
         }
 
-        
         final String exerciseSuccessMessage = generalMessageAccessor.getMessage(null, EXERCISE_FOUND, exerciseId);
-
         log.info(exerciseSuccessMessage);
 
-        return new QuestionResponse(exerciseSuccessMessage, numberOfQuestions, questionDtos);
+        return new QuestionResponse(exerciseSuccessMessage, questionDtoList.size(), questionDtoList);
     }
 
     @Override
     public ExerciseResponse getAllExercisesInLecture(ExerciseRequest exerciseRequest) {
         exerciseValidationService.validateLecture(exerciseRequest);
 
+        final UUID userId = exerciseRequest.getUserId();
         final UUID lectureId = exerciseRequest.getLectureId();
+        LectureDto lecture = lectureService.getLectureById(lectureId);
+        UUID topicId = lecture.getTopicId();
+        UUID levelId = lecture.getLevelId();
+        List<Exercise> exercises = exerciseRepository.findAllByLectureId(lectureId);
+        List<ExerciseStatDetailDto> exerciseStatDetailDtoList = new ArrayList<>();
 
-        List<Exercise> exercises = findAllExercisesInLecture(lectureId);
+        Map<UUID, ExerciseResultDto> exerciseBestResultMap = exerciseHistoryService.getExerciseBestResultOfUser(
+                exercises.stream().map(Exercise::getExerciseId).toList(), userId);
 
-        Lecture lecture = lectureDetailService.getLectureById(lectureId);
-
-        List<ExerciseDto> exerciseDtos = new ArrayList<>();
-
-        for(Exercise exercise: exercises) {
+        for (Exercise exercise : exercises) {
             final UUID exerciseId = exercise.getExerciseId();
-            final UUID userId = exerciseRequest.getUserId();
-
             final Integer numberOfQuestions = exercise.getQuestions().size();
 
-            ExerciseDto exerciseDto = ExerciseMapper.INSTANCE.convertToExerciseDto(exercise);
-
-            exerciseDto.setTopicId(lecture.getTopicId());
-
-            exerciseDto.setLevelId(lecture.getLevelId());
-
-            ExerciseResultDto exerciseResultDto = exerciseResultService.getBestExerciseResult(userId, exerciseId);
-
-            exerciseDto.setTotalQuestions(numberOfQuestions);
-            exerciseDto.setBestResult(exerciseResultDto);
-
-            exerciseDtos.add(exerciseDto);
+            ExerciseStatDetailDto exerciseStatDetailDto = ExerciseStatDetailMapper.INSTANCE.convertToExerciseStatDetailDto(exercise);
+            exerciseStatDetailDto.setTopicId(topicId);
+            exerciseStatDetailDto.setLevelId(levelId);
+            exerciseStatDetailDto.setTotalQuestions(numberOfQuestions);
+            exerciseStatDetailDto.setBestResult(exerciseBestResultMap.get(exerciseId));
+            exerciseStatDetailDtoList.add(exerciseStatDetailDto);
         }
 
         final String exercisesSuccessMessage = generalMessageAccessor.getMessage(null, EXERCISES_FOUND, lectureId);
-
         log.info(exercisesSuccessMessage);
 
-        return new ExerciseResponse(exercisesSuccessMessage,exerciseDtos.size(), exerciseDtos);
+        return new ExerciseResponse(
+                exercisesSuccessMessage,
+                exerciseStatDetailDtoList.size(),
+                exerciseStatDetailDtoList);
     }
 
+
     @Override
-    public Integer getNumberOfQuestions(UUID exerciseId) {
-        Exercise exercise = findByExerciseId(exerciseId);
-
-        List<Question> questions = exercise.getQuestions();
-
-        return questions.size();
+    public Map<UUID, Integer> getExerciseCountForLectures(List<UUID> lectureIdList) {
+        List<Exercise> exerciseList = exerciseRepository.findAllByLectureIdIn(lectureIdList);
+        return exerciseList.stream()
+                .collect(Collectors.groupingBy(Exercise::getLectureId, Collectors.summingInt(e -> 1)));
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.hcmus.mela.exercise.service;
 
 
 import com.hcmus.mela.exercise.dto.request.ExerciseRequest;
-import com.hcmus.mela.exercise.exception.exception.ExerciseException;
+import com.hcmus.mela.exercise.exception.ExerciseException;
 import com.hcmus.mela.exercise.repository.ExerciseRepository;
 import com.hcmus.mela.common.utils.ExceptionMessageAccessor;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +16,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class ExerciseValidationService {
+    
     private static final String EXERCISE_NOT_EXISTS = "exercise_id_must_exist";
 
     private static final String LECTURE_NOT_EXISTS = "lecture_id_must_exist";

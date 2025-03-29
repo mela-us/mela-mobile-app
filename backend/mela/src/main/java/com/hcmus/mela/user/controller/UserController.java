@@ -38,14 +38,12 @@ public class UserController {
                 jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader)
         );
 
-        // Generate pre-signed URL for uploading user profile image
-        final String preSignedUrl = storageService.generatePreSignedUrl(userId.toString());
+        // Get pre-signed URL for uploading user profile image
+        final Map<String, String> urls = storageService.getUploadUserImagePreSignedUrl(userId.toString());
 
-        // Get image URL
-        final String imageUrl = storageService.getImageUrl(userId.toString());
 
         return ResponseEntity.status(HttpStatus.OK).body(
-                Map.of("preSignedUrl", preSignedUrl, "imageUrl", imageUrl)
+                Map.of("preSignedUrl", urls.get("preSignedUrl"), "imageUrl", urls.get("storedUrl"))
         );
     }
 

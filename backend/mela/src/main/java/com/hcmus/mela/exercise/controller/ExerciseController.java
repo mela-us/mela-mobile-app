@@ -1,6 +1,5 @@
 package com.hcmus.mela.exercise.controller;
 
-import com.hcmus.mela.auth.dto.request.LoginRequest;
 import com.hcmus.mela.exercise.dto.request.ExerciseRequest;
 import com.hcmus.mela.exercise.dto.request.ExerciseResultRequest;
 import com.hcmus.mela.exercise.dto.response.ExerciseResponse;
@@ -11,7 +10,6 @@ import com.hcmus.mela.exercise.dto.response.QuestionResponse;
 import com.hcmus.mela.exercise.service.ExerciseResultService;
 import com.hcmus.mela.exercise.service.ExerciseService;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.ResponseEntity;
@@ -35,13 +33,10 @@ public class ExerciseController {
             @PathVariable String lectureId,
             @RequestHeader("Authorization") String authorizationHeader) {
         String token = authorizationHeader.replace(SecurityConstants.TOKEN_PREFIX, Strings.EMPTY);
-
         UUID userId = jwtTokenService.getUserIdFromToken(token);
 
         ExerciseRequest exerciseRequest = new ExerciseRequest(null, UUID.fromString(lectureId), userId);
-
         final ExerciseResponse exerciseResponse = exerciseService.getAllExercisesInLecture(exerciseRequest);
-
         return ResponseEntity.ok(exerciseResponse);
     }
 
@@ -51,31 +46,11 @@ public class ExerciseController {
     public ResponseEntity<QuestionResponse> getExercise(
             @PathVariable String exerciseId,
             @RequestHeader("Authorization") String authorizationHeader) {
-
         String token = jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader);
-
         UUID userId = jwtTokenService.getUserIdFromToken(token);
 
         ExerciseRequest exerciseRequest = new ExerciseRequest(UUID.fromString(exerciseId), null, userId);
-
         final QuestionResponse exerciseResponse = exerciseService.getExercise(exerciseRequest);
-
         return ResponseEntity.ok(exerciseResponse);
     }
-
-    @RequestMapping(value = "/exercises/save", method = RequestMethod.POST)
-    @Operation(tags = "Exercise Service", description = "Save exercise result to database")
-    public ResponseEntity<ExerciseResultResponse> saveResult(
-            @RequestBody ExerciseResultRequest exerciseResultRequest,
-            @RequestHeader("Authorization") String authorizationHeader
-    ) {
-        String token = jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader);
-
-        UUID userId = jwtTokenService.getUserIdFromToken(token);
-
-        final ExerciseResultResponse exerciseResultResponse = exerciseResultService.saveResult(exerciseResultRequest, userId);
-
-        return ResponseEntity.ok(exerciseResultResponse);
-    }
-
 }

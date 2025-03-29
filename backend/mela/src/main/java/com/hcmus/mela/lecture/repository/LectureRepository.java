@@ -1,20 +1,20 @@
 package com.hcmus.mela.lecture.repository;
 
 import com.hcmus.mela.lecture.model.Lecture;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
 import java.util.UUID;
 
-public interface LectureRepository {
+public interface LectureRepository extends MongoRepository<Lecture, UUID> {
 
-    Lecture findById(UUID lectureId);
+    Lecture findByLectureId(UUID lectureId);
 
-    List<Lecture> findLecturesByTopic(UUID topicId);
+    List<Lecture> findAllByLevelIdAndTopicId(UUID levelId, UUID topicId);
 
-    List<Lecture> findLecturesByTopicAndLevel(UUID topicId, UUID levelId);
+    List<Lecture> findAllByNameContainingIgnoreCase(String keyword);
 
-    List<Lecture> findLecturesByKeyword(String keyword);
-
-    List<Lecture> findLecturesByRecent(UUID userId, Integer size);
+    @Query("{ 'lectureId': { '$in': ?0 } }")
+    List<Lecture> findAllByLectureIdList(List<UUID> lectureIdList);
 }
-
