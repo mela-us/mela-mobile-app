@@ -26,7 +26,9 @@ jobs:
           flutter-version: 3.27.4  # You can specify the Flutter version to use
 
       - name: Install dependencies
+        working-directory: frontend/mela
         run: flutter pub get
 
       - name: Run tests
+        working-directory: frontend/mela
         run: flutter test
