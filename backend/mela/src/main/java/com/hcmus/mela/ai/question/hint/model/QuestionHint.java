@@ -11,7 +11,7 @@ import java.util.Map;
 @Configuration
 @ConfigurationProperties(prefix = "prompt.exercise.hint")
 public class QuestionHint {
-    private Map<String, Map<String, String>> term;
+    private Map<String, Map<String, String>> terms;
 
     private Map<String, Map<String, String>> guide;
 }
