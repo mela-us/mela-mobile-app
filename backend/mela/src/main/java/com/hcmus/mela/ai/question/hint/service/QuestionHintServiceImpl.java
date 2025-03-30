@@ -1,5 +1,11 @@
 package com.hcmus.mela.ai.question.hint.service;
 
+import com.hcmus.mela.ai.chatbot.dto.response.AiResponseContent;
+import com.hcmus.mela.ai.client.builder.AiRequestBodyFactory;
+import com.hcmus.mela.ai.client.config.AiClientProperties;
+import com.hcmus.mela.ai.client.filter.AiResponseFilter;
+import com.hcmus.mela.ai.client.web.AiWebClient;
+import com.hcmus.mela.ai.question.hint.dto.response.HintResponseDto;
 import com.hcmus.mela.ai.question.hint.model.QuestionHint;
 import com.hcmus.mela.exercise.model.Exercise;
 import com.hcmus.mela.exercise.model.Option;
@@ -8,9 +14,8 @@ import com.hcmus.mela.exercise.service.ExerciseService;
 import com.hcmus.mela.exercise.service.QuestionService;
 import com.hcmus.mela.lecture.dto.dto.LectureDto;
 import com.hcmus.mela.lecture.model.Level;
-import com.hcmus.mela.lecture.service.LectureServiceImpl;
+import com.hcmus.mela.lecture.service.LectureService;
 import com.hcmus.mela.lecture.service.LevelService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class QuestionHintServiceImpl implements QuestionHintService {
 
     private final QuestionHint questionHint;
@@ -30,9 +36,37 @@ public class QuestionHintServiceImpl implements QuestionHintService {
 
     private final ExerciseService exerciseService;
 
-    private final LectureServiceImpl lectureService;
+    private final LectureService lectureService;
 
     private final LevelService levelService;
+
+    private final AiWebClient aiWebClient;
+
+    private final AiClientProperties.QuestionHint questionHintProperties;
+
+    private final AiRequestBodyFactory aiRequestBodyFactory;
+
+    private final AiResponseFilter aiResponseFilter;
+
+    public QuestionHintServiceImpl(QuestionHint questionHint,
+                                   QuestionService questionService,
+                                   ExerciseService exerciseService,
+                                   LectureService lectureService,
+                                   LevelService levelService,
+                                   AiWebClient aiWebClient,
+                                   AiClientProperties aiClientProperties,
+                                   AiRequestBodyFactory aiRequestBodyFactory,
+                                   AiResponseFilter aiResponseFilter) {
+        this.questionHint = questionHint;
+        this.questionService = questionService;
+        this.exerciseService = exerciseService;
+        this.lectureService = lectureService;
+        this.levelService = levelService;
+        this.aiWebClient = aiWebClient;
+        this.questionHintProperties = aiClientProperties.getQuestionHint();
+        this.aiRequestBodyFactory = aiRequestBodyFactory;
+        this.aiResponseFilter = aiResponseFilter;
+    }
 
     public List<String> generateKeys(UUID questionId) {
         Question question = questionService.findByQuestionId(questionId);
@@ -70,7 +104,7 @@ public class QuestionHintServiceImpl implements QuestionHintService {
     }
 
     public List<String> generateTemplate(Map<String, String> instruction,
-                                         Map<String, String> userMessages,
+                                         Map<String, String> userMessage,
                                          List<String> keys) {
         List<String> template = new ArrayList<>();
 
@@ -88,7 +122,7 @@ public class QuestionHintServiceImpl implements QuestionHintService {
 
         template.add(task + "\n" + background + "\n" + requirement);
 
-        template.add(userMessages.get("data")
+        template.add(userMessage.get("data")
                 .replace("{level}", keys.get(0))
                 .replace("{question}", keys.get(1))
                 .replace("{answer}", keys.get(2)));
@@ -97,26 +131,103 @@ public class QuestionHintServiceImpl implements QuestionHintService {
     }
 
     @Override
-    public List<String> generateTerm(UUID questionId) {
+    public HintResponseDto generateTerms(UUID questionId) {
+        Question question = questionService.findByQuestionId(questionId);
 
-        List<String> keys = generateKeys(questionId);
+        if (question.getTerms() == null || question.getTerms().isEmpty()) {
+            List<String> keys = generateKeys(questionId);
 
-        Map<String, String> instruction = questionHint.getTerm().get("instruction");
+            Map<String, String> instruction = questionHint.getTerms().get("instruction");
 
-        Map<String, String> userMessages = questionHint.getTerm().get("userMessages");
+            Map<String, String> userMessage = questionHint.getTerms().get("userMessage");
 
-        return generateTemplate(instruction, userMessages, keys);
+            List<String> termRequest = generateTemplate(instruction, userMessage, keys);
+
+            List<String> imgSrcs = extractImageSources(termRequest.get(1));
+
+            Object requestBody = aiRequestBodyFactory.createRequestBodyForChatBot(
+                    termRequest.get(0),
+                    termRequest.get(1),
+                    imgSrcs,
+                    questionHintProperties);
+
+            Object response = aiWebClient.fetchAiResponse(questionHintProperties, requestBody);
+            String responseText = aiResponseFilter.getMessage(response);
+
+            Exercise exercise = exerciseService.findByQuestionId(questionId);
+
+            List<Question> questions = exercise.getQuestions();
+
+            for (Question q : questions) {
+                if (q.getQuestionId().equals(questionId)) {
+                    question.setTerms(responseText);
+                    q.setTerms(responseText);
+                    break;
+                }
+            }
+
+            exercise.setQuestions(questions);
+            exerciseService.updateQuestionHint(exercise);
+        }
+
+        return new HintResponseDto(question.getTerms());
+
     }
 
     @Override
-    public List<String> generateGuide(UUID questionId) {
+    public HintResponseDto generateGuide(UUID questionId) {
 
-        List<String> keys = generateKeys(questionId);
+        Question question = questionService.findByQuestionId(questionId);
 
-        Map<String, String> instruction = questionHint.getGuide().get("instruction");
+        if (question.getGuide() == null || question.getGuide().isEmpty()) {
+            List<String> keys = generateKeys(questionId);
 
-        Map<String, String> userMessages = questionHint.getGuide().get("userMessages");
+            Map<String, String> instruction = questionHint.getGuide().get("instruction");
 
-        return generateTemplate(instruction, userMessages, keys);
+            Map<String, String> userMessage = questionHint.getGuide().get("userMessage");
+
+            List<String> guideRequest = generateTemplate(instruction, userMessage, keys);
+
+            List<String> imgSrcs = extractImageSources(guideRequest.get(1));
+
+            Object requestBody = aiRequestBodyFactory.createRequestBodyForChatBot(
+                    guideRequest.get(0),
+                    guideRequest.get(1),
+                    imgSrcs,
+                    questionHintProperties);
+
+            Object response = aiWebClient.fetchAiResponse(questionHintProperties, requestBody);
+            String responseText = aiResponseFilter.getMessage(response);
+
+            Exercise exercise = exerciseService.findByQuestionId(questionId);
+
+            List<Question> questions = exercise.getQuestions();
+
+            for (Question q : questions) {
+                if (q.getQuestionId().equals(questionId)) {
+                    question.setGuide(responseText);
+                    q.setGuide(responseText);
+                    break;
+                }
+            }
+
+            exercise.setQuestions(questions);
+            exerciseService.updateQuestionHint(exercise);
+        }
+
+        return new HintResponseDto(question.getGuide());
+    }
+
+    private List<String> extractImageSources(String text) {
+        List<String> imageSources = new ArrayList<>();
+        String regex = "<img\\s+src='([^\"]*)'>";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(text);
+
+        while (matcher.find()) {
+            imageSources.add(matcher.group(1)); // Capture the src value
+        }
+
+        return imageSources;
     }
 }

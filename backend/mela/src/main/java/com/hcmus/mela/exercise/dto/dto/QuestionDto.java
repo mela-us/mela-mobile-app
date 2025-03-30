@@ -28,5 +28,9 @@ public class QuestionDto {
 
     private String blankAnswer;
 
+    private String solution;
+
+    private String terms;
+
     private String guide;
 }
