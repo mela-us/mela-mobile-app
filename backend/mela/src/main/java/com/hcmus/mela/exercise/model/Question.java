@@ -37,8 +37,8 @@ public class Question {
     @Field(name = "solution")
     private String solution;
 
-    @Field(name = "term")
-    private String term;
+    @Field(name = "terms")
+    private String terms;
 
     @Field(name = "guide")
     private String guide;
