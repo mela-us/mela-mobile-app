@@ -1,6 +1,10 @@
 package com.hcmus.mela.ai.question.hint.controller;
 
+import com.hcmus.mela.ai.question.hint.dto.response.HintResponseDto;
+import com.hcmus.mela.ai.question.hint.service.QuestionHintService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.mongodb.repository.Hint;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,11 +15,24 @@ import java.util.UUID;
 @RequestMapping("/api")
 public class QuestionHintController {
 
-    @GetMapping("/{questionId}/hint/term")
-    public List<String> generateTerm(@PathVariable UUID questionId,
-                                     @RequestHeader(value = "Authorization") String authorizationHeader) {
+    private final QuestionHintService questionHintService;
 
-        return null;
+    @PostMapping("/{questionId}/hint/terms")
+    public ResponseEntity<HintResponseDto> generateTerms(@PathVariable UUID questionId,
+                                                        @RequestHeader(value = "Authorization") String authorizationHeader) {
+
+        HintResponseDto hint = questionHintService.generateTerms(questionId);
+
+        return ResponseEntity.ok(hint);
+    }
+
+    @PostMapping("/{questionId}/hint/guide")
+    public ResponseEntity<HintResponseDto> generateGuide(@PathVariable UUID questionId,
+                                                         @RequestHeader(value = "Authorization") String authorizationHeader) {
+
+        HintResponseDto hint = questionHintService.generateGuide(questionId);
+
+        return ResponseEntity.ok(hint);
     }
 }
 
