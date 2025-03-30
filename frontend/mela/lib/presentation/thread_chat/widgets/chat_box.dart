@@ -69,7 +69,10 @@ class _ChatBoxState extends State<ChatBox> {
   Future<void> pickImage(ImageSource imageSource) async {
     XFile? image = await _imagePickerHelper.pickImageFromGalleryOrCamera(
         source: imageSource);
+
     if (image != null) {
+      // File imageFile = File(image.path);
+      // _imagesNotifier.value = [imageFile];
       CroppedFile? croppedFile = await _imagePickerHelper.cropImage(image);
       if (croppedFile == null) return;
       File imageFile = File(croppedFile.path);
@@ -319,8 +322,6 @@ class _ChatBoxState extends State<ChatBox> {
                 : const SizedBox();
           },
         ),
-     
-     
       ],
     );
   }

@@ -4,6 +4,8 @@ import 'package:mela/data/network/apis/exercises/exercise_api.dart';
 import 'package:mela/data/network/apis/level/level_api.dart';
 import 'package:mela/data/network/apis/login_signup/login_api.dart';
 import 'package:mela/data/network/apis/login_signup/refresh_access_token_api.dart';
+import 'package:mela/data/network/apis/presigned_image/presigned_image_api.dart';
+import 'package:mela/data/network/apis/presigned_image/presigned_image_upload_api.dart';
 import 'package:mela/data/network/apis/searchs/search_api.dart';
 import 'package:mela/data/network/apis/topic_lecture/topic_lecture_api.dart';
 import 'package:mela/data/network/apis/topics/topic_api.dart';
@@ -85,5 +87,8 @@ class NetworkModule {
     getIt.registerSingleton<DeleteAccountApi>(
         DeleteAccountApi(getIt<DioClient>()));
     getIt.registerSingleton<ChatApi>(ChatApi(getIt<DioClient>()));
+    getIt.registerSingleton<PresignedImageApi>(
+        PresignedImageApi(getIt<DioClient>()));
+    getIt.registerSingleton<PresignedImageUploadApi>(PresignedImageUploadApi());
   }
 }

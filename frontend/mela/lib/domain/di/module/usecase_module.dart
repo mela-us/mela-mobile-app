@@ -2,9 +2,11 @@ import 'dart:async';
 import 'package:mela/domain/repository/chat/chat_repository.dart';
 import 'package:mela/domain/repository/lecture/lecture_repository.dart';
 import 'package:mela/domain/repository/level/level_repository.dart';
+import 'package:mela/domain/repository/presigned_image/presigned_image_repository.dart';
 import 'package:mela/domain/repository/topic_lecture/topic_lecture_repository.dart';
 import 'package:mela/domain/repository/user/user_repository.dart';
 import 'package:mela/domain/repository/user_register/user_signup_repostiory.dart';
+import 'package:mela/domain/usecase/chat/create_new_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/get_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_chat_usecase.dart';
 
@@ -12,6 +14,7 @@ import 'package:mela/domain/usecase/exercise/get_exercises_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_lectures_usecase.dart';
 import 'package:mela/domain/usecase/level/get_level_list_usecase.dart';
+import 'package:mela/domain/usecase/presigned_image/get_presigned_image_usecase.dart';
 import 'package:mela/domain/usecase/topic/find_topic_by_id_usecase.dart';
 import 'package:mela/domain/usecase/topic/get_topics_usecase.dart';
 import 'package:mela/domain/usecase/topic_lecture/get_topic_lecture_usecase.dart';
@@ -207,5 +210,16 @@ class UseCaseModule {
         getIt<LogoutUseCase>()));
     getIt.registerSingleton(SendMessageChatUsecase(getIt<ChatRepository>(),
         getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()));
+
+    //Presigned Image
+    getIt.registerSingleton(GetPresignImageUsecase(
+        getIt<PresignedImageRepository>(),
+        getIt<RefreshAccessTokenUsecase>(),
+        getIt<LogoutUseCase>()));
+    getIt.registerSingleton(CreateNewConversationUsecase(
+        getIt<ChatRepository>(),
+        getIt<RefreshAccessTokenUsecase>(),
+        getIt<LogoutUseCase>(),
+        getIt<GetPresignImageUsecase>()));
   }
 }

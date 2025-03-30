@@ -46,14 +46,11 @@ class ImagePickerHelper {
         sourcePath: image.path,
         uiSettings: [
           AndroidUiSettings(
-            toolbarTitle: 'Cropper',
+            toolbarTitle: 'Cắt ảnh',
             toolbarColor: Colors.deepOrange,
             toolbarWidgetColor: Colors.white,
-            // aspectRatioPresets: [
-            //   CropAspectRatioPreset.original,
-            //   CropAspectRatioPreset.square,
-            //   // CropAspectRatioPresetCustom(),
-            // ],
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false,
           ),
           IOSUiSettings(
             title: 'Cropper',

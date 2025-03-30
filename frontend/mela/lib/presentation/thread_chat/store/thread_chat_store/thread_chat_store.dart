@@ -1,7 +1,10 @@
 import 'dart:io';
 
+import 'package:mela/domain/entity/image_source/image_source.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/domain/entity/message_chat/message_chat.dart';
+import 'package:mela/domain/entity/message_chat/normal_message.dart';
+import 'package:mela/domain/usecase/chat/create_new_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/get_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_chat_usecase.dart';
 import 'package:mobx/mobx.dart';
@@ -13,7 +16,9 @@ class ThreadChatStore = _ThreadChatStore with _$ThreadChatStore;
 abstract class _ThreadChatStore with Store {
   SendMessageChatUsecase sendMessageChatUsecase;
   GetConversationUsecase getConversationUsecase;
-  _ThreadChatStore(this.sendMessageChatUsecase, this.getConversationUsecase);
+  CreateNewConversationUsecase createNewConversationUsecase;
+  _ThreadChatStore(this.sendMessageChatUsecase, this.getConversationUsecase,
+      this.createNewConversationUsecase);
 
   int limit = 10;
 
@@ -66,20 +71,43 @@ abstract class _ThreadChatStore with Store {
 
   @action
   Future<void> sendChatMessage(String message, List<File> images) async {
-    currentConversation.messages
-        .add(MessageChat(message: message, isAI: false, images: images));
-    currentConversation.messages.add(MessageChat(message: null, isAI: true));
-    //Copy with to trigger thread chat screen to update
-    currentConversation = currentConversation.copyWith();
+    try {
+      List<ImageSource> imageSources = [];
+      for (var item in images) {
+        imageSources.add(ImageSource(image: item, isImageUrl: false));
+      }
+      currentConversation.messages.add(NormalMessage(
+          text: message, isAI: false, imageSourceList: imageSources));
+      currentConversation.messages.add(NormalMessage(text: null, isAI: true));
+      //Copy with to trigger thread chat screen to update
+      currentConversation = currentConversation.copyWith();
 
-    setIsLoading(true);
-    MessageChat responseMessage = await sendMessageChatUsecase.call(
-        params: ChatRequestParams(
-            message: message,
-            conversationId: currentConversation.conversationId));
-    currentConversation.messages.last = responseMessage;
-    currentConversation = currentConversation.copyWith();
-    setIsLoading(false);
+      setIsLoading(true);
+      if (currentConversation.conversationId.isEmpty) {
+        Conversation newConversation = await createNewConversationUsecase.call(
+            params: CreateNewConversationParams(
+                text: message,
+                imageFile: images.isNotEmpty ? images[0] : null));
+        currentConversation.messages.last = newConversation.messages.last;
+        currentConversation.nameConversation = newConversation.nameConversation;
+        currentConversation.conversationId = newConversation.conversationId;
+        currentConversation = currentConversation.copyWith();
+      } else {
+        MessageChat responseMessage = await sendMessageChatUsecase.call(
+            params: ChatRequestParams(
+                message: message,
+                conversationId: currentConversation.conversationId));
+        currentConversation.messages.last = responseMessage;
+        currentConversation = currentConversation.copyWith();
+      }
+    } catch (e) {
+      print("Error: $e");
+      currentConversation.messages.last =
+          NormalMessage(text: e.toString(), isAI: true);
+      currentConversation = currentConversation.copyWith();
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   @action
