@@ -10,12 +10,18 @@ import com.hcmus.mela.exercise.dto.response.QuestionResponse;
 import com.hcmus.mela.common.utils.GeneralMessageAccessor;
 import com.hcmus.mela.exercise.mapper.ExerciseStatDetailMapper;
 import com.hcmus.mela.exercise.model.Exercise;
+import com.hcmus.mela.exercise.model.Question;
 import com.hcmus.mela.exercise.repository.ExerciseRepository;
 import com.hcmus.mela.history.service.ExerciseHistoryService;
 import com.hcmus.mela.lecture.dto.dto.LectureDto;
 import com.hcmus.mela.lecture.service.LectureService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,6 +34,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ExerciseServiceImpl implements ExerciseService {
+
+    private final MongoTemplate mongoTemplate;
 
     private static final String EXERCISE_FOUND = "exercise_found_successful";
 
@@ -108,6 +116,15 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     @Override
     public Exercise findByQuestionId(UUID questionId) {
-        return exerciseRepository.findExerciseByQuestionId(questionId);
+        return exerciseRepository.findByQuestionsQuestionId(questionId);
+    }
+
+    @Override
+    public Exercise updateQuestionHint(Exercise exercise) {
+        Query query = new Query(Criteria.where("_id").is(exercise.getExerciseId()));
+
+        Update update = new Update().set("questions", exercise.getQuestions());
+
+        return mongoTemplate.findAndModify(query, update, Exercise.class);
     }
 }
