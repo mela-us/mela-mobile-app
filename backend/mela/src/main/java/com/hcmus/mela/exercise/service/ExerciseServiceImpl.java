@@ -10,6 +10,7 @@ import com.hcmus.mela.exercise.dto.response.QuestionResponse;
 import com.hcmus.mela.common.utils.GeneralMessageAccessor;
 import com.hcmus.mela.exercise.mapper.ExerciseStatDetailMapper;
 import com.hcmus.mela.exercise.model.Exercise;
+import com.hcmus.mela.exercise.model.ExerciseStatus;
 import com.hcmus.mela.exercise.repository.ExerciseRepository;
 import com.hcmus.mela.history.service.ExerciseHistoryService;
 import com.hcmus.mela.lecture.dto.dto.LectureDto;
@@ -85,7 +86,8 @@ public class ExerciseServiceImpl implements ExerciseService {
             exerciseStatDetailDto.setTopicId(topicId);
             exerciseStatDetailDto.setLevelId(levelId);
             exerciseStatDetailDto.setTotalQuestions(numberOfQuestions);
-            exerciseStatDetailDto.setBestResult(exerciseBestResultMap.get(exerciseId));
+            ExerciseStatus status = exerciseBestResultMap.get(exerciseId).getStatus();
+            exerciseStatDetailDto.setBestResult(status == ExerciseStatus.NOT_START ? null : exerciseBestResultMap.get(exerciseId));
             exerciseStatDetailDtoList.add(exerciseStatDetailDto);
         }
 
