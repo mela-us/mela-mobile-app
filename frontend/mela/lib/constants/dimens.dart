@@ -25,6 +25,7 @@ class Dimens {
 
   static const double answerTileIconSize = 30.0;
 
+  static const double webViewWidth = 600.0;
 
 
 }

@@ -17,9 +17,11 @@ class PracticeNavigateAnimation extends PageRouteBuilder{
       ).chain(CurveTween(curve: curve));
       var offsetAnimation = ani.drive(tween);
 
-      return SlideTransition(
-        position: offsetAnimation,
-        child: child,
+      return ClipRect(
+        child: SlideTransition(
+          position: offsetAnimation,
+          child: child,
+        ),
       );
     },
     transitionDuration: Duration(milliseconds: 800),

@@ -77,6 +77,7 @@ class QuestionListOverlay extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: Dimens.practiceHorizontalText,
+        vertical: 10,
       ),
       height: 130,
       child: SingleChildScrollView(
