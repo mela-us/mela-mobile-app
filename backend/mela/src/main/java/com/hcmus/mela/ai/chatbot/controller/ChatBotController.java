@@ -1,7 +1,8 @@
 package com.hcmus.mela.ai.chatbot.controller;
 
-import com.hcmus.mela.ai.chatbot.dto.request.ChatRequest;
-import com.hcmus.mela.ai.chatbot.dto.response.ChatResponse;
+import com.hcmus.mela.ai.chatbot.dto.request.CreateConversationRequestDto;
+import com.hcmus.mela.ai.chatbot.dto.request.MessageRequestDto;
+import com.hcmus.mela.ai.chatbot.dto.response.CreateConversationResponseDto;
 import com.hcmus.mela.ai.chatbot.service.ConversationService;
 import com.hcmus.mela.auth.security.jwt.JwtTokenService;
 import com.hcmus.mela.common.storage.StorageService;
@@ -22,19 +23,22 @@ public class ChatBotController {
     private final StorageService storageService;
 
     @PostMapping()
-    public ResponseEntity<ChatResponse> createConversation(
-            @Valid @RequestBody ChatRequest chatRequest,
+    public ResponseEntity<CreateConversationResponseDto> createConversation(
+            @Valid @RequestBody CreateConversationRequestDto createConversationRequestDto,
             @RequestHeader(value = "Authorization") String authorizationHeader) {
-        ChatResponse chatResponse = conversationService.createConversation(chatRequest);
-        return ResponseEntity.ok(chatResponse);
+        // Extract user id from JWT token
+        UUID userId = jwtTokenService.getUserIdFromAuthorizationHeader(authorizationHeader);
+
+        // Create conversation
+        CreateConversationResponseDto createConversationResponseDto = conversationService.createConversation(userId, createConversationRequestDto);
+        return ResponseEntity.ok(createConversationResponseDto);
     }
 
     @PostMapping("{conversationId}/messages")
-    public ResponseEntity<ChatResponse> sendMessage(
-            @Valid @RequestBody ChatRequest chatRequest,
-            @RequestHeader(value = "Authorization") String authorizationHeader,
+    public ResponseEntity<CreateConversationResponseDto> sendMessage(
+            @Valid @RequestBody MessageRequestDto messageRequestDto,
             @PathVariable String conversationId) {
-        return ResponseEntity.ok(new ChatResponse(""));
+        return ResponseEntity.ok(null);
     }
 
     @GetMapping("/files/upload-url")

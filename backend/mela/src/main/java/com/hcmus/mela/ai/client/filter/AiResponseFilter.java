@@ -41,7 +41,7 @@ public class AiResponseFilter {
         return null;
     }
 
-    public int getUsageToken(Object response) {
+    public int getTotalTokens(Object response) {
         if (response instanceof AzureResponseBody azureResponseBody) {
             return azureResponseBody.getUsage().getTotalTokens();
         } else if (response instanceof OpenAiResponseBody openAiResponseBody) {

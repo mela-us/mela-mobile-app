@@ -18,28 +18,42 @@ public class AtLeastOneNotEmptyValidator implements ConstraintValidator<AtLeastO
             return false;
         }
 
+        boolean hasValidField = false;
+
         try {
             for (String fieldName : fields) {
-                Field field = object.getClass().getDeclaredField(fieldName);
+                Field field;
+                try {
+                    field = object.getClass().getDeclaredField(fieldName);
+                } catch (NoSuchFieldException e) {
+                    continue;
+                }
+
                 field.setAccessible(true);
                 Object value = field.get(object);
 
-                if (value instanceof String str && str.trim().isEmpty()) {
-                    return false;
-                }
-
-                if (value != null) {
-                    return true;
+                if (value instanceof String str) {
+                    if (str.trim().isEmpty()) {
+                        context.disableDefaultConstraintViolation();
+                        context.buildConstraintViolationWithTemplate(fieldName + " must not be empty if present")
+                                .addConstraintViolation();
+                        return false;
+                    } else {
+                        hasValidField = true;
+                    }
                 }
             }
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+
+            if (!hasValidField) {
+                context.disableDefaultConstraintViolation();
+                context.buildConstraintViolationWithTemplate("At least one of " + String.join(", ", fields) + " must be provided and not empty")
+                        .addConstraintViolation();
+            }
+
+            return hasValidField;
+
+        } catch (IllegalAccessException e) {
             return false;
         }
-
-        context.disableDefaultConstraintViolation();
-        context.buildConstraintViolationWithTemplate("At least one of " + String.join(", ", fields) + " must not be empty")
-                .addConstraintViolation();
-
-        return false;
     }
 }

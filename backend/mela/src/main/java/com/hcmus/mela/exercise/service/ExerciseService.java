@@ -3,6 +3,7 @@ import com.hcmus.mela.exercise.dto.request.ExerciseRequest;
 import com.hcmus.mela.exercise.dto.response.ExerciseResponse;
 import com.hcmus.mela.exercise.dto.response.QuestionResponse;
 import com.hcmus.mela.exercise.model.Exercise;
+import com.hcmus.mela.exercise.model.Question;
 
 import java.util.List;
 import java.util.Map;
@@ -18,4 +19,5 @@ public interface ExerciseService {
 
     Map<UUID, Integer> getExerciseCountForLectures(List<UUID> lectureIdList);
 
+    Exercise updateQuestionHint(Exercise exercise);
 }

@@ -14,12 +14,9 @@ import java.util.List;
 @AllArgsConstructor
 @Document
 public class Summary {
-    @Field(name = "keywords")
-    private List<String> keywords;
-
     @Field(name = "latest_update")
     private Date latestUpdate;
 
-    @Field(name = "text")
-    private String text;
+    @Field(name = "context")
+    private String context;
 }

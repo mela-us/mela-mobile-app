@@ -1,13 +1,15 @@
-package com.hcmus.mela.ai.chatbot.dto.response;
+package com.hcmus.mela.ai.question.hint.dto.response;
 
-import com.azure.core.annotation.Get;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class ChatResponse {
+@NoArgsConstructor
+public class HintResponseDto {
     private Object body;
 }

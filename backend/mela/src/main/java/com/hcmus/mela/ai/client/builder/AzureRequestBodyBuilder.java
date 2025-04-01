@@ -58,7 +58,7 @@ public class AzureRequestBodyBuilder implements AiRequestBodyBuilder {
     }
 
     /**
-     * Builds a request body for the chat bot feature using Azure's format.
+     * Builds a request body for the chatbot feature using Azure's format.
      * Note: This method is not yet implemented.
      *
      * @param instruction System instruction for the AI
