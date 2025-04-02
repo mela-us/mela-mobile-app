@@ -10,13 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public interface ExerciseHistoryService {
+public interface ActivityService {
 
-    ExerciseResultResponse getExerciseResultResponse(UUID userId, ExerciseResultRequest exerciseResultRequest);
-
-    Map<UUID, Integer> getPassedExerciseCountOfUser(UUID userId);
-
-    Map<UUID, ExerciseResultDto> getExerciseBestResultOfUser(List<UUID> exerciseIdList, UUID userId);
-
-    List<ExerciseHistoryDto> getExerciseHistoryByUserAndLevel(UUID userId, UUID levelId);
+    List<RecentActivityDto> getRecentActivityOfUser(UUID userId, Integer size);
 }

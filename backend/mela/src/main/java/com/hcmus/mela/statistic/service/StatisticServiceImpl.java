@@ -19,13 +19,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class StatisticServiceImpl implements StatisticService  {
-
-    private final JwtTokenService jwtTokenService;
 
     private final LectureHistoryService lectureHistoryService;
 
@@ -37,9 +36,7 @@ public class StatisticServiceImpl implements StatisticService  {
 
     private final ExerciseHistoryService exerciseHistoryService;
 
-    public GetStatisticsResponse getStatisticByUserAndLevelAndType(String authorizationHeader, UUID levelId, ActivityType activityType) {
-        UUID userId = jwtTokenService.getUserIdFromToken(
-                jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader));
+    public GetStatisticsResponse getStatisticByUserAndLevelAndType(UUID userId, UUID levelId, ActivityType activityType) {
         List<ActivityHistoryDto> activityHistoryDtoList = new ArrayList<>();
         if (activityType == ActivityType.SECTION) {
             List<ActivityHistoryDto> activityFromLectureHistory = getActivityFromLectureHistory(userId, levelId);
@@ -52,8 +49,13 @@ public class StatisticServiceImpl implements StatisticService  {
                 activityHistoryDtoList.addAll(activityFromExerciseHistory);
             }
         } else {
-            List<ActivityHistoryDto> activityFromLectureHistory = getActivityFromLectureHistory(userId, levelId);
-            List<ActivityHistoryDto> activityFromExerciseHistory = getActivityFromExerciseHistory(userId, levelId);
+            CompletableFuture<List<ActivityHistoryDto>> activityFromLectureHistoryFuture
+                    = CompletableFuture.supplyAsync(() -> getActivityFromLectureHistory(userId, levelId));
+            CompletableFuture<List<ActivityHistoryDto>> activityFromExerciseHistoryFuture
+                    = CompletableFuture.supplyAsync(() -> getActivityFromExerciseHistory(userId, levelId));
+            CompletableFuture.allOf(activityFromLectureHistoryFuture, activityFromExerciseHistoryFuture).join();
+            List<ActivityHistoryDto> activityFromLectureHistory = activityFromLectureHistoryFuture.join();
+            List<ActivityHistoryDto> activityFromExerciseHistory = activityFromExerciseHistoryFuture.join();
             if (!activityFromLectureHistory.isEmpty()) {
                 activityHistoryDtoList.addAll(activityFromLectureHistory);
             }

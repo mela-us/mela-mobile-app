@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.repository.Query;
 import java.util.List;
 import java.util.UUID;
 
-public interface LectureRepository extends MongoRepository<Lecture, UUID> {
+public interface LectureRepository extends MongoRepository<Lecture, UUID>, LectureCustomRepository {
 
     Lecture findByLectureId(UUID lectureId);
 

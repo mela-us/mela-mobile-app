@@ -8,5 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface QuestionService {
+
     Question findByQuestionId(UUID questionId);
 }

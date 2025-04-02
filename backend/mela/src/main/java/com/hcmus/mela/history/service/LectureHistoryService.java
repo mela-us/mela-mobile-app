@@ -11,9 +11,7 @@ import java.util.UUID;
 
 public interface LectureHistoryService {
 
-    SaveLectureSectionResponse saveSection(String authorizationHeader, SaveLectureSectionRequest saveLectureSectionRequest);
-
-    List<RecentActivityDto> getRecentActivity(UUID userId);
+    SaveLectureSectionResponse saveSection(UUID userId, SaveLectureSectionRequest saveLectureSectionRequest);
 
     List<LectureHistoryDto> getLectureHistoryByUserAndLevel(UUID userId, UUID levelId);
 }

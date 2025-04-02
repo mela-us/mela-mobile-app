@@ -18,7 +18,4 @@ public interface ExerciseRepository extends MongoRepository<Exercise, UUID> {
     Boolean existsByLectureId(UUID lectureId);
 
     Exercise findByQuestionsQuestionId(UUID questionId);
-
-    List<Exercise> findAllByLectureIdIn(List<UUID> lectureIdList);
-
 }

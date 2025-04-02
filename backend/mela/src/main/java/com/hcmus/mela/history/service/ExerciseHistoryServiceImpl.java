@@ -15,6 +15,7 @@ import com.hcmus.mela.history.mapper.ExerciseHistoryMapper;
 import com.hcmus.mela.history.mapper.RecentActivityMapper;
 import com.hcmus.mela.history.model.ExerciseAnswer;
 import com.hcmus.mela.history.model.ExerciseHistory;
+import com.hcmus.mela.history.model.ExercisesCountByLecture;
 import com.hcmus.mela.history.repository.ExerciseHistoryRepository;
 import com.hcmus.mela.lecture.dto.dto.LectureDto;
 import com.hcmus.mela.lecture.service.LectureService;
@@ -38,10 +39,7 @@ public class ExerciseHistoryServiceImpl implements ExerciseHistoryService {
     private final JwtTokenService jwtTokenService;
 
     @Override
-    public ExerciseResultResponse getExerciseResultResponse(String authorizationHeader, ExerciseResultRequest exerciseResultRequest) {
-        UUID userId = jwtTokenService.getUserIdFromToken(
-                jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader));
-        exerciseResultService.checkResult(exerciseResultRequest.getExerciseId(), exerciseResultRequest.getAnswers());
+    public ExerciseResultResponse getExerciseResultResponse(UUID userId, ExerciseResultRequest exerciseResultRequest) {
         saveExercise(exerciseResultRequest, userId);
 
         List<CheckedAnswerDto> checkedAnswerDtoList = exerciseResultRequest.getAnswers().stream()
@@ -51,7 +49,6 @@ public class ExerciseHistoryServiceImpl implements ExerciseHistoryService {
                         .build())
                 .toList();
         return ExerciseResultResponse.builder()
-                .data(checkedAnswerDtoList)
                 .message("Exercise result saved successfully")
                 .build();
     }
@@ -90,33 +87,20 @@ public class ExerciseHistoryServiceImpl implements ExerciseHistoryService {
     }
 
     @Override
-    public Map<UUID, Integer> getPassedExerciseCountForLecturesOfUser(List<UUID> lectureIdList, UUID userId) {
-        List<ExerciseHistory> exerciseHistories = exerciseHistoryRepository.findAllByUserIdAndLectureIdListAndScoreAboveOrEqual(
-                userId, lectureIdList, 80.0
-        );
-        Map<UUID, Integer> passedExerciseMap = new HashMap<>();
-        Set<UUID> exercises = new HashSet<>();
-        for (ExerciseHistory exerciseHistory : exerciseHistories) {
-            if (exercises.add(exerciseHistory.getExerciseId())) {
-                passedExerciseMap.put(exerciseHistory.getLectureId(), passedExerciseMap.getOrDefault(exerciseHistory.getLectureId(), 0) + 1);
-            }
+    public Map<UUID, Integer> getPassedExerciseCountOfUser(UUID userId) {
+        List<ExercisesCountByLecture> exercisesCountByLectureList = exerciseHistoryRepository.countTotalPassExerciseOfUser(userId, 80.0);
+        if (exercisesCountByLectureList.isEmpty()) {
+            return new HashMap<>();
         }
-        return passedExerciseMap;
-    }
-
-    @Override
-    public List<RecentActivityDto> getRecentActivity(UUID userId) {
-        List<ExerciseHistory> exerciseHistories = exerciseHistoryRepository.findAllByUserIdOrderByCompletedAtDesc(userId);
-        if (exerciseHistories.isEmpty()) {
-            return List.of();
-        }
-        return exerciseHistories.stream()
-                .map(RecentActivityMapper.INSTANCE::convertToRecentActivityDto)
-                .toList();
+        return exercisesCountByLectureList.stream().collect(
+                HashMap::new,
+                (map, exercisesCountByLecture) -> map.put(exercisesCountByLecture.getLectureId(), exercisesCountByLecture.getTotalExercises()),
+                HashMap::putAll);
     }
 
     @Override
     public Map<UUID, ExerciseResultDto> getExerciseBestResultOfUser(List<UUID> exerciseIdList, UUID userId) {
+        if (exerciseIdList.isEmpty()) return new HashMap<>();
         List<ExerciseHistory> exerciseHistories = exerciseHistoryRepository.findAllByUserIdAndExerciseIdList(userId, exerciseIdList);
         Map<UUID, ExerciseResultDto> exerciseResultDtoMap = new HashMap<>();
 
@@ -128,12 +112,16 @@ public class ExerciseHistoryServiceImpl implements ExerciseHistoryService {
 
         for(ExerciseHistory exerciseHistory: exerciseHistories) {
             Double score = exerciseHistory.getScore();
-            ExerciseStatus status = score > 80 ? ExerciseStatus.PASS : ExerciseStatus.IN_PROGRESS;
+            ExerciseStatus status = score >= 80 ? ExerciseStatus.PASS : ExerciseStatus.IN_PROGRESS;
             Integer totalAnswers = exerciseHistory.getAnswers().size();
             Integer totalCorrectAnswers =  (int)Math.round(totalAnswers * score / 100);
 
-            Integer inTotalCorrectAnswers = exerciseResultDtoMap.get(exerciseHistory.getExerciseId()).getTotalCorrectAnswers();
-            if (inTotalCorrectAnswers == null || inTotalCorrectAnswers.compareTo(totalCorrectAnswers) < 0) {
+            Integer innerTotalCorrectAnswers = -1;
+            ExerciseResultDto exerciseResultDto = exerciseResultDtoMap.getOrDefault(exerciseHistory.getExerciseId(), null);
+            if (exerciseResultDto != null) {
+                innerTotalCorrectAnswers = exerciseResultDto.getTotalCorrectAnswers();
+            }
+            if (innerTotalCorrectAnswers.compareTo(totalCorrectAnswers) < 0) {
                 exerciseResultDtoMap.put(
                         exerciseHistory.getExerciseId(),
                         ExerciseResultDto.builder()

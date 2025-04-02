@@ -18,6 +18,7 @@ public class Topic {
     @Id
     private UUID topicId;
 
+    @Field("name")
     private String name;
 
     @Field("image_url")

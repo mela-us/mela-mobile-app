@@ -10,13 +10,18 @@ import com.hcmus.mela.exercise.dto.response.QuestionResponse;
 import com.hcmus.mela.common.utils.GeneralMessageAccessor;
 import com.hcmus.mela.exercise.mapper.ExerciseStatDetailMapper;
 import com.hcmus.mela.exercise.model.Exercise;
-import com.hcmus.mela.exercise.model.ExerciseStatus;
+import com.hcmus.mela.exercise.model.Question;
 import com.hcmus.mela.exercise.repository.ExerciseRepository;
 import com.hcmus.mela.history.service.ExerciseHistoryService;
 import com.hcmus.mela.lecture.dto.dto.LectureDto;
 import com.hcmus.mela.lecture.service.LectureService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,6 +34,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ExerciseServiceImpl implements ExerciseService {
+
+    private final MongoTemplate mongoTemplate;
 
     private static final String EXERCISE_FOUND = "exercise_found_successful";
 
@@ -75,6 +82,12 @@ public class ExerciseServiceImpl implements ExerciseService {
         List<Exercise> exercises = exerciseRepository.findAllByLectureId(lectureId);
         List<ExerciseStatDetailDto> exerciseStatDetailDtoList = new ArrayList<>();
 
+        if (exercises.isEmpty()) {
+            final String exercisesNotFoundMessage = generalMessageAccessor.getMessage(null, "exercises_not_found", lectureId);
+            log.info(exercisesNotFoundMessage);
+            return new ExerciseResponse(exercisesNotFoundMessage, 0, exerciseStatDetailDtoList);
+        }
+
         Map<UUID, ExerciseResultDto> exerciseBestResultMap = exerciseHistoryService.getExerciseBestResultOfUser(
                 exercises.stream().map(Exercise::getExerciseId).toList(), userId);
 
@@ -86,8 +99,7 @@ public class ExerciseServiceImpl implements ExerciseService {
             exerciseStatDetailDto.setTopicId(topicId);
             exerciseStatDetailDto.setLevelId(levelId);
             exerciseStatDetailDto.setTotalQuestions(numberOfQuestions);
-            ExerciseStatus status = exerciseBestResultMap.get(exerciseId).getStatus();
-            exerciseStatDetailDto.setBestResult(status == ExerciseStatus.NOT_START ? null : exerciseBestResultMap.get(exerciseId));
+            exerciseStatDetailDto.setBestResult(exerciseBestResultMap.getOrDefault(exerciseId, null));
             exerciseStatDetailDtoList.add(exerciseStatDetailDto);
         }
 
@@ -100,16 +112,17 @@ public class ExerciseServiceImpl implements ExerciseService {
                 exerciseStatDetailDtoList);
     }
 
-
     @Override
-    public Map<UUID, Integer> getExerciseCountForLectures(List<UUID> lectureIdList) {
-        List<Exercise> exerciseList = exerciseRepository.findAllByLectureIdIn(lectureIdList);
-        return exerciseList.stream()
-                .collect(Collectors.groupingBy(Exercise::getLectureId, Collectors.summingInt(e -> 1)));
+    public Exercise findByQuestionId(UUID questionId) {
+        return exerciseRepository.findByQuestionsQuestionId(questionId);
     }
 
     @Override
-    public Exercise findByQuestionId(UUID questionId) {
-        return exerciseRepository.findExerciseByQuestionId(questionId);
+    public Exercise updateQuestionHint(Exercise exercise) {
+        Query query = new Query(Criteria.where("_id").is(exercise.getExerciseId()));
+
+        Update update = new Update().set("questions", exercise.getQuestions());
+
+        return mongoTemplate.findAndModify(query, update, Exercise.class);
     }
 }

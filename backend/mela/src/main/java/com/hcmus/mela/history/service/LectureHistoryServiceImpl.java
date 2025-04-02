@@ -26,13 +26,8 @@ public class LectureHistoryServiceImpl implements LectureHistoryService {
 
     private final LectureService lectureService;
 
-    private final JwtTokenService jwtTokenService;
-
     @Override
-    public SaveLectureSectionResponse saveSection(String authorizationHeader, SaveLectureSectionRequest saveLectureSectionRequest) {
-        UUID userId = jwtTokenService.getUserIdFromToken(
-                jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader));
-
+    public SaveLectureSectionResponse saveSection(UUID userId, SaveLectureSectionRequest saveLectureSectionRequest) {
         LectureHistory lectureHistory = lectureHistoryRepository.findByLectureIdAndUserId(saveLectureSectionRequest.getLectureId(), userId);
         LectureDto lectureInfo = lectureService.getLectureById(saveLectureSectionRequest.getLectureId());
 
@@ -87,29 +82,6 @@ public class LectureHistoryServiceImpl implements LectureHistoryService {
         }
 
         return new SaveLectureSectionResponse("Save lecture section successfully!");
-    }
-
-    @Override
-    public List<RecentActivityDto> getRecentActivity(UUID userId) {
-        List<LectureHistory> lectureHistories = lectureHistoryRepository.findAllByUserId(userId);
-        if (lectureHistories.isEmpty()) {
-            return List.of();
-        }
-        return lectureHistories
-                .stream()
-                .map(lectureHistory -> {
-                    List<LectureCompletedSection> completedSections = lectureHistory.getCompletedSections();
-                    LectureCompletedSection mostRecentSection = completedSections
-                            .stream()
-                            .max(Comparator.comparing(LectureCompletedSection::getCompletedAt))
-                            .orElse(null);
-                    RecentActivityDto recentActivityDto = new RecentActivityDto(
-                            lectureHistory.getLectureId(), LocalDateTime.of(2000,1,1, 1,1,1));
-                    if (mostRecentSection != null) {
-                        recentActivityDto.setDate(mostRecentSection.getCompletedAt());
-                    }
-                    return recentActivityDto;})
-                .toList();
     }
 
     @Override

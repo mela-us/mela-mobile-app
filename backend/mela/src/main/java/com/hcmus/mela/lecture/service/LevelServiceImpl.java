@@ -24,6 +24,13 @@ public class LevelServiceImpl implements LevelService {
         GetLevelsResponse response = new GetLevelsResponse();
         List<Level> levels = levelRepository.findAll();
 
+        if (levels.isEmpty()) {
+            response.setMessage(generalMessageAccessor.getMessage(null, "get_levels_empty"));
+            response.setTotal(0);
+            response.setData(null);
+            return response;
+        }
+
         response.setMessage(generalMessageAccessor.getMessage(null, "get_levels_success"));
         response.setTotal(levels.size());
         response.setData(levels.stream().map(LevelMapper.INSTANCE::levelToLevelDto).collect(Collectors.toList()));
@@ -35,5 +42,4 @@ public class LevelServiceImpl implements LevelService {
     public Level findLevelByLevelId(UUID id) {
         return levelRepository.findById(id).orElse(null);
     }
-
 }

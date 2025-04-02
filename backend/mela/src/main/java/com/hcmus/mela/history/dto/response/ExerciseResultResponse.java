@@ -16,6 +16,4 @@ import java.util.UUID;
 public class ExerciseResultResponse {
 
     private String message;
-
-    private List<CheckedAnswerDto> data;
 }

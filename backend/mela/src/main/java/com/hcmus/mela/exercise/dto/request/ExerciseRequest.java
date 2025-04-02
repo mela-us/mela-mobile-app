@@ -9,6 +9,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExerciseRequest {
+
     private UUID exerciseId;
 
     private UUID lectureId;

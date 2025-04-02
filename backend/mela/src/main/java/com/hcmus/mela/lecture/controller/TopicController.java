@@ -17,7 +17,7 @@ public class TopicController {
     private final TopicService topicService;
 
     @GetMapping
-    @Operation(tags = "Topic Service", description = "Get all topics.")
+    @Operation(tags = "Math Category Service", description = "Get all topics.")
     public ResponseEntity<GetTopicsResponse> getTopicsRequest() {
 
         return ResponseEntity.ok(topicService.getTopicsResponse());

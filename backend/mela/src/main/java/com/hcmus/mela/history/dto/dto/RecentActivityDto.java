@@ -12,7 +12,7 @@ import java.util.UUID;
 @Setter
 @Getter
 @ToString
-public class RecentActivityDto implements Serializable {
+public class RecentActivityDto {
     
     private UUID lectureId;
 

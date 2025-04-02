@@ -17,7 +17,5 @@ public interface ExerciseService {
 
     Exercise findByQuestionId(UUID questionId);
 
-    Map<UUID, Integer> getExerciseCountForLectures(List<UUID> lectureIdList);
-
     Exercise updateQuestionHint(Exercise exercise);
 }

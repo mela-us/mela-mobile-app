@@ -18,6 +18,7 @@ public class Level {
     @Id
     private UUID levelId;
 
+    @Field("name")
     private String name;
 
     @Field("image_url")

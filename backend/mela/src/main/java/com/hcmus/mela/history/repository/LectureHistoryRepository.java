@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.repository.Update;
 import java.util.List;
 import java.util.UUID;
 
-public interface LectureHistoryRepository extends MongoRepository<LectureHistory, UUID> {
+public interface LectureHistoryRepository extends MongoRepository<LectureHistory, UUID>, LectureHistoryCustomRepository {
 
     LectureHistory findByLectureIdAndUserId(UUID lectureId, UUID userId);
 

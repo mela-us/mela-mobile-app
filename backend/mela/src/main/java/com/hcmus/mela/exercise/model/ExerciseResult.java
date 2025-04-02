@@ -16,6 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Document(collection = "exercise_results")
 public class ExerciseResult {
+
     @Id
     @Field(name = "_id")
     private UUID exerciseResultId;

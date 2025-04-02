@@ -2,6 +2,7 @@ package com.hcmus.mela.history.mapper;
 
 import com.hcmus.mela.history.dto.dto.RecentActivityDto;
 import com.hcmus.mela.history.model.ExerciseHistory;
+import com.hcmus.mela.history.model.LectureByTime;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 

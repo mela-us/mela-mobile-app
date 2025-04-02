@@ -39,17 +39,17 @@ public class LectureServiceImpl implements LectureService {
         Lecture lecture = lectureRepository.findByLectureId(lectureId);
 
         LectureOfSectionDto lectureInfo = LectureMapper.INSTANCE.lectureToLectureOfSectionDto(lecture);
-        List<SectionDto> sectionDtos = new ArrayList<>();
+        List<SectionDto> sectionDtoList = new ArrayList<>();
         lecture.getSections().forEach(section -> {
-            sectionDtos.add(LectureSectionMapper.INSTANCE.lectureSectionToLectureSectionDto(section));
+            sectionDtoList.add(LectureSectionMapper.INSTANCE.lectureSectionToLectureSectionDto(section));
         });
-        sectionDtos.sort(Comparator.comparingInt(SectionDto::getOrdinalNumber));
+        sectionDtoList.sort(Comparator.comparingInt(SectionDto::getOrdinalNumber));
 
         return new GetLectureSectionsResponse(
                 generalMessageAccessor.getMessage(null, "get_sections_success"),
-                sectionDtos.size(),
+                sectionDtoList.size(),
                 lectureInfo,
-                sectionDtos
+                sectionDtoList
         );
     }
 }

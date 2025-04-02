@@ -24,6 +24,13 @@ public class TopicServiceImpl implements TopicService {
         GetTopicsResponse response = new GetTopicsResponse();
         List<Topic> topics = topicRepository.findAll();
 
+        if (topics.isEmpty()) {
+            response.setMessage(generalMessageAccessor.getMessage(null, "get_topics_empty"));
+            response.setTotal(0);
+            response.setData(null);
+            return response;
+        }
+
         response.setMessage(generalMessageAccessor.getMessage(null, "get_topics_success"));
         response.setTotal(topics.size());
         response.setData(topics.stream().map(TopicMapper.INSTANCE::topicToTopicDto).collect(Collectors.toList()));
