@@ -3,6 +3,7 @@ package com.hcmus.mela.ai.chatbot.dto.response;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.hcmus.mela.common.utils.LaTeXUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,14 +22,18 @@ public class AiResponseContent {
     public static AiResponseContent fromJson(String jsonString) {
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         Type type = new TypeToken<Map<String, Object>>() {}.getType();
-        Map<String, Object> data = gson.fromJson(jsonString, type);
+        String dataString = LaTeXUtils.normalizeLaTeX(jsonString);
+        Map<String, Object> data = gson.fromJson(dataString, type);
 
         return new AiResponseContent(data != null ? data : new HashMap<>());
     }
 
-
     public Map<String, Object> getIdentifyProblemResponse() {
         return getSafeResponse("analysis", "solutionMethod", "steps", "advice", "relativeTerms");
+    }
+
+    public Map<String, Object> getResolveConfusionResponse() {
+        return getSafeResponse("explain");
     }
 
     public Map<String, Object> getTitleConversation() {

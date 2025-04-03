@@ -2,7 +2,7 @@ package com.hcmus.mela.ai.chatbot.controller;
 
 import com.hcmus.mela.ai.chatbot.dto.request.CreateConversationRequestDto;
 import com.hcmus.mela.ai.chatbot.dto.request.MessageRequestDto;
-import com.hcmus.mela.ai.chatbot.dto.response.CreateConversationResponseDto;
+import com.hcmus.mela.ai.chatbot.dto.response.ConversationResponseDto;
 import com.hcmus.mela.ai.chatbot.service.ConversationService;
 import com.hcmus.mela.auth.security.jwt.JwtTokenService;
 import com.hcmus.mela.common.storage.StorageService;
@@ -23,22 +23,30 @@ public class ChatBotController {
     private final StorageService storageService;
 
     @PostMapping()
-    public ResponseEntity<CreateConversationResponseDto> createConversation(
+    public ResponseEntity<ConversationResponseDto> createConversation(
             @Valid @RequestBody CreateConversationRequestDto createConversationRequestDto,
             @RequestHeader(value = "Authorization") String authorizationHeader) {
         // Extract user id from JWT token
         UUID userId = jwtTokenService.getUserIdFromAuthorizationHeader(authorizationHeader);
 
         // Create conversation
-        CreateConversationResponseDto createConversationResponseDto = conversationService.createConversation(userId, createConversationRequestDto);
-        return ResponseEntity.ok(createConversationResponseDto);
+        ConversationResponseDto conversationResponseDto = conversationService.createConversation(userId, createConversationRequestDto);
+        return ResponseEntity.ok(conversationResponseDto);
     }
 
     @PostMapping("{conversationId}/messages")
-    public ResponseEntity<CreateConversationResponseDto> sendMessage(
+    public ResponseEntity<ConversationResponseDto> sendMessage(
             @Valid @RequestBody MessageRequestDto messageRequestDto,
-            @PathVariable String conversationId) {
-        return ResponseEntity.ok(null);
+            @PathVariable String conversationId,
+            @RequestHeader(value = "Authorization") String authorizationHeader) {
+
+        // Extract user id from JWT token
+        UUID userId = jwtTokenService.getUserIdFromAuthorizationHeader(authorizationHeader);
+
+        // Create conversation
+        ConversationResponseDto conversationResponseDto = conversationService
+                .sendMessage(messageRequestDto, UUID.fromString(conversationId), userId);
+        return ResponseEntity.ok(conversationResponseDto);
     }
 
     @GetMapping("/files/upload-url")

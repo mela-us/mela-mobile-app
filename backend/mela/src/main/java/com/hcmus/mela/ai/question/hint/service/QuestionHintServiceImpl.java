@@ -1,6 +1,5 @@
 package com.hcmus.mela.ai.question.hint.service;
 
-import com.hcmus.mela.ai.chatbot.dto.response.AiResponseContent;
 import com.hcmus.mela.ai.client.builder.AiRequestBodyFactory;
 import com.hcmus.mela.ai.client.config.AiClientProperties;
 import com.hcmus.mela.ai.client.filter.AiResponseFilter;
@@ -145,7 +144,7 @@ public class QuestionHintServiceImpl implements QuestionHintService {
 
             List<String> imgSrcs = extractImageSources(termRequest.get(1));
 
-            Object requestBody = aiRequestBodyFactory.createRequestBodyForChatBot(
+            Object requestBody = aiRequestBodyFactory.createRequestBodyForQuestionHint(
                     termRequest.get(0),
                     termRequest.get(1),
                     imgSrcs,
@@ -190,7 +189,7 @@ public class QuestionHintServiceImpl implements QuestionHintService {
 
             List<String> imgSrcs = extractImageSources(guideRequest.get(1));
 
-            Object requestBody = aiRequestBodyFactory.createRequestBodyForChatBot(
+            Object requestBody = aiRequestBodyFactory.createRequestBodyForQuestionHint(
                     guideRequest.get(0),
                     guideRequest.get(1),
                     imgSrcs,
