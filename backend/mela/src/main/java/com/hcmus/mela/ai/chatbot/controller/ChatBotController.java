@@ -29,7 +29,6 @@ public class ChatBotController {
         // Extract user id from JWT token
         UUID userId = jwtTokenService.getUserIdFromAuthorizationHeader(authorizationHeader);
 
-        // Create conversation
         ConversationResponseDto conversationResponseDto = conversationService.createConversation(userId, createConversationRequestDto);
         return ResponseEntity.ok(conversationResponseDto);
     }
@@ -43,9 +42,22 @@ public class ChatBotController {
         // Extract user id from JWT token
         UUID userId = jwtTokenService.getUserIdFromAuthorizationHeader(authorizationHeader);
 
-        // Create conversation
         ConversationResponseDto conversationResponseDto = conversationService
                 .sendMessage(messageRequestDto, UUID.fromString(conversationId), userId);
+        return ResponseEntity.ok(conversationResponseDto);
+    }
+
+    @PostMapping("{conversationId}/messages/review-submission")
+    public ResponseEntity<ConversationResponseDto> reviewSubmission(
+            @Valid @RequestBody MessageRequestDto messageRequestDto,
+            @PathVariable String conversationId,
+            @RequestHeader(value = "Authorization") String authorizationHeader) {
+
+        // Extract user id from JWT token
+        UUID userId = jwtTokenService.getUserIdFromAuthorizationHeader(authorizationHeader);
+
+        ConversationResponseDto conversationResponseDto = conversationService
+                .getReviewSubmissionResponse(messageRequestDto, UUID.fromString(conversationId), userId);
         return ResponseEntity.ok(conversationResponseDto);
     }
 

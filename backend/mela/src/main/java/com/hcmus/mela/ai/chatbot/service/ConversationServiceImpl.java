@@ -70,13 +70,95 @@ public class ConversationServiceImpl implements ConversationService {
     }
 
     @Override
-    public Object reviewSubmission(MessageRequestDto messageRequestDto) {
+    public Object reviewSubmission(List<Message> messageList, String context) {
+
+        Object requestBody = aiRequestBodyFactory.createRequestBodyForChatBot(
+                chatBotPrompt.getReviewSubmission().formatInstruction(context),
+                messageList,
+                chatBotProperties);
+
+        return aiWebClient.fetchAiResponse(chatBotProperties, requestBody);
+    }
+
+    @Override
+    public Object provideSolution(List<Message> messageList, String context) {
         return null;
     }
 
     @Override
-    public Object provideSolution(MessageRequestDto messageRequestDto) {
-        return null;
+    public ConversationResponseDto getReviewSubmissionResponse(MessageRequestDto messageRequestDto, UUID conversationId, UUID userId) {
+        Conversation conversation = conversationRepository.findByConversationIdAndUserId(conversationId, userId)
+                .orElseThrow(() -> new BadRequestException("Conversation with id " + conversationId + " not found"));
+
+        // Create userMessage response
+        Date userMessageDate = new Date();
+        UUID userMessageId = UUID.randomUUID();
+        UUID aiMessageId = UUID.randomUUID();
+        MessageResponseDto userMessageResponseDto = new MessageResponseDto(
+                userMessageId,
+                Role.USER.getRole(),
+                messageRequestDto.getContent(),
+                userMessageDate
+        );
+
+        // Create userMessage to save to database
+        Message savedUserMessage = Message.builder()
+                .messageId(userMessageId)
+                .role(Role.USER.getRole())
+                .content(messageRequestDto.getContent())
+                .timestamp(userMessageDate).build();
+
+        // Get the list of key messages
+        List<Message> messageList = conversationRepository.getKeyMessages(conversationId);
+        messageList.add(savedUserMessage);
+
+        // Call AI service to resolve confusion
+        Object response = reviewSubmission(messageList, conversation.getSummary().getContext());
+        String responseText = aiResponseFilter.getMessage(response);
+        AiResponseContent aiResponseContent = AiResponseContent.fromJson(responseText);
+
+        Map<String, Object> aiMessageContent = aiResponseContent.getCommonText();
+
+        ConversationStatus conversationStatus = conversation.getMetadata().getStatus();
+        if (aiMessageContent.isEmpty()) {
+            aiMessageContent = aiResponseContent.getReviewSubmissionResponse();
+            conversationStatus = ConversationStatus.SUBMISSION_REVIEWED;
+        }
+
+        // Create AI message to save to database
+        Date aiMessageDate = new Date();
+        Message saveAiMessage = Message.builder()
+                .messageId(aiMessageId)
+                .role(Role.ASSISTANT.getRole())
+                .content(aiMessageContent)
+                .timestamp(aiMessageDate).build();
+
+        // Update metadata
+        int totalTokens = aiResponseFilter.getTotalTokens(response);
+        Metadata currentMetadata = conversation.getMetadata();
+        currentMetadata.setTotalTokens(currentMetadata.getTotalTokens() + totalTokens);
+        currentMetadata.setStatus(conversationStatus);
+
+        // Update conversation
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("metadata", currentMetadata);
+        List<Object> messagesToPush = List.of(savedUserMessage, saveAiMessage);
+        updateConversation(conversationId, userId, updates, messagesToPush);
+
+        // Add AI message to response
+        MessageResponseDto aiMessageResponseDto = new MessageResponseDto(
+                aiMessageId,
+                "assistant",
+                aiMessageContent,
+                aiMessageDate
+        );
+
+        return new ConversationResponseDto(
+                conversationId,
+                conversation.getTitle(),
+                List.of(userMessageResponseDto, aiMessageResponseDto),
+                new ConversationMetadataDto(conversationStatus.name(), currentMetadata.getCreatedAt())
+        );
     }
 
     private void updateConversation(UUID conversationId, UUID userId, Map<String, Object> updates, List<Object> messagesToPush) {
