@@ -61,6 +61,20 @@ public class ChatBotController {
         return ResponseEntity.ok(conversationResponseDto);
     }
 
+    @PostMapping("{conversationId}/messages/solution")
+    public ResponseEntity<ConversationResponseDto> getSolution(
+            @Valid @RequestBody MessageRequestDto messageRequestDto,
+            @PathVariable String conversationId,
+            @RequestHeader(value = "Authorization") String authorizationHeader) {
+
+        // Extract user id from JWT token
+        UUID userId = jwtTokenService.getUserIdFromAuthorizationHeader(authorizationHeader);
+
+        ConversationResponseDto conversationResponseDto = conversationService
+                .getSolutionResponse(messageRequestDto, UUID.fromString(conversationId), userId);
+        return ResponseEntity.ok(conversationResponseDto);
+    }
+
     @GetMapping("/files/upload-url")
     public ResponseEntity<Map<String, String>> getUploadUrl() {
         Map<String, String> urls = storageService.getUploadConversationFilePreSignedUrl(UUID.randomUUID().toString());

@@ -14,7 +14,10 @@ public interface ConversationService {
     Object resolveConfusion(List<Message> messageList, String context);
 
     Object reviewSubmission(List<Message> messageList, String context);
+
     Object provideSolution(List<Message> messageList, String context);
+
+    ConversationResponseDto getSolutionResponse(MessageRequestDto messageRequestDto, UUID conversationId, UUID userId);
 
     ConversationResponseDto getReviewSubmissionResponse(MessageRequestDto messageRequestDto, UUID conversationId, UUID userId);
 

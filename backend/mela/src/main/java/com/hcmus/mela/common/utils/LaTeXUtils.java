@@ -32,8 +32,13 @@ public class LaTeXUtils {
                         sb.append("\\");
                     }
                 }
-
-                else if (currentChar == '\\' && i + 1 < text.length() && text.charAt(i + 1) != '\\') {
+                else if (currentChar == '\\'
+                        && i + 1 < text.length() && text.charAt(i + 1) != '\\'
+                        && i - 1 >= 0 && text.charAt(i - 1) != '\\') {
+                    if((text.charAt(i + 1) == 'n' || text.charAt(i + 1) == 't' || text.charAt(i + 1) == 'r')
+                            && i + 2 < text.length() && (text.charAt(i + 2) == ' ' || text.charAt(i + 2) == '\\')) {
+                        continue;
+                    }
                     sb.append("\\");
                 }
             }

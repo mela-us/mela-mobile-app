@@ -40,6 +40,10 @@ public class AiResponseContent {
         return getSafeResponse("submissionSummary", "status", "areasForImprovement", "guidance", "encouragement");
     }
 
+    public Map<String, Object> getSolution() {
+        return getSafeResponse("finalAnswer", "steps", "advice", "problemSummary");
+    }
+
     public Map<String, Object> getTitleConversation() {
         return getSafeResponse("title");
     }
