@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
-public class LectureCustomImplRepository implements LectureCustomRepository {
+public class LectureCustomRepositoryImpl implements LectureCustomRepository {
 
     private final MongoTemplate mongoTemplate;
 

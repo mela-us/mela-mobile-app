@@ -53,6 +53,7 @@ public class LectureListServiceImpl implements LectureListService {
         for (LecturesByTopicDto lecturesByTopicDto : lecturesByTopicDtoList) {
             List<Lecture> lectures = lectureRepository.findLecturesByTopicAndLevel(lecturesByTopicDto.getTopicId(), levelId);
             if (lectures.isEmpty()) {
+                lecturesByTopicDto.setLectures(List.of());
                 continue;
             }
             List<LectureStatDetailDto> lectureStatDetailDtoList = lectures.stream()

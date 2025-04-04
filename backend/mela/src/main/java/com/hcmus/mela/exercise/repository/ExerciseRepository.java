@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.repository.Query;
 import java.util.List;
 import java.util.UUID;
 
-public interface ExerciseRepository extends MongoRepository<Exercise, UUID> {
+public interface ExerciseRepository extends MongoRepository<Exercise, UUID>, ExerciseCustomRepository {
 
     Exercise findByExerciseId(UUID exerciseId);
 

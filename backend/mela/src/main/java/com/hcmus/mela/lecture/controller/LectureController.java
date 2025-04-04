@@ -31,7 +31,7 @@ public class LectureController {
             @Parameter(description = "Level id", example = "[a7e03165-05fc-4e82-b69b-2874aa006caf, cba0ad0e-1f70-412c-a710-a2fef4582ff2, 0f29791a-f7c6-4c6c-9031-850d21f11d32]")
             @RequestParam(value = "levelId") String levelId,
             @RequestHeader("Authorization") String authorizationHeader) {
-        UUID userId = jwtTokenService.getUserIdFromToken(authorizationHeader);
+        UUID userId = jwtTokenService.getUserIdFromAuthorizationHeader(authorizationHeader);
         return ResponseEntity.ok(lectureListService.getLecturesByLevel(userId, UUID.fromString(levelId)));
     }
 
@@ -41,7 +41,7 @@ public class LectureController {
             @Parameter(description = "Keyword", example = "a")
             @RequestParam(value = "q") String keyword,
             @RequestHeader("Authorization") String authorizationHeader) {
-        UUID userId = jwtTokenService.getUserIdFromToken(authorizationHeader);
+        UUID userId = jwtTokenService.getUserIdFromAuthorizationHeader(authorizationHeader);
         return ResponseEntity.ok(lectureListService.getLecturesByKeyword(userId, keyword));
     }
 
@@ -51,7 +51,7 @@ public class LectureController {
             @Parameter(description = "Size of lectures", example = "5")
             @RequestParam(value = "size") Integer size,
             @RequestHeader("Authorization") String authorizationHeader) {
-        UUID userId = jwtTokenService.getUserIdFromToken(authorizationHeader);
+        UUID userId = jwtTokenService.getUserIdFromAuthorizationHeader(authorizationHeader);
         return ResponseEntity.ok(lectureListService.getLecturesByRecent(userId, size));
     }
 

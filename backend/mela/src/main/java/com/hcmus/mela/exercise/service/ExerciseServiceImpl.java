@@ -119,10 +119,6 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     @Override
     public Exercise updateQuestionHint(Exercise exercise) {
-        Query query = new Query(Criteria.where("_id").is(exercise.getExerciseId()));
-
-        Update update = new Update().set("questions", exercise.getQuestions());
-
-        return mongoTemplate.findAndModify(query, update, Exercise.class);
+        return exerciseRepository.updateQuestionHint(exercise);
     }
 }
