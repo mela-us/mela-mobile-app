@@ -2,7 +2,7 @@ package com.hcmus.mela.ai.chatbot.service;
 
 import com.hcmus.mela.ai.chatbot.dto.request.CreateConversationRequestDto;
 import com.hcmus.mela.ai.chatbot.dto.request.MessageRequestDto;
-import com.hcmus.mela.ai.chatbot.dto.response.ConversationResponseDto;
+import com.hcmus.mela.ai.chatbot.dto.response.ChatResponseDto;
 import com.hcmus.mela.ai.chatbot.model.Message;
 
 import java.util.List;
@@ -17,11 +17,11 @@ public interface ConversationService {
 
     Object provideSolution(List<Message> messageList, String context);
 
-    ConversationResponseDto getSolutionResponse(MessageRequestDto messageRequestDto, UUID conversationId, UUID userId);
+    ChatResponseDto getSolutionResponse(MessageRequestDto messageRequestDto, UUID conversationId, UUID userId);
 
-    ConversationResponseDto getReviewSubmissionResponse(MessageRequestDto messageRequestDto, UUID conversationId, UUID userId);
+    ChatResponseDto getReviewSubmissionResponse(MessageRequestDto messageRequestDto, UUID conversationId, UUID userId);
 
-    ConversationResponseDto sendMessage(MessageRequestDto messageRequestDto, UUID conversationId, UUID userId);
+    ChatResponseDto sendMessage(MessageRequestDto messageRequestDto, UUID conversationId, UUID userId);
 
-    ConversationResponseDto createConversation(UUID userId, CreateConversationRequestDto createConversationRequestDto);
+    ChatResponseDto createConversation(UUID userId, CreateConversationRequestDto createConversationRequestDto);
 }

@@ -4,7 +4,7 @@ import com.hcmus.mela.ai.chatbot.dto.request.CreateConversationRequestDto;
 import com.hcmus.mela.ai.chatbot.dto.request.MessageRequestDto;
 import com.hcmus.mela.ai.chatbot.dto.response.AiResponseContent;
 import com.hcmus.mela.ai.chatbot.dto.response.ConversationMetadataDto;
-import com.hcmus.mela.ai.chatbot.dto.response.ConversationResponseDto;
+import com.hcmus.mela.ai.chatbot.dto.response.ChatResponseDto;
 import com.hcmus.mela.ai.chatbot.dto.response.MessageResponseDto;
 import com.hcmus.mela.ai.chatbot.model.*;
 import com.hcmus.mela.ai.chatbot.repository.ConversationRepository;
@@ -91,7 +91,7 @@ public class ConversationServiceImpl implements ConversationService {
     }
 
     @Override
-    public ConversationResponseDto getSolutionResponse(MessageRequestDto messageRequestDto, UUID conversationId, UUID userId) {
+    public ChatResponseDto getSolutionResponse(MessageRequestDto messageRequestDto, UUID conversationId, UUID userId) {
         Conversation conversation = conversationRepository.findByConversationIdAndUserId(conversationId, userId)
                 .orElseThrow(() -> new BadRequestException("Conversation with id " + conversationId + " not found"));
 
@@ -154,7 +154,7 @@ public class ConversationServiceImpl implements ConversationService {
                 aiMessageDate
         );
 
-        return new ConversationResponseDto(
+        return new ChatResponseDto(
                 conversationId,
                 conversation.getTitle(),
                 List.of(userMessageResponseDto, aiMessageResponseDto),
@@ -163,7 +163,7 @@ public class ConversationServiceImpl implements ConversationService {
     }
 
     @Override
-    public ConversationResponseDto getReviewSubmissionResponse(MessageRequestDto messageRequestDto, UUID conversationId, UUID userId) {
+    public ChatResponseDto getReviewSubmissionResponse(MessageRequestDto messageRequestDto, UUID conversationId, UUID userId) {
         Conversation conversation = conversationRepository.findByConversationIdAndUserId(conversationId, userId)
                 .orElseThrow(() -> new BadRequestException("Conversation with id " + conversationId + " not found"));
 
@@ -230,7 +230,7 @@ public class ConversationServiceImpl implements ConversationService {
                 aiMessageDate
         );
 
-        return new ConversationResponseDto(
+        return new ChatResponseDto(
                 conversationId,
                 conversation.getTitle(),
                 List.of(userMessageResponseDto, aiMessageResponseDto),
@@ -256,7 +256,7 @@ public class ConversationServiceImpl implements ConversationService {
     }
 
     @Override
-    public ConversationResponseDto sendMessage(MessageRequestDto messageRequestDto, UUID conversationId, UUID userId) {
+    public ChatResponseDto sendMessage(MessageRequestDto messageRequestDto, UUID conversationId, UUID userId) {
         Conversation conversation = conversationRepository.findByConversationIdAndUserId(conversationId, userId)
                 .orElseThrow(() -> new BadRequestException("Conversation with id " + conversationId + " not found"));
 
@@ -368,7 +368,7 @@ public class ConversationServiceImpl implements ConversationService {
                 aiMessageDate
         );
 
-        return new ConversationResponseDto(
+        return new ChatResponseDto(
                 conversationId,
                 currentTitle,
                 List.of(userMessageResponseDto, aiMessageResponseDto),
@@ -377,7 +377,7 @@ public class ConversationServiceImpl implements ConversationService {
     }
 
     @Override
-    public ConversationResponseDto createConversation(UUID userId, CreateConversationRequestDto createConversationRequestDto) {
+    public ChatResponseDto createConversation(UUID userId, CreateConversationRequestDto createConversationRequestDto) {
 
         // Create userMessage response
         Date userMessageDate = new Date();
@@ -476,7 +476,7 @@ public class ConversationServiceImpl implements ConversationService {
                 aiMessageDate
         );
 
-        return new ConversationResponseDto(
+        return new ChatResponseDto(
                 conversationId,
                 title,
                 List.of(userMessageResponseDto, aiMessageResponseDto),
