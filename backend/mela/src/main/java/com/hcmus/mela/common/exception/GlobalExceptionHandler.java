@@ -192,6 +192,21 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(response);
     }
 
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ApiErrorResponse> handleBadRequestException(BadRequestException ex, WebRequest request) {
+        log.warn("Bad request: {}", ex.getMessage());
+
+        final ApiErrorResponse response = new ApiErrorResponse(
+                getRequestId(),
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage(),
+                request.getDescription(false),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(response.getStatus()).body(response);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorResponse> handleGlobalException(Exception ex, WebRequest request) {
         log.error("Unexpected error occurred: {}", ex.getMessage(), ex);

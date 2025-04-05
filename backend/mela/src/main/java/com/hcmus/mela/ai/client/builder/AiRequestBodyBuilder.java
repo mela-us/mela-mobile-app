@@ -1,5 +1,6 @@
 package com.hcmus.mela.ai.client.builder;
 
+import com.hcmus.mela.ai.chatbot.model.Message;
 import com.hcmus.mela.ai.client.config.AiFeatureProperties;
 
 import java.util.List;
@@ -23,12 +24,12 @@ public interface AiRequestBodyBuilder {
     Object buildRequestBodyForQuestionHint(String instruction, String textData, List<String> imageUrls, AiFeatureProperties aiFeatureProperties);
 
     /**
-     * Builds a request body for the chat bot feature.
+     * Builds a request body for the chatbot feature.
      *
      * @param instruction System instruction for the AI
      * @param message List of message objects containing role and content
      * @param aiFeatureProperties Configuration properties for the AI feature
      * @return A request body object formatted for the specific AI provider
      */
-    Object buildRequestBodyForChatBot(String instruction, List<Map<String, String>> message, AiFeatureProperties aiFeatureProperties);
+    Object buildRequestBodyForChatBot(String instruction, List<Message> message, AiFeatureProperties aiFeatureProperties);
 }

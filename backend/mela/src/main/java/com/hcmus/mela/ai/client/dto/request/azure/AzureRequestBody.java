@@ -12,6 +12,4 @@ import java.util.List;
 public class AzureRequestBody {
     private String model;
     private List<Message> messages;
-    private double temperature;
-    private int max_completion_tokens;
 }
