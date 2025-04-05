@@ -1,7 +1,6 @@
 package com.hcmus.mela.statistic.service;
 
-import com.hcmus.mela.auth.security.jwt.JwtTokenService;
-import com.hcmus.mela.statistic.dto.response.GetStatisticsResponse;
+import com.hcmus.mela.common.async.AsyncCustomService;
 import com.hcmus.mela.exercise.dto.dto.ExerciseDto;
 import com.hcmus.mela.exercise.service.ExerciseInfoService;
 import com.hcmus.mela.history.dto.dto.ExerciseHistoryDto;
@@ -15,17 +14,17 @@ import com.hcmus.mela.lecture.dto.dto.TopicDto;
 import com.hcmus.mela.lecture.service.LectureService;
 import com.hcmus.mela.lecture.service.TopicService;
 import com.hcmus.mela.statistic.dto.dto.*;
+import com.hcmus.mela.statistic.dto.response.GetStatisticsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class StatisticServiceImpl implements StatisticService  {
-
-    private final JwtTokenService jwtTokenService;
+public class StatisticServiceImpl implements StatisticService {
 
     private final LectureHistoryService lectureHistoryService;
 
@@ -37,109 +36,120 @@ public class StatisticServiceImpl implements StatisticService  {
 
     private final ExerciseHistoryService exerciseHistoryService;
 
-    public GetStatisticsResponse getStatisticByUserAndLevelAndType(String authorizationHeader, UUID levelId, ActivityType activityType) {
-        UUID userId = jwtTokenService.getUserIdFromToken(
-                jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader));
+    private final AsyncCustomService asyncService;
+
+    public GetStatisticsResponse getStatisticByUserAndLevelAndType(UUID userId, UUID levelId, ActivityType activityType) {
         List<ActivityHistoryDto> activityHistoryDtoList = new ArrayList<>();
-        if (activityType == ActivityType.SECTION) {
-            List<ActivityHistoryDto> activityFromLectureHistory = getActivityFromLectureHistory(userId, levelId);
-            if (!activityFromLectureHistory.isEmpty()) {
-                activityHistoryDtoList.addAll(activityFromLectureHistory);
-            }
-        } else if (activityType == ActivityType.EXERCISE) {
-            List<ActivityHistoryDto> activityFromExerciseHistory = getActivityFromExerciseHistory(userId, levelId);
-            if (!activityFromExerciseHistory.isEmpty()) {
-                activityHistoryDtoList.addAll(activityFromExerciseHistory);
-            }
-        } else {
-            List<ActivityHistoryDto> activityFromLectureHistory = getActivityFromLectureHistory(userId, levelId);
-            List<ActivityHistoryDto> activityFromExerciseHistory = getActivityFromExerciseHistory(userId, levelId);
-            if (!activityFromLectureHistory.isEmpty()) {
-                activityHistoryDtoList.addAll(activityFromLectureHistory);
-            }
-            if (!activityFromExerciseHistory.isEmpty()) {
-                activityHistoryDtoList.addAll(activityFromExerciseHistory);
-            }
+
+        switch (activityType) {
+            case SECTION:
+                activityHistoryDtoList.addAll(getActivityFromLectureHistory(userId, levelId));
+                break;
+            case EXERCISE:
+                activityHistoryDtoList.addAll(getActivityFromExerciseHistory(userId, levelId));
+                break;
+            default:
+                CompletableFuture<List<ActivityHistoryDto>> lectureActivitiesFuture =
+                        asyncService.runAsync(() -> getActivityFromLectureHistory(userId, levelId), Collections.emptyList());
+                CompletableFuture<List<ActivityHistoryDto>> exerciseActivitiesFuture =
+                        asyncService.runAsync(() -> getActivityFromExerciseHistory(userId, levelId), Collections.emptyList());
+
+                CompletableFuture.allOf(lectureActivitiesFuture, exerciseActivitiesFuture).join();
+
+                activityHistoryDtoList.addAll(lectureActivitiesFuture.join());
+                activityHistoryDtoList.addAll(exerciseActivitiesFuture.join());
+                break;
         }
-        activityHistoryDtoList.sort((o1, o2) -> o2.getLatestDate().compareTo(o1.getLatestDate()));
+        activityHistoryDtoList.sort(Comparator.comparing(ActivityHistoryDto::getLatestDate).reversed());
 
         return new GetStatisticsResponse(
-                "Get statistic successfully!",
+                "Get statistic successfully for user " + userId + " and level " + levelId + "!",
                 activityHistoryDtoList.size(),
                 activityHistoryDtoList);
     }
 
     private List<ActivityHistoryDto> getActivityFromLectureHistory(UUID userId, UUID levelId) {
-        List<TopicDto> topicDtoList = topicService.getTopics();
-        Map<UUID, String> topicNameMap = topicDtoList.stream().collect(Collectors.toMap(TopicDto::getTopicId, TopicDto::getName));
+        Map<UUID, String> topicNameMap = getTopicNameMap();
 
-        List<LectureHistoryDto> lectureHistoryDtoList = lectureHistoryService.getLectureHistoryByUserAndLevel(userId, levelId);
-        List<ActivityHistoryDto> activityHistoryDtoList = new ArrayList<>();
+        List<LectureHistoryDto> lectureHistories = lectureHistoryService.getLectureHistoryByUserAndLevel(userId, levelId);
+        if (lectureHistories.isEmpty()) {
+            return Collections.emptyList();
+        }
 
-        for (LectureHistoryDto lectureHistoryDto : lectureHistoryDtoList) {
-            LectureDto lectureDto = lectureService.getLectureById(lectureHistoryDto.getLectureId());
-            String lectureName = lectureDto.getName();
-            Map<Integer, String> sectionNameMap = lectureDto.getSections().stream().collect(Collectors.toMap(SectionDto::getOrdinalNumber, SectionDto::getName));
+        List<ActivityHistoryDto> activities = new ArrayList<>();
 
-            String topicName = topicNameMap.get(lectureDto.getTopicId());
-            for (LectureCompletedSectionDto section : lectureHistoryDto.getCompletedSections()) {
-                ActivityHistoryDto activityHistoryDto = new ActivityHistoryDto();
-                activityHistoryDto.setType(ActivityType.SECTION);
-                activityHistoryDto.setLatestDate(section.getCompletedAt());
-                activityHistoryDto.setTopicName(topicName);
-                activityHistoryDto.setLectureName(lectureName);
-                activityHistoryDto.setSection(new SectionActivityDto(sectionNameMap.get(section.getOrdinalNumber()), section.getCompletedAt()));
-                activityHistoryDtoList.add(activityHistoryDto);
+        for (LectureHistoryDto lectureHistory : lectureHistories) {
+            LectureDto lecture = lectureService.getLectureById(lectureHistory.getLectureId());
+            String lectureName = lecture.getName();
+            String topicName = topicNameMap.get(lecture.getTopicId());
+
+            Map<Integer, String> sectionNameMap = lecture.getSections().stream()
+                    .collect(Collectors.toMap(SectionDto::getOrdinalNumber, SectionDto::getName));
+
+            for (LectureCompletedSectionDto section : lectureHistory.getCompletedSections()) {
+                ActivityHistoryDto activity = new ActivityHistoryDto();
+                activity.setType(ActivityType.SECTION);
+                activity.setLatestDate(section.getCompletedAt());
+                activity.setTopicName(topicName);
+                activity.setLectureName(lectureName);
+                activity.setSection(new SectionActivityDto(
+                        sectionNameMap.get(section.getOrdinalNumber()),
+                        section.getCompletedAt()));
+
+                activities.add(activity);
             }
         }
-        return activityHistoryDtoList;
+
+        return activities;
     }
 
     private List<ActivityHistoryDto> getActivityFromExerciseHistory(UUID userId, UUID levelId) {
-        List<ExerciseHistoryDto> exerciseHistoryDtoList = exerciseHistoryService.getExerciseHistoryByUserAndLevel(userId, levelId);
-        if (exerciseHistoryDtoList == null || exerciseHistoryDtoList.isEmpty()) {
-            return new ArrayList<>();
+        Map<UUID, String> topicNameMap = getTopicNameMap();
+
+        List<ExerciseHistoryDto> exerciseHistories = exerciseHistoryService.getExerciseHistoryByUserAndLevel(userId, levelId);
+        if (exerciseHistories.isEmpty()) {
+            return Collections.emptyList();
         }
+        Map<UUID, List<ExerciseHistoryDto>> exerciseHistoriesByExerciseId = exerciseHistories.stream()
+                .collect(Collectors.groupingBy(ExerciseHistoryDto::getExerciseId));
 
-        Map<UUID, List<ExerciseHistoryDto>> exerciseHistoryListDtoMap = new HashMap<>();
-        for (ExerciseHistoryDto exerciseHistoryDto : exerciseHistoryDtoList) {
-            exerciseHistoryListDtoMap
-                    .computeIfAbsent(exerciseHistoryDto.getExerciseId(), k -> new ArrayList<>())
-                    .add(exerciseHistoryDto);
-        }
+        List<ActivityHistoryDto> activities = new ArrayList<>();
 
+        exerciseHistoriesByExerciseId.forEach((exerciseId, histories) -> {
+            ExerciseHistoryDto firstHistory = histories.get(0);
+            LectureDto lecture = lectureService.getLectureById(firstHistory.getLectureId());
+            ExerciseDto exercise = exerciseInfoService.findByExerciseId(exerciseId);
 
-        List<TopicDto> topicDtoList = topicService.getTopics();
-        Map<UUID, String> topicNameMap = topicDtoList.stream().collect(Collectors.toMap(TopicDto::getTopicId, TopicDto::getName));
+            ActivityHistoryDto activity = new ActivityHistoryDto();
+            activity.setType(ActivityType.EXERCISE);
+            activity.setTopicName(topicNameMap.get(lecture.getTopicId()));
+            activity.setLectureName(lecture.getName());
 
-        List<ActivityHistoryDto> activityHistoryDtoList = new ArrayList<>();
-        for (UUID exerciseId : exerciseHistoryListDtoMap.keySet()) {
-            ActivityHistoryDto activityHistoryDto = new ActivityHistoryDto();
-            ExerciseActivityDto exerciseActivityDto = new ExerciseActivityDto();
-            activityHistoryDto.setExercise(exerciseActivityDto);
-            exerciseActivityDto.setScoreRecords(new ArrayList<>());
+            ExerciseActivityDto exerciseActivity = new ExerciseActivityDto();
+            exerciseActivity.setExerciseName(exercise.getExerciseName());
 
-            LectureDto lectureDto = lectureService.getLectureById(exerciseHistoryListDtoMap.get(exerciseId).get(0).getLectureId());
-            ExerciseDto exerciseDto = exerciseInfoService.findByExerciseId(exerciseId);
+            List<ScoreRecordDto> scoreRecords = histories.stream()
+                    .map(history -> new ScoreRecordDto(history.getCompletedAt(), history.getScore()))
+                    .sorted(Comparator.comparing(ScoreRecordDto::getDate).reversed())
+                    .collect(Collectors.toList());
 
-            for (ExerciseHistoryDto exerciseHistoryDto : exerciseHistoryListDtoMap.get(exerciseId)) {
-                ScoreRecordDto scoreRecordDto = new ScoreRecordDto(exerciseHistoryDto.getCompletedAt(), exerciseHistoryDto.getScore());
-                exerciseActivityDto.getScoreRecords().add(scoreRecordDto);
-                exerciseActivityDto.getScoreRecords().sort((o1, o2) -> o2.getDate().compareTo(o1.getDate()));
+            exerciseActivity.setScoreRecords(scoreRecords);
+
+            if (!scoreRecords.isEmpty()) {
+                ScoreRecordDto latestScore = scoreRecords.get(0);
+                exerciseActivity.setLatestScore(latestScore.getScore());
+                activity.setLatestDate(latestScore.getDate());
             }
-            ScoreRecordDto latestScoreRecord = exerciseActivityDto.getScoreRecords().get(0);
 
-            activityHistoryDto.setType(ActivityType.EXERCISE);
-            activityHistoryDto.setLatestDate(latestScoreRecord.getDate());
-            activityHistoryDto.setTopicName(topicNameMap.get(lectureDto.getTopicId()));
-            activityHistoryDto.setLectureName(lectureDto.getName());
+            activity.setExercise(exerciseActivity);
+            activities.add(activity);
+        });
 
-            exerciseActivityDto.setExerciseName(exerciseDto.getExerciseName());
-            exerciseActivityDto.setLatestScore(latestScoreRecord.getScore());
+        return activities;
+    }
 
-            activityHistoryDtoList.add(activityHistoryDto);
-        }
-
-        return activityHistoryDtoList;
+    private Map<UUID, String> getTopicNameMap() {
+        return topicService.getTopics().stream()
+                .collect(Collectors.toMap(TopicDto::getTopicId, TopicDto::getName));
     }
 }

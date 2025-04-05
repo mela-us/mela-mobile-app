@@ -25,12 +25,18 @@ public class Lecture {
     @Field("topic_id")
     private UUID topicId;
 
+    @Field("name")
     private String name;
 
     @Field("ordinal_number")
     private Integer ordinalNumber;
 
+    @Field("description")
     private String description;
 
+    @Field("sections")
     private List<Section> sections;
+
+    @Field("total_exercises")
+    private Integer totalExercises;
 }

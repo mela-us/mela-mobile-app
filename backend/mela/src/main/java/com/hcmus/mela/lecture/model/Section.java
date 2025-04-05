@@ -15,10 +15,13 @@ public class Section {
     @Field("ordinal_number")
     private Integer ordinalNumber;
 
+    @Field("name")
     private String name;
 
+    @Field("content")
     private String content;
 
+    @Field("url")
     private String url;
 
     @Field("section_type")

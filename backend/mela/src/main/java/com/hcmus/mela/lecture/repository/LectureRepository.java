@@ -7,13 +7,9 @@ import org.springframework.data.mongodb.repository.Query;
 import java.util.List;
 import java.util.UUID;
 
-public interface LectureRepository extends MongoRepository<Lecture, UUID> {
+public interface LectureRepository extends MongoRepository<Lecture, UUID>, LectureCustomRepository {
 
     Lecture findByLectureId(UUID lectureId);
-
-    List<Lecture> findAllByLevelIdAndTopicId(UUID levelId, UUID topicId);
-
-    List<Lecture> findAllByNameContainingIgnoreCase(String keyword);
 
     @Query("{ 'lectureId': { '$in': ?0 } }")
     List<Lecture> findAllByLectureIdList(List<UUID> lectureIdList);

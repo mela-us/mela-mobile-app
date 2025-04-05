@@ -1,8 +1,6 @@
 package com.hcmus.mela.history.mapper;
 
-import com.hcmus.mela.history.dto.dto.ExerciseHistoryDto;
 import com.hcmus.mela.history.dto.dto.LectureHistoryDto;
-import com.hcmus.mela.history.model.ExerciseHistory;
 import com.hcmus.mela.history.model.LectureHistory;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

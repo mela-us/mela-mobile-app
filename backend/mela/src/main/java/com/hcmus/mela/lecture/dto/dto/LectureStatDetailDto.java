@@ -6,9 +6,9 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class LectureStatDetailDto {
 
     private UUID lectureId;
@@ -24,6 +24,6 @@ public class LectureStatDetailDto {
     private String description;
 
     private Integer totalExercises;
-    
+
     private Integer totalPassExercises;
 }

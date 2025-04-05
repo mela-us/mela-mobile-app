@@ -2,12 +2,12 @@ package com.hcmus.mela.lecture.dto.dto;
 
 import lombok.*;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class LectureDto {

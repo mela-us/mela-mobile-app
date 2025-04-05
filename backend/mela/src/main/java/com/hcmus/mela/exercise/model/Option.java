@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @AllArgsConstructor
 @Document
 public class Option {
+
     @Field(name = "ordinal_number")
     private Integer ordinalNumber;
 
