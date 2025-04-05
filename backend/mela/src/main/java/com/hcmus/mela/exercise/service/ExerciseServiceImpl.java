@@ -76,10 +76,13 @@ public class ExerciseServiceImpl implements ExerciseService {
         CompletableFuture<List<Exercise>> exerciseFuture = asyncService.runAsync(
                 () -> exerciseRepository.findAllByLectureId(lectureId),
                 Collections.emptyList());
+
+        CompletableFuture.allOf(lectureFuture, exerciseFuture).join();
+
         LectureDto lecture = lectureFuture.join();
         List<Exercise> exercises = exerciseFuture.join();
 
-        if (exercises.isEmpty()) {
+        if (exercises == null || exercises.isEmpty() || lecture == null) {
             final String exercisesNotFoundMessage = generalMessageAccessor.getMessage(null, "exercises_not_found", lectureId);
             log.info(exercisesNotFoundMessage);
             return new ExerciseResponse(exercisesNotFoundMessage, 0, new ArrayList<>());

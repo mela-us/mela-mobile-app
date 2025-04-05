@@ -38,7 +38,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         Map<UUID, LocalDateTime> lectureCompletedAtMap = mergeLectureCompletionTimes(sectionsByTimeList, exercisesByTimeList);
 
-        if (lectureCompletedAtMap.isEmpty()) {
+        if (lectureCompletedAtMap == null || lectureCompletedAtMap.isEmpty()) {
             return Collections.emptyList();
         }
 
@@ -57,7 +57,7 @@ public class ActivityServiceImpl implements ActivityService {
             List<LectureByTime> exercisesByTimeList) {
         Map<UUID, LocalDateTime> lectureCompletedAtMap = new HashMap<>();
 
-        if (!sectionsByTimeList.isEmpty()) {
+        if (sectionsByTimeList != null && !sectionsByTimeList.isEmpty()) {
             lectureCompletedAtMap = sectionsByTimeList.stream()
                     .collect(Collectors.toMap(LectureByTime::getLectureId, LectureByTime::getCompletedAt));
         }

@@ -49,12 +49,15 @@ public class LectureListServiceImpl implements LectureListService {
                         .map(TopicMapper.INSTANCE::topicDtoToLecturesByTopicDto)
                         .toList(),
                 Collections.emptyList());
+
+        CompletableFuture.allOf(passExerciseTotalsMapFuture, lecturesByTopicDtoListFuture).join();
+
         Map<UUID, Integer> passMap = passExerciseTotalsMapFuture.join();
         List<LecturesByTopicDto> lecturesByTopicDtoList = lecturesByTopicDtoListFuture.join();
 
         for (LecturesByTopicDto lecturesByTopicDto : lecturesByTopicDtoList) {
             List<Lecture> lectures = lectureRepository.findLecturesByTopicAndLevel(lecturesByTopicDto.getTopicId(), levelId);
-            if (lectures.isEmpty()) {
+            if (lectures == null || lectures.isEmpty()) {
                 lecturesByTopicDto.setLectures(Collections.emptyList());
                 continue;
             }
@@ -79,10 +82,13 @@ public class LectureListServiceImpl implements LectureListService {
         CompletableFuture<Map<UUID, Integer>> passExerciseTotalsMapFuture = asyncCustomService.runAsync(
                 () -> exerciseHistoryService.getPassedExerciseCountOfUser(userId),
                 Collections.emptyMap());
+
+        CompletableFuture.allOf(passExerciseTotalsMapFuture, lecturesFuture).join();
+
         Map<UUID, Integer> passMap = passExerciseTotalsMapFuture.join();
         List<Lecture> lectures = lecturesFuture.join();
 
-        if (lectures.isEmpty()) {
+        if (lectures == null || lectures.isEmpty()) {
             return new GetLecturesResponse(
                     generalMessageAccessor.getMessage(null, "search_lectures_success"),
                     0,
@@ -96,7 +102,7 @@ public class LectureListServiceImpl implements LectureListService {
     public GetLecturesResponse getLecturesByRecent(UUID userId, Integer size) {
         List<RecentActivityDto> recentActivities = activityService.getRecentActivityOfUser(userId, size);
 
-        if (recentActivities.isEmpty()) {
+        if (recentActivities == null || recentActivities.isEmpty()) {
             return new GetLecturesResponse(
                     generalMessageAccessor.getMessage(null, "get_recent_lectures_success"),
                     0,
@@ -113,6 +119,9 @@ public class LectureListServiceImpl implements LectureListService {
         CompletableFuture<List<Lecture>> lecturesFuture = asyncCustomService.runAsync(
                 () -> lectureRepository.findAllByLectureIdList(lectureIds),
                 Collections.emptyList());
+
+        CompletableFuture.allOf(passExerciseTotalsMapFuture, lecturesFuture).join();
+
         Map<UUID, Integer> passMap = passExerciseTotalsMapFuture.join();
         List<Lecture> lectures = lecturesFuture.join();
 
@@ -120,7 +129,9 @@ public class LectureListServiceImpl implements LectureListService {
     }
 
     private GetLecturesResponse getLectureStatListResponse(Map<UUID, Integer> passExerciseTotalsMap, List<Lecture> lectures) {
-        List<LectureStatDetailDto> lectureStatDetailDtoList = convertLecturesToLectureStatList(passExerciseTotalsMap, lectures);
+        List<LectureStatDetailDto> lectureStatDetailDtoList = convertLecturesToLectureStatList(
+                passExerciseTotalsMap,
+                lectures == null ? Collections.emptyList() : lectures);
         return new GetLecturesResponse(
                 "Get lectures success!",
                 lectureStatDetailDtoList.size(),

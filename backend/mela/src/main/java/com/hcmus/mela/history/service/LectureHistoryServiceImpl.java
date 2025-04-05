@@ -100,7 +100,7 @@ public class LectureHistoryServiceImpl implements LectureHistoryService {
     @Override
     public List<LectureHistoryDto> getLectureHistoryByUserAndLevel(UUID userId, UUID levelId) {
         List<LectureHistory> lectureHistories = lectureHistoryRepository.findAllByUserIdAndLevelId(userId, levelId);
-        if (lectureHistories.isEmpty()) {
+        if (lectureHistories == null || lectureHistories.isEmpty()) {
             return new ArrayList<>();
         }
         return lectureHistories.stream().map(LectureHistoryMapper.INSTANCE::converToLectureHistoryDto).toList();

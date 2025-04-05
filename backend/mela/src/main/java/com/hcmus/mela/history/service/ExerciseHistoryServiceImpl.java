@@ -74,7 +74,7 @@ public class ExerciseHistoryServiceImpl implements ExerciseHistoryService {
         List<ExercisesCountByLecture> exercisesCountByLectureList = exerciseHistoryRepository
                 .countTotalPassExerciseOfUser(userId, ProjectConstants.EXERCISE_PASS_SCORE);
 
-        if (exercisesCountByLectureList.isEmpty()) {
+        if (exercisesCountByLectureList == null || exercisesCountByLectureList.isEmpty()) {
             return Collections.emptyMap();
         }
 
@@ -98,7 +98,7 @@ public class ExerciseHistoryServiceImpl implements ExerciseHistoryService {
     @Override
     public List<ExerciseHistoryDto> getExerciseHistoryByUserAndLevel(UUID userId, UUID levelId) {
         List<ExerciseHistory> exerciseHistories = exerciseHistoryRepository.findAllByUserIdAndLevelId(userId, levelId);
-        if (exerciseHistories.isEmpty()) {
+        if (exerciseHistories == null || exerciseHistories.isEmpty()) {
             return new ArrayList<>();
         }
         return exerciseHistories.stream().map(ExerciseHistoryMapper.INSTANCE::converToExerciseHistoryDto).toList();

@@ -38,4 +38,26 @@ public class LectureHistoryCustomRepositoryImpl implements LectureHistoryCustomR
         );
         return result.getMappedResults();
     }
+
+    @Override
+    public List<Object> getSectionActivityOfUserByLevelId(UUID userId, UUID levelId) {
+        Aggregation aggregation = Aggregation.newAggregation(
+                Aggregation.match(new Criteria().andOperator(
+                        Criteria.where("user_id").is(userId),
+                        Criteria.where("level_id").is(levelId)
+                )),
+                Aggregation.project("lecture_id", "topic_id", "completed_sections"),
+                Aggregation.unwind("completed_sections"),
+                Aggregation.project("lecture_id", "topic_id")
+                        .and("completed_sections.completed_at").as("completed_at")
+                        .and("completed_sections.ordinal_number").as("ordinal_number"),
+                Aggregation.sort(Sort.Direction.DESC, "completed_at")
+        );
+        AggregationResults<Object> result = mongoTemplate.aggregate(
+                aggregation,
+                "lecture_histories",
+                Object.class
+        );
+        return result.getMappedResults();
+    }
 }

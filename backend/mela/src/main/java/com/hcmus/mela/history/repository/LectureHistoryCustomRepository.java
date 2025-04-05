@@ -8,4 +8,6 @@ import java.util.UUID;
 public interface LectureHistoryCustomRepository {
 
     List<LectureByTime> getRecentLecturesBySectionOfUser(UUID userId);
+
+    List<Object> getSectionActivityOfUserByLevelId(UUID userId, UUID levelId);
 }

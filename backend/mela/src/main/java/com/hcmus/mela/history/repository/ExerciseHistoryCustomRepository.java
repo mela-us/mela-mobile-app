@@ -14,4 +14,6 @@ public interface ExerciseHistoryCustomRepository {
     List<BestResultByExercise> getBestExerciseResultsOfUserByLectureId(UUID userId, UUID lectureId);
 
     List<LectureByTime> getRecentLecturesByExercisesOfUser(UUID userId);
+
+    List<Object> getExerciseActivityOfUserByLevelId(UUID userId, UUID levelId);
 }
