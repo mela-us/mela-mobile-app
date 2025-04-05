@@ -7,6 +7,7 @@ import com.hcmus.mela.exercise.repository.ExerciseRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
 import java.util.UUID;
 
 
@@ -20,9 +21,8 @@ public class ExerciseInfoServiceImpl implements ExerciseInfoService {
     @Override
     public ExerciseDto findByExerciseId(UUID exerciseId) {
         Exercise exercise = exerciseRepository.findByExerciseId(exerciseId);
-        if (exercise == null) {
-            return null;
-        }
-        return ExerciseMapper.INSTANCE.converToExerciseDto(exercise);
+        return exercise == null
+                ? null
+                : ExerciseMapper.INSTANCE.converToExerciseDto(exercise);
     }
 }

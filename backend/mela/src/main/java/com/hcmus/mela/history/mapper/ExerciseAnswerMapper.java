@@ -1,7 +1,5 @@
 package com.hcmus.mela.history.mapper;
 
-import com.hcmus.mela.exercise.dto.dto.QuestionDto;
-import com.hcmus.mela.exercise.model.Question;
 import com.hcmus.mela.history.dto.dto.ExerciseAnswerDto;
 import com.hcmus.mela.history.model.ExerciseAnswer;
 import org.mapstruct.Mapper;
@@ -15,6 +13,8 @@ import java.util.List;
 public interface ExerciseAnswerMapper {
 
     ExerciseAnswerMapper INSTANCE = Mappers.getMapper(ExerciseAnswerMapper.class);
+
+    ExerciseAnswer convertToExerciseAnswer(ExerciseAnswerDto answerDto);
 
     ExerciseAnswerDto convertToExerciseAnswerDto(ExerciseAnswer answer);
 

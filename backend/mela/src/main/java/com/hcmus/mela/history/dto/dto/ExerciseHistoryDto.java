@@ -1,8 +1,10 @@
 package com.hcmus.mela.history.dto.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -11,7 +13,6 @@ import java.util.UUID;
 @Builder
 @Setter
 @Getter
-@ToString
 public class ExerciseHistoryDto {
 
     private UUID id;

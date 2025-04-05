@@ -1,19 +1,17 @@
 package com.hcmus.mela.lecture.dto.response;
 
 import com.hcmus.mela.lecture.dto.dto.TopicDto;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetTopicsResponse {
-    
+
     private String message;
 
     private Integer total;

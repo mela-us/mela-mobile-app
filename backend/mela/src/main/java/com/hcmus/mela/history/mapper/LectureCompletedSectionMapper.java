@@ -1,7 +1,6 @@
 package com.hcmus.mela.history.mapper;
 
 import com.hcmus.mela.history.dto.dto.LectureCompletedSectionDto;
-import com.hcmus.mela.history.model.ExerciseAnswer;
 import com.hcmus.mela.history.model.LectureCompletedSection;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;

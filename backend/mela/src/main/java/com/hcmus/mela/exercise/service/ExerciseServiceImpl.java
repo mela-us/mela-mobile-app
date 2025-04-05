@@ -1,39 +1,28 @@
 package com.hcmus.mela.exercise.service;
 
+import com.hcmus.mela.common.async.AsyncCustomService;
+import com.hcmus.mela.common.utils.GeneralMessageAccessor;
+import com.hcmus.mela.common.utils.ProjectConstants;
 import com.hcmus.mela.exercise.dto.dto.ExerciseDto;
-import com.hcmus.mela.exercise.dto.dto.ExerciseStatDetailDto;
 import com.hcmus.mela.exercise.dto.dto.ExerciseResultDto;
+import com.hcmus.mela.exercise.dto.dto.ExerciseStatDetailDto;
 import com.hcmus.mela.exercise.dto.dto.QuestionDto;
 import com.hcmus.mela.exercise.dto.request.ExerciseRequest;
 import com.hcmus.mela.exercise.dto.response.ExerciseResponse;
 import com.hcmus.mela.exercise.dto.response.QuestionResponse;
-import com.hcmus.mela.common.utils.GeneralMessageAccessor;
 import com.hcmus.mela.exercise.mapper.ExerciseStatDetailMapper;
 import com.hcmus.mela.exercise.model.Exercise;
-import com.hcmus.mela.exercise.repository.ExerciseRepository;
-import com.hcmus.mela.history.service.ExerciseHistoryService;
-import com.hcmus.mela.lecture.dto.dto.LectureDto;
-import com.hcmus.mela.lecture.service.LectureService;
+import com.hcmus.mela.exercise.model.ExerciseStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ExerciseServiceImpl implements ExerciseService {
-
-    private final MongoTemplate mongoTemplate;
 
     private static final String EXERCISE_FOUND = "exercise_found_successful";
 
@@ -51,11 +40,14 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     private final ExerciseHistoryService exerciseHistoryService;
 
+    private final AsyncCustomService asyncService;
+
     @Override
     public QuestionResponse getExercise(ExerciseRequest exerciseRequest) {
         exerciseValidationService.validateExercise(exerciseRequest);
 
         final UUID exerciseId = exerciseRequest.getExerciseId();
+
         ExerciseDto exerciseDto = exerciseInfoService.findByExerciseId(exerciseId);
         List<QuestionDto> questionDtoList = new ArrayList<>();
         if (exerciseDto != null) {
@@ -72,28 +64,32 @@ public class ExerciseServiceImpl implements ExerciseService {
     public ExerciseResponse getAllExercisesInLecture(ExerciseRequest exerciseRequest) {
         exerciseValidationService.validateLecture(exerciseRequest);
 
-        final UUID userId = exerciseRequest.getUserId();
-        final UUID lectureId = exerciseRequest.getLectureId();
-        LectureDto lecture = lectureService.getLectureById(lectureId);
-        UUID topicId = lecture.getTopicId();
-        UUID levelId = lecture.getLevelId();
-        List<Exercise> exercises = exerciseRepository.findAllByLectureId(lectureId);
-        List<ExerciseStatDetailDto> exerciseStatDetailDtoList = new ArrayList<>();
+        UUID lectureId = exerciseRequest.getLectureId();
+        CompletableFuture<LectureDto> lectureFuture = asyncService.runAsync(
+                () -> lectureService.getLectureById(lectureId),
+                null);
+        CompletableFuture<List<Exercise>> exerciseFuture = asyncService.runAsync(
+                () -> exerciseRepository.findAllByLectureId(lectureId),
+                Collections.emptyList());
 
-        Map<UUID, ExerciseResultDto> exerciseBestResultMap = exerciseHistoryService.getExerciseBestResultOfUser(
-                exercises.stream().map(Exercise::getExerciseId).toList(), userId);
+        CompletableFuture.allOf(lectureFuture, exerciseFuture).join();
 
-        for (Exercise exercise : exercises) {
-            final UUID exerciseId = exercise.getExerciseId();
-            final Integer numberOfQuestions = exercise.getQuestions().size();
+        LectureDto lecture = lectureFuture.join();
+        List<Exercise> exercises = exerciseFuture.join();
 
-            ExerciseStatDetailDto exerciseStatDetailDto = ExerciseStatDetailMapper.INSTANCE.convertToExerciseStatDetailDto(exercise);
-            exerciseStatDetailDto.setTopicId(topicId);
-            exerciseStatDetailDto.setLevelId(levelId);
-            exerciseStatDetailDto.setTotalQuestions(numberOfQuestions);
-            exerciseStatDetailDto.setBestResult(exerciseBestResultMap.get(exerciseId));
-            exerciseStatDetailDtoList.add(exerciseStatDetailDto);
+        if (exercises == null || exercises.isEmpty() || lecture == null) {
+            final String exercisesNotFoundMessage = generalMessageAccessor.getMessage(null, "exercises_not_found", lectureId);
+            log.info(exercisesNotFoundMessage);
+            return new ExerciseResponse(exercisesNotFoundMessage, 0, new ArrayList<>());
         }
+
+        List<ExerciseStatDetailDto> exerciseStatDetailDtoList = mapExercisesToStatDetails(
+                exercises,
+                exerciseRequest.getUserId(),
+                lectureId,
+                lecture.getTopicId(),
+                lecture.getLevelId()
+        );
 
         final String exercisesSuccessMessage = generalMessageAccessor.getMessage(null, EXERCISES_FOUND, lectureId);
         log.info(exercisesSuccessMessage);
@@ -104,12 +100,40 @@ public class ExerciseServiceImpl implements ExerciseService {
                 exerciseStatDetailDtoList);
     }
 
+    private List<ExerciseStatDetailDto> mapExercisesToStatDetails(
+            List<Exercise> exercises,
+            UUID userId,
+            UUID lectureId,
+            UUID topicId,
+            UUID levelId
+    ) {
+        Map<UUID, Double> exerciseBestScoreMap = exerciseHistoryService.getExerciseBestScoresOfUserByLecture(userId, lectureId);
 
-    @Override
-    public Map<UUID, Integer> getExerciseCountForLectures(List<UUID> lectureIdList) {
-        List<Exercise> exerciseList = exerciseRepository.findAllByLectureIdIn(lectureIdList);
-        return exerciseList.stream()
-                .collect(Collectors.groupingBy(Exercise::getLectureId, Collectors.summingInt(e -> 1)));
+        List<ExerciseStatDetailDto> exerciseStatDetailDtoList = new ArrayList<>();
+        for (Exercise exercise : exercises) {
+            final UUID exerciseId = exercise.getExerciseId();
+            final Integer numberOfQuestions = Optional.ofNullable(exercise.getQuestions()).map(List::size).orElse(0);
+
+            ExerciseStatDetailDto exerciseStatDetailDto = ExerciseStatDetailMapper.INSTANCE.convertToExerciseStatDetailDto(exercise);
+            exerciseStatDetailDto.setTopicId(topicId);
+            exerciseStatDetailDto.setLevelId(levelId);
+            exerciseStatDetailDto.setTotalQuestions(numberOfQuestions);
+
+            if (exerciseBestScoreMap.containsKey(exerciseId)) {
+                double bestScore = exerciseBestScoreMap.get(exerciseId);
+                ExerciseResultDto exerciseResultDto = ExerciseResultDto.builder()
+                        .status(bestScore >= ProjectConstants.EXERCISE_PASS_SCORE ? ExerciseStatus.PASS : ExerciseStatus.IN_PROGRESS)
+                        .totalAnswers(numberOfQuestions)
+                        .totalCorrectAnswers((int) Math.round(numberOfQuestions * bestScore / 100))
+                        .build();
+                exerciseStatDetailDto.setBestResult(exerciseResultDto);
+            } else {
+                exerciseStatDetailDto.setBestResult(null);
+            }
+
+            exerciseStatDetailDtoList.add(exerciseStatDetailDto);
+        }
+        return exerciseStatDetailDtoList;
     }
 
     @Override
@@ -118,11 +142,12 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
-    public Exercise updateQuestionHint(Exercise exercise) {
-        Query query = new Query(Criteria.where("_id").is(exercise.getExerciseId()));
-
-        Update update = new Update().set("questions", exercise.getQuestions());
-
-        return mongoTemplate.findAndModify(query, update, Exercise.class);
+    public void updateQuestionHint(Exercise exercise) {
+        Exercise result = exerciseRepository.updateQuestionHint(exercise);
+        if (result == null) {
+            log.warn("Exercise {} not found", exercise.getExerciseId());
+            return;
+        }
+        log.debug("Exercise {} updated successfully", result.getExerciseId());
     }
 }

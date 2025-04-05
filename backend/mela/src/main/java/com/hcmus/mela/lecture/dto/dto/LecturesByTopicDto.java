@@ -7,9 +7,9 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class LecturesByTopicDto {
 
     private UUID topicId;

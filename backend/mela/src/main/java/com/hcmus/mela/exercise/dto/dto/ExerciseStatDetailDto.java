@@ -12,6 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExerciseStatDetailDto {
+
     private UUID exerciseId;
 
     private UUID lectureId;
