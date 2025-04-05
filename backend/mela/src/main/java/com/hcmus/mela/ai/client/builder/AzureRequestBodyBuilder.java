@@ -51,23 +51,48 @@ public class AzureRequestBodyBuilder implements AiRequestBodyBuilder {
                 List.of(
                         new Message("system", instruction),
                         new Message("user", contentList)
-                ),
-                aiFeatureProperties.getTemperature(),
-                aiFeatureProperties.getMaxCompletionTokens()
+                )
         );
     }
 
     /**
      * Builds a request body for the chatbot feature using Azure's format.
      * Note: This method is not yet implemented.
-     *
      * @param instruction System instruction for the AI
      * @param message List of message objects containing role and content
      * @param aiFeatureProperties Configuration properties for the AI feature
      * @return null (not implemented)
      */
     @Override
-    public Object buildRequestBodyForChatBot(String instruction, List<Map<String, String>> message, AiFeatureProperties aiFeatureProperties) {
-        return null;
+    public Object buildRequestBodyForChatBot(String instruction, List<com.hcmus.mela.ai.chatbot.model.Message> message, AiFeatureProperties aiFeatureProperties) {
+
+        List<Message> inputMessages = new ArrayList<>();
+
+        for (com.hcmus.mela.ai.chatbot.model.Message msg : message) {
+            String role = msg.getRole();
+            List<Map<String, Object>> inputContents = new ArrayList<>();
+            Map<String, Object> content = msg.getContent();
+            Map<String, Object> imgContent;
+
+            StringBuilder textContentBuilder = new StringBuilder();
+            for(Map.Entry<String, Object> entry : content.entrySet()) {
+                if(entry.getKey().equals("imageUrl")) {
+                    imgContent = Map.of("type", "image_url", "image_url", Map.of("url", entry.getValue()));
+                    inputContents.add(imgContent);
+                } else {
+                    textContentBuilder.append(entry).append("\n");
+                }
+            }
+            Map<String, Object> textContent = Map.of("type", "text", "text", textContentBuilder.toString());
+            inputContents.add(textContent);
+            inputMessages.add(new Message(role, inputContents));
+        }
+
+        // Create the full request body with system instruction and user content
+        inputMessages.add(0, new Message("system", instruction));
+        return new AzureRequestBody(
+                aiFeatureProperties.getModel(),
+                inputMessages
+        );
     }
 }

@@ -10,7 +10,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @AllArgsConstructor
-public class CreateConversationResponseDto {
+public class ChatResponseDto {
     private UUID conversationId;
 
     private String title;

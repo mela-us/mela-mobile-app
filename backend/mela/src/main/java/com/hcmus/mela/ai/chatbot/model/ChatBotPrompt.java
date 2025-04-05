@@ -1,9 +1,9 @@
 package com.hcmus.mela.ai.chatbot.model;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties; import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 @Setter
 @Getter
@@ -19,22 +19,39 @@ public class ChatBotPrompt {
     @Getter
     public static class IdentifyProblem {
         private String instruction;
+
+        public String formatInstruction(String context) {
+            return instruction.replace("{context}", context);
+        }
     }
 
     @Setter
     @Getter
     public static class ResolveConfusion {
         private String instruction;
+
+        public String formatInstruction(String context) {
+            return instruction.replace("{context}", context);
+        }
     }
+
     @Setter
     @Getter
     public static class ReviewSubmission {
         private String instruction;
+
+        public String formatInstruction(String context) {
+            return instruction.replace("{context}", context);
+        }
     }
+
     @Setter
     @Getter
     public static class ProvideSolution {
         private String instruction;
-    }
 
+        public String formatInstruction(String context) {
+            return instruction.replace("{context}", context);
+        }
+    }
 }

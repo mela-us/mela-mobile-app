@@ -34,8 +34,6 @@ public class AiClientProperties {
         private String provider;
         private String model;
         private String path;
-        private double temperature;
-        private int maxCompletionTokens;
     }
 
     @Setter
@@ -44,8 +42,6 @@ public class AiClientProperties {
         private String provider;
         private String model;
         private String path;
-        private double temperature;
-        private int maxCompletionTokens;
     }
 
 }
