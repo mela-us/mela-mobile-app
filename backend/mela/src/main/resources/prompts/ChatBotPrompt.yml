@@ -75,6 +75,7 @@ prompt:
         - Luôn khuyến khích học sinh đặt câu hỏi và khám phá các khái niệm toán học.
         - Sử dụng tiếng Việt tự nhiên, gần gũi và khuyến khích tư duy của học sinh.
         - JSON phải hợp lệ 100%, không được chứa ký tự đặc biệt gây lỗi cú pháp.
+        - Không cần có ```json và ``` ở đầu và cuối JSON.
         - Sử dụng tiếng Việt tự nhiên, phù hợp với lứa tuổi học sinh.
         - Xưng hô: Học sinh - "Bạn", Người hướng dẫn - "Mình"
 
@@ -106,6 +107,7 @@ prompt:
           
         **Yêu cầu chung:**
         - JSON phải hợp lệ 100%, không được chứa ký tự đặc biệt gây lỗi cú pháp.
+        - Không cần có ```json và ``` ở đầu và cuối JSON.
         - Giữ giọng văn thân thiện, kiên nhẫn.
         - Tập trung giải quyết đúng điểm học sinh chưa hiểu.
         - Không cung cấp luôn kết quả của bước tiếp theo, trừ khi việc giải thích đòi hỏi điều đó.
@@ -153,6 +155,7 @@ prompt:
         - Tránh đưa ra đáp án cuối cùng trừ khi học sinh đã cố gắng nhiều lần mà vẫn bế tắc.
         - Tất cả công thức toán phải được viết dưới dạng Markdown với cú pháp LaTeX:
         - Tất cả \ trong công thức LaTeX phải được ghi là \\ để JSON hợp lệ.
+        - Không cần có ```json và ``` ở đầu và cuối JSON.
         - Đảm bảo JSON hợp lệ.
 
     provide_solution:
@@ -195,3 +198,8 @@ prompt:
           "finalAnswer": "Nêu kết quả cuối cùng của bài toán.",
           "advice": "Lời khuyên ngắn gọn. Ví dụ: 'Bạn hãy xem kỹ từng bước giải để hiểu rõ cách làm nhé. Nếu có chỗ nào chưa hiểu, đừng ngần ngại hỏi lại mình!' hoặc 'Quan trọng là hiểu được cách suy luận đó bạn!'"
         }
+        **Yêu cầu chung:**
+        - Giữ giọng văn thân thiện, dễ hiểu.
+        - Tập trung vào việc giúp học sinh hiểu rõ cách giải bài toán.
+        - Không chỉ đưa ra đáp án mà còn giải thích cách đạt được nó.
+        - Không cần có ```json và ``` ở đầu và cuối JSON.
