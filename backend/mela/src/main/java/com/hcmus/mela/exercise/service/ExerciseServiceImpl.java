@@ -13,13 +13,8 @@ import com.hcmus.mela.exercise.dto.response.QuestionResponse;
 import com.hcmus.mela.exercise.mapper.ExerciseStatDetailMapper;
 import com.hcmus.mela.exercise.model.Exercise;
 import com.hcmus.mela.exercise.model.ExerciseStatus;
-import com.hcmus.mela.exercise.repository.ExerciseRepository;
-import com.hcmus.mela.history.service.ExerciseHistoryService;
-import com.hcmus.mela.lecture.dto.dto.LectureDto;
-import com.hcmus.mela.lecture.service.LectureService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
