@@ -29,7 +29,7 @@ public class ExerciseHistoryCustomRepositoryImpl implements ExerciseHistoryCusto
                         Criteria.where("score").gte(passScore)
                 )),
                 Aggregation.group("lecture_id").addToSet("exercise_id").as("exercises"),
-                Aggregation.project("_id").and("exercises").size().as("total")
+                Aggregation.project("_id").and("exercises").size().as("total_exercises")
         );
         AggregationResults<ExercisesCountByLecture> result = mongoTemplate.aggregate(
                 aggregation,
