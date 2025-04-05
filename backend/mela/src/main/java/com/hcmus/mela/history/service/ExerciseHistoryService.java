@@ -1,8 +1,6 @@
 package com.hcmus.mela.history.service;
 
-import com.hcmus.mela.exercise.dto.dto.ExerciseResultDto;
 import com.hcmus.mela.history.dto.dto.ExerciseHistoryDto;
-import com.hcmus.mela.history.dto.dto.RecentActivityDto;
 import com.hcmus.mela.history.dto.request.ExerciseResultRequest;
 import com.hcmus.mela.history.dto.response.ExerciseResultResponse;
 
@@ -16,7 +14,7 @@ public interface ExerciseHistoryService {
 
     Map<UUID, Integer> getPassedExerciseCountOfUser(UUID userId);
 
-    Map<UUID, ExerciseResultDto> getExerciseBestResultOfUser(List<UUID> exerciseIdList, UUID userId);
+    Map<UUID, Double> getExerciseBestScoresOfUserByLecture(UUID userId, UUID lectureId);
 
     List<ExerciseHistoryDto> getExerciseHistoryByUserAndLevel(UUID userId, UUID levelId);
 }

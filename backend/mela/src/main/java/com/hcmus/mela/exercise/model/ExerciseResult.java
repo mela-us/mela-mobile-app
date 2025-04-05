@@ -1,6 +1,5 @@
 package com.hcmus.mela.exercise.model;
 
-
 import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;

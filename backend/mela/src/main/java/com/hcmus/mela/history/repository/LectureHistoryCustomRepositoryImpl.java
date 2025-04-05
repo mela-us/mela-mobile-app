@@ -1,7 +1,5 @@
 package com.hcmus.mela.history.repository;
 
-import com.hcmus.mela.history.model.BestResultByExercise;
-import com.hcmus.mela.history.model.ExercisesCountByLecture;
 import com.hcmus.mela.history.model.LectureByTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;

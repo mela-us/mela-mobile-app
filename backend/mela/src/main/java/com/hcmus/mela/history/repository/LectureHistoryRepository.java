@@ -16,8 +16,5 @@ public interface LectureHistoryRepository extends MongoRepository<LectureHistory
     @Update("{ '$set': ?1 }")
     void updateFirstById(UUID id, LectureHistory lectureHistory);
 
-    @Query("{ 'userId': ?0 }")
-    List<LectureHistory> findAllByUserId(UUID userId);
-
     List<LectureHistory> findAllByUserIdAndLevelId(UUID userId, UUID levelId);
 }

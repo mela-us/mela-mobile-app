@@ -1,8 +1,6 @@
 package com.hcmus.mela.history.service;
 
-import com.hcmus.mela.auth.security.jwt.JwtTokenService;
 import com.hcmus.mela.history.dto.dto.LectureHistoryDto;
-import com.hcmus.mela.history.dto.dto.RecentActivityDto;
 import com.hcmus.mela.history.dto.request.SaveLectureSectionRequest;
 import com.hcmus.mela.history.dto.response.SaveLectureSectionResponse;
 import com.hcmus.mela.history.exception.HistoryException;
@@ -13,12 +11,13 @@ import com.hcmus.mela.history.repository.LectureHistoryRepository;
 import com.hcmus.mela.lecture.dto.dto.LectureDto;
 import com.hcmus.mela.lecture.service.LectureService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 @AllArgsConstructor
+@Slf4j
 @Service
 public class LectureHistoryServiceImpl implements LectureHistoryService {
 
@@ -32,7 +31,7 @@ public class LectureHistoryServiceImpl implements LectureHistoryService {
         LectureDto lectureInfo = lectureService.getLectureById(saveLectureSectionRequest.getLectureId());
 
         if (lectureInfo == null) {
-            throw new HistoryException("Lecture not found!");
+            throw new HistoryException("Lecture not found for id: " + saveLectureSectionRequest.getLectureId());
         }
 
         boolean isUpdated = (lectureHistory != null && lectureHistory.getCompletedSections() != null);
@@ -43,26 +42,11 @@ public class LectureHistoryServiceImpl implements LectureHistoryService {
         } else {
             isCompleted = lectureHistory.getProgress().equals(100);
         }
-        List<LectureCompletedSection> completedSections = lectureHistory.getCompletedSections();
-        if (completedSections == null) {
-            completedSections = new ArrayList<>();
-        }
 
-        LectureCompletedSection lectureCompletedSection = completedSections
-                .stream()
-                .filter(section -> section.getOrdinalNumber().equals(saveLectureSectionRequest.getOrdinalNumber()))
-                .findFirst().orElse(null);
-        if (lectureCompletedSection == null) {
-            lectureCompletedSection = new LectureCompletedSection();
-            lectureCompletedSection.setOrdinalNumber(saveLectureSectionRequest.getOrdinalNumber());
-            completedSections.add(lectureCompletedSection);
-        }
-        lectureCompletedSection.setCompletedAt(saveLectureSectionRequest.getCompletedAt());
-        completedSections.sort(Comparator.comparing(LectureCompletedSection::getCompletedAt).reversed());
+        List<LectureCompletedSection> completedSections = updateCompletedSections(lectureHistory, saveLectureSectionRequest);
 
-        int completedSectionsCount = completedSections.size();
-        int sectionsCount = lectureInfo.getSections().size();
-        Integer progress = (int)(completedSectionsCount * 1.0 / sectionsCount * 100);
+        Integer progress = calculateProgress(completedSections, lectureInfo);
+
         if (progress.equals(100) && !isCompleted) {
             lectureHistory.setCompletedAt(saveLectureSectionRequest.getCompletedAt());
         }
@@ -80,8 +64,37 @@ public class LectureHistoryServiceImpl implements LectureHistoryService {
         } else {
             lectureHistoryRepository.save(lectureHistory);
         }
+        log.info("Lecture section saved successfully for user: {}, lecture: {}, progress: {}",
+                userId, saveLectureSectionRequest.getLectureId(), progress);
 
-        return new SaveLectureSectionResponse("Save lecture section successfully!");
+        return new SaveLectureSectionResponse("Lecture section saved successfully for user: " + userId);
+    }
+
+    private List<LectureCompletedSection> updateCompletedSections(LectureHistory lectureHistory, SaveLectureSectionRequest saveLectureSectionRequest) {
+        List<LectureCompletedSection> completedSections = Optional
+                .ofNullable(lectureHistory.getCompletedSections())
+                .orElse(new ArrayList<>());
+
+        LectureCompletedSection lectureCompletedSection = completedSections
+                .stream()
+                .filter(section -> section.getOrdinalNumber().equals(saveLectureSectionRequest.getOrdinalNumber()))
+                .findFirst().orElse(null);
+
+        if (lectureCompletedSection == null) {
+            lectureCompletedSection = new LectureCompletedSection();
+            lectureCompletedSection.setOrdinalNumber(saveLectureSectionRequest.getOrdinalNumber());
+            completedSections.add(lectureCompletedSection);
+        }
+
+        lectureCompletedSection.setCompletedAt(saveLectureSectionRequest.getCompletedAt());
+        completedSections.sort(Comparator.comparing(LectureCompletedSection::getCompletedAt).reversed());
+        return completedSections;
+    }
+
+    private Integer calculateProgress(List<LectureCompletedSection> completedSections, LectureDto lectureInfo) {
+        int completedSectionsCount = completedSections.size();
+        int sectionsCount = lectureInfo.getSections().size();
+        return (int) (completedSectionsCount * 1.0 / sectionsCount * 100);
     }
 
     @Override

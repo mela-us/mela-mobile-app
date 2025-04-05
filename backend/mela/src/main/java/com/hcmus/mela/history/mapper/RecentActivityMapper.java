@@ -2,8 +2,9 @@ package com.hcmus.mela.history.mapper;
 
 import com.hcmus.mela.history.dto.dto.RecentActivityDto;
 import com.hcmus.mela.history.model.ExerciseHistory;
-import com.hcmus.mela.history.model.LectureByTime;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)

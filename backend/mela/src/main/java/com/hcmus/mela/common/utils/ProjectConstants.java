@@ -10,6 +10,8 @@ public final class ProjectConstants {
 
     public static final Locale US_LOCALE = new Locale.Builder().setLanguage("en").setRegion("US").build();
 
+    public static final Double EXERCISE_PASS_SCORE = 80.0;
+
     private ProjectConstants() {
 
         throw new UnsupportedOperationException();

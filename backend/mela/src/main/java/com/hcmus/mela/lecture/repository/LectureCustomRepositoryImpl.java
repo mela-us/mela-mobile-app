@@ -19,38 +19,35 @@ public class LectureCustomRepositoryImpl implements LectureCustomRepository {
 
     @Override
     public List<Lecture> findLecturesByTopicAndLevel(UUID topicId, UUID levelId) {
-        Aggregation aggregation = Aggregation.newAggregation(
-                Aggregation.match(Criteria.where("topic_id").is(topicId)),
-                Aggregation.match(Criteria.where("level_id").is(levelId)),
-                Aggregation.project("_id", "level_id", "topic_id", "ordinal_number", "name", "description"),
-                Aggregation.lookup("exercises", "_id", "lecture_id", "exercises"),
-                Aggregation.project("_id", "level_id", "topic_id", "ordinal_number", "name", "description")
-                        .and("exercises").size().as("total_exercises")
-        );
-        AggregationResults<Lecture> result = mongoTemplate.aggregate(
-                aggregation,
-                "lectures",
-                Lecture.class
-        );
-        return result.getMappedResults();
+        Criteria criteria = Criteria.where("topic_id").is(topicId)
+                .and("level_id").is(levelId);
+
+        Aggregation aggregation = buildLectureAggregation(criteria);
+        return executeLectureAggregation(aggregation);
     }
 
     @Override
     public List<Lecture> findLecturesByKeyword(String keyword) {
-        Aggregation aggregation = Aggregation.newAggregation(
-                (keyword != null && !keyword.isEmpty())
-                        ? Aggregation.match(Criteria.where("name").regex(keyword, "i"))
-                        : Aggregation.match(new Criteria()),
+        Criteria criteria = (keyword != null && !keyword.trim().isEmpty())
+                ? Criteria.where("name").regex(keyword, "i")
+                : new Criteria(); // match all
+
+        Aggregation aggregation = buildLectureAggregation(criteria);
+        return executeLectureAggregation(aggregation);
+    }
+
+    private Aggregation buildLectureAggregation(Criteria matchCriteria) {
+        return Aggregation.newAggregation(
+                Aggregation.match(matchCriteria),
                 Aggregation.project("_id", "level_id", "topic_id", "ordinal_number", "name", "description"),
                 Aggregation.lookup("exercises", "_id", "lecture_id", "exercises"),
                 Aggregation.project("_id", "level_id", "topic_id", "ordinal_number", "name", "description")
                         .and("exercises").size().as("total_exercises")
         );
-        AggregationResults<Lecture> result = mongoTemplate.aggregate(
-                aggregation,
-                "lectures",
-                Lecture.class
-        );
-        return result.getMappedResults();
+    }
+
+    private List<Lecture> executeLectureAggregation(Aggregation aggregation) {
+        AggregationResults<Lecture> results = mongoTemplate.aggregate(aggregation, "lectures", Lecture.class);
+        return results.getMappedResults();
     }
 }

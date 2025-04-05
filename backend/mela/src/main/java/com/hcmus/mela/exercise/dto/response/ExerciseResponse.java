@@ -1,7 +1,6 @@
 package com.hcmus.mela.exercise.dto.response;
 
 import com.hcmus.mela.exercise.dto.dto.ExerciseStatDetailDto;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

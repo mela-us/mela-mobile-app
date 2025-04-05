@@ -12,7 +12,6 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class ExerciseResultRequest {
 
     @Schema(description = "Id of the exercise", example = "904553a4-186e-4889-bb5f-19de4c64522d")

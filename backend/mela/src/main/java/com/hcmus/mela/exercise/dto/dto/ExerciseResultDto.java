@@ -9,7 +9,6 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class ExerciseResultDto {
 
     private Integer totalCorrectAnswers;
