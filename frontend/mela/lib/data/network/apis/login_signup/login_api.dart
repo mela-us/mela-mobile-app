@@ -9,7 +9,7 @@ class LoginApi {
   final DioClient _dioClient;
   LoginApi(this._dioClient);
   Future<TokenModel> login(LoginParams loginParams) async {
-    print("================================ ở login API");
+    // print("================================ ở login API");
     final responseData = await _dioClient.post(
       EndpointsConst.login,
       options: Options(headers: {'Content-Type': 'application/json'}),
@@ -20,7 +20,7 @@ class LoginApi {
 
   Future<TokenModel> loginWithGoogle(
       LoginWithGoogleParams loginWithGoogleParams) async {
-    print("================================ ở loginWithGoogle API");
+    // print("================================ ở loginWithGoogle API");
     // final responseData = await _dioClient.post(
     //   EndpointsConst.loginWithGoogle,
     //   options: Options(headers: {'Content-Type': 'application/json'}),

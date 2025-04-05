@@ -1,3 +1,4 @@
+import 'package:mela/constants/enum.dart';
 import 'package:mela/domain/entity/message_chat/message_chat.dart';
 import 'package:mela/domain/entity/message_chat/normal_message.dart';
 
@@ -10,6 +11,7 @@ Conversation conversation1 = Conversation(
   conversationId: "2",
   dateConversation: DateTime.now(),
   hasMore: true,
+  levelConversation: LevelConversation.UNIDENTIFIED,
   nameConversation: "Học toán cùng AI From API",
   messages: [
     NormalMessage(

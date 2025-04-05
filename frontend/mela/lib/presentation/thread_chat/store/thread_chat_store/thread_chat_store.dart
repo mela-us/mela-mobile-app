@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:mela/domain/entity/image_source/image_source.dart';
+import 'package:mela/constants/enum.dart';
+import 'package:mela/domain/entity/image_origin/image_origin.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
-import 'package:mela/domain/entity/message_chat/message_chat.dart';
 import 'package:mela/domain/entity/message_chat/normal_message.dart';
 import 'package:mela/domain/usecase/chat/create_new_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/get_conversation_usecase.dart';
@@ -27,6 +27,7 @@ abstract class _ThreadChatStore with Store {
       conversationId: "",
       messages: [],
       hasMore: false,
+      levelConversation: LevelConversation.UNIDENTIFIED,
       dateConversation: DateTime.now(),
       nameConversation: "Instance Title");
 
@@ -72,9 +73,9 @@ abstract class _ThreadChatStore with Store {
   @action
   Future<void> sendChatMessage(String message, List<File> images) async {
     try {
-      List<ImageSource> imageSources = [];
+      List<ImageOrigin> imageSources = [];
       for (var item in images) {
-        imageSources.add(ImageSource(image: item, isImageUrl: false));
+        imageSources.add(ImageOrigin(image: item, isImageUrl: false));
       }
       currentConversation.messages.add(NormalMessage(
           text: message, isAI: false, imageSourceList: imageSources));
@@ -91,13 +92,18 @@ abstract class _ThreadChatStore with Store {
         currentConversation.messages.last = newConversation.messages.last;
         currentConversation.nameConversation = newConversation.nameConversation;
         currentConversation.conversationId = newConversation.conversationId;
+        currentConversation.levelConversation =
+            newConversation.levelConversation;
         currentConversation = currentConversation.copyWith();
       } else {
-        MessageChat responseMessage = await sendMessageChatUsecase.call(
+        Conversation responseMessage = await sendMessageChatUsecase.call(
             params: ChatRequestParams(
                 message: message,
                 conversationId: currentConversation.conversationId));
-        currentConversation.messages.last = responseMessage;
+        currentConversation.messages.last = responseMessage.messages.last;
+        currentConversation.nameConversation = responseMessage.nameConversation;
+        currentConversation.levelConversation =
+            responseMessage.levelConversation;
         currentConversation = currentConversation.copyWith();
       }
     } catch (e) {
@@ -117,6 +123,7 @@ abstract class _ThreadChatStore with Store {
         conversationId: "",
         messages: [],
         hasMore: false,
+        levelConversation: LevelConversation.UNIDENTIFIED,
         dateConversation: DateTime.now(),
         nameConversation: "");
   }

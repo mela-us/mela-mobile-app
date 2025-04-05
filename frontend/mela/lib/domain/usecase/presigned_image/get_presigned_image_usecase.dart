@@ -20,16 +20,16 @@ class GetPresignImageUsecase extends UseCase<String, File> {
     try {
       PresignedImage presignedImage =
           await _presignedImageRepository.getPreSignUrl();
-      print("----------->Đường dẫn ảnh: ${presignedImage.imageUrl}");
-      print("----------->Đường dẫn presign: ${presignedImage.preSignedUrl}");
+      // print("----------->Đường dẫn ảnh: ${presignedImage.imageUrl}");
+      // print("----------->Đường dẫn presign: ${presignedImage.preSignedUrl}");
       int statusCode = await _presignedImageRepository.uploadImage(
           params, presignedImage.preSignedUrl);
 
       if (statusCode == 200 || statusCode == 201) {
-        print("----------->Đã up ảnh thành công: $statusCode");
+        // print("----------->Đã up ảnh thành công: $statusCode");
         return presignedImage.imageUrl;
       }
-      print("----------->Lỗi up ảnh: $statusCode");
+      // print("----------->Lỗi up ảnh: $statusCode");
       throw Exception("Upload image failed");
     } catch (e) {
       if (e is DioException) {

@@ -6,11 +6,11 @@ class PresignedImageApi {
   final DioClient _dioClient;
   PresignedImageApi(this._dioClient);
   Future<PresignedImage> getPresignedImage() async {
-    print("================================ ở presigned image API");
+    // print("================================ ở presigned image API");
     final responseData = await _dioClient.get(
       EndpointsConst.getPresignUrl,
     );
-    print("-----> presigned image API: $responseData");
+    // print("-----> presigned image API: $responseData");
     return PresignedImage.fromJson(responseData);
   }
 }

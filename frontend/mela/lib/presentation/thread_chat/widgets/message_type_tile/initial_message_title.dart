@@ -14,10 +14,10 @@ class InitialMessageTitle extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start, // Căn trái cho AI
+        mainAxisAlignment: MainAxisAlignment.start, 
         children: [
           Column(
-            crossAxisAlignment: CrossAxisAlignment.start, // Căn trái nội dung
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Solution Method
               _buildSolutionMethod(context),

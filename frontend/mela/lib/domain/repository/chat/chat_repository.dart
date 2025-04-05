@@ -6,6 +6,9 @@ import 'package:mela/domain/usecase/chat/send_message_chat_usecase.dart';
 
 abstract class ChatRepository {
   Future<Conversation> getConversation(GetConversationRequestParams params);
-  Future<MessageChat> sendMessage(ChatRequestParams params);
-  Future<Conversation> createNewConversation(CreateNewConversationParams params);
+  Future<Conversation> sendMessage(
+      ChatRequestParams
+          params); //Response Conversation not MessageChat because title, status conversation will be updated
+  Future<Conversation> createNewConversation(
+      CreateNewConversationParams params);
 }

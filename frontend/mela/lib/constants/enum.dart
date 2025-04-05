@@ -16,11 +16,19 @@ enum UpdateField { name, image, birthday }
 
 enum MessageType {
   initial('Initial'),
-  solution('Solving Problem'),
-  submission('Submitting'),
-  completion('Completion'),
+  explain('Explain Problem'),
+  review('Review'),
+  solution('Solution'),
   normal('Normal'); //For user and for AI normal
 
   final String displayName;
   const MessageType(this.displayName);
+}
+
+enum LevelConversation {
+  UNIDENTIFIED,
+  PROBLEM_IDENTIFIED,
+  SUBMISSION_REVIEW,
+  SOLUTION_PROVIDED,
+  COMPLETED,
 }

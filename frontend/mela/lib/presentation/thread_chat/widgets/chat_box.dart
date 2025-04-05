@@ -5,6 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/constants/enum.dart';
 // import 'package:math_keyboard/math_keyboard.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
@@ -12,6 +13,7 @@ import 'package:mela/presentation/thread_chat/store/chat_box_store/chat_box_stor
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/utils/image_picker_helper/image_picker_helper.dart';
 import 'package:mela/utils/routes/routes.dart';
+import 'package:mobx/mobx.dart';
 
 class ChatBox extends StatefulWidget {
   bool isFirstChatScreen;
@@ -30,14 +32,33 @@ class _ChatBoxState extends State<ChatBox> {
   final FocusNode _focusNode = FocusNode();
   ValueNotifier<List<File>> _imagesNotifier = ValueNotifier<List<File>>([]);
   final ImagePickerHelper _imagePickerHelper = ImagePickerHelper();
+  late ReactionDisposer disposerIsDisplayCamera;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _chatBoxStore.setShowSendIcon(false);
+      _chatBoxStore.setShowCameraIcon(true);
+    });
     _controller.addListener(onTextChanged);
     _focusNode.addListener(() {
       setState(() {}); // Rebuild when focus changes
     });
+    disposerIsDisplayCamera = reaction<Conversation>(
+      (_) => _threadChatStore.currentConversation,
+      (value) {
+        if (value.levelConversation == LevelConversation.PROBLEM_IDENTIFIED) {
+          print("Current Conversation thay doi thanh PROBLEM_IDENTIFIED");
+          _chatBoxStore.setShowCameraIcon(false);
+        } else if (value.levelConversation == LevelConversation.UNIDENTIFIED) {
+          print("Current Conversation thay doi thanh UNIDENTIFIED");
+          _chatBoxStore.setShowCameraIcon(true);
+        } else {
+          print("Current Conversation Level -----> ${value.levelConversation}");
+        }
+      },
+    );
   }
 
   @override
@@ -45,13 +66,16 @@ class _ChatBoxState extends State<ChatBox> {
     _controller.removeListener(onTextChanged);
     _controller.dispose();
     _focusNode.dispose();
+    disposerIsDisplayCamera();
+
     super.dispose();
   }
 
   //-----------------------Function
   //Event to display/hide the accessibility icons
   void onTextChanged() {
-    if (_controller.text.isNotEmpty && _threadChatStore.isLoading == false) {
+    if ((_controller.text.isNotEmpty || _imagesNotifier.value.isNotEmpty) &&
+        _threadChatStore.isLoading == false) {
       _chatBoxStore.setShowSendIcon(true);
     } else {
       _chatBoxStore.setShowSendIcon(false);
@@ -64,6 +88,10 @@ class _ChatBoxState extends State<ChatBox> {
 
     //Must update the value to notify the listeners
     _imagesNotifier.value = _imagesNotifier.value.toList();
+
+    if (_imagesNotifier.value.isEmpty && _controller.text.isEmpty) {
+      _chatBoxStore.setShowSendIcon(false);
+    }
   }
 
   Future<void> pickImage(ImageSource imageSource) async {
@@ -77,6 +105,7 @@ class _ChatBoxState extends State<ChatBox> {
       if (croppedFile == null) return;
       File imageFile = File(croppedFile.path);
       _imagesNotifier.value = [imageFile];
+      _chatBoxStore.setShowSendIcon(true);
     }
   }
 
@@ -115,18 +144,9 @@ class _ChatBoxState extends State<ChatBox> {
               title: const Text("Chọn ảnh từ thư viện"),
               onTap: () {
                 Navigator.pop(context);
-                pickMultiImage();
+                pickImage(ImageSource.gallery);
               },
             ),
-            // if (_image != null || !defaultImage)
-            //   ListTile(
-            //     leading: const Icon(Icons.delete, color: Colors.red),
-            //     title: const Text("Xóa ảnh đại diện", style: TextStyle(color: Colors.red)),
-            //     onTap: () {
-            //       Navigator.pop(context);
-            //       _removeImage();
-            //     },
-            //   ),
           ],
         );
       },
@@ -143,22 +163,9 @@ class _ChatBoxState extends State<ChatBox> {
           margin: widget.isFirstChatScreen
               ? null
               : const EdgeInsets.fromLTRB(5, 0, 5, 5),
+          padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
             color: Colors.white,
-            // boxShadow: [
-            //   BoxShadow(
-            //     color: Colors.grey.withOpacity(0.2),
-            //     spreadRadius: 1,
-            //     blurRadius: 1,
-            //     offset: const Offset(3, 5),
-            //   ),
-            //   BoxShadow(
-            //     color: Colors.grey.withOpacity(0.2),
-            //     spreadRadius: 1,
-            //     blurRadius: 1,
-            //     offset: const Offset(-3, 5),
-            //   ),
-            // ],
             border: _focusNode.hasFocus
                 ? Border.all(
                     color: Theme.of(context).colorScheme.buttonYesBgOrText,
@@ -178,7 +185,7 @@ class _ChatBoxState extends State<ChatBox> {
               const SizedBox(height: 5),
 
               //Support Icons
-              _buildSupportIcons(),
+              // _buildSupportIcons(),
             ],
           ),
         ),
@@ -260,95 +267,98 @@ class _ChatBoxState extends State<ChatBox> {
   }
 
   Widget _buildTextField() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: TextField(
-              controller: _controller,
-              maxLines: 3,
-              minLines: 1,
-              decoration: const InputDecoration(
-                hintText: "Hãy cho Mela biết thắc mắc của bạn",
-                hintStyle: TextStyle(
-                  color: Colors.grey,
+    return Observer(builder: (_) {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          _chatBoxStore.showCameraIcon
+              ? GestureDetector(
+                  onTap: _showImagePickerOptions,
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 6.0, top: 4, bottom: 4),
+                    child: Icon(Icons.image,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .buttonYesBgOrText
+                            .withOpacity(0.8),
+                        size: 24),
+                  ),
+                )
+              : const SizedBox(),
+          Expanded(
+            child: Container(
+              padding:
+                  const EdgeInsets.only(right: 4, top: 4, bottom: 4, left: 6),
+              child: TextField(
+                controller: _controller,
+                maxLines: 3,
+                minLines: 1,
+                style: const TextStyle(
+                  color: Colors.black,
                   fontSize: 16,
                 ),
-                border: InputBorder.none,
+                textAlignVertical: TextAlignVertical.bottom,
+                decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.zero,
+                  isDense: true,
+                  hintText: "Hãy cho Mela biết thắc mắc của bạn",
+                  hintStyle: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 16,
+                  ),
+                  border: InputBorder.none,
+                ),
               ),
             ),
           ),
-        ),
-        Observer(
-          builder: (_) {
-            return _chatBoxStore.showSendIcon
-                ? IconButton(
-                    icon: Icon(Icons.send,
+          _chatBoxStore.showSendIcon
+              ? GestureDetector(
+                  onTap: () async {
+                    if (widget.isFirstChatScreen) {
+                      _threadChatStore.setConversation(Conversation(
+                          conversationId: "",
+                          messages: [],
+                          hasMore: false,
+                          levelConversation: LevelConversation.UNIDENTIFIED,
+                          dateConversation: DateTime.now(),
+                          nameConversation: ""));
+
+                      Navigator.of(context).pushNamed(Routes.threadChatScreen);
+                    }
+
+                    String message = _controller.text.trim();
+                    _controller.clear();
+                    _chatBoxStore.setShowSendIcon(false);
+
+                    // Hide keyboard
+                    if (_focusNode.hasFocus) {
+                      _focusNode.unfocus();
+                    }
+
+                    List<File> images = _imagesNotifier.value.toList();
+                    _imagesNotifier.value = [];
+                    await _threadChatStore.sendChatMessage(message, images);
+
+                    //Using for while loading response user enter new message availale
+                    if (_controller.text.isNotEmpty ||
+                        _imagesNotifier.value.isNotEmpty) {
+                      _chatBoxStore.setShowSendIcon(true);
+                    }
+                  },
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+                    child: Icon(Icons.send,
                         color: Theme.of(context).colorScheme.buttonYesBgOrText,
                         size: 24),
-                    onPressed: () async {
-                      if (widget.isFirstChatScreen) {
-                        _threadChatStore.setConversation(Conversation(
-                            conversationId: "",
-                            messages: [],
-                            hasMore: false,
-                            dateConversation: DateTime.now(),
-                            nameConversation: ""));
-
-                        Navigator.of(context)
-                            .pushNamed(Routes.threadChatScreen);
-                      }
-
-                      String message = _controller.text.trim();
-                      _controller.clear();
-                      _chatBoxStore.setShowSendIcon(false);
-
-                      // Hide keyboard
-                      if (_focusNode.hasFocus) {
-                        _focusNode.unfocus();
-                      }
-
-                      List<File> images = _imagesNotifier.value.toList();
-                      _imagesNotifier.value = [];
-                      await _threadChatStore.sendChatMessage(message, images);
-
-                      //Using for while loading response user enter new message availale
-                      if (_controller.text.isNotEmpty)
-                        _chatBoxStore.setShowSendIcon(true);
-                    },
-                  )
-                : const SizedBox();
-          },
-        ),
-      ],
-    );
+                  ),
+                )
+              : const SizedBox(),
+        ],
+      );
+    });
   }
-
-  // Widget _buildSupportIcons() {
-  //   return Padding(
-  //     padding: widget.isFirstChatScreen
-  //         ? const EdgeInsets.only(bottom: 6)
-  //         : const EdgeInsets.only(bottom: 12),
-  //     child: Row(
-  //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //       children: [
-
-  //         Expanded(
-  //             child: SupportItem(
-  //                 icon: Icons.functions,
-  //                 textSupport: "Công thức",
-  //                 onTap: () => pickImage(ImageSource.gallery))),
-  //         Expanded(
-  //             child: SupportItem(
-  //                 icon: Icons.camera_alt,
-  //                 textSupport: "Camera",
-  //                 onTap: _showImagePickerOptions)),
-  //       ],
-  //     ),
-  //   );
-  // }
 
   Widget _buildSupportIcons() {
     return Padding(
@@ -392,22 +402,6 @@ class _ChatBoxState extends State<ChatBox> {
               ],
             ),
           ),
-          Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-              decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.15),
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.buttonYesBgOrText,
-                  width: 1,
-                ),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: const Row(
-                children: [
-                  Icon(Icons.bolt, color: Colors.amber),
-                  Text("5"),
-                ],
-              ))
         ],
       ),
     );

@@ -18,7 +18,7 @@ class CreateNewConversationParams {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {};
-    if (text != null) {
+    if (text != null && text!.isNotEmpty) {
       map["text"] = text;
     }
     if (imageUrl != null) {
@@ -52,11 +52,13 @@ class CreateNewConversationUsecase
             await _getPresignImageUsecase.call(params: params.imageFile!);
       }
 
-      return await _chatRepository
+      final result = await _chatRepository
           .createNewConversation(CreateNewConversationParams(
         text: params.text,
         imageUrl: imageUrl,
       ));
+      print("----------->result create new conversation: $result");
+      return result;
     } catch (e) {
       if (e is DioException) {
         //eg accessToken is expired
@@ -64,7 +66,8 @@ class CreateNewConversationUsecase
           bool isRefreshTokenSuccess =
               await _refreshAccessTokenUsecase.call(params: null);
           if (isRefreshTokenSuccess) {
-            print("----------->E1: $e");
+            print(
+                "----------->E1 error is refresh token in create new conversation: $e");
             return await call(params: params);
           }
           //Call logout, logout will delete token in secure storage, shared preference.....
@@ -72,10 +75,10 @@ class CreateNewConversationUsecase
           rethrow;
           //.................
         }
-        print("----------->E2: $e");
+        print("----------->E2 in create new conversation: $e");
         rethrow;
       }
-      print("----------->E3: $e");
+      print("----------->E3 in create new conversation: $e");
       rethrow;
     }
   }

@@ -12,13 +12,13 @@ class ImagePickerHelper {
       {int imageQuality = 100,
       ImageSource source = ImageSource.gallery}) async {
     try {
-      print("------->Picking image ABC");
+      // print("------->Picking image ABC");
       XFile? image = await _imagePicker.pickImage(
         source: source,
         imageQuality: imageQuality,
         requestFullMetadata: true,
       );
-      print("------->Path of image: ${image?.path}");
+      // print("------->Path of image: ${image?.path}");
       return image;
     } catch (e) {
       print("Error in pickImage: $e");

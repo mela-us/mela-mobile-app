@@ -3,8 +3,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/assets.dart';
+import 'package:mela/constants/enum.dart';
 import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/di/service_locator.dart';
+import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/thread_chat/widgets/chat_box.dart';
 import 'package:mela/presentation/thread_chat/widgets/list_skeleton.dart';
@@ -23,6 +25,7 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
   final ScrollController _scrollController = ScrollController();
   late ReactionDisposer disposerSendMessage;
   late ReactionDisposer disposerGetConversation;
+
 
   @override
   void initState() {
@@ -47,6 +50,7 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
         WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
       },
     );
+    
   }
 
   @override
@@ -59,6 +63,7 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
   void dispose() {
     disposerSendMessage();
     disposerGetConversation();
+
     _scrollController.dispose();
     super.dispose();
   }

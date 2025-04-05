@@ -93,7 +93,7 @@ class DioClient {
       return response.data;
     } catch (e) {
       //cat unauthorized above or other exception dio eg timeout...
-      // print("==========>$e");
+      print("==========> Error in post $e");
       rethrow;
     }
   }

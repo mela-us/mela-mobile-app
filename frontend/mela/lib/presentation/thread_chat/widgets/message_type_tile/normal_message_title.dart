@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/assets.dart';
-import 'package:mela/domain/entity/image_source/image_source.dart';
+import 'package:mela/domain/entity/image_origin/image_origin.dart';
 import 'package:mela/domain/entity/message_chat/normal_message.dart';
 import 'package:mela/presentation/thread_chat/widgets/message_type_tile/message_loading_response.dart';
 
@@ -75,7 +75,7 @@ class NormalMessageTitle extends StatelessWidget {
   }
 
   ///-----Images
-  Widget _buildImage(BuildContext context, ImageSource imageSource) {
+  Widget _buildImage(BuildContext context, ImageOrigin imageSource) {
     return GestureDetector(
       onTap: () => _showFullImage(context, imageSource),
       child: ClipRRect(
@@ -94,7 +94,7 @@ class NormalMessageTitle extends StatelessWidget {
   }
 
   //Show full image when click into image
-  void _showFullImage(BuildContext context, ImageSource imageSource) {
+  void _showFullImage(BuildContext context, ImageOrigin imageSource) {
     showDialog(
       context: context,
       builder: (context) {
@@ -182,6 +182,9 @@ class NormalMessageTitle extends StatelessWidget {
   //---Message
   Widget _buildMessage(BuildContext context) {
     bool isAI = currentMessage.isAI;
+    if (currentMessage.text != null && currentMessage.text!.isEmpty) {
+      return const SizedBox();
+    }
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Container(

@@ -33,8 +33,7 @@ class InitialMessage extends MessageChat {
   }) : super(isAI: isAI, type: MessageType.initial, timestamp: timestamp);
 
   factory InitialMessage.fromJson(
-      Map<String, dynamic> json, bool isAI, DateTime? timestamp) {
-    final content = json['content'] as Map<String, dynamic>;
+      Map<String, dynamic> content, bool isAI, DateTime? timestamp) {
     final steps =
         (content['steps'] as List).map((step) => StepGuilde.fromJson(step)).toList();
     final relativeTerms = List<String>.from(content['relativeTerms']);

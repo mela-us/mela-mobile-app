@@ -42,6 +42,7 @@ class EndpointsConst {
   static const String deleteAccount = "/api/users/account";
   static const String getPresignUrl =
       "/api/chatbot/conversations/files/upload-url";
-  static const String createNewConversation =
-      "/api/chatbot/conversations";
+  static const String createNewConversation = "/api/chatbot/conversations";
+  static const String sendMessageChat =
+      "/api/chatbot/conversations/:conversationId/messages";
 }

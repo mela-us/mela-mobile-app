@@ -25,6 +25,22 @@ mixin _$ChatBoxStore on _ChatBoxStore, Store {
     });
   }
 
+  late final _$showCameraIconAtom =
+      Atom(name: '_ChatBoxStore.showCameraIcon', context: context);
+
+  @override
+  bool get showCameraIcon {
+    _$showCameraIconAtom.reportRead();
+    return super.showCameraIcon;
+  }
+
+  @override
+  set showCameraIcon(bool value) {
+    _$showCameraIconAtom.reportWrite(value, super.showCameraIcon, () {
+      super.showCameraIcon = value;
+    });
+  }
+
   late final _$_ChatBoxStoreActionController =
       ActionController(name: '_ChatBoxStore', context: context);
 
@@ -40,9 +56,21 @@ mixin _$ChatBoxStore on _ChatBoxStore, Store {
   }
 
   @override
+  void setShowCameraIcon(bool value) {
+    final _$actionInfo = _$_ChatBoxStoreActionController.startAction(
+        name: '_ChatBoxStore.setShowCameraIcon');
+    try {
+      return super.setShowCameraIcon(value);
+    } finally {
+      _$_ChatBoxStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
-showSendIcon: ${showSendIcon}
+showSendIcon: ${showSendIcon},
+showCameraIcon: ${showCameraIcon}
     ''';
   }
 }

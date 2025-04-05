@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/constants/enum.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/domain/entity/message_chat/message_chat.dart';
@@ -20,6 +21,7 @@ class _SidebarWidgetState extends State<SidebarWidget> {
     conversationId: "conv_001",
     dateConversation: DateTime.now(),
     hasMore: false,
+    levelConversation: LevelConversation.UNIDENTIFIED,
     nameConversation: "Conversation from history",
     messages: [],
   );

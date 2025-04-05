@@ -15,7 +15,7 @@ class ChatRepositoryImpl extends ChatRepository {
   }
 
   @override
-  Future<MessageChat> sendMessage(ChatRequestParams params) {
+  Future<Conversation> sendMessage(ChatRequestParams params) {
     return _chatApi.sendMessageChat(params);
   }
 

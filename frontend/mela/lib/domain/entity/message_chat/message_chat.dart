@@ -1,7 +1,7 @@
-import 'dart:io';
-
-import 'package:mela/domain/entity/image_source/image_source.dart';
+import 'package:mela/domain/entity/message_chat/explain_message.dart';
 import 'package:mela/domain/entity/message_chat/initial_message.dart';
+import 'package:mela/domain/entity/message_chat/review_message.dart';
+import 'package:mela/domain/entity/message_chat/solution_message.dart';
 
 import '../../../constants/enum.dart';
 import 'normal_message.dart';
@@ -25,23 +25,63 @@ abstract class MessageChat {
   });
 
   factory MessageChat.fromJson(Map<String, dynamic> json) {
-    final typeStr = json['type'] as String? ??
-        (json['content'] != null && json['content']['solutionMethod'] != null
-            ? 'initial'
-            : 'normal');
-    final isAI = json['role'] == 'assistant';
-    final timestamp = json['timestamp'] != null
-        ? DateTime.parse(json['timestamp'] as String)
-        : null;
-  print("------------>typeStr: $typeStr");
+    try {
+      final content = json['content'] as Map<String, dynamic>;
 
-    switch (typeStr) {
-      case 'initial':
-        return InitialMessage.fromJson(json, isAI, timestamp);
-      case 'normal':
-        return NormalMessage.fromJson(json, isAI, timestamp);
-      default:
-        return InitialMessage.fromJson(json, isAI, timestamp);
+      final messageType = determineMessageType(content);
+      final isAI = json['role'] == 'assistant';
+      final timestamp = json['timestamp'] != null
+          ? DateTime.parse(json['timestamp'] as String)
+          : null;
+      switch (messageType) {
+        case MessageType.initial:
+          return InitialMessage.fromJson(content, isAI, timestamp);
+        case MessageType.normal:
+          return NormalMessage.fromJson(content, isAI, timestamp);
+        case MessageType.explain:
+          return ExplainMessage.fromJson(content, isAI, timestamp);
+        case MessageType.review:
+          return ReviewMessage.fromJson(content, isAI, timestamp);
+        case MessageType.solution:
+          return SolutionMessage.fromJson(content, isAI, timestamp);
+      }
+    } catch (e) {
+      print("Error in MessageChat.fromJson: $e");
+      return NormalMessage.fromJson({}, false, null);
     }
+  }
+
+  static MessageType determineMessageType(Map<String, dynamic> response) {
+    if (response.containsKey("text")) {
+      return MessageType.normal;
+    }
+
+    if (response.containsKey("explain")) {
+      return MessageType.explain;
+    }
+
+    if (response.containsKey("steps") ||
+        response.containsKey("solutionMethod") ||
+        response.containsKey("analysis") ||
+        response.containsKey("advice") ||
+        response.containsKey("relativeTerms")) {
+      return MessageType.initial;
+    }
+
+    if (response.containsKey("submissionSummary") ||
+        response.containsKey("positiveFeedback") ||
+        response.containsKey("areasForImprovement") ||
+        response.containsKey("guidance") ||
+        response.containsKey("encouragement")) {
+      return MessageType.review;
+    }
+
+    if (response.containsKey("problemSummary") ||
+        response.containsKey("steps") ||
+        response.containsKey("advice")) {
+      return MessageType.solution;
+    }
+
+    return MessageType.normal;
   }
 }
