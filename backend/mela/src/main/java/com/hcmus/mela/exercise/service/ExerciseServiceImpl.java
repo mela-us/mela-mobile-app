@@ -14,7 +14,7 @@ import com.hcmus.mela.exercise.mapper.ExerciseStatDetailMapper;
 import com.hcmus.mela.exercise.model.Exercise;
 import com.hcmus.mela.exercise.model.ExerciseStatus;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
