@@ -293,7 +293,9 @@ public class ConversationServiceImpl implements ConversationService {
         Summary currentSummary = conversation.getSummary();
         String newContext;
 
-        if(conversationStatus == ConversationStatus.PROBLEM_IDENTIFIED) {
+        if(conversationStatus == ConversationStatus.PROBLEM_IDENTIFIED
+                || conversationStatus == ConversationStatus.SOLUTION_PROVIDED
+                || conversationStatus == ConversationStatus.SUBMISSION_REVIEWED)  {
 
             // Get the list of key messages
             List<Message> messageList = conversationRepository.getKeyMessages(conversationId);
