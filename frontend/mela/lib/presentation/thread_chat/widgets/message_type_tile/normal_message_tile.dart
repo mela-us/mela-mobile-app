@@ -7,11 +7,13 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/assets.dart';
 import 'package:mela/domain/entity/image_origin/image_origin.dart';
 import 'package:mela/domain/entity/message_chat/normal_message.dart';
+import 'package:mela/presentation/thread_chat/widgets/convert_string_to_latex.dart';
 import 'package:mela/presentation/thread_chat/widgets/message_type_tile/message_loading_response.dart';
+import 'package:mela/presentation/thread_chat/widgets/message_type_tile/support_icon_in_message.dart';
 
-class NormalMessageTitle extends StatelessWidget {
+class NormalMessageTile extends StatelessWidget {
   final NormalMessage currentMessage;
-  const NormalMessageTitle({super.key, required this.currentMessage});
+  const NormalMessageTile({super.key, required this.currentMessage});
 
   @override
   Widget build(BuildContext context) {
@@ -38,35 +40,9 @@ class NormalMessageTitle extends StatelessWidget {
 
               //Support Icons: Like, not like, copy
               if (currentMessage.isAI) ...[
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    ...[
-                      SvgPicture.asset(
-                        Assets.like,
-                        // color: Theme.of(context).colorScheme.primary,
-                        width: 20,
-                      ),
-                      const SizedBox(width: 5),
-                      SvgPicture.asset(
-                        Assets.unlike,
-                        // color: Theme.of(context).colorScheme.primary,
-                        width: 20,
-                      ),
-                      const SizedBox(width: 5),
-                      SvgPicture.asset(
-                        Assets.copy,
-                        // color: Theme.of(context).colorScheme.primary,
-                        width: 20,
-                      ),
-                    ]
-                        .expand((item) => [item, const SizedBox(width: 5)])
-                        .toList(),
-                  ],
-                ),
+                const SupportIconInMessage(),
+                const SizedBox(height: 8),
               ],
-              const SizedBox(height: 8),
             ],
           ),
         ],
@@ -235,20 +211,16 @@ class NormalMessageTitle extends StatelessWidget {
         ),
         child: currentMessage.text == null
             ? const MessageLoadingResponse()
-            : Text(
-                currentMessage.text!,
-                style: isAI
-                    ? Theme.of(context).textTheme.content.copyWith(
-                        color: Colors.black,
-                        fontSize: 17,
-                        letterSpacing: 0.65,
-                        height: 1.65)
-                    : const TextStyle(
+            : isAI
+                ? ConvertStringToLatex(rawText: currentMessage.text!)
+                : Text(
+                    currentMessage.text!,
+                    style: const TextStyle(
                         color: Colors.white,
                         fontSize: 17,
                         letterSpacing: 0.65,
                         height: 1.65),
-              ),
+                  ),
       ),
     );
   }

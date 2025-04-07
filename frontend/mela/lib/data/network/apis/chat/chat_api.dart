@@ -36,6 +36,25 @@ class ChatApi {
     return Conversation.fromJson(responseData);
   }
 
+  Future<Conversation> sendMessageReviewSubmission(
+      ChatRequestParams params) async {
+    final responseData = await _dioClient.post(
+      EndpointsConst.sendMessageReviewSubmission
+          .replaceAll(':conversationId', params.conversationId!),
+      data: params.toJson(),
+    );
+    return Conversation.fromJson(responseData);
+  }
+
+  Future<Conversation> sendMessageGetSolution(ChatRequestParams params) async {
+    final responseData = await _dioClient.post(
+      EndpointsConst.sendMessageGetSolution
+          .replaceAll(':conversationId', params.conversationId!),
+      data: params.toJson(),
+    );
+    return Conversation.fromJson(responseData);
+  }
+
   Future<Conversation> getConversation(
       GetConversationRequestParams params) async {
     print("================================ Đang gọi getConversation API");

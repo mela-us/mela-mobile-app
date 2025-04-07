@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/assets.dart';
-import 'package:mela/constants/enum.dart';
 import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
+import 'package:mela/domain/entity/message_chat/review_message.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/thread_chat/widgets/chat_box.dart';
 import 'package:mela/presentation/thread_chat/widgets/list_skeleton.dart';
 import 'package:mela/presentation/thread_chat/widgets/message_chat_title.dart';
+import 'package:mela/presentation/thread_chat/widgets/message_type_tile/animation_review_tile.dart';
 import 'package:mobx/mobx.dart';
 
 class ThreadChatScreen extends StatefulWidget {
@@ -25,7 +25,9 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
   final ScrollController _scrollController = ScrollController();
   late ReactionDisposer disposerSendMessage;
   late ReactionDisposer disposerGetConversation;
+  late ReactionDisposer disposerAnimationReviewMessage;
 
+  OverlayEntry? _currentOverlay;
 
   @override
   void initState() {
@@ -50,7 +52,24 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
         WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
       },
     );
-    
+
+    //For animation review message
+    disposerAnimationReviewMessage = reaction<Conversation>(
+      (_) => _threadChatStore.currentConversation,
+      (value) {
+        // if (value.messages.isNotEmpty) {
+        //   WidgetsBinding.instance.addPostFrameCallback((_) {
+        //     _showAnimationOverlay(context, ReviewStatus.correct);
+        //   });
+        // }
+        if (value.messages.isNotEmpty && value.messages.last is ReviewMessage) {
+          ReviewMessage message = value.messages.last as ReviewMessage;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _showAnimationOverlay(context, message.status);
+          });
+        }
+      },
+    );
   }
 
   @override
@@ -61,11 +80,37 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
 
   @override
   void dispose() {
+    _currentOverlay?.remove(); // Xóa overlay khi widget dispose
+    _currentOverlay = null;
     disposerSendMessage();
     disposerGetConversation();
+    disposerAnimationReviewMessage();
 
     _scrollController.dispose();
     super.dispose();
+  }
+
+  //Animation for review message
+
+  void _showAnimationOverlay(BuildContext context, ReviewStatus status) {
+    // Xóa overlay cũ nếu tồn tại
+
+    _currentOverlay?.remove();
+    _currentOverlay = null;
+
+    // Tạo overlay mới
+    _currentOverlay = OverlayEntry(
+      builder: (context) => AnimationOverlayWidget(
+        status: status,
+        onDismiss: () {
+          _currentOverlay?.remove();
+          _currentOverlay = null;
+        },
+      ),
+    );
+
+    // Thêm overlay vào Overlay của context
+    Overlay.of(context).insert(_currentOverlay!);
   }
 
 //For scroll at the top and loading get older messages
@@ -110,7 +155,8 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
         actions: [
           Observer(builder: (context) {
             return IconButton(
-              onPressed: _threadChatStore.isLoadingGetConversation
+              onPressed: _threadChatStore.isLoadingGetConversation ||
+                      _threadChatStore.isLoading
                   ? null
                   : () {
                       _threadChatStore.clearConversation();

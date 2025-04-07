@@ -9,6 +9,8 @@ import 'package:mela/domain/repository/user_register/user_signup_repostiory.dart
 import 'package:mela/domain/usecase/chat/create_new_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/get_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_chat_usecase.dart';
+import 'package:mela/domain/usecase/chat/send_message_get_solution_usecase.dart';
+import 'package:mela/domain/usecase/chat/send_message_review_submission_usecase.dart';
 
 import 'package:mela/domain/usecase/exercise/get_exercises_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
@@ -221,5 +223,15 @@ class UseCaseModule {
         getIt<RefreshAccessTokenUsecase>(),
         getIt<LogoutUseCase>(),
         getIt<GetPresignImageUsecase>()));
+    getIt.registerSingleton(SendMessageReviewSubmissionUsecase(
+        getIt<ChatRepository>(),
+        getIt<RefreshAccessTokenUsecase>(),
+        getIt<LogoutUseCase>(),
+        getIt<GetPresignImageUsecase>()));
+    getIt.registerSingleton(SendMessageGetSolutionUsecase(
+      getIt<ChatRepository>(),
+      getIt<RefreshAccessTokenUsecase>(),
+      getIt<LogoutUseCase>(),
+    ));
   }
 }

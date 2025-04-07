@@ -1,73 +1,82 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
-import 'package:mela/constants/assets.dart';
+import 'package:mela/constants/enum.dart';
+import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/message_chat/initial_message.dart';
+import 'package:mela/presentation/thread_chat/store/chat_box_store/chat_box_store.dart';
+import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
+import 'package:mela/presentation/thread_chat/widgets/convert_string_to_latex.dart';
+import 'package:mela/presentation/thread_chat/widgets/message_type_tile/button_submission_review.dart';
+import 'package:mela/presentation/thread_chat/widgets/message_type_tile/support_icon_in_message.dart';
 
-class InitialMessageTitle extends StatelessWidget {
+class InitialMessageTile extends StatelessWidget {
+  final ThreadChatStore _threadChatStore = getIt.get<ThreadChatStore>();
+  final ChatBoxStore _chatBoxStore = getIt.get<ChatBoxStore>();
   final InitialMessage currentMessage;
 
-  const InitialMessageTitle({super.key, required this.currentMessage});
+  InitialMessageTile({super.key, required this.currentMessage});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start, 
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Solution Method
-              _buildSolutionMethod(context),
-              const SizedBox(height: 10),
+    return Observer(builder: (_) {
+      bool isEnabledSubmission =
+          _threadChatStore.currentConversation.levelConversation ==
+                  LevelConversation.PROBLEM_IDENTIFIED ||
+              _threadChatStore.currentConversation.levelConversation ==
+                  LevelConversation.SUBMISSION_REVIEWED;
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Solution Method
+                _buildSolutionMethod(context),
+                const SizedBox(height: 10),
 
-              // Analysis
-              _buildAnalysis(context),
-              const SizedBox(height: 10),
+                // Analysis
+                _buildAnalysis(context),
+                const SizedBox(height: 10),
 
-              // Steps
-              _buildSteps(context),
-              const SizedBox(height: 10),
+                // Steps
+                _buildSteps(context),
+                const SizedBox(height: 10),
 
-              // Advice
-              _buildAdvice(context),
-              const SizedBox(height: 10),
+                // Advice
+                _buildAdvice(context),
+                const SizedBox(height: 10),
 
-              // Relative Terms
-              _buildRelativeTerms(context),
-              const SizedBox(height: 8),
+                // Relative Terms
+                _buildRelativeTerms(context),
+                const SizedBox(height: 8),
 
-              // Support Icons: Like, unlike, copy
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  ...[
-                    SvgPicture.asset(
-                      Assets.like,
-                      width: 20,
-                    ),
-                    const SizedBox(width: 5),
-                    SvgPicture.asset(
-                      Assets.unlike,
-                      width: 20,
-                    ),
-                    const SizedBox(width: 5),
-                    SvgPicture.asset(
-                      Assets.copy,
-                      width: 20,
-                    ),
-                  ].expand((item) => [item, const SizedBox(width: 5)]).toList(),
-                ],
-              ),
-              const SizedBox(height: 8),
-            ],
-          ),
-        ],
-      ),
-    );
+                // Support Icons: Like, unlike, copy
+                const SupportIconInMessage(),
+
+                const SizedBox(height: 8),
+                Container(
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.85,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ButtonSubmissionReview(
+                        isEnabled: isEnabledSubmission,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 8),
+              ],
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   // Solution Method Container
@@ -95,15 +104,17 @@ class InitialMessageTitle extends StatelessWidget {
                 ),
           ),
           const SizedBox(height: 5),
-          Text(
-            currentMessage.solutionMethod,
-            style: Theme.of(context).textTheme.content.copyWith(
-                  color: Colors.black,
-                  fontSize: 17,
-                  letterSpacing: 0.65,
-                  height: 1.65,
-                ),
-          ),
+          ConvertStringToLatex(rawText: currentMessage.solutionMethod),
+
+          // Text(
+          //   currentMessage.solutionMethod,
+          //   style: Theme.of(context).textTheme.content.copyWith(
+          //         color: Colors.black,
+          //         fontSize: 17,
+          //         letterSpacing: 0.65,
+          //         height: 1.65,
+          //       ),
+          // ),
         ],
       ),
     );
@@ -134,15 +145,16 @@ class InitialMessageTitle extends StatelessWidget {
                 ),
           ),
           const SizedBox(height: 5),
-          Text(
-            currentMessage.analysis,
-            style: Theme.of(context).textTheme.content.copyWith(
-                  color: Colors.black,
-                  fontSize: 17,
-                  letterSpacing: 0.65,
-                  height: 1.65,
-                ),
-          ),
+          ConvertStringToLatex(rawText: currentMessage.analysis),
+          // Text(
+          //   currentMessage.analysis,
+          //   style: Theme.of(context).textTheme.content.copyWith(
+          //         color: Colors.black,
+          //         fontSize: 17,
+          //         letterSpacing: 0.65,
+          //         height: 1.65,
+          //       ),
+          // ),
         ],
       ),
     );
@@ -178,36 +190,23 @@ class InitialMessageTitle extends StatelessWidget {
             StepGuilde step = entry.value;
             return Padding(
               padding: const EdgeInsets.only(bottom: 5.0),
-              child: Row(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("${index + 1}. ",
-                      style:
-                          const TextStyle(fontSize: 17, letterSpacing: 0.65)),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          step.title,
-                          style: const TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: 0.65,
-                          ),
-                        ),
-                        Text(
-                          step.description,
-                          style: Theme.of(context).textTheme.content.copyWith(
-                                color: Colors.black,
-                                fontSize: 17,
-                                letterSpacing: 0.65,
-                                height: 1.65,
-                              ),
-                        ),
-                      ],
-                    ),
+                  ConvertStringToLatex(
+                    rawText: step.title,
+                    isStep: true,
                   ),
+                  const SizedBox(
+                    height: 3,
+                  ),
+                  ConvertStringToLatex(rawText: step.description),
+                  if (index != currentMessage.steps.length - 1)
+                    const Divider(
+                      color: Colors.grey,
+                      thickness: 0.5,
+                      height: 20,
+                    ),
                 ],
               ),
             );
@@ -242,15 +241,16 @@ class InitialMessageTitle extends StatelessWidget {
                 ),
           ),
           const SizedBox(height: 5),
-          Text(
-            currentMessage.advice,
-            style: Theme.of(context).textTheme.content.copyWith(
-                  color: Colors.black,
-                  fontSize: 17,
-                  letterSpacing: 0.65,
-                  height: 1.65,
-                ),
-          ),
+          ConvertStringToLatex(rawText: currentMessage.advice),
+          // Text(
+          //   currentMessage.advice,
+          //   style: Theme.of(context).textTheme.content.copyWith(
+          //         color: Colors.black,
+          //         fontSize: 17,
+          //         letterSpacing: 0.65,
+          //         height: 1.65,
+          //       ),
+          // ),
         ],
       ),
     );
@@ -281,7 +281,17 @@ class InitialMessageTitle extends StatelessWidget {
             runSpacing: 8.0,
             children: currentMessage.relativeTerms
                 .map((term) => ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        if (_threadChatStore.isLoading) {
+                          return;
+                        }
+                        await _threadChatStore.sendChatMessage(term, []);
+                        //Using for while loading response user enter new message availale
+                        if (_chatBoxStore.contentMessage.isNotEmpty ||
+                            _chatBoxStore.images.isNotEmpty) {
+                          _chatBoxStore.setShowSendIcon(true);
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context)
                             .colorScheme
@@ -292,14 +302,7 @@ class InitialMessageTitle extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: Text(
-                        term,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          letterSpacing: 0.65,
-                          color: Colors.black,
-                        ),
-                      ),
+                      child: ConvertStringToLatex(rawText: term),
                     ))
                 .toList(),
           ),

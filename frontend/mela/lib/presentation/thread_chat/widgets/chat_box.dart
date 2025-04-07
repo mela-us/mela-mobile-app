@@ -30,8 +30,6 @@ class _ChatBoxState extends State<ChatBox> {
   final _chatBoxStore = getIt.get<ChatBoxStore>();
   final _threadChatStore = getIt.get<ThreadChatStore>();
   final FocusNode _focusNode = FocusNode();
-  ValueNotifier<List<File>> _imagesNotifier = ValueNotifier<List<File>>([]);
-  final ImagePickerHelper _imagePickerHelper = ImagePickerHelper();
   late ReactionDisposer disposerIsDisplayCamera;
 
   @override
@@ -40,6 +38,8 @@ class _ChatBoxState extends State<ChatBox> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _chatBoxStore.setShowSendIcon(false);
       _chatBoxStore.setShowCameraIcon(true);
+      _chatBoxStore.setIsSelectedImageFromSubmission(false);
+      _chatBoxStore.clearImages();
     });
     _controller.addListener(onTextChanged);
     _focusNode.addListener(() {
@@ -74,7 +74,8 @@ class _ChatBoxState extends State<ChatBox> {
   //-----------------------Function
   //Event to display/hide the accessibility icons
   void onTextChanged() {
-    if ((_controller.text.isNotEmpty || _imagesNotifier.value.isNotEmpty) &&
+    _chatBoxStore.setText(_controller.text);
+    if ((_controller.text.isNotEmpty || _chatBoxStore.images.isNotEmpty) &&
         _threadChatStore.isLoading == false) {
       _chatBoxStore.setShowSendIcon(true);
     } else {
@@ -83,47 +84,13 @@ class _ChatBoxState extends State<ChatBox> {
   }
 
   //Remove Image in the list
-  void _removeImage(File image) {
-    _imagesNotifier.value.remove(image);
-
-    //Must update the value to notify the listeners
-    _imagesNotifier.value = _imagesNotifier.value.toList();
-
-    if (_imagesNotifier.value.isEmpty && _controller.text.isEmpty) {
-      _chatBoxStore.setShowSendIcon(false);
-    }
-  }
-
-  Future<void> pickImage(ImageSource imageSource) async {
-    XFile? image = await _imagePickerHelper.pickImageFromGalleryOrCamera(
-        source: imageSource);
-
-    if (image != null) {
-      // File imageFile = File(image.path);
-      // _imagesNotifier.value = [imageFile];
-      CroppedFile? croppedFile = await _imagePickerHelper.cropImage(image);
-      if (croppedFile == null) return;
-      File imageFile = File(croppedFile.path);
-      _imagesNotifier.value = [imageFile];
-      _chatBoxStore.setShowSendIcon(true);
-    }
-  }
-
-  Future<void> pickMultiImage() async {
-    List<XFile> images = await _imagePickerHelper.pickMultipleImages();
-    if (images.isNotEmpty) {
-      if (images.length == 1) {
-        CroppedFile? croppedFile =
-            await _imagePickerHelper.cropImage(images[0]);
-        if (croppedFile == null) return;
-        File imageFile = File(croppedFile.path);
-        _imagesNotifier.value = [imageFile];
-        return;
-      }
-      List<File> imageFiles = images.map((image) => File(image.path)).toList();
-      _imagesNotifier.value = imageFiles;
-    }
-  }
+  // void _removeImage(File image) {
+  //   _chatBoxStore.removeImage(image);
+  //   if (_chatBoxStore.images.isEmpty && _controller.text.isEmpty) {
+  //     _chatBoxStore.setShowSendIcon(false);
+  //   }
+  //   // WidgetsBinding.instance.addPostFrameCallback((_) {});
+  // }
 
   void _showImagePickerOptions() {
     showModalBottomSheet(
@@ -136,7 +103,7 @@ class _ChatBoxState extends State<ChatBox> {
               title: const Text("Chụp ảnh mới"),
               onTap: () {
                 Navigator.pop(context);
-                pickImage(ImageSource.camera);
+                _chatBoxStore.pickImage(ImageSource.camera);
               },
             ),
             ListTile(
@@ -144,7 +111,7 @@ class _ChatBoxState extends State<ChatBox> {
               title: const Text("Chọn ảnh từ thư viện"),
               onTap: () {
                 Navigator.pop(context);
-                pickImage(ImageSource.gallery);
+                _chatBoxStore.pickImage(ImageSource.gallery);
               },
             ),
           ],
@@ -195,75 +162,72 @@ class _ChatBoxState extends State<ChatBox> {
 
   //-------------------------------Widget---------------
   Widget _buildListImagesIsSeclected() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      child: ValueListenableBuilder(
-          valueListenable: _imagesNotifier,
-          builder: (context, images, child) {
-            return images.isEmpty
-                ? const SizedBox()
-                : SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      // mainAxisAlignment: MainAxisAlignment.start,
-                      // mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ...images.map((image) {
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 4),
-                            child: Stack(
-                              children: [
-                                // Image container
-                                Container(
-                                  width: 60,
-                                  height: 60,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(width: 0),
-                                    image: DecorationImage(
-                                      image: FileImage(image),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
+    return Observer(builder: (_) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        child: _chatBoxStore.images.isEmpty
+            ? const SizedBox()
+            : SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  // mainAxisAlignment: MainAxisAlignment.start,
+                  // mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ..._chatBoxStore.images.map((image) {
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 4),
+                        child: Stack(
+                          children: [
+                            // Image container
+                            Container(
+                              width: 60,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(width: 0),
+                                image: DecorationImage(
+                                  image: FileImage(image),
+                                  fit: BoxFit.cover,
                                 ),
-                                // Close button
-                                Positioned(
-                                  top: 3,
-                                  right: 3,
-                                  child: Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                      borderRadius: BorderRadius.circular(50),
-                                      focusColor: Colors.amber,
-                                      onTap: () {
-                                        _removeImage(image);
-                                      },
-                                      child: Ink(
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey,
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                        ),
-                                        width: 20,
-                                        height: 20,
-                                        child: const Icon(
-                                          Icons.close,
-                                          color: Colors.white,
-                                          size: 20,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
-                          );
-                        }).toList(),
-                      ],
-                    ),
-                  );
-          }),
-    );
+                            // Close button
+                            Positioned(
+                              top: 3,
+                              right: 3,
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(50),
+                                  focusColor: Colors.amber,
+                                  onTap: () {
+                                    _chatBoxStore.removeImage(image);
+                                  },
+                                  child: Ink(
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    width: 20,
+                                    height: 20,
+                                    child: const Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ],
+                ),
+              ),
+      );
+    });
   }
 
   Widget _buildTextField() {
@@ -336,13 +300,19 @@ class _ChatBoxState extends State<ChatBox> {
                       _focusNode.unfocus();
                     }
 
-                    List<File> images = _imagesNotifier.value.toList();
-                    _imagesNotifier.value = [];
-                    await _threadChatStore.sendChatMessage(message, images);
+                    List<File> images = _chatBoxStore.images.toList();
+                    _chatBoxStore.clearImages();
+                    if (_chatBoxStore.isSelectedImageFromSubmission) {
+                      await _threadChatStore.sendMessageSubmitReview(
+                          message, images);
+                      _chatBoxStore.setIsSelectedImageFromSubmission(false);
+                    } else {
+                      await _threadChatStore.sendChatMessage(message, images);
+                    }
 
                     //Using for while loading response user enter new message availale
                     if (_controller.text.isNotEmpty ||
-                        _imagesNotifier.value.isNotEmpty) {
+                        _chatBoxStore.images.isNotEmpty) {
                       _chatBoxStore.setShowSendIcon(true);
                     }
                   },
@@ -360,50 +330,50 @@ class _ChatBoxState extends State<ChatBox> {
     });
   }
 
-  Widget _buildSupportIcons() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 6),
-      child: Row(
-        children: [
-          Expanded(
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Icon(
-                    Icons.functions,
-                    color: Theme.of(context)
-                        .colorScheme
-                        .buttonYesBgOrText
-                        .withOpacity(0.8),
-                    size: 24,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                GestureDetector(
-                  onTap: () => pickImage(ImageSource.camera),
-                  child: Icon(Icons.camera_alt,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .buttonYesBgOrText
-                          .withOpacity(0.8),
-                      size: 24),
-                ),
-                const SizedBox(width: 10),
-                GestureDetector(
-                  onTap: () => pickMultiImage(),
-                  child: Icon(Icons.image,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .buttonYesBgOrText
-                          .withOpacity(0.8),
-                      size: 24),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildSupportIcons() {
+  //   return Padding(
+  //     padding: const EdgeInsets.fromLTRB(10, 0, 10, 6),
+  //     child: Row(
+  //       children: [
+  //         Expanded(
+  //           child: Row(
+  //             children: [
+  //               GestureDetector(
+  //                 onTap: () {},
+  //                 child: Icon(
+  //                   Icons.functions,
+  //                   color: Theme.of(context)
+  //                       .colorScheme
+  //                       .buttonYesBgOrText
+  //                       .withOpacity(0.8),
+  //                   size: 24,
+  //                 ),
+  //               ),
+  //               const SizedBox(width: 10),
+  //               GestureDetector(
+  //                 onTap: () => pickImage(ImageSource.camera),
+  //                 child: Icon(Icons.camera_alt,
+  //                     color: Theme.of(context)
+  //                         .colorScheme
+  //                         .buttonYesBgOrText
+  //                         .withOpacity(0.8),
+  //                     size: 24),
+  //               ),
+  //               const SizedBox(width: 10),
+  //               GestureDetector(
+  //                 onTap: () => pickMultiImage(),
+  //                 child: Icon(Icons.image,
+  //                     color: Theme.of(context)
+  //                         .colorScheme
+  //                         .buttonYesBgOrText
+  //                         .withOpacity(0.8),
+  //                     size: 24),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }

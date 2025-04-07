@@ -60,25 +60,26 @@ abstract class MessageChat {
       return MessageType.explain;
     }
 
-    if (response.containsKey("steps") ||
-        response.containsKey("solutionMethod") ||
-        response.containsKey("analysis") ||
-        response.containsKey("advice") ||
+    if (response.containsKey("steps") &&
+        response.containsKey("solutionMethod") &&
+        response.containsKey("analysis") &&
+        response.containsKey("advice") &&
         response.containsKey("relativeTerms")) {
       return MessageType.initial;
     }
 
-    if (response.containsKey("submissionSummary") ||
-        response.containsKey("positiveFeedback") ||
-        response.containsKey("areasForImprovement") ||
-        response.containsKey("guidance") ||
+    if (response.containsKey("submissionSummary") &&
+        response.containsKey("status") &&
+        response.containsKey("areasForImprovement") &&
+        response.containsKey("guidance") &&
         response.containsKey("encouragement")) {
       return MessageType.review;
     }
 
-    if (response.containsKey("problemSummary") ||
-        response.containsKey("steps") ||
-        response.containsKey("advice")) {
+    if (response.containsKey("problemSummary") &&
+        response.containsKey("steps") &&
+        response.containsKey("advice") &&
+        response.containsKey("finalAnswer")) {
       return MessageType.solution;
     }
 

@@ -30,7 +30,7 @@ dependencies:
   flutter_countdown_timer: ^4.1.0
   flutter_secure_storage: ^9.2.2
   flutter_html: ^3.0.0-beta.2
-  flutter_math_fork: ^0.7.2
+  flutter_math_fork: ^0.7.3
   flutter_animate: ^4.5.2
 #  flutter_native_splash: ^2.4.4
   # G
@@ -78,6 +78,9 @@ dependencies:
   flutter_svg: ^2.0.17
   google_sign_in: ^6.3.0
   skeleton_text: ^3.0.1
+  flutter_markdown: ^0.7.7
+  flutter_markdown_latex: ^0.3.4
+  lottie: ^3.3.1
   # Y
   # Z
 
@@ -106,6 +109,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/fonts/
+    - assets/animations/
     - assets/images/
     - assets/images/grades/
     - assets/images/topics/

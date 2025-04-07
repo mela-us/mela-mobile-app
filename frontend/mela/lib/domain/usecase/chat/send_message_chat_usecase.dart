@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:mela/core/domain/usecase/use_case.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
-import 'package:mela/domain/entity/message_chat/message_chat.dart';
 import 'package:mela/domain/repository/chat/chat_repository.dart';
 import 'package:mela/domain/usecase/user/logout_usecase.dart';
 import 'package:mela/domain/usecase/user_login/refresh_access_token_usecase.dart';
@@ -24,7 +23,7 @@ class ChatRequestParams {
     if (message != null && message!.isNotEmpty) {
       map["text"] = message;
     }
-    if (imageUrlList != null) {
+    if (imageUrlList != null && imageUrlList!.isNotEmpty) {
       map["imageUrl"] =
           imageUrlList!.first; //Because currently, we only send one image
     }

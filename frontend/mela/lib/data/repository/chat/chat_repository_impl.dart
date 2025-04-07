@@ -1,6 +1,5 @@
 import 'package:mela/data/network/apis/chat/chat_api.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
-import 'package:mela/domain/entity/message_chat/message_chat.dart';
 import 'package:mela/domain/repository/chat/chat_repository.dart';
 import 'package:mela/domain/usecase/chat/create_new_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/get_conversation_usecase.dart';
@@ -23,5 +22,15 @@ class ChatRepositoryImpl extends ChatRepository {
   Future<Conversation> createNewConversation(
       CreateNewConversationParams params) {
     return _chatApi.createNewConversation(params);
+  }
+
+  @override
+  Future<Conversation> sendMessageReviewSubmission(ChatRequestParams params) {
+    return _chatApi.sendMessageReviewSubmission(params);
+  }
+
+  @override
+  Future<Conversation> sendMessageGetSolution(ChatRequestParams params) {
+    return _chatApi.sendMessageGetSolution(params);
   }
 }

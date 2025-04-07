@@ -15,6 +15,14 @@ class NormalMessage extends MessageChat {
 
   factory NormalMessage.fromJson(
       Map<String, dynamic> content, bool isAI, DateTime? timestamp) {
+    if (content.isEmpty) {
+      return NormalMessage(
+        isAI: isAI,
+        text: "Có lỗi khi tạo nội dung. Xin cảm ơn bạn đã kiên nhẫn.",
+        imageSourceList: [],
+        timestamp: timestamp,
+      );
+    }
     return NormalMessage(
       isAI: isAI,
       text: content['text'],

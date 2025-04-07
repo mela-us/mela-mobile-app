@@ -4,6 +4,8 @@ import 'package:mela/core/stores/form/form_store.dart';
 import 'package:mela/domain/usecase/chat/create_new_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/get_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_chat_usecase.dart';
+import 'package:mela/domain/usecase/chat/send_message_get_solution_usecase.dart';
+import 'package:mela/domain/usecase/chat/send_message_review_submission_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
 import 'package:mela/domain/usecase/level/get_level_list_usecase.dart';
 import 'package:mela/domain/usecase/question/get_questions_usecase.dart';
@@ -185,11 +187,12 @@ class StoreModule {
     getIt.registerSingleton<ChatBoxStore>(
       ChatBoxStore(),
     );
-    getIt.registerSingleton<ThreadChatStore>(
-      ThreadChatStore(
-          getIt<SendMessageChatUsecase>(),
-          getIt<GetConversationUsecase>(),
-          getIt<CreateNewConversationUsecase>()),
-    );
+    getIt.registerSingleton<ThreadChatStore>(ThreadChatStore(
+      getIt<SendMessageChatUsecase>(),
+      getIt<GetConversationUsecase>(),
+      getIt<CreateNewConversationUsecase>(),
+      getIt<SendMessageReviewSubmissionUsecase>(),
+      getIt<SendMessageGetSolutionUsecase>(),
+    ));
   }
 }

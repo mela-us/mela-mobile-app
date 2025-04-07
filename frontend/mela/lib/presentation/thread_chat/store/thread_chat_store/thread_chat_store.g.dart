@@ -92,6 +92,24 @@ mixin _$ThreadChatStore on _ThreadChatStore, Store {
         .run(() => super.sendChatMessage(message, images));
   }
 
+  late final _$sendMessageSubmitReviewAsyncAction =
+      AsyncAction('_ThreadChatStore.sendMessageSubmitReview', context: context);
+
+  @override
+  Future<void> sendMessageSubmitReview(String message, List<File> imagesParam) {
+    return _$sendMessageSubmitReviewAsyncAction
+        .run(() => super.sendMessageSubmitReview(message, imagesParam));
+  }
+
+  late final _$sendMessageGetSolutionAsyncAction =
+      AsyncAction('_ThreadChatStore.sendMessageGetSolution', context: context);
+
+  @override
+  Future<void> sendMessageGetSolution(String message) {
+    return _$sendMessageGetSolutionAsyncAction
+        .run(() => super.sendMessageGetSolution(message));
+  }
+
   late final _$getConversationAsyncAction =
       AsyncAction('_ThreadChatStore.getConversation', context: context);
 
