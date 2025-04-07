@@ -9,8 +9,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await setPreferredOrientations();
   await ServiceLocator.configureDependencies();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
+
+
 
 Future<void> setPreferredOrientations() {
   return SystemChrome.setPreferredOrientations([
@@ -20,3 +22,4 @@ Future<void> setPreferredOrientations() {
     DeviceOrientation.landscapeLeft,
   ]);
 }
+

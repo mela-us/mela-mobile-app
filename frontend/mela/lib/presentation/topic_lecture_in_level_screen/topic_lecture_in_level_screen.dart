@@ -103,7 +103,7 @@ class _TopicLectureInLevelScreenState extends State<TopicLectureInLevelScreen> {
             labelColor: Theme.of(context).colorScheme.tertiary,
             unselectedLabelColor: Theme.of(context).colorScheme.onSecondary,
             dividerColor: Colors.transparent,
-            overlayColor: WidgetStateProperty.all(Colors.transparent),
+            overlayColor: MaterialStateProperty.all(Colors.transparent),
             indicator: UnderlineTabIndicator(
               borderSide: BorderSide(
                   color: Theme.of(context).colorScheme.tertiary, width: 2),

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_markdown_latex/flutter_markdown_latex.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
+import 'package:mela/presentation/home_screen/test.dart';
 import 'package:mela/presentation/home_screen/widgets/level_item.dart';
+import 'package:mela/presentation/thread_chat/widgets/convert_string_to_latex.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../di/service_locator.dart';
@@ -197,7 +201,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           .map((lecture) {
                         return LectureItem(lecture: lecture);
                       }).toList(),
-                    )
+                    ),
+
+                    // ConvertStringToLatex(rawText: TestData.markdownWithLatex),
+                    // ConvertStringToLatex(rawText: TestData.text),
                   ],
                 )),
           );

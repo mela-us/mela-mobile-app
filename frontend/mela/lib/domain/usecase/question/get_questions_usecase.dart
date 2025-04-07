@@ -26,14 +26,18 @@ class GetQuestionsUseCase extends UseCase<QuestionList?, String>{
     }catch (e){
       if (e is DioException){
         if (e.response?.statusCode  == 401){
+          print("🔄 Attempting to refresh token...");
           bool isSuccess = await _refreshAccessTokenUsecase.call(params: null);
           if (isSuccess) {
             return await call(params: params);
           }
           else {
             await _logoutUseCase.call(params: null);
+            //temporary
             rethrow;
           }
+        } else {
+          return null;
         }
       }
       return null;

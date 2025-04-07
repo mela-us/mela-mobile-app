@@ -73,6 +73,7 @@ class DioClient {
     ProgressCallback? onReceiveProgress,
   }) async {
     try {
+      // print("---->DioClient: post: $uri");
       final Response response = await _dio.post(
         uri,
         data: data,
@@ -92,6 +93,7 @@ class DioClient {
       return response.data;
     } catch (e) {
       //cat unauthorized above or other exception dio eg timeout...
+      print("==========> Error in post $e");
       rethrow;
     }
   }

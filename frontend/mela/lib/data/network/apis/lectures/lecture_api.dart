@@ -35,7 +35,7 @@ class LectureApi {
   }
 
   Future<LectureList> getLecturesAreLearning() async {
-    print("================================ở getLectureAreLearning API");
+    // print("================================ở getLectureAreLearning API");
     final responseData = await _dioClient.get(
         EndpointsConst.getLecturesAreLearning,
         queryParameters: {'size': 3});

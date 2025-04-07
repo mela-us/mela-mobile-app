@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:mela/domain/entity/user/token_model.dart';
 import 'package:mela/domain/usecase/user_login/is_logged_in_usecase.dart';
+import 'package:mela/domain/usecase/user_login/login_with_google_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_access_token_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_login_in_status_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_refresh_token_usecase.dart';
@@ -22,6 +23,7 @@ abstract class _UserLoginStore with Store {
     this._loginUseCase,
     this._saveAccessTokenUsecase,
     this._saveRefreshTokenUsecase,
+    this._loginWithGoogleUseCase,
   ) {
     // // setting up disposers
     // _setupDisposers();
@@ -39,6 +41,7 @@ abstract class _UserLoginStore with Store {
   final LoginUseCase _loginUseCase;
   final SaveAccessTokenUsecase _saveAccessTokenUsecase;
   final SaveRefreshTokenUsecase _saveRefreshTokenUsecase;
+  final LoginWithGoogleUseCase _loginWithGoogleUseCase;
 
   //Error
 
@@ -163,6 +166,43 @@ abstract class _UserLoginStore with Store {
     });
   }
 
+
+  @action
+  Future loginWithGoogle(String? idToken, String? accessToken) async {
+    final LoginWithGoogleParams loginParams =
+        LoginWithGoogleParams(idToken: idToken, accessToken: accessToken);
+    final future = _loginWithGoogleUseCase.call(params: loginParams);
+    loginFuture = ObservableFuture(future);
+    // print("-----********* Email password");
+    // print(email);
+    // print(password);
+    //print("FlutterSa: loginFuture: ${isLoggedIn ? "true" : "false"}");
+    await future.then((value) async {
+      if (value != null) {
+        await _saveLoginStatusUseCase.call(params: true);
+        await _saveAccessTokenUsecase.call(params: value.accessToken);
+        await _saveRefreshTokenUsecase.call(params: value.refreshToken);
+        // print("-----********* Sau khi login thanh cong in UserLoginStore");
+        // print(value.accessToken);
+        // print(value.refreshToken);
+        this.isLoggedIn = true;
+      }
+    }).catchError((e) {
+      this.isLoggedIn = false;
+      print("-----********* Error in UserLoginStore");
+      // print(e.toString());
+      if (e is DioException) {
+        if (e.response?.statusCode == 401) {
+          throw "Mật khẩu hoặc tài khoản không hợp lệ";
+        }
+        throw DioExceptionUtil.handleError(e);
+      } else {
+        throw "Có lỗi, thử lại sau";
+      }
+    });
+  }
+
+
   @action
   void resetSettingForLogin() {
     isPasswordVisible = false;
@@ -174,7 +214,6 @@ abstract class _UserLoginStore with Store {
 
   void logout() async {
     isLoggedIn = false;
-
     await _saveLoginStatusUseCase.call(params: false);
     await _saveAccessTokenUsecase.call(params: "");
     await _saveRefreshTokenUsecase.call(params: "");

@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<!--    &lt;!&ndash; Theme applied while the app is launching &ndash;&gt;-->
+<!--    <style name="LaunchTheme" parent="@android:style/Theme.Black.NoTitleBar">-->
+<!--        <item name="android:windowBackground">@color/ic_launcher_background</item>-->
+<!--    </style>-->
+
+<!--    &lt;!&ndash; Theme applied after the app has launched &ndash;&gt;-->
+<!--    <style name="NormalTheme" parent="@android:style/Theme.Black.NoTitleBar">-->
+<!--        <item name="android:windowBackground">@color/ic_launcher_background</item>-->
+<!--    </style>-->
+
     <!-- Theme applied to the Android Window while the process is starting when the OS's Dark Mode setting is on -->
     <style name="LaunchTheme" parent="@android:style/Theme.Black.NoTitleBar">
         <!-- Show a splash screen on the activity. Automatically removed when
@@ -12,7 +22,8 @@
          running.
 
          This Theme is only used starting with V2 of Flutter's Android embedding. -->
-    <style name="NormalTheme" parent="@android:style/Theme.Black.NoTitleBar">
-        <item name="android:windowBackground">?android:colorBackground</item>
+    <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:windowBackground">@drawable/launch_background</item>
     </style>
+
 </resources>
