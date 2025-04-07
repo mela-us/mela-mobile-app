@@ -1,3 +1,4 @@
+
 class EndpointsConst {
   EndpointsConst._();
 
@@ -10,7 +11,7 @@ class EndpointsConst {
   static const String baseUrl = "https://api.dev.mela.guru";
 
   // receiveTimeout
-  static const int receiveTimeout = 15000;
+  static const int receiveTimeout = 30000;
 
   // connectTimeout
   static const int connectionTimeout = 30000;
@@ -30,11 +31,23 @@ class EndpointsConst {
   static const String getExercises = "/api/lectures/:lectureId/exercises";
   static const String getLecturesSearch = "/api/lectures/search";
   static const String forgotPasswordSendEmail = "/api/forgot-password";
-  static const String forgotPasswordVerifyOTP = "/api/forgot-password/validate-otp";
-  static const String forgotPasswordCreateNewPassword = "/api/forgot-password/reset-password";
+  static const String forgotPasswordVerifyOTP =
+      "/api/forgot-password/validate-otp";
+  static const String forgotPasswordCreateNewPassword =
+      "/api/forgot-password/reset-password";
   static const String getStats = "/api/statistics";
   static const String getUser = "/api/users/profile";
   static const String updateUser = "/api/users/profile";
-  static const String getImageUpdatePresign = "/api/users/profile/upload-image-url";
+  static const String getImageUpdatePresign =
+      "/api/users/profile/upload-image-url";
   static const String deleteAccount = "/api/users/account";
+  static const String getPresignUrl =
+      "/api/chatbot/conversations/files/upload-url";
+  static const String createNewConversation = "/api/chatbot/conversations";
+  static const String sendMessageChat =
+      "/api/chatbot/conversations/:conversationId/messages";
+  static const String sendMessageReviewSubmission =
+      "/api/chatbot/conversations/:conversationId/messages/review-submission";
+  static const String sendMessageGetSolution =
+      "/api/chatbot/conversations/:conversationId/messages/solution";
 }

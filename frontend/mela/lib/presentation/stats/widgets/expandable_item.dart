@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:intl/intl.dart';
 import 'package:mela/domain/entity/stat/progress.dart';
 
 import '../../../constants/assets.dart';
@@ -22,7 +24,7 @@ class _ExpandableItemState extends State<ExpandableItem> {
   late ProgressExercise? prog_ex;
   late ProgressSection? prog_sect;
   late List<ScoreRecord> scores;
-  
+
   @override
   Widget build(BuildContext context) {
     type = widget.item.type;
@@ -37,7 +39,7 @@ class _ExpandableItemState extends State<ExpandableItem> {
         children: [
           GestureDetector(
             onTap: () {
-              if (type != 'SECTION' && scores.length <= 1) {
+              if (type != 'SECTION' && scores.length > 1) {
                 setState(() {
                   _isExpanded = !_isExpanded;
                 });
@@ -53,23 +55,27 @@ class _ExpandableItemState extends State<ExpandableItem> {
                     children: [
                       ConstrainedBox(
                         constraints: const BoxConstraints(
-                          maxWidth: 150,
-                          minWidth: 150,
+                          maxWidth: 200,
+                          minWidth: 200,
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text( //Tên bài tập hoặc section
-                              (type == 'SECTION') 
-                                  ? prog_sect?.sectionName ?? "" 
+                              (type == 'SECTION')
+                                  ? prog_sect?.sectionName ?? ""
                                   : prog_ex?.exerciseName ?? "",
                               style: Theme.of(context).textTheme.title
                                   .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+                              maxLines: 1, // Giới hạn 1 dòng
+                              overflow: TextOverflow.ellipsis, // Thêm "..." nếu quá dài
                             ),
                             Text( //Tên bài học
                               widget.item.lectureName ?? "",
                               style: Theme.of(context).textTheme.normal
                                   .copyWith(color: Theme.of(context).colorScheme.textInBg1),
+                              maxLines: (_isExpanded) ? 2 : 1, // Giới hạn 1 dòng
+                              overflow: (_isExpanded) ? TextOverflow.visible : TextOverflow.ellipsis, // Thêm "..." nếu quá dài
                             ),
                             Text( //Tên chủ đề
                               widget.item.topicName ?? "",
@@ -85,16 +91,16 @@ class _ExpandableItemState extends State<ExpandableItem> {
                             Text(//học bài hay làm bài?
                               (type == 'SECTION') ? "Đã học" : "Đã làm bài",
                               style: Theme.of(context).textTheme.normal
-                                  .copyWith(color: Theme.of(context).colorScheme.textInBg1),
+                                  .copyWith(color: Theme.of(context).colorScheme.tertiary),
                             ),
                             Text(//date
-                              widget.item.latestDate,
+                              parseDate(widget.item.latestDate),
                               style: Theme.of(context).textTheme.normal
                                   .copyWith(color: Theme.of(context).colorScheme.textInBg1),
                             ),
                             if (type != 'SECTION')
                               Text(//score
-                                "${(widget.item.exercise?.latestScore ?? 0) as String} Điểm",
+                                "${(widget.item.exercise?.latestScore ?? 0)} Điểm",
                                 style: Theme.of(context).textTheme.bigTitle
                                     .copyWith(color: Theme.of(context).colorScheme.onPrimary),
                               ),
@@ -103,13 +109,21 @@ class _ExpandableItemState extends State<ExpandableItem> {
                       Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Image.asset(
-                              Assets.stats_gain,
-                              width: 21,
-                              height: 21,
-                            ),
+                            if (type != 'SECTION' && scores.length > 1 && scores[0].score > scores[1].score)
+                              Image.asset(
+                                Assets.stats_gain,
+                                width: 21,
+                                height: 21,
+                              )
+                            else if (type != 'SECTION' && scores.length > 1 && scores[0].score < scores[1].score)
+                              Image.asset(
+                                Assets.stats_drop,
+                                width: 21,
+                                height: 21,
+                              )
+                            else const SizedBox(width: 21, height: 21),
                             const SizedBox(width: 5),
-                            if (type != 'SECTION' && scores.length <= 1)
+                            if (type != 'SECTION' && scores.length > 1)
                               Image.asset(
                                 _isExpanded ? Assets.stats_hide : Assets.stats_show,
                                 width: 16,
@@ -131,7 +145,12 @@ class _ExpandableItemState extends State<ExpandableItem> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(height: 1),
-                  LineChartWidget(scores: scores),
+                  LineChartWidget(scores: scores)
+                    .animate() // Hiệu ứng quét ngang
+                      .fadeIn(
+                        duration: 0.8.seconds,
+                        curve: Curves.easeIn,
+                      ),
                   SizedBox(height: 8),
                 ],
               ),
@@ -139,5 +158,9 @@ class _ExpandableItemState extends State<ExpandableItem> {
         ],
       ),
     );
+  }
+  String parseDate(String inputDate) {
+    DateTime parsedDate = DateTime.parse(inputDate);
+    return  DateFormat('dd-MM-yyyy').format(parsedDate);
   }
 }
