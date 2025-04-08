@@ -48,7 +48,7 @@ class ReviewMessageTile extends StatelessWidget {
                 const SizedBox(height: 10),
 
               // Support Icons: Like, unlike, copy
-              const SupportIconInMessage(),
+               SupportIconInMessage(),
               const SizedBox(height: 8),
 
               Container(

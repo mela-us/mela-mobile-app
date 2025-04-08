@@ -40,7 +40,7 @@ class NormalMessageTile extends StatelessWidget {
 
               //Support Icons: Like, not like, copy
               if (currentMessage.isAI) ...[
-                const SupportIconInMessage(),
+                SupportIconInMessage(),
                 const SizedBox(height: 8),
               ],
             ],
@@ -213,14 +213,19 @@ class NormalMessageTile extends StatelessWidget {
             ? const MessageLoadingResponse()
             : isAI
                 ? ConvertStringToLatex(rawText: currentMessage.text!)
-                : Text(
-                    currentMessage.text!,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                        letterSpacing: 0.65,
-                        height: 1.65),
+                : ConvertStringToLatex(
+                    rawText: currentMessage.text!,
+                    isStep: false,
+                    isAI: false,
                   ),
+        // : Text(
+        //     currentMessage.text!,
+        //     style: const TextStyle(
+        //         color: Colors.white,
+        //         fontSize: 17,
+        //         letterSpacing: 0.65,
+        //         height: 1.65),
+        //   ),
       ),
     );
   }

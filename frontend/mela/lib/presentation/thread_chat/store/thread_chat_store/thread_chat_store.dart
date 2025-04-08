@@ -75,7 +75,7 @@ abstract class _ThreadChatStore with Store {
 
   String getConversationName() {
     return currentConversation.nameConversation.isEmpty
-        ? "Mela New Chat"
+        ? "Đoạn Chat Mới"
         : currentConversation.nameConversation;
   }
 
@@ -122,6 +122,7 @@ abstract class _ThreadChatStore with Store {
     Conversation responseMessage = await sendMessageChatUsecase.call(
         params: ChatRequestParams(
             message: message,
+            images: images,
             conversationId: currentConversation.conversationId));
     currentConversation.messages.last = responseMessage.messages.last;
     currentConversation.nameConversation = responseMessage.nameConversation;

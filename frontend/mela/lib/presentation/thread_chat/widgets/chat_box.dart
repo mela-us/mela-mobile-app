@@ -93,6 +93,9 @@ class _ChatBoxState extends State<ChatBox> {
   // }
 
   void _showImagePickerOptions() {
+    if (_threadChatStore.isLoading) {
+      return;
+    }
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {

@@ -42,7 +42,7 @@ class SolutionMessageTile extends StatelessWidget {
               if (currentMessage.advice != null) const SizedBox(height: 10),
 
               // Support Icons: Like, unlike, copy
-              const SupportIconInMessage(),
+              SupportIconInMessage(),
               const SizedBox(height: 8),
             ],
           ),
@@ -112,7 +112,7 @@ class SolutionMessageTile extends StatelessWidget {
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 0.65,
-                  color: Colors.green[700], 
+                  color: Colors.green[700],
                 ),
           ),
           const SizedBox(height: 5),

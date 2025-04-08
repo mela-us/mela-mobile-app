@@ -109,12 +109,12 @@ class ExerciseItem extends StatelessWidget {
                           ? Text(
                               currentExercise.statusExercise
                                   ? "Đạt"
-                                  : "Chưa đạt",
+                                  : "Đang làm",
                               style:
                                   Theme.of(context).textTheme.subTitle.copyWith(
                                         color: currentExercise.statusExercise
                                             ? Colors.green
-                                            : Colors.red,
+                                            : Colors.lightBlue[500],
                                       ),
                             )
                           : Text(

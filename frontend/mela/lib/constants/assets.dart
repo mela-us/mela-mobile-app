@@ -1,4 +1,4 @@
-class Assets{
+class Assets {
   Assets._();
 
   static const String melaLogo = "assets/icons/clock.png";
@@ -11,6 +11,8 @@ class Assets{
   //Chat AI icons
   static const String like = "assets/icons/like.svg";
   static const String unlike = "assets/icons/unlike.svg";
+  static const String liked = "assets/icons/liked.svg";
+  static const String unliked = "assets/icons/unliked.svg";
   static const String copy = "assets/icons/copy.svg";
 
   //Image
@@ -39,8 +41,8 @@ class Assets{
   static String default_profile_pic = "assets/icons/default_profile_pic.png";
 
   //Stats
-  static String  stats_hide = 'assets/icons/stats_hide.png';
-  static String  stats_show = 'assets/icons/stats_show.png';
+  static String stats_hide = 'assets/icons/stats_hide.png';
+  static String stats_show = 'assets/icons/stats_show.png';
 
   //Navigation
   static String nav_topic = "assets/icons/nav_topic.png";
@@ -49,10 +51,9 @@ class Assets{
   static String nav_personal = "assets/icons/nav_personal.png";
 
   //Chat
-  static String currently_developing_icon = "assets/icons/currently_developing_icon.png";
+  static String currently_developing_icon =
+      "assets/icons/currently_developing_icon.png";
 
   //Loading
   static String loading_icon = "assets/icons/mela_load.png";
-
-
 }

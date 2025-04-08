@@ -36,7 +36,7 @@ class ExplainMessageTile extends StatelessWidget {
               children: [
                 _buildMessage(context),
                 const SizedBox(height: 8),
-                const SupportIconInMessage(),
+                 SupportIconInMessage(),
                 const SizedBox(height: 8),
                 if (isEnabledSubmission) ...[
                   Container(

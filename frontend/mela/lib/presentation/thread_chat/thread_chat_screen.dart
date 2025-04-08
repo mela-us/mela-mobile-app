@@ -304,25 +304,30 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
   }
 
   Widget _buildItemHintQuestion(String title) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      margin: const EdgeInsets.only(right: 10),
-      height: 50,
-      width: 150,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(
-          color: Colors.grey,
+    return GestureDetector(
+      onTap: () {
+        _threadChatStore.sendChatMessage(title, []);
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        margin: const EdgeInsets.only(right: 10),
+        height: 50,
+        width: 150,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(
+            color: Colors.grey,
+          ),
+          borderRadius: BorderRadius.circular(10),
         ),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Center(
-        child: Text(title,
-            textAlign: TextAlign.left,
-            style: Theme.of(context)
-                .textTheme
-                .promptTitleStyle
-                .copyWith(color: Colors.black)),
+        child: Center(
+          child: Text(title,
+              textAlign: TextAlign.left,
+              style: Theme.of(context)
+                  .textTheme
+                  .promptTitleStyle
+                  .copyWith(color: Colors.black)),
+        ),
       ),
     );
   }

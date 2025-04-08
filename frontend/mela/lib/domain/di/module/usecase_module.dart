@@ -210,8 +210,6 @@ class UseCaseModule {
         getIt<ChatRepository>(),
         getIt<RefreshAccessTokenUsecase>(),
         getIt<LogoutUseCase>()));
-    getIt.registerSingleton(SendMessageChatUsecase(getIt<ChatRepository>(),
-        getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()));
 
     //Presigned Image
     getIt.registerSingleton(GetPresignImageUsecase(
@@ -224,6 +222,11 @@ class UseCaseModule {
         getIt<LogoutUseCase>(),
         getIt<GetPresignImageUsecase>()));
     getIt.registerSingleton(SendMessageReviewSubmissionUsecase(
+        getIt<ChatRepository>(),
+        getIt<RefreshAccessTokenUsecase>(),
+        getIt<LogoutUseCase>(),
+        getIt<GetPresignImageUsecase>()));
+    getIt.registerSingleton(SendMessageChatUsecase(
         getIt<ChatRepository>(),
         getIt<RefreshAccessTokenUsecase>(),
         getIt<LogoutUseCase>(),
