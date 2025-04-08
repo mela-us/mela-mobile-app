@@ -29,6 +29,7 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> with SingleTi
       duration: const Duration(milliseconds: 350),
       vsync: this,
     );
+
     _animation = Tween<double>(begin: 0.9, end: 1.4).animate(
       CurvedAnimation(
         parent: _controller,

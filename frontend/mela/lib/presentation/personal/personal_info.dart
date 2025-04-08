@@ -64,9 +64,11 @@ class _PersonalInfoState extends State<PersonalInfo> {
           var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
           var offsetAnimation = animation.drive(tween);
 
-          return SlideTransition(
-            position: offsetAnimation,
-            child: child,
+          return ClipRect(
+            child: SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            ),
           );
         },
       ),
@@ -99,9 +101,11 @@ class _PersonalInfoState extends State<PersonalInfo> {
           var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
           var offsetAnimation = animation.drive(tween);
 
-          return SlideTransition(
-            position: offsetAnimation,
-            child: child,
+          return ClipRect(
+            child: SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            ),
           );
         },
       ),

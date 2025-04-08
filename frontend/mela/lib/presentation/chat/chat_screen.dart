@@ -142,12 +142,14 @@ class _ChatScreenState extends State<ChatScreen> {
                   barrierLabel: "Sidebar",
                   transitionDuration: const Duration(milliseconds: 300),
                   transitionBuilder: (context, anim1, anim2, child) {
-                    return SlideTransition(
-                      position: Tween(
-                              begin: const Offset(-1, 0),
-                              end: const Offset(0, 0))
-                          .animate(anim1),
-                      child: child,
+                    return ClipRect(
+                      child: SlideTransition(
+                        position: Tween(
+                            begin: const Offset(-1, 0),
+                            end: const Offset(0, 0))
+                            .animate(anim1),
+                        child: child,
+                      ),
                     );
                   },
                   pageBuilder: (context, anim1, anim2) {
