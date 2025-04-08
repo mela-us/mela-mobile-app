@@ -94,6 +94,7 @@ abstract class _QuestionStore with Store{
     });
   }
 
+
   @action
   Future submitAnswer(int correct, DateTime start, DateTime end) async {
     questionList ??= QuestionList(message: '', size: 0, questions: []);
@@ -121,6 +122,7 @@ abstract class _QuestionStore with Store{
   @action
   void setQuit(QuitOverlayResponse value){
     isQuit = value;
+    //something
   }
 
   @action

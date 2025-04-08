@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
@@ -118,12 +119,12 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
               // Scaffold con
-              Center(
+              kIsWeb ? Center(
                 child: ConstrainedBox(
                   constraints: BoxConstraints(maxWidth: width), // Giới hạn width về 600px
                   child: child ?? const SizedBox(),
                 ),
-              ),
+              ) : child ?? const SizedBox(),
             ],
           ),
         );

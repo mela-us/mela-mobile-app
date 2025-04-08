@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/data/network/apis/questions/hint_api.dart';
+import 'package:mela/data/network/dio_client.dart';
+import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/question/guide_controller.dart';
+import 'package:mela/presentation/question/store/question_store.dart';
+import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
 
 class GuideBottomSheet extends StatefulWidget {
   final screenHeight;
@@ -11,6 +16,8 @@ class GuideBottomSheet extends StatefulWidget {
 }
 
 class _GuideBottomSheetState extends State<GuideBottomSheet> {
+  final SingleQuestionStore _singleQuestionStore = getIt<SingleQuestionStore>();
+  final QuestionStore _questionStore = getIt<QuestionStore>();
   late double _screenHeight;
   final List<GuideController> guides = [
     GuideController(
@@ -75,7 +82,6 @@ class _GuideBottomSheetState extends State<GuideBottomSheet> {
               children: [
                 _buildSuggestionItem(guides[0]),
                 _buildSuggestionItem(guides[1]),
-                _buildSuggestionItem(guides[2]),
               ],
             ),
           )
@@ -132,7 +138,12 @@ class _GuideBottomSheetState extends State<GuideBottomSheet> {
               height: 44,
               width: 171,
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  // Call the API to generate the guide
+                  HintApi hintApi = HintApi(getIt<DioClient>());
+                  String id = _questionStore.questionList!.questions![_singleQuestionStore.currentIndex].questionId!;
+
+
                   setState(() {
                     g.changeState();
                   });

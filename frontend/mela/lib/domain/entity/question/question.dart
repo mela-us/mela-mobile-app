@@ -7,7 +7,9 @@ class Question{
   final String questionType;
   final List<Option> options;
   final String blankAnswer;
-  final String guide;
+  final String solution;
+  final String? term;
+  final String? guide;
 
 
 
@@ -18,8 +20,11 @@ class Question{
     required this.questionType,
     required this.options,
     required this.blankAnswer,
+    required this.solution,
     required this.guide,
+    required this.term,
   });
+
 
   factory Question.fromJson(Map<String, dynamic> json) {
     return Question(
@@ -31,7 +36,10 @@ class Question{
           .map((o) => Option.fromJson(o))
           .toList(),
       blankAnswer: json['blankAnswer'],
+      solution: json['solution'],
+      term: json['term'],
       guide: json['guide'],
+
     );
   }
 
@@ -43,7 +51,6 @@ class Question{
     //option not empty
     if (userAnswer.length == 1) {
       int answerOrd = charToNumber(userAnswer);
-      print ("answer Ord: $answerOrd");
       if (options.elementAt(answerOrd-1).isCorrect) {
         return true;
       }
@@ -64,7 +71,6 @@ class Question{
   }
 
   String numberToChar(int number) {
-    // Đảm bảo số đầu vào nằm trong khoảng từ 1 đến 26
     if (number >= 1 && number <= 26) {
       return String.fromCharCode('A'.codeUnitAt(0) + number - 1);
     } else {

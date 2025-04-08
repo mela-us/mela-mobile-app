@@ -82,7 +82,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 ? const SizedBox(height: 15)
                 : const SizedBox(height: 27),
 
-            questions[_singleQuestionStore.currentIndex].guide.isEmpty?
+            questions[_singleQuestionStore.currentIndex].solution.isEmpty?
             Container():
             Padding(
               padding:
@@ -97,10 +97,10 @@ class _ReviewScreenState extends State<ReviewScreen> {
             ),
 
             // SizedBox(height: 17),
-            questions[_singleQuestionStore.currentIndex].guide.isEmpty?
+            questions[_singleQuestionStore.currentIndex].solution.isEmpty?
             Container():
             _buildExplainView(
-                questions[_singleQuestionStore.currentIndex].guide),
+                questions[_singleQuestionStore.currentIndex].solution),
             const SizedBox(height: 17),
           ],
         ),
