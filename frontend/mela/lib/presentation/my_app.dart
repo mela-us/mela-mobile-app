@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
@@ -32,7 +33,6 @@ import '../di/service_locator.dart';
 
 import 'signup_login_screen/store/user_login_store/user_login_store.dart';
 
-
 import '../utils/locale/app_localization.dart';
 
 class MyApp extends StatefulWidget {
@@ -60,17 +60,16 @@ class _MyAppState extends State<MyApp> {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        print ('Data: $data');
+        print('Data: $data');
         int latestCount = int.parse(data["count"]);
 
-        PackageInfo packageInfo  = await PackageInfo.fromPlatform();
+        PackageInfo packageInfo = await PackageInfo.fromPlatform();
         String buildNumber = packageInfo.buildNumber;
         int buildNumberInt = int.parse(buildNumber);
-        print('Latest count: $latestCount and buildNumber: $buildNumberInt' );
+        print('Latest count: $latestCount and buildNumber: $buildNumberInt');
         if (buildNumberInt < latestCount) {
           return true;
         }
-
       }
     } catch (e) {
       print('Error in fetching version: $e');
@@ -82,7 +81,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return Observer(
       builder: (context) {
-        double height = MediaQuery.of(context).size.height;
+        double height = 0;
+        if (kIsWeb) {
+          height = MediaQuery.of(context).size.height;
+        }
         return _buildAppContent(context, height);
       },
     );
@@ -107,26 +109,31 @@ class _MyAppState extends State<MyApp> {
         //       ),
         //   ),
         // );
-        return Scaffold(
-          body: Stack(
-            children: [
-              // Hình nền
-              Positioned.fill(
-                child: Image.asset(
-                  'assets/images/web_background.png',  // Đường dẫn hình nền
-                  fit: BoxFit.cover,  // Điều chỉnh hình ảnh phủ toàn bộ
+        if (kIsWeb) {
+          return Scaffold(
+            body: Stack(
+              children: [
+                // Hình nền
+                Positioned.fill(
+                  child: Image.asset(
+                    'assets/images/web_background.png', // Đường dẫn hình nền
+                    fit: BoxFit.cover, // Điều chỉnh hình ảnh phủ toàn bộ
+                  ),
                 ),
-              ),
-              // Scaffold con
-              Center(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: width), // Giới hạn width về 600px
-                  child: child ?? const SizedBox(),
-                ),
-              ),
-            ],
-          ),
-        );
+                // Scaffold con
+                kIsWeb
+                    ? Center(
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(maxWidth: width),
+                          child: child ?? const SizedBox(),
+                        ),
+                      )
+                    : child ?? const SizedBox(),
+              ],
+            ),
+          );
+        }
+        return child ?? const SizedBox();
       },
       localizationsDelegates: const [
         // A class which loads the translations from JSON files
@@ -135,16 +142,13 @@ class _MyAppState extends State<MyApp> {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-
       home: FutureBuilder(
           future: fetchVersion(),
           builder: (context, snapshot) {
-
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const SplashScreen();
-            }
-            else if (snapshot.data == true) {
-              WidgetsBinding.instance.addPostFrameCallback((_){
+            } else if (snapshot.data == true) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
                 showDialog(
                     context: context,
                     barrierDismissible: false,
@@ -168,10 +172,8 @@ class _MyAppState extends State<MyApp> {
                                 url = Strings.googlePlayUrl;
                               }
                               if (await canLaunchUrl(Uri.parse(url))) {
-                                await launchUrl(
-                                    Uri.parse(url),
-                                    mode: LaunchMode.externalApplication
-                                );
+                                await launchUrl(Uri.parse(url),
+                                    mode: LaunchMode.externalApplication);
                               }
                               //Reset sharedpref.
                               await prefs.saveIsLoggedIn(false);
@@ -187,9 +189,7 @@ class _MyAppState extends State<MyApp> {
                     });
               });
               return const SplashScreen();
-            }
-            else if (snapshot.data == false) {
-
+            } else if (snapshot.data == false) {
               return _userStore.isLoggedIn
                   ? AllScreens()
                   : LoginOrSignupScreen();
@@ -199,15 +199,10 @@ class _MyAppState extends State<MyApp> {
                 child: Text('Error in fetching version'),
               ),
             );
-          }
-      ),
-
+          }),
     );
   }
-
-
 }
-
 
 //
 // class MyApp extends StatelessWidget {
