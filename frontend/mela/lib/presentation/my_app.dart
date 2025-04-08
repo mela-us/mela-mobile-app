@@ -71,7 +71,6 @@ class _MyAppState extends State<MyApp> {
         if (buildNumberInt < latestCount) {
           return true;
         }
-
       }
     } catch (e) {
       print('Error in fetching version: $e');
@@ -83,7 +82,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return Observer(
       builder: (context) {
-        double height = MediaQuery.of(context).size.height;
+        double height = 0;
+        if (kIsWeb) {
+          height = MediaQuery.of(context).size.height;
+        }
         return _buildAppContent(context, height);
       },
     );

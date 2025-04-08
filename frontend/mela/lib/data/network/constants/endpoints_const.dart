@@ -53,7 +53,7 @@ class EndpointsConst {
     static String generateGuide(String questionId) =>
       "/api/$questionId/hint/guide";
     static String generateTerm(String questionId) =>
-      "/api/$questionId/hint/term";
+      "/api/$questionId/hint/terms";
 
     // static String generateTerm(String questionId) =>
     //   "/api/ai-hint/$questionId";

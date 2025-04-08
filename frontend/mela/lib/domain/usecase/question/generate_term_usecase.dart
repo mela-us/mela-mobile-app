@@ -17,7 +17,7 @@ class GenerateTermUseCase extends UseCase<String, String> {
   FutureOr<String> call({required String params}) async {
     // TODO: implement call
     try {
-      return await _hintRepository.generateGuide(params);
+      return await _hintRepository.generateTerm(params);
     } catch (e) {
       if (e is DioException) {
         if (e.response?.statusCode == 401) {

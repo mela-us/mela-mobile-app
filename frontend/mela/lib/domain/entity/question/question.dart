@@ -37,7 +37,7 @@ class Question{
           .toList(),
       blankAnswer: json['blankAnswer'],
       solution: json['solution'],
-      term: json['term'],
+      term: json['terms'],
       guide: json['guide'],
 
     );
