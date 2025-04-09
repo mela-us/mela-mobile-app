@@ -75,7 +75,7 @@ class _ChatScreenState extends State<ChatScreen> {
       padding: const EdgeInsets.only(left: Dimens.horizontal_padding),
       child: Row(
         children: [
-          _buildHistoryButton(context),
+          // _buildHistoryButton(context),
           Expanded(
             child: Align(
               alignment: Alignment.center,

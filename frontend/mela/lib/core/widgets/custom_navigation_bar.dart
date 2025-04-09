@@ -56,7 +56,7 @@ class _CustomNavigationBarState extends State<CustomNavigationBar>
   Widget build(BuildContext context) {
     return Container(
       color: Theme.of(context).colorScheme.appBackground,
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 8),
       height: 68,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
