@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/dimens.dart';
+import 'package:mela/constants/enum.dart';
+import 'package:mela/di/service_locator.dart';
+import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/presentation/chat/widgets/sidebar_widget.dart';
+import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/thread_chat/widgets/chat_box.dart';
 import 'package:mela/utils/routes/routes.dart';
 
@@ -14,6 +18,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  final ThreadChatStore _threadChatStore = getIt.get<ThreadChatStore>();
   List<Map<String, dynamic>> messages = [
     {
       "text":
@@ -93,7 +98,8 @@ class _ChatScreenState extends State<ChatScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Icon(Icons.waving_hand, color: Theme.of(context).colorScheme.buttonYesBgOrText, size: 48),
+          Icon(Icons.waving_hand,
+              color: Theme.of(context).colorScheme.buttonYesBgOrText, size: 48),
           const SizedBox(height: 15),
           Row(
             children: [
@@ -145,8 +151,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     return ClipRect(
                       child: SlideTransition(
                         position: Tween(
-                            begin: const Offset(-1, 0),
-                            end: const Offset(0, 0))
+                                begin: const Offset(-1, 0),
+                                end: const Offset(0, 0))
                             .animate(anim1),
                         child: child,
                       ),
@@ -191,35 +197,49 @@ class _ChatScreenState extends State<ChatScreen> {
 
   //List Items first hint chat
   Widget _buildListItem(String title) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          top: BorderSide(
-            color: Theme.of(context).colorScheme.secondary,
-            width: 0.1,
-          ),
-          bottom: BorderSide(
-            color: Theme.of(context).colorScheme.secondary,
-            width: 0.1,
+    return GestureDetector(
+      onTap: () {
+        print("Clicked");
+        _threadChatStore.setConversation(Conversation(
+            conversationId: "",
+            messages: [],
+            hasMore: false,
+            levelConversation: LevelConversation.UNIDENTIFIED,
+            dateConversation: DateTime.now(),
+            nameConversation: ""));
+
+        Navigator.of(context).pushNamed(Routes.threadChatScreen);
+        _threadChatStore.sendChatMessage(title, []);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            top: BorderSide(
+              color: Theme.of(context).colorScheme.secondary,
+              width: 0.1,
+            ),
+            bottom: BorderSide(
+              color: Theme.of(context).colorScheme.secondary,
+              width: 0.1,
+            ),
           ),
         ),
-      ),
-      child: Card(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.zero, // Bỏ bo góc
-        ),
-        color: Colors.white.withOpacity(0.9),
-        margin: const EdgeInsets.symmetric(vertical: 0),
-        child: ListTile(
-          title: Text(title,
-              style: Theme.of(context)
-                  .textTheme
-                  .promptTitleStyle
-                  .copyWith(color: Colors.black)),
-          trailing: Icon(Icons.send,
-              size: 14, color: Theme.of(context).colorScheme.sendButton),
-          onTap: () {},
+        child: Card(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero, // Bỏ bo góc
+          ),
+          color: Colors.white.withOpacity(0.9),
+          margin: const EdgeInsets.symmetric(vertical: 0),
+          child: ListTile(
+            title: Text(title,
+                style: Theme.of(context)
+                    .textTheme
+                    .promptTitleStyle
+                    .copyWith(color: Colors.black)),
+            trailing: Icon(Icons.send,
+                size: 14, color: Theme.of(context).colorScheme.sendButton),
+          ),
         ),
       ),
     );
