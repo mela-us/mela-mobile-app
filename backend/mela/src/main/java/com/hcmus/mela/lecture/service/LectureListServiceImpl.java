@@ -145,9 +145,9 @@ public class LectureListServiceImpl implements LectureListService {
                 secondIndex++;
             } else if (modifiableFirst.get(firstIndex++).getCompletedAt()
                     .isAfter(modifiableSecond.get(secondIndex++).getCompletedAt())) {
-                recentLecture.add(modifiableFirst.get(firstIndex));
+                recentLecture.add(modifiableFirst.get(firstIndex - 1));
             } else {
-                recentLecture.add(modifiableSecond.get(secondIndex));
+                recentLecture.add(modifiableSecond.get(secondIndex - 1));
             }
         }
 
