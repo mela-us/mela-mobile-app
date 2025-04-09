@@ -50,4 +50,12 @@ class EndpointsConst {
       "/api/chatbot/conversations/:conversationId/messages/review-submission";
   static const String sendMessageGetSolution =
       "/api/chatbot/conversations/:conversationId/messages/solution";
+
+    static String generateGuide(String questionId) =>
+      "/api/$questionId/hint/guide";
+    static String generateTerm(String questionId) =>
+      "/api/$questionId/hint/terms";
+
+    // static String generateTerm(String questionId) =>
+    //   "/api/ai-hint/$questionId";
 }

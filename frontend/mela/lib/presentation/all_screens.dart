@@ -58,12 +58,14 @@ class _AllScreensState extends State<AllScreens> {
             final slideDirection = _currentIndex > _previousIndex ?
                 Offset(1, 0) : Offset(-1, 0);
 
-            return SlideTransition(
-              position: Tween<Offset>(
-                begin: slideDirection,
-                end: Offset.zero,
-              ).animate(animation),
-              child: child,
+            return ClipRect(
+              child: SlideTransition(
+                position: Tween<Offset>(
+                  begin: slideDirection,
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              ),
             );
           },
           child: _screens[_currentIndex], // Load trực tiếp màn hình đích

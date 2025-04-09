@@ -54,7 +54,9 @@ class InitialMessageTile extends StatelessWidget {
                 const SizedBox(height: 8),
 
                 // Support Icons: Like, unlike, copy
-                const SupportIconInMessage(),
+                SupportIconInMessage(
+                  textCopy: _buildFullMessageText(),
+                ),
 
                 const SizedBox(height: 8),
                 Container(
@@ -118,6 +120,42 @@ class InitialMessageTile extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _buildFullMessageText() {
+    StringBuffer fullText = StringBuffer();
+
+    // Solution Method
+    fullText.writeln("Phương pháp giải:");
+    fullText.writeln(currentMessage.solutionMethod);
+    fullText.writeln();
+
+    // Analysis
+    fullText.writeln("Phân tích:");
+    fullText.writeln(currentMessage.analysis);
+    fullText.writeln();
+
+    // Steps
+    fullText.writeln("Các bước thực hiện:");
+    for (int i = 0; i < currentMessage.steps.length; i++) {
+      fullText.writeln("${currentMessage.steps[i].title}");
+      fullText.writeln("${currentMessage.steps[i].description}");
+      if (i < currentMessage.steps.length - 1) {
+        fullText.writeln("---");
+      }
+    }
+    fullText.writeln();
+
+    // Advice
+    fullText.writeln("Lời khuyên:");
+    fullText.writeln(currentMessage.advice);
+    fullText.writeln();
+
+    // Relative Terms
+    fullText.writeln("Từ khóa liên quan:");
+    fullText.writeln(currentMessage.relativeTerms.join(", "));
+
+    return fullText.toString();
   }
 
   // Analysis Container

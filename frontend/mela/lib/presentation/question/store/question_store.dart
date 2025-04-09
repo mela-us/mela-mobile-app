@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:mela/constants/enum.dart';
 import 'package:mela/domain/entity/question/question_list.dart';
 import 'package:mela/domain/params/question/submit_result_params.dart';
+import 'package:mela/domain/usecase/question/generate_hint_usecase.dart';
+import 'package:mela/domain/usecase/question/generate_term_usecase.dart';
 import 'package:mela/domain/usecase/question/submit_result_usecase.dart';
 import 'package:mobx/mobx.dart';
 
@@ -22,6 +24,7 @@ abstract class _QuestionStore with Store{
   //UseCase:--------------------------------------------------------------------
   final GetQuestionsUseCase _getQuestionsUseCase;
   final SubmitResultUseCase _submitResultUseCase;
+
   //Store:----------------------------------------------------------------------
   final ErrorStore _errorStore;
 
@@ -94,6 +97,7 @@ abstract class _QuestionStore with Store{
     });
   }
 
+
   @action
   Future submitAnswer(int correct, DateTime start, DateTime end) async {
     questionList ??= QuestionList(message: '', size: 0, questions: []);
@@ -121,6 +125,7 @@ abstract class _QuestionStore with Store{
   @action
   void setQuit(QuitOverlayResponse value){
     isQuit = value;
+    //something
   }
 
   @action

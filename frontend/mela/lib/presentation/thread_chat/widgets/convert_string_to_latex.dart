@@ -6,10 +6,12 @@ import 'package:markdown/markdown.dart' as md;
 class ConvertStringToLatex extends StatelessWidget {
   final String rawText;
   final bool isStep;
+  final bool isAI;
 
   const ConvertStringToLatex({
     required this.rawText,
     this.isStep = false,
+    this.isAI = true,
     super.key,
   });
 
@@ -42,23 +44,40 @@ class ConvertStringToLatex extends StatelessWidget {
             styleSheet:
                 MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
               p: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    fontSize: 16,
-                    color: isStep ? const Color(0xff5D3891) : Colors.black,
+                    fontSize: 17,
+                    letterSpacing: 0.65,
+                    color: isStep
+                        ? const Color(0xff5D3891)
+                        : isAI
+                            ? Colors.black
+                            : Colors.white,
                     height: 1.8,
                   ),
               strong: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    fontSize: 16,
+                    fontSize: 17,
+                    letterSpacing: 0.65,
+                    height: 1.8,
                     fontWeight: FontWeight.bold,
-                    color: isStep ? const Color(0xff5D3891) : Colors.black,
+                    color: isStep
+                        ? const Color(0xff5D3891)
+                        : isAI
+                            ? Colors.black
+                            : Colors.white,
                   ),
               em: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    fontSize: 16,
+                    fontSize: 17,
+                    letterSpacing: 0.65,
+                    height: 1.8,
                     fontStyle: FontStyle.italic,
-                    color: isStep ? const Color(0xff5D3891) : Colors.black,
+                    color: isStep
+                        ? const Color(0xff5D3891)
+                        : isAI
+                            ? Colors.black
+                            : Colors.white,
                   ),
             ),
             builders: {
-              'math': MathBuilder(isStep: isStep),
+              'math': MathBuilder(isStep: isStep, isAI: isAI),
             },
             extensionSet: md.ExtensionSet(
               md.ExtensionSet.gitHubFlavored.blockSyntaxes,
@@ -90,8 +109,9 @@ class MathSyntax extends md.InlineSyntax {
 
 class MathBuilder extends MarkdownElementBuilder {
   final bool isStep;
+  final bool isAI;
 
-  MathBuilder({required this.isStep});
+  MathBuilder({required this.isStep, required this.isAI});
 
   @override
   Widget visitElementAfter(md.Element element, TextStyle? preferredStyle) {
@@ -116,10 +136,14 @@ class MathBuilder extends MarkdownElementBuilder {
                 mathStyle: MathStyle.text,
                 textScaleFactor: 1.1,
                 textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      fontSize: 16,
-                      letterSpacing: 0.5,
+                      fontSize: 17,
+                      letterSpacing: 0.65,
                       height: 1.8,
-                      color: isStep ? const Color(0xff5D3891) : Colors.black,
+                      color: isStep
+                          ? const Color(0xff5D3891)
+                          : isAI
+                              ? Colors.black
+                              : Colors.white,
                     ),
               ),
             ],

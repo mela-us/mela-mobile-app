@@ -42,7 +42,9 @@ class SolutionMessageTile extends StatelessWidget {
               if (currentMessage.advice != null) const SizedBox(height: 10),
 
               // Support Icons: Like, unlike, copy
-              const SupportIconInMessage(),
+              SupportIconInMessage(
+                textCopy: _buildFullMessageText(),
+              ),
               const SizedBox(height: 8),
             ],
           ),
@@ -112,7 +114,7 @@ class SolutionMessageTile extends StatelessWidget {
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 0.65,
-                  color: Colors.green[700], 
+                  color: Colors.green[700],
                 ),
           ),
           const SizedBox(height: 5),
@@ -222,5 +224,43 @@ class SolutionMessageTile extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _buildFullMessageText() {
+    StringBuffer fullText = StringBuffer();
+
+    // Problem Summary
+    if (currentMessage.problemSummary != null) {
+      fullText.writeln("Đề bài:");
+      fullText.writeln(currentMessage.problemSummary);
+      fullText.writeln();
+    }
+
+    // Steps
+    fullText.writeln("Các bước giải:");
+    for (int i = 0; i < currentMessage.steps.length; i++) {
+      fullText.writeln("${currentMessage.steps[i].title}");
+      fullText.writeln("${currentMessage.steps[i].explanation}");
+      fullText.writeln("${currentMessage.steps[i].calculation}");
+      if (i < currentMessage.steps.length - 1) {
+        fullText.writeln("---");
+      }
+    }
+    fullText.writeln();
+
+    // Final Answer
+    if (currentMessage.finalAnswer != null) {
+      fullText.writeln("Đáp án cuối cùng:");
+      fullText.writeln(currentMessage.finalAnswer);
+      fullText.writeln();
+    }
+
+    // Advice
+    if (currentMessage.advice != null) {
+      fullText.writeln("Lời khuyên:");
+      fullText.writeln(currentMessage.advice);
+    }
+
+    return fullText.toString();
   }
 }

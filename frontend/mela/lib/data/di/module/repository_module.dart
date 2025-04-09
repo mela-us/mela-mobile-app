@@ -5,6 +5,7 @@ import 'package:mela/data/network/apis/chat/chat_api.dart';
 import 'package:mela/data/network/apis/level/level_api.dart';
 import 'package:mela/data/network/apis/presigned_image/presigned_image_api.dart';
 import 'package:mela/data/network/apis/presigned_image/presigned_image_upload_api.dart';
+import 'package:mela/data/network/apis/questions/hint_api.dart';
 import 'package:mela/data/network/apis/questions/questions_api.dart';
 import 'package:mela/data/network/apis/exercises/exercise_api.dart';
 import 'package:mela/data/network/apis/forgot_password/forgot_password_api.dart';
@@ -21,6 +22,7 @@ import 'package:mela/data/network/apis/user/user_info_api.dart';
 import 'package:mela/data/repository/chat/chat_repository_impl.dart';
 import 'package:mela/data/repository/level/level_repository_impl.dart';
 import 'package:mela/data/repository/presigned_image/presigned_image_repository_impl.dart';
+import 'package:mela/data/repository/question/hint_repository_impl.dart';
 import 'package:mela/data/repository/question/question_repository_impl.dart';
 import 'package:mela/data/repository/setting/setting_repository_impl.dart';
 import 'package:mela/data/repository/stat/stat_search_impl.dart';
@@ -32,6 +34,7 @@ import 'package:mela/domain/repository/chat/chat_repository.dart';
 import 'package:mela/domain/repository/forgot_password/forgot_password_repository.dart';
 import 'package:mela/domain/repository/level/level_repository.dart';
 import 'package:mela/domain/repository/presigned_image/presigned_image_repository.dart';
+import 'package:mela/domain/repository/question/hint_repository.dart';
 import 'package:mela/domain/repository/question/question_repository.dart';
 import 'package:mela/domain/repository/setting/setting_repository.dart';
 import 'package:mela/domain/repository/stat/stat_search_repository.dart';
@@ -128,5 +131,9 @@ class RepositoryModule {
         PresignedImageRepositoryImpl(
                 getIt<PresignedImageApi>(), getIt<PresignedImageUploadApi>())
             as PresignedImageRepository);
+
+    //Hint generator
+    getIt.registerSingleton<HintRepository>(
+        HintRepositoryImpl(getIt<HintApi>()) as HintRepository);
   }
 }

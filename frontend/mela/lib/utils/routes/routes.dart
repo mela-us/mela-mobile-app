@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mela/core/widgets/screen_wrapper.dart';
 import 'package:mela/presentation/chat/chat_screen.dart';
 import 'package:mela/presentation/forgot_password_screen/create_new_password_in_forgot_password_screen.dart';
 import 'package:mela/presentation/forgot_password_screen/enter_email_in_forgot_password_screen.dart';
@@ -59,34 +60,133 @@ class Routes {
   static const String threadChatScreen = '/thread_chat_screen';
 
 
+  // static final routes = <String, WidgetBuilder>{
+  //   loginScreen: (BuildContext context) => const ScreenWrapper(child:LoginScreen()),
+  //   signupScreen: (BuildContext context) => const ScreenWrapper(child:SignUpScreen()),
+  //
+  //   loginOrSignupScreen: (BuildContext context) =>
+  //       ScreenWrapper(child:LoginOrSignupScreen()),
+  //
+  //   enterEmailInForgotPasswordScreen: (BuildContext context) =>
+  //       ScreenWrapper(child: EnterEmailInForgotPasswordScreen()),
+  //
+  //   enterOTPInForgotPasswordScreen: (BuildContext context) =>
+  //       const ScreenWrapper(child: EnterOTPInForgotPasswordScreen()),
+  //
+  //   createNewPasswordInForgotPasswordScreen: (BuildContext context) =>
+  //       ScreenWrapper(child: CreateNewPasswordInForgotPasswordScreen()),
+  //   //coursesScreen: (BuildContext context) => const CoursesScreen(),
+  //
+  //   homeScreen: (BuildContext context) =>
+  //       const ScreenWrapper(child: HomeScreen()),
+  //   // allLecturesInTopicScreen: (BuildContext context) =>
+  //   //     AllLecturesInTopicScreen(),
+  //   topicLectureInLevelScreen: (BuildContext context) =>
+  //       ScreenWrapper(child: TopicLectureInLevelScreen()),
+  //
+  //   dividedLecturesAndExercisesScreen: (BuildContext context) =>
+  //       ScreenWrapper(child: DividedLecturesAndExercisesScreen()),
+  //
+  //   searchScreen: (BuildContext context) =>
+  //       const ScreenWrapper(child: SearchScreen()),
+  //
+  //   filterScreen: (BuildContext context) =>
+  //       ScreenWrapper(child: FilterScreen()),
+  //
+  //   question: (BuildContext context) =>
+  //       ScreenWrapper(child: QuestionScreen()),
+  //
+  //   result: (BuildContext context) =>
+  //       ScreenWrapper(child: ResultScreen()),
+  //
+  //   review: (BuildContext context) =>
+  //       ScreenWrapper(child: ReviewScreen()),
+  //
+  //   personal: (BuildContext context) =>
+  //       const ScreenWrapper(child: PersonalScreen()),
+  //
+  //   stats: (BuildContext context) =>
+  //       ScreenWrapper(child: StatisticsScreen()),
+  //
+  //   searchStats: (BuildContext context) =>
+  //       const ScreenWrapper(child: StatSearchScreen()),
+  //
+  //   filterStats: (BuildContext context) =>
+  //       ScreenWrapper(child: FilterStatScreen()),
+  //
+  //   threadChatScreen: (BuildContext context) =>
+  //       ScreenWrapper(child: ThreadChatScreen()),
+  //
+  //   chat: (BuildContext context) =>
+  //       const ScreenWrapper(child: ChatScreen()),
+  //
+  //   allScreens: (BuildContext context) =>
+  //       ScreenWrapper(child: AllScreens()),
+  // };
+
+
+
+
   static final routes = <String, WidgetBuilder>{
     loginScreen: (BuildContext context) => const LoginScreen(),
     signupScreen: (BuildContext context) => const SignUpScreen(),
-    loginOrSignupScreen: (BuildContext context) => LoginOrSignupScreen(),
+
+    loginOrSignupScreen: (BuildContext context) =>LoginOrSignupScreen(),
+
     enterEmailInForgotPasswordScreen: (BuildContext context) =>
         EnterEmailInForgotPasswordScreen(),
+
     enterOTPInForgotPasswordScreen: (BuildContext context) =>
-        const EnterOTPInForgotPasswordScreen(),
+    const EnterOTPInForgotPasswordScreen(),
+
     createNewPasswordInForgotPasswordScreen: (BuildContext context) =>
         CreateNewPasswordInForgotPasswordScreen(),
     //coursesScreen: (BuildContext context) => const CoursesScreen(),
-    homeScreen: (BuildContext context) => const HomeScreen(),
+
+    homeScreen: (BuildContext context) =>
+      const HomeScreen(),
     // allLecturesInTopicScreen: (BuildContext context) =>
     //     AllLecturesInTopicScreen(),
-    topicLectureInLevelScreen: (BuildContext context) => TopicLectureInLevelScreen(),
+    topicLectureInLevelScreen: (BuildContext context) =>
+        TopicLectureInLevelScreen(),
+
     dividedLecturesAndExercisesScreen: (BuildContext context) =>
         DividedLecturesAndExercisesScreen(),
-    searchScreen: (BuildContext context) => const SearchScreen(),
-    filterScreen: (BuildContext context) => FilterScreen(),
-    question: (BuildContext context) => QuestionScreen(),
-    result: (BuildContext context) => ResultScreen(),
-    review: (BuildContext context) => ReviewScreen(),
-    personal: (BuildContext context) => const PersonalScreen(),
-    stats: (BuildContext context) => StatisticsScreen(),
-    searchStats: (BuildContext context) => StatSearchScreen(),
-    filterStats: (BuildContext context) => FilterStatScreen(),
-    threadChatScreen: (BuildContext context) => ThreadChatScreen(),
-    chat: (BuildContext context) => ChatScreen(),
-    allScreens: (BuildContext context) => AllScreens(),
+
+    searchScreen: (BuildContext context) =>
+    const SearchScreen(),
+
+    filterScreen: (BuildContext context) =>
+        FilterScreen(),
+
+    question: (BuildContext context) =>
+        QuestionScreen(),
+
+    result: (BuildContext context) =>
+        ResultScreen(),
+
+    review: (BuildContext context) =>
+        ReviewScreen(),
+
+    personal: (BuildContext context) =>
+    const PersonalScreen(),
+
+    stats: (BuildContext context) =>
+        StatisticsScreen(),
+
+    searchStats: (BuildContext context) =>
+    const StatSearchScreen(),
+
+    filterStats: (BuildContext context) =>
+        FilterStatScreen(),
+
+    threadChatScreen: (BuildContext context) =>
+        ThreadChatScreen(),
+
+    chat: (BuildContext context) =>
+    const ChatScreen(),
+
+    allScreens: (BuildContext context) =>
+        AllScreens(),
   };
 }

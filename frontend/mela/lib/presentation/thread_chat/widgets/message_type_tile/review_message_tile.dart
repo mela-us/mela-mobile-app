@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:mela/constants/app_theme.dart';
-import 'package:mela/constants/assets.dart';
 import 'package:mela/domain/entity/message_chat/review_message.dart';
 import 'package:mela/presentation/thread_chat/widgets/convert_string_to_latex.dart';
 import 'package:mela/presentation/thread_chat/widgets/message_type_tile/button_solution_ai.dart';
@@ -48,7 +46,9 @@ class ReviewMessageTile extends StatelessWidget {
                 const SizedBox(height: 10),
 
               // Support Icons: Like, unlike, copy
-              const SupportIconInMessage(),
+              SupportIconInMessage(
+                textCopy: _buildFullMessageText(),
+              ),
               const SizedBox(height: 8),
 
               Container(
@@ -271,5 +271,44 @@ class ReviewMessageTile extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _buildFullMessageText() {
+    StringBuffer fullText = StringBuffer();
+
+    // Status
+    fullText.writeln("Kết quả:");
+    fullText.writeln(
+        currentMessage.status == ReviewStatus.correct ? 'Đúng' : 'Sai');
+    fullText.writeln();
+
+    // Submission Summary
+    if (currentMessage.submissionSummary != null) {
+      fullText.writeln("Tóm tắt bài làm:");
+      fullText.writeln(currentMessage.submissionSummary);
+      fullText.writeln();
+    }
+
+    // Guidance
+    if (currentMessage.guidance != null) {
+      fullText.writeln("Hướng dẫn:");
+      fullText.writeln(currentMessage.guidance);
+      fullText.writeln();
+    }
+
+    // Encouragement
+    if (currentMessage.encouragement != null) {
+      fullText.writeln("Động viên:");
+      fullText.writeln(currentMessage.encouragement);
+      fullText.writeln();
+    }
+
+    // Areas for Improvement
+    if (currentMessage.areasForImprovement != null) {
+      fullText.writeln("Điểm cần cải thiện:");
+      fullText.writeln(currentMessage.areasForImprovement);
+    }
+
+    return fullText.toString();
   }
 }

@@ -33,7 +33,7 @@ class SendMessageReviewSubmissionUsecase
               conversationId: params.conversationId,
               message: params.message,
               imageUrlList: (imageUrl != null) ? [imageUrl] : []));
-      print("----------->result send message with review submission: $result");
+      // print("----------->result send message with review submission: $result");
       return result;
     } catch (e) {
       if (e is DioException) {

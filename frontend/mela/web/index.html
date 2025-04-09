@@ -31,12 +31,7 @@
   <link rel="manifest" href="manifest.json">
   
   
-  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
-  
-  
-  
-  
-  
+  <meta content="width=600px, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
   
   <style id="splash-screen-style">
     html {
@@ -49,6 +44,7 @@
       background-color: #FFFFFF;
           background-size: 100% 100%;
     }
+
 
     .center {
       margin: 0;
@@ -103,9 +99,27 @@
       document.body.style.background = "transparent";
     }
   </script>
+  <style>
+    body {
+      background-color: #90EE90;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    flutter-view {
+      width: 600px; /* Giới hạn width cho ứng dụng */
+      max-width: 100%; /* Đảm bảo ứng dụng không vượt quá 100% chiều rộng của màn hình */
+      height: auto;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    }
+  </style>
 </head>
 <body>
   <script src="flutter_bootstrap.js" async=""></script>
-
 
 </body></html>
