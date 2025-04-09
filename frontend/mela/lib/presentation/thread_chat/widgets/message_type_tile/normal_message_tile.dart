@@ -40,7 +40,9 @@ class NormalMessageTile extends StatelessWidget {
 
               //Support Icons: Like, not like, copy
               if (currentMessage.isAI) ...[
-                SupportIconInMessage(),
+                SupportIconInMessage(
+                  textCopy: currentMessage.text ?? "",
+                ),
                 const SizedBox(height: 8),
               ],
             ],

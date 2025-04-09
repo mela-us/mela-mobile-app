@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mela/constants/assets.dart';
 
 class SupportIconInMessage extends StatelessWidget {
-  SupportIconInMessage({super.key});
+  final String textCopy;
+  SupportIconInMessage({super.key, required this.textCopy});
 
   ValueNotifier<bool?> isLikedNotifier = ValueNotifier(null);
 
@@ -69,9 +71,19 @@ class SupportIconInMessage extends StatelessWidget {
                         ),
                 ),
                 const SizedBox(width: 5),
-                SvgPicture.asset(
-                  Assets.copy,
-                  width: 20,
+                InkWell(
+                  onTap: () {
+                    Clipboard.setData(ClipboardData(text: textCopy));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Đã copy'),
+                          duration: Duration(milliseconds: 300)),
+                    );
+                  },
+                  child: SvgPicture.asset(
+                    Assets.copy,
+                    width: 20,
+                  ),
                 ),
               ].expand((item) => [item, const SizedBox(width: 5)]).toList(),
             ],

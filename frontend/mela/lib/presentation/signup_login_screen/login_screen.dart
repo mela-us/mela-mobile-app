@@ -299,109 +299,83 @@ class __FormContentState extends State<_FormContent> {
                     _userLoginStore.setLoadingLogin(false);
                   }
                 }
-                // _userLoginStore.setLoadingLogin(true);
-                // _emailFocus.unfocus();
-                // _passwordFocus.unfocus();
-                // _userLoginStore.setEmail(_emailController.text);
-                // _userLoginStore.setPassword(_passwordController.text);
-
-                // if (_userLoginStore.emailError.isEmpty &&
-                //     _userLoginStore.passwordError.isEmpty) {
-                //   //FocusScope.of(context).unfocus();
-                //   try {
-                //     await _userLoginStore.login(
-                //       _emailController.text,
-                //       _passwordController.text,
-                //     );
-                //     _userLoginStore.resetSettingForLogin();
-                //     _emailController.clear();
-                //     _passwordController.clear();
-                //     Navigator.of(context).pushNamedAndRemoveUntil(
-                //         Routes.allScreens, (Route<dynamic> route) => false);
-                //   } catch (e) {
-                //     ScaffoldMessenger.of(context).showSnackBar(
-                //       SnackBar(content: Text(e.toString())),
-                //     );
-                //   }
-                //   _userLoginStore.setLoadingLogin(false);
-                // }
               }),
 
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Hoặc tiếp tục với',
-                  style: Theme.of(context).textTheme.normal.copyWith(
-                      color: Theme.of(context).colorScheme.secondary)),
-            ],
-          ),
-          const SizedBox(height: 16),
-          //Sign Up by Third Party
+          // const SizedBox(height: 16),
           // Row(
           //   mainAxisAlignment: MainAxisAlignment.center,
           //   children: [
-          //     ThirdPartyButton(
-          //         pathLogo: Assets.googleIcon,
-          //         onPressed: () async {
-          //           final googleSignInService = GoogleSignInService();
-          //           await googleSignInService.handleSignIn();
-          //           print("Google Sign In Thanh Cong");
-          //         }),
-          //     const SizedBox(width: 20),
-          //     ThirdPartyButton(pathLogo: Assets.facebookIcon, onPressed: () {}),
+          //     Text('Hoặc tiếp tục với',
+          //         style: Theme.of(context).textTheme.normal.copyWith(
+          //             color: Theme.of(context).colorScheme.secondary)),
           //   ],
           // ),
-          ThirdPartyLoginWidget(
-              pathLogo: Assets.googleIcon,
-              onPressed: () async {
-                final googleSignInService = GoogleSignInService();
-                try {
-                  final googleLoginRequest =
-                      await googleSignInService.handleSignIn();
-                  if (googleLoginRequest?.idToken == null ||
-                      googleLoginRequest?.accessToken == null) {
-                    return;
-                  }
-                  _userLoginStore.setLoadingLogin(true);
-                  await _userLoginStore.loginWithGoogle(
-                      googleLoginRequest?.idToken,
-                      googleLoginRequest?.accessToken);
+          // const SizedBox(height: 16),
+          // //Sign Up by Third Party
+          // // Row(
+          // //   mainAxisAlignment: MainAxisAlignment.center,
+          // //   children: [
+          // //     ThirdPartyButton(
+          // //         pathLogo: Assets.googleIcon,
+          // //         onPressed: () async {
+          // //           final googleSignInService = GoogleSignInService();
+          // //           await googleSignInService.handleSignIn();
+          // //           print("Google Sign In Thanh Cong");
+          // //         }),
+          // //     const SizedBox(width: 20),
+          // //     ThirdPartyButton(pathLogo: Assets.facebookIcon, onPressed: () {}),
+          // //   ],
+          // // ),
+          // ThirdPartyLoginWidget(
+          //     pathLogo: Assets.googleIcon,
+          //     onPressed: () async {
+          //       final googleSignInService = GoogleSignInService();
+          //       try {
+          //         final googleLoginRequest =
+          //             await googleSignInService.handleSignIn();
+          //         if (googleLoginRequest?.idToken == null ||
+          //             googleLoginRequest?.accessToken == null) {
+          //           return;
+          //         }
+          //         _userLoginStore.setLoadingLogin(true);
+          //         await _userLoginStore.loginWithGoogle(
+          //             googleLoginRequest?.idToken,
+          //             googleLoginRequest?.accessToken);
 
-                  if (_userLoginStore.isLoggedIn) {
-                    // Clean up after successful login
-                    _userLoginStore.resetSettingForLogin();
-                    _emailController.clear();
-                    _passwordController.clear();
+          //         if (_userLoginStore.isLoggedIn) {
+          //           // Clean up after successful login
+          //           _userLoginStore.resetSettingForLogin();
+          //           _emailController.clear();
+          //           _passwordController.clear();
 
-                    // Add a small delay before navigation
-                    await Future.delayed(const Duration(milliseconds: 300));
+          //           // Add a small delay before navigation
+          //           await Future.delayed(const Duration(milliseconds: 300));
 
-                    if (mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Đăng nhập thành công với Google"),
-                          duration: const Duration(milliseconds: 800),
-                        ),
-                      );
-                      // Navigator.of(context).pushNamedAndRemoveUntil(
-                      //   Routes.allScreens,
-                      //   (Route<dynamic> route) => false,
-                      // );
-                    }
-                  }
-                } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(e.toString()),
-                      duration: const Duration(milliseconds: 800),
-                    ),
-                  );
-                } finally {
-                  _userLoginStore.setLoadingLogin(false);
-                }
-              },
-              title: "Đăng nhập với Google"),
+          //           if (mounted) {
+          //             ScaffoldMessenger.of(context).showSnackBar(
+          //               const SnackBar(
+          //                 content: Text("Đăng nhập thành công với Google"),
+          //                 duration: const Duration(milliseconds: 800),
+          //               ),
+          //             );
+          //             // Navigator.of(context).pushNamedAndRemoveUntil(
+          //             //   Routes.allScreens,
+          //             //   (Route<dynamic> route) => false,
+          //             // );
+          //           }
+          //         }
+          //       } catch (e) {
+          //         ScaffoldMessenger.of(context).showSnackBar(
+          //           SnackBar(
+          //             content: Text(e.toString()),
+          //             duration: const Duration(milliseconds: 800),
+          //           ),
+          //         );
+          //       } finally {
+          //         _userLoginStore.setLoadingLogin(false);
+          //       }
+          //     },
+          //     title: "Đăng nhập với Google"),
           const SizedBox(height: 30),
 
           //Return sign up
