@@ -13,7 +13,6 @@ Future<void> main() async {
 }
 
 
-
 Future<void> setPreferredOrientations() {
   return SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

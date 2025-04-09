@@ -24,6 +24,7 @@ import 'package:mobx/mobx.dart';
 import '../../constants/enum.dart';
 import '../../constants/layout.dart';
 import '../../di/service_locator.dart';
+import 'store/hint_store/hint_store.dart';
 
 class QuestionScreen extends StatefulWidget {
   QuestionScreen({super.key});
@@ -45,6 +46,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
       WidgetsBinding.instance.platformDispatcher.views.first).size.width.toDouble();
   late Offset fabPos;
 
+  final HintStore _hintStore = getIt<HintStore>();
   //----------------------------------------------------------------------------
   final TextEditingController _controller = TextEditingController();
 
@@ -117,6 +119,12 @@ class _QuestionScreenState extends State<QuestionScreen> {
             .generateAnswerList(_questionStore.questionList!
             .questions!.length);
         _initListOverlay(context);
+
+        _hintStore.reset();
+        _hintStore.setHint(
+            _questionStore.questionList!.questions![0].guide);
+        _hintStore.setTerm(_questionStore.questionList!.questions![0].term);
+
       }
     }, fireImmediately: true);
 
@@ -128,7 +136,6 @@ class _QuestionScreenState extends State<QuestionScreen> {
     }, fireImmediately: true);
 
     _singleQuestionStore.changeQuestion(0);
-
   }
 
   @override
@@ -562,6 +569,10 @@ class _QuestionScreenState extends State<QuestionScreen> {
         return;
       }
       _singleQuestionStore.changeQuestion(index);
+      _hintStore.reset();
+      _hintStore.setHint(
+          _questionStore.questionList!.questions![index].guide);
+      _hintStore.setTerm(_questionStore.questionList!.questions![index].term);
     }
 
   }
