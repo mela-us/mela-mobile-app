@@ -58,4 +58,7 @@ class EndpointsConst {
 
     // static String generateTerm(String questionId) =>
     //   "/api/ai-hint/$questionId";
+
+  static const String updateSectionProgress = "/api/lecture-histories";
+  static const String updateExerciseProgress = "/api/exercise-histories";
 }

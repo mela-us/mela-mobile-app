@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/domain/entity/divided_lecture/divided_lecture.dart';
+import 'package:mela/domain/params/history/section_progress_params.dart';
+import 'package:mela/domain/usecase/history/update_section_progress_usecase.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
+
+import '../../di/service_locator.dart';
 
 class ContentInDividedLectureScreen extends StatefulWidget {
   final DividedLecture currentDividedLecture;
@@ -20,10 +24,20 @@ class _ContentInDividedLectureScreenState
   late PdfViewerController _pdfViewerController;
   int _totalPages = 0;
 
+  final UpdateSectionProgressUsecase _updateUsecase = getIt<UpdateSectionProgressUsecase>();
+
   @override
   void initState() {
     super.initState();
     _pdfViewerController = PdfViewerController();
+    //call to update
+    final sectionToUpdate = widget.currentDividedLecture;
+    final params = SectionProgressParams(
+        lectureId: sectionToUpdate.lectureId,
+        ordinalNumber: sectionToUpdate.ordinalNumber,
+        completedAt: DateTime.now()
+    );
+    _updateUsecase.call(params: params);
   }
 
   @override

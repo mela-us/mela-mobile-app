@@ -37,12 +37,6 @@ class _AllScreensState extends State<AllScreens> {
     setState(() {
       //eg: turnoff wifi,have errorString in _topicStore, change other tab, then turn on wifi, go back coureses screen, it will need to set errorString to empty
       _levelStore.resetErrorString();
-
-      // _pageController.animateToPage(
-      //   index,
-      //   duration: const Duration(milliseconds: 300),
-      //   curve: Curves.easeInOut,
-      // );
       _previousIndex = _currentIndex;
       _currentIndex = index;
 

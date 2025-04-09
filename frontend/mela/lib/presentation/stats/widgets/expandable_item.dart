@@ -12,7 +12,7 @@ import 'line_chart_widget.dart';
 class ExpandableItem extends StatefulWidget {
   final Progress item;
 
-  ExpandableItem({super.key, required this.item});
+  const ExpandableItem({super.key, required this.item});
 
   @override
   _ExpandableItemState createState() => _ExpandableItemState();
@@ -21,16 +21,16 @@ class ExpandableItem extends StatefulWidget {
 class _ExpandableItemState extends State<ExpandableItem> {
   bool _isExpanded = false;
   late String type;
-  late ProgressExercise? prog_ex;
-  late ProgressSection? prog_sect;
+  late ProgressExercise? progressExercise;
+  late ProgressSection? progressSection;
   late List<ScoreRecord> scores;
 
   @override
   Widget build(BuildContext context) {
     type = widget.item.type;
-    prog_ex = widget.item.exercise;
-    prog_sect = widget.item.section;
-    scores = prog_ex?.scoreRecords ?? [];
+    progressExercise = widget.item.exercise;
+    progressSection = widget.item.section;
+    scores = progressExercise?.scoreRecords ?? [];
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
       elevation: 5.0,
@@ -55,16 +55,16 @@ class _ExpandableItemState extends State<ExpandableItem> {
                     children: [
                       ConstrainedBox(
                         constraints: const BoxConstraints(
-                          maxWidth: 200,
-                          minWidth: 200,
+                          maxWidth: 160,
+                          minWidth: 160,
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text( //Tên bài tập hoặc section
                               (type == 'SECTION')
-                                  ? prog_sect?.sectionName ?? ""
-                                  : prog_ex?.exerciseName ?? "",
+                                  ? progressSection?.sectionName ?? ""
+                                  : progressExercise?.exerciseName ?? "",
                               style: Theme.of(context).textTheme.title
                                   .copyWith(color: Theme.of(context).colorScheme.onPrimary),
                               maxLines: 1, // Giới hạn 1 dòng
@@ -98,11 +98,29 @@ class _ExpandableItemState extends State<ExpandableItem> {
                               style: Theme.of(context).textTheme.normal
                                   .copyWith(color: Theme.of(context).colorScheme.textInBg1),
                             ),
-                            if (type != 'SECTION')
+                            if (type != 'SECTION' && (widget.item.exercise?.latestScore ?? 0) < 50)
                               Text(//score
                                 "${(widget.item.exercise?.latestScore ?? 0)} Điểm",
-                                style: Theme.of(context).textTheme.bigTitle
-                                    .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+                                style:  Theme.of(context).textTheme.bigTitle
+                                    .copyWith(
+                                    color:  Colors.red
+                                ),
+                              )
+                            else if (type != 'SECTION' && (widget.item.exercise?.latestScore ?? 0) >= 80)
+                              Text(//score
+                                "${(widget.item.exercise?.latestScore ?? 0)} Điểm",
+                                style:  Theme.of(context).textTheme.bigTitle
+                                    .copyWith(
+                                    color:  Colors.green
+                                ),
+                              )
+                            else if (type != 'SECTION')
+                              Text(//score
+                                "${(widget.item.exercise?.latestScore ?? 0)} Điểm",
+                                style:  Theme.of(context).textTheme.bigTitle
+                                    .copyWith(
+                                    color:  Theme.of(context).colorScheme.onPrimary
+                                ),
                               ),
                           ]
                       ),
@@ -140,18 +158,18 @@ class _ExpandableItemState extends State<ExpandableItem> {
           ),
           if (_isExpanded)
             Padding(
-              padding: EdgeInsets.only(left: 16.0, right: 16.0),
+              padding: const EdgeInsets.only(left: 16.0, right: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 1),
+                  const SizedBox(height: 1),
                   LineChartWidget(scores: scores)
-                    .animate() // Hiệu ứng quét ngang
+                    .animate()
                       .fadeIn(
                         duration: 0.8.seconds,
                         curve: Curves.easeIn,
                       ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                 ],
               ),
             ),

@@ -6,9 +6,10 @@ class StatsApi {
   final DioClient _dioClient;
   StatsApi(this._dioClient);
   Future<ProgressList> getStats(String level) async {
+    final url = '${EndpointsConst.getStats}/$level?type=ALL';
     print("================================ở getStats API");
     final responseData = await _dioClient.get(
-      EndpointsConst.getStats,
+      url,
     );
     print(responseData);
     return ProgressList.fromJson(responseData);

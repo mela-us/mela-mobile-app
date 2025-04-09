@@ -6,6 +6,7 @@ import 'package:mela/domain/usecase/chat/get_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_chat_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_get_solution_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_review_submission_usecase.dart';
+import 'package:mela/domain/usecase/history/update_excercise_progress_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
 import 'package:mela/domain/usecase/level/get_level_list_usecase.dart';
 import 'package:mela/domain/usecase/question/generate_hint_usecase.dart';
@@ -142,6 +143,7 @@ class StoreModule {
       getIt<GetQuestionsUseCase>(),
       getIt<ErrorStore>(),
       getIt<SubmitResultUseCase>(),
+      getIt<UpdateExcerciseProgressUsecase>(),
     ));
 
     getIt.registerSingleton<TimerStore>(TimerStore());

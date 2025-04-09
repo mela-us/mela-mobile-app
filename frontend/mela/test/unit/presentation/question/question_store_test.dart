@@ -3,6 +3,7 @@ import 'package:mela/constants/enum.dart';
 import 'package:mela/core/stores/error/error_store.dart';
 import 'package:mela/domain/entity/question/question.dart';
 import 'package:mela/domain/entity/question/question_list.dart';
+import 'package:mela/domain/usecase/history/update_excercise_progress_usecase.dart';
 import 'package:mela/domain/usecase/question/get_questions_usecase.dart';
 import 'package:mela/domain/usecase/question/submit_result_usecase.dart';
 import 'package:mela/presentation/question/store/question_store.dart';
@@ -11,20 +12,22 @@ import 'package:mockito/mockito.dart';
 
 import 'question_store_test.mocks.dart';
 
-@GenerateMocks([GetQuestionsUseCase, SubmitResultUseCase, ErrorStore])
+@GenerateMocks([GetQuestionsUseCase, SubmitResultUseCase, ErrorStore, UpdateExcerciseProgressUsecase])
 void main(){
   late MockGetQuestionsUseCase mockGetQuestionsUseCase;
   late MockSubmitResultUseCase mockSubmitResultUseCase;
+  late MockUpdateExcerciseProgressUsecase mockUpdateExcerciseProgressUsecase;
   late MockErrorStore mockErrorStore;
   late QuestionStore questionStore;
 
   setUp(() {
     mockGetQuestionsUseCase = MockGetQuestionsUseCase();
     mockSubmitResultUseCase = MockSubmitResultUseCase();
+    mockUpdateExcerciseProgressUsecase = MockUpdateExcerciseProgressUsecase();
     mockErrorStore = MockErrorStore();
     questionStore =
         QuestionStore(
-            mockGetQuestionsUseCase, mockErrorStore, mockSubmitResultUseCase);
+            mockGetQuestionsUseCase, mockErrorStore, mockSubmitResultUseCase, mockUpdateExcerciseProgressUsecase);
   });
 
   group('QuestionStore - Success Cases [=>', () {

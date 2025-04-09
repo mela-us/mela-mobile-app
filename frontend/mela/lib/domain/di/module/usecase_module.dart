@@ -14,6 +14,7 @@ import 'package:mela/domain/usecase/chat/send_message_get_solution_usecase.dart'
 import 'package:mela/domain/usecase/chat/send_message_review_submission_usecase.dart';
 
 import 'package:mela/domain/usecase/exercise/get_exercises_usecase.dart';
+import 'package:mela/domain/usecase/history/update_excercise_progress_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_lectures_usecase.dart';
 import 'package:mela/domain/usecase/level/get_level_list_usecase.dart';
@@ -31,6 +32,7 @@ import 'package:mela/domain/usecase/user_login/refresh_access_token_usecase.dart
 import 'package:mela/domain/usecase/user_login/save_access_token_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_refresh_token_usecase.dart';
 
+import '../../../data/network/apis/history/update_progress_api.dart';
 import '../../../data/network/apis/questions/save_result_api.dart';
 import '../../../di/service_locator.dart';
 
@@ -45,6 +47,7 @@ import '../../repository/user_login/user_login_repository.dart';
 import '../../usecase/forgot_password/create_new_password_usecase.dart';
 import '../../usecase/forgot_password/verify_exist_email_usecase.dart';
 import '../../usecase/forgot_password/verify_otp_usecase.dart';
+import '../../usecase/history/update_section_progress_usecase.dart';
 import '../../usecase/lecture/get_lectures_are_learning_usecase.dart';
 import '../../usecase/question/get_questions_usecase.dart';
 import '../../usecase/question/submit_result_usecase.dart';
@@ -164,6 +167,14 @@ class UseCaseModule {
         DeleteAllHistorySearchUsecase(getIt<SearchRepository>()));
 
     //stats:--------------------------------------------------------------------
+    getIt.registerSingleton<UpdateExcerciseProgressUsecase>(
+      UpdateExcerciseProgressUsecase(getIt<UpdateProgressApi>(),
+          getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()),
+    );
+    getIt.registerSingleton<UpdateSectionProgressUsecase>(
+      UpdateSectionProgressUsecase(getIt<UpdateProgressApi>(),
+          getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()),
+    );
     getIt.registerSingleton<GetProgressListUseCase>(
       GetProgressListUseCase(getIt<StatRepository>(),
           getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()),

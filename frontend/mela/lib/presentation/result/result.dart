@@ -15,6 +15,7 @@ import 'package:mela/utils/routes/routes.dart';
 import '../../constants/assets.dart';
 import '../../di/service_locator.dart';
 import '../../domain/entity/question/question.dart';
+import '../../domain/params/history/exercise_progress_params.dart';
 
 class ResultScreen extends StatefulWidget{
   ResultScreen({super.key});
@@ -36,6 +37,12 @@ class _ResultScreenState extends State<ResultScreen> {
     if (!_questionStore.saving) {
       _questionStore.submitAnswer(
           getCorrect(),
+          DateTime.now().subtract(_timerStore.elapsedTime),
+          DateTime.now()
+      );
+
+      _questionStore.updateProgress(
+          getAnswerResultList(),
           DateTime.now().subtract(_timerStore.elapsedTime),
           DateTime.now()
       );
@@ -330,4 +337,38 @@ class _ResultScreenState extends State<ResultScreen> {
     }
     return correct;
   }
+
+  List<ExerciseAnswer> getAnswerResultList() {
+    List<Question> questions = _questionStore.questionList!.questions!;
+    List<String> userAnswers = _singleQuestionStore.userAnswers;
+    final List<ExerciseAnswer> answerList = [];
+
+    for (int i = 0; i < questions.length; i++) {
+      final question = questions[i];
+      final userAnswer = userAnswers[i];
+
+      final bool isCorrect = question.isCorrect(userAnswer);
+      String? blankAnswer;
+      int? selectedOption;
+
+      if (question.options.isEmpty) {
+        blankAnswer = userAnswer.trim();
+      } else {
+        // Convert A/B/C/D → 1/2/3/4
+        selectedOption = question.charToNumber(userAnswer.trim());
+      }
+
+      answerList.add(
+        ExerciseAnswer(
+          questionId: question.questionId ?? '',
+          isCorrect: isCorrect,
+          blankAnswer: blankAnswer,
+          selectedOption: selectedOption,
+        ),
+      );
+    }
+
+    return answerList;
+  }
+
 }

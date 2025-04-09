@@ -7,7 +7,11 @@ import 'dart:async' as _i4;
 
 import 'package:mela/core/stores/error/error_store.dart' as _i8;
 import 'package:mela/domain/entity/question/question_list.dart' as _i5;
+import 'package:mela/domain/params/history/exercise_progress_params.dart'
+    as _i11;
 import 'package:mela/domain/params/question/submit_result_params.dart' as _i7;
+import 'package:mela/domain/usecase/history/update_excercise_progress_usecase.dart'
+    as _i10;
 import 'package:mela/domain/usecase/question/get_questions_usecase.dart' as _i3;
 import 'package:mela/domain/usecase/question/submit_result_usecase.dart' as _i6;
 import 'package:mobx/mobx.dart' as _i2;
@@ -132,4 +136,25 @@ class MockErrorStore extends _i1.Mock implements _i8.ErrorStore {
         ),
         returnValueForMissingStub: null,
       );
+}
+
+/// A class which mocks [UpdateExcerciseProgressUsecase].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockUpdateExcerciseProgressUsecase extends _i1.Mock
+    implements _i10.UpdateExcerciseProgressUsecase {
+  MockUpdateExcerciseProgressUsecase() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.Future<int> call({required _i11.ExerciseProgressParams? params}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #call,
+          [],
+          {#params: params},
+        ),
+        returnValue: _i4.Future<int>.value(0),
+      ) as _i4.Future<int>);
 }

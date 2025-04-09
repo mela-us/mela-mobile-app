@@ -18,7 +18,8 @@ class CustomNavigationBar extends StatefulWidget {
   _CustomNavigationBarState createState() => _CustomNavigationBarState();
 }
 
-class _CustomNavigationBarState extends State<CustomNavigationBar> with SingleTickerProviderStateMixin {
+class _CustomNavigationBarState extends State<CustomNavigationBar>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
 
@@ -69,33 +70,40 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> with SingleTi
     );
   }
 
-  Widget _buildNavItem(String iconPath, String label, int index, BuildContext context) {
-    return GestureDetector(
+  Widget _buildNavItem(
+      String iconPath, String label, int index, BuildContext context) {
+    return InkWell(
       onTap: () => _onTap(index),
-      child: ScaleTransition(
-        scale: index == widget.currentIndex ? _animation : const AlwaysStoppedAnimation(1.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              iconPath,
-              width: 24,
-              height: 24,
-              color: widget.currentIndex == index
-                  ? Theme.of(context).colorScheme.buttonYesBgOrText
-                  : Theme.of(context).colorScheme.textInBg2,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: Theme.of(context).textTheme.miniCaption.copyWith(
-                fontSize: 9,
+      borderRadius: BorderRadius.circular(12), // Optional: Add rounded corners to the InkWell
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), // Optional: Add padding inside the InkWell
+        child: ScaleTransition(
+          scale: index == widget.currentIndex
+              ? _animation
+              : const AlwaysStoppedAnimation(1.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                iconPath,
+                width: 24,
+                height: 24,
                 color: widget.currentIndex == index
                     ? Theme.of(context).colorScheme.buttonYesBgOrText
                     : Theme.of(context).colorScheme.textInBg2,
               ),
-            ),
-          ],
+              const SizedBox(height: 4),
+              Text(
+                label,
+                style: Theme.of(context).textTheme.miniCaption.copyWith(
+                  fontSize: 9,
+                  color: widget.currentIndex == index
+                      ? Theme.of(context).colorScheme.buttonYesBgOrText
+                      : Theme.of(context).colorScheme.textInBg2,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

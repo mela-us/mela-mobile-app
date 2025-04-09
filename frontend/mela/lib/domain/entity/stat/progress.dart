@@ -31,7 +31,7 @@ class Progress {
 
 class ProgressExercise {
   String exerciseName;
-  int latestScore;
+  double latestScore;
   List<ScoreRecord> scoreRecords;
 
   ProgressExercise({

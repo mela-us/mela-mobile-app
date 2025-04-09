@@ -152,6 +152,16 @@ mixin _$QuestionStore on _QuestionStore, Store {
         .run(() => super.submitAnswer(correct, start, end));
   }
 
+  late final _$updateProgressAsyncAction =
+      AsyncAction('_QuestionStore.updateProgress', context: context);
+
+  @override
+  Future<dynamic> updateProgress(
+      List<ExerciseAnswer> exerciseAnswers, DateTime start, DateTime end) {
+    return _$updateProgressAsyncAction
+        .run(() => super.updateProgress(exerciseAnswers, start, end));
+  }
+
   late final _$_QuestionStoreActionController =
       ActionController(name: '_QuestionStore', context: context);
 

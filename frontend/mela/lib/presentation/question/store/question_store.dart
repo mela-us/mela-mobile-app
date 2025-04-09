@@ -8,6 +8,8 @@ import 'package:mela/domain/usecase/question/submit_result_usecase.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../core/stores/error/error_store.dart';
+import '../../../domain/params/history/exercise_progress_params.dart';
+import '../../../domain/usecase/history/update_excercise_progress_usecase.dart';
 import '../../../domain/usecase/question/get_questions_usecase.dart';
 import '../../../utils/dio/dio_error_util.dart';
 part 'question_store.g.dart';
@@ -19,12 +21,13 @@ abstract class _QuestionStore with Store{
   _QuestionStore(
       this._getQuestionsUseCase,
       this._errorStore,
-      this._submitResultUseCase);
+      this._submitResultUseCase,
+      this._updateExerciseProgressUseCase);
 
   //UseCase:--------------------------------------------------------------------
   final GetQuestionsUseCase _getQuestionsUseCase;
   final SubmitResultUseCase _submitResultUseCase;
-
+  final UpdateExcerciseProgressUsecase _updateExerciseProgressUseCase;
   //Store:----------------------------------------------------------------------
   final ErrorStore _errorStore;
 
@@ -114,6 +117,27 @@ abstract class _QuestionStore with Store{
     future.then((statusCode){
       if (statusCode == 200) {
         print('Saving done');
+      }
+    }).catchError((error){
+      print("Store: $error");
+      _errorStore.errorMessage = DioExceptionUtil.handleError(error);
+    });
+  }
+
+  @action
+  Future updateProgress(List<ExerciseAnswer> exerciseAnswers, DateTime start, DateTime end) async {
+    final future = _updateExerciseProgressUseCase.call(
+        params: ExerciseProgressParams(
+            startedAt: start,
+            completedAt: end,
+            answers: exerciseAnswers,
+            exerciseId: questionsUid,
+        )
+    );
+    saveUserResult = ObservableFuture(future);
+    future.then((statusCode){
+      if (statusCode == 200) {
+        print('Saving done - update exercise progress');
       }
     }).catchError((error){
       print("Store: $error");
