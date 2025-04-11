@@ -31,7 +31,7 @@ jobs:
 
       - name: Check sign in config #
         run: |
-          echo "storeFile=upload-keystore.jks" >> $GITHUB_ENV
+          echo "storeFile=$GITHUB_WORKSPACE/frontend/mela/android/upload-keystore.jks" >> $GITHUB_ENV
           echo "storePassword=${{ secrets.STORE_PASSWORD }}" >> $GITHUB_ENV
           echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> $GITHUB_ENV
           echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> $GITHUB_ENV
