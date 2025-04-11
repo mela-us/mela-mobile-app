@@ -22,6 +22,7 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
+        working-directory: frontend/mela
 
       #Decode secret
       - name: Decode keystore from secret
@@ -37,9 +38,10 @@ jobs:
 
       - name: Build AAB
         run: flutter build appbundle --release --no-tree-shake-icons
+        working-directory: frontend/mela
 
       - name: Upload AAB Artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-release.aab
-          path: build/app/outputs/bundle/release/app-release.aab
+          path: frontend/mela/build/app/outputs/bundle/release/app-release.aab
