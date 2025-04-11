@@ -29,7 +29,7 @@ jobs:
         run: |
           echo "${{ secrets.KEYSTORE_SECRET }}" | base64 -d > android/upload-keystore.jks
 
-      - name: Check signin config
+      - name: Check sign in config #
         run: |
           echo "storeFile=upload-keystore.jks" >> $GITHUB_ENV
           echo "storePassword=${{ secrets.STORE_PASSWORD }}" >> $GITHUB_ENV
