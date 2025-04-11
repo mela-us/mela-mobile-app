@@ -35,12 +35,11 @@ class _ResultScreenState extends State<ResultScreen> {
   @override
   void didChangeDependencies() {
     if (!_questionStore.saving) {
-      _questionStore.submitAnswer(
-          getCorrect(),
-          DateTime.now().subtract(_timerStore.elapsedTime),
-          DateTime.now()
-      );
-
+      // _questionStore.submitAnswer(
+      //     getCorrect(),
+      //     DateTime.now().subtract(_timerStore.elapsedTime),
+      //     DateTime.now()
+      // );
       _questionStore.updateProgress(
           getAnswerResultList(),
           DateTime.now().subtract(_timerStore.elapsedTime),

@@ -9,19 +9,25 @@ import '../../../domain/entity/stat/score_record.dart';
 class LineChartWidget extends StatelessWidget {
   final List<ScoreRecord> scores;
 
-  final test_scores = [
-    ScoreRecord(date: '05-01-2025', score: 9.0),
-    ScoreRecord(date: '04-01-2025', score: 7.5),
-    ScoreRecord(date: '08-03-2025', score: 8.0),
-    ScoreRecord(date: '08-03-2025', score: 8.5),
-  ];
+  late double highest, lowest, median;
 
   LineChartWidget({super.key, required this.scores});
 
   @override
   Widget build(BuildContext context) {
     //
-    final _scores = scores.reversed.toList();
+    final reversedScore = scores.reversed.toList();
+    //
+    List<double> sortedScores = reversedScore.map((e) => e.score).toList()..sort();
+    int mid = sortedScores.length ~/ 2;
+    if (sortedScores.length % 2 == 1) {
+      median = sortedScores[mid];
+    } else {
+      median = (sortedScores[mid - 1] + sortedScores[mid]) / 2;
+    }
+
+    highest = sortedScores.last;
+    lowest = sortedScores.first;
     //
     return AspectRatio(
       aspectRatio: 1.5,
@@ -29,6 +35,7 @@ class LineChartWidget extends StatelessWidget {
         padding: const EdgeInsets.only(left: 17.0, right: 26.0, top: 16.0, bottom: 19.0),
         child: LineChart(
           LineChartData(
+            minY: (lowest == highest) ? 0 : null,
             titlesData: FlTitlesData(
               leftTitles: AxisTitles(
                 axisNameWidget: Padding(
@@ -46,25 +53,30 @@ class LineChartWidget extends StatelessWidget {
                   showTitles: true,
                   reservedSize: 30,
                   getTitlesWidget: (value, meta) {
-                    List<double> sortedScores = _scores.map((e) => e.score).toList()..sort();
-                    double median;
-                    int mid = sortedScores.length ~/ 2;
-                    if (sortedScores.length % 2 == 1) {
-                      median = sortedScores[mid];
-                    } else {
-                      median = (sortedScores[mid - 1] + sortedScores[mid]) / 2;
-                    }
-
-                    double highest = sortedScores.last;
-                    double lowest = sortedScores.first;
-
                     if (value == highest || value == median || value == lowest) {
-                      return Text(
-                        value.toString(),
-                        style: Theme.of(context).textTheme.miniCaption
-                            .copyWith(color: Theme.of(context).colorScheme.textInBg1),
-                        textAlign: TextAlign.left,
-                      );
+                      if (value < 50) {
+                        return Text(
+                          double.parse(value.toStringAsFixed(1)).toString(),
+                          style: Theme.of(context).textTheme.miniCaption
+                              .copyWith(color: Colors.red),
+                          textAlign: TextAlign.left,
+                        );
+                      } else if (value >= 80) {
+                        return Text(
+                          double.parse(value.toStringAsFixed(1)).toString(),
+                          style: Theme.of(context).textTheme.miniCaption
+                              .copyWith(color: Colors.green),
+                          textAlign: TextAlign.left,
+                        );
+                      }
+                      else {
+                        return Text(
+                          double.parse(value.toStringAsFixed(1)).toString(),
+                          style: Theme.of(context).textTheme.miniCaption
+                              .copyWith(color: Theme.of(context).colorScheme.textInBg1),
+                          textAlign: TextAlign.left,
+                        );
+                      }
                     }
                     return Container();
                   },
@@ -83,11 +95,11 @@ class LineChartWidget extends StatelessWidget {
                   reservedSize: 20,
                   getTitlesWidget: (value, meta) {
                     int index = value.toInt();
-                    if (index == 0 || index == _scores.length - 1) {
+                    if (index == 0 || index == reversedScore.length - 1) {
                       return Padding(
                         padding: const EdgeInsets.only(top: 4.0),
                         child: Text(
-                          parseDate(_scores[index].date),
+                          parseDate(reversedScore[index].date),
                           style: Theme.of(context).textTheme.miniCaption
                               .copyWith(color: Theme.of(context).colorScheme.textInBg1),
                         ),
@@ -102,7 +114,7 @@ class LineChartWidget extends StatelessWidget {
             gridData: FlGridData(
               drawVerticalLine: false,
               drawHorizontalLine: true,
-              horizontalInterval: 2.5,
+              horizontalInterval: 5,
               getDrawingHorizontalLine: (value) {
                 return FlLine(
                   color: Colors.grey.shade300,
@@ -112,7 +124,7 @@ class LineChartWidget extends StatelessWidget {
             ),
             lineBarsData: [
               LineChartBarData(
-                spots: _scores.asMap().entries.map((entry) {
+                spots: reversedScore.asMap().entries.map((entry) {
                   int index = entry.key;
                   ScoreRecord result = entry.value;
                   return FlSpot(index.toDouble(), result.score);
@@ -137,9 +149,9 @@ class LineChartWidget extends StatelessWidget {
               touchTooltipData: LineTouchTooltipData(
                 getTooltipItems: (List<LineBarSpot> touchedSpots) {
                   return touchedSpots.map((spot) {
-                    final result = _scores[spot.x.toInt()];
+                    final result = reversedScore[spot.x.toInt()];
                     return LineTooltipItem(
-                      '${parseDate(result.date)}\nĐiểm: ${result.score}',
+                      '${parseDate(result.date)}\nĐiểm: ${double.parse(result.score.toStringAsFixed(1))}',
                       Theme.of(context).textTheme.miniCaption
                           .copyWith(color: Colors.white),
                     );

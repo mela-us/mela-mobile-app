@@ -24,6 +24,7 @@ class _ExpandableItemState extends State<ExpandableItem> {
   late ProgressExercise? progressExercise;
   late ProgressSection? progressSection;
   late List<ScoreRecord> scores;
+  late double score;
 
   @override
   Widget build(BuildContext context) {
@@ -31,19 +32,19 @@ class _ExpandableItemState extends State<ExpandableItem> {
     progressExercise = widget.item.exercise;
     progressSection = widget.item.section;
     scores = progressExercise?.scoreRecords ?? [];
+    score = widget.item.exercise?.latestScore ?? 0;
+
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
       elevation: 5.0,
       color: !_isExpanded ? Colors.white : Theme.of(context).colorScheme.appBackground,
       child: Column(
         children: [
-          GestureDetector(
+          InkWell(
             onTap: () {
-              if (type != 'SECTION' && scores.length > 1) {
-                setState(() {
-                  _isExpanded = !_isExpanded;
-                });
-              }
+              setState(() {
+                _isExpanded = !_isExpanded;
+              });
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
@@ -53,11 +54,7 @@ class _ExpandableItemState extends State<ExpandableItem> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ConstrainedBox(
-                        constraints: const BoxConstraints(
-                          maxWidth: 160,
-                          minWidth: 160,
-                        ),
+                      Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -67,14 +64,14 @@ class _ExpandableItemState extends State<ExpandableItem> {
                                   : progressExercise?.exerciseName ?? "",
                               style: Theme.of(context).textTheme.title
                                   .copyWith(color: Theme.of(context).colorScheme.onPrimary),
-                              maxLines: 1, // Giới hạn 1 dòng
-                              overflow: TextOverflow.ellipsis, // Thêm "..." nếu quá dài
+                              maxLines: (_isExpanded) ? 3 : 1, // Giới hạn 1 dòng
+                              overflow: (_isExpanded) ? TextOverflow.visible : TextOverflow.ellipsis, // Thêm "..." nếu quá dài
                             ),
                             Text( //Tên bài học
                               widget.item.lectureName ?? "",
                               style: Theme.of(context).textTheme.normal
                                   .copyWith(color: Theme.of(context).colorScheme.textInBg1),
-                              maxLines: (_isExpanded) ? 2 : 1, // Giới hạn 1 dòng
+                              maxLines: (_isExpanded) ? 3 : 1, // Giới hạn 1 dòng
                               overflow: (_isExpanded) ? TextOverflow.visible : TextOverflow.ellipsis, // Thêm "..." nếu quá dài
                             ),
                             Text( //Tên chủ đề
@@ -85,70 +82,82 @@ class _ExpandableItemState extends State<ExpandableItem> {
                           ],
                         ),
                       ),
-                      Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(//học bài hay làm bài?
-                              (type == 'SECTION') ? "Đã học" : "Đã làm bài",
-                              style: Theme.of(context).textTheme.normal
-                                  .copyWith(color: Theme.of(context).colorScheme.tertiary),
-                            ),
-                            Text(//date
-                              parseDate(widget.item.latestDate),
-                              style: Theme.of(context).textTheme.normal
-                                  .copyWith(color: Theme.of(context).colorScheme.textInBg1),
-                            ),
-                            if (type != 'SECTION' && (widget.item.exercise?.latestScore ?? 0) < 50)
-                              Text(//score
-                                "${(widget.item.exercise?.latestScore ?? 0)} Điểm",
-                                style:  Theme.of(context).textTheme.bigTitle
-                                    .copyWith(
-                                    color:  Colors.red
-                                ),
-                              )
-                            else if (type != 'SECTION' && (widget.item.exercise?.latestScore ?? 0) >= 80)
-                              Text(//score
-                                "${(widget.item.exercise?.latestScore ?? 0)} Điểm",
-                                style:  Theme.of(context).textTheme.bigTitle
-                                    .copyWith(
-                                    color:  Colors.green
-                                ),
-                              )
-                            else if (type != 'SECTION')
-                              Text(//score
-                                "${(widget.item.exercise?.latestScore ?? 0)} Điểm",
-                                style:  Theme.of(context).textTheme.bigTitle
-                                    .copyWith(
-                                    color:  Theme.of(context).colorScheme.onPrimary
-                                ),
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          maxWidth: 100,
+                          minWidth: 100,
+                        ),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(//học bài hay làm bài?
+                                (type == 'SECTION') ? "Đã học" : "Đã làm bài",
+                                style: Theme.of(context).textTheme.normal
+                                    .copyWith(color: Theme.of(context).colorScheme.tertiary),
                               ),
-                          ]
+                              Text(//date
+                                parseDate(widget.item.latestDate),
+                                style: Theme.of(context).textTheme.normal
+                                    .copyWith(color: Theme.of(context).colorScheme.textInBg1),
+                              ),
+                              if (type != 'SECTION' && (score < 50))
+                                Text(//score
+                                  "${formatScore(score)} Điểm",
+                                  style:  Theme.of(context).textTheme.bigTitle
+                                      .copyWith(
+                                      color:  Colors.red
+                                  ),
+                                )
+                              else if (type != 'SECTION' && score >= 80)
+                                Text(//score
+                                  "${formatScore(score)} Điểm",
+                                  style:  Theme.of(context).textTheme.bigTitle
+                                      .copyWith(
+                                      color:  Colors.green
+                                  ),
+                                )
+                              else if (type != 'SECTION')
+                                  Text(//score
+                                    "${formatScore(score)} Điểm",
+                                    style:  Theme.of(context).textTheme.bigTitle
+                                        .copyWith(
+                                        color:  Theme.of(context).colorScheme.onPrimary
+                                    ),
+                                  ),
+                            ]
+                        ),
                       ),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            if (type != 'SECTION' && scores.length > 1 && scores[0].score > scores[1].score)
-                              Image.asset(
-                                Assets.stats_gain,
-                                width: 21,
-                                height: 21,
-                              )
-                            else if (type != 'SECTION' && scores.length > 1 && scores[0].score < scores[1].score)
-                              Image.asset(
-                                Assets.stats_drop,
-                                width: 21,
-                                height: 21,
-                              )
-                            else const SizedBox(width: 21, height: 21),
-                            const SizedBox(width: 5),
-                            if (type != 'SECTION' && scores.length > 1)
-                              Image.asset(
-                                _isExpanded ? Assets.stats_hide : Assets.stats_show,
-                                width: 16,
-                                height: 16,
-                              )
-                            else const SizedBox(width: 16, height: 16),
-                          ]
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          maxWidth: 47,
+                          minWidth: 47,
+                        ),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              if (type != 'SECTION' && scores.length > 1 && scores[0].score > scores[1].score)
+                                Image.asset(
+                                  Assets.stats_gain,
+                                  width: 21,
+                                  height: 21,
+                                )
+                              else if (type != 'SECTION' && scores.length > 1 && scores[0].score < scores[1].score)
+                                Image.asset(
+                                  Assets.stats_drop,
+                                  width: 21,
+                                  height: 21,
+                                )
+                              else const SizedBox(width: 21, height: 21),
+                              const SizedBox(width: 5),
+                              if (type != 'SECTION' && scores.length > 1)
+                                Image.asset(
+                                  _isExpanded ? Assets.stats_hide : Assets.stats_show,
+                                  width: 16,
+                                  height: 16,
+                                )
+                              else const SizedBox(width: 16, height: 16),
+                            ]
+                        ),
                       ),
                     ],
                   ),
@@ -156,7 +165,7 @@ class _ExpandableItemState extends State<ExpandableItem> {
               ),
             ),
           ),
-          if (_isExpanded)
+          if (_isExpanded && type != 'SECTION' && scores.length > 1)
             Padding(
               padding: const EdgeInsets.only(left: 16.0, right: 16.0),
               child: Column(
@@ -181,4 +190,10 @@ class _ExpandableItemState extends State<ExpandableItem> {
     DateTime parsedDate = DateTime.parse(inputDate);
     return  DateFormat('dd-MM-yyyy').format(parsedDate);
   }
+  String formatScore(double score) {
+    return score % 1 == 0
+        ? score.toStringAsFixed(0)
+        : score.toStringAsFixed(1);
+  }
+
 }
