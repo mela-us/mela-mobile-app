@@ -1,0 +1,47 @@
+name: Android App Bundle
+on:
+  push:
+    branches:
+      - fe-release
+  pull_request:
+    branches:
+      - fe-release
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      - name: Setup flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.27.4' # You can specify the Flutter version to use
+          channel: 'stable' # You can specify the Flutter channel to use
+
+      - name: Install dependencies
+        run: flutter pub get
+        working-directory: frontend/mela
+
+      #Decode secret
+      - name: Decode keystore from secret
+        run: |
+          echo "${{ secrets.KEYSTORE_SECRET }}" | base64 -d > frontend/mela/android/upload-keystore.jks
+
+      - name: Check sign in config #
+        run: |
+          echo "storeFile=$GITHUB_WORKSPACE/frontend/mela/android/upload-keystore.jks" >> $GITHUB_ENV
+          echo "storePassword=${{ secrets.STORE_PASSWORD }}" >> $GITHUB_ENV
+          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> $GITHUB_ENV
+          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> $GITHUB_ENV
+
+      - name: Build AAB
+        run: flutter build appbundle --release --no-tree-shake-icons
+        working-directory: frontend/mela
+
+      - name: Upload AAB Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release.aab
+          path: frontend/mela/build/app/outputs/bundle/release/app-release.aab
