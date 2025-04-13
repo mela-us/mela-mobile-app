@@ -9,6 +9,7 @@ import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/question/question.dart';
 import 'package:mela/presentation/question/store/question_store.dart';
 import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
+import 'package:mela/presentation/review/widgets/draggable_ai_button.dart';
 import 'package:mela/presentation/review/widgets/list_item_tile_widget.dart';
 import 'package:mela/utils/locale/app_localization.dart';
 
@@ -44,7 +45,10 @@ class _ReviewScreenState extends State<ReviewScreen> {
           Navigator.of(context).pop();
         },
       ),
-      body: _buildBody(),
+      body: Stack(children: [
+        _buildBody(),
+        DraggableAIButton(),
+      ]),
       bottomNavigationBar: _buildQuestionList(),
     );
   }
@@ -82,25 +86,23 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 ? const SizedBox(height: 15)
                 : const SizedBox(height: 27),
 
-            questions[_singleQuestionStore.currentIndex].solution.isEmpty?
-            Container():
-            Padding(
-              padding:
-                  const EdgeInsets.only(left: Dimens.practiceLeftContainer),
-              child: Text(
-                AppLocalizations.of(context).translate('review_explain'),
-                style: Theme.of(context)
-                    .textTheme
-                    .subTitle
-                    .copyWith(color: Theme.of(context).colorScheme.textInBg2),
-              ),
-            ),
+            questions[_singleQuestionStore.currentIndex].solution.isEmpty
+                ? Container()
+                : Padding(
+                    padding: const EdgeInsets.only(
+                        left: Dimens.practiceLeftContainer),
+                    child: Text(
+                      AppLocalizations.of(context).translate('review_explain'),
+                      style: Theme.of(context).textTheme.subTitle.copyWith(
+                          color: Theme.of(context).colorScheme.textInBg2),
+                    ),
+                  ),
 
             // SizedBox(height: 17),
-            questions[_singleQuestionStore.currentIndex].solution.isEmpty?
-            Container():
-            _buildExplainView(
-                questions[_singleQuestionStore.currentIndex].solution),
+            questions[_singleQuestionStore.currentIndex].solution.isEmpty
+                ? Container()
+                : _buildExplainView(
+                    questions[_singleQuestionStore.currentIndex].solution),
             const SizedBox(height: 17),
           ],
         ),
