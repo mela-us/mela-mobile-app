@@ -1,10 +1,7 @@
 name: Update Version in Gist
 
 on:
-  workflow_dispatch: #manually run
-  push:
-    branches:
-      - fe-release
+  workflow_dispatch: {} #manually run
 
 jobs:
   update-version:
@@ -24,6 +21,6 @@ jobs:
       - name: Update Gist
         run: |
          curl -X PATCH "https://api.github.com/gists/${{ secrets.VCS_GIST_ID }}" \
-              -H "Authorization: token ${{ secrets.VCS_GIST_TOKEN}}"
+              -H "Authorization: token ${{ secrets.VCS_GIST_TOKEN}}"\
               -H "Accept: application/vnd.github.v3+json" \
               -d '{"files": {"mela.json": {"content": "{\"version\": \"${{ env.VERSION_NAME }}\" , \"count\": \"${{ env.BUILD_NUMBER }}\"}"}}}'
