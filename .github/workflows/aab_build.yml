@@ -53,6 +53,12 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV 
       #ADDED TO GITHUB_ENV FOR LATER CALL
 
+
+      - name: python dependencies
+        run: |
+          python -m pip install --upgrade pi
+          pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
+
       - name: Push AAB to drive
         env:
           GCP_CREDENTIAL: ${{secrets.GPC_CREDENTIAL}}
