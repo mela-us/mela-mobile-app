@@ -45,3 +45,18 @@ jobs:
         with:
           name: app-release.aab
           path: frontend/mela/build/app/outputs/bundle/release/app-release.aab
+      - name: Parsing version
+        id: version
+        run: |
+          VERSION=$(grep '^version' frontend/mela/pubspec.yaml | cut -d ' ' -f 2)
+          echo "Parsed, releasing version: $VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV 
+      #ADDED TO GITHUB_ENV FOR LATER CALL
+
+      - name: Push AAB to drive
+        env:
+          GCP_CREDENTIAL: ${{secrets.GPC_CREDENTIAL}}
+          ROOT_FOLDER_ID: ${{secrets.ROOT_FOLDER_ID}}
+          FOLDER_NAME:  "Release ${{env.VERSION}}"
+        run: python upload_drive.py
+        
