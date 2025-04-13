@@ -60,7 +60,7 @@
           uses: actions/download-artifact@v4
           with:
             name: app-release.aab
-            path: frontend/mela/build/app/outputs/bundle/release/app-release.aab
+            path: frontend/mela/build/app/outputs/bundle/release
 
         - name: Decode gcp_credential
           run: |
