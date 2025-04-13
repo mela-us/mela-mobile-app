@@ -2,6 +2,9 @@ name: Update Version in Gist
 
 on:
   workflow_dispatch: #manually run
+  push:
+    branches:
+      - fe-release
 
 jobs:
   update-version:
