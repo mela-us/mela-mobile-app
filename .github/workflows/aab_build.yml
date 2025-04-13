@@ -47,6 +47,7 @@ jobs:
         with:
           name: app-release.aab
           path: frontend/mela/build/app/outputs/bundle/release/app-release.aab
+
       - name: Parsing version
         id: version
         run: |
@@ -63,7 +64,7 @@ jobs:
 
       - name: Push AAB to drive
         env:
-          CREDENTIAL_LINKS: ${{ env.CRED_LINK }}
+          CREDENTIAL_LINK: ${{ env.CRED_LINK }}
           ROOT_FOLDER_ID: ${{ secrets.ROOT_FOLDER_ID }}
           FOLDER_NAME:  "Release ${{ env.VERSION }}"
         run: python upload_drive.py
