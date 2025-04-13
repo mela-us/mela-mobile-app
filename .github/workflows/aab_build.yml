@@ -28,6 +28,7 @@ jobs:
       - name: Decode keystore from secret
         run: |
           echo "${{ secrets.KEYSTORE_SECRET }}" | base64 -d > frontend/mela/android/upload-keystore.jks
+          echo "${{ secrets.GCP_CREDENTIAL }}" | base64 -d >> frontend/mela/gcp_cred.json
 
       - name: Check sign in config #
         run: |
@@ -61,7 +62,6 @@ jobs:
 
       - name: Push AAB to drive
         env:
-          GCP_CREDENTIAL: ${{secrets.GPC_CREDENTIAL}}
           ROOT_FOLDER_ID: ${{secrets.ROOT_FOLDER_ID}}
           FOLDER_NAME:  "Release ${{env.VERSION}}"
         run: python upload_drive.py
