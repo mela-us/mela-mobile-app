@@ -28,7 +28,7 @@ jobs:
       - name: Decode keystore from secret
         run: |
           echo "${{ secrets.KEYSTORE_SECRET }}" | base64 -d > frontend/mela/android/upload-keystore.jks
-          echo "${{ secrets.GCP_CREDENTIAL }}" | base64 -d >> frontend/mela/gcp_cred.json
+          echo "${{ secrets.GCP_CREDENTIAL }}" | base64 -d > frontend/mela/gcp_cred.json
 
       - name: Check sign in config #
         run: |
