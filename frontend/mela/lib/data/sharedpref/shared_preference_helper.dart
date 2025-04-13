@@ -29,6 +29,41 @@ class SharedPreferenceHelper {
     return _sharedPreference.getBool(PreferencesConst.is_logged_in) ?? false;
   }
 
+  //Chat:
+  Future<bool> get isFirstTimeGoToChat async {
+    return _sharedPreference
+            .getBool(PreferencesConst.is_first_time_go_to_chat) ??
+        true;
+  }
+
+  Future<bool> saveIsFirstTimeGoToChat(bool value) async {
+    return _sharedPreference.setBool(
+        PreferencesConst.is_first_time_go_to_chat, value);
+  }
+
+  Future<bool> get isFirstTimeIntitialMessage async {
+    return _sharedPreference
+            .getBool(PreferencesConst.is_first_time_intitial_message) ??
+        true;
+  }
+
+  Future<bool> saveIsFirstTimeIntitialMessage(bool value) async {
+    return _sharedPreference.setBool(
+        PreferencesConst.is_first_time_intitial_message, value);
+  }
+
+  Future<bool> get isFirstTimeReviewMessage async {
+    return _sharedPreference
+            .getBool(PreferencesConst.is_first_time_review_message) ??
+        true;
+  }
+
+  Future<bool> saveIsFirstTimeReviewMessage(bool value) async {
+    return _sharedPreference.setBool(
+        PreferencesConst.is_first_time_review_message, value);
+  }
+  // Save login status:--------------------------------------------------------
+
   Future<bool> saveIsLoggedIn(bool value) async {
     return _sharedPreference.setBool(PreferencesConst.is_logged_in, value);
   }

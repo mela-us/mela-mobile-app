@@ -6,4 +6,9 @@ class PreferencesConst {
   static const String auth_token = "authToken";
   static const String is_dark_mode = "is_dark_mode";
   static const String current_language = "current_language";
+  static const String is_first_time_go_to_chat = "is_first_time_go_to_chat";
+  static const String is_first_time_intitial_message =
+      "is_first_time_intitial_message";
+  static const String is_first_time_review_message =
+      "is_first_time_review_message";
 }

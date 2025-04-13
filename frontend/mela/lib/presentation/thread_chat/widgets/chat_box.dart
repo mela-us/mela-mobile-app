@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/enum.dart';
@@ -11,9 +10,9 @@ import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/presentation/thread_chat/store/chat_box_store/chat_box_store.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
-import 'package:mela/utils/image_picker_helper/image_picker_helper.dart';
 import 'package:mela/utils/routes/routes.dart';
 import 'package:mobx/mobx.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class ChatBox extends StatefulWidget {
   bool isFirstChatScreen;
@@ -45,6 +44,7 @@ class _ChatBoxState extends State<ChatBox> {
     _focusNode.addListener(() {
       setState(() {}); // Rebuild when focus changes
     });
+
     disposerIsDisplayCamera = reaction<Conversation>(
       (_) => _threadChatStore.currentConversation,
       (value) {
@@ -122,6 +122,13 @@ class _ChatBoxState extends State<ChatBox> {
       },
     );
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return ShowCaseWidget(builder: Builder(builder: (context) {
+  //     return Text("ABC");
+  //   }));
+  // }
 
   @override
   Widget build(BuildContext context) {
