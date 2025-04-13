@@ -49,7 +49,7 @@
 
           
     push_ggdrive:
-      runs_on: ububtu-latest
+      runs_on: ubuntu-latest
       needs: build_aab
       steps:
         - name: Download .aab artifact
