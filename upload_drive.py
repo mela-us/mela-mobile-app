@@ -9,7 +9,7 @@ from googleapiclient.http import MediaFileUpload
 #FOLDER_NAME
 
 #Credential
-credentials_dict = json.load(os.environ["GCP_CREDENTIAL"])
+credentials_dict = json.loads(os.environ["GCP_CREDENTIAL"])
 SCOPES = ['https://www.googleapis.com/auth/drive']
 credentials = service_account.Credentials.from_service_account_info(credentials_dict, scopes = SCOPES)
 
