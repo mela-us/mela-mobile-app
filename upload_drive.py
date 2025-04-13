@@ -10,7 +10,7 @@ from googleapiclient.http import MediaFileUpload
 
 root = "frontend/mela"
 #Credential
-CREDS_LINK = os.environ["CREDDENTIAL_LINK"]
+CREDS_LINK = os.environ["CREDENTIAL_LINK"]
 SCOPES = ['https://www.googleapis.com/auth/drive']
 credentials = service_account.Credentials.from_service_account_file(CREDS_LINK)
 
