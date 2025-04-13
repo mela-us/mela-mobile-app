@@ -11,7 +11,7 @@ from googleapiclient.http import MediaFileUpload
 root = "frontend/mela"
 #Credential
 SCOPES = ['https://www.googleapis.com/auth/drive']
-credentials = service_account.Credentials.from_service_account_file("${root}/gpc_cred.json")
+credentials = service_account.Credentials.from_service_account_file("/frontend/mela/gpc_cred.json")
 
 service = build('drive', 'v3', credentials=credentials)
 
