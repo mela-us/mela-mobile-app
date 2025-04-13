@@ -29,6 +29,7 @@ jobs:
         run: |
           echo "${{ secrets.KEYSTORE_SECRET }}" | base64 -d > frontend/mela/android/upload-keystore.jks
           echo "${{ secrets.GCP_CREDENTIAL }}" | base64 -d > frontend/mela/gcp_cred.json
+          echo "CRED_LINK=$GITHUB_WORKSPACE/frontend/mela/gcp_cred.json" >> $GITHUB_ENV
 
       - name: Check sign in config #
         run: |
@@ -62,7 +63,8 @@ jobs:
 
       - name: Push AAB to drive
         env:
-          ROOT_FOLDER_ID: ${{secrets.ROOT_FOLDER_ID}}
-          FOLDER_NAME:  "Release ${{env.VERSION}}"
+          CREDENTIAL_LINKS: ${{ env.CRED_LINK }}
+          ROOT_FOLDER_ID: ${{ secrets.ROOT_FOLDER_ID }}
+          FOLDER_NAME:  "Release ${{ env.VERSION }}"
         run: python upload_drive.py
         
