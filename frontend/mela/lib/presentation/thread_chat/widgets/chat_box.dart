@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
@@ -264,26 +265,46 @@ class _ChatBoxState extends State<ChatBox> {
             child: Container(
               padding:
                   const EdgeInsets.only(right: 4, top: 4, bottom: 4, left: 6),
-              child: TextField(
-                controller: _controller,
-                maxLines: 3,
-                minLines: 1,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                ),
-                textAlignVertical: TextAlignVertical.bottom,
-                decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.zero,
-                  isDense: true,
-                  hintText: "Hãy cho Mela biết thắc mắc của bạn",
-                  hintStyle: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
-                  ),
-                  border: InputBorder.none,
-                ),
-              ),
+              child: Platform.isIOS
+                  ? CupertinoTextField(
+                      controller: _controller,
+                      maxLines: 3,
+                      minLines: 1,
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Colors.black, fontWeight: FontWeight.w600),
+                      textAlignVertical: TextAlignVertical.bottom,
+                      placeholder: "Hãy cho Mela biết thắc mắc của bạn",
+                      placeholderStyle: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      padding: EdgeInsets.zero,
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        border: Border.all(color: Colors.transparent),
+                      ),
+                      cursorColor: Theme.of(context).primaryColor,
+                    )
+                  : TextField(
+                      controller: _controller,
+                      maxLines: 3,
+                      minLines: 1,
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Colors.black, fontWeight: FontWeight.w600),
+                      textAlignVertical: TextAlignVertical.bottom,
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.zero,
+                        isDense: true,
+                        hintText: "Hãy cho Mela biết thắc mắc của bạn",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        border: InputBorder.none,
+                      ),
+                    ),
             ),
           ),
           _chatBoxStore.showSendIcon

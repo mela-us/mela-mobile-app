@@ -40,8 +40,9 @@ class _DraggableAIButtonState extends State<DraggableAIButton> {
             });
           },
           onTap: () {
-            _threadChatStore.clearConversation();
+            // _threadChatStore.clearConversation();
             // Navigator.of(context).pushNamed(Routes.threadChatScreen);
+            _threadChatStore.setIsGoToFromReview(true);
 
             Navigator.of(context).push(
               PageRouteBuilder(

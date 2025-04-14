@@ -40,6 +40,11 @@ abstract class _ThreadChatStore with Store {
       dateConversation: DateTime.now(),
       nameConversation: "Instance Title");
 
+  bool isGoToFromReview = false;
+  void setIsGoToFromReview(bool value) {
+    isGoToFromReview = value;
+  }
+
   @observable
   bool isLoading = false;
 
@@ -210,7 +215,8 @@ abstract class _ThreadChatStore with Store {
   @action
   Future<void> getConversation() async {
     //for new chat
-    if (currentConversation.conversationId.isEmpty) {
+    if (currentConversation.conversationId.isEmpty ||
+        isGoToFromReview == true) {
       return;
     }
 

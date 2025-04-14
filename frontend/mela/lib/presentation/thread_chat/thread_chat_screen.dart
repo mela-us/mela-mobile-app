@@ -148,7 +148,12 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            _threadChatStore.clearConversation();
+            if (_threadChatStore.isGoToFromReview) {
+              _threadChatStore.setIsGoToFromReview(false);
+            } else {
+              _threadChatStore.clearConversation();
+            }
+
             Navigator.of(context).pop();
           },
         ),
