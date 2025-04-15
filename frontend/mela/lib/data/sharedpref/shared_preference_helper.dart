@@ -62,6 +62,30 @@ class SharedPreferenceHelper {
     return _sharedPreference.setBool(
         PreferencesConst.is_first_time_review_message, value);
   }
+
+  //Guidance learning for first time go to app.
+  Future<bool> get isFirstTimeOpenLevel async {
+    return _sharedPreference
+            .getBool(PreferencesConst.is_first_time_open_level) ??
+        true;
+  }
+
+  Future<bool> saveIsFirstTimeOpenLevel(bool value) async {
+    return _sharedPreference.setBool(
+        PreferencesConst.is_first_time_open_level, value);
+  }
+
+  Future<bool> get isFirstTimeOpenLessonInTopic async {
+    return _sharedPreference
+            .getBool(PreferencesConst.is_first_time_open_lesson_in_topic) ??
+        true;
+  }
+
+  Future<bool> saveIsFirstTimeOpenLessonInTopic(bool value) async {
+    return _sharedPreference.setBool(
+        PreferencesConst.is_first_time_open_lesson_in_topic, value);
+  }
+
   // Save login status:--------------------------------------------------------
 
   Future<bool> saveIsLoggedIn(bool value) async {
