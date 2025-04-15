@@ -30,7 +30,11 @@ abstract class _HintStore with Store {
   Question? question;
 
   @observable
-  bool isLoading = false;
+  bool isHintLoading = false;
+
+  @observable
+  bool isTermLoading = false;
+
   _HintStore(this._generateHintUseCase, this._generateTermUseCase);
 
 
@@ -65,7 +69,7 @@ abstract class _HintStore with Store {
   @action
   Future<void> generateHint(String questionId) async {
     // Call the use case to generate a hint
-    isLoading = true;
+    isHintLoading = true;
     try {
       String generatedHint = await _generateHintUseCase.call(params: questionId);
       setHint(generatedHint);
@@ -82,7 +86,7 @@ abstract class _HintStore with Store {
         throw ResponseStatus.ERROR;
       }
     } finally {
-      isLoading = false;
+      isHintLoading = false;
     }
 
   }
@@ -90,7 +94,7 @@ abstract class _HintStore with Store {
   @action
   Future<void> generateTerm(String questionId) async {
     // Call the use case to generate a hint
-    isLoading = true;
+    isTermLoading = true;
     try {
       String generatedTerm = await _generateTermUseCase.call(params: questionId);
       setTerm(generatedTerm);
@@ -107,7 +111,7 @@ abstract class _HintStore with Store {
         throw ResponseStatus.ERROR;
       }
     } finally {
-      isLoading = false;
+      isTermLoading = false;
     }
 
   }

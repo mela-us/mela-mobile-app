@@ -69,7 +69,7 @@ class _FilterStatScreenState extends State<FilterStatScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               //Sắp xếp
-              Text("Sắp xếp mức độ hoàn thành",
+              Text("Sắp xếp theo thời gian",
                   style: Theme.of(context)
                       .textTheme
                       .title
@@ -84,7 +84,7 @@ class _FilterStatScreenState extends State<FilterStatScreen> {
                   onToggle: _filterStore.toggleDescending),
               const SizedBox(height: 16),
               //Tiến trình
-              Text("Tiến trình",
+              Text("Sắp xếp",
                   style: Theme.of(context)
                       .textTheme
                       .title

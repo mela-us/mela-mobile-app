@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/enum.dart';
-import 'package:mela/data/network/apis/questions/hint_api.dart';
-import 'package:mela/data/network/dio_client.dart';
+import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/question/guide_controller.dart';
 import 'package:mela/presentation/question/store/hint_store/hint_store.dart';
 import 'package:mela/presentation/question/store/question_store.dart';
 import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
+
+import 'convert_string_hint_to_latex.dart';
 
 class GuideBottomSheet extends StatefulWidget {
   final screenHeight;
@@ -24,6 +25,7 @@ class _GuideBottomSheetState extends State<GuideBottomSheet> {
 
   final HintStore _hintStore = getIt<HintStore>();
   late double _screenHeight;
+
   final List<GuideController> guides = [
     GuideController(
         guide: "Hãy tưởng tượng trong buổi tiệc, mỗi người sẽ lần lượt bắt tay với tất cả những người khác. \n\n"
@@ -135,7 +137,11 @@ class _GuideBottomSheetState extends State<GuideBottomSheet> {
           type == GenerateType.HINT ?
           Observer(builder: (context) {
             if (!_hintStore.pressHint) {
-
+              if (_hintStore.isHintLoading) {
+                return const Center(
+                    child: RotatingImageIndicator(size: 30.0)
+                );
+              }
               return _buildGuideButton(GenerateType.HINT);
             }
             else {
@@ -143,6 +149,11 @@ class _GuideBottomSheetState extends State<GuideBottomSheet> {
             }
           }) : Observer(builder: (context) {
             if (!_hintStore.pressTerm) {
+              if (_hintStore.isTermLoading) {
+                return const Center(
+                    child: RotatingImageIndicator(size: 30.0)
+                );
+              }
               return _buildGuideButton(GenerateType.TERM);
             }
             else {
@@ -159,19 +170,20 @@ class _GuideBottomSheetState extends State<GuideBottomSheet> {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Text(
-            guidance,
-            style: Theme
-                .of(context)
-                .textTheme
-                .normal
-                .copyWith(
-              color: Theme
-                  .of(context)
-                  .colorScheme
-                  .inputTitleText,
-            ),
-          ),
+          child: ConvertStringHintToLatex(rawText: guidance),
+          // Text(
+          //   guidance,
+          //   style: Theme
+          //       .of(context)
+          //       .textTheme
+          //       .normal
+          //       .copyWith(
+          //     color: Theme
+          //         .of(context)
+          //         .colorScheme
+          //         .inputTitleText,
+          //   ),
+          // ),
         ),
 
         Row(
@@ -204,7 +216,6 @@ class _GuideBottomSheetState extends State<GuideBottomSheet> {
         width: 171,
         child: ElevatedButton(
           onPressed: () async {
-
             // Call the API to generate the guide
             await generateDataHandler(type);
             if (type == GenerateType.HINT) {
@@ -285,7 +296,7 @@ class _GuideBottomSheetState extends State<GuideBottomSheet> {
           await _hintStore.generateTerm(id);
         }
       } catch (e){
-        if (e == ResponseStatus.UNAUTHORIZED){
+        if (e == ResponseStatus.UNAUTHORIZED) {
 
         }
         else {
