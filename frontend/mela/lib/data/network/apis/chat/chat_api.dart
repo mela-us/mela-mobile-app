@@ -86,7 +86,6 @@ class ChatApi {
           dataList.map((item) => HistoryItem.fromJson(item)).toList();
       return temp;
     }
-
     return [];
   }
 }

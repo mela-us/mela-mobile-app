@@ -4,6 +4,7 @@ import 'package:mela/constants/enum.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/domain/entity/message_chat/message_chat.dart';
+import 'package:mela/presentation/chat/store/history_store.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/thread_chat/thread_chat_screen.dart';
 import 'package:mela/utils/routes/routes.dart';
@@ -16,6 +17,7 @@ class SidebarWidget extends StatefulWidget {
 
 class _SidebarWidgetState extends State<SidebarWidget> {
   final _threadChatStore = getIt.get<ThreadChatStore>();
+  final _historyStore = getIt.get<HistoryStore>();
 
   Conversation testConversation = Conversation(
     conversationId: "conv_001",
