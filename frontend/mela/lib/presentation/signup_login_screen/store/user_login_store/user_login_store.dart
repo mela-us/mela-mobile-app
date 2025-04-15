@@ -156,7 +156,7 @@ abstract class _UserLoginStore with Store {
       print("-----********* Error in UserLoginStore");
       // print(e.toString());
       if (e is DioException) {
-        if (e.response?.statusCode == 401) {
+        if (e.response?.statusCode == 400) {
           throw "Mật khẩu hoặc tài khoản không hợp lệ";
         }
         throw DioExceptionUtil.handleError(e);
@@ -165,7 +165,6 @@ abstract class _UserLoginStore with Store {
       }
     });
   }
-
 
   @action
   Future loginWithGoogle(String? idToken, String? accessToken) async {
@@ -192,7 +191,7 @@ abstract class _UserLoginStore with Store {
       print("-----********* Error in UserLoginStore");
       // print(e.toString());
       if (e is DioException) {
-        if (e.response?.statusCode == 401) {
+        if (e.response?.statusCode == 400) {
           throw "Mật khẩu hoặc tài khoản không hợp lệ";
         }
         throw DioExceptionUtil.handleError(e);
@@ -201,7 +200,6 @@ abstract class _UserLoginStore with Store {
       }
     });
   }
-
 
   @action
   void resetSettingForLogin() {

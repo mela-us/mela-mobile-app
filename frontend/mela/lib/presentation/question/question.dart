@@ -654,6 +654,14 @@ class _QuestionScreenState extends State<QuestionScreen> {
      );
    }
 
+   Question questionHolder = Question(
+       questionId: '',
+       ordinalNumber: 1,
+       content: '',
+       questionType: 'FILL_IN_THE_BLANK',
+       options: [], blankAnswer: '', solution: '', guide: '', term: ''
+
+   );
 
 
 }
