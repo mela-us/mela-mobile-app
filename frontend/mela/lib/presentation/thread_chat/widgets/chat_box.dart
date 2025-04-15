@@ -133,10 +133,14 @@ class _ChatBoxState extends State<ChatBox> {
 
   @override
   Widget build(BuildContext context) {
-    return Focus(
-      focusNode: _focusNode,
-      child: GestureDetector(
-        onTap: () => _focusNode.requestFocus(),
+    return TapRegion(
+      onTapOutside: (_) {
+        if (_focusNode.hasFocus) {
+          _focusNode.unfocus();
+        }
+      },
+      child: Focus(
+        focusNode: _focusNode,
         child: Container(
           margin: widget.isFirstChatScreen
               ? null
@@ -328,6 +332,7 @@ class _ChatBoxState extends State<ChatBox> {
 
                     // Hide keyboard
                     if (_focusNode.hasFocus) {
+                      print("==================> Hide keyboard");
                       _focusNode.unfocus();
                     }
 
