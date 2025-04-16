@@ -4,6 +4,7 @@ import 'package:mela/constants/dimens.dart';
 import 'package:mela/constants/enum.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
+import 'package:mela/presentation/chat/store/history_store.dart';
 import 'package:mela/presentation/chat/widgets/sidebar_widget.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/thread_chat/widgets/chat_box.dart';
@@ -19,6 +20,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final ThreadChatStore _threadChatStore = getIt.get<ThreadChatStore>();
+  final HistoryStore _historyStore = getIt.get<HistoryStore>();
   List<Map<String, dynamic>> messages = [
     {
       "text":
@@ -170,6 +172,8 @@ class _ChatScreenState extends State<ChatScreen> {
                           child: SidebarWidget(),
                         )); // Sidebar
                   }),
+              // Call api
+              _historyStore.getConvHistory()
             },
         child: SizedBox(
           width: 30,

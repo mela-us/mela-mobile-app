@@ -76,7 +76,9 @@ class ChatApi {
   }
 
   Future<List<HistoryItem>> getHistoryChat() async {
-    final response = await _dioClient.get(EndpointsConst.getChatHistory);
+    final data = {'order': 'desc', 'limit': 20};
+    final response = await _dioClient.get(EndpointsConst.getChatHistory,
+        queryParameters: data);
 
     if (response.statusCode == 200) {
       print("--API GET HISTORY--");

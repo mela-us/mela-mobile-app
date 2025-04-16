@@ -3,6 +3,7 @@ import 'package:mela/core/stores/error/error_store.dart';
 import 'package:mela/core/stores/form/form_store.dart';
 import 'package:mela/domain/usecase/chat/create_new_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/get_conversation_usecase.dart';
+import 'package:mela/domain/usecase/chat/get_history_chat_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_chat_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_get_solution_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_review_submission_usecase.dart';
@@ -17,6 +18,7 @@ import 'package:mela/domain/usecase/user/update_user_usecase.dart';
 import 'package:mela/domain/usecase/user_login/login_with_google_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_access_token_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_refresh_token_usecase.dart';
+import 'package:mela/presentation/chat/store/history_store.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 import 'package:mela/presentation/question/store/hint_store/hint_store.dart';
 
@@ -201,9 +203,11 @@ class StoreModule {
     ));
 
     //Hint Store
-    getIt.registerSingleton<HintStore>(HintStore(
-      getIt<GenerateHintUseCase>(), getIt<GenerateTermUseCase>()
+    getIt.registerSingleton<HintStore>(
+        HintStore(getIt<GenerateHintUseCase>(), getIt<GenerateTermUseCase>()));
 
-    ));
+    //History
+    getIt.registerSingleton<HistoryStore>(
+        HistoryStore(getIt<GetHistoryChatUsecase>(), getIt<ErrorStore>()));
   }
 }
