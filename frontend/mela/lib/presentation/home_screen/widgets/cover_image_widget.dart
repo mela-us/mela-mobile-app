@@ -3,7 +3,8 @@ import 'package:mela/constants/app_theme.dart';
 import '../../../themes/default/colors_standards.dart';
 
 class CoverImageWidget extends StatelessWidget {
-  const CoverImageWidget({super.key});
+  final void Function() onPressed;
+  const CoverImageWidget({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -39,23 +40,21 @@ class CoverImageWidget extends StatelessWidget {
           child: SizedBox(
             width: 250,
             height: 34,
-            child: AbsorbPointer(
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: ColorsStandards.buttonYesColor1,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  padding: EdgeInsets.zero,
+            child: ElevatedButton(
+              onPressed: onPressed,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ColorsStandards.buttonYesColor1,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                child: Text(
-                  'Học toán hàng ngày với Mela',
-                  style: Theme.of(context)
-                      .textTheme
-                      .content
-                      .copyWith(color: Theme.of(context).colorScheme.onTertiary),
-                ),
+                padding: EdgeInsets.zero,
+              ),
+              child: Text(
+                'Học toán hàng ngày với Mela',
+                style: Theme.of(context)
+                    .textTheme
+                    .content
+                    .copyWith(color: Theme.of(context).colorScheme.onTertiary),
               ),
             ),
           ),

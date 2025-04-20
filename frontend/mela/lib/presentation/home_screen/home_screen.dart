@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:flutter_markdown_latex/flutter_markdown_latex.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/constants/assets.dart';
 import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
-import 'package:mela/presentation/home_screen/test.dart';
+import 'package:mela/presentation/home_screen/widgets/button_individual_exercise.dart';
 import 'package:mela/presentation/home_screen/widgets/level_item.dart';
-import 'package:mela/presentation/thread_chat/widgets/convert_string_to_latex.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../di/service_locator.dart';
@@ -23,13 +22,28 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
   //stores:---------------------------------------------------------------------
   final LevelStore _levelStore = getIt<LevelStore>();
   late final ReactionDisposer _unAuthorizedReactionDisposer;
+  final GlobalKey _buttonIndividualExerciseKey = GlobalKey();
+  late AnimationController _animationController;
+  late Animation<double> _scaleAnimation;
+
+  // Add ScrollController
+  final ScrollController _scrollController = ScrollController();
   @override
   void initState() {
     super.initState();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.1).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
     //routeObserver.subscribe(this, ModalRoute.of(context));
 
     //for only refresh token expired
@@ -50,7 +64,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    print("didChangeDependencies In HomeScreen");
     //print("========TopicError: ${_topicStore.errorString}");
     // check to see if already called api
     if (!_levelStore.loading) {
@@ -63,8 +76,32 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     //routeObserver.unsubscribe(this);
+    _animationController.dispose();
+
     _unAuthorizedReactionDisposer();
+    _scrollController.dispose();
+
     super.dispose();
+  }
+
+  void _scrollToButtonIndividualExercise() {
+    final RenderBox? renderBox = _buttonIndividualExerciseKey.currentContext
+        ?.findRenderObject() as RenderBox?;
+    if (renderBox != null) {
+      final position = renderBox.localToGlobal(Offset.zero).dy;
+      final scrollOffset = position + _scrollController.offset - 100;
+      _scrollController
+          .animateTo(
+        scrollOffset,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      )
+          .then((_) {
+        _animationController.forward().then((_) {
+          _animationController.reverse();
+        });
+      });
+    }
   }
 
   @override
@@ -131,41 +168,147 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
           //print("build In CoursesScreen+++++++++++++++++++++++++++++++");
-          return SingleChildScrollView(
-            physics: const ClampingScrollPhysics(),
-            child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    //Cover Image Introduction
-                    const CoverImageWidget(),
-                    const SizedBox(height: 15),
-                    //Levels Grid
-                    GridView.builder(
-                      padding: EdgeInsets.zero,
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        mainAxisSpacing: 0,
-                        crossAxisSpacing: 0,
-                        childAspectRatio: 1,
-                        mainAxisExtent: 100, // set the height of each item
+          return DefaultTabController(
+            length: 2,
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              physics: const ClampingScrollPhysics(),
+              child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      //Cover Image Introduction
+                      CoverImageWidget(
+                        onPressed: _scrollToButtonIndividualExercise,
                       ),
-                      itemCount: _levelStore.levelList!.levelList.length,
-                      itemBuilder: (context, index) {
-                        return LevelItem(
-                          level: _levelStore.levelList!.levelList[index],
-                        );
-                      },
-                    ),
+                      const SizedBox(height: 15),
+                      //Levels Grid
+                      GridView.builder(
+                        padding: EdgeInsets.zero,
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          mainAxisSpacing: 0,
+                          crossAxisSpacing: 0,
+                          childAspectRatio: 1,
+                          mainAxisExtent: 100, // set the height of each item
+                        ),
+                        itemCount: _levelStore.levelList!.levelList.length,
+                        itemBuilder: (context, index) {
+                          return LevelItem(
+                            level: _levelStore.levelList!.levelList[index],
+                          );
+                        },
+                      ),
 
-                    const SizedBox(height: 15),
-                    //Text "lectures đang học"
-                    if (_levelStore
-                        .lecturesAreLearningList!.lectures.isNotEmpty) ...[
+                      const SizedBox(height: 15),
+
+                      TabBar(
+                        labelColor: Theme.of(context).colorScheme.tertiary,
+                        labelStyle:
+                            Theme.of(context).textTheme.subTitle.copyWith(
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                ),
+                        unselectedLabelStyle:
+                            Theme.of(context).textTheme.subTitle.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSecondary
+                                      .withOpacity(0.5),
+                                ),
+                        unselectedLabelColor:
+                            Theme.of(context).colorScheme.onSecondary,
+                        dividerColor: Colors.transparent,
+                        overlayColor:
+                            WidgetStateProperty.all(Colors.transparent),
+                        indicator: UnderlineTabIndicator(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.tertiary,
+                              width: 2),
+                        ),
+                        tabs: const [
+                          Tab(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.school, size: 14),
+                                SizedBox(width: 6),
+                                Text(
+                                  "Bài giảng đang học",
+                                ),
+                              ],
+                            ),
+                          ),
+                          Tab(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.integration_instructions_outlined,
+                                    size: 14),
+                                SizedBox(width: 6),
+                                Text(
+                                  "Bài giảng đề xuất",
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 420,
+                        child: TabBarView(
+                          children: [
+                            // Tab 1: Bài giảng đang học
+                            _levelStore.lecturesAreLearningList!.lectures
+                                    .isNotEmpty
+                                ? ListView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: _levelStore
+                                        .lecturesAreLearningList!
+                                        .lectures
+                                        .length,
+                                    itemBuilder: (context, index) {
+                                      return LectureItem(
+                                        lecture: _levelStore
+                                            .lecturesAreLearningList!
+                                            .lectures[index],
+                                      );
+                                    },
+                                  )
+                                : const Center(
+                                    child: Text("Không có bài giảng đang học"),
+                                  ),
+                            // Tab 2: Bài giảng đề xuất
+                            _levelStore.lecturesAreLearningList!.lectures
+                                    .isNotEmpty
+                                ? ListView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: _levelStore
+                                        .lecturesAreLearningList!
+                                        .lectures
+                                        .length,
+                                    itemBuilder: (context, index) {
+                                      return LectureItem(
+                                        lecture: _levelStore
+                                            .lecturesAreLearningList!
+                                            .lectures[index],
+                                      );
+                                    },
+                                  )
+                                : const Center(
+                                    child: Text("Không có bài giảng đề xuất"),
+                                  ),
+                          ],
+                        ),
+                      ),
+
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Row(
@@ -193,20 +336,26 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       const SizedBox(height: 10),
+
+                      AnimatedBuilder(
+                          animation: _scaleAnimation,
+                          builder: (context, child) {
+                            return Transform.scale(
+                              scale: _scaleAnimation.value,
+                              child: ButtonIndividualExercise(
+                                  key: _buttonIndividualExerciseKey,
+                                  leadingIcon: SvgPicture.asset(
+                                    Assets.mela_think,
+                                    width: 40,
+                                  ),
+                                  textButton: "Ôn tập nhanh cùng MELA",
+                                  onPressed: () {}),
+                            );
+                          }),
+                      const SizedBox(height: 20),
                     ],
-                    //Lectures is learning
-
-                    Column(
-                      children: _levelStore.lecturesAreLearningList!.lectures
-                          .map((lecture) {
-                        return LectureItem(lecture: lecture);
-                      }).toList(),
-                    ),
-
-                    // ConvertStringToLatex(rawText: TestData.markdownWithLatex),
-                    // ConvertStringToLatex(rawText: TestData.text),
-                  ],
-                )),
+                  )),
+            ),
           );
         },
       ),
