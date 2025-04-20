@@ -324,7 +324,7 @@ class _HomeScreenState extends State<HomeScreen>
                               width: 10,
                             ),
                             Text(
-                              "Bài giảng đang học",
+                              "Bài tập nhanh",
                               style: Theme.of(context)
                                   .textTheme
                                   .subTitle
