@@ -40,6 +40,7 @@ class DioClient {
     String uri, {
     Map<String, dynamic>? queryParameters,
     Options? options,
+    Object? data,
     CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
   }) async {
@@ -48,6 +49,7 @@ class DioClient {
         uri,
         queryParameters: queryParameters,
         options: options,
+        data: data,
         cancelToken: cancelToken,
         onReceiveProgress: onReceiveProgress,
       );

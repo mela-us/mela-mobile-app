@@ -1,6 +1,8 @@
 import 'package:mela/constants/enum.dart';
 import 'package:mela/domain/entity/message_chat/message_chat.dart';
 
+import '../chat/history_item.dart';
+
 class Conversation {
   String conversationId;
   String nameConversation;
@@ -39,6 +41,18 @@ class Conversation {
       messages: messages,
       levelConversation: LevelConversation.values
           .firstWhere((e) => e.name == json['metadata']['status'] as String),
+    );
+  }
+
+  factory Conversation.fromHistoryItem(HistoryItem item) {
+    return Conversation(
+      conversationId: item.conversationId,
+      nameConversation: item.title,
+      dateConversation: item.metadata.createdAt,
+      hasMore: false,
+      messages: [],
+      levelConversation: LevelConversation.values
+          .firstWhere((e) => e.name == item.metadata.status),
     );
   }
 }

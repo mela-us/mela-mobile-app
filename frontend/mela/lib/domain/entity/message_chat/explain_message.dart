@@ -8,14 +8,20 @@ class ExplainMessage extends MessageChat {
     required bool isAI,
     required this.explain,
     DateTime? timestamp,
-  }) : super(isAI: isAI, type: MessageType.explain, timestamp: timestamp);
+    String? messageId,
+  }) : super(
+            isAI: isAI,
+            type: MessageType.explain,
+            timestamp: timestamp,
+            messageId: messageId);
 
-  factory ExplainMessage.fromJson(
-      Map<String, dynamic> content, bool isAI, DateTime? timestamp) {
+  factory ExplainMessage.fromJson(Map<String, dynamic> content, bool isAI,
+      DateTime? timestamp, String? messageId) {
     return ExplainMessage(
       isAI: isAI,
       explain: content['explain'] as String?,
       timestamp: timestamp,
+      messageId: messageId,
     );
   }
 }

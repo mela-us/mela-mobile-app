@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen>
       vsync: this,
       duration: const Duration(seconds: 1),
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.1).animate(
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.04).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
     );
     //routeObserver.subscribe(this, ModalRoute.of(context));

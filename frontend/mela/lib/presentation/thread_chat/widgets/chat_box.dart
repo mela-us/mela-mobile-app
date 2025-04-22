@@ -11,6 +11,7 @@ import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/presentation/thread_chat/store/chat_box_store/chat_box_store.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
+import 'package:mela/presentation/thread_chat/thread_chat_screen.dart';
 import 'package:mela/utils/routes/routes.dart';
 import 'package:mobx/mobx.dart';
 import 'package:showcaseview/showcaseview.dart';
@@ -37,7 +38,6 @@ class _ChatBoxState extends State<ChatBox> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _chatBoxStore.setShowSendIcon(false);
-      _chatBoxStore.setShowCameraIcon(true);
       _chatBoxStore.setIsSelectedImageFromSubmission(false);
       _chatBoxStore.clearImages();
     });
@@ -56,7 +56,9 @@ class _ChatBoxState extends State<ChatBox> {
           print("Current Conversation thay doi thanh UNIDENTIFIED");
           _chatBoxStore.setShowCameraIcon(true);
         } else {
+          //For open from history
           print("Current Conversation Level -----> ${value.levelConversation}");
+          _chatBoxStore.setShowCameraIcon(false);
         }
       },
     );
@@ -247,6 +249,8 @@ class _ChatBoxState extends State<ChatBox> {
 
   Widget _buildTextField() {
     return Observer(builder: (_) {
+      // print(
+      //     "==================> _buildTextField: showSendIcon ${_chatBoxStore.showSendIcon} showCameraIcon ${_chatBoxStore.showCameraIcon}");
       return Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -322,8 +326,34 @@ class _ChatBoxState extends State<ChatBox> {
                           levelConversation: LevelConversation.UNIDENTIFIED,
                           dateConversation: DateTime.now(),
                           nameConversation: ""));
+                      //Push chat screen with transition
+                      Navigator.of(context).push(
+                        PageRouteBuilder(
+                          settings: const RouteSettings(
+                              name: Routes.threadChatScreen),
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  ThreadChatScreen(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            const begin = Offset(1.0, 0.0);
+                            const end = Offset.zero;
+                            const curve = Curves.easeInOut;
 
-                      Navigator.of(context).pushNamed(Routes.threadChatScreen);
+                            var tween = Tween(begin: begin, end: end)
+                                .chain(CurveTween(curve: curve));
+                            var offsetAnimation = animation.drive(tween);
+
+                            return ClipRect(
+                              child: SlideTransition(
+                                position: offsetAnimation,
+                                child: child,
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                      // Navigator.of(context).pushNamed(Routes.threadChatScreen);
                     }
 
                     String message = _controller.text.trim();

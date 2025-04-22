@@ -17,16 +17,19 @@ abstract class MessageChat {
   final bool isAI;
   final MessageType type;
   final DateTime? timestamp;
+  final String? messageId;
 
   MessageChat({
     required this.isAI,
     required this.type,
     this.timestamp,
+    this.messageId,
   });
 
   factory MessageChat.fromJson(Map<String, dynamic> json) {
     try {
       final content = json['content'] as Map<String, dynamic>;
+      final messageId = json['messageId'] as String?;
 
       final messageType = determineMessageType(content);
       final isAI = json['role'] == 'assistant';
@@ -35,19 +38,19 @@ abstract class MessageChat {
           : null;
       switch (messageType) {
         case MessageType.initial:
-          return InitialMessage.fromJson(content, isAI, timestamp);
+          return InitialMessage.fromJson(content, isAI, timestamp, messageId);
         case MessageType.normal:
-          return NormalMessage.fromJson(content, isAI, timestamp);
+          return NormalMessage.fromJson(content, isAI, timestamp, messageId);
         case MessageType.explain:
-          return ExplainMessage.fromJson(content, isAI, timestamp);
+          return ExplainMessage.fromJson(content, isAI, timestamp, messageId);
         case MessageType.review:
-          return ReviewMessage.fromJson(content, isAI, timestamp);
+          return ReviewMessage.fromJson(content, isAI, timestamp, messageId);
         case MessageType.solution:
-          return SolutionMessage.fromJson(content, isAI, timestamp);
+          return SolutionMessage.fromJson(content, isAI, timestamp, messageId);
       }
     } catch (e) {
       print("Error in MessageChat.fromJson: $e");
-      return NormalMessage.fromJson({}, false, null);
+      return NormalMessage.fromJson({}, false, null, null);
     }
   }
 

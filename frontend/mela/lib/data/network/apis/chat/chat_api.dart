@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:mela/constants/enum.dart';
 import 'package:mela/data/network/apis/chat/dummy_data.dart';
 import 'package:mela/data/network/constants/endpoints_const.dart';
 import 'package:mela/data/network/dio_client.dart';
@@ -17,7 +18,6 @@ class ChatApi {
   DioClient _dioClient;
   SecureStorageHelper _store;
   ChatApi(this._dioClient, this._store);
-
 
   //=======Test
   Conversation _conversation = conversation1;
@@ -64,12 +64,30 @@ class ChatApi {
 
   Future<Conversation> getConversation(
       GetConversationRequestParams params) async {
-    print("================================ Đang gọi getConversation API");
-    await Future.delayed(const Duration(seconds: 4));
-    _conversation.messages.insertAll(0, _additionalMessages[_currentIndex % 3]);
-    _currentIndex++;
+    // print("================================ Đang gọi getConversation API");
+    // await Future.delayed(const Duration(seconds: 4));
+    // _conversation.messages.insertAll(0, _additionalMessages[_currentIndex % 3]);
+    // _currentIndex++;
+    final responseData = await _dioClient.get(
+      EndpointsConst.getMessageInConversation
+          .replaceAll(':conversationId', params.conversationId),
+      data: {
+        'limit': params.limit,
+      },
+    );
+    // print("================================ getConversation API");
+    // print(responseData);
 
-    return _conversation;
+    return Conversation(
+        conversationId: params.conversationId, //Not important
+        messages: (responseData['data'] as List<dynamic>)
+            .map((message) => MessageChat.fromJson(message))
+            .toList(),
+        hasMore: responseData['hasMore'] ?? false, //Important to map in store
+        dateConversation: DateTime.now(), //Not important
+        nameConversation: "", //Not important
+        levelConversation: LevelConversation.UNIDENTIFIED //Not important
+        );
   }
 
   Future<Conversation> createNewConversation(
@@ -93,8 +111,8 @@ class ChatApi {
       throw 401;
     }
     HttpClient client = HttpClient();
-    final Uri uri = Uri.parse(
-        "${EndpointsConst.baseUrl}${EndpointsConst.getChatHistory}");
+    final Uri uri =
+        Uri.parse("${EndpointsConst.baseUrl}${EndpointsConst.getChatHistory}");
     HttpClientRequest request = await client.openUrl('GET', uri);
     request.headers.set('Authorization', 'Bearer $token');
     request.headers.set('Content-Type', 'application/json');

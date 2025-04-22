@@ -132,30 +132,27 @@ class _SidebarWidgetState extends State<SidebarWidget> {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18),
-        child: Observer(
-            builder: (_) {
-              if (_historyStore.isLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else {
-                if (_historyStore.convs == null || _historyStore.convs!.isEmpty) {
-                  return const Center(
-                    child: Text("Chưa có lịch sử nào"),
-                  );
-                }
-                else {
-                  return ListView.builder(
-                    itemCount: _historyStore.convs!.length,
-                    itemBuilder: (context, index) {
-                      final item = _historyStore.convs![index];
-                      return _buildChatHistory(item);
-                    },
-                  );
-                }
-              }
-
+        child: Observer(builder: (_) {
+          if (_historyStore.isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            if (_historyStore.convs == null || _historyStore.convs!.isEmpty) {
+              return const Center(
+                child: Text("Chưa có lịch sử nào"),
+              );
+            } else {
+              return ListView.builder(
+                itemCount: _historyStore.convs!.length,
+                itemBuilder: (context, index) {
+                  final item = _historyStore.convs![index];
+                  return _buildChatHistory(item);
+                },
+              );
             }
+          }
+        }
 
             // children: isExpanded.keys.map((title) {
             //   return Column(
@@ -224,11 +221,36 @@ class _SidebarWidgetState extends State<SidebarWidget> {
         padding: const EdgeInsets.only(bottom: 25),
         child: GestureDetector(
           onTap: () {
-            _threadChatStore.setConversation(testConversation);
+            _threadChatStore
+                .setConversation(Conversation.fromHistoryItem(item));
 
             // Close sidebar and navigate to chat screen
             Navigator.of(context).pop();
-            Navigator.of(context).pushNamed(Routes.threadChatScreen);
+            //Push chat screen with transition
+            Navigator.of(context).push(
+              PageRouteBuilder(
+                settings: const RouteSettings(name: Routes.threadChatScreen),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    ThreadChatScreen(),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  const begin = Offset(1.0, 0.0);
+                  const end = Offset.zero;
+                  const curve = Curves.easeInOut;
+
+                  var tween = Tween(begin: begin, end: end)
+                      .chain(CurveTween(curve: curve));
+                  var offsetAnimation = animation.drive(tween);
+
+                  return ClipRect(
+                    child: SlideTransition(
+                      position: offsetAnimation,
+                      child: child,
+                    ),
+                  );
+                },
+              ),
+            );
           },
           child: Text(
             item.title,
