@@ -6,12 +6,12 @@ import com.hcmus.mela.ai.chatbot.dto.response.*;
 import com.hcmus.mela.ai.chatbot.model.Conversation;
 import com.hcmus.mela.ai.chatbot.model.Message;
 import com.hcmus.mela.ai.chatbot.repository.ConversationRepository;
+import com.hcmus.mela.ai.client.exception.ApiException;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,25 +23,30 @@ public class ConversationHistoryServiceImpl implements ConversationHistoryServic
 
     @Override
     public GetConversationHistoryResponseDto getConversationHistory(GetConversationHistoryRequestDto request, UUID userId) {
-        // Create Pageable object with sorting by createdAt (either asc or desc based on 'order' field)
-        Pageable pageable = PageRequest.of(0, request.getLimit(),
-                request.getOrder().equals("asc") ? Sort.by(Sort.Order.asc("createdAt")) : Sort.by(Sort.Order.desc("createdAt"))
-        );
 
-        List<Conversation> conversations;
+        List<Conversation> conversations = conversationRepository.findAllByUserId(userId);
 
-        if (request.getAfter() != null) {
-            // Fetch conversations after a certain conversationId
-            UUID afterId = UUID.fromString(request.getAfter());
-            conversations = conversationRepository.findByUserIdAndConversationIdAfter(userId, afterId, pageable);
-        } else if (request.getBefore() != null) {
-            // Fetch conversations before a certain conversationId
-            UUID beforeId = UUID.fromString(request.getBefore());
-            conversations = conversationRepository.findByUserIdAndConversationIdBefore(userId, beforeId, pageable);
-        } else {
-            // Fetch conversations without specific cursor filters
-            conversations = conversationRepository.findByUserId(userId, pageable);
+        if ("asc".equals(request.getOrder())) {
+            conversations.sort((c1, c2) -> c1.getMetadata().getUpdatedAt().compareTo(c2.getMetadata().getUpdatedAt()));
+        } else if ("desc".equals(request.getOrder())) {
+            conversations.sort((c1, c2) -> c2.getMetadata().getUpdatedAt().compareTo(c1.getMetadata().getUpdatedAt()));
         }
+
+        // Apply pagination
+        if(request.getUpdatedAtAfter() != null) {
+            conversations = conversations.stream()
+                    .filter(conversation -> conversation.getMetadata().getUpdatedAt().after(request.getUpdatedAtAfter()))
+                    .toList();
+        }
+        if(request.getUpdatedAtBefore() != null) {
+            conversations = conversations.stream()
+                    .filter(conversation -> conversation.getMetadata().getUpdatedAt().before(request.getUpdatedAtBefore()))
+                    .toList();
+        }
+
+        conversations = conversations.stream()
+                .limit(request.getLimit())
+                .toList();
 
         // Prepare the response
         List<ConversationInfoDto> conversationInfoDtos = conversations.stream()
@@ -51,7 +56,8 @@ public class ConversationHistoryServiceImpl implements ConversationHistoryServic
                         .metadata(
                                 new ConversationMetadataDto(
                                         conversation.getMetadata().getStatus().name(),
-                                        conversation.getMetadata().getCreatedAt())
+                                        conversation.getMetadata().getCreatedAt(),
+                                        conversation.getMetadata().getUpdatedAt())
                         )
                         .build())
                 .toList();
@@ -59,8 +65,8 @@ public class ConversationHistoryServiceImpl implements ConversationHistoryServic
         return GetConversationHistoryResponseDto.builder()
                 .object("list")
                 .data(conversationInfoDtos)
-                .firstId(conversationInfoDtos.isEmpty() ? null : conversationInfoDtos.get(0).getConversationId().toString())
-                .lastId(conversationInfoDtos.isEmpty() ? null : conversationInfoDtos.get(conversationInfoDtos.size() - 1).getConversationId().toString())
+                .firstUpdatedAt(conversations.isEmpty() ? null : conversations.get(0).getMetadata().getUpdatedAt())
+                .lastUpdatedAt(conversations.isEmpty() ? null : conversations.get(conversations.size() - 1).getMetadata().getUpdatedAt())
                 .hasMore(conversationInfoDtos.size() == request.getLimit())
                 .build();
     }
@@ -76,7 +82,8 @@ public class ConversationHistoryServiceImpl implements ConversationHistoryServic
                 .metadata(
                         new ConversationMetadataDto(
                                 conversation.getMetadata().getStatus().name(),
-                                conversation.getMetadata().getCreatedAt())
+                                conversation.getMetadata().getCreatedAt(),
+                                conversation.getMetadata().getUpdatedAt())
                 )
                 .build();
     }
@@ -93,7 +100,7 @@ public class ConversationHistoryServiceImpl implements ConversationHistoryServic
     @Override
     public GetListMessagesResponseDto getListMessages(GetListMessagesRequestDto request, UUID conversationId) {
         if(!conversationRepository.existsByConversationId(conversationId)) {
-            throw new RuntimeException("Conversation not found");
+            throw new ApiException(404, "Conversation not found");
         }
         List<Message> messages;
 

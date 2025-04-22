@@ -10,4 +10,5 @@ import java.util.Date;
 public class ConversationMetadataDto {
     private String status;
     private Date createdAt;
+    private Date updatedAt;
 }

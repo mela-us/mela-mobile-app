@@ -23,5 +23,8 @@ public class Metadata {
     private Date createdAt;
 
     @Field
+    private Date updatedAt;
+
+    @Field
     private int totalTokens;
 }
