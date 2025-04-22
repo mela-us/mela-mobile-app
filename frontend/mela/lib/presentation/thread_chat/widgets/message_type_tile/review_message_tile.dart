@@ -1,14 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/core/widgets/showcase_custom.dart';
+import 'package:mela/data/sharedpref/shared_preference_helper.dart';
+import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/message_chat/review_message.dart';
 import 'package:mela/presentation/thread_chat/widgets/convert_string_to_latex.dart';
 import 'package:mela/presentation/thread_chat/widgets/message_type_tile/button_solution_ai.dart';
 import 'package:mela/presentation/thread_chat/widgets/message_type_tile/support_icon_in_message.dart';
+import 'package:showcaseview/showcaseview.dart';
 
-class ReviewMessageTile extends StatelessWidget {
+class ReviewMessageTile extends StatefulWidget {
   final ReviewMessage currentMessage;
 
   const ReviewMessageTile({super.key, required this.currentMessage});
+
+  @override
+  State<ReviewMessageTile> createState() => _ReviewMessageTileState();
+}
+
+class _ReviewMessageTileState extends State<ReviewMessageTile> {
+  BuildContext? showCaseContext;
+  GlobalKey _keySolutionAi = GlobalKey();
+  final SharedPreferenceHelper _sharedPreferenceHelper =
+      getIt.get<SharedPreferenceHelper>();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(const Duration(milliseconds: 300), () async {
+        final isFirstTimeReviewMessage =
+            await _sharedPreferenceHelper.isFirstTimeReviewMessage;
+        if (mounted && showCaseContext != null && isFirstTimeReviewMessage) {
+          ShowCaseWidget.of(showCaseContext!).startShowCase([
+            _keySolutionAi,
+          ]);
+        }
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,25 +54,27 @@ class ReviewMessageTile extends StatelessWidget {
               _buildStatus(context),
               const SizedBox(height: 8),
               // Submission Summary
-              if (currentMessage.submissionSummary != null)
+              if (widget.currentMessage.submissionSummary != null)
                 _buildSubmissionSummary(context),
-              if (currentMessage.submissionSummary != null)
+              if (widget.currentMessage.submissionSummary != null)
                 const SizedBox(height: 10),
 
               // Guidance
-              if (currentMessage.guidance != null) _buildGuidance(context),
-              if (currentMessage.guidance != null) const SizedBox(height: 10),
+              if (widget.currentMessage.guidance != null)
+                _buildGuidance(context),
+              if (widget.currentMessage.guidance != null)
+                const SizedBox(height: 10),
 
               // Encouragement
-              if (currentMessage.encouragement != null)
+              if (widget.currentMessage.encouragement != null)
                 _buildEncouragement(context),
-              if (currentMessage.encouragement != null)
+              if (widget.currentMessage.encouragement != null)
                 const SizedBox(height: 10),
 
               // Areas for Improvement
-              if (currentMessage.areasForImprovement != null)
+              if (widget.currentMessage.areasForImprovement != null)
                 _buildAreasForImprovement(context),
-              if (currentMessage.areasForImprovement != null)
+              if (widget.currentMessage.areasForImprovement != null)
                 const SizedBox(height: 10),
 
               // Support Icons: Like, unlike, copy
@@ -58,7 +90,26 @@ class ReviewMessageTile extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ButtonSolutionAi(isEnabled: true),
+                    ShowCaseWidget(onFinish: () {
+                      _sharedPreferenceHelper
+                          .saveIsFirstTimeReviewMessage(false);
+                    }, builder: (context) {
+                      showCaseContext = context;
+
+                      return ShowcaseCustom(
+                          keyWidget: _keySolutionAi,
+                          isHideActionWidget: true,
+                          title: "Đáp án từ MELA",
+                          description: "Chọn để xem hướng dẫn chi tiết từ Mela",
+                          child: ButtonSolutionAi(isEnabled: true));
+                      //   return Showcase(
+                      //       key: _keySolutionAi,
+                      //       description: "Giai thich solution cua AI",
+                      //       title: "Loi giai cua Mela",
+                      //       child: ButtonSolutionAi(isEnabled: true));
+                      // }
+                      // // );
+                    }),
                   ],
                 ),
               ),
@@ -95,7 +146,8 @@ class ReviewMessageTile extends StatelessWidget {
                 ),
           ),
           const SizedBox(height: 5),
-          ConvertStringToLatex(rawText: currentMessage.submissionSummary!),
+          ConvertStringToLatex(
+              rawText: widget.currentMessage.submissionSummary!),
           // Text(
           //   currentMessage.submissionSummary!,
           //   style: Theme.of(context).textTheme.content.copyWith(
@@ -135,7 +187,7 @@ class ReviewMessageTile extends StatelessWidget {
                 ),
           ),
           const SizedBox(height: 5),
-          ConvertStringToLatex(rawText: currentMessage.guidance!),
+          ConvertStringToLatex(rawText: widget.currentMessage.guidance!),
           // Text(
           //   currentMessage.guidance!,
           //   style: Theme.of(context).textTheme.content.copyWith(
@@ -175,7 +227,7 @@ class ReviewMessageTile extends StatelessWidget {
                 ),
           ),
           const SizedBox(height: 5),
-          ConvertStringToLatex(rawText: currentMessage.encouragement!),
+          ConvertStringToLatex(rawText: widget.currentMessage.encouragement!),
           // Text(
           //   currentMessage.encouragement!,
           //   style: Theme.of(context).textTheme.content.copyWith(
@@ -215,7 +267,8 @@ class ReviewMessageTile extends StatelessWidget {
                 ),
           ),
           const SizedBox(height: 5),
-          ConvertStringToLatex(rawText: currentMessage.areasForImprovement!),
+          ConvertStringToLatex(
+              rawText: widget.currentMessage.areasForImprovement!),
           // Text(
           //   currentMessage.areasForImprovement!,
           //   style: Theme.of(context).textTheme.content.copyWith(
@@ -241,29 +294,29 @@ class ReviewMessageTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         border:
             Border.all(color: Theme.of(context).colorScheme.buttonYesBgOrText),
-        color: currentMessage.status == ReviewStatus.correct
+        color: widget.currentMessage.status == ReviewStatus.correct
             ? Colors.green[50]
             : Colors.red[50],
       ),
       child: Row(
         children: [
           Icon(
-            currentMessage.status == ReviewStatus.correct
+            widget.currentMessage.status == ReviewStatus.correct
                 ? Icons.check_circle
                 : Icons.cancel,
-            color: currentMessage.status == ReviewStatus.correct
+            color: widget.currentMessage.status == ReviewStatus.correct
                 ? Colors.green[700]
                 : Colors.red[700],
             size: 20,
           ),
           const SizedBox(width: 8),
           Text(
-            "Kết quả: ${currentMessage.status == ReviewStatus.correct ? 'Đúng' : 'Sai'}",
+            "Kết quả: ${widget.currentMessage.status == ReviewStatus.correct ? 'Đúng' : 'Sai'}",
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 0.65,
-                  color: currentMessage.status == ReviewStatus.correct
+                  color: widget.currentMessage.status == ReviewStatus.correct
                       ? Colors.green[700]
                       : Colors.red[700],
                 ),
@@ -279,34 +332,34 @@ class ReviewMessageTile extends StatelessWidget {
     // Status
     fullText.writeln("Kết quả:");
     fullText.writeln(
-        currentMessage.status == ReviewStatus.correct ? 'Đúng' : 'Sai');
+        widget.currentMessage.status == ReviewStatus.correct ? 'Đúng' : 'Sai');
     fullText.writeln();
 
     // Submission Summary
-    if (currentMessage.submissionSummary != null) {
+    if (widget.currentMessage.submissionSummary != null) {
       fullText.writeln("Tóm tắt bài làm:");
-      fullText.writeln(currentMessage.submissionSummary);
+      fullText.writeln(widget.currentMessage.submissionSummary);
       fullText.writeln();
     }
 
     // Guidance
-    if (currentMessage.guidance != null) {
+    if (widget.currentMessage.guidance != null) {
       fullText.writeln("Hướng dẫn:");
-      fullText.writeln(currentMessage.guidance);
+      fullText.writeln(widget.currentMessage.guidance);
       fullText.writeln();
     }
 
     // Encouragement
-    if (currentMessage.encouragement != null) {
+    if (widget.currentMessage.encouragement != null) {
       fullText.writeln("Động viên:");
-      fullText.writeln(currentMessage.encouragement);
+      fullText.writeln(widget.currentMessage.encouragement);
       fullText.writeln();
     }
 
     // Areas for Improvement
-    if (currentMessage.areasForImprovement != null) {
+    if (widget.currentMessage.areasForImprovement != null) {
       fullText.writeln("Điểm cần cải thiện:");
-      fullText.writeln(currentMessage.areasForImprovement);
+      fullText.writeln(widget.currentMessage.areasForImprovement);
     }
 
     return fullText.toString();

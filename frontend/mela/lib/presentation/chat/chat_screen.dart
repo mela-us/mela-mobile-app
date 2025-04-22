@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/dimens.dart';
 import 'package:mela/constants/enum.dart';
+import 'package:mela/core/widgets/showcase_custom.dart';
+import 'package:mela/data/sharedpref/shared_preference_helper.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/presentation/chat/store/history_store.dart';
@@ -9,10 +11,11 @@ import 'package:mela/presentation/chat/widgets/sidebar_widget.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/thread_chat/widgets/chat_box.dart';
 import 'package:mela/utils/routes/routes.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 //First look at the ChatScreen
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  ChatScreen({super.key});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -21,6 +24,8 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final ThreadChatStore _threadChatStore = getIt.get<ThreadChatStore>();
   final HistoryStore _historyStore = getIt.get<HistoryStore>();
+  final _sharedPrefsHelper = getIt.get<SharedPreferenceHelper>();
+
   List<Map<String, dynamic>> messages = [
     {
       "text":
@@ -47,28 +52,55 @@ class _ChatScreenState extends State<ChatScreen> {
     "Cách tìm công thức tổng quát?",
     "Kết thúc"
   ];
+  GlobalKey _chatBoxKey = GlobalKey();
+  GlobalKey _relativeTermKey = GlobalKey();
+  BuildContext? showCaseContext;
 
   bool isSelected = false;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Thêm delay 500ms trước khi gọi startShowCase
+      Future.delayed(const Duration(milliseconds: 300), () async {
+        final isFirstTimeGoToChat =
+            await _sharedPrefsHelper.isFirstTimeGoToChat;
+        if (mounted && showCaseContext != null && isFirstTimeGoToChat) {
+          ShowCaseWidget.of(showCaseContext!)
+              .startShowCase([_chatBoxKey, _relativeTermKey]);
+        }
+      });
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _threadChatStore.clearConversation();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          scrolledUnderElevation: 0,
-          backgroundColor: Theme.of(context).colorScheme.appBackground,
-          elevation: 0,
-          title: _buildTitle(context),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.appBackground,
-        body: SingleChildScrollView(
-          child: _buildDefaultBody(context),
-        ));
+    return ShowCaseWidget(
+        onComplete: (p0, p1) => print("===============>Complete $p0 $p1"),
+        onStart: (p0, p1) => print("================>Start $p0 $p1"),
+        onFinish: () {
+          print("Finish");
+          _sharedPrefsHelper.saveIsFirstTimeGoToChat(false);
+        },
+        builder: (context) {
+          showCaseContext = context;
+          return Scaffold(
+              appBar: AppBar(
+                automaticallyImplyLeading: false,
+                scrolledUnderElevation: 0,
+                backgroundColor: Theme.of(context).colorScheme.appBackground,
+                elevation: 0,
+                title: _buildTitle(context),
+              ),
+              backgroundColor: Theme.of(context).colorScheme.appBackground,
+              body: SingleChildScrollView(
+                child: _buildDefaultBody(context),
+              ));
+        });
   }
 
   //Build component:------------------------------------------------------------
@@ -122,18 +154,79 @@ class _ChatScreenState extends State<ChatScreen> {
                   .aiExplainStyle
                   .copyWith(color: Theme.of(context).colorScheme.secondary)),
           const SizedBox(height: 15),
-          ChatBox(isFirstChatScreen: true),
-          const SizedBox(height: 15),
-          ListView(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              _buildListItem("Cách giải phương trình bậc 2 một ẩn"),
-              _buildListItem("Hệ thức Vi-et là gì?"),
-              _buildListItem("Hướng dẫn mình giải bài toán này"),
-              _buildListItem("Nhận xét bài làm của mình"),
-            ],
+          // Showcase.withWidget(
+          //     height: 80,
+          //     key: _key1,
+          //     width: 200,
+          //     container: Container(
+          //       decoration: BoxDecoration(
+          //         color: Colors.red,
+          //         borderRadius: BorderRadius.circular(15),
+          //       ),
+          //       child: const Column(
+          //         mainAxisSize: MainAxisSize.min,
+          //         children: [
+          //           Text(
+          //             "Gửi bài toán dễ dàng",
+          //             style: TextStyle(
+          //               color: Colors.white,
+          //               fontWeight: FontWeight.bold,
+          //               fontSize: 16,
+          //             ),
+          //             textAlign: TextAlign.center,
+          //           ),
+          //           SizedBox(height: 10),
+          //           Text(
+          //             "Chụp ảnh hoặc nhập bài toán vào ô chatbox, Mela sẽ hỗ trợ ngay!",
+          //             style: TextStyle(color: Colors.white, fontSize: 14),
+          //             textAlign: TextAlign.center,
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //     child: ChatBox(isFirstChatScreen: true)),
+
+          ShowcaseCustom(
+            keyWidget: _chatBoxKey,
+            isHideActionWidget: true,
+            title: "Đặt câu hỏi cho MELA",
+            description:
+                "Chụp ảnh hoặc nhập bài toán vào ô chat, Mela sẽ hỗ trợ ngay!",
+            child: ChatBox(isFirstChatScreen: true),
           ),
+
+          const SizedBox(height: 15),
+          ShowcaseCustom(
+            keyWidget: _relativeTermKey,
+            title: "Câu hỏi nhanh",
+            description: "Lựa chọn những câu hỏi gợi ý để bắt đầu",
+            child: ListView(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                _buildListItem("Cách giải phương trình bậc 2 một ẩn"),
+                _buildListItem("Hệ thức Vi-et là gì?"),
+                _buildListItem("Hướng dẫn mình giải bài toán này"),
+                _buildListItem("Nhận xét bài làm của mình"),
+              ],
+            ),
+          ),
+
+          // Showcase(
+          //   key: _key2,
+          //   description: "Những câu hỏi gợi ý cho bạn",
+          //   title: "Gợi ý câu hỏi",
+          //   child: ListView(
+          //     shrinkWrap: true,
+          //     physics: const NeverScrollableScrollPhysics(),
+          //     children: [
+          //       _buildListItem("Cách giải phương trình bậc 2 một ẩn"),
+          //       _buildListItem("Hệ thức Vi-et là gì?"),
+          //       _buildListItem("Hướng dẫn mình giải bài toán này"),
+          //       _buildListItem("Nhận xét bài làm của mình"),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );

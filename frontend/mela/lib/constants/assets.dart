@@ -15,6 +15,8 @@ class Assets {
   static const String unliked = "assets/icons/unliked.svg";
   static const String copy = "assets/icons/copy.svg";
 
+  static const String mela_think = "assets/icons/mela_think.svg";
+
   //Image
   static String exit_image = 'assets/images/exit_image.png';
   static String result_image = 'assets/images/result_image.png';

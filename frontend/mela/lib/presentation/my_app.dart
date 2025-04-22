@@ -27,6 +27,7 @@ import 'package:mela/presentation/stats/stats.dart';
 import 'package:mela/utils/routes/routes.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../constants/route_observer.dart';
 import '../di/service_locator.dart';
@@ -178,7 +179,7 @@ class _MyAppState extends State<MyApp> {
                               //Reset sharedpref.
                               await prefs.saveIsLoggedIn(false);
                               await secureStorageHelper.deleteAll();
-
+    
                               SystemNavigator.pop();
                               exit(0);
                             },
