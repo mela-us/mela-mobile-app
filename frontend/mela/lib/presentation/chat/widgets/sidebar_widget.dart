@@ -133,10 +133,29 @@ class _SidebarWidgetState extends State<SidebarWidget> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18),
         child: Observer(
-            builder: (_) => ListView.builder(itemBuilder: (context, index) {
-                  final item = _historyStore.convs?[index];
-                  return _buildChatHistory(item!);
-                })
+            builder: (_) {
+              if (_historyStore.isLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                if (_historyStore.convs == null || _historyStore.convs!.isEmpty) {
+                  return const Center(
+                    child: Text("Chưa có lịch sử nào"),
+                  );
+                }
+                else {
+                  return ListView.builder(
+                    itemCount: _historyStore.convs!.length,
+                    itemBuilder: (context, index) {
+                      final item = _historyStore.convs![index];
+                      return _buildChatHistory(item);
+                    },
+                  );
+                }
+              }
+
+            }
 
             // children: isExpanded.keys.map((title) {
             //   return Column(

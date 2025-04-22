@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:mela/data/network/apis/chat/dummy_data.dart';
 import 'package:mela/data/network/constants/endpoints_const.dart';
 import 'package:mela/data/network/dio_client.dart';
+import 'package:mela/data/securestorage/secure_storage_helper.dart';
 import 'package:mela/domain/entity/chat/history_item.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/domain/entity/message_chat/message_chat.dart';
@@ -11,7 +15,9 @@ import 'package:mela/domain/usecase/chat/send_message_chat_usecase.dart';
 
 class ChatApi {
   DioClient _dioClient;
-  ChatApi(this._dioClient);
+  SecureStorageHelper _store;
+  ChatApi(this._dioClient, this._store);
+
 
   //=======Test
   Conversation _conversation = conversation1;
@@ -76,18 +82,47 @@ class ChatApi {
   }
 
   Future<List<HistoryItem>> getHistoryChat() async {
-    final data = {'order': 'desc', 'limit': 20};
-    final response = await _dioClient.get(EndpointsConst.getChatHistory,
-        queryParameters: data);
+    final data = {'order': 'desc', 'limit': '20'};
+    // final response = await _dioClient.get(EndpointsConst.getChatHistory,
+    //     queryParameters: data);
 
-    if (response.statusCode == 200) {
-      print("--API GET HISTORY--");
-      print(response.data);
-      List<dynamic> dataList = response.data["data"];
+    // final response = await _dioClient.getWithBody(EndpointsConst.getChatHistory,
+    //     data: data);
+    String? token = await _store.accessToken;
+    if (token == null) {
+      throw 401;
+    }
+    HttpClient client = HttpClient();
+    final Uri uri = Uri.parse(
+        "${EndpointsConst.baseUrl}${EndpointsConst.getChatHistory}");
+    HttpClientRequest request = await client.openUrl('GET', uri);
+    request.headers.set('Authorization', 'Bearer $token');
+    request.headers.set('Content-Type', 'application/json');
+
+    String body = jsonEncode(data);
+    request.headers.contentLength = utf8.encode(body).length;
+    request.add(utf8.encode(body));
+    try {
+      HttpClientResponse response = await request.close();
+      String responseBody = await utf8.decodeStream(response);
+      List<dynamic> dataList = jsonDecode(responseBody)["data"];
       List<HistoryItem> temp =
           dataList.map((item) => HistoryItem.fromJson(item)).toList();
+      print("--API GET HISTORY--");
+      print("Response: $responseBody");
       return temp;
+    } catch (e) {
+      print("Error: $e");
+    } finally {
+      client.close();
     }
     return [];
+    // if (response.statusCode == 200) {
+    //   print("--API GET HISTORY--");
+    //   print(response.data);
+    //   List<dynamic> dataList = response.data["data"];
+    //   List<HistoryItem> temp =
+    //       dataList.map((item) => HistoryItem.fromJson(item)).toList();
+    //   return temp;
   }
 }

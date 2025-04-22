@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:mela/core/stores/error/error_store.dart';
+import 'package:mela/data/securestorage/secure_storage_helper.dart';
+import 'package:mela/data/sharedpref/shared_preference_helper.dart';
 import 'package:mela/domain/entity/chat/history_item.dart';
 import 'package:mela/domain/usecase/chat/get_history_chat_usecase.dart';
 import 'package:mela/utils/dio/dio_error_util.dart';
@@ -16,22 +18,30 @@ abstract class _HistoryStore with Store {
 
   //Observable:-----------------------------------------------------------------
   @observable
-  List<HistoryItem>? convs;
+  ObservableList<HistoryItem> convs = ObservableList<HistoryItem>();
 
   @observable
   bool isLoading = false;
 
   _HistoryStore(this._getHistoryChatUsecase, this._errorStore);
 
+
+  @computed
+  bool get iisLoading => isLoading;
   //Action:---------------------------------------------------------------------
 
   @action
-  void getConvHistory() async {
+  Future<void> getConvHistory() async {
     isLoading = true;
 
     try {
-      convs = await _getHistoryChatUsecase.call(params: null);
-    } catch (e) {
+      print("Reach");
+      List<HistoryItem> hist = await _getHistoryChatUsecase.call(params: null);
+      convs.clear();
+      convs.addAll(hist);
+      print("Done!");
+      isLoading = false;
+    } catch (e, stackTrace) {
       if (e is DioException) {
         if (e.response?.statusCode == 401) {
           // isAuthorized = false;
@@ -40,13 +50,19 @@ abstract class _HistoryStore with Store {
           //ss
         }
         _errorStore.errorMessage = DioExceptionUtil.handleError(e);
-      } else {
+      }
+      else {
         if (e == 401) {
           return;
         }
+        print("Error: $e");
       }
-      print("Error: $e");
+      print("Error: $e, stackTrace: $stackTrace");
+    } finally {
+      isLoading = false;
     }
+
+    isLoading = false;
   }
 
   //Computed:-------------------------------------------------------------------

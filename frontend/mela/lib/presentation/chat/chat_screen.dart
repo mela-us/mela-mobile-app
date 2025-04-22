@@ -142,7 +142,7 @@ class _ChatScreenState extends State<ChatScreen> {
   //Build items:----------------------------------------------------------------
   Widget _buildHistoryButton(BuildContext context) {
     return GestureDetector(
-        onTap: () => {
+        onTap: () async => {
               // Show sidebar
               showGeneralDialog(
                   context: context,
@@ -173,7 +173,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         )); // Sidebar
                   }),
               // Call api
-              _historyStore.getConvHistory()
+              await _historyStore.getConvHistory()
             },
         child: SizedBox(
           width: 30,
