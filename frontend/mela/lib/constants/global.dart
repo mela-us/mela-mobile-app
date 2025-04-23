@@ -9,7 +9,6 @@ import '../domain/entity/lecture/lecture.dart';
 import '../domain/entity/topic/topic.dart';
 import 'package:mela/domain/entity/question/question.dart';
 import 'package:mela/domain/entity/stat/progress.dart';
-import 'package:mela/domain/entity/stat/detailed_progress.dart';
 
 
 class Global {
