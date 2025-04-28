@@ -21,10 +21,11 @@ class ReviewMessage extends MessageChat {
     this.areasForImprovement,
     required this.status,
     DateTime? timestamp,
-  }) : super(isAI: isAI, type: MessageType.review, timestamp: timestamp);
+    String? messageId,
+  }) : super(isAI: isAI, type: MessageType.review, timestamp: timestamp, messageId: messageId);
 
   factory ReviewMessage.fromJson(
-      Map<String, dynamic> content, bool isAI, DateTime? timestamp) {
+      Map<String, dynamic> content, bool isAI, DateTime? timestamp, String? messageId) {
     return ReviewMessage(
       isAI: isAI,
       submissionSummary: content['submissionSummary'] as String?,
@@ -33,6 +34,7 @@ class ReviewMessage extends MessageChat {
       areasForImprovement: content['areasForImprovement'] as String?,
       status: _parseStatus(content['status'] as String?),
       timestamp: timestamp,
+      messageId: messageId,
     );
   }
 

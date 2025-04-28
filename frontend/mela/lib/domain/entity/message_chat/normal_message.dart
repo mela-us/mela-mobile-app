@@ -10,11 +10,16 @@ class NormalMessage extends MessageChat {
     required bool isAI,
     required this.text,
     this.imageSourceList,
+    String? messageId,
     DateTime? timestamp,
-  }) : super(isAI: isAI, type: MessageType.normal, timestamp: timestamp);
+  }) : super(
+            isAI: isAI,
+            type: MessageType.normal,
+            timestamp: timestamp,
+            messageId: messageId);
 
-  factory NormalMessage.fromJson(
-      Map<String, dynamic> content, bool isAI, DateTime? timestamp) {
+  factory NormalMessage.fromJson(Map<String, dynamic> content, bool isAI,
+      DateTime? timestamp, String? messageId) {
     if (content.isEmpty) {
       return NormalMessage(
         isAI: true,
@@ -25,16 +30,17 @@ class NormalMessage extends MessageChat {
     }
     return NormalMessage(
       isAI: isAI,
-      text: content['text'],
-      imageSourceList: content['image_url'] != null
+      text: content['text'] ?? "",
+      imageSourceList: content['imageUrl'] != null
           ? [
               ImageOrigin(
-                image: content['image_url'] as String,
+                image: content['imageUrl'] as String,
                 isImageUrl: true,
               )
             ]
           : [],
       timestamp: timestamp,
+      messageId: messageId,
     );
   }
 }

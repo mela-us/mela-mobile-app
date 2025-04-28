@@ -46,6 +46,7 @@ class _CustomNavigationBarState extends State<CustomNavigationBar>
   }
 
   void _onTap(int index) {
+
     widget.onTap(index);
     _controller.forward().then((_) {
       _controller.reverse();

@@ -1,3 +1,4 @@
+import 'package:mela/domain/entity/chat/history_item.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/domain/usecase/chat/create_new_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/get_conversation_usecase.dart';
@@ -12,5 +13,7 @@ abstract class ChatRepository {
       CreateNewConversationParams params);
 
   Future<Conversation> sendMessageReviewSubmission(ChatRequestParams params);
-    Future<Conversation> sendMessageGetSolution(ChatRequestParams params);
+  Future<Conversation> sendMessageGetSolution(ChatRequestParams params);
+
+  Future<List<HistoryItem>> getHistoryChat();
 }

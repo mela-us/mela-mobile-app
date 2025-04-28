@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/enum.dart';
+import 'package:mela/core/widgets/showcase_custom.dart';
+import 'package:mela/data/sharedpref/shared_preference_helper.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/message_chat/initial_message.dart';
 import 'package:mela/presentation/thread_chat/store/chat_box_store/chat_box_store.dart';
@@ -9,75 +11,122 @@ import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_cha
 import 'package:mela/presentation/thread_chat/widgets/convert_string_to_latex.dart';
 import 'package:mela/presentation/thread_chat/widgets/message_type_tile/button_submission_review.dart';
 import 'package:mela/presentation/thread_chat/widgets/message_type_tile/support_icon_in_message.dart';
+import 'package:showcaseview/showcaseview.dart';
 
-class InitialMessageTile extends StatelessWidget {
-  final ThreadChatStore _threadChatStore = getIt.get<ThreadChatStore>();
-  final ChatBoxStore _chatBoxStore = getIt.get<ChatBoxStore>();
+class InitialMessageTile extends StatefulWidget {
   final InitialMessage currentMessage;
 
   InitialMessageTile({super.key, required this.currentMessage});
 
   @override
+  State<InitialMessageTile> createState() => _InitialMessageTileState();
+}
+
+class _InitialMessageTileState extends State<InitialMessageTile> {
+  final ThreadChatStore _threadChatStore = getIt.get<ThreadChatStore>();
+  final SharedPreferenceHelper _sharedPreferenceHelper =
+      getIt.get<SharedPreferenceHelper>();
+
+  final ChatBoxStore _chatBoxStore = getIt.get<ChatBoxStore>();
+  final GlobalKey _keyRelativeTerm = GlobalKey();
+  final GlobalKey _keySubmitAnswer = GlobalKey();
+  BuildContext? showCaseContext;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(const Duration(milliseconds: 300), () async {
+        final isFirstTimeIntitialMessage =
+            await _sharedPreferenceHelper.isFirstTimeIntitialMessage;
+        if (mounted && showCaseContext != null && isFirstTimeIntitialMessage) {
+          ShowCaseWidget.of(showCaseContext!).startShowCase([
+            _keyRelativeTerm,
+            _keySubmitAnswer,
+          ]);
+        }
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Observer(builder: (_) {
-      bool isEnabledSubmission =
-          _threadChatStore.currentConversation.levelConversation ==
-                  LevelConversation.PROBLEM_IDENTIFIED ||
-              _threadChatStore.currentConversation.levelConversation ==
-                  LevelConversation.SUBMISSION_REVIEWED;
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Solution Method
-                _buildSolutionMethod(context),
-                const SizedBox(height: 10),
+    return ShowCaseWidget(onFinish: () {
+      print("=============>Finish showcase in InitialMessageTile");
+      _sharedPreferenceHelper.saveIsFirstTimeIntitialMessage(false);
+    }, builder: (context) {
+      showCaseContext = context;
+      return Observer(builder: (_) {
+        bool isEnabledSubmission =
+            _threadChatStore.currentConversation.levelConversation ==
+                    LevelConversation.PROBLEM_IDENTIFIED ||
+                _threadChatStore.currentConversation.levelConversation ==
+                    LevelConversation.SUBMISSION_REVIEWED;
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Solution Method
+                  _buildSolutionMethod(context),
+                  const SizedBox(height: 10),
 
-                // Analysis
-                _buildAnalysis(context),
-                const SizedBox(height: 10),
+                  // Analysis
+                  _buildAnalysis(context),
+                  const SizedBox(height: 10),
 
-                // Steps
-                _buildSteps(context),
-                const SizedBox(height: 10),
+                  // Steps
+                  _buildSteps(context),
+                  const SizedBox(height: 10),
 
-                // Advice
-                _buildAdvice(context),
-                const SizedBox(height: 10),
+                  // Advice
+                  _buildAdvice(context),
+                  const SizedBox(height: 10),
 
-                // Relative Terms
-                _buildRelativeTerms(context),
-                const SizedBox(height: 8),
+                  // Relative Terms
+                  ShowcaseCustom(
+                      keyWidget: _keyRelativeTerm,
+                      title: "Các từ khóa liên quan",
+                      isHideActionWidget: true,
+                      description:
+                          "Chọn nhanh các từ khóa liên quan để MELA giải thích chi tiết nhanh chóng!",
+                      child: _buildRelativeTerms(context)),
+                  const SizedBox(height: 8),
 
-                // Support Icons: Like, unlike, copy
-                SupportIconInMessage(
-                  textCopy: _buildFullMessageText(),
-                ),
-
-                const SizedBox(height: 8),
-                Container(
-                  constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width * 0.85,
+                  // Support Icons: Like, unlike, copy
+                  SupportIconInMessage(
+                    textCopy: _buildFullMessageText(),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ButtonSubmissionReview(
-                        isEnabled: isEnabledSubmission,
-                      ),
-                    ],
+
+                  const SizedBox(height: 8),
+                  Container(
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.85,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ShowcaseCustom(
+                          keyWidget: _keySubmitAnswer,
+                          title: "Nộp bài",
+                          description:
+                              "Sau khi xem các hướng dẫn chi tiết, bạn có thể ấn nộp bài để MELA kiểm tra bài làm của bạn nhé!",
+                          child: ButtonSubmissionReview(
+                            isEnabled: isEnabledSubmission,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8),
-              ],
-            ),
-          ],
-        ),
-      );
+                  const SizedBox(height: 8),
+                ],
+              ),
+            ],
+          ),
+        );
+      });
     });
   }
 
@@ -106,7 +155,7 @@ class InitialMessageTile extends StatelessWidget {
                 ),
           ),
           const SizedBox(height: 5),
-          ConvertStringToLatex(rawText: currentMessage.solutionMethod),
+          ConvertStringToLatex(rawText: widget.currentMessage.solutionMethod),
 
           // Text(
           //   currentMessage.solutionMethod,
@@ -127,20 +176,20 @@ class InitialMessageTile extends StatelessWidget {
 
     // Solution Method
     fullText.writeln("Phương pháp giải:");
-    fullText.writeln(currentMessage.solutionMethod);
+    fullText.writeln(widget.currentMessage.solutionMethod);
     fullText.writeln();
 
     // Analysis
     fullText.writeln("Phân tích:");
-    fullText.writeln(currentMessage.analysis);
+    fullText.writeln(widget.currentMessage.analysis);
     fullText.writeln();
 
     // Steps
     fullText.writeln("Các bước thực hiện:");
-    for (int i = 0; i < currentMessage.steps.length; i++) {
-      fullText.writeln("${currentMessage.steps[i].title}");
-      fullText.writeln("${currentMessage.steps[i].description}");
-      if (i < currentMessage.steps.length - 1) {
+    for (int i = 0; i < widget.currentMessage.steps.length; i++) {
+      fullText.writeln("${widget.currentMessage.steps[i].title}");
+      fullText.writeln("${widget.currentMessage.steps[i].description}");
+      if (i < widget.currentMessage.steps.length - 1) {
         fullText.writeln("---");
       }
     }
@@ -148,12 +197,12 @@ class InitialMessageTile extends StatelessWidget {
 
     // Advice
     fullText.writeln("Lời khuyên:");
-    fullText.writeln(currentMessage.advice);
+    fullText.writeln(widget.currentMessage.advice);
     fullText.writeln();
 
     // Relative Terms
     fullText.writeln("Từ khóa liên quan:");
-    fullText.writeln(currentMessage.relativeTerms.join(", "));
+    fullText.writeln(widget.currentMessage.relativeTerms.join(", "));
 
     return fullText.toString();
   }
@@ -183,7 +232,7 @@ class InitialMessageTile extends StatelessWidget {
                 ),
           ),
           const SizedBox(height: 5),
-          ConvertStringToLatex(rawText: currentMessage.analysis),
+          ConvertStringToLatex(rawText: widget.currentMessage.analysis),
           // Text(
           //   currentMessage.analysis,
           //   style: Theme.of(context).textTheme.content.copyWith(
@@ -223,7 +272,7 @@ class InitialMessageTile extends StatelessWidget {
                 ),
           ),
           const SizedBox(height: 5),
-          ...currentMessage.steps.asMap().entries.map((entry) {
+          ...widget.currentMessage.steps.asMap().entries.map((entry) {
             int index = entry.key;
             StepGuilde step = entry.value;
             return Padding(
@@ -239,7 +288,7 @@ class InitialMessageTile extends StatelessWidget {
                     height: 3,
                   ),
                   ConvertStringToLatex(rawText: step.description),
-                  if (index != currentMessage.steps.length - 1)
+                  if (index != widget.currentMessage.steps.length - 1)
                     const Divider(
                       color: Colors.grey,
                       thickness: 0.5,
@@ -279,7 +328,7 @@ class InitialMessageTile extends StatelessWidget {
                 ),
           ),
           const SizedBox(height: 5),
-          ConvertStringToLatex(rawText: currentMessage.advice),
+          ConvertStringToLatex(rawText: widget.currentMessage.advice),
           // Text(
           //   currentMessage.advice,
           //   style: Theme.of(context).textTheme.content.copyWith(
@@ -317,7 +366,7 @@ class InitialMessageTile extends StatelessWidget {
           Wrap(
             spacing: 8.0,
             runSpacing: 8.0,
-            children: currentMessage.relativeTerms
+            children: widget.currentMessage.relativeTerms
                 .map((term) => ElevatedButton(
                       onPressed: () async {
                         if (_threadChatStore.isLoading) {

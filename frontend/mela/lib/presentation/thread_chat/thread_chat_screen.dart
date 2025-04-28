@@ -6,6 +6,7 @@ import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/domain/entity/message_chat/review_message.dart';
+import 'package:mela/presentation/thread_chat/store/chat_box_store/chat_box_store.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/thread_chat/widgets/chat_box.dart';
 import 'package:mela/presentation/thread_chat/widgets/list_skeleton.dart';
@@ -22,6 +23,7 @@ class ThreadChatScreen extends StatefulWidget {
 
 class _ThreadChatScreenState extends State<ThreadChatScreen> {
   final ThreadChatStore _threadChatStore = getIt.get<ThreadChatStore>();
+  final _chatBoxStore = getIt.get<ChatBoxStore>();
   final ScrollController _scrollController = ScrollController();
   late ReactionDisposer disposerSendMessage;
   late ReactionDisposer disposerGetConversation;
@@ -148,7 +150,12 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            _threadChatStore.clearConversation();
+            if (_threadChatStore.isGoToFromReview) {
+              _threadChatStore.setIsGoToFromReview(false);
+            } else {
+              _threadChatStore.clearConversation();
+            }
+            _chatBoxStore.setShowCameraIcon(true);
             Navigator.of(context).pop();
           },
         ),

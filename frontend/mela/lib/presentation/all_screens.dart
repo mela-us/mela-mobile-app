@@ -4,6 +4,7 @@ import 'package:mela/presentation/home_screen/home_screen.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 import 'package:mela/presentation/stats/stats.dart';
 import 'package:mela/presentation/personal/personal.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 import '../core/widgets/custom_navigation_bar.dart';
 import 'chat/chat_screen.dart';
@@ -39,7 +40,6 @@ class _AllScreensState extends State<AllScreens> {
       _levelStore.resetErrorString();
       _previousIndex = _currentIndex;
       _currentIndex = index;
-
     });
   }
 
@@ -49,8 +49,8 @@ class _AllScreensState extends State<AllScreens> {
         body: AnimatedSwitcher(
           duration: const Duration(milliseconds: 300),
           transitionBuilder: (Widget child, Animation<double> animation) {
-            final slideDirection = _currentIndex > _previousIndex ?
-                Offset(1, 0) : Offset(-1, 0);
+            final slideDirection =
+                _currentIndex > _previousIndex ? Offset(1, 0) : Offset(-1, 0);
 
             return ClipRect(
               child: SlideTransition(

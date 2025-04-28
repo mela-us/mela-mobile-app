@@ -1,4 +1,3 @@
-
 class EndpointsConst {
   EndpointsConst._();
 
@@ -51,14 +50,18 @@ class EndpointsConst {
   static const String sendMessageGetSolution =
       "/api/chatbot/conversations/:conversationId/messages/solution";
 
-    static String generateGuide(String questionId) =>
+  static String generateGuide(String questionId) =>
       "/api/$questionId/hint/guide";
-    static String generateTerm(String questionId) =>
+  static String generateTerm(String questionId) =>
       "/api/$questionId/hint/terms";
 
-    // static String generateTerm(String questionId) =>
-    //   "/api/ai-hint/$questionId";
+  // static String generateTerm(String questionId) =>
+  //   "/api/ai-hint/$questionId";
 
   static const String updateSectionProgress = "/api/lecture-histories";
   static const String updateExerciseProgress = "/api/exercise-histories";
+
+  static const String getChatHistory = "/api/chatbot/conversations";
+  static const String getMessageInConversation =
+      "/api/chatbot/conversations/:conversationId/messages";
 }

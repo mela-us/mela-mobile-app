@@ -8,6 +8,14 @@ class Progress {
   ProgressExercise? exercise;
   ProgressSection? section;
 
+  bool get isGain {
+    return exercise?.isGain ?? false;
+  }
+
+  bool get isDrop {
+    return exercise?.isDrop ?? false;
+  }
+
   Progress({
     required this.type,
     required this.latestDate,
@@ -33,6 +41,14 @@ class ProgressExercise {
   String exerciseName;
   double latestScore;
   List<ScoreRecord> scoreRecords;
+
+  bool get isGain {
+    return scoreRecords.length > 1 && scoreRecords[0].score > scoreRecords[1].score;
+  }
+
+  bool get isDrop {
+    return scoreRecords.length > 1 && scoreRecords[0].score < scoreRecords[1].score;
+  }
 
   ProgressExercise({
     required this.exerciseName,

@@ -41,6 +41,7 @@ abstract class _ChatBoxStore with Store {
 
   @action
   void setShowCameraIcon(bool value) {
+    print('setShowCameraIcon: $value');
     showCameraIcon = value;
   }
 

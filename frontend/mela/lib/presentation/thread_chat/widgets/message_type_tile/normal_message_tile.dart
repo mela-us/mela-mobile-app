@@ -160,6 +160,9 @@ class NormalMessageTile extends StatelessWidget {
   //---Message
   Widget _buildMessage(BuildContext context) {
     bool isAI = currentMessage.isAI;
+    // print(
+    //     "=================Build Message In Normal Message Tile===================");
+    // print("-------->${currentMessage.text}");
     if (currentMessage.text != null && currentMessage.text!.isEmpty) {
       return const SizedBox();
     }
@@ -211,12 +214,12 @@ class NormalMessageTile extends StatelessWidget {
           //       offset: isAI ? const Offset(3, 6) : const Offset(0, 0)),
           // ],
         ),
-        child: currentMessage.text == null
+        child: (currentMessage.text == null && currentMessage.isAI)
             ? const MessageLoadingResponse()
             : isAI
-                ? ConvertStringToLatex(rawText: currentMessage.text!)
+                ? ConvertStringToLatex(rawText: currentMessage.text ?? "")
                 : ConvertStringToLatex(
-                    rawText: currentMessage.text!,
+                    rawText: currentMessage.text ?? "",
                     isStep: false,
                     isAI: false,
                   ),

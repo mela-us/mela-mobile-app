@@ -29,13 +29,19 @@ class InitialMessage extends MessageChat {
     required this.analysis,
     required this.steps,
     required this.relativeTerms,
+    String? messageId,
     DateTime? timestamp,
-  }) : super(isAI: isAI, type: MessageType.initial, timestamp: timestamp);
+  }) : super(
+            isAI: isAI,
+            type: MessageType.initial,
+            timestamp: timestamp,
+            messageId: messageId);
 
-  factory InitialMessage.fromJson(
-      Map<String, dynamic> content, bool isAI, DateTime? timestamp) {
-    final steps =
-        (content['steps'] as List).map((step) => StepGuilde.fromJson(step)).toList();
+  factory InitialMessage.fromJson(Map<String, dynamic> content, bool isAI,
+      DateTime? timestamp, String? messageId) {
+    final steps = (content['steps'] as List)
+        .map((step) => StepGuilde.fromJson(step))
+        .toList();
     final relativeTerms = List<String>.from(content['relativeTerms']);
     return InitialMessage(
       isAI: isAI,
@@ -45,6 +51,7 @@ class InitialMessage extends MessageChat {
       steps: steps,
       relativeTerms: relativeTerms,
       timestamp: timestamp,
+      messageId: messageId,
     );
   }
 }
