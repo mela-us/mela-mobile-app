@@ -40,7 +40,7 @@ android {
         release {
             keyAlias = System.getenv('keyAlias')
             keyPassword = System.getenv('keyPassword')
-            storeFile = file(System.getenv('storeFile'))
+            storeFile = (System.getenv('storeFile')!=null)? file(System.getenv('storeFile')) : System.getenv("upload-keystore.jks")
             storePassword = System.getenv('storePassword')
         }
     }
