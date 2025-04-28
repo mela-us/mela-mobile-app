@@ -191,10 +191,10 @@ class _HomeScreenState extends State<HomeScreen>
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,
-                          mainAxisSpacing: 0,
+                          mainAxisSpacing: 8,
                           crossAxisSpacing: 0,
                           childAspectRatio: 1,
-                          mainAxisExtent: 100, // set the height of each item
+                          mainAxisExtent: 80, // set the height of each item
                         ),
                         itemCount: _levelStore.levelList!.levelList.length,
                         itemBuilder: (context, index) {
@@ -204,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen>
                         },
                       ),
 
-                      const SizedBox(height: 15),
+                      const SizedBox(height: 10),
 
                       TabBar(
                         labelColor: Theme.of(context).colorScheme.tertiary,
@@ -309,50 +309,50 @@ class _HomeScreenState extends State<HomeScreen>
                         ),
                       ),
 
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Image.asset(
-                              'assets/images/fire.png',
-                              width: 20,
-                              height: 28,
-                              fit: BoxFit.contain,
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              "Bài tập nhanh",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subTitle
-                                  .copyWith(
-                                      color: ColorsStandards
-                                          .textColorInBackground2),
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 10),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 10),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.start,
+                      //     children: [
+                      //       Image.asset(
+                      //         'assets/images/fire.png',
+                      //         width: 20,
+                      //         height: 28,
+                      //         fit: BoxFit.contain,
+                      //       ),
+                      //       const SizedBox(
+                      //         width: 10,
+                      //       ),
+                      //       Text(
+                      //         "Bài tập nhanh",
+                      //         style: Theme.of(context)
+                      //             .textTheme
+                      //             .subTitle
+                      //             .copyWith(
+                      //                 color: ColorsStandards
+                      //                     .textColorInBackground2),
+                      //       )
+                      //     ],
+                      //   ),
+                      // ),
+                      // const SizedBox(height: 10),
 
-                      AnimatedBuilder(
-                          animation: _scaleAnimation,
-                          builder: (context, child) {
-                            return Transform.scale(
-                              scale: _scaleAnimation.value,
-                              child: ButtonIndividualExercise(
-                                  key: _buttonIndividualExerciseKey,
-                                  leadingIcon: SvgPicture.asset(
-                                    Assets.mela_think,
-                                    width: 40,
-                                  ),
-                                  textButton: "Ôn tập nhanh cùng MELA",
-                                  onPressed: () {}),
-                            );
-                          }),
-                      const SizedBox(height: 20),
+                      // AnimatedBuilder(
+                      //     animation: _scaleAnimation,
+                      //     builder: (context, child) {
+                      //       return Transform.scale(
+                      //         scale: _scaleAnimation.value,
+                      //         child: ButtonIndividualExercise(
+                      //             key: _buttonIndividualExerciseKey,
+                      //             leadingIcon: SvgPicture.asset(
+                      //               Assets.mela_think,
+                      //               width: 40,
+                      //             ),
+                      //             textButton: "Ôn tập nhanh cùng MELA",
+                      //             onPressed: () {}),
+                      //       );
+                      //     }),
+                      // const SizedBox(height: 20),
                     ],
                   )),
             ),
