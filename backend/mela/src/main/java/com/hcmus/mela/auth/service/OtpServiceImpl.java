@@ -8,6 +8,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
@@ -37,11 +39,12 @@ public class OtpServiceImpl implements OtpService {
         Otp otp = otpRepository.findByUser(user);
         if (otp == null) {
             otp = new Otp();
+            otp.setOtpId(UUID.randomUUID());
         }
+
         otp.setUser(user);
         otp.setOtpCode(bCryptPasswordEncoder.encode(otpCode));
-        otp.setExpireAt(LocalDateTime.now().plusMinutes(OTP_EXPIRY_MINUTES));
-
+        otp.setExpireAt(Date.from(LocalDateTime.now().plusMinutes(OTP_EXPIRY_MINUTES).atZone(ZoneId.systemDefault()).toInstant()));
         otpRepository.save(otp);
     }
 
@@ -52,7 +55,7 @@ public class OtpServiceImpl implements OtpService {
             return false;
         }
         if (!bCryptPasswordEncoder.matches(otpCode, otp.getOtpCode())
-                || otp.getExpireAt().isBefore(LocalDateTime.now())) {
+                || otp.getExpireAt().before(new Date())) {
             return false;
         }
         otpRepository.deleteById(otp.getOtpId());

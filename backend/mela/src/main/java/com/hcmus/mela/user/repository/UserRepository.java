@@ -1,11 +1,10 @@
 package com.hcmus.mela.user.repository;
 
 import com.hcmus.mela.user.model.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.UUID;
 
-@Repository
-public interface UserRepository extends JpaRepository<User, UUID> {
+public interface UserRepository extends MongoRepository<User, UUID> {
+    User findByUserId(UUID userId);
 }

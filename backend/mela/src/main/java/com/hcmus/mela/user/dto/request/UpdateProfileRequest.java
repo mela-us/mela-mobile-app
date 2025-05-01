@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -19,5 +20,5 @@ public class UpdateProfileRequest {
     private String imageUrl;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private LocalDate birthday;
+    private Date birthday;
 }
