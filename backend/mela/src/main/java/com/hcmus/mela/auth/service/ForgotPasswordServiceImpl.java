@@ -70,7 +70,8 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
 
     @Override
     public OtpConfirmationResponse validateOtp(OtpConfirmationRequest otpConfirmationRequest) {
-        if (otpService.validateOtpOfUser(otpConfirmationRequest.getOtpCode(), otpConfirmationRequest.getUsername())) {
+        User user = authService.findByUsername(otpConfirmationRequest.getUsername());
+        if (otpService.validateOtpOfUser(otpConfirmationRequest.getOtpCode(), user.getUserId())) {
             String token = jwtTokenForgotPasswordService.generateToken(otpConfirmationRequest.getUsername());
             OtpConfirmationResponse otpConfirmationResponse = new OtpConfirmationResponse();
             otpConfirmationResponse.setUsername(otpConfirmationRequest.getUsername());

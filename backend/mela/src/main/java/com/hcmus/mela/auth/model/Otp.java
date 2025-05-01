@@ -2,11 +2,9 @@ package com.hcmus.mela.auth.model;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -28,7 +26,6 @@ public class Otp {
     @Field("expired_at")
     private Date expireAt;
 
-    // Reference to the User document
-    @DBRef
-    private User user;
+    @Field(name = "user_id")
+    private UUID userId;
 }

@@ -10,7 +10,7 @@ public interface OtpService {
 
     void cacheOtpCode(String otpCode, User user);
 
-    boolean validateOtpOfUser(String otpCode, String username);
+    boolean validateOtpOfUser(String otpCode, UUID userId);
 
     void deleteOtpCodeByUserId(UUID userId);
 }
