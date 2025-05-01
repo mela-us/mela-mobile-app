@@ -139,6 +139,7 @@ public class ConversationServiceImpl implements ConversationService {
         Metadata currentMetadata = conversation.getMetadata();
         currentMetadata.setTotalTokens(currentMetadata.getTotalTokens() + totalTokens);
         currentMetadata.setStatus(conversationStatus);
+        currentMetadata.setUpdatedAt(aiMessageDate);
 
         // Update conversation
         Map<String, Object> updates = new HashMap<>();
@@ -158,7 +159,7 @@ public class ConversationServiceImpl implements ConversationService {
                 conversationId,
                 conversation.getTitle(),
                 List.of(userMessageResponseDto, aiMessageResponseDto),
-                new ConversationMetadataDto(conversationStatus.name(), currentMetadata.getCreatedAt())
+                new ConversationMetadataDto(conversationStatus.name(), currentMetadata.getCreatedAt(), currentMetadata.getUpdatedAt())
         );
     }
 
@@ -215,6 +216,7 @@ public class ConversationServiceImpl implements ConversationService {
         Metadata currentMetadata = conversation.getMetadata();
         currentMetadata.setTotalTokens(currentMetadata.getTotalTokens() + totalTokens);
         currentMetadata.setStatus(conversationStatus);
+        currentMetadata.setUpdatedAt(aiMessageDate);
 
         // Update conversation
         Map<String, Object> updates = new HashMap<>();
@@ -234,7 +236,7 @@ public class ConversationServiceImpl implements ConversationService {
                 conversationId,
                 conversation.getTitle(),
                 List.of(userMessageResponseDto, aiMessageResponseDto),
-                new ConversationMetadataDto(conversationStatus.name(), currentMetadata.getCreatedAt())
+                new ConversationMetadataDto(conversationStatus.name(), currentMetadata.getCreatedAt(), currentMetadata.getUpdatedAt())
         );
     }
 
@@ -285,14 +287,13 @@ public class ConversationServiceImpl implements ConversationService {
         String responseText;
         AiResponseContent aiResponseContent;
         Map<String, Object> aiMessageContent = new HashMap<>();
-        Date aiMessageDate = new Date();
 
         String currentTitle = conversation.getTitle();
 
         // Update summary
         Summary currentSummary = conversation.getSummary();
         String newContext;
-
+        Date aiMessageDate = null;
         if(conversationStatus == ConversationStatus.PROBLEM_IDENTIFIED
                 || conversationStatus == ConversationStatus.SOLUTION_PROVIDED
                 || conversationStatus == ConversationStatus.SUBMISSION_REVIEWED)  {
@@ -306,6 +307,7 @@ public class ConversationServiceImpl implements ConversationService {
             responseText = aiResponseFilter.getMessage(response);
             aiResponseContent = AiResponseContent.fromJson(responseText);
             aiMessageContent = aiResponseContent.getCommonText();
+            aiMessageDate = new Date();
             if (aiMessageContent.isEmpty()) {
                 aiMessageContent = aiResponseContent.getResolveConfusionResponse();
                 newContext = aiResponseContent.getContextConversation()
@@ -321,7 +323,7 @@ public class ConversationServiceImpl implements ConversationService {
             responseText = aiResponseFilter.getMessage(response);
             aiResponseContent = AiResponseContent.fromJson(responseText);
             aiMessageContent = aiResponseContent.getCommonText();
-
+            aiMessageDate = new Date();
             // If AI message content is empty, use resolve confusion response
             if (aiMessageContent.isEmpty()) {
                 aiMessageContent = aiResponseContent.getResolveConfusionResponse();
@@ -335,6 +337,7 @@ public class ConversationServiceImpl implements ConversationService {
                 newContext = aiResponseContent.getContextConversation()
                         .getOrDefault("context", "").toString();
                 currentSummary.setContext("Vấn đề: " + newContext);
+
                 currentSummary.setLatestUpdate(aiMessageDate);
                 currentSummary.getKeyMessages().add(aiMessageId);
             }
@@ -353,6 +356,7 @@ public class ConversationServiceImpl implements ConversationService {
         Metadata currentMetadata = conversation.getMetadata();
         currentMetadata.setTotalTokens(currentMetadata.getTotalTokens() + totalTokens);
         currentMetadata.setStatus(conversationStatus);
+        currentMetadata.setUpdatedAt(aiMessageDate);
 
         // Update conversation
         Map<String, Object> updates = new HashMap<>();
@@ -374,7 +378,7 @@ public class ConversationServiceImpl implements ConversationService {
                 conversationId,
                 currentTitle,
                 List.of(userMessageResponseDto, aiMessageResponseDto),
-                new ConversationMetadataDto(conversationStatus.name(), currentMetadata.getCreatedAt())
+                new ConversationMetadataDto(conversationStatus.name(), currentMetadata.getCreatedAt(), currentMetadata.getUpdatedAt())
         );
     }
 
@@ -404,7 +408,6 @@ public class ConversationServiceImpl implements ConversationService {
         // Filter AI response
         String responseText = aiResponseFilter.getMessage(response);
         AiResponseContent aiResponseContent = AiResponseContent.fromJson(responseText);
-
 
         Date aiMessageDate = new Date();
 
@@ -449,6 +452,7 @@ public class ConversationServiceImpl implements ConversationService {
                 .totalTokens(totalTokens)
                 .status(conversationStatus)
                 .createdAt(userMessageDate)
+                .updatedAt(aiMessageDate)
                 .build();
 
         // Create new conversation
@@ -482,7 +486,7 @@ public class ConversationServiceImpl implements ConversationService {
                 conversationId,
                 title,
                 List.of(userMessageResponseDto, aiMessageResponseDto),
-                new ConversationMetadataDto(conversationStatus.name(), metadata.getCreatedAt())
+                new ConversationMetadataDto(conversationStatus.name(), metadata.getCreatedAt(), metadata.getUpdatedAt())
         );
     }
 }

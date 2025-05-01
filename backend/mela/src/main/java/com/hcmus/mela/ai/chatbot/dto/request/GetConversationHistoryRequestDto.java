@@ -6,22 +6,15 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 public class GetConversationHistoryRequestDto {
-    /**
-     * A cursor for use in pagination. 'after' is an object ID that defines your place in the list.
-     * For instance, if you make a list request and receive 100 objects, ending with obj_foo,
-     * your subsequent call can include after=obj_foo in order to fetch the next page of the list.
-     */
-    private String after;
 
-    /**
-     * A cursor for use in pagination. 'before' is an object ID that defines your place in the list.
-     * For instance, if you make a list request and receive 100 objects, starting with obj_foo,
-     * your subsequent call can include before=obj_foo in order to fetch the previous page of the list.
-     */
-    private String before;
+    private Date updatedAtAfter;
+
+    private Date updatedAtBefore;
 
     /**
      * A limit on the number of objects to be returned.
@@ -33,7 +26,7 @@ public class GetConversationHistoryRequestDto {
     private int limit = 20;
 
     /**
-     * Sort order by the created_at timestamp of the objects.
+     * Sort order by the updatedAt timestamp of the objects.
      * Accepted values: "asc" for ascending order and "desc" for descending order.
      * Default: "desc"
      */

@@ -23,10 +23,12 @@ import org.springframework.lang.NonNull;
         "com.hcmus.mela.exercise.repository",
         "com.hcmus.mela.lecture.repository",
         "com.hcmus.mela.ai.chatbot.repository",
-        "com.hcmus.mela.history.repository"
+        "com.hcmus.mela.history.repository",
+        "com.hcmus.mela.auth.repository",
+        "com.hcmus.mela.user.repository"
 })
 @RequiredArgsConstructor
-public class ContentDataSourceConfiguration {
+public class DatabaseConfiguration {
 
     @Value("${spring.data.mongodb.uri}")
     private String mongoUri;

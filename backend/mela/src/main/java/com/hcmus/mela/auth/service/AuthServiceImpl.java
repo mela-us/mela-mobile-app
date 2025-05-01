@@ -19,7 +19,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -66,9 +67,10 @@ public class AuthServiceImpl implements AuthService {
         }
 
         final User user = UserMapper.INSTANCE.convertToUser(registrationRequest);
+        user.setUserId(UUID.randomUUID());
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setUserRole(UserRole.USER);
-        user.setCreatedAt(LocalDateTime.now());
+        user.setCreatedAt(new Date());
         user.setUpdatedAt(user.getCreatedAt());
 
         authRepository.save(user);
@@ -85,7 +87,7 @@ public class AuthServiceImpl implements AuthService {
         User user = this.findByUsername(username);
         if (user != null) {
             user.setPassword(bCryptPasswordEncoder.encode(newPassword));
-            user.setUpdatedAt(LocalDateTime.now());
+            user.setUpdatedAt(new Date());
             authRepository.save(user);
         }
     }

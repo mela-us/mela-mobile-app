@@ -2,7 +2,6 @@ package com.hcmus.mela.ai.chatbot.repository;
 
 import com.hcmus.mela.ai.chatbot.model.Conversation;
 import com.hcmus.mela.ai.chatbot.model.Message;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +12,8 @@ import java.util.stream.Collectors;
 
 @Repository
 public interface ConversationRepository extends MongoRepository<Conversation, UUID> {
+
+    List<Conversation> findAllByUserId(UUID userId);
 
     Optional<Conversation> findByConversationIdAndUserId(UUID id, UUID userId);
 
@@ -69,20 +70,13 @@ public interface ConversationRepository extends MongoRepository<Conversation, UU
         Optional<Conversation> conversation = findById(conversationId);
 
         if (conversation.isPresent() && conversation.get().getMessages() != null) {
-            return conversation.get().getMessages().stream()
-                    .limit(limit)
-                    .collect(Collectors.toList());
+            List<Message> messages = conversation.get().getMessages();
+            int fromIndex = Math.max(messages.size() - limit, 0);
+            return messages.subList(fromIndex, messages.size());
         } else {
-            return null; // Or return an empty list: return Collections.emptyList();
+            return null;
         }
     }
-
-    // Standard MongoRepository methods
-    List<Conversation> findByUserId(UUID userId, Pageable pageable);
-
-    List<Conversation> findByUserIdAndConversationIdBefore(UUID userId, UUID conversationId, Pageable pageable);
-
-    List<Conversation> findByUserIdAndConversationIdAfter(UUID userId, UUID conversationId, Pageable pageable);
 
     // Custom method to delete a conversation by conversationId
     void deleteByConversationId(UUID conversationId);

@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -12,7 +13,7 @@ import java.util.List;
 public class GetConversationHistoryResponseDto {
     private String object;
     private List<ConversationInfoDto> data;
-    private String firstId;
-    private String lastId;
+    private Date firstUpdatedAt;
+    private Date lastUpdatedAt;
     private Boolean hasMore;
 }

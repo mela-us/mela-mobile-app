@@ -1,47 +1,48 @@
 package com.hcmus.mela.user.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
+        import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 @Getter
 @Setter
-@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users")
+@Document(collection = "users")
 public class User {
-    @Id
-    @Column(name = "user_id")
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID userId;
 
-    @Column(name = "username", unique = true)
+    @Id
+    @Field(name = "_id")
+    private UUID userId; // Mongo stores _id as a String; you can use UUID.toString()
+
     private String username;
 
-    @Column(name = "password_hash")
     private String password;
 
-    @Column(name = "full_name")
+    @Field("full_name")
     private String fullname;
 
-    @Column(name = "image_url")
+    @Field("image_url")
     private String imageUrl;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @Field("created_at")
+    private Date createdAt;
 
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    @Field("updated_at")
+    private Date updatedAt;
 
-    @Column(name = "birthday")
-    private LocalDate birthday;
+    private Date birthday;
 
+    @Field("user_role")
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_role")
     private UserRole userRole;
 }

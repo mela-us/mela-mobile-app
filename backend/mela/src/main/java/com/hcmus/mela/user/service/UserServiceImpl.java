@@ -3,6 +3,7 @@ package com.hcmus.mela.user.service;
 import com.hcmus.mela.auth.security.jwt.JwtTokenService;
 import com.hcmus.mela.auth.service.OtpService;
 import com.hcmus.mela.common.cache.RedisService;
+import com.hcmus.mela.common.exception.BadRequestException;
 import com.hcmus.mela.user.dto.request.*;
 import com.hcmus.mela.user.dto.response.*;
 import com.hcmus.mela.user.exception.InvalidTokenException;
@@ -17,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 @Slf4j
@@ -42,11 +43,11 @@ public class UserServiceImpl implements UserService {
 
         final UUID userId = jwtTokenService.getUserIdFromAuthorizationHeader(authorizationHeader);
 
-        User user = userRepository.findById(userId).orElse(null);
+        User user = userRepository.findByUserId(userId);
 
         if (user == null) {
             final String userNotFound = exceptionMessageAccessor.getMessage(null, "user_not_found");
-            throw new InvalidTokenException(userNotFound);
+            throw new BadRequestException(userNotFound);
         }
 
         if (updateProfileRequest.getBirthday() == null &&
@@ -68,7 +69,7 @@ public class UserServiceImpl implements UserService {
             user.setImageUrl(updateProfileRequest.getImageUrl());
         }
 
-        user.setUpdatedAt(LocalDateTime.now());
+        user.setUpdatedAt(new Date());
 
         userRepository.save(user);
 
@@ -82,11 +83,11 @@ public class UserServiceImpl implements UserService {
 
         final UUID userId = jwtTokenService.getUserIdFromAuthorizationHeader(authorizationHeader);
 
-        User user = userRepository.findById(userId).orElse(null);
+        User user = userRepository.findByUserId(userId);
 
         if (user == null) {
             final String userNotFound = exceptionMessageAccessor.getMessage(null, "user_not_found");
-            throw new InvalidTokenException(userNotFound);
+            throw new BadRequestException(userNotFound);
         }
 
         return UserMapper.INSTANCE.convertToGetUserProfileResponse(user);
@@ -98,11 +99,11 @@ public class UserServiceImpl implements UserService {
 
             final UUID userId = jwtTokenService.getUserIdFromAuthorizationHeader(authorizationHeader);
 
-            User user = userRepository.findById(userId).orElse(null);
+            User user = userRepository.findByUserId(userId);
 
             if (user == null) {
                 final String userNotFound = exceptionMessageAccessor.getMessage(null, "user_not_found");
-                throw new InvalidTokenException(userNotFound);
+                throw new BadRequestException(userNotFound);
             }
 
             otpService.deleteOtpCodeByUserId(userId);
