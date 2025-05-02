@@ -5,8 +5,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.UUID;
 
-public interface StreakRepository extends MongoRepository<Streak, UUID> {
+public interface StreakRepository extends MongoRepository<Streak, UUID>, StreakCustomRepository {
 
     Streak findByUserId(UUID userId);
-
 }
