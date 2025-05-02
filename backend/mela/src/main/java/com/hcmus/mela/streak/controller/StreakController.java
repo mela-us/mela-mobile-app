@@ -2,15 +2,13 @@ package com.hcmus.mela.streak.controller;
 
 import com.hcmus.mela.auth.security.jwt.JwtTokenService;
 import com.hcmus.mela.streak.dto.response.GetStreakResponse;
+import com.hcmus.mela.streak.dto.response.UpdateStreakResponse;
 import com.hcmus.mela.streak.service.StreakService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -40,5 +38,19 @@ public class StreakController {
         return ResponseEntity.ok(getStreakResponse);
     }
 
-    
+    @PostMapping(value = "")
+    @Operation(
+            tags = "Streak Service",
+            summary = "Update user's streak",
+            description = "Updates a user's streak."
+    )
+    public ResponseEntity<UpdateStreakResponse> updateStreak(@RequestHeader("Authorization") String authorizationHeader) {
+        UUID userId = jwtTokenService.getUserIdFromAuthorizationHeader(authorizationHeader);
+
+        log.info("Updating streak for user: {}", userId);
+
+        final UpdateStreakResponse updateStreakResponse = streakService.updateStreak(userId);
+
+        return ResponseEntity.ok(updateStreakResponse);
+    }
 }
