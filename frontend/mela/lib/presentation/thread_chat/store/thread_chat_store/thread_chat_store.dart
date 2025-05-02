@@ -38,7 +38,7 @@ abstract class _ThreadChatStore with Store {
       hasMore: false,
       levelConversation: LevelConversation.UNIDENTIFIED,
       dateConversation: DateTime.now(),
-      nameConversation: "Instance Title");
+      nameConversation: "Đoạn Chat Mới");
 
   bool isGoToFromReview = false;
   void setIsGoToFromReview(bool value) {
