@@ -69,7 +69,7 @@ public class StreakServiceImpl implements StreakService {
         Streak streak = streakRepository.findByUserId(userId);
 
         if (streak == null) {
-            final String userNotFound = exceptionMessageAccessor.getMessage(null, "user_not_found");
+            final String userNotFound = exceptionMessageAccessor.getMessage(null, USER_NOT_FOUND);
             throw new BadRequestException(userNotFound);
         }
 
