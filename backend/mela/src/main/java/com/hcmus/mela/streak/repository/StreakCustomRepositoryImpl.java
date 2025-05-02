@@ -1,13 +1,14 @@
 package com.hcmus.mela.streak.repository;
 
-import com.hcmus.mela.exercise.model.Exercise;
 import com.hcmus.mela.streak.model.Streak;
 import lombok.AllArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.stereotype.Repository;
 
+@Repository
 @AllArgsConstructor
 public class StreakCustomRepositoryImpl implements StreakCustomRepository {
 

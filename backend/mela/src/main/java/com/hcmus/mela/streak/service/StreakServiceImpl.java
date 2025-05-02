@@ -6,7 +6,6 @@ import com.hcmus.mela.common.utils.GeneralMessageAccessor;
 import com.hcmus.mela.streak.dto.response.GetStreakResponse;
 import com.hcmus.mela.streak.dto.response.UpdateStreakResponse;
 import com.hcmus.mela.streak.model.Streak;
-import com.hcmus.mela.streak.repository.StreakCustomRepository;
 import com.hcmus.mela.streak.repository.StreakRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +26,8 @@ public class StreakServiceImpl implements StreakService {
     private static final String UPDATE_STREAK_SUCCESS = "update_streak_successful";
 
     private static final String USER_NOT_FOUND = "user_not_found";
+
+    private static final String STREAK_ALREADY_UPDATED = "streak_already_updated";
 
     private final StreakRepository streakRepository;
 
@@ -73,12 +74,21 @@ public class StreakServiceImpl implements StreakService {
             throw new BadRequestException(userNotFound);
         }
 
+        if (ChronoUnit.DAYS.between(
+                streak.getUpdatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+                (new Date()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate()) == 0
+                && streak.getStreakDays() != 0) {
+            final String streakAlreadyUpdated = exceptionMessageAccessor.getMessage(null, STREAK_ALREADY_UPDATED, userId);
+
+            return new UpdateStreakResponse(streakAlreadyUpdated);
+        }
+
         streak.setStreakDays(streak.getStreakDays() + 1);
 
         streak.setUpdatedAt(new Date());
 
-        if (streak.getStreakDays().compareTo(streak.getLongestStreak()) > 0) {
-            streak.setLongestStreak(streak.getStreakDays() + 1);
+        if (streak.getStreakDays() > streak.getLongestStreak()) {
+            streak.setLongestStreak(streak.getStreakDays());
         }
 
         streakRepository.updateStreak(streak);
