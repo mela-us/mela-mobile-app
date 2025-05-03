@@ -87,19 +87,35 @@ mixin _$HintStore on _HintStore, Store {
     });
   }
 
-  late final _$isLoadingAtom =
-      Atom(name: '_HintStore.isLoading', context: context);
+  late final _$isHintLoadingAtom =
+      Atom(name: '_HintStore.isHintLoading', context: context);
 
   @override
-  bool get isLoading {
-    _$isLoadingAtom.reportRead();
-    return super.isLoading;
+  bool get isHintLoading {
+    _$isHintLoadingAtom.reportRead();
+    return super.isHintLoading;
   }
 
   @override
-  set isLoading(bool value) {
-    _$isLoadingAtom.reportWrite(value, super.isLoading, () {
-      super.isLoading = value;
+  set isHintLoading(bool value) {
+    _$isHintLoadingAtom.reportWrite(value, super.isHintLoading, () {
+      super.isHintLoading = value;
+    });
+  }
+
+  late final _$isTermLoadingAtom =
+      Atom(name: '_HintStore.isTermLoading', context: context);
+
+  @override
+  bool get isTermLoading {
+    _$isTermLoadingAtom.reportRead();
+    return super.isTermLoading;
+  }
+
+  @override
+  set isTermLoading(bool value) {
+    _$isTermLoadingAtom.reportWrite(value, super.isTermLoading, () {
+      super.isTermLoading = value;
     });
   }
 
@@ -185,7 +201,8 @@ term: ${term},
 pressHint: ${pressHint},
 pressTerm: ${pressTerm},
 question: ${question},
-isLoading: ${isLoading}
+isHintLoading: ${isHintLoading},
+isTermLoading: ${isTermLoading}
     ''';
   }
 }

@@ -36,21 +36,21 @@ class ButtonLoginOrSignUp extends StatelessWidget {
             ),
 
             //Button arrow
-            Positioned(
-              right: 0,
-              child: Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.onTertiary,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.arrow_forward,
-                  color: Theme.of(context).colorScheme.tertiary,
-                ),
-              ),
-            ),
+            // Positioned(
+            //   right: 0,
+            //   child: Container(
+            //     width: 48,
+            //     height: 48,
+            //     decoration: BoxDecoration(
+            //       color: Theme.of(context).colorScheme.onTertiary,
+            //       shape: BoxShape.circle,
+            //     ),
+            //     child: Icon(
+            //       Icons.arrow_forward,
+            //       color: Theme.of(context).colorScheme.tertiary,
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

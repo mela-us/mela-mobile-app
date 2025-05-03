@@ -1,4 +1,5 @@
 import 'package:mela/data/network/apis/chat/chat_api.dart';
+import 'package:mela/domain/entity/chat/history_item.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/domain/repository/chat/chat_repository.dart';
 import 'package:mela/domain/usecase/chat/create_new_conversation_usecase.dart';
@@ -32,5 +33,10 @@ class ChatRepositoryImpl extends ChatRepository {
   @override
   Future<Conversation> sendMessageGetSolution(ChatRequestParams params) {
     return _chatApi.sendMessageGetSolution(params);
+  }
+
+  @override
+  Future<List<HistoryItem>> getHistoryChat() {
+    return _chatApi.getHistoryChat();
   }
 }

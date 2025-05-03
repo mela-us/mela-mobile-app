@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/enum.dart';
 import 'package:mela/di/service_locator.dart';
+import 'package:mela/domain/entity/chat/history_item.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/domain/entity/message_chat/message_chat.dart';
+import 'package:mela/presentation/chat/store/history_store.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/thread_chat/thread_chat_screen.dart';
 import 'package:mela/utils/routes/routes.dart';
+import 'package:mobx/mobx.dart';
 
 class SidebarWidget extends StatefulWidget {
   const SidebarWidget({super.key});
@@ -16,6 +20,7 @@ class SidebarWidget extends StatefulWidget {
 
 class _SidebarWidgetState extends State<SidebarWidget> {
   final _threadChatStore = getIt.get<ThreadChatStore>();
+  final _historyStore = getIt.get<HistoryStore>();
 
   Conversation testConversation = Conversation(
     conversationId: "conv_001",
@@ -39,6 +44,16 @@ class _SidebarWidgetState extends State<SidebarWidget> {
     "Quy luật hình học",
     "Tính chất chia hết cho 7"
   ];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // if (!_historyStore.isLoading) {
+    //   _historyStore.getConvHistory();
+    // }
+  }
+
   @override
   Widget build(BuildContext context) {
     return FractionallySizedBox(
@@ -117,74 +132,128 @@ class _SidebarWidgetState extends State<SidebarWidget> {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18),
-        child: ListView(
-          children: isExpanded.keys.map((title) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Tiêu đề lịch sử & icon mở rộng
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isExpanded[title] = !isExpanded[title]!;
-                    });
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        title,
-                        style: Theme.of(context).textTheme.contentBold.copyWith(
-                              color:
-                                  Theme.of(context).colorScheme.timelineTitle,
-                            ),
-                      ),
-                      Icon(
-                        isExpanded[title]!
-                            ? Icons.indeterminate_check_box_outlined
-                            : Icons.add_box_outlined,
-                        color: Colors.black,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 25),
-                // Nội dung lịch sử nếu mở rộng
-                if (isExpanded[title]!)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: historyItems
-                        .map((item) => _buildChatHistory(item))
-                        .toList(),
-                  ),
-                isExpanded[title]!
-                    ? const SizedBox(height: 0)
-                    : const SizedBox(height: 5),
-                const Divider(
-                  thickness: 0.5,
-                  color: Colors.black,
-                ),
-              ],
+        child: Observer(builder: (_) {
+          if (_historyStore.isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
             );
-          }).toList(),
-        ),
+          } else {
+            if (_historyStore.convs == null || _historyStore.convs!.isEmpty) {
+              return const Center(
+                child: Text("Chưa có lịch sử nào"),
+              );
+            } else {
+              return ListView.builder(
+                itemCount: _historyStore.convs!.length,
+                itemBuilder: (context, index) {
+                  final item = _historyStore.convs![index];
+                  return _buildChatHistory(item);
+                },
+              );
+            }
+          }
+        }
+
+            // children: isExpanded.keys.map((title) {
+            //   return Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       // Tiêu đề lịch sử & icon mở rộng
+            //       GestureDetector(
+            //         onTap: () {
+            //           setState(() {
+            //             isExpanded[title] = !isExpanded[title]!;
+            //           });
+            //         },
+            //         child: Row(
+            //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //           children: [
+            //             Text(
+            //               title,
+            //               style: Theme.of(context).textTheme.contentBold.copyWith(
+            //                     color:
+            //                         Theme.of(context).colorScheme.timelineTitle,
+            //                   ),
+            //             ),
+            //             Icon(
+            //               isExpanded[title]!
+            //                   ? Icons.indeterminate_check_box_outlined
+            //                   : Icons.add_box_outlined,
+            //               color: Colors.black,
+            //             ),
+            //           ],
+            //         ),
+            //       ),
+            //       const SizedBox(height: 25),
+            //       // Nội dung lịch sử nếu mở rộng
+            //       if (isExpanded[title]!)
+            //         Column(
+            //           crossAxisAlignment: CrossAxisAlignment.start,
+            //           // children: historyItems
+            //           //     .map((item) => _buildChatHistory(item))
+            //           //     .toList(),
+            //           children: [
+            //             Observer(
+            //                 builder: (_) =>
+            //                     ListView.builder(itemBuilder: (context, index) {
+            //                       final item = _historyStore.convs?[index];
+            //                       return _buildChatHistory(item!);
+            //                     }))
+            //           ],
+            //         ),
+            //       isExpanded[title]!
+            //           ? const SizedBox(height: 0)
+            //           : const SizedBox(height: 5),
+            //       const Divider(
+            //         thickness: 0.5,
+            //         color: Colors.black,
+            //       ),
+            //     ],
+            //   );
+            // }).toList(),
+            ),
       ),
     );
   }
 
-  Widget _buildChatHistory(String item) {
+  Widget _buildChatHistory(HistoryItem item) {
     return Padding(
         padding: const EdgeInsets.only(bottom: 25),
         child: GestureDetector(
           onTap: () {
-            _threadChatStore.setConversation(testConversation);
+            _threadChatStore
+                .setConversation(Conversation.fromHistoryItem(item));
 
             // Close sidebar and navigate to chat screen
             Navigator.of(context).pop();
-            Navigator.of(context).pushNamed(Routes.threadChatScreen);
+            //Push chat screen with transition
+            Navigator.of(context).push(
+              PageRouteBuilder(
+                settings: const RouteSettings(name: Routes.threadChatScreen),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    ThreadChatScreen(),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  const begin = Offset(1.0, 0.0);
+                  const end = Offset.zero;
+                  const curve = Curves.easeInOut;
+
+                  var tween = Tween(begin: begin, end: end)
+                      .chain(CurveTween(curve: curve));
+                  var offsetAnimation = animation.drive(tween);
+
+                  return ClipRect(
+                    child: SlideTransition(
+                      position: offsetAnimation,
+                      child: child,
+                    ),
+                  );
+                },
+              ),
+            );
           },
           child: Text(
-            item,
+            item.title,
             style: Theme.of(context).textTheme.contentBold.copyWith(
                   fontWeight: FontWeight.w500,
                   color: const Color(0XFF303030),

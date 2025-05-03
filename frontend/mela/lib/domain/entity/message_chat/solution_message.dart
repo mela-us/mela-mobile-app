@@ -34,10 +34,11 @@ class SolutionMessage extends MessageChat {
     this.finalAnswer,
     required this.steps,
     DateTime? timestamp,
-  }) : super(isAI: isAI, type: MessageType.solution, timestamp: timestamp);
+    String? messageId,
+  }) : super(isAI: isAI, type: MessageType.solution, timestamp: timestamp, messageId: messageId);
 
   factory SolutionMessage.fromJson(
-      Map<String, dynamic> content, bool isAI, DateTime? timestamp) {
+      Map<String, dynamic> content, bool isAI, DateTime? timestamp, String? messageId) {
     final stepsJson = content['steps'] as List<dynamic>? ?? [];
     final steps = stepsJson
         .map((step) => SolutionStep.fromJson(step as Map<String, dynamic>))
@@ -50,6 +51,7 @@ class SolutionMessage extends MessageChat {
       finalAnswer: content['finalAnswer'] as String?,
       steps: steps,
       timestamp: timestamp,
+      messageId: messageId,
     );
   }
 }

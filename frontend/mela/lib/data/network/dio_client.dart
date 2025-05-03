@@ -40,6 +40,7 @@ class DioClient {
     String uri, {
     Map<String, dynamic>? queryParameters,
     Options? options,
+    Object? data,
     CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
   }) async {
@@ -48,6 +49,7 @@ class DioClient {
         uri,
         queryParameters: queryParameters,
         options: options,
+        data: data,
         cancelToken: cancelToken,
         onReceiveProgress: onReceiveProgress,
       );
@@ -58,6 +60,48 @@ class DioClient {
       return response.data;
     } catch (e) {
       //cat error above or other exception dio eg timeout....
+      rethrow;
+    }
+  }
+
+  // GetWithBody:----------------------------------------------------------------------
+  Future<dynamic> getWithBody(
+    String uri, {
+    data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onReceiveProgress,
+  }) async {
+    try {
+      // print("---->DioClient: post: $uri");
+      // final Response response = await _dio.get(
+
+      //   uri,
+      //   data: data,
+      //   queryParameters: queryParameters,
+      //   options: options,
+      //   cancelToken: cancelToken,
+      //   onReceiveProgress: onReceiveProgress,
+      // );
+      // return response.data;
+      final Response response = await _dio.request(
+        uri,
+        data: data,
+        queryParameters: queryParameters,
+        options: Options(
+            method: 'GET', headers: {'Content-Type': 'application/json'}),
+        cancelToken: cancelToken,
+        onReceiveProgress: onReceiveProgress,
+      );
+      _dio.interceptors.add(LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+      ));
+      return response.data;
+    } catch (e) {
+      //cat unauthorized above or other exception dio eg timeout...
+      print("==========> Error in get with body $e");
       rethrow;
     }
   }

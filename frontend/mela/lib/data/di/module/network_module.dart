@@ -88,7 +88,7 @@ class NetworkModule {
     getIt.registerSingleton<LogoutApi>(LogoutApi(getIt<DioClient>()));
     getIt.registerSingleton<DeleteAccountApi>(
         DeleteAccountApi(getIt<DioClient>()));
-    getIt.registerSingleton<ChatApi>(ChatApi(getIt<DioClient>()));
+    getIt.registerSingleton<ChatApi>(ChatApi(getIt<DioClient>(), getIt<SecureStorageHelper>()));
     getIt.registerSingleton<PresignedImageApi>(
         PresignedImageApi(getIt<DioClient>()));
     getIt.registerSingleton<PresignedImageUploadApi>(PresignedImageUploadApi());

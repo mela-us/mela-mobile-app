@@ -29,7 +29,7 @@ abstract class _ThreadChatStore with Store {
       this.sendMessageReviewSubmissionUsecase,
       this.sendMessageGetSolutionUsecase);
 
-  int limit = 10;
+  int limit = 100;
 
   @observable
   Conversation currentConversation = Conversation(
@@ -39,6 +39,11 @@ abstract class _ThreadChatStore with Store {
       levelConversation: LevelConversation.UNIDENTIFIED,
       dateConversation: DateTime.now(),
       nameConversation: "Instance Title");
+
+  bool isGoToFromReview = false;
+  void setIsGoToFromReview(bool value) {
+    isGoToFromReview = value;
+  }
 
   @observable
   bool isLoading = false;
@@ -197,7 +202,7 @@ abstract class _ThreadChatStore with Store {
 
   @action
   void clearConversation() {
-    limit = 10;
+    limit = 100;
     currentConversation = Conversation(
         conversationId: "",
         messages: [],
@@ -210,7 +215,8 @@ abstract class _ThreadChatStore with Store {
   @action
   Future<void> getConversation() async {
     //for new chat
-    if (currentConversation.conversationId.isEmpty) {
+    if (currentConversation.conversationId.isEmpty ||
+        isGoToFromReview == true) {
       return;
     }
 
@@ -219,23 +225,29 @@ abstract class _ThreadChatStore with Store {
         params: GetConversationRequestParams(
             conversationId: currentConversation.conversationId, limit: limit));
     // print("Get conversation: ${conversation.nameConversation}");
-    setConversation(conversation);
+    setConversation(Conversation(
+        conversationId: currentConversation.conversationId,
+        messages: conversation.messages,
+        hasMore: conversation.hasMore,
+        dateConversation: currentConversation.dateConversation,
+        nameConversation: currentConversation.nameConversation,
+        levelConversation: currentConversation.levelConversation));
     setIsLoadingConversation(false);
   }
 
   @action
   Future<void> getOlderMessages() async {
     setIsLoadingGetOlderMessages(true);
-    limit += 10;
-    Conversation conversation = await getConversationUsecase.call(
-        params: GetConversationRequestParams(
-            conversationId: currentConversation.conversationId, limit: limit));
-    setConversation(conversation);
+    // limit += 10;
+    // Conversation conversation = await getConversationUsecase.call(
+    //     params: GetConversationRequestParams(
+    //         conversationId: currentConversation.conversationId, limit: limit));
+    // setConversation(conversation);
     setIsLoadingGetOlderMessages(false);
   }
 
   void resetLimit() {
-    limit = 10;
+    limit = 100;
   }
 }
   // constructor:--------------------------------

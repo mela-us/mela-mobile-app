@@ -42,7 +42,8 @@ class Routes {
   static const String signupScreen = '/signup';
   // static const String allLecturesInTopicScreen =
   //     '/all_lectures_in_topic_screen';
-  static const String topicLectureInLevelScreen= '/topic_lecture_in_level_screen';
+  static const String topicLectureInLevelScreen =
+      '/topic_lecture_in_level_screen';
   static const String dividedLecturesAndExercisesScreen =
       '/divided_lectures_and_exercises_screen';
   static const String searchScreen = '/search_screen';
@@ -58,7 +59,6 @@ class Routes {
   static const String chat = "/chat";
   static const String allScreens = '/all_screens';
   static const String threadChatScreen = '/thread_chat_screen';
-
 
   // static final routes = <String, WidgetBuilder>{
   //   loginScreen: (BuildContext context) => const ScreenWrapper(child:LoginScreen()),
@@ -124,27 +124,23 @@ class Routes {
   //       ScreenWrapper(child: AllScreens()),
   // };
 
-
-
-
   static final routes = <String, WidgetBuilder>{
     loginScreen: (BuildContext context) => const LoginScreen(),
     signupScreen: (BuildContext context) => const SignUpScreen(),
 
-    loginOrSignupScreen: (BuildContext context) =>LoginOrSignupScreen(),
+    loginOrSignupScreen: (BuildContext context) => LoginOrSignupScreen(),
 
     enterEmailInForgotPasswordScreen: (BuildContext context) =>
         EnterEmailInForgotPasswordScreen(),
 
     enterOTPInForgotPasswordScreen: (BuildContext context) =>
-    const EnterOTPInForgotPasswordScreen(),
+        const EnterOTPInForgotPasswordScreen(),
 
     createNewPasswordInForgotPasswordScreen: (BuildContext context) =>
         CreateNewPasswordInForgotPasswordScreen(),
     //coursesScreen: (BuildContext context) => const CoursesScreen(),
 
-    homeScreen: (BuildContext context) =>
-      const HomeScreen(),
+    homeScreen: (BuildContext context) => const HomeScreen(),
     // allLecturesInTopicScreen: (BuildContext context) =>
     //     AllLecturesInTopicScreen(),
     topicLectureInLevelScreen: (BuildContext context) =>
@@ -153,40 +149,28 @@ class Routes {
     dividedLecturesAndExercisesScreen: (BuildContext context) =>
         DividedLecturesAndExercisesScreen(),
 
-    searchScreen: (BuildContext context) =>
-    const SearchScreen(),
+    searchScreen: (BuildContext context) => const SearchScreen(),
 
-    filterScreen: (BuildContext context) =>
-        FilterScreen(),
+    filterScreen: (BuildContext context) => FilterScreen(),
 
-    question: (BuildContext context) =>
-        QuestionScreen(),
+    question: (BuildContext context) => QuestionScreen(),
 
-    result: (BuildContext context) =>
-        ResultScreen(),
+    result: (BuildContext context) => ResultScreen(),
 
-    review: (BuildContext context) =>
-        ReviewScreen(),
+    review: (BuildContext context) => ReviewScreen(),
 
-    personal: (BuildContext context) =>
-    const PersonalScreen(),
+    personal: (BuildContext context) => const PersonalScreen(),
 
-    stats: (BuildContext context) =>
-        StatisticsScreen(),
+    stats: (BuildContext context) => StatisticsScreen(),
 
-    searchStats: (BuildContext context) =>
-    const StatSearchScreen(),
+    searchStats: (BuildContext context) => const StatSearchScreen(),
 
-    filterStats: (BuildContext context) =>
-        FilterStatScreen(),
+    filterStats: (BuildContext context) => FilterStatScreen(),
 
-    threadChatScreen: (BuildContext context) =>
-        ThreadChatScreen(),
+    threadChatScreen: (BuildContext context) => ThreadChatScreen(),
 
-    chat: (BuildContext context) =>
-    const ChatScreen(),
+    chat: (BuildContext context) => ChatScreen(),
 
-    allScreens: (BuildContext context) =>
-        AllScreens(),
+    allScreens: (BuildContext context) => AllScreens(),
   };
 }

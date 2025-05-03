@@ -3,17 +3,29 @@ import 'package:mela/constants/app_theme.dart';
 import '../../../themes/default/colors_standards.dart';
 
 class CoverImageWidget extends StatelessWidget {
-  const CoverImageWidget({super.key});
+  final void Function() onPressed;
+  const CoverImageWidget({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    final containerWidth = screenWidth * 0.85;
+    final containerHeight =
+        containerWidth * (290 / 384); // Maintain aspect ratio
+    final imageHeight = containerWidth * (257 / 384); // Scale image height
+    final buttonWidth = containerWidth * (250 / 384); // Scale button width
+    final buttonHeight = containerHeight * (34 / 290); // Scale button height
+
+    final fontSize = buttonWidth * (16 / 250);
+
     return Stack(
       alignment: Alignment.center,
       children: [
-        // Layer 0:
+        // Layer 0: Container
         Container(
-          width: 384,
-          height: 290,
+          width: containerWidth,
+          height: containerHeight,
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.inverseSurface,
             borderRadius: BorderRadius.circular(20),
@@ -26,8 +38,8 @@ class CoverImageWidget extends StatelessWidget {
             children: [
               Image.asset(
                 'assets/images/cover.jpeg',
-                width: 384,
-                height: 257,
+                width: containerWidth,
+                height: imageHeight,
                 fit: BoxFit.cover,
               ),
             ],
@@ -35,27 +47,25 @@ class CoverImageWidget extends StatelessWidget {
         ),
         // Layer 2: Button "Học toán hàng ngày với Mela"
         Positioned(
-          bottom: 10,
+          bottom: containerHeight * (10 / 290),
           child: SizedBox(
-            width: 250,
-            height: 34,
-            child: AbsorbPointer(
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: ColorsStandards.buttonYesColor1,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  padding: EdgeInsets.zero,
+            width: buttonWidth,
+            height: buttonHeight,
+            child: ElevatedButton(
+              onPressed: onPressed,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ColorsStandards.buttonYesColor1,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                child: Text(
-                  'Học toán hàng ngày với Mela',
-                  style: Theme.of(context)
-                      .textTheme
-                      .content
-                      .copyWith(color: Theme.of(context).colorScheme.onTertiary),
-                ),
+                padding: EdgeInsets.zero,
+              ),
+              child: Text(
+                'Học toán hàng ngày với Mela',
+                style: Theme.of(context).textTheme.content.copyWith(
+                      color: Theme.of(context).colorScheme.onTertiary,
+                      fontSize: fontSize,
+                    ),
               ),
             ),
           ),

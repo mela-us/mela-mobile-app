@@ -47,11 +47,11 @@
 		</array>
 		<!-- Add this key to your Info.plist file -->
 		<key>NSCameraUsageDescription</key>
-		<string>This app requires access to the camera.</string>
+		<string>Mela muốn truy cập camera để có thể chụp ảnh đổi avartar, hoặc gởi câu hỏi của bạn cũng như nhiều tác vụ khác.</string>
 		<key>NSPhotoLibraryUsageDescription</key>
-		<string>This app requires access to the photo library.</string>
+		<string>Mela muốn truy cập Ảnh để có thể chọn ảnh đổi avartar, hoặc gởi câu hỏi của bạn cũng như nhiều tác vụ khác.</string>
 		<key>NSPhotoLibraryAddUsageDescription</key>
-		<string>This app requires permission to save photos.</string>
+		<string>Mela muốn lưu ảnh của bạn để có thể giúp bạn lưu trữ thông tin bạn cho là quan trọng</string>
 		<key>UIStatusBarHidden</key>
 		<true/>
 		<key>UIViewControllerBasedStatusBarAppearance</key>

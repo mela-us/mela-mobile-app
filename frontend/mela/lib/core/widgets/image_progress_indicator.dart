@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 import '../../constants/assets.dart';
 
 class RotatingImageIndicator extends StatefulWidget {
-  const RotatingImageIndicator({super.key});
+  final double size;
+
+  const RotatingImageIndicator({
+    super.key,
+    this.size = 100.0, // Giá trị mặc định
+  });
 
   @override
   _RotatingImageIndicatorState createState() => _RotatingImageIndicatorState();
@@ -17,9 +22,9 @@ class _RotatingImageIndicatorState extends State<RotatingImageIndicator>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(seconds: 3), // Duration for one full rotation
+      duration: const Duration(seconds: 3),
       vsync: this,
-    )..repeat(); // Repeat the animation indefinitely
+    )..repeat();
   }
 
   @override
@@ -31,11 +36,11 @@ class _RotatingImageIndicatorState extends State<RotatingImageIndicator>
   @override
   Widget build(BuildContext context) {
     return RotationTransition(
-      turns: _controller, // The animation controller for rotation
+      turns: _controller,
       child: Image(
-        image: AssetImage(Assets.loading_icon), // Replace with your image path
-        width: 100.0, // Set your desired width
-        height: 100.0, // Set your desired height
+        image: AssetImage(Assets.loading_icon),
+        width: widget.size,
+        height: widget.size,
       ),
     );
   }

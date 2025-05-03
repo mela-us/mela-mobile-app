@@ -87,15 +87,15 @@ class _StatisticsScreenState extends State<StatisticsScreen> with TickerProvider
                   .heading
                   .copyWith(color: Theme.of(context).colorScheme.onPrimary)),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(Routes.searchStats);
-            },
-            icon: const Icon(Icons.search),
-            color: Theme.of(context).colorScheme.onPrimary,
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     onPressed: () {
+        //       Navigator.of(context).pushNamed(Routes.searchStats);
+        //     },
+        //     icon: const Icon(Icons.search),
+        //     color: Theme.of(context).colorScheme.onPrimary,
+        //   ),
+        // ],
         bottom: TabBar(
           controller: _tabController,
           isScrollable: levelNames.length > 3,
@@ -123,7 +123,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> with TickerProvider
                 "Đã có lỗi xảy ra. Vui lòng thử lại",
                 style: Theme.of(context)
                     .textTheme
-                    .subTitle
+                    .subHeading
                     .copyWith(color: Theme.of(context).colorScheme.textInBg1),
               ),
             );
@@ -141,7 +141,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> with TickerProvider
                   children: [
                     Text(
                       'Oops! Hành trình của bạn chưa bắt đầu với lớp này!\nVui lòng chuyển sang \"Chủ đề\" để học và làm bài tập!',
-                      style: Theme.of(context).textTheme.subTitle
+                      style: Theme.of(context).textTheme.subHeading
                           .copyWith(color: Theme.of(context).colorScheme.textInBg1),
                       textAlign: TextAlign.center,
                     ),
