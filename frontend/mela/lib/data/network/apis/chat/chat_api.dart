@@ -71,13 +71,12 @@ class ChatApi {
     final responseData = await _dioClient.get(
       EndpointsConst.getMessageInConversation
           .replaceAll(':conversationId', params.conversationId),
-      data: {
-        'limit': params.limit,
-      },
+      data: params.toMap(),
     );
     // print("================================ getConversation API");
     // print(responseData);
 
+    //Chỗ này thực ra chỉ cần trả về messages là đủ, nhưng mà cái này cần cái hasMore nữa nên thôi trả về như này luôn
     return Conversation(
         conversationId: params.conversationId, //Not important
         messages: (responseData['data'] as List<dynamic>)

@@ -10,11 +10,24 @@ import 'package:mela/domain/usecase/user_login/refresh_access_token_usecase.dart
 class GetConversationRequestParams {
   final String conversationId;
   final int limit;
+  String? beforeMessageId;
   GetConversationRequestParams(
-      {required this.conversationId, required this.limit});
+      {required this.conversationId,
+      required this.limit,
+      this.beforeMessageId});
+
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = {};
+    map["limit"] = limit;
+    if (beforeMessageId != null) {
+      map["before"] = beforeMessageId;
+    }
+    return map;
+  }
 }
 
-class GetConversationUsecase extends UseCase<Conversation, GetConversationRequestParams> {
+class GetConversationUsecase
+    extends UseCase<Conversation, GetConversationRequestParams> {
   final ChatRepository _chatRepository;
   final RefreshAccessTokenUsecase _refreshAccessTokenUsecase;
   final LogoutUseCase _logoutUseCase;
@@ -22,7 +35,8 @@ class GetConversationUsecase extends UseCase<Conversation, GetConversationReques
       this._logoutUseCase);
 
   @override
-  Future<Conversation> call({required GetConversationRequestParams params}) async {
+  Future<Conversation> call(
+      {required GetConversationRequestParams params}) async {
     try {
       return await _chatRepository.getConversation(params);
     } catch (e) {

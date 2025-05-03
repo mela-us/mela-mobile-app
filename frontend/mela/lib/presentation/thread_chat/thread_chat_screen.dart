@@ -125,14 +125,23 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
     if (_scrollController.position.pixels <= 0 &&
         !_threadChatStore.isLoadingGetOlderMessages &&
         _threadChatStore.currentConversation.hasMore) {
-      print("=======================>On Scroll At the top");
+      double _currentPosition = _scrollController.position.maxScrollExtent;
+      // print("=======================>1On Scroll At the top $_currentPosition");
+
       await _threadChatStore.getOlderMessages();
       if (_scrollController.position.pixels <= 0) {
-        _scrollController.animateTo(
-          _scrollController.position.minScrollExtent + 20.0,
-          duration: const Duration(seconds: 1),
-          curve: Curves.easeOutExpo,
-        );
+        //Chờ loading xong thì mới scroll
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
+          double newPosition = _scrollController.position.maxScrollExtent -
+              _currentPosition -
+              50;
+          // print("=======================>1On Scroll At the top $newPosition");
+          await _scrollController.animateTo(
+            newPosition,
+            duration: const Duration(milliseconds: 5),
+            curve: Curves.fastEaseInToSlowEaseOut,
+          );
+        });
       }
     }
   }
