@@ -25,7 +25,8 @@ import org.springframework.lang.NonNull;
         "com.hcmus.mela.ai.chatbot.repository",
         "com.hcmus.mela.history.repository",
         "com.hcmus.mela.auth.repository",
-        "com.hcmus.mela.user.repository"
+        "com.hcmus.mela.user.repository",
+        "com.hcmus.mela.streak.repository"
 })
 @RequiredArgsConstructor
 public class DatabaseConfiguration {
