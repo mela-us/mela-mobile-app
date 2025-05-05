@@ -6,8 +6,8 @@ class EndpointsConst {
   static const String saveResult = "/api/exercises/save";
   // base url
   //static const String baseUrl = "http://jsonplaceholder.typicode.com";
-  static const String baseUrl = "https://api.mela.guru";
-  // static const String baseUrl = "https://api.dev.mela.guru";
+  // static const String baseUrl = "https://api.mela.guru";
+  static const String baseUrl = "https://api.dev.mela.guru";
 
   // receiveTimeout
   static const int receiveTimeout = 30000;
@@ -64,4 +64,7 @@ class EndpointsConst {
   static const String getChatHistory = "/api/chatbot/conversations";
   static const String getMessageInConversation =
       "/api/chatbot/conversations/:conversationId/messages";
+
+  //streak
+  static const String streak = "/api/streak";
 }

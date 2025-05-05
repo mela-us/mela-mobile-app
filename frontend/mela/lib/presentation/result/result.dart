@@ -16,6 +16,8 @@ import '../../constants/assets.dart';
 import '../../di/service_locator.dart';
 import '../../domain/entity/question/question.dart';
 import '../../domain/params/history/exercise_progress_params.dart';
+import '../streak/store/streak_store.dart';
+import '../streak/streak_gain_screen.dart';
 
 class ResultScreen extends StatefulWidget{
   ResultScreen({super.key});
@@ -31,6 +33,8 @@ class _ResultScreenState extends State<ResultScreen> {
   final TopicLectureStore _topicLectureStore = getIt<TopicLectureStore>();
   final LevelStore _levelStore = getIt<LevelStore>();
   final ExerciseStore _exerciseStore = getIt<ExerciseStore>();
+
+  final StreakStore _streakStore = getIt<StreakStore>();
 
   @override
   void didChangeDependencies() {
@@ -52,6 +56,9 @@ class _ResultScreenState extends State<ResultScreen> {
   }
   @override
   Widget build(BuildContext context) {
+    //
+    _checkAndUpdateStreak();
+    //
     return Observer(
       builder: (context) {
         if (_questionStore.saving) {
@@ -133,6 +140,25 @@ class _ResultScreenState extends State<ResultScreen> {
         ),
       ],
     );
+  }
+
+  Future<void> _checkAndUpdateStreak() async {
+    if (calculatePoint() >= 8){
+      int prevStreak = _streakStore.streak?.current ?? 0;
+      await _streakStore.updateStreak();
+      await _streakStore.getStreak();
+      int nextStreak = _streakStore.streak?.current ?? 0;
+      //
+      if (nextStreak > prevStreak) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  StreakScreen(prevStreak: prevStreak)
+          ),
+        );
+      }
+    }
   }
 
   //Build items:----------------------------------------------------------------
