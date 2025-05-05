@@ -25,7 +25,7 @@ class _StreakDialogState extends State<StreakDialog> {
   @override
   Widget build(BuildContext context) {
 
-    const size = 160.0;
+    const size = 150.0;
 
     final streak = _store.streak?.current ?? 0;
 
@@ -93,7 +93,7 @@ class _StreakDialogState extends State<StreakDialog> {
                                 ? 50
                                 : 70)
                                 : 88,
-                            color: Theme.of(context).colorScheme.tertiary,
+                            color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'Asap',
                           ),
@@ -135,6 +135,7 @@ class _StreakDialogState extends State<StreakDialog> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                const SizedBox(height: 10),
               ],
             ),
             Column(

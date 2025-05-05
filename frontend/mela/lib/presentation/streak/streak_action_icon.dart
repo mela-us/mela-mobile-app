@@ -81,7 +81,7 @@ class _StreakActionIconState extends State<StreakActionIcon> {
                   fontSize: (streak / 100 >= 1)
                       ? 14
                       : 16,
-                  color: Theme.of(context).colorScheme.tertiary,
+                  color: Theme.of(context).colorScheme.primary,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Asap',
                 ),
