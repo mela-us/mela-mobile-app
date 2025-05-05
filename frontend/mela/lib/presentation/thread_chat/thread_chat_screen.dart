@@ -6,6 +6,8 @@ import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/domain/entity/message_chat/review_message.dart';
+import 'package:mela/presentation/question/store/question_store.dart';
+import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
 import 'package:mela/presentation/thread_chat/store/chat_box_store/chat_box_store.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/thread_chat/widgets/chat_box.dart';
@@ -23,6 +25,9 @@ class ThreadChatScreen extends StatefulWidget {
 
 class _ThreadChatScreenState extends State<ThreadChatScreen> {
   final ThreadChatStore _threadChatStore = getIt.get<ThreadChatStore>();
+  final SingleQuestionStore _singleQuestionStore =
+      getIt.get<SingleQuestionStore>();
+  final QuestionStore _questionStore = getIt<QuestionStore>();
   final _chatBoxStore = getIt.get<ChatBoxStore>();
   final ScrollController _scrollController = ScrollController();
   late ReactionDisposer disposerSendMessage;
@@ -120,14 +125,23 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
     if (_scrollController.position.pixels <= 0 &&
         !_threadChatStore.isLoadingGetOlderMessages &&
         _threadChatStore.currentConversation.hasMore) {
-      print("=======================>On Scroll At the top");
+      double _currentPosition = _scrollController.position.maxScrollExtent;
+      // print("=======================>1On Scroll At the top $_currentPosition");
+
       await _threadChatStore.getOlderMessages();
       if (_scrollController.position.pixels <= 0) {
-        _scrollController.animateTo(
-          _scrollController.position.minScrollExtent + 20.0,
-          duration: const Duration(seconds: 1),
-          curve: Curves.easeOutExpo,
-        );
+        //Chờ loading xong thì mới scroll
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
+          double newPosition = _scrollController.position.maxScrollExtent -
+              _currentPosition -
+              50;
+          // print("=======================>1On Scroll At the top $newPosition");
+          await _scrollController.animateTo(
+            newPosition,
+            duration: const Duration(milliseconds: 5),
+            curve: Curves.fastEaseInToSlowEaseOut,
+          );
+        });
       }
     }
   }
@@ -297,12 +311,11 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildItemHintQuestion(
-                      "Cách giải phương trình bậc 2 một ẩn?"),
-                  _buildItemHintQuestion("Hệ thức Vi-et là gì?"),
-                  _buildItemHintQuestion(
-                      "Cách giải phương trình bậc 3 một ẩn?"),
-                  _buildItemHintQuestion("Làm sao để tính số Fibonacci thứ n?"),
+                  // if (_threadChatStore.isGoToFromReview)
+                  //   ..._buildAllItemQuestionDefaultForFromReview()
+                  // else
+                  //   ..._buildAllItemQuestionDefault(),
+                  ..._buildAllItemQuestionDefault()
                 ],
               ),
             )
@@ -310,11 +323,57 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
     );
   }
 
+  List<Widget> _buildAllItemQuestionDefault() {
+    return [
+      _buildItemHintQuestion("Cách giải phương trình bậc 2 một ẩn?"),
+      _buildItemHintQuestion("Hệ thức Vi-et là gì?"),
+      _buildItemHintQuestion("Cách giải phương trình bậc 3 một ẩn?"),
+      _buildItemHintQuestion("Làm sao để tính số Fibonacci thứ n?"),
+    ];
+  }
+
+  List<Widget> _buildAllItemQuestionDefaultForFromReview() {
+    return [
+      _buildItemHintQuestionFromReview("Giải thích lại câu hỏi hiện tại", () {
+        _threadChatStore.sendChatMessage(
+            "Giải thích lại câu hỏi hiện tại: ${_questionStore.questionList!.questions![_singleQuestionStore.currentIndex].content}",
+            []);
+      }),
+    ];
+  }
+
   Widget _buildItemHintQuestion(String title) {
     return GestureDetector(
       onTap: () {
         _threadChatStore.sendChatMessage(title, []);
       },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        margin: const EdgeInsets.only(right: 10),
+        height: 50,
+        width: 150,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(
+            color: Colors.grey,
+          ),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Center(
+          child: Text(title,
+              textAlign: TextAlign.left,
+              style: Theme.of(context)
+                  .textTheme
+                  .promptTitleStyle
+                  .copyWith(color: Colors.black)),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildItemHintQuestionFromReview(String title, Function() onTap) {
+    return GestureDetector(
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
         margin: const EdgeInsets.only(right: 10),

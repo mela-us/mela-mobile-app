@@ -29,7 +29,7 @@ abstract class _ThreadChatStore with Store {
       this.sendMessageReviewSubmissionUsecase,
       this.sendMessageGetSolutionUsecase);
 
-  int limit = 100;
+  int limit = 5;
 
   @observable
   Conversation currentConversation = Conversation(
@@ -38,7 +38,7 @@ abstract class _ThreadChatStore with Store {
       hasMore: false,
       levelConversation: LevelConversation.UNIDENTIFIED,
       dateConversation: DateTime.now(),
-      nameConversation: "Instance Title");
+      nameConversation: "Đoạn Chat Mới");
 
   bool isGoToFromReview = false;
   void setIsGoToFromReview(bool value) {
@@ -202,7 +202,7 @@ abstract class _ThreadChatStore with Store {
 
   @action
   void clearConversation() {
-    limit = 100;
+    limit = 5;
     currentConversation = Conversation(
         conversationId: "",
         messages: [],
@@ -238,16 +238,24 @@ abstract class _ThreadChatStore with Store {
   @action
   Future<void> getOlderMessages() async {
     setIsLoadingGetOlderMessages(true);
-    // limit += 10;
-    // Conversation conversation = await getConversationUsecase.call(
-    //     params: GetConversationRequestParams(
-    //         conversationId: currentConversation.conversationId, limit: limit));
-    // setConversation(conversation);
+    Conversation conversation = await getConversationUsecase.call(
+        params: GetConversationRequestParams(
+            conversationId: currentConversation.conversationId,
+            limit: limit,
+            beforeMessageId: currentConversation.messages.first.messageId));
+    // print("Get conversation: ${conversation.nameConversation}");
+    setConversation(Conversation(
+        conversationId: currentConversation.conversationId,
+        messages: [...conversation.messages, ...currentConversation.messages],
+        hasMore: conversation.hasMore,
+        dateConversation: currentConversation.dateConversation,
+        nameConversation: currentConversation.nameConversation,
+        levelConversation: currentConversation.levelConversation));
     setIsLoadingGetOlderMessages(false);
   }
 
   void resetLimit() {
-    limit = 100;
+    limit = 5;
   }
 }
   // constructor:--------------------------------
