@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/presentation/streak/store/streak_store.dart';
 
 import '../../constants/assets.dart';
+import '../../di/service_locator.dart';
 
 class StreakScreen extends StatefulWidget {
-  final int prevStreak;
+  final int streak;
 
-  const StreakScreen({super.key, required this.prevStreak});
+  const StreakScreen({super.key, required this.streak});
 
   @override
   State<StreakScreen> createState() => _StreakScreenState();
@@ -17,11 +19,17 @@ class _StreakScreenState extends State<StreakScreen> {
   late int streak;
   bool hasIncreased = false;
 
+  final StreakStore _streakStore = getIt<StreakStore>();
+
   @override
   void initState() {
     super.initState();
 
-    streak = widget.prevStreak;
+    _streakStore.toggleUpdate(); //sau khi update xong rồi, toggle trở lại thành false
+
+    _streakStore.getStreak();
+
+    streak = widget.streak;
 
     Future.delayed(const Duration(seconds: 2), () {
       setState(() {
@@ -138,7 +146,7 @@ class _StreakScreenState extends State<StreakScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.tertiary,
@@ -164,9 +172,9 @@ class _StreakScreenState extends State<StreakScreen> {
   Widget _buildStreakText() {
     String txt;
 
-    int type = widget.prevStreak % 4;
+    int type = widget.streak % 4;
 
-    if (widget.prevStreak == 0) {
+    if (widget.streak == 1) {
       txt = 'Một cuộc hành trình mới bắt đầu!!!';
     } else {
       if (type == 0) {

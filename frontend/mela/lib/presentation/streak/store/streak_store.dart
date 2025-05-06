@@ -47,11 +47,19 @@ abstract class _StreakStore with Store {
   @observable
   bool isLoading = false;
 
+  @observable
+  bool isUpdating = false;
+
   //loading
   @computed
   bool get streakLoading => fetchFuture.status == FutureStatus.pending;
 
   //action:---------------------------------------------------------------------
+  @action
+  void toggleUpdate() {
+    isUpdating = !isUpdating;
+  }
+
   @action
   Future getStreak() async {
     isLoading = true;
@@ -69,6 +77,8 @@ abstract class _StreakStore with Store {
 
   @action
   Future updateStreak() async {
+    isUpdating = true;
+
     final future = _updateStreakUseCase.call(params: null);
     updateFuture = ObservableFuture(future);
 
@@ -77,5 +87,6 @@ abstract class _StreakStore with Store {
     }).catchError((error) {
       _errorStore.errorMessage = DioExceptionUtil.handleError(error);
     });
+    isUpdating = false;
   }
 }

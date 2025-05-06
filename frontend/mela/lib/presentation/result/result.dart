@@ -11,6 +11,7 @@ import 'package:mela/presentation/question/store/timer/timer_store.dart';
 import 'package:mela/presentation/topic_lecture_in_level_screen/store/topic_lecture_store.dart';
 import 'package:mela/utils/locale/app_localization.dart';
 import 'package:mela/utils/routes/routes.dart';
+import 'package:mobx/mobx.dart';
 
 import '../../constants/assets.dart';
 import '../../di/service_locator.dart';
@@ -36,6 +37,34 @@ class _ResultScreenState extends State<ResultScreen> {
 
   final StreakStore _streakStore = getIt<StreakStore>();
 
+  late ReactionDisposer _disposer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _checkAndUpdateStreak();
+
+    _disposer = reaction<bool>(
+          (_) => _streakStore.updateSuccess ?? false,
+          (updateSuccess) {
+        if (updateSuccess) {
+          int streak = _streakStore.streak?.current ?? 0;
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => StreakScreen(streak: streak)),
+          );
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _disposer();
+    super.dispose();
+  }
+
   @override
   void didChangeDependencies() {
     if (!_questionStore.saving) {
@@ -50,15 +79,10 @@ class _ResultScreenState extends State<ResultScreen> {
           DateTime.now()
       );
     }
-
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
   @override
   Widget build(BuildContext context) {
-    //
-    _checkAndUpdateStreak();
-    //
     return Observer(
       builder: (context) {
         if (_questionStore.saving) {
@@ -142,22 +166,9 @@ class _ResultScreenState extends State<ResultScreen> {
     );
   }
 
-  Future<void> _checkAndUpdateStreak() async {
+  void _checkAndUpdateStreak() {
     if (calculatePoint() >= 8){
-      int prevStreak = _streakStore.streak?.current ?? 0;
-      await _streakStore.updateStreak();
-      await _streakStore.getStreak();
-      int nextStreak = _streakStore.streak?.current ?? 0;
-      //
-      if (nextStreak > prevStreak) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  StreakScreen(prevStreak: prevStreak)
-          ),
-        );
-      }
+      _streakStore.updateStreak();
     }
   }
 
