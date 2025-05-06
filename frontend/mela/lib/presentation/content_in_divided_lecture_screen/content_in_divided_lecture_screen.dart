@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/domain/entity/divided_lecture/divided_lecture.dart';
 import 'package:mela/domain/params/history/section_progress_params.dart';
@@ -21,10 +22,12 @@ class ContentInDividedLectureScreen extends StatefulWidget {
 
 class _ContentInDividedLectureScreenState
     extends State<ContentInDividedLectureScreen> {
+  OverlayEntry? _overlayEntry;
   late PdfViewerController _pdfViewerController;
   int _totalPages = 0;
 
-  final UpdateSectionProgressUsecase _updateUsecase = getIt<UpdateSectionProgressUsecase>();
+  final UpdateSectionProgressUsecase _updateUsecase =
+      getIt<UpdateSectionProgressUsecase>();
 
   @override
   void initState() {
@@ -35,8 +38,7 @@ class _ContentInDividedLectureScreenState
     final params = SectionProgressParams(
         lectureId: sectionToUpdate.lectureId,
         ordinalNumber: sectionToUpdate.ordinalNumber,
-        completedAt: DateTime.now()
-    );
+        completedAt: DateTime.now());
     _updateUsecase.call(params: params);
   }
 
@@ -170,10 +172,20 @@ class _ContentInDividedLectureScreenState
               progressBarColor: Theme.of(context).colorScheme.primary,
             ),
             child: SfPdfViewer.network(
+              onTextSelectionChanged: (PdfTextSelectionChangedDetails details) {
+                if (details.selectedText == null && _overlayEntry != null) {
+                  _overlayEntry!.remove();
+                  _overlayEntry = null;
+                } else if (details.selectedText != null &&
+                    _overlayEntry == null) {
+                  _showContextMenu(context, details);
+                }
+              },
               pageSpacing: 4,
               widget.currentDividedLecture.urlContentInDividedLecture,
               controller: _pdfViewerController,
               canShowScrollHead: false,
+              canShowTextSelectionMenu: false,
               enableDoubleTapZooming: true,
               onDocumentLoaded: (PdfDocumentLoadedDetails details) {
                 _totalPages = details.document.pages.count;
@@ -183,5 +195,63 @@ class _ContentInDividedLectureScreenState
         ),
       ),
     );
+  }
+
+  void _showContextMenu(
+    BuildContext context,
+    PdfTextSelectionChangedDetails details,
+  ) {
+    final OverlayState overlayState = Overlay.of(context);
+    _overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: details.globalSelectedRegion!.center.dy - 50,
+        left: details.globalSelectedRegion!.center.dx - 50,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.copy, color: Colors.black),
+                  onPressed: () {
+                    Clipboard.setData(
+                        ClipboardData(text: details.selectedText!));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Copied to clipboard')),
+                    );
+                    _overlayEntry?.remove();
+                    _overlayEntry = null;
+                    _pdfViewerController.clearSelection();
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.chat, color: Colors.black),
+                  onPressed: () {
+                    // Call your "Ask Mela AI" function here
+                    print("Ask Mela AI: ${details.selectedText}");
+                    _overlayEntry?.remove();
+                    _overlayEntry = null;
+                    _pdfViewerController.clearSelection();
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    overlayState.insert(_overlayEntry!);
   }
 }
