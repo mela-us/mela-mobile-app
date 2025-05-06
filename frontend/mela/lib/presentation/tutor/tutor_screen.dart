@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/dimens.dart';
+import 'package:mela/presentation/detailed_stats_and_comments/detailed_stats_and_comments.dart';
 import 'package:mela/presentation/tutor/widgets/grade_items.dart';
 
 class TutorScreen extends StatefulWidget {
@@ -140,20 +141,23 @@ class _TutorScreenState extends State<TutorScreen> {
                       const SizedBox(height: 10),
                       Expanded(
                         child: Container(
-                          color: Theme.of(context).colorScheme.appBackground,
-                          child: Center(
-                            child: Text(
-                              'Biểu đồ sẽ hiển thị ở đây',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .content
-                                  .copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .textInBg2),
-                            ),
-                          ),
-                        ),
+                            color: Theme.of(context).colorScheme.appBackground,
+                            // child: Center(
+                            //   child: Text(
+                            //     'Biểu đồ sẽ hiển thị ở đây',
+                            //     style: Theme.of(context)
+                            //         .textTheme
+                            //         .content
+                            //         .copyWith(
+                            //             color: Theme.of(context)
+                            //                 .colorScheme
+                            //                 .textInBg2),
+                            //   ),
+                            // ),
+                            child: const DetailedStatsAndCommentsScreen(
+                              name: "Tên học sinh",
+                              imageUrl: "",
+                            )),
                       ),
                     ],
                   ),

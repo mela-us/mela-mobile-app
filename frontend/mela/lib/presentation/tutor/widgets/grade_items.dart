@@ -17,7 +17,7 @@ class _GradeItemsState extends State<GradeItems> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Image.asset(
-            'images/grades/default_level.png', // Replace with your image path
+            'assets/images/grades/default_level.png', // Replace with your image path
             height: 50,
             width: 50,
           ),

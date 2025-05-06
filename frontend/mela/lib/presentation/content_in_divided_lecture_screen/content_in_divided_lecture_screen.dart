@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/constants/enum.dart';
 import 'package:mela/domain/entity/divided_lecture/divided_lecture.dart';
+import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/domain/params/history/section_progress_params.dart';
 import 'package:mela/domain/usecase/history/update_section_progress_usecase.dart';
+import 'package:mela/presentation/review/widgets/draggable_ai_button.dart';
+import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
+import 'package:mela/presentation/thread_chat/thread_chat_screen.dart';
+import 'package:mela/utils/routes/routes.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 
@@ -24,6 +30,7 @@ class _ContentInDividedLectureScreenState
     extends State<ContentInDividedLectureScreen> {
   OverlayEntry? _overlayEntry;
   late PdfViewerController _pdfViewerController;
+  final _threadChatStore = getIt.get<ThreadChatStore>();
   int _totalPages = 0;
 
   final UpdateSectionProgressUsecase _updateUsecase =
@@ -132,7 +139,12 @@ class _ContentInDividedLectureScreenState
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            print("------------->Back button pressed");
+            print(Navigator.of(context).widget.pages);
+
+            Navigator.of(context).pop();
+          },
         ),
         actions: [
           Padding(
@@ -148,51 +160,57 @@ class _ContentInDividedLectureScreenState
           ),
         ],
       ),
-      body: Center(
-        child: Container(
-          margin:
-              const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 16),
-          padding: const EdgeInsets.all(4),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(6),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.18),
-                spreadRadius: 2,
-                blurRadius: 2,
-                offset: const Offset(0, 0),
+      body: Stack(
+        children: [
+          Center(
+            child: Container(
+              margin: const EdgeInsets.only(
+                  left: 16, right: 16, top: 8, bottom: 16),
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(6),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.18),
+                    spreadRadius: 2,
+                    blurRadius: 2,
+                    offset: const Offset(0, 0),
+                  ),
+                ],
               ),
-            ],
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: SfPdfViewerTheme(
-            data: SfPdfViewerThemeData(
-              backgroundColor: Theme.of(context).colorScheme.surface,
-              progressBarColor: Theme.of(context).colorScheme.primary,
+              clipBehavior: Clip.antiAlias,
+              child: SfPdfViewerTheme(
+                data: SfPdfViewerThemeData(
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  progressBarColor: Theme.of(context).colorScheme.primary,
+                ),
+                child: SfPdfViewer.network(
+                  onTextSelectionChanged:
+                      (PdfTextSelectionChangedDetails details) {
+                    if (details.selectedText == null && _overlayEntry != null) {
+                      _overlayEntry!.remove();
+                      _overlayEntry = null;
+                    } else if (details.selectedText != null &&
+                        _overlayEntry == null) {
+                      _showContextMenu(context, details);
+                    }
+                  },
+                  pageSpacing: 4,
+                  widget.currentDividedLecture.urlContentInDividedLecture,
+                  controller: _pdfViewerController,
+                  canShowScrollHead: false,
+                  canShowTextSelectionMenu: false,
+                  enableDoubleTapZooming: true,
+                  onDocumentLoaded: (PdfDocumentLoadedDetails details) {
+                    _totalPages = details.document.pages.count;
+                  },
+                ),
+              ),
             ),
-            child: SfPdfViewer.network(
-              onTextSelectionChanged: (PdfTextSelectionChangedDetails details) {
-                if (details.selectedText == null && _overlayEntry != null) {
-                  _overlayEntry!.remove();
-                  _overlayEntry = null;
-                } else if (details.selectedText != null &&
-                    _overlayEntry == null) {
-                  _showContextMenu(context, details);
-                }
-              },
-              pageSpacing: 4,
-              widget.currentDividedLecture.urlContentInDividedLecture,
-              controller: _pdfViewerController,
-              canShowScrollHead: false,
-              canShowTextSelectionMenu: false,
-              enableDoubleTapZooming: true,
-              onDocumentLoaded: (PdfDocumentLoadedDetails details) {
-                _totalPages = details.document.pages.count;
-              },
-            ),
           ),
-        ),
+          DraggableAIButton(),
+        ],
       ),
     );
   }
@@ -240,10 +258,19 @@ class _ContentInDividedLectureScreenState
                   icon: const Icon(Icons.chat, color: Colors.black),
                   onPressed: () {
                     // Call your "Ask Mela AI" function here
-                    print("Ask Mela AI: ${details.selectedText}");
-                    _overlayEntry?.remove();
-                    _overlayEntry = null;
+                    // Đảm bảo overlay được xóa
+                    if (_overlayEntry != null) {
+                      _overlayEntry?.remove();
+                      _overlayEntry = null;
+                    }
+                    // Xóa lựa chọn văn bản
                     _pdfViewerController.clearSelection();
+                    //Pop selected text
+                    Navigator.of(context).pop();
+
+                    //Pop Selected Text Overlay
+                    _handleGoToChatFromSelection(
+                        details.selectedText ?? "Hỏi demo");
                   },
                 ),
               ],
@@ -253,5 +280,20 @@ class _ContentInDividedLectureScreenState
       ),
     );
     overlayState.insert(_overlayEntry!);
+  }
+
+  Future<void> _handleGoToChatFromSelection(
+    String selectedText,
+  ) async {
+    _threadChatStore.setConversation(Conversation(
+        conversationId: "",
+        messages: [],
+        hasMore: false,
+        levelConversation: LevelConversation.UNIDENTIFIED,
+        dateConversation: DateTime.now(),
+        nameConversation: ""));
+    //Push chat screen with transition
+    Navigator.of(context).pushNamed(Routes.threadChatScreen);
+    _threadChatStore.sendChatMessage(selectedText, []);
   }
 }
