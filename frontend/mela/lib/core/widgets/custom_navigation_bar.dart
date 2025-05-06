@@ -46,7 +46,6 @@ class _CustomNavigationBarState extends State<CustomNavigationBar>
   }
 
   void _onTap(int index) {
-
     widget.onTap(index);
     _controller.forward().then((_) {
       _controller.reverse();
@@ -55,7 +54,9 @@ class _CustomNavigationBarState extends State<CustomNavigationBar>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return BottomAppBar(
+      shape: const CircularNotchedRectangle(),
+      notchMargin: 8,
       color: Theme.of(context).colorScheme.appBackground,
       padding: const EdgeInsets.only(bottom: 8),
       height: 68,
@@ -64,8 +65,9 @@ class _CustomNavigationBarState extends State<CustomNavigationBar>
         children: [
           _buildNavItem(Assets.nav_topic, 'CHỦ ĐỀ', 0, context),
           _buildNavItem(Assets.nav_stats, 'THỐNG KÊ', 1, context),
-          _buildNavItem(Assets.nav_chat, 'CHAT AI', 2, context),
-          _buildNavItem(Assets.nav_personal, 'CÁ NHÂN', 3, context),
+          SizedBox(width: 60), // Placeholder for the center item
+          _buildNavItem(Assets.nav_chat, 'CHAT AI', 3, context),
+          _buildNavItem(Assets.nav_personal, 'CÁ NHÂN', 4, context),
         ],
       ),
     );
@@ -75,9 +77,12 @@ class _CustomNavigationBarState extends State<CustomNavigationBar>
       String iconPath, String label, int index, BuildContext context) {
     return InkWell(
       onTap: () => _onTap(index),
-      borderRadius: BorderRadius.circular(12), // Optional: Add rounded corners to the InkWell
+      borderRadius: BorderRadius.circular(
+          12), // Optional: Add rounded corners to the InkWell
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), // Optional: Add padding inside the InkWell
+        padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 8), // Optional: Add padding inside the InkWell
         child: ScaleTransition(
           scale: index == widget.currentIndex
               ? _animation
@@ -97,11 +102,11 @@ class _CustomNavigationBarState extends State<CustomNavigationBar>
               Text(
                 label,
                 style: Theme.of(context).textTheme.miniCaption.copyWith(
-                  fontSize: 9,
-                  color: widget.currentIndex == index
-                      ? Theme.of(context).colorScheme.buttonYesBgOrText
-                      : Theme.of(context).colorScheme.textInBg2,
-                ),
+                      fontSize: 9,
+                      color: widget.currentIndex == index
+                          ? Theme.of(context).colorScheme.buttonYesBgOrText
+                          : Theme.of(context).colorScheme.textInBg2,
+                    ),
               ),
             ],
           ),
