@@ -25,6 +25,7 @@ import '../../network/apis/login_signup/signup_api.dart';
 import '../../network/apis/questions/questions_api.dart';
 import '../../network/apis/questions/save_result_api.dart';
 import '../../network/apis/stats/stats_api.dart';
+import '../../network/apis/streak/streak_api.dart';
 import '../../network/apis/user/logout_api.dart';
 import '../../network/apis/user/user_info_api.dart';
 import '../../network/constants/endpoints_const.dart';
@@ -95,5 +96,7 @@ class NetworkModule {
 
     getIt.registerSingleton<HintApi>(HintApi(getIt<DioClient>()));
     getIt.registerSingleton<UpdateProgressApi>(UpdateProgressApi(getIt<DioClient>()));
+
+    getIt.registerSingleton<StreakApi>(StreakApi(getIt<DioClient>()));
   }
 }
