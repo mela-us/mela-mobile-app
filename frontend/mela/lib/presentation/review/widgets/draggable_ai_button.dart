@@ -4,6 +4,8 @@ import 'package:mela/constants/assets.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/thread_chat/thread_chat_screen.dart';
+import 'package:mela/presentation/thread_chat_learning/store/thread_chat_learning_store/thread_chat_learning_store.dart';
+import 'package:mela/presentation/thread_chat_learning/thread_chat_learning_screen.dart';
 import 'package:mela/utils/routes/routes.dart';
 
 class DraggableAIButton extends StatefulWidget {
@@ -12,7 +14,8 @@ class DraggableAIButton extends StatefulWidget {
 }
 
 class _DraggableAIButtonState extends State<DraggableAIButton> {
-  final ThreadChatStore _threadChatStore = getIt.get<ThreadChatStore>();
+  final ThreadChatLearningStore _threadChatLearningStore =
+      getIt.get<ThreadChatLearningStore>();
   double _topPosition = 60;
   final double _buttonSize = 80.0;
   final double _rightPosition = -2;
@@ -40,15 +43,14 @@ class _DraggableAIButtonState extends State<DraggableAIButton> {
             });
           },
           onTap: () {
-            // _threadChatStore.clearConversation();
-            // Navigator.of(context).pushNamed(Routes.threadChatScreen);
-            _threadChatStore.setIsGoToFromReview(true);
+            _threadChatLearningStore.clearConversation();
 
             Navigator.of(context).push(
               PageRouteBuilder(
-                settings: const RouteSettings(name: Routes.threadChatScreen),
+                settings:
+                    const RouteSettings(name: Routes.threadChatLearningScreen),
                 pageBuilder: (context, animation, secondaryAnimation) =>
-                    ThreadChatScreen(),
+                    ThreadChatLearningScreen(),
                 transitionsBuilder:
                     (context, animation, secondaryAnimation, child) {
                   const begin = Offset(1.0, 0.0);

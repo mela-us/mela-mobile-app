@@ -96,6 +96,22 @@ mixin _$StreakStore on _StreakStore, Store {
     });
   }
 
+  late final _$isUpdatingAtom =
+      Atom(name: '_StreakStore.isUpdating', context: context);
+
+  @override
+  bool get isUpdating {
+    _$isUpdatingAtom.reportRead();
+    return super.isUpdating;
+  }
+
+  @override
+  set isUpdating(bool value) {
+    _$isUpdatingAtom.reportWrite(value, super.isUpdating, () {
+      super.isUpdating = value;
+    });
+  }
+
   late final _$getStreakAsyncAction =
       AsyncAction('_StreakStore.getStreak', context: context);
 
@@ -112,6 +128,20 @@ mixin _$StreakStore on _StreakStore, Store {
     return _$updateStreakAsyncAction.run(() => super.updateStreak());
   }
 
+  late final _$_StreakStoreActionController =
+      ActionController(name: '_StreakStore', context: context);
+
+  @override
+  void toggleUpdate() {
+    final _$actionInfo = _$_StreakStoreActionController.startAction(
+        name: '_StreakStore.toggleUpdate');
+    try {
+      return super.toggleUpdate();
+    } finally {
+      _$_StreakStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
@@ -120,6 +150,7 @@ updateFuture: ${updateFuture},
 streak: ${streak},
 updateSuccess: ${updateSuccess},
 isLoading: ${isLoading},
+isUpdating: ${isUpdating},
 streakLoading: ${streakLoading}
     ''';
   }

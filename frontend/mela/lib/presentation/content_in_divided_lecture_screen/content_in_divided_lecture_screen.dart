@@ -9,6 +9,7 @@ import 'package:mela/domain/usecase/history/update_section_progress_usecase.dart
 import 'package:mela/presentation/review/widgets/draggable_ai_button.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/thread_chat/thread_chat_screen.dart';
+import 'package:mela/presentation/thread_chat_learning/store/thread_chat_learning_store/thread_chat_learning_store.dart';
 import 'package:mela/utils/routes/routes.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
@@ -30,7 +31,7 @@ class _ContentInDividedLectureScreenState
     extends State<ContentInDividedLectureScreen> {
   OverlayEntry? _overlayEntry;
   late PdfViewerController _pdfViewerController;
-  final _threadChatStore = getIt.get<ThreadChatStore>();
+  final _threadChatLearningStore = getIt.get<ThreadChatLearningStore>();
   int _totalPages = 0;
 
   final UpdateSectionProgressUsecase _updateUsecase =
@@ -285,7 +286,7 @@ class _ContentInDividedLectureScreenState
   Future<void> _handleGoToChatFromSelection(
     String selectedText,
   ) async {
-    _threadChatStore.setConversation(Conversation(
+    _threadChatLearningStore.setConversation(Conversation(
         conversationId: "",
         messages: [],
         hasMore: false,
@@ -293,7 +294,7 @@ class _ContentInDividedLectureScreenState
         dateConversation: DateTime.now(),
         nameConversation: ""));
     //Push chat screen with transition
-    Navigator.of(context).pushNamed(Routes.threadChatScreen);
-    _threadChatStore.sendChatMessage(selectedText, []);
+    Navigator.of(context).pushNamed(Routes.threadChatLearningScreen);
+    _threadChatLearningStore.sendChatMessage(selectedText, []);
   }
 }

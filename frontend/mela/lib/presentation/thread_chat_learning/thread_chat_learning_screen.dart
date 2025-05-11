@@ -16,25 +16,28 @@ import 'package:mela/presentation/thread_chat/widgets/message_chat_title.dart';
 import 'package:mela/presentation/thread_chat/widgets/message_type_tile/animation_review_tile.dart';
 import 'package:mobx/mobx.dart';
 
-class ThreadChatScreen extends StatefulWidget {
-  ThreadChatScreen({super.key});
+import 'store/chat_box_learning_store/chat_box_learning_store.dart';
+import 'store/thread_chat_learning_store/thread_chat_learning_store.dart';
+import 'widgets/chat_box_learning.dart';
+
+class ThreadChatLearningScreen extends StatefulWidget {
+  ThreadChatLearningScreen({super.key});
 
   @override
-  State<ThreadChatScreen> createState() => _ThreadChatScreenState();
+  State<ThreadChatLearningScreen> createState() => _ThreadChatLearningScreenState();
 }
 
-class _ThreadChatScreenState extends State<ThreadChatScreen> {
-  final ThreadChatStore _threadChatStore = getIt.get<ThreadChatStore>();
-  final SingleQuestionStore _singleQuestionStore =
-      getIt.get<SingleQuestionStore>();
-  final QuestionStore _questionStore = getIt<QuestionStore>();
-  final _chatBoxStore = getIt.get<ChatBoxStore>();
+class _ThreadChatLearningScreenState extends State<ThreadChatLearningScreen> {
+  final ThreadChatLearningStore _threadChatLearningStore =
+      getIt.get<ThreadChatLearningStore>();
+  // final SingleQuestionStore _singleQuestionStore =
+  //     getIt.get<SingleQuestionStore>();
+  // final QuestionStore _questionStore = getIt<QuestionStore>();
+  final ChatBoxLearningStore _chatBoxLearningStore =
+      getIt.get<ChatBoxLearningStore>();
   final ScrollController _scrollController = ScrollController();
   late ReactionDisposer disposerSendMessage;
-  late ReactionDisposer disposerGetConversation;
-  late ReactionDisposer disposerAnimationReviewMessage;
-
-  OverlayEntry? _currentOverlay;
+  // late ReactionDisposer disposerGetConversation;
 
   @override
   void initState() {
@@ -42,18 +45,18 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
     _scrollController.addListener(_onScroll);
 
     //For first time go to from history it will scroll to bottom
-    disposerGetConversation = reaction<bool>(
-      (_) => _threadChatStore.isLoadingGetConversation,
-      (value) {
-        if (!value) {
-          WidgetsBinding.instance
-              .addPostFrameCallback((_) => _scrollToBottom());
-        }
-      },
-    );
+    // disposerGetConversation = reaction<bool>(
+    //   (_) => _threadChatLearningStore.isLoadingGetConversation,
+    //   (value) {
+    //     if (!value) {
+    //       WidgetsBinding.instance
+    //           .addPostFrameCallback((_) => _scrollToBottom());
+    //     }
+    //   },
+    // );
     //For send message and get response from AI, it will scroll to bottom
     disposerSendMessage = reaction<bool>(
-      (_) => _threadChatStore.isLoading,
+      (_) => _threadChatLearningStore.isLoading,
       (value) {
         //not need to check value ==true because it must always loading when isLoading change
         WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
@@ -61,74 +64,30 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
     );
 
     //For animation review message
-    disposerAnimationReviewMessage = reaction<Conversation>(
-      (_) => _threadChatStore.currentConversation,
-      (value) {
-        // if (value.messages.isNotEmpty) {
-        //   WidgetsBinding.instance.addPostFrameCallback((_) {
-        //     _showAnimationOverlay(context, ReviewStatus.correct);
-        //   });
-        // }
-        if (value.messages.isNotEmpty && value.messages.last is ReviewMessage) {
-          ReviewMessage message = value.messages.last as ReviewMessage;
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            _showAnimationOverlay(context, message.status);
-          });
-        }
-      },
-    );
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _threadChatStore.getConversation();
+    // _threadChatLearningStore.getConversation();
   }
 
   @override
   void dispose() {
-    _currentOverlay?.remove(); // Xóa overlay khi widget dispose
-    _currentOverlay = null;
     disposerSendMessage();
-    disposerGetConversation();
-    disposerAnimationReviewMessage();
-
     _scrollController.dispose();
     super.dispose();
-  }
-
-  //Animation for review message
-
-  void _showAnimationOverlay(BuildContext context, ReviewStatus status) {
-    // Xóa overlay cũ nếu tồn tại
-
-    _currentOverlay?.remove();
-    _currentOverlay = null;
-
-    // Tạo overlay mới
-    _currentOverlay = OverlayEntry(
-      builder: (context) => AnimationOverlayWidget(
-        status: status,
-        onDismiss: () {
-          _currentOverlay?.remove();
-          _currentOverlay = null;
-        },
-      ),
-    );
-
-    // Thêm overlay vào Overlay của context
-    Overlay.of(context).insert(_currentOverlay!);
   }
 
 //For scroll at the top and loading get older messages
   void _onScroll() async {
     if (_scrollController.position.pixels <= 0 &&
-        !_threadChatStore.isLoadingGetOlderMessages &&
-        _threadChatStore.currentConversation.hasMore) {
+        !_threadChatLearningStore.isLoadingGetOlderMessages &&
+        _threadChatLearningStore.currentConversation.hasMore) {
       double _currentPosition = _scrollController.position.maxScrollExtent;
       // print("=======================>1On Scroll At the top $_currentPosition");
 
-      await _threadChatStore.getOlderMessages();
+      await _threadChatLearningStore.getOlderMessages();
       if (_scrollController.position.pixels <= 0) {
         //Chờ loading xong thì mới scroll
         WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -164,24 +123,20 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            // if (_threadChatStore.isGoToFromReview) {
-            //   _threadChatStore.setIsGoToFromReview(false);
-            // } else {
-            //   _threadChatStore.clearConversation();
-            // }
-            _threadChatStore.clearConversation();
-            _chatBoxStore.setShowCameraIcon(true);
+            _threadChatLearningStore.clearConversation();
+
+            _chatBoxLearningStore.setShowCameraIcon(true);
             Navigator.of(context).pop();
           },
         ),
         actions: [
           Observer(builder: (context) {
             return IconButton(
-              onPressed: _threadChatStore.isLoadingGetConversation ||
-                      _threadChatStore.isLoading
+              onPressed: _threadChatLearningStore.isLoadingGetConversation ||
+                      _threadChatLearningStore.isLoading
                   ? null
                   : () {
-                      _threadChatStore.clearConversation();
+                      _threadChatLearningStore.clearConversation();
                     },
               icon: Icon(
                 Icons.add_circle_outline,
@@ -192,7 +147,7 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
         ],
         title: Observer(builder: (context) {
           return Text(
-            _threadChatStore.conversationName,
+            _threadChatLearningStore.conversationName,
             style: Theme.of(context)
                 .textTheme
                 .heading
@@ -201,7 +156,7 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
         }),
       ),
       body: Observer(builder: (context) {
-        return _threadChatStore.isLoadingGetConversation
+        return _threadChatLearningStore.isLoadingGetConversation
             ? AbsorbPointer(
                 absorbing: true,
                 child: Stack(
@@ -220,7 +175,8 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
             : Column(
                 children: [
                   Expanded(
-                    child: _threadChatStore.currentConversation.messages.isEmpty
+                    child: _threadChatLearningStore
+                            .currentConversation.messages.isEmpty
                         ? _buildDefaultBodyInNewConversation()
                         : ScrollbarTheme(
                             data: ScrollbarThemeData(
@@ -237,19 +193,19 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
                                 //Must use SingleChildScrollView
                                 controller: _scrollController,
                                 child: Column(children: [
-                                  if (_threadChatStore
+                                  if (_threadChatLearningStore
                                       .isLoadingGetOlderMessages) ...[
                                     Padding(
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 10, horizontal: 8),
                                         child: ListSkeleton(
-                                            isReverse: _threadChatStore
+                                            isReverse: _threadChatLearningStore
                                                 .currentConversation
                                                 .messages
                                                 .first
                                                 .isAI))
                                   ],
-                                  ..._threadChatStore
+                                  ..._threadChatLearningStore
                                       .currentConversation.messages
                                       .map((message) => MessageChatTitle(
                                           currentMessage: message))
@@ -261,7 +217,7 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10),
-                    child: ChatBox(),
+                    child: ChatBoxLearning(),
                   )
                 ],
               );
@@ -312,7 +268,7 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // if (_threadChatStore.isGoToFromReview)
+                  // if (_threadChatLearningStore.isGoToFromReview)
                   //   ..._buildAllItemQuestionDefaultForFromReview()
                   // else
                   //   ..._buildAllItemQuestionDefault(),
@@ -333,20 +289,20 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
     ];
   }
 
-  List<Widget> _buildAllItemQuestionDefaultForFromReview() {
-    return [
-      _buildItemHintQuestionFromReview("Giải thích lại câu hỏi hiện tại", () {
-        _threadChatStore.sendChatMessage(
-            "Giải thích lại câu hỏi hiện tại: ${_questionStore.questionList!.questions![_singleQuestionStore.currentIndex].content}",
-            []);
-      }),
-    ];
-  }
+  // List<Widget> _buildAllItemQuestionDefaultForFromReview() {
+  //   return [
+  //     _buildItemHintQuestionFromReview("Giải thích lại câu hỏi hiện tại", () {
+  //       // _threadChatLearningStore.sendChatMessage(
+  //       //     "Giải thích lại câu hỏi hiện tại: ${_questionStore.questionList!.questions![_singleQuestionStore.currentIndex].content}",
+  //       //     []);
+  //     }),
+  //   ];
+  // }
 
   Widget _buildItemHintQuestion(String title) {
     return GestureDetector(
       onTap: () {
-        _threadChatStore.sendChatMessage(title, []);
+        _threadChatLearningStore.sendChatMessage(title, []);
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -372,30 +328,31 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
     );
   }
 
-  Widget _buildItemHintQuestionFromReview(String title, Function() onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-        margin: const EdgeInsets.only(right: 10),
-        height: 50,
-        width: 150,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(
-            color: Colors.grey,
-          ),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Center(
-          child: Text(title,
-              textAlign: TextAlign.left,
-              style: Theme.of(context)
-                  .textTheme
-                  .promptTitleStyle
-                  .copyWith(color: Colors.black)),
-        ),
-      ),
-    );
-  }
+  // Widget _buildItemHintQuestionFromReview(String title, Function() onTap) {
+  //   return GestureDetector(
+  //     onTap: onTap,
+  //     child: Container(
+  //       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+  //       margin: const EdgeInsets.only(right: 10),
+  //       height: 50,
+  //       width: 150,
+  //       decoration: BoxDecoration(
+  //         color: Colors.white,
+  //         border: Border.all(
+  //           color: Colors.grey,
+  //         ),
+  //         borderRadius: BorderRadius.circular(10),
+  //       ),
+  //       child: Center(
+  //         child: Text(title,
+  //             textAlign: TextAlign.left,
+  //             style: Theme.of(context)
+  //                 .textTheme
+  //                 .promptTitleStyle
+  //                 .copyWith(color: Colors.black)),
+  //       ),
+  //     ),
+  //   );
+  // }
+
 }

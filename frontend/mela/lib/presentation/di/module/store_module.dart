@@ -26,6 +26,7 @@ import 'package:mela/presentation/question/store/single_question/single_question
 import 'package:mela/presentation/question/store/timer/timer_store.dart';
 import 'package:mela/presentation/thread_chat/store/chat_box_store/chat_box_store.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
+import 'package:mela/presentation/thread_chat_learning/store/thread_chat_learning_store/thread_chat_learning_store.dart';
 import 'package:mela/presentation/topic_lecture_in_level_screen/store/topic_lecture_store.dart';
 
 import '../../../di/service_locator.dart';
@@ -75,6 +76,7 @@ import 'package:mela/presentation/personal/store/personal_store.dart';
 import '../../stats/store/stat_filter_store.dart';
 import '../../stats/store/stat_search_store.dart';
 import '../../streak/store/streak_store.dart';
+import '../../thread_chat_learning/store/chat_box_learning_store/chat_box_learning_store.dart';
 
 class StoreModule {
   static Future<void> configureStoreModuleInjection() async {
@@ -214,7 +216,17 @@ class StoreModule {
         HistoryStore(getIt<GetHistoryChatUsecase>(), getIt<ErrorStore>()));
 
     //Streak
-    getIt.registerSingleton<StreakStore>(
-        StreakStore(getIt<ErrorStore>(), getIt<GetStreakUseCase>(), getIt<UpdateStreakUseCase>(), ));
+    getIt.registerSingleton<StreakStore>(StreakStore(
+      getIt<ErrorStore>(),
+      getIt<GetStreakUseCase>(),
+      getIt<UpdateStreakUseCase>(),
+    ));
+
+    getIt.registerSingleton<ThreadChatLearningStore>(
+      ThreadChatLearningStore(
+        getIt<CreateNewConversationUsecase>(),
+      ),
+    );
+    getIt.registerSingleton<ChatBoxLearningStore>(ChatBoxLearningStore());
   }
 }

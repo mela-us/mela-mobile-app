@@ -24,6 +24,7 @@ import '../../presentation/personal/personal.dart';
 import '../../presentation/stats/stat_filter.dart';
 import '../../presentation/stats/stat_search.dart';
 import '../../presentation/stats/stats.dart';
+import '../../presentation/thread_chat_learning/thread_chat_learning_screen.dart';
 
 class Routes {
   Routes._();
@@ -59,6 +60,7 @@ class Routes {
   static const String chat = "/chat";
   static const String allScreens = '/all_screens';
   static const String threadChatScreen = '/thread_chat_screen';
+  static const String threadChatLearningScreen = '/thread_chat_learning_screen';
 
   // static final routes = <String, WidgetBuilder>{
   //   loginScreen: (BuildContext context) => const ScreenWrapper(child:LoginScreen()),
@@ -168,6 +170,9 @@ class Routes {
     filterStats: (BuildContext context) => FilterStatScreen(),
 
     threadChatScreen: (BuildContext context) => ThreadChatScreen(),
+
+    threadChatLearningScreen: (BuildContext context) =>
+        ThreadChatLearningScreen(),
 
     chat: (BuildContext context) => ChatScreen(),
 
