@@ -42,6 +42,7 @@ import '../../repository/forgot_password/forgot_password_repository.dart';
 import '../../repository/question/question_repository.dart';
 import '../../repository/search/search_repository.dart';
 import '../../repository/stat/stat_search_repository.dart';
+import '../../repository/streak/streak_repository.dart';
 import '../../repository/topic/topic_repository.dart';
 import '../../repository/user_login/user_login_repository.dart';
 
@@ -59,6 +60,8 @@ import '../../usecase/search/get_history_search_list_usecase.dart';
 import '../../usecase/search/get_search_lectures_result_usecase.dart';
 import '../../usecase/stat/get_stat_search_history_usecase.dart';
 import '../../usecase/stat/update_stat_search_history_usecase.dart';
+import '../../usecase/streak/get_streak_usecase.dart';
+import '../../usecase/streak/update_streak_usecase.dart';
 import '../../usecase/user/delete_user_usecase.dart';
 import '../../usecase/user/logout_usecase.dart';
 import '../../usecase/user_login/is_logged_in_usecase.dart';
@@ -264,5 +267,16 @@ class UseCaseModule {
 
     getIt.registerSingleton(GetHistoryChatUsecase(getIt<ChatRepository>(),
         getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()));
+
+    getIt.registerSingleton(GetStreakUseCase(
+        getIt<StreakRepository>(),
+        getIt<RefreshAccessTokenUsecase>(),
+        getIt<LogoutUseCase>())
+    );
+    getIt.registerSingleton(UpdateStreakUseCase(
+        getIt<StreakRepository>(),
+        getIt<RefreshAccessTokenUsecase>(),
+        getIt<LogoutUseCase>())
+    );
   }
 }

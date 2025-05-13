@@ -26,6 +26,7 @@ import 'package:mela/presentation/question/store/single_question/single_question
 import 'package:mela/presentation/question/store/timer/timer_store.dart';
 import 'package:mela/presentation/thread_chat/store/chat_box_store/chat_box_store.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
+import 'package:mela/presentation/thread_chat_learning/store/thread_chat_learning_store/thread_chat_learning_store.dart';
 import 'package:mela/presentation/topic_lecture_in_level_screen/store/topic_lecture_store.dart';
 import 'package:mela/presentation/tutor/stores/tutor_store.dart';
 
@@ -39,6 +40,8 @@ import '../../../domain/usecase/search/delete_all_history_search_usecase.dart';
 import '../../../domain/usecase/search/delete_history_search_usecase.dart';
 import '../../../domain/usecase/stat/get_stat_search_history_usecase.dart';
 import '../../../domain/usecase/stat/update_stat_search_history_usecase.dart';
+import '../../../domain/usecase/streak/get_streak_usecase.dart';
+import '../../../domain/usecase/streak/update_streak_usecase.dart';
 import '../../../domain/usecase/user/delete_user_usecase.dart';
 import '../../../domain/usecase/user/get_user_info_usecase.dart';
 import '../../../domain/usecase/user/logout_usecase.dart';
@@ -73,6 +76,8 @@ import 'package:mela/presentation/personal/store/personal_store.dart';
 
 import '../../stats/store/stat_filter_store.dart';
 import '../../stats/store/stat_search_store.dart';
+import '../../streak/store/streak_store.dart';
+import '../../thread_chat_learning/store/chat_box_learning_store/chat_box_learning_store.dart';
 
 class StoreModule {
   static Future<void> configureStoreModuleInjection() async {
@@ -214,5 +219,19 @@ class StoreModule {
     getIt.registerSingleton<TutorStore>(TutorStore(
       getIt<GetLevelListUsecase>(),
     ));
+
+    //Streak
+    getIt.registerSingleton<StreakStore>(StreakStore(
+      getIt<ErrorStore>(),
+      getIt<GetStreakUseCase>(),
+      getIt<UpdateStreakUseCase>(),
+    ));
+
+    getIt.registerSingleton<ThreadChatLearningStore>(
+      ThreadChatLearningStore(
+        getIt<CreateNewConversationUsecase>(),
+      ),
+    );
+    getIt.registerSingleton<ChatBoxLearningStore>(ChatBoxLearningStore());
   }
 }

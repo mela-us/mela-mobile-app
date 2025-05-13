@@ -7,11 +7,14 @@ import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 import 'package:mela/presentation/home_screen/widgets/button_individual_exercise.dart';
 import 'package:mela/presentation/home_screen/widgets/level_item.dart';
+import 'package:mela/presentation/streak/streak_action_icon.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../di/service_locator.dart';
 import '../../themes/default/colors_standards.dart';
 import '../../utils/routes/routes.dart';
+import '../streak/store/streak_store.dart';
+import '../streak/streak_dialog.dart';
 import '../topic_lecture_in_level_screen/widgets/lecture_item.dart';
 import 'widgets/cover_image_widget.dart';
 
@@ -26,6 +29,8 @@ class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   //stores:---------------------------------------------------------------------
   final LevelStore _levelStore = getIt<LevelStore>();
+  final StreakStore _streakStore = getIt<StreakStore>();
+
   late final ReactionDisposer _unAuthorizedReactionDisposer;
   final GlobalKey _buttonIndividualExerciseKey = GlobalKey();
   late AnimationController _animationController;
@@ -136,7 +141,14 @@ class _HomeScreenState extends State<HomeScreen>
               icon: const Icon(Icons.search),
               color: Theme.of(context).colorScheme.onPrimary,
             );
-          })
+          }),
+          InkWell(
+            onTap: () {
+              _showStreakDialog();
+            },
+            child: const StreakActionIcon()
+          ),
+          const SizedBox(width: 24),
         ],
       ),
       body: Observer(
@@ -359,6 +371,20 @@ class _HomeScreenState extends State<HomeScreen>
           );
         },
       ),
+    );
+  }
+
+  void _showStreakDialog() {
+    if (_streakStore.isLoading) return;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StreakDialog(
+          onCancel: () {
+            Navigator.of(context).pop();
+          },
+        );
+      },
     );
   }
 }

@@ -60,4 +60,7 @@ class Assets {
 
   //Loading
   static String loading_icon = "assets/icons/mela_load.png";
+
+  //Streak
+  static String streak_ring = "assets/icons/mela_streak.png";
 }

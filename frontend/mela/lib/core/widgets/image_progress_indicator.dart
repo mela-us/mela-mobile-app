@@ -7,7 +7,7 @@ class RotatingImageIndicator extends StatefulWidget {
 
   const RotatingImageIndicator({
     super.key,
-    this.size = 100.0, // Giá trị mặc định
+    this.size = 100.0,
   });
 
   @override
@@ -41,6 +41,7 @@ class _RotatingImageIndicatorState extends State<RotatingImageIndicator>
         image: AssetImage(Assets.loading_icon),
         width: widget.size,
         height: widget.size,
+        fit: BoxFit.fill,
       ),
     );
   }

@@ -11,11 +11,14 @@ import 'package:mela/presentation/question/store/timer/timer_store.dart';
 import 'package:mela/presentation/topic_lecture_in_level_screen/store/topic_lecture_store.dart';
 import 'package:mela/utils/locale/app_localization.dart';
 import 'package:mela/utils/routes/routes.dart';
+import 'package:mobx/mobx.dart';
 
 import '../../constants/assets.dart';
 import '../../di/service_locator.dart';
 import '../../domain/entity/question/question.dart';
 import '../../domain/params/history/exercise_progress_params.dart';
+import '../streak/store/streak_store.dart';
+import '../streak/streak_gain_screen.dart';
 
 class ResultScreen extends StatefulWidget{
   ResultScreen({super.key});
@@ -32,6 +35,36 @@ class _ResultScreenState extends State<ResultScreen> {
   final LevelStore _levelStore = getIt<LevelStore>();
   final ExerciseStore _exerciseStore = getIt<ExerciseStore>();
 
+  final StreakStore _streakStore = getIt<StreakStore>();
+
+  late ReactionDisposer _disposer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _checkAndUpdateStreak();
+
+    _disposer = reaction<bool>(
+          (_) => _streakStore.updateSuccess ?? false,
+          (updateSuccess) {
+        if (updateSuccess) {
+          int streak = _streakStore.streak?.current ?? 0;
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => StreakScreen(streak: streak)),
+          );
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _disposer();
+    super.dispose();
+  }
+
   @override
   void didChangeDependencies() {
     if (!_questionStore.saving) {
@@ -46,8 +79,6 @@ class _ResultScreenState extends State<ResultScreen> {
           DateTime.now()
       );
     }
-
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
   @override
@@ -133,6 +164,12 @@ class _ResultScreenState extends State<ResultScreen> {
         ),
       ],
     );
+  }
+
+  void _checkAndUpdateStreak() {
+    if (calculatePoint() >= 8){
+      _streakStore.updateStreak();
+    }
   }
 
   //Build items:----------------------------------------------------------------

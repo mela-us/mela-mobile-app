@@ -53,8 +53,11 @@ import 'package:mela/domain/repository/user_register/user_signup_repostiory.dart
 import '../../../domain/repository/lecture/lecture_repository.dart';
 import '../../../domain/repository/search/search_repository.dart';
 
+import '../../../domain/repository/streak/streak_repository.dart';
 import '../../network/apis/stats/stats_api.dart';
+import '../../network/apis/streak/streak_api.dart';
 import '../../repository/forgot_password/forgot_password_repository_impl.dart';
+import '../../repository/streak/streak_repository_impl.dart';
 import '../../repository/topic/topic_repository_impl.dart';
 import '../../repository/user_login/user_login_repository_impl.dart';
 import '../../repository/user_signup/user_signup_repository_impl.dart';
@@ -135,5 +138,9 @@ class RepositoryModule {
     //Hint generator
     getIt.registerSingleton<HintRepository>(
         HintRepositoryImpl(getIt<HintApi>()) as HintRepository);
+
+    //Streak
+    getIt.registerSingleton<StreakRepository>(
+        StreakRepositoryImpl(getIt<StreakApi>()) as StreakRepository);
   }
 }
