@@ -15,4 +15,5 @@ class PreferencesConst {
       "is_first_time_open_level";
   static const String is_first_time_open_lesson_in_topic =
       "is_first_time_open_lesson_in_topic";
+  static const String is_first_time_go_to_pdf ="is_first_time_go_to_pdf";
 }

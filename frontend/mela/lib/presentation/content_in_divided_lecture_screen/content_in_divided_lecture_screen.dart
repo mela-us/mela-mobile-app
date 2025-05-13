@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/enum.dart';
+import 'package:mela/core/widgets/showcase_custom.dart';
+import 'package:mela/data/sharedpref/shared_preference_helper.dart';
 import 'package:mela/domain/entity/divided_lecture/divided_lecture.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/domain/params/history/section_progress_params.dart';
@@ -11,6 +13,7 @@ import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_cha
 import 'package:mela/presentation/thread_chat/thread_chat_screen.dart';
 import 'package:mela/presentation/thread_chat_learning/store/thread_chat_learning_store/thread_chat_learning_store.dart';
 import 'package:mela/utils/routes/routes.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 
@@ -33,6 +36,10 @@ class _ContentInDividedLectureScreenState
   late PdfViewerController _pdfViewerController;
   final _threadChatLearningStore = getIt.get<ThreadChatLearningStore>();
   int _totalPages = 0;
+  final ValueNotifier<int> _currentPage = ValueNotifier(0);
+  final _sharedPrefsHelper = getIt.get<SharedPreferenceHelper>();
+  BuildContext? showCaseContext;
+  GlobalKey _pdfKey = GlobalKey();
 
   final UpdateSectionProgressUsecase _updateUsecase =
       getIt<UpdateSectionProgressUsecase>();
@@ -41,13 +48,16 @@ class _ContentInDividedLectureScreenState
   void initState() {
     super.initState();
     _pdfViewerController = PdfViewerController();
-    //call to update
-    final sectionToUpdate = widget.currentDividedLecture;
-    final params = SectionProgressParams(
-        lectureId: sectionToUpdate.lectureId,
-        ordinalNumber: sectionToUpdate.ordinalNumber,
-        completedAt: DateTime.now());
-    _updateUsecase.call(params: params);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Thêm delay 500ms trước khi gọi startShowCase
+      Future.delayed(const Duration(milliseconds: 300), () async {
+        final isFirstTimeGoToPdf = await _sharedPrefsHelper.isFirstTimeGoToPdf;
+        if (mounted && showCaseContext != null && isFirstTimeGoToPdf) {
+          ShowCaseWidget.of(showCaseContext!).startShowCase([_pdfKey]);
+        }
+      });
+    });
   }
 
   @override
@@ -126,8 +136,6 @@ class _ContentInDividedLectureScreenState
 
   @override
   Widget build(BuildContext context) {
-    print("===============ContentInDividedLectureScreen");
-    print(widget.currentDividedLecture.urlContentInDividedLecture);
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
@@ -186,29 +194,91 @@ class _ContentInDividedLectureScreenState
                   backgroundColor: Theme.of(context).colorScheme.surface,
                   progressBarColor: Theme.of(context).colorScheme.primary,
                 ),
-                child: SfPdfViewer.network(
-                  onTextSelectionChanged:
-                      (PdfTextSelectionChangedDetails details) {
-                    if (details.selectedText == null && _overlayEntry != null) {
-                      _overlayEntry!.remove();
-                      _overlayEntry = null;
-                    } else if (details.selectedText != null &&
-                        _overlayEntry == null) {
-                      _showContextMenu(context, details);
-                    }
-                  },
-                  pageSpacing: 4,
-                  widget.currentDividedLecture.urlContentInDividedLecture,
-                  controller: _pdfViewerController,
-                  canShowScrollHead: false,
-                  canShowTextSelectionMenu: false,
-                  enableDoubleTapZooming: true,
-                  onDocumentLoaded: (PdfDocumentLoadedDetails details) {
-                    _totalPages = details.document.pages.count;
-                  },
-                ),
+                child: ShowCaseWidget(onFinish: () {
+                  _sharedPrefsHelper.saveIsFirstTimeGoToPdf(false);
+                }, builder: (context) {
+                  showCaseContext = context;
+                  return ShowcaseCustom(
+                    keyWidget: _pdfKey,
+                    title: "Hoàn thành bài học",
+                    description:
+                        "Bạn hãy đọc đến trang cuối cùng để MELA xác nhận hoàn thành bài giảng này nhé!",
+                    child: SfPdfViewer.network(
+                      onTextSelectionChanged:
+                          (PdfTextSelectionChangedDetails details) {
+                        if (details.selectedText == null &&
+                            _overlayEntry != null) {
+                          _overlayEntry!.remove();
+                          _overlayEntry = null;
+                        } else if (details.selectedText != null &&
+                            _overlayEntry == null) {
+                          _showContextMenu(context, details);
+                        }
+                      },
+                      pageSpacing: 4,
+                      widget.currentDividedLecture.urlContentInDividedLecture,
+                      controller: _pdfViewerController,
+                      canShowScrollHead: false,
+                      canShowTextSelectionMenu: false,
+                      enableDoubleTapZooming: true,
+                      onDocumentLoaded: (PdfDocumentLoadedDetails details) {
+                        _totalPages = details.document.pages.count;
+                      },
+                      onPageChanged: (PdfPageChangedDetails details) {
+                        _currentPage.value = details.newPageNumber;
+                      },
+                    ),
+                  );
+                }),
               ),
             ),
+          ),
+          Positioned(
+            left: 16,
+            bottom: 2,
+            right: 16,
+            child: ValueListenableBuilder(
+                valueListenable: _currentPage,
+                builder: (context, value, child) {
+                  if (_totalPages != 0 && value >= _totalPages - 3) {
+                    return SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.tertiary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                        ),
+                        onPressed: () {
+                          //call to update
+                          final sectionToUpdate = widget.currentDividedLecture;
+                          final params = SectionProgressParams(
+                              lectureId: sectionToUpdate.lectureId,
+                              ordinalNumber: sectionToUpdate.ordinalNumber,
+                              completedAt: DateTime.now());
+                          _updateUsecase.call(params: params);
+                          Navigator.of(context).pop();
+                        },
+                        child: Center(
+                          child: Text(
+                            "Đã học xong",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontFamily: 'Asap',
+                                fontWeight: FontWeight.bold,
+                                color:
+                                    Theme.of(context).colorScheme.onTertiary),
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  return const SizedBox();
+                }),
           ),
           DraggableAIButton(),
         ],

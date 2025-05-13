@@ -86,6 +86,18 @@ class SharedPreferenceHelper {
         PreferencesConst.is_first_time_open_lesson_in_topic, value);
   }
 
+  //First time how to learnn pdf
+  Future<bool> get isFirstTimeGoToPdf async {
+    return _sharedPreference
+            .getBool(PreferencesConst.is_first_time_go_to_pdf) ??
+        true;
+  }
+
+  Future<bool> saveIsFirstTimeGoToPdf(bool value) async {
+    return _sharedPreference.setBool(
+        PreferencesConst.is_first_time_go_to_pdf, value);
+  }
+
   // Save login status:--------------------------------------------------------
 
   Future<bool> saveIsLoggedIn(bool value) async {
