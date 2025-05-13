@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mela/presentation/detailed_stats_and_comments/detailed_stats_and_comments.dart';
 import 'package:mela/presentation/signup_login_screen/login_or_signup_screen.dart';
+import 'package:vibration/vibration.dart';
 import '../../constants/assets.dart';
 import '../../constants/app_theme.dart';
 import '../../core/widgets/image_progress_indicator.dart';
@@ -103,30 +104,6 @@ class _PersonalScreenState extends State<PersonalScreen> {
                             Assets.personal_darkmode,
                             'Thống kê',
                                 () {
-                                  Navigator.push(
-                                    context,
-                                    PageRouteBuilder(
-                                      pageBuilder: (context, animation, secondaryAnimation) => DetailedStatsAndCommentsScreen(
-                                        name: _store.user?.name ?? 'Người học không tên',
-                                        imageUrl: _store.user?.imageUrl ?? '',
-                                      ),
-                                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                        const begin = Offset(1.0, 0.0); // Bắt đầu từ bên phải
-                                        const end = Offset.zero; // Kết thúc ở vị trí gốc
-                                        const curve = Curves.easeInOut;
-
-                                        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                                        var offsetAnimation = animation.drive(tween);
-
-                                        return ClipRect(
-                                          child: SlideTransition(
-                                            position: offsetAnimation,
-                                            child: child,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  );
                             }, false
                         ),
                         _buildListTile(
@@ -194,7 +171,10 @@ class _PersonalScreenState extends State<PersonalScreen> {
                 : Theme.of(context).textTheme.subTitle
                 .copyWith(color: Theme.of(context).colorScheme.textInBg1),
           ),
-          onTap: onTap,
+          onTap: () {
+            onTap();
+            Vibration.vibrate(duration: 40);
+          },
         ),
       ),
     );
@@ -217,7 +197,8 @@ class _PersonalScreenState extends State<PersonalScreen> {
           final url = _store.user?.imageUrl ?? '';
           _profileImage = url.isNotEmpty
               ? NetworkImage(url)
-              : const AssetImage('assets/icons/default_profile_pic.png') as ImageProvider<Object>;
+              : AssetImage(Assets.default_profile_pic) as ImageProvider<Object>;
+          //_profileImage = AssetImage(Assets.default_profile_pic) as ImageProvider<Object>;
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -279,7 +260,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                 ShaderMask(
                     shaderCallback: (Rect bounds) {
                       return LinearGradient(
-                        colors: [Theme.of(context).colorScheme.tertiary, Colors.lightBlueAccent],
+                        colors: [Colors.orange.shade700, Colors.red.shade300],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ).createShader(bounds);
@@ -336,6 +317,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
       builder: (BuildContext context) {
         return LogoutConfirmationDialog(
           onLogout: () {
+            Vibration.vibrate(duration: 40);
             _store.logout();
             _loginStore.logout();
             Navigator.of(context).pushAndRemoveUntil(
@@ -344,6 +326,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
             );
           },
           onCancel: () {
+            Vibration.vibrate(duration: 40);
             Navigator.of(context).pop();
           },
         );

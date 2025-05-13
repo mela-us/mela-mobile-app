@@ -40,7 +40,7 @@ class Assets {
   static String personal_darkmode = 'assets/icons/personal_darkmode.png';
   static String personal_support = 'assets/icons/personal_support.png';
   static String upload_profile_pic = 'assets/icons/upload_profile_pic.png';
-  static String default_profile_pic = "assets/icons/default_profile_pic.png";
+  static String default_profile_pic = "assets/icons/default_prof.png";
 
   //Stats
   static String stats_hide = 'assets/icons/stats_hide.png';
@@ -53,7 +53,8 @@ class Assets {
   static String nav_stats = "assets/icons/nav_stat.png";
   static String nav_chat = "assets/icons/nav_chat.png";
   static String nav_personal = "assets/icons/nav_personal.png";
-
+  static String nav_tutor = "assets/icons/mela_center.png";
+  static String nav_tutor_focus = "assets/icons/mela_center2.png";
   //Chat
   static String currently_developing_icon =
       "assets/icons/currently_developing_icon.png";

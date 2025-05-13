@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vibration/vibration.dart';
 import '../../constants/app_theme.dart';
 import '../../constants/assets.dart';
 
@@ -76,7 +77,9 @@ class _CustomNavigationBarState extends State<CustomNavigationBar>
   Widget _buildNavItem(
       String iconPath, String label, int index, BuildContext context) {
     return InkWell(
-      onTap: () => _onTap(index),
+      onTap: () {
+        _onTap(index);
+      },
       borderRadius: BorderRadius.circular(
           12), // Optional: Add rounded corners to the InkWell
       child: Padding(

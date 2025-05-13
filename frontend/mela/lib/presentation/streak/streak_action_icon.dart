@@ -45,7 +45,7 @@ class _StreakActionIconState extends State<StreakActionIcon> {
               ShaderMask(
                 shaderCallback: (Rect bounds) {
                   return LinearGradient(
-                    colors: [Theme.of(context).colorScheme.tertiary, Colors.lightBlueAccent],
+                    colors: [Colors.orange.shade700, Colors.red.shade300],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ).createShader(bounds);

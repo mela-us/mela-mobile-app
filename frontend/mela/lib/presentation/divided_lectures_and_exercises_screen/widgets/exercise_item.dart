@@ -4,6 +4,7 @@ import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 import 'package:mela/presentation/question/store/question_store.dart';
 import 'package:mela/utils/routes/routes.dart';
+import 'package:vibration/vibration.dart';
 
 import '../../../domain/entity/exercise/exercise.dart';
 
@@ -24,6 +25,7 @@ class ExerciseItem extends StatelessWidget {
       onTap: () {
         _questionStore.setQuestionsUid(currentExercise.exerciseId);
         Navigator.of(context).pushNamed(Routes.question);
+        Vibration.vibrate(duration: 60);
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 16, left: 16, right: 16),

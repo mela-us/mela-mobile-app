@@ -3,6 +3,7 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/content_in_divided_lecture_screen/content_in_divided_lecture_screen.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
+import 'package:vibration/vibration.dart';
 
 import '../../../domain/entity/divided_lecture/divided_lecture.dart';
 
@@ -41,6 +42,7 @@ class DividedLectureItem extends StatelessWidget {
             builder: (context) => ContentInDividedLectureScreen(
                 currentDividedLecture: currentDividedLecture),
           ));
+          Vibration.vibrate(duration: 60);
         },
         child: Row(
           children: [

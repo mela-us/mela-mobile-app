@@ -1,10 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
-import '../../../themes/default/colors_standards.dart';
 
-class CoverImageWidget extends StatelessWidget {
+class CoverImageWidget extends StatefulWidget {
   final void Function() onPressed;
+
   const CoverImageWidget({super.key, required this.onPressed});
+
+  @override
+  _CoverImageWidgetState createState() => _CoverImageWidgetState();
+}
+
+class _CoverImageWidgetState extends State<CoverImageWidget>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    )..repeat(reverse: true);
+
+    _animation = Tween<double>(begin: 1.0, end: 0.9).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +41,7 @@ class CoverImageWidget extends StatelessWidget {
         containerWidth * (290 / 384); // Maintain aspect ratio
     final imageHeight = containerWidth * (257 / 384); // Scale image height
     final buttonWidth = containerWidth * (250 / 384); // Scale button width
-    final buttonHeight = containerHeight * (34 / 290); // Scale button height
+    final buttonHeight = containerHeight * (34 / 260); // Scale button height
 
     final fontSize = buttonWidth * (16 / 250);
 
@@ -51,21 +77,24 @@ class CoverImageWidget extends StatelessWidget {
           child: SizedBox(
             width: buttonWidth,
             height: buttonHeight,
-            child: ElevatedButton(
-              onPressed: onPressed,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: ColorsStandards.buttonYesColor1,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+            child: ScaleTransition(
+              scale: _animation,
+              child: ElevatedButton(
+                onPressed: widget.onPressed,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.tertiary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  padding: EdgeInsets.zero,
                 ),
-                padding: EdgeInsets.zero,
-              ),
-              child: Text(
-                'Học toán hàng ngày với Mela',
-                style: Theme.of(context).textTheme.content.copyWith(
-                      color: Theme.of(context).colorScheme.onTertiary,
-                      fontSize: fontSize,
-                    ),
+                child: Text(
+                  'Học toán hàng ngày với Mela',
+                  style: Theme.of(context).textTheme.subTitle.copyWith(
+                    color: Colors.white,
+                    fontSize: fontSize,
+                  ),
+                ),
               ),
             ),
           ),
