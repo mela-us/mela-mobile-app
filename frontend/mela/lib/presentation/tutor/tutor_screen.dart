@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/dimens.dart';
+import 'package:mela/di/service_locator.dart';
+import 'package:mela/presentation/home_screen/widgets/level_item.dart';
+import 'package:mela/presentation/tutor/stores/tutor_store.dart';
 import 'package:mela/presentation/tutor/widgets/grade_items.dart';
+import 'package:mobx/mobx.dart';
 
 class TutorScreen extends StatefulWidget {
   const TutorScreen({Key? key}) : super(key: key);
@@ -12,6 +18,17 @@ class TutorScreen extends StatefulWidget {
 
 class _TutorScreenState extends State<TutorScreen> {
   bool _isGradeSelected = false;
+
+  TutorStore _tutorStore = getIt<TutorStore>();
+  @override
+  void initState() {
+    super.initState();
+    if (_tutorStore.levelList == null &&
+        _tutorStore.fetchLevelsFuture.status != FutureStatus.pending) {
+      _tutorStore.getLevels();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,60 +46,35 @@ class _TutorScreenState extends State<TutorScreen> {
   }
 
   Widget _buildGradeSelection() {
-    return Padding(
-      padding:
-          const EdgeInsets.symmetric(horizontal: Dimens.horizontal_padding),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 20),
-            Text(
-              'Chọn lớp',
-              style: Theme.of(context)
-                  .textTheme
-                  .title
-                  .copyWith(color: Theme.of(context).colorScheme.textInBg1),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Chọn lớp học mà bạn muốn gia sư AI hỗ trợ',
-              style: Theme.of(context)
-                  .textTheme
-                  .content
-                  .copyWith(color: Theme.of(context).colorScheme.textInBg2),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                ),
-                itemCount: 9,
-                itemBuilder: (context, index) {
-                  final grade = index + 1;
-                  return Material(
-                    child: InkWell(
-                      onTap: () {
-                        handleGradeSelection(grade);
-                      },
-                      borderRadius: BorderRadius.circular(8),
-                      splashColor: Theme.of(context)
-                          .colorScheme
-                          .appBackground
-                          .withOpacity(0.5),
-                      child: GradeItems(inputNumber: grade),
-                    ),
-                  );
-                },
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+    return Observer(builder: (BuildContext context) {
+      return _tutorStore.loading
+          ? const Center(child: CircularProgressIndicator())
+          : _tutorStore.levelList == null
+              ? const Center(
+                  child: Text('Không có lớp nào'),
+                )
+              : Padding(
+                  padding: const EdgeInsets.all(Dimens.horizontal_padding),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Chọn lớp học',
+                        style: Theme.of(context).textTheme.title.copyWith(
+                            color: Theme.of(context).colorScheme.textInBg1),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Chọn lớp học mà bạn muốn gia sư AI giúp đỡ.',
+                        style: Theme.of(context).textTheme.content.copyWith(
+                            color: Theme.of(context).colorScheme.textInBg2),
+                      ),
+                      const SizedBox(height: 20),
+                      Expanded(child: _buildGridView()),
+                    ],
+                  ),
+                );
+    });
   }
 
   Widget _buildInitialScreen() {
@@ -227,6 +219,37 @@ class _TutorScreenState extends State<TutorScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildGridView() {
+    return GridView.builder(
+      padding: EdgeInsets.zero,
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        mainAxisSpacing: 8,
+        crossAxisSpacing: 0,
+        childAspectRatio: 1,
+        mainAxisExtent: 80, // set the height of each item
+      ),
+      itemCount: _tutorStore.levelList!.levelList.length,
+      itemBuilder: (context, index) {
+        return GestureDetector(
+          onTap: () {
+            String levelName =
+                _tutorStore.levelList!.levelList[index].levelName;
+            int levelInt = int.parse(levelName.split(" ")[1]);
+            handleGradeSelection(levelInt);
+          },
+          child: AbsorbPointer(
+            child: LevelItem(
+              level: _tutorStore.levelList!.levelList[index],
+            ),
+          ),
+        );
+      },
     );
   }
 

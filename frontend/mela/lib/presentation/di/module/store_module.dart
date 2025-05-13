@@ -27,6 +27,7 @@ import 'package:mela/presentation/question/store/timer/timer_store.dart';
 import 'package:mela/presentation/thread_chat/store/chat_box_store/chat_box_store.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/topic_lecture_in_level_screen/store/topic_lecture_store.dart';
+import 'package:mela/presentation/tutor/stores/tutor_store.dart';
 
 import '../../../di/service_locator.dart';
 import '../../../domain/usecase/forgot_password/create_new_password_usecase.dart';
@@ -209,5 +210,9 @@ class StoreModule {
     //History
     getIt.registerSingleton<HistoryStore>(
         HistoryStore(getIt<GetHistoryChatUsecase>(), getIt<ErrorStore>()));
+
+    getIt.registerSingleton<TutorStore>(TutorStore(
+      getIt<GetLevelListUsecase>(),
+    ));
   }
 }
