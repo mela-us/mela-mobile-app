@@ -156,7 +156,7 @@ class _TutorScreenState extends State<TutorScreen> {
                 ),
                 // Practice Tab
                 Padding(
-                  padding: const EdgeInsets.all(Dimens.horizontal_padding),
+                  padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -178,40 +178,97 @@ class _TutorScreenState extends State<TutorScreen> {
                         child: ListView.builder(
                           itemCount: 5, // Replace with actual exercise count
                           itemBuilder: (context, index) {
-                            return Card(
-                              margin: const EdgeInsets.symmetric(vertical: 8),
-                              child: ListTile(
-                                title: Text(
-                                  'Bài tập ${index + 1}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .content
-                                      .copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .textInBg1),
-                                ),
-                                subtitle: Text(
-                                  'Mô tả bài tập ${index + 1}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .content
-                                      .copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .textInBg2),
-                                ),
-                                trailing: Icon(
-                                  Icons.arrow_forward,
-                                  color:
-                                      Theme.of(context).colorScheme.textInBg2,
-                                ),
+                            return Container(
+                              margin: const EdgeInsets.only(bottom: 8, left: 8, right: 8),
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
+                                    blurRadius: 8,
+                                    offset: const Offset(3, 5),
+                                  ),
+                                ],
+                              ),
+                              child: GestureDetector(
                                 onTap: () {
-                                  // Handle exercise selection
-                                  print('Selected exercise ${index + 1}');
+                                  //TODO: HANDLE TO TEST PAGE
                                 },
+                                child: Row(
+                                  children: [
+                                    // Image + completed questions/total questions
+                                    Expanded(
+                                      flex: 1,
+                                      child: Image.asset('assets/images/pdf_image.png', width: 60, height: 60),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Expanded(
+                                      flex: 2,
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Bài tập ${index + 1}',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .subTitle
+                                                .copyWith(color: Theme.of(context).colorScheme.primary,fontSize: 18),
+                                          ),
+                                          const SizedBox(height: 6),
+                                          // Topic name + level name
+                                          Text(
+                                            'Mô tả bài tập ${index + 1}',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .subTitle
+                                                .copyWith(color: Colors.orange, fontSize: 14),
+                                          ),
+
+                                          const SizedBox(width: 6),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(width: 6),
+                                  ],
+                                ),
                               ),
                             );
+                            //   Card(
+                            //   margin: const EdgeInsets.symmetric(vertical: 8),
+                            //   child: ListTile(
+                            //     title: Text(
+                            //       'Bài tập ${index + 1}',
+                            //       style: Theme.of(context)
+                            //           .textTheme
+                            //           .content
+                            //           .copyWith(
+                            //               color: Theme.of(context)
+                            //                   .colorScheme
+                            //                   .textInBg1),
+                            //     ),
+                            //     subtitle: Text(
+                            //       'Mô tả bài tập ${index + 1}',
+                            //       style: Theme.of(context)
+                            //           .textTheme
+                            //           .content
+                            //           .copyWith(
+                            //               color: Theme.of(context)
+                            //                   .colorScheme
+                            //                   .textInBg2),
+                            //     ),
+                            //     trailing: Icon(
+                            //       Icons.arrow_forward,
+                            //       color:
+                            //           Theme.of(context).colorScheme.textInBg2,
+                            //     ),
+                            //     onTap: () {
+                            //       // Handle exercise selection
+                            //       print('Selected exercise ${index + 1}');
+                            //     },
+                            //   ),
+                            // );
                           },
                         ),
                       ),

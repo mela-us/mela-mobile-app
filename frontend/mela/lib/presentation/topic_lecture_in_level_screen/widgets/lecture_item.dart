@@ -5,6 +5,7 @@ import 'package:mela/presentation/divided_lectures_and_exercises_screen/store/ex
 import 'package:mela/presentation/filter_screen/store/filter_store.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 import 'package:mela/presentation/search_screen/store/search_store.dart';
+import 'package:vibration/vibration.dart';
 
 import '../../../domain/entity/lecture/lecture.dart';
 import '../../../utils/routes/routes.dart';
@@ -44,6 +45,7 @@ class LectureItem extends StatelessWidget {
             return true;
           },
         );
+        Vibration.vibrate(duration: 40);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),

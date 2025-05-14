@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mela/constants/app_theme.dart';
@@ -12,6 +13,7 @@ import 'package:mobx/mobx.dart';
 
 import '../../di/service_locator.dart';
 import '../../themes/default/colors_standards.dart';
+import '../../utils/animation_helper/animation_helper.dart';
 import '../../utils/routes/routes.dart';
 import '../streak/store/streak_store.dart';
 import '../streak/streak_dialog.dart';
@@ -210,8 +212,32 @@ class _HomeScreenState extends State<HomeScreen>
                         ),
                         itemCount: _levelStore.levelList!.levelList.length,
                         itemBuilder: (context, index) {
-                          return LevelItem(
-                            level: _levelStore.levelList!.levelList[index],
+                          return Animate(
+                            onPlay: (controller) async {
+                              await Future.delayed(AnimationHelper.getAnimationDelayOfIndex(index));
+                              if (mounted) {
+                                  controller.repeat(
+                                    period: AnimationHelper.getAnimationDurationOfIndex(index),
+                                );
+                              }
+                            },
+                            effects: [
+                              MoveEffect(
+                                begin: const Offset(0, 0),
+                                end: const Offset(0, -11),
+                                duration: 200.ms,
+                                curve: Curves.elasticOut,
+                              ),
+                              MoveEffect(
+                                begin: const Offset(0, -11),
+                                end: const Offset(0, 0),
+                                duration: 500.ms,
+                                curve: Curves.elasticOut,
+                              ),
+                            ],
+                            child: LevelItem(
+                              level: _levelStore.levelList!.levelList[index],
+                            ),
                           );
                         },
                       ),

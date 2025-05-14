@@ -72,7 +72,7 @@ class _StreakScreenState extends State<StreakScreen> {
                           ShaderMask(
                             shaderCallback: (Rect bounds) {
                               return LinearGradient(
-                                colors: [Theme.of(context).colorScheme.tertiary, Colors.lightBlueAccent],
+                                colors: [Colors.orange.shade700, Colors.red.shade300],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ).createShader(bounds);
@@ -125,7 +125,7 @@ class _StreakScreenState extends State<StreakScreen> {
                     ],
                   ).animate().slide(
                     begin: const Offset(0, 6),
-                    end: const Offset(0, -2),
+                    end: const Offset(0, 0),
                     duration: const Duration(milliseconds: 2000),
                     curve: Curves.easeOut,
                   ),

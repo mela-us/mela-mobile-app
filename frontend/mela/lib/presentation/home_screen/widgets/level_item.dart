@@ -4,8 +4,10 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/domain/entity/level/level.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 import 'package:mela/presentation/topic_lecture_in_level_screen/store/topic_lecture_store.dart';
+import 'package:vibration/vibration.dart';
 
 import '../../../di/service_locator.dart';
+import '../../../utils/animation_helper/animation_helper.dart';
 import '../../../utils/routes/routes.dart';
 
 class LevelItem extends StatelessWidget {
@@ -22,6 +24,7 @@ class LevelItem extends StatelessWidget {
         _topicLectureStore.setCurrentLevel(level);
         _levelStore.resetErrorString();
         Navigator.of(context).pushNamed(Routes.topicLectureInLevelScreen);
+        Vibration.vibrate(duration: 60);
       },
       child: Container(
         width: double.infinity,
@@ -42,6 +45,12 @@ class LevelItem extends StatelessWidget {
                     : NetworkImage(level.levelImagePath)
                         as ImageProvider<Object>,
                 fit: BoxFit.contain,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: AnimationHelper.buildShimmerPlaceholder(context,100,100),
+                  );
+                },
               ),
             ),
             const SizedBox(height: 4),

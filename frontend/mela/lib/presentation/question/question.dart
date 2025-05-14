@@ -26,6 +26,8 @@ import '../../constants/layout.dart';
 import '../../di/service_locator.dart';
 import 'store/hint_store/hint_store.dart';
 
+import '../../../utils/animation_helper/animation_helper.dart';
+
 class QuestionScreen extends StatefulWidget {
   QuestionScreen({super.key});
 
@@ -362,6 +364,27 @@ class _QuestionScreenState extends State<QuestionScreen> {
                                 ),
                               );
                             }
+                        ),
+                        TagExtension(
+                          tagsToExtend: {"img"},
+                          builder: (context) {
+                            final src = context.attributes['src'] ?? '';
+                            return Image.network(
+                              src,
+                              fit: BoxFit.contain,
+                              loadingBuilder: (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Center(
+                                  child: AnimationHelper.buildShimmerPlaceholder(context, 500, 200),
+                                );
+                              },
+                              errorBuilder: (context, error, stackTrace){
+                                return Center(
+                                  child: AnimationHelper.buildShimmerPlaceholder(context, 500, 200),
+                                );
+                              }
+                            );
+                          },
                         ),
                       ],
                       style: {

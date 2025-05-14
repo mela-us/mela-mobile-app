@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/presentation/personal/store/personal_store.dart';
 import 'package:mela/presentation/personal/widgets/delete_account_dialog.dart';
+import 'package:vibration/vibration.dart';
 import '../../di/service_locator.dart';
 import '../../themes/default/colors_standards.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -391,7 +392,10 @@ class _PersonalInfoState extends State<PersonalInfo> {
               const Icon(Icons.arrow_forward_ios_sharp, size: 18.0),
             ],
           ),
-          onTap: onTap,
+          onTap: () {
+            onTap();
+            Vibration.vibrate(duration: 40);
+          },
         ),
       ),
     );
