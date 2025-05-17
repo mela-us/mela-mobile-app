@@ -7,11 +7,9 @@ import java.util.UUID;
 
 public interface LectureListService {
 
-    GetLecturesResponse getLecturesByTopic(String authorizationHeader, UUID topicId);
+    GetLecturesByLevelResponse getLecturesByLevel(UUID userId, UUID levelId);
 
-    GetLecturesByLevelResponse getLecturesByLevel(String authorizationHeader, UUID levelId);
+    GetLecturesResponse getLecturesByKeyword(UUID userId, String keyword);
 
-    GetLecturesResponse getLecturesByKeyword(String authorizationHeader, String keyword);
-
-    GetLecturesResponse getLecturesByRecent(String authorizationHeader, Integer size);
+    GetLecturesResponse getLecturesByRecent(UUID userId, Integer size);
 }

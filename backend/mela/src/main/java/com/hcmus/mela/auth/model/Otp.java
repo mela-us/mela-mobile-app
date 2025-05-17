@@ -1,31 +1,31 @@
 package com.hcmus.mela.auth.model;
 
-import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 @Getter
 @Setter
-@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "otps")
+@Document(collection = "otps")
 public class Otp {
+
     @Id
-    @Column(name = "otp_id")
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @Field(name = "_id")
     private UUID otpId;
 
-    @Column(name = "otp_code")
+    @Field("otp_code")
     private String otpCode;
 
-    @Column(name = "expired_at")
-    private LocalDateTime expireAt;
+    @Field("expired_at")
+    private Date expireAt;
 
-    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Field(name = "user_id")
+    private UUID userId;
 }

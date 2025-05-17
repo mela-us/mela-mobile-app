@@ -8,6 +8,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
@@ -34,25 +36,26 @@ public class OtpServiceImpl implements OtpService {
 
     @Override
     public void cacheOtpCode(String otpCode, User user) {
-        Otp otp = otpRepository.findByUser(user);
+        Otp otp = otpRepository.findByUserId(user.getUserId());
         if (otp == null) {
             otp = new Otp();
+            otp.setOtpId(UUID.randomUUID());
         }
-        otp.setUser(user);
-        otp.setOtpCode(bCryptPasswordEncoder.encode(otpCode));
-        otp.setExpireAt(LocalDateTime.now().plusMinutes(OTP_EXPIRY_MINUTES));
 
+        otp.setUserId(user.getUserId());
+        otp.setOtpCode(bCryptPasswordEncoder.encode(otpCode));
+        otp.setExpireAt(Date.from(LocalDateTime.now().plusMinutes(OTP_EXPIRY_MINUTES).atZone(ZoneId.systemDefault()).toInstant()));
         otpRepository.save(otp);
     }
 
     @Override
-    public boolean validateOtpOfUser(String otpCode, String username) {
-        Otp otp = otpRepository.findByUserUsername(username);
+    public boolean validateOtpOfUser(String otpCode, UUID userId) {
+        Otp otp = otpRepository.findByUserId(userId);
         if (otp == null) {
             return false;
         }
         if (!bCryptPasswordEncoder.matches(otpCode, otp.getOtpCode())
-                || otp.getExpireAt().isBefore(LocalDateTime.now())) {
+                || otp.getExpireAt().before(new Date())) {
             return false;
         }
         otpRepository.deleteById(otp.getOtpId());
@@ -61,6 +64,6 @@ public class OtpServiceImpl implements OtpService {
 
     @Override
     public void deleteOtpCodeByUserId(UUID userId) {
-        otpRepository.deleteByUser_UserId(userId);
+        otpRepository.deleteByUserId(userId);
     }
 }

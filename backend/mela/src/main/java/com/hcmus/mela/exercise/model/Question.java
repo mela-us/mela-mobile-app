@@ -1,7 +1,7 @@
 package com.hcmus.mela.exercise.model;
+
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
@@ -14,6 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Document
 public class Question {
+
     @Field(name = "_id")
     private UUID questionId;
 
@@ -32,8 +33,12 @@ public class Question {
     @Field(name = "blank_answer")
     private String blankAnswer;
 
+    @Field(name = "solution")
+    private String solution;
+
+    @Field(name = "terms")
+    private String terms;
+
     @Field(name = "guide")
     private String guide;
 }
-
-

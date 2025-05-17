@@ -1,15 +1,13 @@
 package com.hcmus.mela.lecture.dto.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 import java.util.UUID;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class LecturesByTopicDto {
@@ -18,5 +16,5 @@ public class LecturesByTopicDto {
 
     private String topicName;
 
-    private List<LectureDetailDto> lectures;
+    private List<LectureStatDetailDto> lectures;
 }

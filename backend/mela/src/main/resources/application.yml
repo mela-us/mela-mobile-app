@@ -1,0 +1,21 @@
+server:
+    port: 8080
+
+spring:
+  config:
+    import:
+      - classpath:configuration/Database.properties
+      - classpath:configuration/Security.properties
+      - classpath:configuration/Mail.properties
+      - classpath:configuration/Cache.properties
+      - classpath:configuration/Storage.properties
+      - classpath:configuration/AiClient.properties
+      - classpath:prompts/ExerciseHintPrompt.yml
+      - classpath:prompts/ChatBotPrompt.yml
+
+logging:
+  level:
+    com:
+      hcmus:
+        mela=debug:
+

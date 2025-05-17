@@ -1,8 +1,7 @@
 package com.hcmus.mela.exercise.model;
 
-
-import jakarta.persistence.Id;
 import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -16,6 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Document(collection = "exercise_results")
 public class ExerciseResult {
+
     @Id
     @Field(name = "_id")
     private UUID exerciseResultId;

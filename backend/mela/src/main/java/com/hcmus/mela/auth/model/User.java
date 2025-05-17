@@ -1,47 +1,45 @@
 package com.hcmus.mela.auth.model;
 
-import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 @Getter
 @Setter
-@Entity(name = "AuthUser")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users")
+@Document(collection = "users")
 public class User {
+
     @Id
-    @Column(name = "user_id")
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @Field(name = "_id")
     private UUID userId;
 
-    @Column(name = "username", unique = true)
     private String username;
 
-    @Column(name = "password_hash")
     private String password;
 
-    @Column(name = "full_name")
+    @Field("full_name")
     private String fullname;
 
-    @Column(name = "image_url")
+    @Field("image_url")
     private String imageUrl;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @Field("created_at")
+    private Date createdAt;
 
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    @Field("updated_at")
+    private Date updatedAt;
 
-    @Column(name = "birthday")
-    private LocalDate birthday;
+    private Date birthday;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "user_role")
+    @Field("user_role")
     private UserRole userRole;
 }

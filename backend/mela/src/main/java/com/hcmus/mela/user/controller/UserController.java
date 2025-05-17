@@ -3,7 +3,7 @@ package com.hcmus.mela.user.controller;
 import com.hcmus.mela.auth.security.jwt.JwtTokenService;
 import com.hcmus.mela.user.dto.request.*;
 import com.hcmus.mela.user.dto.response.*;
-import com.hcmus.mela.user.service.StorageService;
+import com.hcmus.mela.common.storage.StorageService;
 import com.hcmus.mela.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -38,14 +38,12 @@ public class UserController {
                 jwtTokenService.extractTokenFromAuthorizationHeader(authorizationHeader)
         );
 
-        // Generate pre-signed URL for uploading user profile image
-        final String preSignedUrl = storageService.generatePreSignedUrl(userId.toString());
+        // Get pre-signed URL for uploading user profile image
+        final Map<String, String> urls = storageService.getUploadUserImagePreSignedUrl(userId.toString());
 
-        // Get image URL
-        final String imageUrl = storageService.getImageUrl(userId.toString());
 
         return ResponseEntity.status(HttpStatus.OK).body(
-                Map.of("preSignedUrl", preSignedUrl, "imageUrl", imageUrl)
+                Map.of("preSignedUrl", urls.get("preSignedUrl"), "imageUrl", urls.get("storedUrl"))
         );
     }
 

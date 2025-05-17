@@ -7,13 +7,13 @@ import com.hcmus.mela.auth.dto.request.ResetPasswordRequest;
 import com.hcmus.mela.auth.dto.response.ForgotPasswordResponse;
 import com.hcmus.mela.auth.dto.response.OtpConfirmationResponse;
 import com.hcmus.mela.auth.dto.response.ResetPasswordResponse;
-import com.hcmus.mela.auth.exception.exception.ForgotPasswordException;
-import com.hcmus.mela.auth.exception.exception.InvalidTokenException;
-import com.hcmus.mela.auth.exception.exception.UserNotFoundException;
+import com.hcmus.mela.auth.exception.ForgotPasswordException;
+import com.hcmus.mela.auth.exception.InvalidTokenException;
+import com.hcmus.mela.auth.exception.UserNotFoundException;
 import com.hcmus.mela.auth.model.User;
 import com.hcmus.mela.auth.security.jwt.JwtTokenForgotPasswordService;
-import com.hcmus.mela.utils.ExceptionMessageAccessor;
-import com.hcmus.mela.utils.GeneralMessageAccessor;
+import com.hcmus.mela.common.utils.ExceptionMessageAccessor;
+import com.hcmus.mela.common.utils.GeneralMessageAccessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -70,7 +70,8 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
 
     @Override
     public OtpConfirmationResponse validateOtp(OtpConfirmationRequest otpConfirmationRequest) {
-        if (otpService.validateOtpOfUser(otpConfirmationRequest.getOtpCode(), otpConfirmationRequest.getUsername())) {
+        User user = authService.findByUsername(otpConfirmationRequest.getUsername());
+        if (otpService.validateOtpOfUser(otpConfirmationRequest.getOtpCode(), user.getUserId())) {
             String token = jwtTokenForgotPasswordService.generateToken(otpConfirmationRequest.getUsername());
             OtpConfirmationResponse otpConfirmationResponse = new OtpConfirmationResponse();
             otpConfirmationResponse.setUsername(otpConfirmationRequest.getUsername());

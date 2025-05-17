@@ -1,16 +1,14 @@
 package com.hcmus.mela.lecture.dto.response;
 
-import com.hcmus.mela.lecture.dto.dto.LectureInfoDto;
-import com.hcmus.mela.lecture.dto.dto.LectureSectionDto;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.hcmus.mela.lecture.dto.dto.LectureOfSectionDto;
+import com.hcmus.mela.lecture.dto.dto.SectionDto;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetLectureSectionsResponse {
@@ -19,8 +17,8 @@ public class GetLectureSectionsResponse {
 
     private Integer total;
 
-    private LectureInfoDto lecture;
+    private LectureOfSectionDto lecture;
 
-    private List<LectureSectionDto> data;
+    private List<SectionDto> data;
 }
 

@@ -1,12 +1,9 @@
 package com.hcmus.mela.auth.security.jwt;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.hcmus.mela.auth.exception.response.ApiExceptionResponse;
-import com.hcmus.mela.auth.service.TokenStoreService;
+import com.hcmus.mela.common.cache.RedisService;
 import com.hcmus.mela.auth.service.UserDetailsServiceImpl;
 import com.hcmus.mela.auth.security.utils.SecurityConstants;
+import com.hcmus.mela.common.exception.ApiErrorResponse;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +12,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
+import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +24,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -34,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenManager jwtTokenManager;
     private final UserDetailsServiceImpl userDetailsService;
-    private final TokenStoreService tokenStoreService;
+    private final RedisService redisService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain chain)
@@ -50,7 +49,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 username = jwtTokenManager.getUsernameFromToken(authToken);
             } catch (Exception e) {
-                sendErrorResponse(response, "Invalid token!");
+                sendErrorResponse(request, response, "Invalid token!");
                 return;
             }
         }
@@ -61,12 +60,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         if (isTokenBlacklisted(authToken)) {
-            sendErrorResponse(response, "Token is in blacklist");
+            sendErrorResponse(request, response, "Token is in blacklist");
             return;
         }
 
         if (!isValidToken(authToken, username)) {
-            sendErrorResponse(response, "Invalid token!");
+            sendErrorResponse(request, response, "Invalid token!");
             return;
         }
 
@@ -83,7 +82,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private boolean isTokenBlacklisted(String authToken) {
-        return tokenStoreService.isAccessTokenBlacklisted(authToken);
+        return redisService.isAccessTokenBlacklisted(authToken);
     }
 
     private boolean isValidToken(String authToken, String username) {
@@ -99,20 +98,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.info("Authentication successful for username: {}", username);
     }
 
-    private void sendErrorResponse(HttpServletResponse response, String message) throws IOException {
+    private String getRequestId() {
+        String requestId = MDC.get("X-Request-Id");
+        if (requestId == null) {
+            requestId = UUID.randomUUID().toString();
+        }
+        return requestId;
+    }
+
+    private void sendErrorResponse(HttpServletRequest request, HttpServletResponse response, String message) throws IOException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");
 
-        ApiExceptionResponse apiExceptionResponse = new ApiExceptionResponse(
+        ApiErrorResponse apiErrorResponse = new ApiErrorResponse(
+                getRequestId(),
+                HttpStatus.UNAUTHORIZED.value(),
                 message,
-                HttpStatus.UNAUTHORIZED,
+                request.getRequestURI(),
                 LocalDateTime.now()
         );
-        ObjectMapper objectMapper = new ObjectMapper();
-        JavaTimeModule javaTimeModule = new JavaTimeModule();
-        objectMapper.registerModule(javaTimeModule);
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        objectMapper.registerModule(javaTimeModule);
-        response.getWriter().write(objectMapper.writeValueAsString(apiExceptionResponse));
+
+        response.getWriter().write(apiErrorResponse.toJson());
     }
 }

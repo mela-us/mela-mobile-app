@@ -1,6 +1,6 @@
 package com.hcmus.mela.statistic.dto.response;
 
-import com.hcmus.mela.statistic.dto.dto.QuestionStatsDto;
+import com.hcmus.mela.statistic.dto.dto.ActivityHistoryDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +16,8 @@ public class GetStatisticsResponse {
 
     private String message;
 
-    private List<QuestionStatsDto> data;
+    private Integer total;
+
+    private List<ActivityHistoryDto> data;
 }
 
