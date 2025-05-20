@@ -39,4 +39,10 @@ class LectureRepositoryImpl extends LectureRepository {
   Future<LectureList> getLecturesAreLearning() {
     return _lectureApi.getLecturesAreLearning();
   }
+  
+  @override
+  Future<LectureList> getProposedNewLecture() {
+    // TODO: implement getProposedNewLecture
+     return _lectureApi.getProposedNewLectures();
+  }
 }

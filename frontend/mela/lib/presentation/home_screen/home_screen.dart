@@ -8,6 +8,7 @@ import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 import 'package:mela/presentation/home_screen/widgets/button_individual_exercise.dart';
 import 'package:mela/presentation/home_screen/widgets/level_item.dart';
+import 'package:mela/presentation/list_proposed_new_lecture/list_proposed_new_lecture.dart';
 import 'package:mela/presentation/streak/streak_action_icon.dart';
 import 'package:mobx/mobx.dart';
 
@@ -145,11 +146,10 @@ class _HomeScreenState extends State<HomeScreen>
             );
           }),
           InkWell(
-            onTap: () {
-              _showStreakDialog();
-            },
-            child: const StreakActionIcon()
-          ),
+              onTap: () {
+                _showStreakDialog();
+              },
+              child: const StreakActionIcon()),
           const SizedBox(width: 24),
         ],
       ),
@@ -214,10 +214,13 @@ class _HomeScreenState extends State<HomeScreen>
                         itemBuilder: (context, index) {
                           return Animate(
                             onPlay: (controller) async {
-                              await Future.delayed(AnimationHelper.getAnimationDelayOfIndex(index));
+                              await Future.delayed(
+                                  AnimationHelper.getAnimationDelayOfIndex(
+                                      index));
                               if (mounted) {
-                                  controller.repeat(
-                                    period: AnimationHelper.getAnimationDurationOfIndex(index),
+                                controller.repeat(
+                                  period: AnimationHelper
+                                      .getAnimationDurationOfIndex(index),
                                 );
                               }
                             },
@@ -322,27 +325,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     child: Text("Không có bài giảng đang học"),
                                   ),
                             // Tab 2: Bài giảng đề xuất
-                            _levelStore.lecturesAreLearningList!.lectures
-                                    .isNotEmpty
-                                ? ListView.builder(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount: _levelStore
-                                        .lecturesAreLearningList!
-                                        .lectures
-                                        .length,
-                                    itemBuilder: (context, index) {
-                                      return LectureItem(
-                                        lecture: _levelStore
-                                            .lecturesAreLearningList!
-                                            .lectures[index],
-                                      );
-                                    },
-                                  )
-                                : const Center(
-                                    child: Text("Không có bài giảng đề xuất"),
-                                  ),
+                            ListProposedNewLectureScreen()
                           ],
                         ),
                       ),

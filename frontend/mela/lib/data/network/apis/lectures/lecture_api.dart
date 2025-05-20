@@ -41,4 +41,11 @@ class LectureApi {
         queryParameters: {'size': 3});
     return LectureList.fromJson(responseData['data']);
   }
+    Future<LectureList> getProposedNewLectures() async {
+    // print("================================ở getLectureAreLearning API");
+    final responseData = await _dioClient.get(
+        EndpointsConst.getLecturesAreLearning,
+        queryParameters: {'size': 3});
+    return LectureList.fromJson(responseData['data']);
+  }
 }
