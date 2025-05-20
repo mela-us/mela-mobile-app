@@ -98,7 +98,11 @@ class _MyAppState extends State<MyApp> {
       navigatorObservers: [routeObserver],
       debugShowCheckedModeBanner: false,
       title: Strings.appName,
-      theme: AppThemeData.lightThemeData,
+      theme: AppThemeData.lightThemeData.copyWith(
+        textSelectionTheme: TextSelectionThemeData(
+            selectionColor: Theme.of(context).colorScheme.tertiary,
+            selectionHandleColor: Color(0xFF63A1FF)),
+      ),
       routes: Routes.routes,
       builder: (context, child) {
         // return Scaffold(
@@ -179,7 +183,7 @@ class _MyAppState extends State<MyApp> {
                               //Reset sharedpref.
                               await prefs.saveIsLoggedIn(false);
                               await secureStorageHelper.deleteAll();
-    
+
                               SystemNavigator.pop();
                               exit(0);
                             },
