@@ -280,7 +280,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 Icon(Icons.school, size: 14),
                                 SizedBox(width: 6),
                                 Text(
-                                  "Bài giảng đang học",
+                                  "Cùng ôn tập",
                                 ),
                               ],
                             ),
@@ -293,7 +293,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     size: 14),
                                 SizedBox(width: 6),
                                 Text(
-                                  "Bài giảng đề xuất",
+                                  "Hôm nay học gì?",
                                 ),
                               ],
                             ),

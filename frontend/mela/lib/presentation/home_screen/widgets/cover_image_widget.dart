@@ -10,24 +10,25 @@ class CoverImageWidget extends StatefulWidget {
   _CoverImageWidgetState createState() => _CoverImageWidgetState();
 }
 
-class _CoverImageWidgetState extends State<CoverImageWidget> {
-  // late AnimationController _controller;
-  // late Animation<double> _animation;
+class _CoverImageWidgetState extends State<CoverImageWidget>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
-    // _controller = AnimationController(
-    //   duration: const Duration(milliseconds: 600),
-    //   vsync: this,
-    // )..repeat(reverse: true);
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    )..repeat(reverse: true);
 
-    // _animation = Tween<double>(begin: 1.0, end: 0.9).animate(_controller);
+    _animation = Tween<double>(begin: 1.0, end: 0.9).animate(_controller);
   }
 
   @override
   void dispose() {
-    // _controller.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -76,21 +77,24 @@ class _CoverImageWidgetState extends State<CoverImageWidget> {
           child: SizedBox(
             width: buttonWidth,
             height: buttonHeight,
-            child: ElevatedButton(
-              onPressed: widget.onPressed,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.tertiary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+            child: ScaleTransition(
+              scale: _animation,
+              child: ElevatedButton(
+                onPressed: widget.onPressed,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.tertiary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  padding: EdgeInsets.zero,
                 ),
-                padding: EdgeInsets.zero,
-              ),
-              child: Text(
-                'Học toán hàng ngày với Mela',
-                style: Theme.of(context).textTheme.subTitle.copyWith(
-                      color: Colors.white,
-                      fontSize: fontSize,
-                    ),
+                child: Text(
+                  'Học toán hàng ngày với Mela',
+                  style: Theme.of(context).textTheme.subTitle.copyWith(
+                    color: Colors.white,
+                    fontSize: fontSize,
+                  ),
+                ),
               ),
             ),
           ),
