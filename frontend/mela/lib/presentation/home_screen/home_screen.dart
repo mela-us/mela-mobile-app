@@ -5,11 +5,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/assets.dart';
 import 'package:mela/core/widgets/image_progress_indicator.dart';
+import 'package:mela/domain/entity/lecture/lecture.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 import 'package:mela/presentation/home_screen/widgets/button_individual_exercise.dart';
 import 'package:mela/presentation/home_screen/widgets/level_item.dart';
 import 'package:mela/presentation/list_proposed_new_lecture/list_proposed_new_lecture.dart';
 import 'package:mela/presentation/streak/streak_action_icon.dart';
+import 'package:mela/presentation/topic_lecture_in_level_screen/widgets/lecture_item_copy.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../di/service_locator.dart';
@@ -188,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen>
               controller: _scrollController,
               physics: const ClampingScrollPhysics(),
               child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.fromLTRB(0, 8, 8, 8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -305,22 +307,7 @@ class _HomeScreenState extends State<HomeScreen>
                             // Tab 1: Bài giảng đang học
                             _levelStore.lecturesAreLearningList!.lectures
                                     .isNotEmpty
-                                ? ListView.builder(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount: _levelStore
-                                        .lecturesAreLearningList!
-                                        .lectures
-                                        .length,
-                                    itemBuilder: (context, index) {
-                                      return LectureItem(
-                                        lecture: _levelStore
-                                            .lecturesAreLearningList!
-                                            .lectures[index],
-                                      );
-                                    },
-                                  )
+                                ? _buildRoadList()
                                 : const Center(
                                     child: Text("Không có bài giảng đang học"),
                                   ),
@@ -380,6 +367,59 @@ class _HomeScreenState extends State<HomeScreen>
           );
         },
       ),
+    );
+  }
+
+  Widget _buildRoadList() {
+    // return LayoutBuilder(
+    //   builder: (context, constrain) {
+    //     double width = constrain.maxWidth;
+    //     double lineX = width * 0.5 - 1; // Center the line
+    //     return Stack(
+    //       children: [
+    //         Positioned(
+    //           left: lineX,
+    //           top: 0,
+    //           bottom: 0,
+    //           width: 2,
+    //           child: Container(
+    //             color: Theme.of(context).colorScheme.tertiary,
+    //           ),
+    //         ),
+    //         ListView.builder(
+    //           physics: const NeverScrollableScrollPhysics(),
+    //           shrinkWrap: true,
+    //           itemCount: _levelStore.lecturesAreLearningList!.lectures.length,
+    //           itemBuilder: (context, index) {
+    //             return LectureItemCopy(
+    //               isFirst: index == 0,
+    //               isLast: index ==
+    //                   _levelStore.lecturesAreLearningList!.lectures.length - 1,
+    //               lecture: _levelStore.lecturesAreLearningList!.lectures[index],
+    //             );
+    //           },
+    //         )
+    //       ],
+    //     );
+    //   },
+    // );
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: _levelStore.lecturesAreLearningList!.lectures.length,
+      itemBuilder: (context, index) {
+        List<Lecture> lectures = _levelStore.lecturesAreLearningList!.lectures;
+        return LectureItemCopy(
+          isFirst: index == 0,
+          isLast: index == lectures.length - 1,
+          lecture: lectures[index],
+          isPursuing: (index == 0 && lectures[0].progress < 0.8) ||
+              (index != 0 &&
+                  lectures[index].progress < 0.8 &&
+                  lectures[index - 1].progress >=
+                      0.8), // Check if the lecture is in progress
+        );
+      },
     );
   }
 
