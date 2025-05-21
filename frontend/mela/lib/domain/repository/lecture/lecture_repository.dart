@@ -6,5 +6,6 @@ abstract class LectureRepository {
   Future<LectureList> getLectures(String topicId);
   Future<Lecture> getLectureById(int id);
   Future<LectureList> getLecturesAreLearning();
+  Future<LectureList> getProposedNewLecture();
   Future<DividedLectureList> getDividedLectureList(String lectureId);
 }
