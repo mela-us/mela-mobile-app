@@ -28,6 +28,7 @@ class _StreakDialogState extends State<StreakDialog> {
     const size = 150.0;
 
     final streak = _store.streak?.current ?? 0;
+    final longest = _store.streak?.longest ?? 0;
 
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -41,6 +42,7 @@ class _StreakDialogState extends State<StreakDialog> {
           children: [
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 10),
                 Row(
@@ -110,14 +112,25 @@ class _StreakDialogState extends State<StreakDialog> {
                     color: Theme.of(context).colorScheme.tertiary,
                     fontWeight: FontWeight.bold,
                   ),
+                  textAlign: TextAlign.center,
                 ),
-                if (streak == 0) Text(
+                if (streak == 0 && longest == 0) Text(
                   'Hãy bắt đầu một hành trình mới!',
                   style: Theme.of(context).textTheme.heading.copyWith(
                     fontSize: 20,
                     color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.bold,
                   ),
+                  textAlign: TextAlign.center,
+                ),
+                if (streak == 0 && longest != 0) Text(
+                  'Hãy bắt đầu lại một hành trình mới thôi nhỉ?',
+                  style: Theme.of(context).textTheme.heading.copyWith(
+                    fontSize: 20,
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
                 if (streak > 10 && streak < 50) Text(
                   'Ấn tượng đó, học tập là không ngừng... cố gắng',
@@ -126,6 +139,7 @@ class _StreakDialogState extends State<StreakDialog> {
                     color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.bold,
                   ),
+                  textAlign: TextAlign.center,
                 ),
                 if (streak > 50) Text(
                   'Quá sức ấn tượng!',
@@ -134,8 +148,74 @@ class _StreakDialogState extends State<StreakDialog> {
                     color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.bold,
                   ),
+                  textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Chuỗi dài nhất: ',
+                      style: Theme.of(context).textTheme.heading.copyWith(
+                        fontSize: 17,
+                        color: Theme.of(context).colorScheme.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        ShaderMask(
+                            shaderCallback: (Rect bounds) {
+                              return LinearGradient(
+                                colors: [Colors.orange.shade700, Colors.red.shade300],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ).createShader(bounds);
+                            },
+                            blendMode: BlendMode.srcIn,
+                            child: Image.asset(
+                              Assets.streak_ring,
+                              width: 30,
+                              height: 30,
+                              fit: BoxFit.fill,
+                            )
+                        ),
+                        Text(
+                          '$longest',
+                          style: Theme.of(context).textTheme.subTitle.copyWith(
+                            fontSize: (streak / 10 >= 1)
+                                ? ((streak / 100 >= 1)
+                                ? 13
+                                : 16)
+                                : 21,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Asap',
+                            foreground: Paint()
+                              ..style = PaintingStyle.stroke
+                              ..strokeWidth = 2.8
+                              ..color = Theme.of(context).colorScheme.appBackground,
+                          ),
+                        ),
+                        Text(
+                          '$longest',
+                          style: Theme.of(context).textTheme.subTitle.copyWith(
+                            fontSize: (streak / 10 >= 1)
+                                ? ((streak / 100 >= 1)
+                                ? 13
+                                : 16)
+                                : 21,
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Asap',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 3),
               ],
             ),
             Column(

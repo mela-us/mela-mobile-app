@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/presentation/personal/store/personal_store.dart';
+import 'package:mela/presentation/personal/widgets/decorative_ring.dart';
 import 'package:mela/presentation/personal/widgets/delete_account_dialog.dart';
 import 'package:vibration/vibration.dart';
+import '../../constants/assets.dart';
 import '../../di/service_locator.dart';
 import '../../themes/default/colors_standards.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -74,14 +76,6 @@ class _PersonalInfoState extends State<PersonalInfo> {
         },
       ),
     );
-  }
-
-  void _navigateToEditEmail() { //not yet available for email editing
-    // Navigator.of(context).push(
-    //   MaterialPageRoute(
-    //     builder: (context) => EditEmailScreen(email: widget.email),
-    //   ),
-    // );
   }
 
   void _navigateToEditBirthdate() {
@@ -154,7 +148,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
       _profileImage = NetworkImage(widget.imageUrl!);
       defaultImage = false;
     } else {
-      _profileImage = const AssetImage('assets/icons/default_profile_pic.png');
+      _profileImage = AssetImage(Assets.default_profile_pic);
       defaultImage = true;
     }
   }
@@ -261,95 +255,114 @@ class _PersonalInfoState extends State<PersonalInfo> {
           },
         ),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Container(
-            height: double.infinity,
-            width: double.infinity,
-            child: Column(
-              children: [
-                // Avatar and Name at the top
-                // Fixed position for Avatar and Name
-                Container(
-                  height: 160.0,
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  alignment: Alignment.center,
-                  child: Stack(
-                    children: [
-                      Column(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(30.0),
-                            child: Container(
-                              width: 100.0,
-                              height: 100.0,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: _profileImage,
-                                  fit: BoxFit.cover,
-                                ),
+      body: Stack(
+          alignment: Alignment.center,
+          children: [
+            const Positioned(
+              top: 100,
+              right: 220,
+              child: DecorativeRing(size: 300, clockwise: false),
+            ),
+            const Positioned(
+              top: 280,
+              right: -270,
+              child: DecorativeRing(),
+            ),
+            _buildBody(context),
+          ]
+      ),
+    );
+  }
+
+  Widget _buildBody(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Container(
+          height: double.infinity,
+          width: double.infinity,
+          child: Column(
+            children: [
+              // Avatar and Name at the top
+              // Fixed position for Avatar and Name
+              Container(
+                height: 150.0,
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                alignment: Alignment.center,
+                child: Stack(
+                  children: [
+                    Column(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(30.0),
+                          child: Container(
+                            width: 100.0,
+                            height: 100.0,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: _profileImage,
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
-                          const SizedBox(height: 5.0),
-                          Observer(builder: (_) => const Text("")),
-                        ],
-                      ),
-                      Positioned(
-                        bottom: 15,
-                        right: -3,
-                        child: IconButton(
-                          icon: Image.asset(
-                            "assets/icons/upload_profile_pic.png",
-                            width: 30,
-                            height: 30,
-                          ),
-                          onPressed: _showImagePickerOptions, //_showImagePickerOptions,
                         ),
+                        const SizedBox(height: 5.0),
+                        Observer(builder: (_) => const Text("")),
+                      ],
+                    ),
+                    Positioned(
+                      bottom: 14.8,
+                      right: -3,
+                      child: IconButton(
+                        icon: Image.asset(
+                          "assets/icons/upload_profile_pic.png",
+                          width: 30,
+                          height: 30,
+                        ),
+                        onPressed: _showImagePickerOptions, //_showImagePickerOptions,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10.0), // Spacing before the list
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      _buildListTile(
+                          context,
+                          "Tên học viên",
+                          widget.name,
+                          _navigateToEditName
+                          , Theme.of(context).colorScheme.textInBg1
+                      ),
+                      _buildListTile(
+                          context,
+                          "Email",
+                          widget.email,
+                              () {}
+                          , Theme.of(context).colorScheme.textInBg2
+                      ),
+                      _buildListTile(
+                          context,
+                          "Ngày sinh",
+                          widget.dob,
+                          _navigateToEditBirthdate
+                          , Theme.of(context).colorScheme.textInBg1
+                      ),
+                      _buildListTile(
+                          context,
+                          "Xóa tài khoản",
+                          "",
+                          _showDeleteAccountDialog,
+                          Colors.red
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 10.0), // Spacing before the list
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        _buildListTile(
-                            context,
-                            "Tên học viên",
-                            widget.name,
-                            _navigateToEditName
-                            , Theme.of(context).colorScheme.textInBg1
-                        ),
-                        _buildListTile(
-                            context,
-                            "Email",
-                            widget.email,
-                                () {}
-                            , Theme.of(context).colorScheme.textInBg2
-                        ),
-                        _buildListTile(
-                            context,
-                            "Ngày sinh",
-                            widget.dob,
-                            _navigateToEditBirthdate
-                            , Theme.of(context).colorScheme.textInBg1
-                        ),
-                        _buildListTile(
-                            context,
-                            "Xóa tài khoản",
-                            "",
-                            _showDeleteAccountDialog,
-                            Colors.red
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

@@ -4,6 +4,7 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/presentation/detailed_stats_and_comments/widgets/radar_stat_chart.dart';
 import 'package:mela/presentation/detailed_stats_and_comments/widgets/tile_list.dart';
 
+import '../../constants/assets.dart';
 import '../../domain/entity/stat/detailed_stat.dart';
 
 class DetailedStatsAndCommentsScreen extends StatefulWidget {
@@ -30,74 +31,76 @@ class _DetailedStatsAndCommentsScreenState
   Widget build(BuildContext context) {
     url = widget.imageUrl ?? "";
     list = getMock();
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     scrolledUnderElevation: 0,
-    //     title: Padding(
-    //       padding: const EdgeInsets.only(left: 10),
-    //       child: Text("Thống kê",
-    //           style: Theme.of(context)
-    //               .textTheme
-    //               .heading
-    //               .copyWith(color: Theme.of(context).colorScheme.onPrimary)),
-    //     ),
-    //     leading: IconButton(
-    //       icon: const Icon(Icons.arrow_back),
-    //       onPressed: () {
-    //         Navigator.of(context).pop();
-    //       },
-    //     ),
-    //   ),
-    //   body:
-    //   backgroundColor: Theme.of(context).colorScheme.appBackground,
-    // );
-
-    return SingleChildScrollView(
-        child: Column(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(15.0),
-          child: Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: url.isNotEmpty
-                    ? NetworkImage(url)
-                    : const AssetImage('assets/icons/default_profile_pic.png')
-                        as ImageProvider<Object>,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        scrolledUnderElevation: 0,
+        title: Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: Text("Thống kê & Đánh giá",
+              style: Theme.of(context)
+                  .textTheme
+                  .heading
+                  .copyWith(color: Theme.of(context).colorScheme.onPrimary)),
         ),
-        Observer(
-          builder: (context) {
-            if (list.isEmpty) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Oops! Hành trình của bạn chưa bắt đầu\nHãy bắt đầu học!',
-                        style: Theme.of(context).textTheme.subTitle.copyWith(
-                            color: Theme.of(context).colorScheme.textInBg1),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }
-            //return RadarStatChart(stats: list);
-            return TileList(list: list);
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
           },
         ),
-      ],
-    ));
+      ),
+      body: _buildBody(context),
+      backgroundColor: Theme.of(context).colorScheme.appBackground,
+    );
+  }
+
+  Widget _buildBody(BuildContext context) {
+    return SingleChildScrollView(
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(15.0),
+              child: Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: url.isNotEmpty
+                        ? NetworkImage(url)
+                        : AssetImage(Assets.default_profile_pic)
+                    as ImageProvider<Object>,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+            Observer(
+              builder: (context) {
+                if (list.isEmpty) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Oops! Hành trình của bạn chưa bắt đầu\nHãy bắt đầu học!',
+                            style: Theme.of(context).textTheme.subTitle.copyWith(
+                                color: Theme.of(context).colorScheme.textInBg1),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+                //return RadarStatChart(stats: list);
+                return TileList(list: list);
+              },
+            ),
+          ],
+        ));
   }
 }
 

@@ -28,17 +28,22 @@ class AnimationHelper {
     return duration;
   }
 
-  static Widget buildShimmerPlaceholder(BuildContext context, double width, double height) {
+  static Widget buildShimmerPlaceholder(BuildContext context, double width, double height, {
+        Color? base,
+        Color? highlight,
+      }) {
+    final theme = Theme.of(context).colorScheme;
+
     return Shimmer.fromColors(
-      baseColor: Theme.of(context).colorScheme.appBackground,
-      highlightColor: Theme.of(context).colorScheme.onSecondary,
+      baseColor: base ?? theme.appBackground,
+      highlightColor: highlight ?? theme.onSecondary,
       direction: ShimmerDirection.ltr,
-      period: 1000.ms,
+      period: const Duration(milliseconds: 1000),
       child: Container(
         width: width,
         height: height,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.appBackground,
+          color: base ?? theme.appBackground,
           borderRadius: BorderRadius.circular(16),
         ),
       ),
