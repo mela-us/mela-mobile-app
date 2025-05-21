@@ -17,15 +17,15 @@ class RadarStatChart extends StatelessWidget {
     final excellenceValues = stats.map((e) => e.excellence).toList();
 
     return SizedBox(
-      height: 240,
-      width: 240,
+      height: 250,
+      width: 250,
       child: Stack(
         alignment: Alignment.center,
         children: [
           Center(
             child: SizedBox(
-              height: 180,
-              width: 180,
+              height: 200,
+              width: 200,
               child: RadarChart(
                 ticks: const [20, 40, 60, 80, 100],
                 features: List.filled(stats.length, ""), // Ẩn text gốc
@@ -44,7 +44,7 @@ class RadarStatChart extends StatelessWidget {
           ),
           ..._buildCustomLabels(
             topics,
-            80, // Bán kính
+            92, // Bán kính
             Theme.of(context).textTheme.miniCaption.copyWith(
               color: Theme.of(context).colorScheme.tertiary,
               fontWeight: FontWeight.bold,
@@ -63,7 +63,7 @@ class RadarStatChart extends StatelessWidget {
       return Positioned(
         left: getLeft(x,style), // Canh giữa theo chiều ngang
         top: getTop(y,style), // Canh giữa theo chiều dọc
-        child: Container(
+        child: SizedBox(
           width: 80, // Điều chỉnh chiều rộng nếu cần
           child: Text(
             labels[i],
@@ -75,15 +75,14 @@ class RadarStatChart extends StatelessWidget {
       );
     });
   }
-
   double getLeft(double x, TextStyle style) {
-    final temp = (120 + x) - (style.fontSize! / 2);
+    final temp = (122 + x) - (style.fontSize! / 2);
     if (x < 0) return temp - 68;
     return temp - 1;
   }
 
   double getTop(double y, TextStyle style) {
-    final temp = (120 + y) - (style.fontSize! / 2);
+    final temp = (126 + y) - (style.fontSize! / 2);
     if (y < 0) return temp - 5;
     return temp;
   }

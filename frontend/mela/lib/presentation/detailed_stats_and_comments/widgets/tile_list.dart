@@ -22,8 +22,24 @@ class TileList extends StatelessWidget {
             if (index == 0) {
               return Column(
                 children: [
-                  RadarStatChart(stats: list!), // Chart ở đầu
-                  const SizedBox(height: 4),
+                  Container(
+                    width: 400,
+                    alignment: Alignment.center,
+                    margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8.0),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 4.0,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: RadarStatChart(stats: list!),
+                  ),
+                  const SizedBox(height: 16),
                 ],
               );
             }

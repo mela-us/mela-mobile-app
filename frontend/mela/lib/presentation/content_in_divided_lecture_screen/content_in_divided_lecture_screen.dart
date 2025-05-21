@@ -17,6 +17,7 @@ import 'package:showcaseview/showcaseview.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 
+import '../../constants/assets.dart';
 import '../../di/service_locator.dart';
 
 class ContentInDividedLectureScreen extends StatefulWidget {
@@ -303,7 +304,7 @@ class _ContentInDividedLectureScreenState
               borderRadius: BorderRadius.circular(8),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
+                  color: Theme.of(context).colorScheme.tertiary,
                   blurRadius: 4,
                   offset: const Offset(0, 2),
                 ),
@@ -313,7 +314,7 @@ class _ContentInDividedLectureScreenState
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
-                  icon: const Icon(Icons.copy, color: Colors.black),
+                  icon: Icon(Icons.copy, color: Theme.of(context).colorScheme.tertiary),
                   onPressed: () {
                     Clipboard.setData(
                         ClipboardData(text: details.selectedText!));
@@ -326,7 +327,12 @@ class _ContentInDividedLectureScreenState
                   },
                 ),
                 IconButton(
-                  icon: const Icon(Icons.chat, color: Colors.black),
+                  icon: Image.asset(
+                    Assets.nav_chat,
+                    width: 28,
+                    height: 28,
+                    color: Theme.of(context).colorScheme.tertiary,
+                  ),
                   onPressed: () {
                     // Call your "Ask Mela AI" function here
                     // Đảm bảo overlay được xóa

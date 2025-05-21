@@ -100,8 +100,8 @@ class _MyAppState extends State<MyApp> {
       title: Strings.appName,
       theme: AppThemeData.lightThemeData.copyWith(
         textSelectionTheme: TextSelectionThemeData(
-            selectionColor: Theme.of(context).colorScheme.tertiary,
-            selectionHandleColor: Color(0xFF63A1FF)),
+            selectionColor: const Color(0xFF0961F5).withOpacity(0.4),
+            selectionHandleColor: const Color(0xFF0961F5)),
       ),
       routes: Routes.routes,
       builder: (context, child) {

@@ -6,6 +6,7 @@ import 'package:mela/presentation/detailed_stats_and_comments/widgets/tile_list.
 
 import '../../constants/assets.dart';
 import '../../domain/entity/stat/detailed_stat.dart';
+import '../personal/widgets/decorative_ring.dart';
 
 class DetailedStatsAndCommentsScreen extends StatefulWidget {
   final String name;
@@ -49,7 +50,22 @@ class _DetailedStatsAndCommentsScreenState
           },
         ),
       ),
-      body: _buildBody(context),
+      body: Stack(
+          alignment: Alignment.center,
+          children: [
+            const Positioned(
+              top: 100,
+              right: 220,
+              child: DecorativeRing(size: 300, clockwise: false),
+            ),
+            const Positioned(
+              top: 280,
+              right: -270,
+              child: DecorativeRing(),
+            ),
+            _buildBody(context),
+          ]
+      ),
       backgroundColor: Theme.of(context).colorScheme.appBackground,
     );
   }
@@ -58,22 +74,6 @@ class _DetailedStatsAndCommentsScreenState
     return SingleChildScrollView(
         child: Column(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(15.0),
-              child: Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: url.isNotEmpty
-                        ? NetworkImage(url)
-                        : AssetImage(Assets.default_profile_pic)
-                    as ImageProvider<Object>,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ),
             Observer(
               builder: (context) {
                 if (list.isEmpty) {

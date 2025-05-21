@@ -6,8 +6,6 @@ import 'package:mela/presentation/home_screen/home_screen.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 import 'package:mela/presentation/stats/stats.dart';
 import 'package:mela/presentation/personal/personal.dart';
-import 'package:mela/presentation/tutor/tutor_screen.dart';
-import 'package:showcaseview/showcaseview.dart';
 import 'package:vibration/vibration.dart';
 
 import '../constants/assets.dart';
@@ -20,17 +18,17 @@ class AllScreens extends StatefulWidget {
 }
 
 class _AllScreensState extends State<AllScreens> {
-  bool tutor_chosen = false;
+  bool middle_tab_chosen = true;
   // Index for the currently selected tab
   final _levelStore = getIt<LevelStore>();
-  int _currentIndex = 0;
+  int _currentIndex = 2;
   int _previousIndex = -1;
   late PageController _pageController;
   // List of screens for each tab
   final List<Widget> _screens = [
     HomeScreen(),
     StatisticsScreen(),
-    TutorScreen(),
+    HomeScreen(), //TutorScreen(),
     ChatScreen(),
     PersonalScreen(),
   ];
@@ -48,9 +46,9 @@ class _AllScreensState extends State<AllScreens> {
       _previousIndex = _currentIndex;
       _currentIndex = index;
       if (index != 2) {
-        tutor_chosen = false;
+        middle_tab_chosen = false;
       } else {
-        tutor_chosen = true;
+        middle_tab_chosen = true;
       }
     });
     Vibration.vibrate(duration: 60);
@@ -74,7 +72,7 @@ class _AllScreensState extends State<AllScreens> {
               },
               child: ClipOval(
                 child: Image.asset(
-                  tutor_chosen ? Assets.nav_tutor_focus : Assets.nav_tutor,
+                  middle_tab_chosen ? Assets.nav_tutor_focus : Assets.nav_tutor,
                   fit: BoxFit.cover,
                   width: 60,
                   height: 60,
