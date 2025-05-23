@@ -6,6 +6,7 @@ import 'package:mela/presentation/home_screen/home_screen.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 import 'package:mela/presentation/stats/stats.dart';
 import 'package:mela/presentation/personal/personal.dart';
+import 'package:mela/presentation/tutor/tutor_screen.dart';
 import 'package:vibration/vibration.dart';
 
 import '../constants/assets.dart';
@@ -26,7 +27,7 @@ class _AllScreensState extends State<AllScreens> {
   late PageController _pageController;
   // List of screens for each tab
   final List<Widget> _screens = [
-    HomeScreen(),
+    TutorScreen(),
     StatisticsScreen(),
     HomeScreen(), //TutorScreen(),
     ChatScreen(),
@@ -71,11 +72,18 @@ class _AllScreensState extends State<AllScreens> {
                 onTabTapped(2);
               },
               child: ClipOval(
-                child: Image.asset(
-                  middle_tab_chosen ? Assets.nav_tutor_focus : Assets.nav_tutor,
-                  fit: BoxFit.cover,
-                  width: 60,
-                  height: 60,
+                child: Container(
+                  color: Theme.of(context).colorScheme.buttonNoText,
+                  child: AnimatedScale(
+                    scale: middle_tab_chosen ? 1.0 : 0.7,
+                    duration: const Duration(milliseconds: 500),
+                    child: Image.asset(
+                      Assets.nav_tutor,
+                      fit: BoxFit.cover,
+                      width: 60,
+                      height: 60,
+                    ),
+                  ),
                 ),
               ),
             ),

@@ -150,10 +150,10 @@ class _ContentInDividedLectureScreenState
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            print("------------->Back button pressed");
-            print(Navigator.of(context).widget.pages);
+            // print("------------->Back button pressed");
+            // print(Navigator.of(context).widget.pages);
 
-            Navigator.of(context).pop();
+            Navigator.of(context).pop(false);
           },
         ),
         actions: [
@@ -254,7 +254,7 @@ class _ContentInDividedLectureScreenState
                           ),
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                         ),
-                        onPressed: () {
+                        onPressed: () async {
                           //call to update
                           final sectionToUpdate = widget.currentDividedLecture;
                           final params = SectionProgressParams(
@@ -262,7 +262,11 @@ class _ContentInDividedLectureScreenState
                               ordinalNumber: sectionToUpdate.ordinalNumber,
                               completedAt: DateTime.now());
                           _updateUsecase.call(params: params);
-                          Navigator.of(context).pop();
+                          final result = await showDialogGoToExercise();
+                          if (result == null) return;
+                          if (mounted) {
+                            Navigator.of(context).pop(result);
+                          }
                         },
                         child: Center(
                           child: Text(
@@ -314,7 +318,8 @@ class _ContentInDividedLectureScreenState
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
-                  icon: Icon(Icons.copy, color: Theme.of(context).colorScheme.tertiary),
+                  icon: Icon(Icons.copy,
+                      color: Theme.of(context).colorScheme.tertiary),
                   onPressed: () {
                     Clipboard.setData(
                         ClipboardData(text: details.selectedText!));
@@ -372,5 +377,130 @@ class _ContentInDividedLectureScreenState
     //Push chat screen with transition
     Navigator.of(context).pushNamed(Routes.threadChatLearningScreen);
     _threadChatLearningStore.sendChatMessage(selectedText, []);
+  }
+
+  Future<bool?> showDialogGoToExercise() async {
+    final result = await showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Center(
+          child: TapRegion(
+            onTapOutside: (event) {
+              Navigator.of(context).pop();
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.85,
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.4,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Title
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.tertiary,
+                      borderRadius:
+                          const BorderRadius.vertical(top: Radius.circular(16)),
+                    ),
+                    width: double.infinity,
+                    child: Text(
+                      'Bắt Đầu Luyện Tập',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ),
+                  // Description
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 24),
+                    child: Text(
+                      'Bạn có muốn luyện tập ngay với những lí thuyết vừa học không?',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                  // Buttons
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(false);
+                            },
+                            style: OutlinedButton.styleFrom(
+                              side: BorderSide(
+                                  color:
+                                      Theme.of(context).colorScheme.tertiary),
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                            ),
+                            child: Text(
+                              'Thoát ngay',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(true);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.tertiary,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                            ),
+                            child: Text(
+                              'Tiếp tục',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onTertiary),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+
+    return result;
   }
 }

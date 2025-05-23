@@ -10,8 +10,8 @@ import 'divided_lecture_item.dart';
 
 class DividedLectureListItem extends StatelessWidget {
   final ExerciseStore _exerciseStore = getIt<ExerciseStore>();
-  DividedLectureListItem();
-
+  final void Function() onGoToExercise;
+  DividedLectureListItem({super.key, required this.onGoToExercise});
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +21,9 @@ class DividedLectureListItem extends StatelessWidget {
       itemCount: _exerciseStore.dividedLectureList!.dividedLectures.length,
       itemBuilder: (context, index) {
         return DividedLectureItem(
-          currentDividedLecture: _exerciseStore.dividedLectureList!.dividedLectures[index],
-        );
+            currentDividedLecture:
+                _exerciseStore.dividedLectureList!.dividedLectures[index],
+            onGoToExercise: onGoToExercise);
       },
     );
   }

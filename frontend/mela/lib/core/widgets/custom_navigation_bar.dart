@@ -64,8 +64,8 @@ class _CustomNavigationBarState extends State<CustomNavigationBar>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavItem(Assets.nav_topic, 'CHỦ ĐỀ', 0, context),
-          _buildNavItem(Assets.nav_stats, 'THỐNG KÊ', 1, context),
+          _buildNavItem(Assets.nav_topic, 'KIỂM TRA', 0, context),
+          _buildNavItem(Assets.nav_stats, 'LỊCH SỬ', 1, context),
           SizedBox(width: 60), // Placeholder for the center item
           _buildNavItem(Assets.nav_chat, 'CHAT AI', 3, context),
           _buildNavItem(Assets.nav_personal, 'CÁ NHÂN', 4, context),
