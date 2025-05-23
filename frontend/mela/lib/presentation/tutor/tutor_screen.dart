@@ -35,7 +35,7 @@ class _TutorScreenState extends State<TutorScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Gia sư AI',
+          'Bài kiểm tra',
           style: Theme.of(context)
               .textTheme
               .heading
