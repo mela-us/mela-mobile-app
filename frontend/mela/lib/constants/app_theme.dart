@@ -225,7 +225,7 @@ extension CustomColorTheme on ColorScheme{
 
   Color get buttonNoBackground => const Color(0xFFE8F1FF);
   Color get buttonNoBorder => const Color(0xFFB4BDC4);
-  Color get buttonNoText => const Color(0xFF202244);
+  Color get buttonNoText => const Color(0xFF002060);
 
   Color get buttonChooseBackground => const Color(0xFF167F71);
   Color get buttonChooseText => const Color(0xFFFFFFFF);

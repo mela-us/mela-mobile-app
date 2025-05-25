@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/home_screen/home_screen.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 import 'package:mela/presentation/stats/stats.dart';
 import 'package:mela/presentation/personal/personal.dart';
-import 'package:mela/presentation/tutor/tutor_screen.dart';
+import 'package:mela/presentation/tutor/exam_screen.dart';
 import 'package:vibration/vibration.dart';
 
 import '../constants/assets.dart';
@@ -28,8 +27,10 @@ class _AllScreensState extends State<AllScreens> {
   // List of screens for each tab
   final List<Widget> _screens = [
     TutorScreen(),
+    //tạm thời để Tutor Screen đây thôi, tutor screen chắc không phải sử dụng,
+    // dự kiến chỉ còn 3 screen vì bỏ Statistics vào Personal
     StatisticsScreen(),
-    HomeScreen(), //TutorScreen(),
+    HomeScreen(),
     ChatScreen(),
     PersonalScreen(),
   ];
