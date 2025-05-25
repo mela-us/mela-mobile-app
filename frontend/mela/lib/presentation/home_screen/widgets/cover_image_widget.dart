@@ -77,24 +77,21 @@ class _CoverImageWidgetState extends State<CoverImageWidget>
           child: SizedBox(
             width: buttonWidth,
             height: buttonHeight,
-            child: ScaleTransition(
-              scale: _animation,
-              child: ElevatedButton(
-                onPressed: widget.onPressed,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.tertiary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  padding: EdgeInsets.zero,
+            child: ElevatedButton(
+              onPressed: widget.onPressed,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.tertiary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                child: Text(
-                  'Học toán hàng ngày với Mela',
-                  style: Theme.of(context).textTheme.subTitle.copyWith(
-                    color: Colors.white,
-                    fontSize: fontSize,
-                  ),
-                ),
+                padding: EdgeInsets.zero,
+              ),
+              child: Text(
+                'Học toán hàng ngày với Mela',
+                style: Theme.of(context).textTheme.subTitle.copyWith(
+                      color: Colors.white,
+                      fontSize: fontSize,
+                    ),
               ),
             ),
           ),

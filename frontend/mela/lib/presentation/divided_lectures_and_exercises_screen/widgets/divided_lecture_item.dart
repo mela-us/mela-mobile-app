@@ -9,10 +9,12 @@ import '../../../domain/entity/divided_lecture/divided_lecture.dart';
 
 class DividedLectureItem extends StatelessWidget {
   final DividedLecture currentDividedLecture;
+  final void Function() onGoToExercise;
   final LevelStore _levelStore = getIt<LevelStore>();
 
   DividedLectureItem({
     required this.currentDividedLecture,
+    required this.onGoToExercise,
   });
 
   @override
@@ -37,11 +39,17 @@ class DividedLectureItem extends StatelessWidget {
         ],
       ),
       child: GestureDetector(
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
+        onTap: () async {
+          final isGoToExercise =
+              await Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => ContentInDividedLectureScreen(
                 currentDividedLecture: currentDividedLecture),
           ));
+          if (isGoToExercise != null &&
+              isGoToExercise is bool &&
+              isGoToExercise) {
+            onGoToExercise();
+          }
           Vibration.vibrate(duration: 60);
         },
         child: Row(
@@ -62,10 +70,9 @@ class DividedLectureItem extends StatelessWidget {
                   // Divided Lecture name
                   Text(
                     currentDividedLecture.dividedLectureName,
-                    style: Theme.of(context)
-                        .textTheme
-                        .subTitle
-                        .copyWith(color: Theme.of(context).colorScheme.primary,fontSize: 18),
+                    style: Theme.of(context).textTheme.subTitle.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontSize: 18),
                   ),
                   const SizedBox(height: 6),
                   // Topic name + level name

@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen>
       vsync: this,
       duration: const Duration(seconds: 1),
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.04).animate(
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.08).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
     );
     //routeObserver.subscribe(this, ModalRoute.of(context));
@@ -94,24 +94,37 @@ class _HomeScreenState extends State<HomeScreen>
     super.dispose();
   }
 
-  void _scrollToButtonIndividualExercise() {
-    final RenderBox? renderBox = _buttonIndividualExerciseKey.currentContext
-        ?.findRenderObject() as RenderBox?;
-    if (renderBox != null) {
-      final position = renderBox.localToGlobal(Offset.zero).dy;
-      final scrollOffset = position + _scrollController.offset - 100;
-      _scrollController
-          .animateTo(
-        scrollOffset,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      )
-          .then((_) {
-        _animationController.forward().then((_) {
-          _animationController.reverse();
-        });
+  // void _scrollToButtonIndividualExercise() {
+  //   final RenderBox? renderBox = _buttonIndividualExerciseKey.currentContext
+  //       ?.findRenderObject() as RenderBox?;
+  //   if (renderBox != null) {
+  //     final position = renderBox.localToGlobal(Offset.zero).dy;
+  //     final scrollOffset = position + _scrollController.offset - 100;
+  //     _scrollController
+  //         .animateTo(
+  //       scrollOffset,
+  //       duration: const Duration(milliseconds: 500),
+  //       curve: Curves.easeInOut,
+  //     )
+  //         .then((_) {
+  //       _animationController.forward().then((_) {
+  //         _animationController.reverse();
+  //       });
+  //     });
+  //   }
+  // }
+  void _scrollToEnd() {
+    _scrollController
+        .animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    )
+        .then((_) {
+      _animationController.forward().then((_) {
+        _animationController.reverse();
       });
-    }
+    });
   }
 
   @override
@@ -196,7 +209,7 @@ class _HomeScreenState extends State<HomeScreen>
                     children: [
                       //Cover Image Introduction
                       CoverImageWidget(
-                        onPressed: _scrollToButtonIndividualExercise,
+                        onPressed: _scrollToEnd,
                       ),
                       const SizedBox(height: 15),
                       //Levels Grid
@@ -249,57 +262,64 @@ class _HomeScreenState extends State<HomeScreen>
 
                       const SizedBox(height: 10),
 
-                      TabBar(
-                        labelColor: Theme.of(context).colorScheme.tertiary,
-                        labelStyle:
-                            Theme.of(context).textTheme.subTitle.copyWith(
-                                  color: Theme.of(context).colorScheme.tertiary,
-                                ),
-                        unselectedLabelStyle:
-                            Theme.of(context).textTheme.subTitle.copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSecondary
-                                      .withOpacity(0.5),
-                                ),
-                        unselectedLabelColor:
-                            Theme.of(context).colorScheme.onSecondary,
-                        dividerColor: Colors.transparent,
-                        overlayColor:
-                            WidgetStateProperty.all(Colors.transparent),
-                        indicator: UnderlineTabIndicator(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).colorScheme.tertiary,
-                              width: 2),
+                      ScaleTransition(
+                        scale: _scaleAnimation,
+                        child: TabBar(
+                          // key: _buttonIndividualExerciseKey,
+                          labelColor: Theme.of(context).colorScheme.tertiary,
+                          labelStyle: Theme.of(context)
+                              .textTheme
+                              .subTitle
+                              .copyWith(
+                                color: Theme.of(context).colorScheme.tertiary,
+                              ),
+                          unselectedLabelStyle:
+                              Theme.of(context).textTheme.subTitle.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSecondary
+                                        .withOpacity(0.5),
+                                  ),
+                          unselectedLabelColor:
+                              Theme.of(context).colorScheme.onSecondary,
+                          dividerColor: Colors.transparent,
+                          overlayColor:
+                              WidgetStateProperty.all(Colors.transparent),
+                          indicator: UnderlineTabIndicator(
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.tertiary,
+                                width: 2),
+                          ),
+                          tabs: const [
+                            Tab(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.school, size: 14),
+                                  SizedBox(width: 6),
+                                  Text(
+                                    "Cùng ôn tập",
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Tab(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.integration_instructions_outlined,
+                                      size: 14),
+                                  SizedBox(width: 6),
+                                  Text(
+                                    "Hôm nay học gì?",
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        tabs: const [
-                          Tab(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.school, size: 14),
-                                SizedBox(width: 6),
-                                Text(
-                                  "Cùng ôn tập",
-                                ),
-                              ],
-                            ),
-                          ),
-                          Tab(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.integration_instructions_outlined,
-                                    size: 14),
-                                SizedBox(width: 6),
-                                Text(
-                                  "Hôm nay học gì?",
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
                       ),
+
                       SizedBox(
                         height: 420,
                         child: TabBarView(
@@ -317,49 +337,49 @@ class _HomeScreenState extends State<HomeScreen>
                         ),
                       ),
 
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Image.asset(
-                              'assets/images/fire.png',
-                              width: 20,
-                              height: 28,
-                              fit: BoxFit.contain,
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              "Bài tập nhanh",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subTitle
-                                  .copyWith(
-                                      color: ColorsStandards
-                                          .textColorInBackground2),
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 10),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 10),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.start,
+                      //     children: [
+                      //       Image.asset(
+                      //         'assets/images/fire.png',
+                      //         width: 20,
+                      //         height: 28,
+                      //         fit: BoxFit.contain,
+                      //       ),
+                      //       const SizedBox(
+                      //         width: 10,
+                      //       ),
+                      //       Text(
+                      //         "Bài tập nhanh",
+                      //         style: Theme.of(context)
+                      //             .textTheme
+                      //             .subTitle
+                      //             .copyWith(
+                      //                 color: ColorsStandards
+                      //                     .textColorInBackground2),
+                      //       )
+                      //     ],
+                      //   ),
+                      // ),
+                      // const SizedBox(height: 10),
 
-                      AnimatedBuilder(
-                          animation: _scaleAnimation,
-                          builder: (context, child) {
-                            return Transform.scale(
-                              scale: _scaleAnimation.value,
-                              child: ButtonIndividualExercise(
-                                  key: _buttonIndividualExerciseKey,
-                                  leadingIcon: SvgPicture.asset(
-                                    Assets.mela_think,
-                                    width: 40,
-                                  ),
-                                  textButton: "Ôn tập nhanh cùng MELA",
-                                  onPressed: () {}),
-                            );
-                          }),
+                      // AnimatedBuilder(
+                      //     animation: _scaleAnimation,
+                      //     builder: (context, child) {
+                      //       return Transform.scale(
+                      //         scale: _scaleAnimation.value,
+                      //         child: ButtonIndividualExercise(
+                      //             key: _buttonIndividualExerciseKey,
+                      //             leadingIcon: SvgPicture.asset(
+                      //               Assets.mela_think,
+                      //               width: 40,
+                      //             ),
+                      //             textButton: "Ôn tập nhanh cùng MELA",
+                      //             onPressed: () {}),
+                      //       );
+                      //     }),
                       const SizedBox(height: 20),
                     ],
                   )),

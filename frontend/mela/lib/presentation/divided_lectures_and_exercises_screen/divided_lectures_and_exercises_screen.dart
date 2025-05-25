@@ -167,7 +167,11 @@ class _DividedLecturesAndExercisesScreenState
                               _exerciseStore.exerciseList != null)
                           ? [
                               //Tab "Lý thuyết" content
-                              DividedLectureListItem(),
+                              DividedLectureListItem(
+                                onGoToExercise: () {
+                                  _tabController.animateTo(1);
+                                },
+                              ),
 
                               //Tab "Luyện tập" content
                               ExerciseListItem(),
