@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/presentation/personal/store/personal_store.dart';
-import 'package:mela/presentation/personal/widgets/decorative_ring.dart';
-import 'package:mela/presentation/personal/widgets/delete_account_dialog.dart';
+import 'package:mela/presentation/personal/widgets/headings/personal_info_heading.dart';
+import 'package:mela/presentation/personal/widgets/ui_items/decorative_ring.dart';
+import 'package:mela/presentation/personal/widgets/dialogs/delete_account_dialog.dart';
 import 'package:vibration/vibration.dart';
-import '../../constants/assets.dart';
+import '../../core/widgets/image_progress_indicator.dart';
 import '../../di/service_locator.dart';
 import '../../themes/default/colors_standards.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -18,17 +19,9 @@ import 'edit_screens/edit_birthdate_screen.dart';
 import 'edit_screens/edit_name_screen.dart';
 
 class PersonalInfo extends StatefulWidget {
-  final String name;
-  final String email;
-  final String dob;
-  final String? imageUrl;
 
   const PersonalInfo({
     super.key,
-    required this.name,
-    required this.email,
-    required this.dob,
-    this.imageUrl,
   });
 
   @override
@@ -36,9 +29,6 @@ class PersonalInfo extends StatefulWidget {
 }
 
 class _PersonalInfoState extends State<PersonalInfo> {
-  File? _image; //for uploaded image
-  late ImageProvider _profileImage; //can be _image or can be passed from imageURL
-  bool defaultImage = false; //flag for default avatar image
   final PersonalStore _personalStore = getIt<PersonalStore>();
 
   final ImagePicker _picker = ImagePicker(); //image picker
@@ -46,19 +36,16 @@ class _PersonalInfoState extends State<PersonalInfo> {
   @override
   void initState() {
     super.initState();
-    _setProfileImage();
   }
 
   void _navigateToEditName() {
     Navigator.push(
       context,
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => EditNameScreen(
-          name: widget.name,
-          email: widget.email,
-          dob: widget.dob,
-          imageUrl: widget.imageUrl,
-        ),
+        pageBuilder:
+            (context, animation, secondaryAnimation) => EditNameScreen(
+                name: _personalStore.user?.name ?? ""
+            ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset(1.0, 0.0); // Bắt đầu từ bên phải
           const end = Offset.zero; // Kết thúc ở vị trí gốc
@@ -83,10 +70,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
       context,
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) => EditBirthdateScreen(
-          name: widget.name,
-          email: widget.email,
-          dob: widget.dob,
-          imageUrl: widget.imageUrl,
+          dob: _personalStore.user?.dob ?? "",
         ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset(1.0, 0.0); // Bắt đầu từ bên phải
@@ -107,7 +91,6 @@ class _PersonalInfoState extends State<PersonalInfo> {
     );
   }
 
-  // Hàm hiển thị hộp thoại xác nhận xóa tài khoản
   void _showDeleteAccountDialog() {
     showDialog(
       context: context,
@@ -140,61 +123,24 @@ class _PersonalInfoState extends State<PersonalInfo> {
     );
   }
 
-  void _setProfileImage() {
-    if (_image != null) {
-      _profileImage = FileImage(_image!);
-      defaultImage = false;
-    } else if (widget.imageUrl != null && widget.imageUrl!.isNotEmpty && !defaultImage) {
-      _profileImage = NetworkImage(widget.imageUrl!);
-      defaultImage = false;
-    } else {
-      _profileImage = AssetImage(Assets.default_profile_pic);
-      defaultImage = true;
-    }
-  }
-
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
-    final temp = _image;
     if (pickedFile != null) {
       try {
         _showSnackBar("Đang tải ảnh lên...");
         await _personalStore.updateImage(File(pickedFile.path));
-        await _personalStore.getUserInfo();
-        setState(() {
-          _image = File(pickedFile.path);
-          _setProfileImage();
-          //
-        });
         _showSnackBar("Ảnh đại diện đã được cập nhật...");
       } catch (e) {
         _showSnackBar("Không thể tải ảnh của bạn!");
-        setState(() {
-          _image = temp;
-          _setProfileImage();
-          //
-        });
       }
     }
   }
 
   Future<void> _removeImage() async {
-    final temp = _image;
-    setState(() {
-      _image = null;
-      defaultImage = true;
-      _setProfileImage();
-    });
     try {
       await _personalStore.updateImage(File(""));
-      await _personalStore.getUserInfo();
     } catch (e) {
       _showSnackBar("Không thể xóa ảnh của bạn!");
-      setState(() {
-        _image = temp;
-        _setProfileImage();
-        //
-      });
     }
   }
 
@@ -275,98 +221,70 @@ class _PersonalInfoState extends State<PersonalInfo> {
   }
 
   Widget _buildBody(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Container(
-          height: double.infinity,
-          width: double.infinity,
-          child: Column(
-            children: [
-              // Avatar and Name at the top
-              // Fixed position for Avatar and Name
-              Container(
-                height: 150.0,
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                alignment: Alignment.center,
-                child: Stack(
-                  children: [
-                    Column(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(30.0),
-                          child: Container(
-                            width: 100.0,
-                            height: 100.0,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: _profileImage,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 5.0),
-                        Observer(builder: (_) => const Text("")),
-                      ],
-                    ),
-                    Positioned(
-                      bottom: 14.8,
-                      right: -3,
-                      child: IconButton(
-                        icon: Image.asset(
-                          "assets/icons/upload_profile_pic.png",
-                          width: 30,
-                          height: 30,
-                        ),
-                        onPressed: _showImagePickerOptions, //_showImagePickerOptions,
+    return Observer(
+      builder: (context) {
+        if (_personalStore.isLoading) {
+          return const Center(child: RotatingImageIndicator());
+        }
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Container(
+              height: double.infinity,
+              width: double.infinity,
+              child: Column(
+                children: [
+                  const SizedBox(height: 10.0), // Spacing before the list
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          PersonalInfoHeading(onChangeImage: _showImagePickerOptions),
+                          ..._buildAttributeList(context),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10.0), // Spacing before the list
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _buildListTile(
-                          context,
-                          "Tên học viên",
-                          widget.name,
-                          _navigateToEditName
-                          , Theme.of(context).colorScheme.textInBg1
-                      ),
-                      _buildListTile(
-                          context,
-                          "Email",
-                          widget.email,
-                              () {}
-                          , Theme.of(context).colorScheme.textInBg2
-                      ),
-                      _buildListTile(
-                          context,
-                          "Ngày sinh",
-                          widget.dob,
-                          _navigateToEditBirthdate
-                          , Theme.of(context).colorScheme.textInBg1
-                      ),
-                      _buildListTile(
-                          context,
-                          "Xóa tài khoản",
-                          "",
-                          _showDeleteAccountDialog,
-                          Colors.red
-                      ),
-                    ],
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
+  }
+
+  List<Widget> _buildAttributeList(BuildContext context) {
+    return [
+      _buildListTile(
+          context,
+          "Tên học viên",
+          _personalStore.user?.name ?? "Người học không tên",
+          _navigateToEditName
+          , Theme.of(context).colorScheme.textInBg1
+      ),
+      _buildListTile(
+          context,
+          "Email",
+          _personalStore.user?.email ?? "",
+              () {}
+          , Theme.of(context).colorScheme.textInBg2
+      ),
+      _buildListTile(
+          context,
+          "Ngày sinh",
+          _personalStore.user?.dob ?? "",
+          _navigateToEditBirthdate
+          , Theme.of(context).colorScheme.textInBg1
+      ),
+      _buildListTile(
+          context,
+          "Xóa tài khoản",
+          "",
+          _showDeleteAccountDialog,
+          Colors.red
+      ),
+    ];
   }
 
   Widget _buildListTile(BuildContext context, String title, String content, VoidCallback onTap, Color color) {

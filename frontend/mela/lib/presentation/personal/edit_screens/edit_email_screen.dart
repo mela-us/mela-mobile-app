@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 
 import '../../../themes/default/colors_standards.dart';
-import '../widgets/back_dialog.dart';
-import '../widgets/save_change_button.dart';
+import '../widgets/dialogs/back_dialog.dart';
+import '../widgets/ui_items/save_change_button.dart';
 
 class EditEmailScreen extends StatefulWidget {
   final String email;

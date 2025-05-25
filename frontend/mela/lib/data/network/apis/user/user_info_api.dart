@@ -13,8 +13,8 @@ class UserInfoApi {
     final responseData = await _dioClient.get(
       EndpointsConst.getUser,
     );
-    print(responseData);
-    return User.fromMap(responseData);
+    User user = User.fromMap(responseData);
+    return user;
   }
 
   Future<String> updateName(String name) async {
@@ -64,5 +64,19 @@ class UserInfoApi {
     );
     print(responseData);
     return "${responseData["preSignedUrl"]} ${responseData["imageUrl"]}";
+  }
+
+  Future<String> updateLevel(String level) async {
+    print("================================ở updateUser API");
+    var body = {
+      "levelTitle": level,
+    };
+
+    final responseData = await _dioClient.put(
+      EndpointsConst.updateUser,
+      data: body,
+    );
+    print(responseData);
+    return responseData["message"];
   }
 }

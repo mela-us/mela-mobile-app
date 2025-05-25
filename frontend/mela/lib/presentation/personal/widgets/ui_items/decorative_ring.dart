@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import '../../../constants/assets.dart';
+import '../../../../constants/assets.dart';
 
 class DecorativeRing extends StatefulWidget {
   final double size;

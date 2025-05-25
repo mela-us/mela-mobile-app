@@ -6,17 +6,13 @@ import 'package:mela/presentation/personal/store/personal_store.dart';
 import 'package:mela/utils/routes/routes.dart';
 
 import '../../../themes/default/colors_standards.dart';
-import '../personal_info.dart';
-import '../widgets/back_dialog.dart';
-import '../widgets/save_change_button.dart';
+import '../widgets/dialogs/back_dialog.dart';
+import '../widgets/ui_items/save_change_button.dart';
 
 class EditBirthdateScreen extends StatefulWidget {
-  final String name;
-  final String email;
   final String dob;
-  final String? imageUrl; //dd-MM-yyyy
 
-  const EditBirthdateScreen({super.key, required this.name, required this.email, required this.dob, this.imageUrl});
+  const EditBirthdateScreen({super.key, required this.dob});
 
   @override
   _EditBirthdateScreenState createState() => _EditBirthdateScreenState();
@@ -143,19 +139,7 @@ class _EditBirthdateScreenState extends State<EditBirthdateScreen> {
                 //TODO: Xử lý finalBirthdate
                 try {
                   await _personalStore.updateBirthday(finalBirthdate);
-                  await _personalStore.getUserInfo();
                   Navigator.of(context).pop();
-                  Navigator.of(context).pop();
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => PersonalInfo(
-                        name: widget.name,
-                        email: widget.email,
-                        dob: finalBirthdate,
-                        imageUrl: widget.imageUrl,
-                      ),
-                    ),
-                  );
                 } catch (e) {
                   if (e is DioException) {
                     if (e.response?.statusCode == 401) {

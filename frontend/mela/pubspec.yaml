@@ -33,7 +33,7 @@ dependencies:
   flutter_math_fork: ^0.7.3
   flutter_animate: ^4.5.2
   flutter_radar_chart: ^0.2.1
-  flutter_local_notifications: ^17.0.0
+  flutter_local_notifications: ^19.2.1
 #  flutter_native_splash: ^2.4.4
   # G
   get_it: ^7.2.0
@@ -69,6 +69,7 @@ dependencies:
   shimmer: ^3.0.0
   # T
   timeline_tile: ^2.0.0
+  timezone: ^0.10.1
   # U
   url_launcher: ^6.3.1
   # V

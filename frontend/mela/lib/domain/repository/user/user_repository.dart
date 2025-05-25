@@ -17,4 +17,6 @@ abstract class UserRepository {
   Future<bool> logout();
 
   Future<bool> deleteAccount();
+
+  Future<String> updateLevel(String level);
 }

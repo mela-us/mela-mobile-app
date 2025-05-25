@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../../../constants/app_theme.dart';
+import '../../../../constants/app_theme.dart';
 
 class BackDialog extends StatelessWidget {
   final VoidCallback onConfirm;

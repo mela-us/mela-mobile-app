@@ -33,6 +33,8 @@ class UpdateUserUsecase extends UseCase<String, UserUpdateParam>{
         case UpdateField.birthday:
           String formattedDate = params.value;
           return await _userRepository.updateBirthday(formattedDate);
+        case UpdateField.level:
+          return await _userRepository.updateLevel(params.value);
         case UpdateField.image:
           String uploadUrl = await _getUploadPresignUseCase.call(params: null);
           if (uploadUrl.isNotEmpty) {
