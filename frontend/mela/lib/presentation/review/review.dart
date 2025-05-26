@@ -45,10 +45,13 @@ class _ReviewScreenState extends State<ReviewScreen> {
           Navigator.of(context).pop();
         },
       ),
-      body: Stack(children: [
-        _buildBody(),
-        DraggableAIButton(),
-      ]),
+      body: Container(
+        height: double.infinity,
+        child: Stack(children: [
+          _buildBody(),
+          DraggableAIButton(),
+        ]),
+      ),
       bottomNavigationBar: _buildQuestionList(),
     );
   }
