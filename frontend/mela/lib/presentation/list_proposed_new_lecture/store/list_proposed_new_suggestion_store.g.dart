@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'list_proposed_new_lecture_store.dart';
+part of 'list_proposed_new_suggestion_store.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -8,9 +8,10 @@ part of 'list_proposed_new_lecture_store.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$ListProposedNewLectureStore on _ListProposedNewLectureStore, Store {
+mixin _$ListProposedNewSuggestionStore
+    on _ListProposedNewSuggestionStore, Store {
   late final _$isLoadingAtom =
-      Atom(name: '_ListProposedNewLectureStore.isLoading', context: context);
+      Atom(name: '_ListProposedNewSuggestionStore.isLoading', context: context);
 
   @override
   bool get isLoading {
@@ -26,7 +27,7 @@ mixin _$ListProposedNewLectureStore on _ListProposedNewLectureStore, Store {
   }
 
   late final _$isUnAuthorizedAtom = Atom(
-      name: '_ListProposedNewLectureStore.isUnAuthorized', context: context);
+      name: '_ListProposedNewSuggestionStore.isUnAuthorized', context: context);
 
   @override
   bool get isUnAuthorized {
@@ -41,24 +42,24 @@ mixin _$ListProposedNewLectureStore on _ListProposedNewLectureStore, Store {
     });
   }
 
-  late final _$lectureListAtom =
-      Atom(name: '_ListProposedNewLectureStore.lectureList', context: context);
+  late final _$suggestionListAtom = Atom(
+      name: '_ListProposedNewSuggestionStore.suggestionList', context: context);
 
   @override
-  LectureList? get lectureList {
-    _$lectureListAtom.reportRead();
-    return super.lectureList;
+  ListSuggestion? get suggestionList {
+    _$suggestionListAtom.reportRead();
+    return super.suggestionList;
   }
 
   @override
-  set lectureList(LectureList? value) {
-    _$lectureListAtom.reportWrite(value, super.lectureList, () {
-      super.lectureList = value;
+  set suggestionList(ListSuggestion? value) {
+    _$suggestionListAtom.reportWrite(value, super.suggestionList, () {
+      super.suggestionList = value;
     });
   }
 
   late final _$getProposedNewLectureAsyncAction = AsyncAction(
-      '_ListProposedNewLectureStore.getProposedNewLecture',
+      '_ListProposedNewSuggestionStore.getProposedNewLecture',
       context: context);
 
   @override
@@ -67,28 +68,29 @@ mixin _$ListProposedNewLectureStore on _ListProposedNewLectureStore, Store {
         .run(() => super.getProposedNewLecture());
   }
 
-  late final _$_ListProposedNewLectureStoreActionController =
-      ActionController(name: '_ListProposedNewLectureStore', context: context);
+  late final _$_ListProposedNewSuggestionStoreActionController =
+      ActionController(
+          name: '_ListProposedNewSuggestionStore', context: context);
 
   @override
   void setLoading(bool value) {
-    final _$actionInfo = _$_ListProposedNewLectureStoreActionController
-        .startAction(name: '_ListProposedNewLectureStore.setLoading');
+    final _$actionInfo = _$_ListProposedNewSuggestionStoreActionController
+        .startAction(name: '_ListProposedNewSuggestionStore.setLoading');
     try {
       return super.setLoading(value);
     } finally {
-      _$_ListProposedNewLectureStoreActionController.endAction(_$actionInfo);
+      _$_ListProposedNewSuggestionStoreActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void setUnAuthorized(bool value) {
-    final _$actionInfo = _$_ListProposedNewLectureStoreActionController
-        .startAction(name: '_ListProposedNewLectureStore.setUnAuthorized');
+    final _$actionInfo = _$_ListProposedNewSuggestionStoreActionController
+        .startAction(name: '_ListProposedNewSuggestionStore.setUnAuthorized');
     try {
       return super.setUnAuthorized(value);
     } finally {
-      _$_ListProposedNewLectureStoreActionController.endAction(_$actionInfo);
+      _$_ListProposedNewSuggestionStoreActionController.endAction(_$actionInfo);
     }
   }
 
@@ -97,7 +99,7 @@ mixin _$ListProposedNewLectureStore on _ListProposedNewLectureStore, Store {
     return '''
 isLoading: ${isLoading},
 isUnAuthorized: ${isUnAuthorized},
-lectureList: ${lectureList}
+suggestionList: ${suggestionList}
     ''';
   }
 }

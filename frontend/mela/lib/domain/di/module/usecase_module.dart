@@ -18,7 +18,7 @@ import 'package:mela/domain/usecase/exercise/get_exercises_usecase.dart';
 import 'package:mela/domain/usecase/history/update_excercise_progress_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_lectures_usecase.dart';
-import 'package:mela/domain/usecase/lecture/get_proposed_new_lecture_usecase.dart';
+import 'package:mela/domain/usecase/suggestion/get_proposed_new_suggestion_usecase.dart';
 import 'package:mela/domain/usecase/level/get_level_list_usecase.dart';
 import 'package:mela/domain/usecase/presigned_image/get_presigned_image_usecase.dart';
 import 'package:mela/domain/usecase/question/generate_hint_usecase.dart';
@@ -144,8 +144,8 @@ class UseCaseModule {
         GetLecturesAreLearningUsecase(getIt<LectureRepository>(),
             getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()));
 
-    getIt.registerSingleton<GetProposedNewLectureUsecase>(
-        GetProposedNewLectureUsecase(getIt<LectureRepository>(),
+    getIt.registerSingleton<GetProposedNewSuggestionUsecase>(
+        GetProposedNewSuggestionUsecase(getIt<LectureRepository>(),
             getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()));
 
     getIt.registerSingleton<GetDividedLectureUsecase>(GetDividedLectureUsecase(

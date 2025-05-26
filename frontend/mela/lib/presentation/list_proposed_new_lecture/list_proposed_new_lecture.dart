@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
-import 'package:mela/presentation/list_proposed_new_lecture/store/list_proposed_new_lecture_store.dart';
+import 'package:mela/domain/entity/suggestion/suggestion.dart';
+import 'package:mela/presentation/list_proposed_new_lecture/store/list_proposed_new_suggestion_store.dart';
 import 'package:mela/presentation/topic_lecture_in_level_screen/widgets/lecture_item.dart';
 import 'package:skeleton_text/skeleton_text.dart';
+
+import 'widgets/section_item.dart';
 
 class ListProposedNewLectureScreen extends StatefulWidget {
   ListProposedNewLectureScreen({super.key});
@@ -16,7 +19,8 @@ class ListProposedNewLectureScreen extends StatefulWidget {
 
 class _ListProposedNewLectureScreenState
     extends State<ListProposedNewLectureScreen> {
-  ListProposedNewLectureStore _store = getIt<ListProposedNewLectureStore>();
+  ListProposedNewSuggestionStore _store =
+      getIt<ListProposedNewSuggestionStore>();
 
   @override
   void initState() {
@@ -30,7 +34,7 @@ class _ListProposedNewLectureScreenState
       if (_store.isLoading) {
         return _buildListSkeleton();
       }
-      if (_store.lectureList == null) {
+      if (_store.suggestionList == null) {
         return Center(
           child: Text(
             "Có lỗi xảy ra. Thử lại sau!",
@@ -41,16 +45,26 @@ class _ListProposedNewLectureScreenState
           ),
         );
       }
+      List<List<Section>> value =
+          _store.suggestionList!.suggestions.map((suggestion) {
+        return suggestion.sectionList;
+      }).toList();
+      List<Section> myListSection =
+          value.expand((sectionList) => sectionList).toList();
 
-      return ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: _store.lectureList!.lectures.length,
-        itemBuilder: (context, index) {
-          return LectureItem(
-            lecture: _store.lectureList!.lectures[index],
-          );
-        },
+      return Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: ListView.builder(
+          // physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: myListSection.length * 2,
+          itemBuilder: (context, index) {
+            final section = myListSection[index % 2];
+            return SectionItem(
+              section: section,
+            );
+          },
+        ),
       );
     });
   }

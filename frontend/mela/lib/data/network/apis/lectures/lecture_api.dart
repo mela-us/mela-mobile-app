@@ -2,6 +2,7 @@ import 'package:mela/data/network/constants/endpoints_const.dart';
 import 'package:mela/data/network/dio_client.dart';
 import 'package:mela/domain/entity/divided_lecture/divided_lecture_list.dart';
 import 'package:mela/domain/entity/lecture/lecture_list.dart';
+import 'package:mela/domain/entity/suggestion/suggestion.dart';
 
 class LectureApi {
   DioClient _dioClient;
@@ -41,11 +42,12 @@ class LectureApi {
         queryParameters: {'size': 3});
     return LectureList.fromJson(responseData['data']);
   }
-    Future<LectureList> getProposedNewLectures() async {
+
+  Future<ListSuggestion> getProposedNewSuggestion() async {
     // print("================================ở getLectureAreLearning API");
     final responseData = await _dioClient.get(
-        EndpointsConst.getLecturesAreLearning,
-        queryParameters: {'size': 3});
-    return LectureList.fromJson(responseData['data']);
+      EndpointsConst.getProposedNewSuggestion,
+    );
+    return ListSuggestion.fromJson(responseData);
   }
 }

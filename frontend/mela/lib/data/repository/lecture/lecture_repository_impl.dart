@@ -3,6 +3,7 @@ import 'package:mela/domain/entity/divided_lecture/divided_lecture_list.dart';
 import 'package:mela/domain/entity/lecture/lecture.dart';
 
 import 'package:mela/domain/entity/lecture/lecture_list.dart';
+import 'package:mela/domain/entity/suggestion/suggestion.dart';
 
 import '../../../domain/repository/lecture/lecture_repository.dart';
 
@@ -39,10 +40,9 @@ class LectureRepositoryImpl extends LectureRepository {
   Future<LectureList> getLecturesAreLearning() {
     return _lectureApi.getLecturesAreLearning();
   }
-  
+
   @override
-  Future<LectureList> getProposedNewLecture() {
-    // TODO: implement getProposedNewLecture
-     return _lectureApi.getProposedNewLectures();
+  Future<ListSuggestion> getProposedNewSuggestion() {
+    return _lectureApi.getProposedNewSuggestion();
   }
 }

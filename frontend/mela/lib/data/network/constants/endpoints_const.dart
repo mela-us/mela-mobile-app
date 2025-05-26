@@ -67,4 +67,8 @@ class EndpointsConst {
 
   //streak
   static const String streak = "/api/streak";
+
+  //suggestion
+  static const String getProposedNewSuggestion =
+      "/api/suggestions";
 }
