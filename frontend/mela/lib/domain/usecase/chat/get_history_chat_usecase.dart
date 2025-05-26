@@ -13,7 +13,6 @@ class GetHistoryChatUsecase extends UseCase<List<HistoryItem>, void> {
   final RefreshAccessTokenUsecase _refreshAccessTokenUsecase;
   final LogoutUseCase _logoutUseCase;
 
-
   GetHistoryChatUsecase(this._chatRepository, this._refreshAccessTokenUsecase,
       this._logoutUseCase);
 
