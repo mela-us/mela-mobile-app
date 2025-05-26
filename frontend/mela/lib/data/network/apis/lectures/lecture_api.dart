@@ -1,8 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:mela/data/network/constants/endpoints_const.dart';
 import 'package:mela/data/network/dio_client.dart';
 import 'package:mela/domain/entity/divided_lecture/divided_lecture_list.dart';
 import 'package:mela/domain/entity/lecture/lecture_list.dart';
 import 'package:mela/domain/entity/suggestion/suggestion.dart';
+import 'package:mela/domain/usecase/suggestion/update_suggestion_usecase.dart';
 
 class LectureApi {
   DioClient _dioClient;
@@ -49,5 +51,16 @@ class LectureApi {
       EndpointsConst.getProposedNewSuggestion,
     );
     return ListSuggestion.fromJson(responseData);
+  }
+
+  Future<void> updateSuggestion(UpdateSuggestionParams params) async {
+    print(
+        "Sa4 ===> Updating suggestion in API: ${params.suggestionId}, ${params.lectureId}, ${params.ordinalNumber}, ${params.isDone}");
+    await _dioClient.post(
+      EndpointsConst.updateSuggestion
+          .replaceAll(":suggestionId", params.suggestionId),
+      options: Options(headers: {'Content-Type': 'application/json'}),
+      data: params.toMap(),
+    );
   }
 }

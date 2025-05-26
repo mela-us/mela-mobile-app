@@ -68,6 +68,17 @@ mixin _$ListProposedNewSuggestionStore
         .run(() => super.getProposedNewLecture());
   }
 
+  late final _$updateSuggestionAsyncAction = AsyncAction(
+      '_ListProposedNewSuggestionStore.updateSuggestion',
+      context: context);
+
+  @override
+  Future<void> updateSuggestion(
+      String suggestionId, String lectureId, int ordinalNumber, bool isDone) {
+    return _$updateSuggestionAsyncAction.run(() =>
+        super.updateSuggestion(suggestionId, lectureId, ordinalNumber, isDone));
+  }
+
   late final _$_ListProposedNewSuggestionStoreActionController =
       ActionController(
           name: '_ListProposedNewSuggestionStore', context: context);

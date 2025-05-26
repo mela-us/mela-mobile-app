@@ -24,8 +24,8 @@ class Suggestion {
 
   factory Suggestion.fromJson(Map<String, dynamic> json) => Suggestion(
         suggestionId: json["suggestionId"],
-        sectionList: List<Section>.from(
-            json["sectionList"].map((e) => Section.fromJson(e))),
+        sectionList: List<Section>.from(json["sectionList"]
+            .map((e) => Section.fromJson(e, json["suggestionId"]))),
       );
 }
 
@@ -37,6 +37,7 @@ class Section {
   String topicTitle;
   String levelTitle;
   String sectionUrl;
+  String suggestionId;
 
   Section({
     required this.lectureId,
@@ -46,9 +47,11 @@ class Section {
     required this.topicTitle,
     required this.levelTitle,
     required this.sectionUrl,
+    required this.suggestionId,
   });
 
-  factory Section.fromJson(Map<String, dynamic> json) => Section(
+  factory Section.fromJson(Map<String, dynamic> json, String suggestionId) =>
+      Section(
         lectureId: json["lectureId"],
         ordinalNumber: json["ordinalNumber"],
         isDone: json["isDone"],
@@ -56,6 +59,7 @@ class Section {
         topicTitle: json["topicTitle"],
         levelTitle: json["levelTitle"],
         sectionUrl: json["sectionUrl"],
+        suggestionId: suggestionId,
       );
 
   DividedLecture get toDividedLectureFromSection => DividedLecture(

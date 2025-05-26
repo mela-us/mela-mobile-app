@@ -4,6 +4,7 @@ import 'package:mela/domain/entity/lecture/lecture.dart';
 
 import 'package:mela/domain/entity/lecture/lecture_list.dart';
 import 'package:mela/domain/entity/suggestion/suggestion.dart';
+import 'package:mela/domain/usecase/suggestion/update_suggestion_usecase.dart';
 
 import '../../../domain/repository/lecture/lecture_repository.dart';
 
@@ -44,5 +45,11 @@ class LectureRepositoryImpl extends LectureRepository {
   @override
   Future<ListSuggestion> getProposedNewSuggestion() {
     return _lectureApi.getProposedNewSuggestion();
+  }
+
+  @override
+  Future<void> updateSuggestion(UpdateSuggestionParams params) {
+    print("Sa3 ===> Updating suggestion in repository: ${params.suggestionId}, ${params.lectureId}, ${params.ordinalNumber}, ${params.isDone}");
+    return _lectureApi.updateSuggestion(params);
   }
 }

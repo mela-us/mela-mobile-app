@@ -53,15 +53,17 @@ class _ListProposedNewLectureScreenState
           value.expand((sectionList) => sectionList).toList();
 
       return Padding(
-        padding: const EdgeInsets.only(top: 8.0),
+        padding: const EdgeInsets.only(top: 10.0),
         child: ListView.builder(
           // physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: myListSection.length * 2,
+          itemCount: myListSection.length,
           itemBuilder: (context, index) {
-            final section = myListSection[index % 2];
+            final section = myListSection[index];
             return SectionItem(
               section: section,
+              isLast: index == myListSection.length - 1,
+              isFirst: index == 0,
             );
           },
         ),
