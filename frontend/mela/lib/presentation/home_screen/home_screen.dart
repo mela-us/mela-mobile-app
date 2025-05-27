@@ -281,25 +281,13 @@ class _HomeScreenState extends State<HomeScreen>
                         child: TabBar(
                           // key: _buttonIndividualExerciseKey,
                           labelColor: Theme.of(context).colorScheme.tertiary,
-                          labelStyle: Theme.of(context)
-                              .textTheme
-                              .subTitle
-                              .copyWith(
-                                color: Theme.of(context).colorScheme.tertiary,
-                              ),
-                          unselectedLabelStyle:
-                              Theme.of(context).textTheme.subTitle.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSecondary
-                                        .withOpacity(0.5),
-                                  ),
                           unselectedLabelColor:
                               Theme.of(context).colorScheme.onSecondary,
                           dividerColor: Colors.transparent,
                           overlayColor:
-                              WidgetStateProperty.all(Colors.transparent),
+                              MaterialStateProperty.all(Colors.transparent),
                           indicator: UnderlineTabIndicator(
+                            insets: const EdgeInsets.symmetric(horizontal: 50),
                             borderSide: BorderSide(
                                 color: Theme.of(context).colorScheme.tertiary,
                                 width: 2),
@@ -310,7 +298,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(Icons.school, size: 14),
-                                  SizedBox(width: 6),
+                                  SizedBox(width: 12),
                                   Text(
                                     "Cùng ôn tập",
                                   ),
@@ -323,7 +311,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 children: [
                                   Icon(Icons.integration_instructions_outlined,
                                       size: 14),
-                                  SizedBox(width: 6),
+                                  SizedBox(width: 12),
                                   Text(
                                     "Hôm nay học gì?",
                                   ),

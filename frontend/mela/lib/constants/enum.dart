@@ -12,7 +12,7 @@ enum QuitOverlayResponse {
 
 enum ResponseStatus { OK, SIMILAR, UNAUTHORIZED, ERROR, BAD_REQUEST, UNKNOWN }
 
-enum UpdateField { name, image, birthday }
+enum UpdateField { name, image, birthday, level }
 
 enum MessageType {
   initial('Initial'),

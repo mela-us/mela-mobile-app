@@ -71,4 +71,8 @@ class EndpointsConst {
   //revise
   static const String getRevise = "/api/reviews";
   static String updateReview(String reviewId) => "/api/reviews/$reviewId";
+
+  //suggestion
+  static const String getProposedNewSuggestion = "/api/suggestions";
+  static const String updateSuggestion = "/api/suggestions/:suggestionId";
 }

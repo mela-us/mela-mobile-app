@@ -29,7 +29,8 @@ class UserRepositoryImpl extends UserRepository {
 
   @override
   Future<User> getUserInfo() async {
-    return _userInfoApi.getUser();
+    User user = await _userInfoApi.getUser();
+    return user;
   }
 
   @override
@@ -85,12 +86,17 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<String> updateName(String name) {
+  Future<String> updateName(String name) async {
     return _userInfoApi.updateName(name);
   }
 
   @override
-  Future<String> getImageUpdatePresign() {
+  Future<String> updateLevel(String level) async {
+    return _userInfoApi.updateLevel(level);
+  }
+
+  @override
+  Future<String> getImageUpdatePresign() async {
     return _userInfoApi.getImageUpdatePresign();
   }
 

@@ -11,14 +11,11 @@ class User{
   });
 
   factory User.fromMap(Map<String, dynamic> json) => User(
-    id: json["userId"],
-    name: json["fullname"],
-    email: json["username"],
-    dob: json["birthday"],
-    imageUrl: json["imageUrl"],
-    level: json["level"],
+    id: json["user"]["userId"],
+    name: json["user"]["fullname"],
+    email: json["user"]["username"],
+    dob: json["user"]["birthday"],
+    imageUrl: json["user"]["imageUrl"],
+    level: json["user"]["levelTitle"],
   );
-  // Map<String, dynamic> toMap() {
-//   throw UnimplementedError('toMap() must be implemented in a subclass');
-// }
 }

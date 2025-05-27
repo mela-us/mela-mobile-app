@@ -16,7 +16,8 @@ class GetUserInfoUseCase implements UseCase<User, void> {
   @override
   Future<User> call({required params}) async {
     try {
-      return await _userRepository.getUserInfo();
+      User user = await _userRepository.getUserInfo();
+      return user;
     } catch (e) {
       if (e is DioException) {
         //eg accessToken is expired

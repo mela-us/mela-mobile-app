@@ -12,6 +12,7 @@ import 'package:mela/domain/params/history/section_progress_params.dart';
 import 'package:mela/domain/params/revise/update_review_param.dart';
 import 'package:mela/domain/usecase/history/update_section_progress_usecase.dart';
 import 'package:mela/presentation/home_screen/store/revise_store/revise_store.dart';
+import 'package:mela/presentation/list_proposed_new_lecture/store/list_proposed_new_suggestion_store.dart';
 import 'package:mela/presentation/review/widgets/draggable_ai_button.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/thread_chat/thread_chat_screen.dart';
@@ -26,9 +27,11 @@ import '../../di/service_locator.dart';
 
 class ContentInDividedLectureScreen extends StatefulWidget {
   final DividedLecture currentDividedLecture;
+  final String?
+      suggestionId; // Has suggestionId if go to from suggestion in home
 
   const ContentInDividedLectureScreen(
-      {super.key, required this.currentDividedLecture});
+      {super.key, required this.currentDividedLecture, this.suggestionId});
 
   @override
   State<ContentInDividedLectureScreen> createState() =>
@@ -49,6 +52,8 @@ class _ContentInDividedLectureScreenState
 
   final UpdateSectionProgressUsecase _updateUsecase =
       getIt<UpdateSectionProgressUsecase>();
+  final ListProposedNewSuggestionStore _listProposedNewSuggestionStore =
+      getIt<ListProposedNewSuggestionStore>();
 
   final ReviseStore _reviseStore = getIt.get<ReviseStore>();
 
@@ -264,6 +269,19 @@ class _ContentInDividedLectureScreenState
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                         ),
                         onPressed: () async {
+                          //if go to from suggestion, update section progress
+                          if (widget.suggestionId != null) {
+                            await _listProposedNewSuggestionStore
+                                .updateSuggestion(
+                                    widget.suggestionId!,
+                                    widget.currentDividedLecture.lectureId,
+                                    widget.currentDividedLecture.ordinalNumber,
+                                    true);
+
+                            Navigator.of(context).pop(true);
+                            return;
+                          }
+
                           //call to update
                           final sectionToUpdate = widget.currentDividedLecture;
                           final params = SectionProgressParams(

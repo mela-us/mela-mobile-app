@@ -4,6 +4,7 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/dimens.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/home_screen/widgets/level_item.dart';
+import 'package:mela/presentation/personal/store/personal_store.dart';
 import 'package:mela/presentation/tutor/stores/tutor_store.dart';
 import 'package:mobx/mobx.dart';
 
@@ -21,7 +22,8 @@ class LevelSelectorScreen extends StatefulWidget {
 class _LevelSelectorScreenState extends State<LevelSelectorScreen> {
   //bool _isGradeSelected = false;
 
-  TutorStore _tutorStore = getIt<TutorStore>();
+  final TutorStore _tutorStore = getIt<TutorStore>();
+  final PersonalStore _personalStore = getIt<PersonalStore>();
 
   @override
   void initState() {
@@ -90,11 +92,10 @@ class _LevelSelectorScreenState extends State<LevelSelectorScreen> {
       itemCount: _tutorStore.levelList!.levelList.length,
       itemBuilder: (context, index) {
         return GestureDetector(
-          onTap: () {
+          onTap: () async {
             String levelName =
                 _tutorStore.levelList!.levelList[index].levelName;
-            int levelInt = int.parse(levelName.split(" ")[1]);
-            //TODO: thêm logic cập nhật lớp
+            _personalStore.updateLevel(levelName);
             Navigator.of(context).pop();
           },
           child: AbsorbPointer(

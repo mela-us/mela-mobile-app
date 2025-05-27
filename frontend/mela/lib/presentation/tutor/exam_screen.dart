@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/dimens.dart';
@@ -7,7 +6,6 @@ import 'package:mela/presentation/detailed_stats_and_comments/detailed_stats_and
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/home_screen/widgets/level_item.dart';
 import 'package:mela/presentation/tutor/stores/tutor_store.dart';
-import 'package:mela/presentation/tutor/widgets/grade_items.dart';
 import 'package:mobx/mobx.dart';
 
 class TutorScreen extends StatefulWidget {
@@ -35,7 +33,7 @@ class _TutorScreenState extends State<TutorScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Bài kiểm tra',
+          'Gia sư AI',
           style: Theme.of(context)
               .textTheme
               .heading
@@ -134,22 +132,7 @@ class _TutorScreenState extends State<TutorScreen> {
                       Expanded(
                         child: Container(
                             color: Theme.of(context).colorScheme.appBackground,
-                            // child: Center(
-                            //   child: Text(
-                            //     'Biểu đồ sẽ hiển thị ở đây',
-                            //     style: Theme.of(context)
-                            //         .textTheme
-                            //         .content
-                            //         .copyWith(
-                            //             color: Theme.of(context)
-                            //                 .colorScheme
-                            //                 .textInBg2),
-                            //   ),
-                            // ),
-                            child: const DetailedStatsAndCommentsScreen(
-                              name: "Tên học sinh",
-                              imageUrl: "",
-                            )),
+                            child: const DetailedStatsAndComments()),
                       ),
                     ],
                   ),

@@ -1,20 +1,20 @@
 import 'package:dio/dio.dart';
 import 'package:mela/core/domain/usecase/use_case.dart';
-import 'package:mela/domain/entity/lecture/lecture_list.dart';
+import 'package:mela/domain/entity/suggestion/suggestion.dart';
 import 'package:mela/domain/repository/lecture/lecture_repository.dart';
 import 'package:mela/domain/usecase/user/logout_usecase.dart';
 import 'package:mela/domain/usecase/user_login/refresh_access_token_usecase.dart';
 
-class GetProposedNewLectureUsecase extends UseCase<LectureList, void> {
+class GetProposedNewSuggestionUsecase extends UseCase<ListSuggestion, void> {
   final LectureRepository _lectureRepository;
   final RefreshAccessTokenUsecase _refreshAccessTokenUsecase;
   final LogoutUseCase _logoutUseCase;
-  GetProposedNewLectureUsecase(this._lectureRepository,
+  GetProposedNewSuggestionUsecase(this._lectureRepository,
       this._refreshAccessTokenUsecase, this._logoutUseCase);
   @override
-  Future<LectureList> call({void params}) async {
+  Future<ListSuggestion> call({void params}) async {
     try {
-      return await _lectureRepository.getProposedNewLecture();
+      return await _lectureRepository.getProposedNewSuggestion();
     } catch (e) {
       if (e is DioException) {
         //eg accessToken is expired

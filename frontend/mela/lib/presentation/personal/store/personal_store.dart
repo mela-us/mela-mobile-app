@@ -53,6 +53,9 @@ abstract class _PersonalStore with Store {
   //
   @observable
   bool logout_success = false;
+  //
+  @observable
+  bool isImageUpdating = false;
   //loading
   @computed
   bool get progressLoading => fetchFuture.status == FutureStatus.pending;
@@ -62,6 +65,8 @@ abstract class _PersonalStore with Store {
   //action:---------------------------------------------------------------------
   @action
   Future getUserInfo() async {
+    isLoading = true;
+
     final future = _getUserInfoUseCase.call(params: null);
     fetchFuture = ObservableFuture(future);
 
@@ -70,6 +75,7 @@ abstract class _PersonalStore with Store {
     }).catchError((error) {
       _errorStore.errorMessage = DioExceptionUtil.handleError(error);
     });
+    isLoading = false;
   }
 
   @action
@@ -89,7 +95,7 @@ abstract class _PersonalStore with Store {
       }
       rethrow;
     } finally {
-      isLoading = false;
+      getUserInfo();
     }
   }
 
@@ -110,15 +116,25 @@ abstract class _PersonalStore with Store {
       }
       rethrow;
     } finally {
-      isLoading = false;
+      getUserInfo();
     }
   }
 
   @action
   Future<bool> updateImage(File image) async {
     try {
-      isLoading = true;
+      isImageUpdating = true;
+      //call to update image first
       await _updateUserUsecase.call(params: UserUpdateParam(image, field: UpdateField.image, value:""));
+      //then call only to get the new url
+      final future = _getUserInfoUseCase.call(params: null);
+      fetchFuture = ObservableFuture(future);
+      future.then((temp) {
+        user = temp;
+      }).catchError((error) {
+        _errorStore.errorMessage = DioExceptionUtil.handleError(error);
+      });
+      //
       return true;
     } catch (e) {
       if (e is DioException) {
@@ -131,7 +147,28 @@ abstract class _PersonalStore with Store {
       }
       rethrow;
     } finally {
-      isLoading = false;
+      isImageUpdating = false;
+    }
+  }
+
+  @action
+  Future<bool> updateLevel(String level) async {
+    try {
+      isLoading = true;
+      await _updateUserUsecase.call(params: UserUpdateParam(null, field: UpdateField.level, value: level));
+      return true;
+    } catch (e) {
+      if (e is DioException) {
+        _errorStore.errorMessage = DioExceptionUtil.handleError(e);
+        if (e.response?.statusCode == 401) {
+          await _logoutUseCase.call(params: null);
+        }
+      } else {
+        print(e.toString());
+      }
+      rethrow;
+    } finally {
+      getUserInfo();
     }
   }
 

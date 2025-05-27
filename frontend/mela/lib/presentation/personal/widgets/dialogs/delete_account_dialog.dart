@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../../../constants/app_theme.dart';
+import '../../../../constants/app_theme.dart';
 
-class LogoutConfirmationDialog extends StatelessWidget {
-  final VoidCallback onLogout;
+class DeleteAccountConfirmationDialog extends StatefulWidget {
+  final VoidCallback onDelete;
   final VoidCallback onCancel;
 
-  const LogoutConfirmationDialog({
-    Key? key,
-    required this.onLogout,
+  const DeleteAccountConfirmationDialog({
+    super.key,
+    required this.onDelete,
     required this.onCancel,
-  }) : super(key: key);
+  });
+
+  @override
+  _DeleteAccountConfirmationDialogState createState() => _DeleteAccountConfirmationDialogState();
+}
+
+class _DeleteAccountConfirmationDialogState extends State<DeleteAccountConfirmationDialog> {
+  bool _isChecked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -25,18 +32,39 @@ class LogoutConfirmationDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Bạn có chắc là bạn muốn đăng xuất?',
+              'Bạn có chắc chắn muốn xóa tài khoản và toàn bộ quá trình học tập của bạn? Chức năng này sẽ không thể thu hồi!',
               style: Theme.of(context).textTheme.subHeading.copyWith(color: Colors.black),
-              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 16.0),
+            Row(
+              children: [
+                Checkbox(
+                  value: _isChecked,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isChecked = value ?? false;
+                    });
+                  },
+                  // Tùy chỉnh màu sắc cho checkbox
+                  activeColor: Theme.of(context).colorScheme.tertiary,
+                  checkColor: Colors.white,
+                ),
+                Expanded(
+                  child: Text(
+                    'Tôi đã hiểu và muốn xóa tài khoản',
+                    style: Theme.of(context).textTheme.subTitle.copyWith(color: Colors.black),
+                  ),
+                ),
+              ],
             ),
             SizedBox(height: 16.0),
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 ElevatedButton(
-                  onPressed: onLogout,
+                  onPressed: _isChecked ? widget.onDelete : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.tertiary,
+                    backgroundColor: Colors.red, // Đổi màu nút thành đỏ
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0),
                     ),
@@ -44,13 +72,13 @@ class LogoutConfirmationDialog extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 6.0),
                     child: Text(
-                      'Đăng xuất',
+                      'Xóa tài khoản',
                       style: Theme.of(context).textTheme.subHeading.copyWith(color: Colors.white),
                     ),
                   ),
                 ),
                 OutlinedButton(
-                  onPressed: onCancel,
+                  onPressed: widget.onCancel,
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: Colors.white), // Set border color
                     shape: RoundedRectangleBorder(
@@ -61,8 +89,7 @@ class LogoutConfirmationDialog extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 6.0),
                     child: Text(
                       'Hủy',
-                      style: Theme.of(context).textTheme.subHeading
-                          .copyWith(color: Theme.of(context).colorScheme.tertiary),
+                      style: Theme.of(context).textTheme.subHeading.copyWith(color: Theme.of(context).colorScheme.tertiary),
                     ),
                   ),
                 ),

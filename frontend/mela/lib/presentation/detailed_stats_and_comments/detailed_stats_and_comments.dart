@@ -1,73 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
-import 'package:mela/presentation/detailed_stats_and_comments/widgets/radar_stat_chart.dart';
 import 'package:mela/presentation/detailed_stats_and_comments/widgets/tile_list.dart';
 
-import '../../constants/assets.dart';
 import '../../domain/entity/stat/detailed_stat.dart';
-import '../personal/widgets/decorative_ring.dart';
 
-class DetailedStatsAndCommentsScreen extends StatefulWidget {
-  final String name;
-  final String? imageUrl;
+class DetailedStatsAndComments extends StatefulWidget {
 
-  const DetailedStatsAndCommentsScreen({
+  const DetailedStatsAndComments({
     super.key,
-    required this.name,
-    this.imageUrl,
   });
 
   @override
-  _DetailedStatsAndCommentsScreenState createState() =>
-      _DetailedStatsAndCommentsScreenState();
+  _DetailedStatsAndCommentsState createState() =>
+      _DetailedStatsAndCommentsState();
 }
 
-class _DetailedStatsAndCommentsScreenState
-    extends State<DetailedStatsAndCommentsScreen> {
+class _DetailedStatsAndCommentsState
+    extends State<DetailedStatsAndComments> {
   late List<DetailedStat> list;
   late String url;
 
   @override
   Widget build(BuildContext context) {
-    url = widget.imageUrl ?? "";
     list = getMock();
-    return Scaffold(
-      appBar: AppBar(
-        scrolledUnderElevation: 0,
-        title: Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: Text("Thống kê & Đánh giá",
-              style: Theme.of(context)
-                  .textTheme
-                  .heading
-                  .copyWith(color: Theme.of(context).colorScheme.onPrimary)),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ),
-      body: Stack(
-          alignment: Alignment.center,
-          children: [
-            const Positioned(
-              top: 100,
-              right: 220,
-              child: DecorativeRing(size: 300, clockwise: false),
-            ),
-            const Positioned(
-              top: 280,
-              right: -270,
-              child: DecorativeRing(),
-            ),
-            _buildBody(context),
-          ]
-      ),
-      backgroundColor: Theme.of(context).colorScheme.appBackground,
-    );
+    return _buildBody(context);
   }
 
   Widget _buildBody(BuildContext context) {

@@ -6,18 +6,14 @@ import 'package:mela/presentation/personal/store/personal_store.dart';
 import 'package:mela/utils/routes/routes.dart';
 
 import '../../../themes/default/colors_standards.dart';
-import '../personal_info.dart';
-import '../widgets/back_dialog.dart';
-import '../widgets/save_change_button.dart';
+import '../widgets/dialogs/back_dialog.dart';
+import '../widgets/ui_items/save_change_button.dart';
 
 class EditNameScreen extends StatefulWidget {
   final String name;
-  final String email;
-  final String dob;
-  final String? imageUrl;
 
 
-  const EditNameScreen({super.key, required this.name, required this.email, required this.dob, this.imageUrl});
+  const EditNameScreen({super.key, required this.name});
 
   @override
   _EditNameScreenState createState() => _EditNameScreenState();
@@ -98,20 +94,8 @@ class _EditNameScreenState extends State<EditNameScreen> {
               textButton: "Lưu",
               onPressed: isValid ? () async {
                 try {
-                  await _personalStore.updateName(_controller.text);
-                  await _personalStore.getUserInfo();
+                  _personalStore.updateName(_controller.text);
                   Navigator.of(context).pop();
-                  Navigator.of(context).pop();
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => PersonalInfo(
-                        name: _controller.text,
-                        email: widget.email,
-                        dob: widget.dob,
-                        imageUrl: widget.imageUrl,
-                      ),
-                    ),
-                  );
                 } catch (e) {
                   if (e is DioException) {
                     if (e.response?.statusCode == 401) {
