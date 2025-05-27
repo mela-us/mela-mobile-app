@@ -73,6 +73,9 @@ class ReviewItemWidget extends StatelessWidget {
             showDialog(
               context: context,
               builder: (context) => AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 title: Text('Bài học đang khóa',
                     style: Theme.of(context).textTheme.title.copyWith(
                           color: Theme.of(context).colorScheme.primary,
@@ -82,13 +85,21 @@ class ReviewItemWidget extends StatelessWidget {
                           color: Theme.of(context).colorScheme.onPrimary,
                         )),
                 actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(
-                      'Đóng',
-                      style: Theme.of(context).textTheme.buttonStyle.copyWith(
-                            color: Colors.red,
-                          ),
+                  InkWell(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.tertiary,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        'Đóng',
+                        style: Theme.of(context).textTheme.subTitle.copyWith(
+                              color: Theme.of(context).colorScheme.onTertiary,
+                            ),
+                      ),
                     ),
                   ),
                 ],

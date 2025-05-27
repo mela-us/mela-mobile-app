@@ -64,6 +64,10 @@ class _ListProposedNewLectureScreenState
               section: section,
               isLast: index == myListSection.length - 1,
               isFirst: index == 0,
+              isPursuing: (index == 0 && !section.isDone) ||
+                  (index > 0 &&
+                      myListSection[index - 1].isDone &&
+                      !section.isDone),
             );
           },
         ),

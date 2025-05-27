@@ -11,11 +11,13 @@ class SectionItem extends StatefulWidget {
   final Section section;
   final bool isLast;
   final bool isFirst;
+  final bool isPursuing; //đang học
 
   SectionItem({
     required this.section,
     this.isLast = false,
     this.isFirst = false,
+    this.isPursuing = false,
   });
 
   @override
@@ -37,18 +39,22 @@ class _SectionItemState extends State<SectionItem> {
           width: 30,
           height: 30,
           drawGap: true,
-          indicator: Icon(
-            widget.section.isDone
-                ? Icons.check_circle
-                : Icons.radio_button_unchecked,
-            color: widget.section.isDone
-                ? Theme.of(context).colorScheme.tertiary
-                : Colors.grey,
-            size: 30,
-          ),
+          indicator: widget.isPursuing
+              ? Icon(
+                  Icons.circle,
+                  color: Theme.of(context).colorScheme.tertiary,
+                  size: 30,
+                )
+              : Icon(
+                  widget.section.isDone ? Icons.check_circle : Icons.lock,
+                  color: widget.section.isDone
+                      ? Theme.of(context).colorScheme.tertiary
+                      : Colors.grey,
+                  size: 30,
+                ),
         ),
         beforeLineStyle: LineStyle(
-          color: widget.section.isDone
+          color: widget.section.isDone || widget.isPursuing
               ? Theme.of(context).colorScheme.tertiary
               : Colors.grey,
           thickness: 2,
@@ -60,7 +66,85 @@ class _SectionItemState extends State<SectionItem> {
           thickness: 2,
         ),
         startChild: const SizedBox(height: 120),
-        endChild: buildItemSection());
+        endChild: GestureDetector(
+          onTap: () async {
+            if (widget.section.isDone || widget.isPursuing) {
+              final isUpdateSuggestion =
+                  await Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ContentInDividedLectureScreen(
+                  currentDividedLecture:
+                      widget.section.toDividedLectureFromSection,
+                  suggestionId: widget.section.suggestionId,
+                ),
+              ));
+              if (isUpdateSuggestion != null &&
+                  isUpdateSuggestion is bool &&
+                  isUpdateSuggestion) {
+                _store.getProposedNewLecture();
+              }
+            } else {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  title: Text('Bài học đang khóa',
+                      style: Theme.of(context).textTheme.title.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          )),
+                  content: Text('Hãy hoàn thành bài học trước đó để mở khóa.',
+                      style: Theme.of(context).textTheme.normal.copyWith(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          )),
+                  actions: [
+                    InkWell(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.tertiary,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          'Đóng',
+                          style: Theme.of(context).textTheme.subTitle.copyWith(
+                                color: Theme.of(context).colorScheme.onTertiary,
+                              ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: widget.section.isDone || widget.isPursuing
+                ? buildItemSection()
+                : Stack(
+                    children: [
+                      buildItemSection(),
+                      Positioned.fill(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: Icon(Icons.lock,
+                            color: Colors.grey.shade700, size: 20),
+                      ),
+                    ],
+                  ),
+          ),
+        ));
   }
 
   Widget buildItemSection() {
@@ -68,7 +152,6 @@ class _SectionItemState extends State<SectionItem> {
     String levelName = widget.section.levelTitle;
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -81,61 +164,43 @@ class _SectionItemState extends State<SectionItem> {
           ),
         ],
       ),
-      child: GestureDetector(
-        onTap: () async {
-          final isUpdateSuggestion =
-              await Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ContentInDividedLectureScreen(
-              currentDividedLecture: widget.section.toDividedLectureFromSection,
-              suggestionId: widget.section.suggestionId,
-            ),
-          ));
-          if (isUpdateSuggestion != null &&
-              isUpdateSuggestion is bool &&
-              isUpdateSuggestion) {
-            _store.getProposedNewLecture();
-          }
+      child: Row(
+        children: [
+          // Image + completed questions/total questions
+          Expanded(
+            flex: 1,
+            child: Image.asset('assets/images/pdf_image.png',
+                width: 50, height: 50),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            flex: 2,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Divided Lecture name
+                Text(
+                  widget.section.lectureTitle,
+                  style: Theme.of(context).textTheme.subTitle.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 16),
+                ),
+                const SizedBox(height: 6),
+                // Topic name + level name
+                Text(
+                  '$topicName - $levelName',
+                  style: Theme.of(context)
+                      .textTheme
+                      .subTitle
+                      .copyWith(color: Colors.orange, fontSize: 14),
+                ),
 
-          Vibration.vibrate(duration: 60);
-        },
-        child: Row(
-          children: [
-            // Image + completed questions/total questions
-            Expanded(
-              flex: 1,
-              child: Image.asset('assets/images/pdf_image.png',
-                  width: 60, height: 60),
+                const SizedBox(width: 6),
+              ],
             ),
-            const SizedBox(width: 10),
-            Expanded(
-              flex: 2,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Divided Lecture name
-                  Text(
-                    widget.section.lectureTitle,
-                    style: Theme.of(context).textTheme.subTitle.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontSize: 18),
-                  ),
-                  const SizedBox(height: 6),
-                  // Topic name + level name
-                  Text(
-                    '$topicName - $levelName',
-                    style: Theme.of(context)
-                        .textTheme
-                        .subTitle
-                        .copyWith(color: Colors.orange, fontSize: 14),
-                  ),
-
-                  const SizedBox(width: 6),
-                ],
-              ),
-            ),
-            const SizedBox(width: 6),
-          ],
-        ),
+          ),
+          const SizedBox(width: 6),
+        ],
       ),
     );
   }

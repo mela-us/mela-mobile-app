@@ -288,20 +288,21 @@ class _HomeScreenState extends State<HomeScreen>
                           overlayColor:
                               MaterialStateProperty.all(Colors.transparent),
                           indicator: UnderlineTabIndicator(
-                            insets: const EdgeInsets.symmetric(horizontal: 50),
+                            insets: const EdgeInsets.symmetric(horizontal: 30),
                             borderSide: BorderSide(
                                 color: Theme.of(context).colorScheme.tertiary,
                                 width: 2),
                           ),
-                          tabs: const [
+                          tabs: [
                             Tab(
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(Icons.school, size: 14),
-                                  SizedBox(width: 12),
+                                  const Icon(Icons.school, size: 14),
+                                  const SizedBox(width: 12),
                                   Text(
                                     "Cùng ôn tập",
+                                    style: Theme.of(context).textTheme.subTitle,
                                   ),
                                 ],
                               ),
@@ -310,11 +311,13 @@ class _HomeScreenState extends State<HomeScreen>
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(Icons.integration_instructions_outlined,
+                                  const Icon(
+                                      Icons.integration_instructions_outlined,
                                       size: 14),
-                                  SizedBox(width: 12),
+                                  const SizedBox(width: 12),
                                   Text(
                                     "Hôm nay học gì?",
+                                    style: Theme.of(context).textTheme.subTitle,
                                   ),
                                 ],
                               ),

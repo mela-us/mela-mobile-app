@@ -306,20 +306,20 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
                         color: Theme.of(context).colorScheme.secondary)),
               ],
             ),
-            const SizedBox(height: 15),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // if (_threadChatStore.isGoToFromReview)
-                  //   ..._buildAllItemQuestionDefaultForFromReview()
-                  // else
-                  //   ..._buildAllItemQuestionDefault(),
-                  ..._buildAllItemQuestionDefault()
-                ],
-              ),
-            )
+            // const SizedBox(height: 15),
+            // SingleChildScrollView(
+            //   scrollDirection: Axis.horizontal,
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       // if (_threadChatStore.isGoToFromReview)
+            //       //   ..._buildAllItemQuestionDefaultForFromReview()
+            //       // else
+            //       //   ..._buildAllItemQuestionDefault(),
+            //       ..._buildAllItemQuestionDefault()
+            //     ],
+            //   ),
+            // )
           ]),
     );
   }
