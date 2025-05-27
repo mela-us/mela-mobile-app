@@ -12,6 +12,7 @@ import 'package:mela/presentation/home_screen/store/revise_store/revise_store.da
 import 'package:mela/presentation/home_screen/widgets/button_individual_exercise.dart';
 import 'package:mela/presentation/home_screen/widgets/level_item.dart';
 import 'package:mela/presentation/home_screen/widgets/review_item_widget.dart';
+import 'package:mela/presentation/home_screen/widgets/revise_view_widget.dart';
 import 'package:mela/presentation/list_proposed_new_lecture/list_proposed_new_lecture.dart';
 import 'package:mela/presentation/streak/streak_action_icon.dart';
 import 'package:mela/presentation/topic_lecture_in_level_screen/widgets/lecture_item_copy.dart';
@@ -327,7 +328,7 @@ class _HomeScreenState extends State<HomeScreen>
                         child: TabBarView(
                           children: [
                             // Tab 1: Revision List
-                            _buildRevisionView(),
+                            ReviseViewWidget(),
 
                             // Tab 2: Bài giảng đề xuất
                             ListProposedNewLectureScreen()
@@ -388,35 +389,32 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  Widget _buildRoadList() {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: _reviseStore.revisionItemList.length,
-      itemBuilder: (context, index) {
-        List<ReviseItem> items = _reviseStore.revisionItemList;
-        return ReviewItemWidget(
-          isFirst: index == 0,
-          isLast: index == items.length - 1,
-          reviseItem: _reviseStore.revisionItemList[index],
-          isPursuing: (index == 0 && !items[0].isDone) ||
-              (index != 0 &&
-                  !items[index].isDone &&
-                  items[index - 1]
-                      .isDone), // Check if the lecture is in progress
-        );
-      },
-    );
-  }
+  // Widget _buildRoadList() {
+  //   return ListView.builder(
+  //     itemCount: _reviseStore.revisionItemList.length,
+  //     itemBuilder: (context, index) {
+  //       List<ReviseItem> items = _reviseStore.revisionItemList;
+  //       return ReviewItemWidget(
+  //         isFirst: index == 0,
+  //         isLast: index == items.length - 1,
+  //         reviseItem: _reviseStore.revisionItemList[index],
+  //         isPursuing: (index == 0 && !items[0].isDone) ||
+  //             (index != 0 &&
+  //                 !items[index].isDone &&
+  //                 items[index - 1]
+  //                     .isDone), // Check if the lecture is in progress
+  //       );
+  //     },
+  //   );
+  // }
 
-  Widget _buildRevisionView() {
-    return _reviseStore.revisionItemList.isNotEmpty
-        ? SingleChildScrollView(
-            child: _buildRoadList(),
-          )
-        : const Center(
-            child: Text("Không có bài ôn tập nào"),
-          );
-  }
+  // Widget _buildRevisionView() {
+  //   return _reviseStore.revisionItemList.isNotEmpty
+  //       ? _buildRoadList()
+  //       : const Center(
+  //           child: Text("Không có bài ôn tập nào"),
+  //         );
+  // }
 
   void _showStreakDialog() {
     if (_streakStore.isLoading) return;

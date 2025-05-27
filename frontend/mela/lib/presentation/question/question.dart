@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/assets.dart';
 import 'package:mela/constants/dimens.dart';
@@ -57,6 +60,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
   final HintStore _hintStore = getIt<HintStore>();
   final ReviseStore _reviseStore = getIt<ReviseStore>();
+
+  List<File> _selectedImages = [];
+  final ImagePicker _imagePicker = ImagePicker();
   //----------------------------------------------------------------------------
   final TextEditingController _controller = TextEditingController();
 
@@ -275,7 +281,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
             ?
             //quiz view      :      fill view
             _buildQuizView(questions[index])
-            : _buildFillView(questions[index]),
+            : _buildSubjectiveView(questions[index]),
 
         //spacing
         const SizedBox(height: 30),
@@ -402,6 +408,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
     );
   }
 
+  //For quiz question view
   Widget _buildQuizView(Question question) {
     return Column(children: [
       Container(
@@ -423,6 +430,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
     ]);
   }
 
+  //For fill in the blank question view
   Widget _buildFillView(Question question) {
     return Container(
         margin: Layout.practiceContainerPadding,
@@ -457,6 +465,133 @@ class _QuestionScreenState extends State<QuestionScreen> {
             _buildNextButton(question),
           ],
         ));
+  }
+
+  //For subjective question view
+  Widget _buildSubjectiveView(Question question) {
+    return Container(
+        margin: Layout.practiceContainerPadding,
+        decoration: const BoxDecoration(
+          color: Colors.transparent,
+        ),
+        child: Column(
+          children: [
+            // TextField lớn
+            Container(
+              decoration: decorationWithShadow.copyWith(
+                color: Colors.white, // ✅ thêm màu nền trắng
+              ),
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // TextField lớn
+                  TextField(
+                    controller: _controller,
+                    focusNode: _focusNode,
+                    decoration: InputDecoration(
+                      hintText: "Điền đáp án hoặc chọn ảnh tại đây.",
+                      hintStyle: Theme.of(context).textTheme.subTitle.copyWith(
+                          color: Theme.of(context).colorScheme.inputHintText),
+                      border: InputBorder.none,
+                    ),
+                    onChanged: (value) {
+                      _singleQuestionStore.setAnswer(
+                          _singleQuestionStore.currentIndex, value);
+                    },
+                    style: Theme.of(context).textTheme.normal.copyWith(
+                        color: Theme.of(context).colorScheme.inputTitleText),
+                    maxLines: 8,
+                    keyboardType: TextInputType.multiline,
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  // Nút chọn/chụp ảnh
+                  Row(
+                    children: [
+                      ElevatedButton(
+                        onPressed: _pickImages,
+                        child: const Icon(Icons.photo_library),
+                      ),
+                      const SizedBox(width: 10),
+                      ElevatedButton(
+                        onPressed: _takePhoto,
+                        child: const Icon(Icons.camera_alt),
+                      ),
+                    ],
+                  ),
+
+                  // Preview ảnh
+                  if (_selectedImages.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: SizedBox(
+                        height: 80,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: _selectedImages
+                              .map((img) => Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 4),
+                                    child: Image.file(img,
+                                        width: 70,
+                                        height: 70,
+                                        fit: BoxFit.cover),
+                                  ))
+                              .toList(),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 12),
+            _buildNextButton(question),
+          ],
+
+          // Container(
+          //   decoration: decorationWithShadow,
+          //   child: TextField(
+          //     controller: _controller,
+          //     focusNode: _focusNode,
+          //     decoration: InputDecoration(
+          //       hintText: AppLocalizations.of(context)
+          //           .translate('question_hint_text_field'),
+          //       hintStyle: Theme.of(context).textTheme.subTitle.copyWith(
+          //           color: Theme.of(context).colorScheme.inputHintText),
+          //       border: InputBorder.none,
+          //       contentPadding: const EdgeInsets.symmetric(
+          //           vertical: 21, horizontal: Dimens.practiceHorizontalText),
+          //     ),
+          //     onChanged: (value) {
+          //       _singleQuestionStore.setAnswer(
+          //           _singleQuestionStore.currentIndex, value);
+          //     },
+          //     style: Theme.of(context).textTheme.normal.copyWith(
+          //         color: Theme.of(context).colorScheme.inputTitleText),
+          //   ),
+          // ),
+        ));
+  }
+
+  Future<void> _pickImages() async {
+    final images = await _imagePicker.pickMultiImage();
+    if (images != null) {
+      setState(() {
+        _selectedImages.addAll(images.map((x) => File(x.path)));
+      });
+    }
+  }
+
+  Future<void> _takePhoto() async {
+    final image = await _imagePicker.pickImage(source: ImageSource.camera);
+    if (image != null) {
+      setState(() {
+        _selectedImages.add(File(image.path));
+      });
+    }
   }
 
   Widget _buildNextButton(Question question) {
