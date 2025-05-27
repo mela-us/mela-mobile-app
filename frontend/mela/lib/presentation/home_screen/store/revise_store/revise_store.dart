@@ -100,6 +100,7 @@ abstract class _ReviseStore with Store {
               lectureTitle: ex.lectureTitle,
               topicTitle: ex.topicTitle,
               levelTitle: ex.levelTitle,
+              sectionUrl: null, // Exercises do not have section URLs
             ),
           );
         }
@@ -115,6 +116,7 @@ abstract class _ReviseStore with Store {
               lectureTitle: sec.lectureTitle,
               topicTitle: sec.topicTitle,
               levelTitle: sec.levelTitle,
+              sectionUrl: sec.sectionUrl,
             ),
           );
         }

@@ -9,6 +9,7 @@ class ReviseItem {
   String lectureTitle;
   String topicTitle;
   String levelTitle;
+  String? sectionUrl;
 
   ReviseItem({
     required this.itemId,
@@ -19,5 +20,6 @@ class ReviseItem {
     required this.lectureTitle,
     required this.topicTitle,
     required this.levelTitle,
+    required this.sectionUrl,
   });
 }

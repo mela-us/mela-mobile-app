@@ -269,6 +269,18 @@ class _ContentInDividedLectureScreenState
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                         ),
                         onPressed: () async {
+                          if (_reviseStore.selectedItem != null) {
+                            // If the user is revising, update the review
+                            await _reviseStore.updateReview(UpdateReviewParam(
+                                reviewId: _reviseStore.selectedItem!.reviewId,
+                                itemId: _reviseStore.selectedItem!.itemId,
+                                ordinalNumber:
+                                    _reviseStore.selectedItem!.ordinalNumber,
+                                itemType: _reviseStore.selectedItem!.type,
+                                isDone: true));
+
+                            _reviseStore.setSelectedItem(null);
+                          }
                           //if go to from suggestion, update section progress
                           if (widget.suggestionId != null) {
                             await _listProposedNewSuggestionStore
