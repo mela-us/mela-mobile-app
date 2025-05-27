@@ -1,3 +1,159 @@
+// import 'package:flutter/material.dart';
+// import 'package:flutter_markdown/flutter_markdown.dart';
+// import 'package:flutter_math_fork/flutter_math.dart';
+// import 'package:markdown/markdown.dart' as md;
+
+// class ConvertStringToLatex extends StatelessWidget {
+//   final String rawText;
+//   final bool isStep;
+//   final bool isAI;
+
+//   const ConvertStringToLatex({
+//     required this.rawText,
+//     this.isStep = false,
+//     this.isAI = true,
+//     super.key,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: _buildContent(context, rawText),
+//     );
+//   }
+
+//   List<Widget> _buildContent(BuildContext context, String content) {
+//     final lines = content.split('\n');
+//     final widgets = <Widget>[];
+
+//     for (final line in lines) {
+//       if (line.trim().isEmpty) {
+//         widgets.add(const SizedBox(height: 6));
+//         continue;
+//       }
+
+//       widgets.add(
+//         Container(
+//           margin: isStep
+//               ? const EdgeInsets.only(bottom: 8.0)
+//               : const EdgeInsets.only(bottom: 4.0),
+//           child: MarkdownBody(
+//             data: line,
+//             softLineBreak: false, // Ngăn tự động xuống dòng
+//             styleSheet:
+//                 MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
+//               p: Theme.of(context).textTheme.bodyMedium!.copyWith(
+//                     fontSize: 17,
+//                     letterSpacing: 0.65,
+//                     color: isStep
+//                         ? const Color(0xff5D3891)
+//                         : isAI
+//                             ? Colors.black
+//                             : Colors.white,
+//                     height: 1.8,
+//                   ),
+//               strong: Theme.of(context).textTheme.bodyMedium!.copyWith(
+//                     fontSize: 17,
+//                     letterSpacing: 0.65,
+//                     height: 1.8,
+//                     fontWeight: FontWeight.bold,
+//                     color: isStep
+//                         ? const Color(0xff5D3891)
+//                         : isAI
+//                             ? Colors.black
+//                             : Colors.white,
+//                   ),
+//               em: Theme.of(context).textTheme.bodyMedium!.copyWith(
+//                     fontSize: 17,
+//                     letterSpacing: 0.65,
+//                     height: 1.8,
+//                     fontStyle: FontStyle.italic,
+//                     color: isStep
+//                         ? const Color(0xff5D3891)
+//                         : isAI
+//                             ? Colors.black
+//                             : Colors.white,
+//                   ),
+//             ),
+//             builders: {
+//               'math': MathBuilder(isStep: isStep, isAI: isAI),
+//             },
+//             extensionSet: md.ExtensionSet(
+//               md.ExtensionSet.gitHubFlavored.blockSyntaxes,
+//               [
+//                 md.EmojiSyntax(),
+//                 ...md.ExtensionSet.gitHubFlavored.inlineSyntaxes,
+//                 MathSyntax(),
+//               ],
+//             ),
+//           ),
+//         ),
+//       );
+//     }
+
+//     return widgets;
+//   }
+// }
+
+// class MathSyntax extends md.InlineSyntax {
+//   MathSyntax() : super(r'\\\((.+?)\\\)|\\\[(.+?)\\\]');
+
+//   @override
+//   bool onMatch(md.InlineParser parser, Match match) {
+//     final mathContent = match[1] ?? match[2] ?? '';
+//     parser.addNode(md.Element('math', [md.Text(mathContent)]));
+//     return true;
+//   }
+// }
+
+// class MathBuilder extends MarkdownElementBuilder {
+//   final bool isStep;
+//   final bool isAI;
+
+//   MathBuilder({required this.isStep, required this.isAI});
+
+//   @override
+//   Widget visitElementAfter(md.Element element, TextStyle? preferredStyle) {
+//     final mathContent = element.textContent
+//         .replaceAllMapped(RegExp(r'\\{2,}'), (_) => '\\')
+//         .trim();
+
+//     return Builder(
+//       builder: (context) => ConstrainedBox(
+//         constraints: BoxConstraints(
+//           maxWidth: MediaQuery.of(context).size.width * 0.85,
+//         ),
+//         child: SingleChildScrollView(
+//           scrollDirection: Axis.horizontal,
+//           physics:
+//               const ClampingScrollPhysics(), // Ngăn bouncing không cần thiết
+//           child: Row(
+//             mainAxisSize: MainAxisSize.min,
+//             children: [
+//               Math.tex(
+//                 mathContent,
+//                 mathStyle: MathStyle.text,
+//                 textScaleFactor: 1.1,
+//                 textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+//                       fontSize: 17,
+//                       letterSpacing: 0.65,
+//                       height: 1.8,
+//                       color: isStep
+//                           ? const Color(0xff5D3891)
+//                           : isAI
+//                               ? Colors.black
+//                               : Colors.white,
+//                     ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
@@ -17,85 +173,91 @@ class ConvertStringToLatex extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: _buildContent(context, rawText),
+    return Container(
+      margin: isStep
+          ? const EdgeInsets.only(bottom: 8.0)
+          : const EdgeInsets.only(bottom: 4.0),
+      child: _buildRichText(context),
     );
   }
 
-  List<Widget> _buildContent(BuildContext context, String content) {
-    final lines = content.split('\n');
-    final widgets = <Widget>[];
+  Widget _buildRichText(BuildContext context) {
+    final spans = <InlineSpan>[];
+    final regex = RegExp(r'\\\((.+?)\\\)|\\\[(.+?)\\\]');
 
-    for (final line in lines) {
-      if (line.trim().isEmpty) {
-        widgets.add(const SizedBox(height: 6));
-        continue;
+    int lastEnd = 0;
+
+    for (final match in regex.allMatches(rawText)) {
+      // Thêm text trước LaTeX
+      if (match.start > lastEnd) {
+        final textBefore = rawText.substring(lastEnd, match.start);
+        spans.add(TextSpan(text: textBefore));
       }
 
-      widgets.add(
-        Container(
-          margin: isStep
-              ? const EdgeInsets.only(bottom: 8.0)
-              : const EdgeInsets.only(bottom: 4.0),
-          child: MarkdownBody(
-            data: line,
-            softLineBreak: false, // Ngăn tự động xuống dòng
-            styleSheet:
-                MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
-              p: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    fontSize: 17,
-                    letterSpacing: 0.65,
-                    color: isStep
-                        ? const Color(0xff5D3891)
-                        : isAI
-                            ? Colors.black
-                            : Colors.white,
-                    height: 1.8,
-                  ),
-              strong: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    fontSize: 17,
-                    letterSpacing: 0.65,
-                    height: 1.8,
-                    fontWeight: FontWeight.bold,
-                    color: isStep
-                        ? const Color(0xff5D3891)
-                        : isAI
-                            ? Colors.black
-                            : Colors.white,
-                  ),
-              em: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    fontSize: 17,
-                    letterSpacing: 0.65,
-                    height: 1.8,
-                    fontStyle: FontStyle.italic,
-                    color: isStep
-                        ? const Color(0xff5D3891)
-                        : isAI
-                            ? Colors.black
-                            : Colors.white,
-                  ),
-            ),
-            builders: {
-              'math': MathBuilder(isStep: isStep, isAI: isAI),
-            },
-            extensionSet: md.ExtensionSet(
-              md.ExtensionSet.gitHubFlavored.blockSyntaxes,
-              [
-                md.EmojiSyntax(),
-                ...md.ExtensionSet.gitHubFlavored.inlineSyntaxes,
-                MathSyntax(),
-              ],
-            ),
-          ),
-        ),
-      );
+      // Thêm LaTeX
+      final mathContent = match.group(1) ?? match.group(2) ?? '';
+      spans.add(WidgetSpan(
+        child: _buildMathWidget(context, mathContent),
+        alignment: PlaceholderAlignment.middle,
+      ));
+
+      lastEnd = match.end;
     }
 
-    return widgets;
+    // Thêm text còn lại
+    if (lastEnd < rawText.length) {
+      spans.add(TextSpan(text: rawText.substring(lastEnd)));
+    }
+
+    return RichText(
+      text: TextSpan(
+        children: spans,
+        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+              fontSize: 17,
+              letterSpacing: 0.65,
+              color: isStep
+                  ? const Color(0xff5D3891)
+                  : isAI
+                      ? Colors.black
+                      : Colors.white,
+              height: 1.8,
+            ),
+      ),
+    );
+  }
+
+  Widget _buildMathWidget(BuildContext context, String mathContent) {
+    final cleanContent =
+        mathContent.replaceAllMapped(RegExp(r'\\{2,}'), (_) => '\\').trim();
+
+    return Container(
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.of(context).size.width * 0.7,
+      ),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        child: Math.tex(
+          cleanContent,
+          mathStyle: MathStyle.text,
+          textScaleFactor: 1.1,
+          textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                fontSize: 17,
+                letterSpacing: 0.65,
+                height: 1.8,
+                color: isStep
+                    ? const Color(0xff5D3891)
+                    : isAI
+                        ? Colors.black
+                        : Colors.white,
+              ),
+        ),
+      ),
+    );
   }
 }
 
+// Giữ lại các class cũ để tương thích (nếu cần)
 class MathSyntax extends md.InlineSyntax {
   MathSyntax() : super(r'\\\((.+?)\\\)|\\\[(.+?)\\\]');
 
@@ -120,33 +282,27 @@ class MathBuilder extends MarkdownElementBuilder {
         .trim();
 
     return Builder(
-      builder: (context) => ConstrainedBox(
+      builder: (context) => Container(
         constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width * 0.85,
+          maxWidth: MediaQuery.of(context).size.width * 0.7,
         ),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          physics:
-              const ClampingScrollPhysics(), // Ngăn bouncing không cần thiết
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Math.tex(
-                mathContent,
-                mathStyle: MathStyle.text,
-                textScaleFactor: 1.1,
-                textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      fontSize: 17,
-                      letterSpacing: 0.65,
-                      height: 1.8,
-                      color: isStep
-                          ? const Color(0xff5D3891)
-                          : isAI
-                              ? Colors.black
-                              : Colors.white,
-                    ),
-              ),
-            ],
+          physics: const BouncingScrollPhysics(),
+          child: Math.tex(
+            mathContent,
+            mathStyle: MathStyle.text,
+            textScaleFactor: 1.1,
+            textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  fontSize: 17,
+                  letterSpacing: 0.65,
+                  height: 1.8,
+                  color: isStep
+                      ? const Color(0xff5D3891)
+                      : isAI
+                          ? Colors.black
+                          : Colors.white,
+                ),
           ),
         ),
       ),
