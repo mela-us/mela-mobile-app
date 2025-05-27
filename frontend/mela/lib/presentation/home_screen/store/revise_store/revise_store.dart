@@ -20,6 +20,9 @@ abstract class _ReviseStore with Store {
   final UpdateRevisionUsecase _updateReviewUsecase;
 
   @observable
+  ReviseItem? selectedItem;
+
+  @observable
   UserReviewsResponse? userReviewsResponse;
 
   @observable
@@ -119,5 +122,10 @@ abstract class _ReviseStore with Store {
     } else {
       revisionItemList.clear();
     }
+  }
+
+  @action
+  void setSelectedItem(ReviseItem? item) {
+    selectedItem = item;
   }
 }

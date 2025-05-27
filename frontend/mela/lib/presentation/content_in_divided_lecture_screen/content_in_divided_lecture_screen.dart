@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mela/constants/app_theme.dart';
@@ -7,7 +9,9 @@ import 'package:mela/data/sharedpref/shared_preference_helper.dart';
 import 'package:mela/domain/entity/divided_lecture/divided_lecture.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/domain/params/history/section_progress_params.dart';
+import 'package:mela/domain/params/revise/update_review_param.dart';
 import 'package:mela/domain/usecase/history/update_section_progress_usecase.dart';
+import 'package:mela/presentation/home_screen/store/revise_store/revise_store.dart';
 import 'package:mela/presentation/review/widgets/draggable_ai_button.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/thread_chat/thread_chat_screen.dart';
@@ -40,10 +44,18 @@ class _ContentInDividedLectureScreenState
   final ValueNotifier<int> _currentPage = ValueNotifier(0);
   final _sharedPrefsHelper = getIt.get<SharedPreferenceHelper>();
   BuildContext? showCaseContext;
+
+  Timer? _readingTimer;
+  bool _scrolledToEnd = false;
+  bool _isDone = false;
+  int _readingSeconds = 0;
+
   GlobalKey _pdfKey = GlobalKey();
 
   final UpdateSectionProgressUsecase _updateUsecase =
       getIt<UpdateSectionProgressUsecase>();
+
+  final ReviseStore _reviseStore = getIt.get<ReviseStore>();
 
   @override
   void initState() {
@@ -58,6 +70,10 @@ class _ContentInDividedLectureScreenState
           ShowCaseWidget.of(showCaseContext!).startShowCase([_pdfKey]);
         }
       });
+    });
+
+    _readingTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      _readingSeconds++;
     });
   }
 
@@ -153,6 +169,8 @@ class _ContentInDividedLectureScreenState
             // print("------------->Back button pressed");
             // print(Navigator.of(context).widget.pages);
 
+            _reviseStore.setSelectedItem(null);
+
             Navigator.of(context).pop(false);
           },
         ),
@@ -225,8 +243,30 @@ class _ContentInDividedLectureScreenState
                       onDocumentLoaded: (PdfDocumentLoadedDetails details) {
                         _totalPages = details.document.pages.count;
                       },
-                      onPageChanged: (PdfPageChangedDetails details) {
+                      onPageChanged: (PdfPageChangedDetails details) async {
                         _currentPage.value = details.newPageNumber;
+
+                        // Check if the user has scrolled to the end of the PDF
+                        if (details.isLastPage && _readingSeconds >= 5) {
+                          if (_reviseStore.selectedItem != null &&
+                              _reviseStore.selectedItem!.isDone == false) {
+                            // Update the review status to done
+                            await _reviseStore.updateReview(UpdateReviewParam(
+                                reviewId: _reviseStore.selectedItem!.reviewId,
+                                itemId: _reviseStore.selectedItem!.itemId,
+                                ordinalNumber:
+                                    _reviseStore.selectedItem!.ordinalNumber,
+                                itemType: _reviseStore.selectedItem!.type,
+                                isDone: true));
+
+                            _reviseStore.setSelectedItem(null);
+
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text('Đã hoàn thành bài giảng'),
+                            ));
+                          }
+                        }
                       },
                     ),
                   );

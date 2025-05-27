@@ -11,6 +11,7 @@ import 'package:mela/constants/dimens.dart';
 import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/domain/entity/question/guide_controller.dart';
 import 'package:mela/domain/entity/question/question.dart';
+import 'package:mela/presentation/home_screen/store/revise_store/revise_store.dart';
 import 'package:mela/presentation/question/store/question_store.dart';
 import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
 import 'package:mela/presentation/question/store/timer/timer_store.dart';
@@ -43,12 +44,19 @@ class _QuestionScreenState extends State<QuestionScreen> {
   late OverlayEntry questionListOverlay;
   final FocusNode _focusNode = FocusNode();
   final double screenHeight = MediaQueryData.fromView(
-      WidgetsBinding.instance.platformDispatcher.views.first).size.height.toDouble();
+          WidgetsBinding.instance.platformDispatcher.views.first)
+      .size
+      .height
+      .toDouble();
   final double screenWidth = MediaQueryData.fromView(
-      WidgetsBinding.instance.platformDispatcher.views.first).size.width.toDouble();
+          WidgetsBinding.instance.platformDispatcher.views.first)
+      .size
+      .width
+      .toDouble();
   late Offset fabPos;
 
   final HintStore _hintStore = getIt<HintStore>();
+  final ReviseStore _reviseStore = getIt<ReviseStore>();
   //----------------------------------------------------------------------------
   final TextEditingController _controller = TextEditingController();
 
@@ -61,26 +69,23 @@ class _QuestionScreenState extends State<QuestionScreen> {
     fabPos = Offset(50, screenHeight - 80);
 
     //Reaction to questions status.
-    reaction((_) => _questionStore.loading, (loading){
-      if (!loading){
+    reaction((_) => _questionStore.loading, (loading) {
+      if (!loading) {
         //can't be null here
         _singleQuestionStore
-            .generateAnswerList(_questionStore.questionList!
-            .questions!.length);
+            .generateAnswerList(_questionStore.questionList!.questions!.length);
         _initListOverlay(context);
 
         _timerStore.resetTimer();
         _timerStore.startTimer();
       }
-    },
-    fireImmediately: true);
-
+    }, fireImmediately: true);
 
     //Reaction to question index change.
-    reaction((_) => _singleQuestionStore.currentIndex, (index){
+    reaction((_) => _singleQuestionStore.currentIndex, (index) {
       String userAnswer = _singleQuestionStore.userAnswers[index];
       Question question = _questionStore.questionList!.questions![index];
-      if (isQuizQuestion(question)){
+      if (isQuizQuestion(question)) {
         if (userAnswer.isEmpty) {
           _singleQuestionStore.setQuizAnswerValue(userAnswer);
         }
@@ -88,12 +93,10 @@ class _QuestionScreenState extends State<QuestionScreen> {
         String choiceValue = question.options[choiceIndex].content;
 
         _singleQuestionStore.setQuizAnswerValue(choiceValue);
-      }
-      else {
+      } else {
         _controller.text = userAnswer;
       }
     });
-
   }
 
   @override
@@ -108,31 +111,28 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
     reaction((_) => _questionStore.isAuthorized, (flag) {
       if (!flag) {
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          Routes.loginScreen, (route) => false
-        );
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil(Routes.loginScreen, (route) => false);
       }
     });
 
-    reaction((_) => _questionStore.questionList, (questions){
-      if (questions != null){
+    reaction((_) => _questionStore.questionList, (questions) {
+      if (questions != null) {
         //can't be null here
         _singleQuestionStore
-            .generateAnswerList(_questionStore.questionList!
-            .questions!.length);
+            .generateAnswerList(_questionStore.questionList!.questions!.length);
         _initListOverlay(context);
 
         _hintStore.reset();
-        _hintStore.setHint(
-            _questionStore.questionList!.questions![0].guide);
+        _hintStore.setHint(_questionStore.questionList!.questions![0].guide);
         _hintStore.setTerm(_questionStore.questionList!.questions![0].term);
-
       }
     }, fireImmediately: true);
 
     //Reaction to quit
-    reaction((_) => _questionStore.isQuit, (quit){
-      if (quit == QuitOverlayResponse.quit){
+    reaction((_) => _questionStore.isQuit, (quit) {
+      if (quit == QuitOverlayResponse.quit) {
+        _reviseStore.setSelectedItem(null);
         Navigator.of(context).pop();
       }
     }, fireImmediately: true);
@@ -151,7 +151,6 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Observer(
       builder: (context) {
         if (_questionStore.loading) {
@@ -160,14 +159,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
             backgroundColor: Theme.of(context).colorScheme.appBackground,
             body: const Center(child: RotatingImageIndicator()),
           );
-
-        }
-        else {
+        } else {
           return Scaffold(
-            backgroundColor: Theme
-                .of(context)
-                .colorScheme
-                .appBackground,
+            backgroundColor: Theme.of(context).colorScheme.appBackground,
             appBar: QuestionAppBar(
               questionListOverlay: questionListOverlay,
               focusNode: _focusNode,
@@ -182,10 +176,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
     );
   }
 
-
   //Build components:-----------------------------------------------------------
-  Widget _buildMainBody(){
-    return  _buildBodyContent(context);
+  Widget _buildMainBody() {
+    return _buildBodyContent(context);
   }
 
   Widget _buildDFAB(BuildContext context) {
@@ -204,9 +197,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
                         borderPositionHandler(details.offset.dy, screenHeight));
                   });
                 },
-                child: _buildFAB(context)
-          )
-        ),
+                child: _buildFAB(context))),
       ],
     );
   }
@@ -225,32 +216,30 @@ class _QuestionScreenState extends State<QuestionScreen> {
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
           border: GradientBoxBorder(
-            gradient: LinearGradient(
-                colors: [
-                  Color(0xFF31BCFF),
-                  Color(0xFF9676FF),
-                  Color(0xFFBE64FE),
-                  Color(0xFFE157CB),
-                  Color(0xFFEF5794),
-                  Color(0xFFFD683F),
-                  Color(0xFFFE7C2B),
-                  Color(0xFFFFA10B),
-                ]),
+            gradient: LinearGradient(colors: [
+              Color(0xFF31BCFF),
+              Color(0xFF9676FF),
+              Color(0xFFBE64FE),
+              Color(0xFFE157CB),
+              Color(0xFFEF5794),
+              Color(0xFFFD683F),
+              Color(0xFFFE7C2B),
+              Color(0xFFFFA10B),
+            ]),
             width: 2,
           ),
         ),
         height: 60,
         width: 60,
         child: FloatingActionButton(
-          onPressed: () =>
-              showModalBottomSheet(
-                context: context,
-                backgroundColor: Colors.transparent,
-                isScrollControlled: true,
-                builder: (BuildContext context) {
-                  return GuideBottomSheet(screenHeight: screenHeight);
-                },
-              ),
+          onPressed: () => showModalBottomSheet(
+            context: context,
+            backgroundColor: Colors.transparent,
+            isScrollControlled: true,
+            builder: (BuildContext context) {
+              return GuideBottomSheet(screenHeight: screenHeight);
+            },
+          ),
           backgroundColor: Colors.white,
           hoverColor: Colors.white,
           splashColor: Colors.transparent,
@@ -262,8 +251,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
             width: 38,
             height: 38,
           ),
-        )
-    );
+        ));
   }
 
   Widget _buildBodyContent(BuildContext context) {
@@ -283,9 +271,11 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
         const SizedBox(height: 17),
         //Answer View
-        isQuizQuestion(questions[index]) ?
-        //quiz view      :      fill view
-        _buildQuizView(questions[index]) : _buildFillView(questions[index]),
+        isQuizQuestion(questions[index])
+            ?
+            //quiz view      :      fill view
+            _buildQuizView(questions[index])
+            : _buildFillView(questions[index]),
 
         //spacing
         const SizedBox(height: 30),
@@ -293,23 +283,26 @@ class _QuestionScreenState extends State<QuestionScreen> {
     );
   }
 
-
-  Widget _buildQuestionSubTitle(BuildContext context, Question question){
+  Widget _buildQuestionSubTitle(BuildContext context, Question question) {
     return Padding(
         padding: const EdgeInsets.only(left: Dimens.practiceLeftContainer),
-        child: isQuizQuestion(question) ?
-        Text(
-          AppLocalizations.of(context)
-              .translate('question_subtitle_for_quiz'),
-          style: Theme.of(context).textTheme.subTitle
-              .copyWith(color: Theme.of(context).colorScheme.textInBg2),
-        ) : Text(
-          AppLocalizations.of(context)
-              .translate('question_subtitle_for_fitb'),
-          style: Theme.of(context).textTheme.subTitle
-              .copyWith(color: Theme.of(context).colorScheme.textInBg2),
-        )
-    );
+        child: isQuizQuestion(question)
+            ? Text(
+                AppLocalizations.of(context)
+                    .translate('question_subtitle_for_quiz'),
+                style: Theme.of(context)
+                    .textTheme
+                    .subTitle
+                    .copyWith(color: Theme.of(context).colorScheme.textInBg2),
+              )
+            : Text(
+                AppLocalizations.of(context)
+                    .translate('question_subtitle_for_fitb'),
+                style: Theme.of(context)
+                    .textTheme
+                    .subTitle
+                    .copyWith(color: Theme.of(context).colorScheme.textInBg2),
+              ));
   }
 
   Widget _buildQuestionContent() {
@@ -333,80 +326,71 @@ class _QuestionScreenState extends State<QuestionScreen> {
                   children: [
                     Text(
                       'Câu ${_singleQuestionStore.currentIndex + 1}:',
-                      style: Theme
-                          .of(context)
+                      style: Theme.of(context)
                           .textTheme
                           .subTitle
                           .copyWith(color: const Color(0xFFFF6B00)),
                     ),
                     const SizedBox(height: 3.0),
-
-                    Flexible(child: Html(
-                      shrinkWrap: true,
-                      data: "<html>${getCurrentQuestion()!.content}</html>",
-                      extensions: [
-                        TagExtension(
-                            tagsToExtend: {"latex"},
-                            builder: (extensionContext) {
-                              String latexCode = extensionContext.innerHtml ??
-                                  "";
-                              print("Latex: $latexCode");
-                              return SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Math.tex(
-                                  latexCode,
-                                  mathStyle: MathStyle.display,
-                                  textStyle: extensionContext.style
-                                      ?.generateTextStyle(),
-                                  onErrorFallback: (FlutterMathException e) {
-                                    return Text(e.message);
-                                  },
-                                ),
-                              );
-                            }
-                        ),
-                        TagExtension(
-                          tagsToExtend: {"img"},
-                          builder: (context) {
-                            final src = context.attributes['src'] ?? '';
-                            return Image.network(
-                              src,
-                              fit: BoxFit.contain,
-                              loadingBuilder: (context, child, loadingProgress) {
+                    Flexible(
+                      child: Html(
+                        shrinkWrap: true,
+                        data: "<html>${getCurrentQuestion()!.content}</html>",
+                        extensions: [
+                          TagExtension(
+                              tagsToExtend: {"latex"},
+                              builder: (extensionContext) {
+                                String latexCode =
+                                    extensionContext.innerHtml ?? "";
+                                print("Latex: $latexCode");
+                                return SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Math.tex(
+                                    latexCode,
+                                    mathStyle: MathStyle.display,
+                                    textStyle: extensionContext.style
+                                        ?.generateTextStyle(),
+                                    onErrorFallback: (FlutterMathException e) {
+                                      return Text(e.message);
+                                    },
+                                  ),
+                                );
+                              }),
+                          TagExtension(
+                            tagsToExtend: {"img"},
+                            builder: (context) {
+                              final src = context.attributes['src'] ?? '';
+                              return Image.network(src, fit: BoxFit.contain,
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
                                 if (loadingProgress == null) return child;
                                 return Center(
-                                  child: AnimationHelper.buildShimmerPlaceholder(context, 500, 200),
+                                  child:
+                                      AnimationHelper.buildShimmerPlaceholder(
+                                          context, 500, 200),
                                 );
-                              },
-                              errorBuilder: (context, error, stackTrace){
+                              }, errorBuilder: (context, error, stackTrace) {
                                 return Center(
-                                  child: AnimationHelper.buildShimmerPlaceholder(context, 500, 200),
+                                  child:
+                                      AnimationHelper.buildShimmerPlaceholder(
+                                          context, 500, 200),
                                 );
-                              }
-                            );
-                          },
-                        ),
-                      ],
-                      style: {
-                        "*": Style.fromTextStyle(
-                          Theme
-                              .of(context)
-                              .textTheme
-                              .questionStyle
-                              .copyWith(
-                              color: Theme
-                                  .of(context)
-                                  .colorScheme
-                                  .inputTitleText
+                              });
+                            },
                           ),
-                        ).merge(
-                            Style(
-                              display: Display.inline,
-                              textOverflow: TextOverflow.clip,
-                            )
-                        )
-                      },
-                    ),
+                        ],
+                        style: {
+                          "*": Style.fromTextStyle(
+                            Theme.of(context).textTheme.questionStyle.copyWith(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .inputTitleText),
+                          ).merge(Style(
+                            display: Display.inline,
+                            textOverflow: TextOverflow.clip,
+                          ))
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -419,79 +403,67 @@ class _QuestionScreenState extends State<QuestionScreen> {
   }
 
   Widget _buildQuizView(Question question) {
-    return Column(
-        children: [
-          Container(
-            padding: Layout.practiceContainerPadding,
-            child: ListView.builder(
-              itemCount: getCurrentQuestion()!.options.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return Observer(builder: (context) {
-                  return Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: _radioTile(index)
-                  );
-                });
-              },
-            ),
-          ),
-          _buildNextButton(question),
-        ]
-    );
+    return Column(children: [
+      Container(
+        padding: Layout.practiceContainerPadding,
+        child: ListView.builder(
+          itemCount: getCurrentQuestion()!.options.length,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            return Observer(builder: (context) {
+              return Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: _radioTile(index));
+            });
+          },
+        ),
+      ),
+      _buildNextButton(question),
+    ]);
   }
 
   Widget _buildFillView(Question question) {
     return Container(
-      margin: Layout.practiceContainerPadding,
-      decoration: const BoxDecoration(
-        color: Colors.transparent,
-      ),
-      
-      child: Column(
-        children: [
-          Container(
-            decoration: decorationWithShadow,
-            child: TextField(
-              controller: _controller,
-              focusNode: _focusNode,
-              decoration: InputDecoration(
-                hintText: AppLocalizations.of(context)
-                    .translate('question_hint_text_field'),
-                hintStyle: Theme.of(context).textTheme.subTitle
-                    .copyWith(color: Theme.of(context)
-                    .colorScheme.inputHintText),
-                border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(
-                    vertical: 21,
-                    horizontal: Dimens.practiceHorizontalText
+        margin: Layout.practiceContainerPadding,
+        decoration: const BoxDecoration(
+          color: Colors.transparent,
+        ),
+        child: Column(
+          children: [
+            Container(
+              decoration: decorationWithShadow,
+              child: TextField(
+                controller: _controller,
+                focusNode: _focusNode,
+                decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context)
+                      .translate('question_hint_text_field'),
+                  hintStyle: Theme.of(context).textTheme.subTitle.copyWith(
+                      color: Theme.of(context).colorScheme.inputHintText),
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.symmetric(
+                      vertical: 21, horizontal: Dimens.practiceHorizontalText),
                 ),
-
-              ),
-              onChanged: (value){
-                _singleQuestionStore.setAnswer(
-                    _singleQuestionStore.currentIndex,
-                    value
-                );
-              },
-              style:
-                Theme.of(context).textTheme.normal
-                    .copyWith(color: Theme.of(context)
-                    .colorScheme.inputTitleText),
+                onChanged: (value) {
+                  _singleQuestionStore.setAnswer(
+                      _singleQuestionStore.currentIndex, value);
+                },
+                style: Theme.of(context).textTheme.normal.copyWith(
+                    color: Theme.of(context).colorScheme.inputTitleText),
               ),
             ),
-              const SizedBox(height: 12),
-             _buildNextButton(question),
+            const SizedBox(height: 12),
+            _buildNextButton(question),
           ],
-      )
-    );
+        ));
   }
 
   Widget _buildNextButton(Question question) {
     return Padding(
-        padding: isQuizQuestion(question) ?
-        const EdgeInsets.only(right: 34 + 9) : const EdgeInsets.only(right: 9),
+        padding: isQuizQuestion(question)
+            ? const EdgeInsets.only(right: 34 + 9)
+            : const EdgeInsets.only(right: 9),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -500,63 +472,57 @@ class _QuestionScreenState extends State<QuestionScreen> {
               child: Text(
                 AppLocalizations.of(context)
                     .translate('question_btn_text_next'),
-                style: Theme
-                    .of(context)
+                style: Theme.of(context)
                     .textTheme
                     .subTitle
-                    .copyWith(color: Theme
-                    .of(context)
-                    .colorScheme
-                    .tertiary),
+                    .copyWith(color: Theme.of(context).colorScheme.tertiary),
               ),
             )
           ],
-        )
-    );
+        ));
   }
 
-  Widget _radioTile(int index){
+  Widget _radioTile(int index) {
     return Container(
       height: Dimens.answerTileHeight,
       decoration: decorationWithShadow,
       child: RadioListTile<String>(
         title: Align(
           alignment: Alignment.centerLeft,
-          child: getCurrentQuestion()!.options.isEmpty ?
-          const Text('null') :
-          Html(
-            shrinkWrap: true,
-            data: "<html>${makeChoiceFromIndex(index)+
-                getCurrentQuestion()!.options[index].content}</html>",
-            extensions: [
-              TagExtension(
-                  tagsToExtend: {"latex"},
-                  builder: (extensionContext) {
-                    String latexCode = extensionContext.innerHtml ??
-                        "";
-                    return Math.tex(
-                      latexCode,
-                      mathStyle: MathStyle.display,
-                      textStyle: extensionContext.style?.generateTextStyle(),
-                      onErrorFallback: (FlutterMathException e) {
-                        return Text(e.message);
-                      },
-                    );
-                  }
-              ),
-            ],
-            style: {
-              "*": Style.fromTextStyle(
-                  Theme.of(context).textTheme.normal
-                      .copyWith(color: Theme.of(context).colorScheme.inputText)
-              ).merge(
-                  Style(
-                    display: Display.inline,
-                    textOverflow: TextOverflow.clip,
-                  )
-              )
-            },
-          ),
+          child: getCurrentQuestion()!.options.isEmpty
+              ? const Text('null')
+              : Html(
+                  shrinkWrap: true,
+                  data:
+                      "<html>${makeChoiceFromIndex(index) + getCurrentQuestion()!.options[index].content}</html>",
+                  extensions: [
+                    TagExtension(
+                        tagsToExtend: {"latex"},
+                        builder: (extensionContext) {
+                          String latexCode = extensionContext.innerHtml ?? "";
+                          return Math.tex(
+                            latexCode,
+                            mathStyle: MathStyle.display,
+                            textStyle:
+                                extensionContext.style?.generateTextStyle(),
+                            onErrorFallback: (FlutterMathException e) {
+                              return Text(e.message);
+                            },
+                          );
+                        }),
+                  ],
+                  style: {
+                    "*": Style.fromTextStyle(Theme.of(context)
+                            .textTheme
+                            .normal
+                            .copyWith(
+                                color: Theme.of(context).colorScheme.inputText))
+                        .merge(Style(
+                      display: Display.inline,
+                      textOverflow: TextOverflow.clip,
+                    ))
+                  },
+                ),
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(Dimens.answerTileRadius),
@@ -568,9 +534,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
         //Answer key.
         onChanged: (value) {
           _singleQuestionStore.setAnswer(
-              _singleQuestionStore.currentIndex,
-              getAnswerFromIndex(index)
-          );
+              _singleQuestionStore.currentIndex, getAnswerFromIndex(index));
           _singleQuestionStore.setQuizAnswerValue(value!);
         },
       ),
@@ -585,23 +549,21 @@ class _QuestionScreenState extends State<QuestionScreen> {
   void _continueButtonPressedEvent() {
     _focusNode.unfocus();
     if (_singleQuestionStore.currentIndex <
-          _questionStore.questionList!.questions!.length) {
-      int index =  _singleQuestionStore.currentIndex + 1;
-      if (index == _questionStore.questionList!.questions!.length){
+        _questionStore.questionList!.questions!.length) {
+      int index = _singleQuestionStore.currentIndex + 1;
+      if (index == _questionStore.questionList!.questions!.length) {
         Overlay.of(context).insert(questionListOverlay);
         return;
       }
       _singleQuestionStore.changeQuestion(index);
       _hintStore.reset();
-      _hintStore.setHint(
-          _questionStore.questionList!.questions![index].guide);
+      _hintStore.setHint(_questionStore.questionList!.questions![index].guide);
       _hintStore.setTerm(_questionStore.questionList!.questions![index].term);
     }
-
   }
 
   //Others:---------------------------------------------------------------------
-  Question? getCurrentQuestion(){
+  Question? getCurrentQuestion() {
     int index = _singleQuestionStore.currentIndex;
 
     if (_questionStore.questionList == null) return null;
@@ -612,12 +574,12 @@ class _QuestionScreenState extends State<QuestionScreen> {
     return questions[index];
   }
 
-  int getIndexFromLetter(String key){
+  int getIndexFromLetter(String key) {
     return key.codeUnitAt(0) - 'A'.codeUnitAt(0);
   }
 
-  bool isQuizQuestion(Question question){
-    if (question.options.isEmpty){
+  bool isQuizQuestion(Question question) {
+    if (question.options.isEmpty) {
       return false;
     }
     return true;
@@ -627,65 +589,58 @@ class _QuestionScreenState extends State<QuestionScreen> {
     return '${String.fromCharCode(index + 65)}. ';
   }
 
-  String getAnswerFromIndex(int index){
+  String getAnswerFromIndex(int index) {
     return String.fromCharCode(index + 65);
   }
 
-  double borderPositionHandler(double pos, double border){
-    if (pos < 30){
+  double borderPositionHandler(double pos, double border) {
+    if (pos < 30) {
       return 30;
     }
-    if (pos > border - 60){
+    if (pos > border - 60) {
       return border - 60;
     }
     return pos;
   }
 
-  void showGuidance(String guide){
-
-  }
+  void showGuidance(String guide) {}
 
   //Initialize overlay:---------------------------------------------------------
-   void _initListOverlay(BuildContext context) async{
-     questionListOverlay = OverlayEntry(
-         builder: (BuildContext overlayContext) {
-           return Stack(
-             children: [
-               Container(
-                 color: Colors.black.withOpacity(0.53),
-               ),
-               Positioned(
-                 bottom: 34,
-                 left: 19,
-                 right: 19,
-                 child: QuestionListOverlay(
-                     isSubmitted: (bool submit) {
-                       if (!submit) {
-                         questionListOverlay.remove();
-                       }
-                       else {
-                         _singleQuestionStore.printAllAnswer();
-                         questionListOverlay.remove();
-                         Navigator.of(context)
-                             .pushReplacementNamed(Routes.result);
-                       }
-                     }),
-               )
-             ],
-           );
-         }
-     );
-   }
+  void _initListOverlay(BuildContext context) async {
+    questionListOverlay = OverlayEntry(builder: (BuildContext overlayContext) {
+      return Stack(
+        children: [
+          Container(
+            color: Colors.black.withOpacity(0.53),
+          ),
+          Positioned(
+            bottom: 34,
+            left: 19,
+            right: 19,
+            child: QuestionListOverlay(isSubmitted: (bool submit) {
+              //TODO: Handle submit
+              if (!submit) {
+                questionListOverlay.remove();
+              } else {
+                _singleQuestionStore.printAllAnswer();
+                questionListOverlay.remove();
+                Navigator.of(context).pushReplacementNamed(Routes.result);
+              }
+            }),
+          )
+        ],
+      );
+    });
+  }
 
-   Question questionHolder = Question(
-       questionId: '',
-       ordinalNumber: 1,
-       content: '',
-       questionType: 'FILL_IN_THE_BLANK',
-       options: [], blankAnswer: '', solution: '', guide: '', term: ''
-
-   );
-
-
+  Question questionHolder = Question(
+      questionId: '',
+      ordinalNumber: 1,
+      content: '',
+      questionType: 'FILL_IN_THE_BLANK',
+      options: [],
+      blankAnswer: '',
+      solution: '',
+      guide: '',
+      term: '');
 }
-

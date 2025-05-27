@@ -82,6 +82,7 @@ class Section {
   final String lectureTitle;
   final String topicTitle;
   final String levelTitle;
+  final String sectionUrl;
 
   Section({
     required this.lectureId,
@@ -90,6 +91,7 @@ class Section {
     required this.lectureTitle,
     required this.topicTitle,
     required this.levelTitle,
+    required this.sectionUrl,
   });
 
   factory Section.fromJson(Map<String, dynamic> json) {
@@ -100,6 +102,7 @@ class Section {
       lectureTitle: json['lectureTitle'],
       topicTitle: json['topicTitle'],
       levelTitle: json['levelTitle'],
+      sectionUrl: json['sectionUrl'],
     );
   }
 }

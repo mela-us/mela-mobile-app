@@ -3,6 +3,7 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/enum.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/revise/revise_item.dart';
+import 'package:mela/presentation/home_screen/store/revise_store/revise_store.dart';
 import 'package:mela/presentation/question/store/question_store.dart';
 import 'package:mela/utils/routes/routes.dart';
 import 'package:timeline_tile/timeline_tile.dart';
@@ -28,13 +29,15 @@ class ReviewItemWidget extends StatelessWidget {
     String itemType =
         reviseItem.type == ReviewItemType.EXERCISE ? 'Bài tập' : 'Bài giảng';
 
-    final QuestionStore _questionStore = getIt<QuestionStore>();
+    final QuestionStore questionStore = getIt<QuestionStore>();
+    final ReviseStore reviseStore = getIt<ReviseStore>();
     return GestureDetector(
         onTap: () {
           if (reviseItem.isDone || isPursuing) {
+            reviseStore.setSelectedItem(reviseItem);
             //Exercise navigating
             if (reviseItem.type == ReviewItemType.EXERCISE) {
-              _questionStore.setQuestionsUid(
+              questionStore.setQuestionsUid(
                 reviseItem.itemId,
               );
               // Navigate to exercise screen
@@ -44,7 +47,9 @@ class ReviewItemWidget extends StatelessWidget {
             }
 
             //Lecture navigating
-            else {}
+            else {
+              //Here
+            }
           } else {
             showDialog(
               context: context,
