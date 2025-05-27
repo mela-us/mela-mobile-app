@@ -45,11 +45,6 @@ class _ContentInDividedLectureScreenState
   final _sharedPrefsHelper = getIt.get<SharedPreferenceHelper>();
   BuildContext? showCaseContext;
 
-  Timer? _readingTimer;
-  bool _scrolledToEnd = false;
-  bool _isDone = false;
-  int _readingSeconds = 0;
-
   GlobalKey _pdfKey = GlobalKey();
 
   final UpdateSectionProgressUsecase _updateUsecase =
@@ -70,10 +65,6 @@ class _ContentInDividedLectureScreenState
           ShowCaseWidget.of(showCaseContext!).startShowCase([_pdfKey]);
         }
       });
-    });
-
-    _readingTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      _readingSeconds++;
     });
   }
 
@@ -245,28 +236,6 @@ class _ContentInDividedLectureScreenState
                       },
                       onPageChanged: (PdfPageChangedDetails details) async {
                         _currentPage.value = details.newPageNumber;
-
-                        // Check if the user has scrolled to the end of the PDF
-                        if (details.isLastPage && _readingSeconds >= 5) {
-                          if (_reviseStore.selectedItem != null &&
-                              _reviseStore.selectedItem!.isDone == false) {
-                            // Update the review status to done
-                            await _reviseStore.updateReview(UpdateReviewParam(
-                                reviewId: _reviseStore.selectedItem!.reviewId,
-                                itemId: _reviseStore.selectedItem!.itemId,
-                                ordinalNumber:
-                                    _reviseStore.selectedItem!.ordinalNumber,
-                                itemType: _reviseStore.selectedItem!.type,
-                                isDone: true));
-
-                            _reviseStore.setSelectedItem(null);
-
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text('Đã hoàn thành bài giảng'),
-                            ));
-                          }
-                        }
                       },
                     ),
                   );
