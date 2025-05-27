@@ -6,9 +6,13 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/assets.dart';
 import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/domain/entity/lecture/lecture.dart';
+import 'package:mela/domain/entity/revise/revise_item.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
+import 'package:mela/presentation/home_screen/store/revise_store/revise_store.dart';
 import 'package:mela/presentation/home_screen/widgets/button_individual_exercise.dart';
 import 'package:mela/presentation/home_screen/widgets/level_item.dart';
+import 'package:mela/presentation/home_screen/widgets/review_item_widget.dart';
+import 'package:mela/presentation/home_screen/widgets/revise_view_widget.dart';
 import 'package:mela/presentation/list_proposed_new_lecture/list_proposed_new_lecture.dart';
 import 'package:mela/presentation/streak/streak_action_icon.dart';
 import 'package:mela/presentation/topic_lecture_in_level_screen/widgets/lecture_item_copy.dart';
@@ -35,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen>
   //stores:---------------------------------------------------------------------
   final LevelStore _levelStore = getIt<LevelStore>();
   final StreakStore _streakStore = getIt<StreakStore>();
+  final ReviseStore _reviseStore = getIt<ReviseStore>();
 
   late final ReactionDisposer _unAuthorizedReactionDisposer;
   final GlobalKey _buttonIndividualExerciseKey = GlobalKey();
@@ -58,10 +63,12 @@ class _HomeScreenState extends State<HomeScreen>
 
     //for only refresh token expired
     _unAuthorizedReactionDisposer = reaction(
-      (_) => _levelStore.isUnAuthorized,
+      (_) => _levelStore.isUnAuthorized || _reviseStore.isUnAuthorized,
       (value) {
         if (value) {
           _levelStore.isUnAuthorized = false;
+          _reviseStore.isUnAuthorized = false;
+
           _levelStore.resetErrorString();
           //Remove all routes in stack
           Navigator.of(context).pushNamedAndRemoveUntil(
@@ -69,6 +76,12 @@ class _HomeScreenState extends State<HomeScreen>
         }
       },
     );
+  }
+
+  Future<void> _initReviseData() async {
+    if (!_reviseStore.loading) {
+      await _reviseStore.getRevision();
+    }
   }
 
   @override
@@ -81,6 +94,8 @@ class _HomeScreenState extends State<HomeScreen>
       _levelStore.getTopics();
       _levelStore.getAreLearningLectures();
     }
+
+    _initReviseData();
   }
 
   @override
@@ -312,13 +327,9 @@ class _HomeScreenState extends State<HomeScreen>
                         height: 420,
                         child: TabBarView(
                           children: [
-                            // Tab 1: Bài giảng đang học
-                            _levelStore.lecturesAreLearningList!.lectures
-                                    .isNotEmpty
-                                ? _buildRoadList()
-                                : const Center(
-                                    child: Text("Không có bài giảng đang học"),
-                                  ),
+                            // Tab 1: Revision List
+                            ReviseViewWidget(),
+
                             // Tab 2: Bài giảng đề xuất
                             ListProposedNewLectureScreen()
                           ],
@@ -378,58 +389,32 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  Widget _buildRoadList() {
-    // return LayoutBuilder(
-    //   builder: (context, constrain) {
-    //     double width = constrain.maxWidth;
-    //     double lineX = width * 0.5 - 1; // Center the line
-    //     return Stack(
-    //       children: [
-    //         Positioned(
-    //           left: lineX,
-    //           top: 0,
-    //           bottom: 0,
-    //           width: 2,
-    //           child: Container(
-    //             color: Theme.of(context).colorScheme.tertiary,
-    //           ),
-    //         ),
-    //         ListView.builder(
-    //           physics: const NeverScrollableScrollPhysics(),
-    //           shrinkWrap: true,
-    //           itemCount: _levelStore.lecturesAreLearningList!.lectures.length,
-    //           itemBuilder: (context, index) {
-    //             return LectureItemCopy(
-    //               isFirst: index == 0,
-    //               isLast: index ==
-    //                   _levelStore.lecturesAreLearningList!.lectures.length - 1,
-    //               lecture: _levelStore.lecturesAreLearningList!.lectures[index],
-    //             );
-    //           },
-    //         )
-    //       ],
-    //     );
-    //   },
-    // );
-    return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: _levelStore.lecturesAreLearningList!.lectures.length,
-      itemBuilder: (context, index) {
-        List<Lecture> lectures = _levelStore.lecturesAreLearningList!.lectures;
-        return LectureItemCopy(
-          isFirst: index == 0,
-          isLast: index == lectures.length - 1,
-          lecture: lectures[index],
-          isPursuing: (index == 0 && lectures[0].progress < 0.8) ||
-              (index != 0 &&
-                  lectures[index].progress < 0.8 &&
-                  lectures[index - 1].progress >=
-                      0.8), // Check if the lecture is in progress
-        );
-      },
-    );
-  }
+  // Widget _buildRoadList() {
+  //   return ListView.builder(
+  //     itemCount: _reviseStore.revisionItemList.length,
+  //     itemBuilder: (context, index) {
+  //       List<ReviseItem> items = _reviseStore.revisionItemList;
+  //       return ReviewItemWidget(
+  //         isFirst: index == 0,
+  //         isLast: index == items.length - 1,
+  //         reviseItem: _reviseStore.revisionItemList[index],
+  //         isPursuing: (index == 0 && !items[0].isDone) ||
+  //             (index != 0 &&
+  //                 !items[index].isDone &&
+  //                 items[index - 1]
+  //                     .isDone), // Check if the lecture is in progress
+  //       );
+  //     },
+  //   );
+  // }
+
+  // Widget _buildRevisionView() {
+  //   return _reviseStore.revisionItemList.isNotEmpty
+  //       ? _buildRoadList()
+  //       : const Center(
+  //           child: Text("Không có bài ôn tập nào"),
+  //         );
+  // }
 
   void _showStreakDialog() {
     if (_streakStore.isLoading) return;

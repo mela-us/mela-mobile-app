@@ -8,6 +8,7 @@ import 'package:mela/data/network/apis/login_signup/refresh_access_token_api.dar
 import 'package:mela/data/network/apis/presigned_image/presigned_image_api.dart';
 import 'package:mela/data/network/apis/presigned_image/presigned_image_upload_api.dart';
 import 'package:mela/data/network/apis/questions/hint_api.dart';
+import 'package:mela/data/network/apis/revise/revise_api.dart';
 import 'package:mela/data/network/apis/searchs/search_api.dart';
 import 'package:mela/data/network/apis/topic_lecture/topic_lecture_api.dart';
 import 'package:mela/data/network/apis/topics/topic_api.dart';
@@ -89,14 +90,18 @@ class NetworkModule {
     getIt.registerSingleton<LogoutApi>(LogoutApi(getIt<DioClient>()));
     getIt.registerSingleton<DeleteAccountApi>(
         DeleteAccountApi(getIt<DioClient>()));
-    getIt.registerSingleton<ChatApi>(ChatApi(getIt<DioClient>(), getIt<SecureStorageHelper>()));
+    getIt.registerSingleton<ChatApi>(
+        ChatApi(getIt<DioClient>(), getIt<SecureStorageHelper>()));
     getIt.registerSingleton<PresignedImageApi>(
         PresignedImageApi(getIt<DioClient>()));
     getIt.registerSingleton<PresignedImageUploadApi>(PresignedImageUploadApi());
 
     getIt.registerSingleton<HintApi>(HintApi(getIt<DioClient>()));
-    getIt.registerSingleton<UpdateProgressApi>(UpdateProgressApi(getIt<DioClient>()));
+    getIt.registerSingleton<UpdateProgressApi>(
+        UpdateProgressApi(getIt<DioClient>()));
 
     getIt.registerSingleton<StreakApi>(StreakApi(getIt<DioClient>()));
+
+    getIt.registerSingleton<ReviseApi>(ReviseApi(getIt<DioClient>()));
   }
 }

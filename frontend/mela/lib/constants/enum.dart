@@ -32,3 +32,8 @@ enum LevelConversation {
   SOLUTION_PROVIDED,
   COMPLETED,
 }
+
+enum ReviewItemType {
+  EXERCISE,
+  SECTION,
+}

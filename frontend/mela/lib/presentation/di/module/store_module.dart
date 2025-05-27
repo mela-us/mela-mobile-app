@@ -14,6 +14,8 @@ import 'package:mela/domain/usecase/level/get_level_list_usecase.dart';
 import 'package:mela/domain/usecase/question/generate_hint_usecase.dart';
 import 'package:mela/domain/usecase/question/generate_term_usecase.dart';
 import 'package:mela/domain/usecase/question/get_questions_usecase.dart';
+import 'package:mela/domain/usecase/revise/get_revision_usecase.dart';
+import 'package:mela/domain/usecase/revise/update_revision_usecase.dart';
 import 'package:mela/domain/usecase/suggestion/update_suggestion_usecase.dart';
 import 'package:mela/domain/usecase/topic_lecture/get_topic_lecture_usecase.dart';
 import 'package:mela/domain/usecase/user/update_user_usecase.dart';
@@ -22,6 +24,7 @@ import 'package:mela/domain/usecase/user_login/save_access_token_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_refresh_token_usecase.dart';
 import 'package:mela/presentation/chat/store/history_store.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
+import 'package:mela/presentation/home_screen/store/revise_store/revise_store.dart';
 import 'package:mela/presentation/list_proposed_new_lecture/store/list_proposed_new_suggestion_store.dart';
 import 'package:mela/presentation/question/store/hint_store/hint_store.dart';
 
@@ -239,5 +242,12 @@ class StoreModule {
     getIt.registerSingleton<ListProposedNewSuggestionStore>(
         ListProposedNewSuggestionStore(getIt<GetProposedNewSuggestionUsecase>(),
             getIt<UpdateSuggestionUsecase>()));
+
+    getIt.registerSingleton<ReviseStore>(
+      ReviseStore(
+        getIt<GetRevisionUsecase>(),
+        getIt<UpdateRevisionUsecase>(),
+      ),
+    );
   }
 }

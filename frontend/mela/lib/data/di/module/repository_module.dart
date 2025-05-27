@@ -13,6 +13,7 @@ import 'package:mela/data/network/apis/lectures/lecture_api.dart';
 import 'package:mela/data/network/apis/login_signup/login_api.dart';
 import 'package:mela/data/network/apis/login_signup/refresh_access_token_api.dart';
 import 'package:mela/data/network/apis/login_signup/signup_api.dart';
+import 'package:mela/data/network/apis/revise/revise_api.dart';
 import 'package:mela/data/network/apis/searchs/search_api.dart';
 import 'package:mela/data/network/apis/topic_lecture/topic_lecture_api.dart';
 import 'package:mela/data/network/apis/topics/topic_api.dart';
@@ -24,6 +25,7 @@ import 'package:mela/data/repository/level/level_repository_impl.dart';
 import 'package:mela/data/repository/presigned_image/presigned_image_repository_impl.dart';
 import 'package:mela/data/repository/question/hint_repository_impl.dart';
 import 'package:mela/data/repository/question/question_repository_impl.dart';
+import 'package:mela/data/repository/revise/revise_repository_impl.dart';
 import 'package:mela/data/repository/setting/setting_repository_impl.dart';
 import 'package:mela/data/repository/stat/stat_search_impl.dart';
 import 'package:mela/data/repository/topic_lecture/topic_lecture_repository_impl.dart';
@@ -36,6 +38,7 @@ import 'package:mela/domain/repository/level/level_repository.dart';
 import 'package:mela/domain/repository/presigned_image/presigned_image_repository.dart';
 import 'package:mela/domain/repository/question/hint_repository.dart';
 import 'package:mela/domain/repository/question/question_repository.dart';
+import 'package:mela/domain/repository/revise/revise_repository.dart';
 import 'package:mela/domain/repository/setting/setting_repository.dart';
 import 'package:mela/domain/repository/stat/stat_search_repository.dart';
 import 'package:mela/domain/repository/topic_lecture/topic_lecture_repository.dart';
@@ -142,5 +145,9 @@ class RepositoryModule {
     //Streak
     getIt.registerSingleton<StreakRepository>(
         StreakRepositoryImpl(getIt<StreakApi>()) as StreakRepository);
+
+    //Revise
+    getIt.registerSingleton<ReviseRepository>(
+        ReviseRepositoryImpl(getIt<ReviseApi>()) as ReviseRepository);
   }
 }

@@ -6,7 +6,7 @@ class EndpointsConst {
   static const String saveResult = "/api/exercises/save";
   // base url
   //static const String baseUrl = "http://jsonplaceholder.typicode.com";
-  // static const String baseUrl = "https://api.mela.guru";
+//   static const String baseUrl = "https://api.mela.guru";
   static const String baseUrl = "https://api.dev.mela.guru";
 
   // receiveTimeout
@@ -68,8 +68,11 @@ class EndpointsConst {
   //streak
   static const String streak = "/api/streak";
 
+  //revise
+  static const String getRevise = "/api/reviews";
+  static String updateReview(String reviewId) => "/api/reviews/$reviewId";
+
   //suggestion
-  static const String getProposedNewSuggestion =
-      "/api/suggestions";
+  static const String getProposedNewSuggestion = "/api/suggestions";
   static const String updateSuggestion = "/api/suggestions/:suggestionId";
 }

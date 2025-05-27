@@ -4,6 +4,7 @@ import 'package:mela/domain/repository/lecture/lecture_repository.dart';
 import 'package:mela/domain/repository/level/level_repository.dart';
 import 'package:mela/domain/repository/presigned_image/presigned_image_repository.dart';
 import 'package:mela/domain/repository/question/hint_repository.dart';
+import 'package:mela/domain/repository/revise/revise_repository.dart';
 import 'package:mela/domain/repository/topic_lecture/topic_lecture_repository.dart';
 import 'package:mela/domain/repository/user/user_repository.dart';
 import 'package:mela/domain/repository/user_register/user_signup_repostiory.dart';
@@ -24,6 +25,8 @@ import 'package:mela/domain/usecase/presigned_image/get_presigned_image_usecase.
 import 'package:mela/domain/usecase/question/generate_hint_usecase.dart';
 import 'package:mela/domain/usecase/question/generate_term_usecase.dart';
 import 'package:mela/domain/usecase/suggestion/update_suggestion_usecase.dart';
+import 'package:mela/domain/usecase/revise/get_revision_usecase.dart';
+import 'package:mela/domain/usecase/revise/update_revision_usecase.dart';
 import 'package:mela/domain/usecase/topic/find_topic_by_id_usecase.dart';
 import 'package:mela/domain/usecase/topic/get_topics_usecase.dart';
 import 'package:mela/domain/usecase/topic_lecture/get_topic_lecture_usecase.dart';
@@ -144,7 +147,6 @@ class UseCaseModule {
     getIt.registerSingleton<GetLecturesAreLearningUsecase>(
         GetLecturesAreLearningUsecase(getIt<LectureRepository>(),
             getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()));
-
 
     getIt.registerSingleton<GetDividedLectureUsecase>(GetDividedLectureUsecase(
         getIt<LectureRepository>(),
@@ -280,8 +282,19 @@ class UseCaseModule {
         GetProposedNewSuggestionUsecase(getIt<LectureRepository>(),
             getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()));
 
-    getIt.registerSingleton<UpdateSuggestionUsecase>(
-        UpdateSuggestionUsecase(getIt<LectureRepository>(),
-            getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()));
+    getIt.registerSingleton<UpdateSuggestionUsecase>(UpdateSuggestionUsecase(
+        getIt<LectureRepository>(),
+        getIt<RefreshAccessTokenUsecase>(),
+        getIt<LogoutUseCase>()));
+
+    getIt.registerSingleton<GetRevisionUsecase>(
+      GetRevisionUsecase(getIt<ReviseRepository>(),
+          getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()),
+    );
+
+    getIt.registerSingleton<UpdateRevisionUsecase>(
+      UpdateRevisionUsecase(getIt<ReviseRepository>(),
+          getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()),
+    );
   }
 }

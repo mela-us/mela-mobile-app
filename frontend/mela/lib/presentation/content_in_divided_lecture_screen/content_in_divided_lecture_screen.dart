@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mela/constants/app_theme.dart';
@@ -7,7 +9,9 @@ import 'package:mela/data/sharedpref/shared_preference_helper.dart';
 import 'package:mela/domain/entity/divided_lecture/divided_lecture.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/domain/params/history/section_progress_params.dart';
+import 'package:mela/domain/params/revise/update_review_param.dart';
 import 'package:mela/domain/usecase/history/update_section_progress_usecase.dart';
+import 'package:mela/presentation/home_screen/store/revise_store/revise_store.dart';
 import 'package:mela/presentation/list_proposed_new_lecture/store/list_proposed_new_suggestion_store.dart';
 import 'package:mela/presentation/review/widgets/draggable_ai_button.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
@@ -43,12 +47,15 @@ class _ContentInDividedLectureScreenState
   final ValueNotifier<int> _currentPage = ValueNotifier(0);
   final _sharedPrefsHelper = getIt.get<SharedPreferenceHelper>();
   BuildContext? showCaseContext;
+
   GlobalKey _pdfKey = GlobalKey();
 
   final UpdateSectionProgressUsecase _updateUsecase =
       getIt<UpdateSectionProgressUsecase>();
   final ListProposedNewSuggestionStore _listProposedNewSuggestionStore =
       getIt<ListProposedNewSuggestionStore>();
+
+  final ReviseStore _reviseStore = getIt.get<ReviseStore>();
 
   @override
   void initState() {
@@ -158,6 +165,8 @@ class _ContentInDividedLectureScreenState
             // print("------------->Back button pressed");
             // print(Navigator.of(context).widget.pages);
 
+            _reviseStore.setSelectedItem(null);
+
             Navigator.of(context).pop(false);
           },
         ),
@@ -230,7 +239,7 @@ class _ContentInDividedLectureScreenState
                       onDocumentLoaded: (PdfDocumentLoadedDetails details) {
                         _totalPages = details.document.pages.count;
                       },
-                      onPageChanged: (PdfPageChangedDetails details) {
+                      onPageChanged: (PdfPageChangedDetails details) async {
                         _currentPage.value = details.newPageNumber;
                       },
                     ),
@@ -260,6 +269,18 @@ class _ContentInDividedLectureScreenState
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                         ),
                         onPressed: () async {
+                          if (_reviseStore.selectedItem != null) {
+                            // If the user is revising, update the review
+                            await _reviseStore.updateReview(UpdateReviewParam(
+                                reviewId: _reviseStore.selectedItem!.reviewId,
+                                itemId: _reviseStore.selectedItem!.itemId,
+                                ordinalNumber:
+                                    _reviseStore.selectedItem!.ordinalNumber,
+                                itemType: _reviseStore.selectedItem!.type,
+                                isDone: true));
+
+                            _reviseStore.setSelectedItem(null);
+                          }
                           //if go to from suggestion, update section progress
                           if (widget.suggestionId != null) {
                             await _listProposedNewSuggestionStore

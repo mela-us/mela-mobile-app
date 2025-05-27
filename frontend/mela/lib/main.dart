@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/my_app.dart';
 import 'package:flutter/material.dart';
@@ -11,10 +12,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await setPreferredOrientations();
   await ServiceLocator.configureDependencies();
-  NotificationService().initNotification();
+  if (!kIsWeb) {
+    NotificationService().initNotification();
+  }
   runApp(const MyApp());
 }
-
 
 Future<void> setPreferredOrientations() {
   return SystemChrome.setPreferredOrientations([
@@ -24,4 +26,3 @@ Future<void> setPreferredOrientations() {
     DeviceOrientation.landscapeLeft,
   ]);
 }
-
