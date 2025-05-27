@@ -87,6 +87,22 @@ mixin _$PersonalStore on _PersonalStore, Store {
     });
   }
 
+  late final _$isImageUpdatingAtom =
+      Atom(name: '_PersonalStore.isImageUpdating', context: context);
+
+  @override
+  bool get isImageUpdating {
+    _$isImageUpdatingAtom.reportRead();
+    return super.isImageUpdating;
+  }
+
+  @override
+  set isImageUpdating(bool value) {
+    _$isImageUpdatingAtom.reportWrite(value, super.isImageUpdating, () {
+      super.isImageUpdating = value;
+    });
+  }
+
   late final _$getUserInfoAsyncAction =
       AsyncAction('_PersonalStore.getUserInfo', context: context);
 
@@ -120,6 +136,14 @@ mixin _$PersonalStore on _PersonalStore, Store {
     return _$updateImageAsyncAction.run(() => super.updateImage(image));
   }
 
+  late final _$updateLevelAsyncAction =
+      AsyncAction('_PersonalStore.updateLevel', context: context);
+
+  @override
+  Future<bool> updateLevel(String level) {
+    return _$updateLevelAsyncAction.run(() => super.updateLevel(level));
+  }
+
   late final _$deleteAccountAsyncAction =
       AsyncAction('_PersonalStore.deleteAccount', context: context);
 
@@ -143,6 +167,7 @@ fetchFuture: ${fetchFuture},
 user: ${user},
 isLoading: ${isLoading},
 logout_success: ${logout_success},
+isImageUpdating: ${isImageUpdating},
 progressLoading: ${progressLoading},
 detailedProgressLoading: ${detailedProgressLoading}
     ''';

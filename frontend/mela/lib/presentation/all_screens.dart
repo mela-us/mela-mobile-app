@@ -74,6 +74,7 @@ class _AllScreensState extends State<AllScreens> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         floatingActionButton: Transform.translate(
           offset: const Offset(0, 15),
           child: SizedBox(
