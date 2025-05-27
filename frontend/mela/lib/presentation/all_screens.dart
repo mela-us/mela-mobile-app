@@ -6,10 +6,12 @@ import 'package:mela/presentation/home_screen/store/level_store/level_store.dart
 import 'package:mela/presentation/stats/stats.dart';
 import 'package:mela/presentation/personal/personal.dart';
 import 'package:mela/presentation/tutor/exam_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vibration/vibration.dart';
 
 import '../constants/assets.dart';
 import '../core/widgets/custom_navigation_bar.dart';
+import '../utils/notifications/notification_service.dart';
 import 'chat/chat_screen.dart';
 
 class AllScreens extends StatefulWidget {
@@ -39,6 +41,7 @@ class _AllScreensState extends State<AllScreens> {
   void initState() {
     super.initState();
     _pageController = PageController();
+    _getNotificationPref();
   }
 
   void onTabTapped(int index) {
@@ -54,6 +57,18 @@ class _AllScreensState extends State<AllScreens> {
       }
     });
     Vibration.vibrate(duration: 60);
+  }
+
+  Future<void> _getNotificationPref() async {
+    await NotificationService().cancelAllNotifications();
+
+    final prefs = await SharedPreferences.getInstance();
+    final isEnabled = prefs.getBool('streak_notifications_enabled') ?? true;
+
+    if (isEnabled) {
+      NotificationService().scheduleNotification(hour: 6, minute: 0, notifyFromTomorrow: false);
+      NotificationService().scheduleNotification(hour: 19, minute: 30, notifyFromTomorrow: false);
+    }
   }
 
   @override

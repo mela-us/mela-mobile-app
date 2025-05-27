@@ -56,6 +56,8 @@
 		<true/>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false/>
+		<key>NSUserNotificationUsageDescription</key>
+        <string>Ứng dụng cần quyền gửi thông báo để nhắc bạn học bài.</string>
 		<!--Google Sign In-->
 		<key>GIDClientID</key>
 		<string>956797993013-m0knscu6c9j13l6vv7e42u9phrvrd6ho.apps.googleusercontent.com</string>

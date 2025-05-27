@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mela/presentation/personal/level_selector.dart';
+import 'package:mela/presentation/personal/notification_setting/notification_setting.dart';
 import 'package:mela/presentation/personal/widgets/ui_items/decorative_ring.dart';
 import 'package:mela/presentation/personal/widgets/headings/personal_heading.dart';
 import 'package:mela/presentation/signup_login_screen/login_or_signup_screen.dart';
@@ -274,6 +275,34 @@ class _PersonalScreenState extends State<PersonalScreen> {
                 ),
               );
             }
+          }, false
+      ),
+      _buildListTile(
+          context,
+          Assets.personal_term,
+          'Thông báo',
+              () {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) => const NotificationSettingsScreen(),
+                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      const begin = Offset(1.0, 0.0); // Bắt đầu từ bên phải
+                      const end = Offset.zero; // Kết thúc ở vị trí gốc
+                      const curve = Curves.easeInOut;
+
+                      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                      var offsetAnimation = animation.drive(tween);
+
+                      return ClipRect(
+                        child: SlideTransition(
+                          position: offsetAnimation,
+                          child: child,
+                        ),
+                      );
+                    },
+                  ),
+                );
           }, false
       ),
       _buildListTile(

@@ -1,81 +1,144 @@
+import 'dart:math';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:intl/intl.dart';
-import 'package:timezone/timezone.dart' as tz;
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+class NotificationService {
+  final _plugin = FlutterLocalNotificationsPlugin();
 
-Future<void> initNotifications() async {
-  const android = AndroidInitializationSettings('@mipmap/ic_launcher');
-  const ios = DarwinInitializationSettings(
-    requestAlertPermission: true,
-    requestBadgePermission: true,
-    requestSoundPermission: true,
-  );
+  bool _isInitialized = false;
 
-  const initSettings = InitializationSettings(android: android, iOS: ios);
-  await flutterLocalNotificationsPlugin.initialize(initSettings);
+  bool get isInitialized => _isInitialized;
 
-  tz.initializeTimeZones();
-  tz.setLocalLocation(tz.getLocation('Asia/Ho_Chi_Minh'));
-}
+  // INITIALIZE
+  Future<void> initNotification() async {
+    if (_isInitialized) return; // prevent re-initialization
 
-Future<void> scheduleDailyNotifications() async {
-  await flutterLocalNotificationsPlugin.cancelAll();
+    print("Init Notification");
 
-  //await _scheduleAtHourAndMinute(0, 6, 0);  // 6:00 sáng
-  //await _scheduleAtHourAndMinute(1, 19, 0); // 19:00 tối
+    // init timezone handling
+    tz.initializeTimeZones();
+    String currentTimeZone = await FlutterTimezone.getLocalTimezone();
+    if (currentTimeZone == "Asia/Saigon") {
+      currentTimeZone = "Asia/Ho_Chi_Minh";
+    }
+    tz.setLocalLocation(tz.getLocation(currentTimeZone));
 
-  //test
-  await _scheduleAtHourAndMinute(2, 21, 20);
-}
+    // prepare android init settings
+    const initSettingsAndroid =
+    AndroidInitializationSettings('@mipmap/ic_launcher');
 
-Future<void> _scheduleAtHourAndMinute(int id, int hour, int minute) async {
-  final prefs = await SharedPreferences.getInstance();
-  final notificationsEnabled = prefs.getBool('notifications_enabled') ?? true;
-  final hasStreak = prefs.getBool(_todayKey()) ?? false;
+    // prepare ios init settings
+    const initSettingsIOS = DarwinInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+    );
 
-  if (notificationsEnabled && !hasStreak) {
-    final time = _nextInstanceOfHourAndMinute(hour, minute);
-    print("Time set at $hour : $minute ");
-    await flutterLocalNotificationsPlugin.zonedSchedule(
+    // init settings
+    const initSettings = InitializationSettings(
+      android: initSettingsAndroid,
+      iOS: initSettingsIOS,
+    );
+
+    //initialize the plugin
+    await _plugin.initialize(initSettings);
+  }
+
+  // NOTIFICATIONS DETAIL SETUP
+  NotificationDetails notificationDetails() {
+    return const NotificationDetails(
+      android: AndroidNotificationDetails(
+        'daily_channel_id',
+        'Thông báo hằng ngày',
+        channelDescription: 'Thông báo nhắc nhở giữ chuỗi',
+        importance: Importance.max,
+        priority: Priority.high,
+      ), // AndroidNotificationDetails
+      iOS: DarwinNotificationDetails(),
+    ); // NotificationDetails
+  }
+
+  // SHOW NOTIFICATION
+  Future<void> showNotification({
+    int id = 0,
+    String? title,
+    String? body,
+  }) async {
+    return _plugin.show(
       id,
-      '📚 Nhắc nhở học tập',
-      'Đừng quên vào app để giữ streak nhé!',
-      time,
-      const NotificationDetails(
-        android: AndroidNotificationDetails(
-          'daily_channel',
-          'Daily Reminders',
-          channelDescription: 'Nhắc nhở học tập hàng ngày',
-          importance: Importance.high,
-          priority: Priority.high,
-        ),
-        iOS: DarwinNotificationDetails(),
-      ),
-      matchDateTimeComponents: DateTimeComponents.time,
-      androidScheduleMode: AndroidScheduleMode.inexact,
+      title,
+      body,
+      notificationDetails(),
     );
   }
-}
 
-tz.TZDateTime _nextInstanceOfHourAndMinute(int hour, int minute) {
-  final now = tz.TZDateTime.now(tz.local);
-  var scheduled = tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minute);
-  if (scheduled.isBefore(now)) {
-    scheduled = scheduled.add(const Duration(days: 1));
+  Future<void> scheduleNotification({
+    int id = 1,
+    bool notifyFromTomorrow = true, //if not notify from now
+    required int hour,
+    required int minute,
+  }) async {
+    // Get the current date/time in device's local timezone
+    final now = tz.TZDateTime.now(tz.local);
+
+    // Create a date/time for today at the specified hour/min
+    var scheduledDate = tz.TZDateTime(
+      tz.local,
+      now.year,
+      now.month,
+      notifyFromTomorrow ? now.day + 1 : now.day,
+      hour,
+      minute,
+    );
+
+    // Danh sách tiêu đề và nội dung
+    final titles = [
+      "Mela đây!",
+      "+1 máy giữ chuỗi Mela",
+      "Bạn của Mela ơi!",
+      "Lời nhắc từ Mela",
+    ];
+
+    final bodies = [
+      "Học cùng MELA thôi, do dự chuỗi không còn mất!",
+      "Hôm nay bạn học chưa? MELA đang đợi đấy!",
+      "Đừng quên nhiệm vụ học tập hôm nay nhé!",
+      "Một chút học mỗi ngày giúp giữ chuỗi không gãy!",
+    ];
+
+    final random = Random();
+    final randomTitle = titles[random.nextInt(titles.length)];
+    final randomBody = bodies[random.nextInt(bodies.length)];
+
+    print("Scheduling notification at $scheduledDate");
+
+    // Schedule the notification
+    await _plugin.zonedSchedule(
+      id,
+      randomTitle,
+      randomBody,
+      scheduledDate,
+      notificationDetails(),
+
+      // iOS specific: Use exact time specified (vs relative time)
+
+      // Android specific: Allow notification while device is in low-power mode
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+
+      // Make notification repeat DAILY at same time
+      matchDateTimeComponents: DateTimeComponents.time,
+    );
   }
-  return scheduled;
-}
 
-String _todayKey() {
-  final today = DateFormat('yyyyMMdd').format(DateTime.now());
-  return 'streak_$today';
-}
+  Future<void> cancelAllNotifications() async {
+    await _plugin.cancelAll();
+  }
 
-Future<void> markStreakIncreasedToday() async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setBool(_todayKey(), true);
-  await flutterLocalNotificationsPlugin.cancelAll(); // Hủy các thông báo còn lại
+  Future<void> scheduleAll() async {
+    await scheduleNotification(hour: 6, minute: 00);
+    await scheduleNotification(hour: 19, minute: 30);
+  }
+
 }
