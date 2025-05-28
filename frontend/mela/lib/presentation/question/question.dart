@@ -506,7 +506,47 @@ class _QuestionScreenState extends State<QuestionScreen> {
                   ),
 
                   const SizedBox(height: 12),
-
+                  // Preview ảnh
+                  if (_selectedImages.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: SizedBox(
+                        height: 80,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: _selectedImages
+                              .map((img) => Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 4),
+                                    child: Stack(children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: Image.file(img,
+                                            width: 70,
+                                            height: 70,
+                                            fit: BoxFit.cover),
+                                      ),
+                                      Positioned(
+                                        right: -10,
+                                        top: -10,
+                                        child: IconButton(
+                                          padding: EdgeInsets.zero,
+                                          constraints: const BoxConstraints(),
+                                          icon: const Icon(Icons.close,
+                                              color: Colors.black),
+                                          onPressed: () {
+                                            setState(() {
+                                              _selectedImages.remove(img);
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ]),
+                                  ))
+                              .toList(),
+                        ),
+                      ),
+                    ),
                   // Nút chọn/chụp ảnh
                   Row(
                     children: [
@@ -521,28 +561,6 @@ class _QuestionScreenState extends State<QuestionScreen> {
                       ),
                     ],
                   ),
-
-                  // Preview ảnh
-                  if (_selectedImages.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: SizedBox(
-                        height: 80,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: _selectedImages
-                              .map((img) => Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 4),
-                                    child: Image.file(img,
-                                        width: 70,
-                                        height: 70,
-                                        fit: BoxFit.cover),
-                                  ))
-                              .toList(),
-                        ),
-                      ),
-                    ),
                 ],
               ),
             ),
