@@ -40,11 +40,12 @@ class _ListProposedNewLectureScreenState
             "Có lỗi xảy ra. Thử lại sau!",
             style: Theme.of(context)
                 .textTheme
-                .bodySmall!
+                .titleMedium!
                 .copyWith(color: Colors.red),
           ),
         );
       }
+      
       List<List<Section>> value =
           _store.suggestionList!.suggestions.map((suggestion) {
         return suggestion.sectionList;

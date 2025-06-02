@@ -7,10 +7,12 @@ import 'package:mela/constants/enum.dart';
 import 'package:mela/core/widgets/showcase_custom.dart';
 import 'package:mela/data/sharedpref/shared_preference_helper.dart';
 import 'package:mela/domain/entity/divided_lecture/divided_lecture.dart';
+import 'package:mela/domain/entity/lecture/lecture.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/domain/params/history/section_progress_params.dart';
 import 'package:mela/domain/params/revise/update_review_param.dart';
 import 'package:mela/domain/usecase/history/update_section_progress_usecase.dart';
+import 'package:mela/presentation/divided_lectures_and_exercises_screen/divided_lectures_and_exercises_screen.dart';
 import 'package:mela/presentation/home_screen/store/revise_store/revise_store.dart';
 import 'package:mela/presentation/list_proposed_new_lecture/store/list_proposed_new_suggestion_store.dart';
 import 'package:mela/presentation/review/widgets/draggable_ai_button.dart';
@@ -24,6 +26,7 @@ import 'package:syncfusion_flutter_core/theme.dart';
 
 import '../../constants/assets.dart';
 import '../../di/service_locator.dart';
+import '../divided_lectures_and_exercises_screen/store/exercise_store.dart';
 
 class ContentInDividedLectureScreen extends StatefulWidget {
   final DividedLecture currentDividedLecture;
@@ -56,6 +59,7 @@ class _ContentInDividedLectureScreenState
       getIt<ListProposedNewSuggestionStore>();
 
   final ReviseStore _reviseStore = getIt.get<ReviseStore>();
+  final ExerciseStore _exerciseStore = getIt.get<ExerciseStore>();
 
   @override
   void initState() {
@@ -289,22 +293,42 @@ class _ContentInDividedLectureScreenState
                                     widget.currentDividedLecture.lectureId,
                                     widget.currentDividedLecture.ordinalNumber,
                                     true);
-
-                            Navigator.of(context).pop(true);
-                            return;
+                          } else {
+                            //call to update
+                            final sectionToUpdate =
+                                widget.currentDividedLecture;
+                            final params = SectionProgressParams(
+                                lectureId: sectionToUpdate.lectureId,
+                                ordinalNumber: sectionToUpdate.ordinalNumber,
+                                completedAt: DateTime.now());
+                            _updateUsecase.call(params: params);
                           }
 
-                          //call to update
-                          final sectionToUpdate = widget.currentDividedLecture;
-                          final params = SectionProgressParams(
-                              lectureId: sectionToUpdate.lectureId,
-                              ordinalNumber: sectionToUpdate.ordinalNumber,
-                              completedAt: DateTime.now());
-                          _updateUsecase.call(params: params);
                           final result = await showDialogGoToExercise();
                           if (result == null) return;
                           if (mounted) {
-                            Navigator.of(context).pop(result);
+                            if (result && widget.suggestionId != null) {
+                              _exerciseStore.setCurrentLecture(Lecture(
+                                lectureId: widget.currentDividedLecture
+                                    .lectureId, //only parameter is important
+                                levelId: widget.currentDividedLecture.levelId,
+                                topicId: widget.currentDividedLecture.topicId,
+                                lectureDescription: "",
+                                ordinalNumber:
+                                    widget.currentDividedLecture.ordinalNumber,
+                                lectureName: widget
+                                    .currentDividedLecture.dividedLectureName,
+                                totalExercises: 0,
+                                totalPassExercises: 0,
+                              ));
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      DividedLecturesAndExercisesScreen()));
+                            } else if (!result && widget.suggestionId != null) {
+                              Navigator.of(context).pop(true);//true to update suggestion
+                            } else {
+                              Navigator.of(context).pop(result);
+                            }
                           }
                         },
                         child: Center(

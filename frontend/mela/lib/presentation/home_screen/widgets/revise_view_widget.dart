@@ -161,8 +161,11 @@ class _ReviseViewWidgetState extends State<ReviseViewWidget> {
   Widget _buildRevisionView() {
     return _reviseStore.revisionItemList.isNotEmpty
         ? _buildRoadList()
-        : const Center(
-            child: Text("Không có bài ôn tập nào"),
-          );
+        : Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Không có bài ôn tập nào"),
+          ],
+        );
   } //comment
 }
