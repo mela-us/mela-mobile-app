@@ -81,6 +81,8 @@ class _SectionItemState extends State<SectionItem> {
                   isUpdateSuggestion is bool &&
                   isUpdateSuggestion) {
                 _store.getProposedNewLecture();
+              } else {
+                print('isUpdateSuggestion is null or not a bool');
               }
             } else {
               showDialog(

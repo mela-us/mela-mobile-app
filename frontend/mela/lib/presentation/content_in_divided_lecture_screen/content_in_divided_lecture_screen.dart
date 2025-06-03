@@ -60,6 +60,7 @@ class _ContentInDividedLectureScreenState
 
   final ReviseStore _reviseStore = getIt.get<ReviseStore>();
   final ExerciseStore _exerciseStore = getIt.get<ExerciseStore>();
+  bool isBackFromDividedLectureAndExercise = false;
 
   @override
   void initState() {
@@ -170,6 +171,11 @@ class _ContentInDividedLectureScreenState
             // print(Navigator.of(context).widget.pages);
 
             _reviseStore.setSelectedItem(null);
+
+            if (isBackFromDividedLectureAndExercise) {
+              Navigator.of(context).pop(true);
+              return;
+            }
 
             Navigator.of(context).pop(false);
           },
@@ -321,11 +327,14 @@ class _ContentInDividedLectureScreenState
                                 totalExercises: 0,
                                 totalPassExercises: 0,
                               ));
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) =>
-                                      DividedLecturesAndExercisesScreen()));
+                              isBackFromDividedLectureAndExercise = await Navigator
+                                      .of(context)
+                                  .push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          DividedLecturesAndExercisesScreen()));
                             } else if (!result && widget.suggestionId != null) {
-                              Navigator.of(context).pop(true);//true to update suggestion
+                              Navigator.of(context)
+                                  .pop(true); //true to update suggestion
                             } else {
                               Navigator.of(context).pop(result);
                             }
