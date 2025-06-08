@@ -85,40 +85,106 @@ class _SectionItemState extends State<SectionItem> {
                 print('isUpdateSuggestion is null or not a bool');
               }
             } else {
-              showDialog(
+             showModalBottomSheet(
                 context: context,
-                builder: (context) => AlertDialog(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  title: Text('Bài học đang khóa',
-                      style: Theme.of(context).textTheme.title.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                          )),
-                  content: Text('Hãy hoàn thành bài học trước đó để mở khóa.',
-                      style: Theme.of(context).textTheme.normal.copyWith(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          )),
-                  actions: [
-                    InkWell(
-                      onTap: () => Navigator.of(context).pop(),
+                backgroundColor: Colors.transparent,
+                isScrollControlled: true,
+                builder: (BuildContext context) {
+                  return Center(
+                    child: TapRegion(
+                      onTapOutside: (event) {
+                        Navigator.of(context).pop();
+                      },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.tertiary,
-                          borderRadius: BorderRadius.circular(10),
+                        width: MediaQuery.of(context).size.width * 0.85,
+                        constraints: BoxConstraints(
+                          maxHeight: MediaQuery.of(context).size.height * 0.4,
                         ),
-                        child: Text(
-                          'Đóng',
-                          style: Theme.of(context).textTheme.subTitle.copyWith(
-                                color: Theme.of(context).colorScheme.onTertiary,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Title
+                            Container(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.tertiary,
+                                borderRadius: const BorderRadius.vertical(
+                                    top: Radius.circular(16)),
                               ),
+                              width: double.infinity,
+                              child: Text(
+                                'Bài học đang khóa',
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                            ),
+                            // Description
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 24),
+                              child: Text(
+                                'Hãy hoàn thành bài học trước đó để mở khóa.',
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                            ),
+                            // Buttons
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .tertiary,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 12),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        'Đóng',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium!
+                                            .copyWith(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onTertiary),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                          ],
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  );
+                },
               );
             }
           },
