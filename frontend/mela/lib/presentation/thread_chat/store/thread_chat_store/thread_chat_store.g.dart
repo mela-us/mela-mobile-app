@@ -83,6 +83,22 @@ mixin _$ThreadChatStore on _ThreadChatStore, Store {
     });
   }
 
+  late final _$tokenChatAtom =
+      Atom(name: '_ThreadChatStore.tokenChat', context: context);
+
+  @override
+  int get tokenChat {
+    _$tokenChatAtom.reportRead();
+    return super.tokenChat;
+  }
+
+  @override
+  set tokenChat(int value) {
+    _$tokenChatAtom.reportWrite(value, super.tokenChat, () {
+      super.tokenChat = value;
+    });
+  }
+
   late final _$sendChatMessageAsyncAction =
       AsyncAction('_ThreadChatStore.sendChatMessage', context: context);
 
@@ -116,6 +132,14 @@ mixin _$ThreadChatStore on _ThreadChatStore, Store {
   @override
   Future<void> getConversation() {
     return _$getConversationAsyncAction.run(() => super.getConversation());
+  }
+
+  late final _$getTokenChatAsyncAction =
+      AsyncAction('_ThreadChatStore.getTokenChat', context: context);
+
+  @override
+  Future<void> getTokenChat() {
+    return _$getTokenChatAsyncAction.run(() => super.getTokenChat());
   }
 
   late final _$getOlderMessagesAsyncAction =
@@ -191,6 +215,7 @@ currentConversation: ${currentConversation},
 isLoading: ${isLoading},
 isLoadingGetConversation: ${isLoadingGetConversation},
 isLoadingGetOlderMessages: ${isLoadingGetOlderMessages},
+tokenChat: ${tokenChat},
 conversationName: ${conversationName}
     ''';
   }

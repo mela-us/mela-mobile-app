@@ -6,6 +6,7 @@ import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/domain/entity/message_chat/normal_message.dart';
 import 'package:mela/domain/usecase/chat/create_new_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/get_conversation_usecase.dart';
+import 'package:mela/domain/usecase/chat/get_token_chat_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_chat_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_get_solution_usecase.dart';
 import 'package:mobx/mobx.dart';
@@ -22,12 +23,14 @@ abstract class _ThreadChatStore with Store {
   SendMessageGetSolutionUsecase sendMessageGetSolutionUsecase;
   GetConversationUsecase getConversationUsecase;
   CreateNewConversationUsecase createNewConversationUsecase;
+  GetTokenChatUsecase getTokenChatUsecase;
   _ThreadChatStore(
       this.sendMessageChatUsecase,
       this.getConversationUsecase,
       this.createNewConversationUsecase,
       this.sendMessageReviewSubmissionUsecase,
-      this.sendMessageGetSolutionUsecase);
+      this.sendMessageGetSolutionUsecase,
+      this.getTokenChatUsecase);
 
   int limit = 5;
 
@@ -53,6 +56,9 @@ abstract class _ThreadChatStore with Store {
 
   @observable
   bool isLoadingGetOlderMessages = false;
+
+  @observable
+  int tokenChat = 0;
 
   @computed
   String get conversationName => getConversationName();
@@ -232,6 +238,17 @@ abstract class _ThreadChatStore with Store {
         nameConversation: currentConversation.nameConversation,
         levelConversation: currentConversation.levelConversation));
     setIsLoadingConversation(false);
+  }
+
+  @action
+  Future<void> getTokenChat() async {
+    try {
+      int token = await getTokenChatUsecase.call();
+      tokenChat = token;
+    } catch (e) {
+      print("Error when get token chat: $e");
+      tokenChat = 0;
+    }
   }
 
   @action

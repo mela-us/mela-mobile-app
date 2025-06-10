@@ -16,6 +16,22 @@ mixin _$ReviseStore on _ReviseStore, Store {
           Computed<bool>(() => super.loading, name: '_ReviseStore.loading'))
       .value;
 
+  late final _$selectedItemAtom =
+      Atom(name: '_ReviseStore.selectedItem', context: context);
+
+  @override
+  ReviseItem? get selectedItem {
+    _$selectedItemAtom.reportRead();
+    return super.selectedItem;
+  }
+
+  @override
+  set selectedItem(ReviseItem? value) {
+    _$selectedItemAtom.reportWrite(value, super.selectedItem, () {
+      super.selectedItem = value;
+    });
+  }
+
   late final _$userReviewsResponseAtom =
       Atom(name: '_ReviseStore.userReviewsResponse', context: context);
 
@@ -112,9 +128,24 @@ mixin _$ReviseStore on _ReviseStore, Store {
     return _$updateReviewAsyncAction.run(() => super.updateReview(params));
   }
 
+  late final _$_ReviseStoreActionController =
+      ActionController(name: '_ReviseStore', context: context);
+
+  @override
+  void setSelectedItem(ReviseItem? item) {
+    final _$actionInfo = _$_ReviseStoreActionController.startAction(
+        name: '_ReviseStore.setSelectedItem');
+    try {
+      return super.setSelectedItem(item);
+    } finally {
+      _$_ReviseStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
+selectedItem: ${selectedItem},
 userReviewsResponse: ${userReviewsResponse},
 revisionItemList: ${revisionItemList},
 errorString: ${errorString},

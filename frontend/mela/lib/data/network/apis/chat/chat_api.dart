@@ -142,4 +142,11 @@ class ChatApi {
     //       dataList.map((item) => HistoryItem.fromJson(item)).toList();
     //   return temp;
   }
+
+  Future<int> getTokenChat() async {
+    
+    final responseData = await _dioClient.get(EndpointsConst.getTokenChat);
+    
+    return responseData['token'] ?? 0;
+  }
 }

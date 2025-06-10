@@ -64,6 +64,8 @@ class EndpointsConst {
   static const String getChatHistory = "/api/chatbot/conversations";
   static const String getMessageInConversation =
       "/api/chatbot/conversations/:conversationId/messages";
+  static const String getTokenChat =
+      "/api/tokens";
 
   //streak
   static const String streak = "/api/streak";

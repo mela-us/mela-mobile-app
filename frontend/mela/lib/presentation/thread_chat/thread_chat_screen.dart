@@ -11,6 +11,7 @@ import 'package:mela/presentation/question/store/single_question/single_question
 import 'package:mela/presentation/thread_chat/store/chat_box_store/chat_box_store.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/thread_chat/widgets/chat_box.dart';
+import 'package:mela/presentation/thread_chat/widgets/chat_token_widget.dart';
 import 'package:mela/presentation/thread_chat/widgets/list_skeleton.dart';
 import 'package:mela/presentation/thread_chat/widgets/message_chat_title.dart';
 import 'package:mela/presentation/thread_chat/widgets/message_type_tile/animation_review_tile.dart';
@@ -175,6 +176,9 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
           },
         ),
         actions: [
+          Observer(builder: (context) {
+            return ChatTokenWidget(tokenChat: _threadChatStore.tokenChat);
+          }),
           Observer(builder: (context) {
             return IconButton(
               onPressed: _threadChatStore.isLoadingGetConversation ||

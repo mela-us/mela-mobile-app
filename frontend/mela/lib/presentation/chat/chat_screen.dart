@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/dimens.dart';
 import 'package:mela/constants/enum.dart';
@@ -10,6 +11,7 @@ import 'package:mela/presentation/chat/store/history_store.dart';
 import 'package:mela/presentation/chat/widgets/sidebar_widget.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/thread_chat/widgets/chat_box.dart';
+import 'package:mela/presentation/thread_chat/widgets/chat_token_widget.dart';
 import 'package:mela/utils/routes/routes.dart';
 import 'package:showcaseview/showcaseview.dart';
 
@@ -78,6 +80,12 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _threadChatStore.getTokenChat();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ShowCaseWidget(
         onComplete: (p0, p1) => print("===============>Complete $p0 $p1"),
@@ -95,6 +103,15 @@ class _ChatScreenState extends State<ChatScreen> {
                 backgroundColor: Theme.of(context).colorScheme.appBackground,
                 elevation: 0,
                 title: _buildTitle(context),
+                actions: [
+                  Observer(builder: (context) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: ChatTokenWidget(
+                          tokenChat: _threadChatStore.tokenChat),
+                    );
+                  })
+                ],
               ),
               backgroundColor: Theme.of(context).colorScheme.appBackground,
               body: SingleChildScrollView(

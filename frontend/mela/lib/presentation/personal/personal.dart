@@ -5,6 +5,7 @@ import 'package:mela/presentation/personal/widgets/ui_items/decorative_ring.dart
 import 'package:mela/presentation/personal/widgets/headings/personal_heading.dart';
 import 'package:mela/presentation/signup_login_screen/login_or_signup_screen.dart';
 import 'package:mela/presentation/stats/stats.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vibration/vibration.dart';
 import '../../constants/assets.dart';
 import '../../constants/app_theme.dart';
@@ -36,7 +37,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
   }
 
   Future<void> _loadData() async {
-    await  _store.getUserInfo();
+    await _store.getUserInfo();
     await _streakStore.getStreak();
   }
 
@@ -48,36 +49,36 @@ class _PersonalScreenState extends State<PersonalScreen> {
         scrolledUnderElevation: 0,
         title: Text(
           'Cá nhân',
-          style: Theme.of(context).textTheme.heading
+          style: Theme.of(context)
+              .textTheme
+              .heading
               .copyWith(color: Theme.of(context).colorScheme.textInBg1),
         ),
         automaticallyImplyLeading: false,
       ),
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          const Positioned(
-            top: 14,
-            right: -9,
-            child: DecorativeRing(size: 100, duration: 20, sigma: 1),
-          ),
-          const Positioned(
-            top: 100,
-            right: 220,
-            child: DecorativeRing(size: 300, clockwise: false),
-          ),
-          const Positioned(
-            top: 280,
-            right: -270,
-            child: DecorativeRing(),
-          ),
-          _buildBody(context),
-        ]
-      ),
+      body: Stack(alignment: Alignment.center, children: [
+        const Positioned(
+          top: 14,
+          right: -9,
+          child: DecorativeRing(size: 100, duration: 20, sigma: 1),
+        ),
+        const Positioned(
+          top: 100,
+          right: 220,
+          child: DecorativeRing(size: 300, clockwise: false),
+        ),
+        const Positioned(
+          top: 280,
+          right: -270,
+          child: DecorativeRing(),
+        ),
+        _buildBody(context),
+      ]),
     );
   }
 
-  Widget _buildListTile(BuildContext context, String asset, String title, VoidCallback onTap, bool disable) {
+  Widget _buildListTile(BuildContext context, String asset, String title,
+      VoidCallback onTap, bool disable) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5.0),
       decoration: BoxDecoration(
@@ -98,11 +99,15 @@ class _PersonalScreenState extends State<PersonalScreen> {
           trailing: const Icon(Icons.arrow_forward_ios, size: 18.0),
           title: Text(
             title,
-            style:
-            disable ? Theme.of(context).textTheme.subTitle
-                .copyWith(color: Colors.black26)
-                : Theme.of(context).textTheme.subTitle
-                .copyWith(color: Theme.of(context).colorScheme.textInBg1),
+            style: disable
+                ? Theme.of(context)
+                    .textTheme
+                    .subTitle
+                    .copyWith(color: Colors.black26)
+                : Theme.of(context)
+                    .textTheme
+                    .subTitle
+                    .copyWith(color: Theme.of(context).colorScheme.textInBg1),
           ),
           onTap: () {
             onTap();
@@ -154,7 +159,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
             _loginStore.logout();
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => LoginOrSignupScreen()),
-                  (Route<dynamic> route) => false,
+              (Route<dynamic> route) => false,
             );
           },
           onCancel: () {
@@ -184,13 +189,15 @@ class _PersonalScreenState extends State<PersonalScreen> {
     Navigator.push(
       context,
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => LevelSelectorScreen(),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            LevelSelectorScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset(1.0, 0.0); // Bắt đầu từ bên phải
           const end = Offset.zero; // Kết thúc ở vị trí gốc
           const curve = Curves.easeInOut;
 
-          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
           var offsetAnimation = animation.drive(tween);
 
           return ClipRect(
@@ -208,14 +215,15 @@ class _PersonalScreenState extends State<PersonalScreen> {
     Navigator.push(
       context,
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation)
-          => StatisticsScreen(),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            StatisticsScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset(1.0, 0.0); // Bắt đầu từ bên phải
           const end = Offset.zero; // Kết thúc ở vị trí gốc
           const curve = Curves.easeInOut;
 
-          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
           var offsetAnimation = animation.drive(tween);
 
           return ClipRect(
@@ -240,6 +248,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
       ),
     );
   }
+
   Widget _buildDetailedStatsTab(BuildContext context) {
     return const DetailedStatsAndComments();
   }
@@ -247,91 +256,86 @@ class _PersonalScreenState extends State<PersonalScreen> {
   //OPTION LIST (info, signout...)
   List<Widget> _buildOptions(BuildContext context) {
     return [
-      _buildListTile(
-          context,
-          Assets.personal_info,
-          'Thông tin cá nhân',
-              () {
-            if (!_store.progressLoading) {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) => const PersonalInfo(),
-                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                    const begin = Offset(1.0, 0.0); // Bắt đầu từ bên phải
-                    const end = Offset.zero; // Kết thúc ở vị trí gốc
-                    const curve = Curves.easeInOut;
+      _buildListTile(context, Assets.personal_info, 'Thông tin cá nhân', () {
+        if (!_store.progressLoading) {
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  const PersonalInfo(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                const begin = Offset(1.0, 0.0); // Bắt đầu từ bên phải
+                const end = Offset.zero; // Kết thúc ở vị trí gốc
+                const curve = Curves.easeInOut;
 
-                    var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                    var offsetAnimation = animation.drive(tween);
+                var tween = Tween(begin: begin, end: end)
+                    .chain(CurveTween(curve: curve));
+                var offsetAnimation = animation.drive(tween);
 
-                    return ClipRect(
-                      child: SlideTransition(
-                        position: offsetAnimation,
-                        child: child,
-                      ),
-                    );
-                  },
-                ),
-              );
-            }
-          }, false
-      ),
-      _buildListTile(
-          context,
-          Assets.personal_term,
-          'Thông báo',
-              () {
-                Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) => const NotificationSettingsScreen(),
-                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                      const begin = Offset(1.0, 0.0); // Bắt đầu từ bên phải
-                      const end = Offset.zero; // Kết thúc ở vị trí gốc
-                      const curve = Curves.easeInOut;
-
-                      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                      var offsetAnimation = animation.drive(tween);
-
-                      return ClipRect(
-                        child: SlideTransition(
-                          position: offsetAnimation,
-                          child: child,
-                        ),
-                      );
-                    },
+                return ClipRect(
+                  child: SlideTransition(
+                    position: offsetAnimation,
+                    child: child,
                   ),
                 );
-          }, false
-      ),
-      _buildListTile(
+              },
+            ),
+          );
+        }
+      }, false),
+      _buildListTile(context, Assets.personal_term, 'Thông báo', () {
+        Navigator.push(
           context,
-          Assets.personal_term,
-          'Các điều khoản',
-              () {
-            // Navigate to terms and conditions page
-          }, true
-      ),
-      _buildListTile(
-          context,
-          Assets.personal_support,
-          'Trung tâm hỗ trợ',
-              () {
-            // Navigate to support center page
-          }, true
-      ),
-      _buildListTile(
-          context,
-          Assets.personal_signout,
-          'Đăng xuất',
-              () {
-            if (!_store.progressLoading) {
-              _showLogoutConfirmationDialog(context);
-            }
-          }, false
-      ),
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const NotificationSettingsScreen(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              const begin = Offset(1.0, 0.0); // Bắt đầu từ bên phải
+              const end = Offset.zero; // Kết thúc ở vị trí gốc
+              const curve = Curves.easeInOut;
+
+              var tween =
+                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+              var offsetAnimation = animation.drive(tween);
+
+              return ClipRect(
+                child: SlideTransition(
+                  position: offsetAnimation,
+                  child: child,
+                ),
+              );
+            },
+          ),
+        );
+      }, false),
+      _buildListTile(context, Assets.personal_term, 'Các điều khoản', () {
+        // Navigate to terms and conditions page
+      }, true),
+      _buildListTile(context, Assets.personal_support, 'Trung tâm hỗ trợ',
+          () async {
+        final Uri url = Uri.parse('https://datn-math-learning-with-ai.atlassian.net/servicedesk/customer/portal/1');
+        if (await canLaunchUrl(url)) {
+          await launchUrl(
+            url,
+            mode: LaunchMode.externalApplication,
+          );
+        } else {
+          // Xử lý không mở được
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Không thể mở liên kết.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }, false),
+      _buildListTile(context, Assets.personal_signout, 'Đăng xuất', () {
+        if (!_store.progressLoading) {
+          _showLogoutConfirmationDialog(context);
+        }
+      }, false),
     ];
   }
 }
-

@@ -4,6 +4,7 @@ import 'package:mela/core/stores/form/form_store.dart';
 import 'package:mela/domain/usecase/chat/create_new_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/get_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/get_history_chat_usecase.dart';
+import 'package:mela/domain/usecase/chat/get_token_chat_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_chat_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_get_solution_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_review_submission_usecase.dart';
@@ -212,6 +213,7 @@ class StoreModule {
       getIt<CreateNewConversationUsecase>(),
       getIt<SendMessageReviewSubmissionUsecase>(),
       getIt<SendMessageGetSolutionUsecase>(),
+      getIt<GetTokenChatUsecase>(),
     ));
 
     //Hint Store
