@@ -8,6 +8,7 @@ import 'package:mela/domain/usecase/chat/get_token_chat_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_chat_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_get_solution_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_review_submission_usecase.dart';
+import 'package:mela/domain/usecase/chat_with_exercise/send_message_chat_exercise_usecase.dart';
 import 'package:mela/domain/usecase/history/update_excercise_progress_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
 import 'package:mela/domain/usecase/suggestion/get_proposed_new_suggestion_usecase.dart';
@@ -236,7 +237,8 @@ class StoreModule {
 
     getIt.registerSingleton<ThreadChatLearningStore>(
       ThreadChatLearningStore(
-        getIt<CreateNewConversationUsecase>(),
+        getIt<GetTokenChatUsecase>(),
+        getIt<SendMessageChatExerciseUsecase>(),
       ),
     );
     getIt.registerSingleton<ChatBoxLearningStore>(ChatBoxLearningStore());

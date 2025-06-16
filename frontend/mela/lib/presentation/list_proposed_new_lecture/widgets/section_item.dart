@@ -5,7 +5,6 @@ import 'package:mela/domain/entity/suggestion/suggestion.dart';
 import 'package:mela/presentation/content_in_divided_lecture_screen/content_in_divided_lecture_screen.dart';
 import 'package:mela/presentation/list_proposed_new_lecture/store/list_proposed_new_suggestion_store.dart';
 import 'package:timeline_tile/timeline_tile.dart';
-import 'package:vibration/vibration.dart';
 
 class SectionItem extends StatefulWidget {
   final Section section;

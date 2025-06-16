@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
-import 'package:mela/constants/assets.dart';
-import 'package:mela/core/services/google_sign_in_service.dart';
 import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/di/service_locator.dart';
-import 'package:mela/presentation/signup_login_screen/widgets/third_party_button.dart';
-import 'package:mela/presentation/signup_login_screen/widgets/third_party_login_widget.dart';
-import 'package:mela/utils/check_inputs/check_input.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../utils/routes/routes.dart';

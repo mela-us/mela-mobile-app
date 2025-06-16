@@ -58,6 +58,6 @@ class UpdateUserUsecase extends UseCase<String, UserUpdateParam>{
       }
       rethrow;
     }
-    return "Error Occurred without DioException";
+    // return "Error Occurred without DioException";
   }
 }

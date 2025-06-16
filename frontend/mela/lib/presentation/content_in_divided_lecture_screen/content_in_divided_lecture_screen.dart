@@ -437,16 +437,16 @@ class _ContentInDividedLectureScreenState
   Future<void> _handleGoToChatFromSelection(
     String selectedText,
   ) async {
-    _threadChatLearningStore.setConversation(Conversation(
-        conversationId: "",
-        messages: [],
-        hasMore: false,
-        levelConversation: LevelConversation.UNIDENTIFIED,
-        dateConversation: DateTime.now(),
-        nameConversation: ""));
-    //Push chat screen with transition
-    Navigator.of(context).pushNamed(Routes.threadChatLearningScreen);
-    _threadChatLearningStore.sendChatMessage(selectedText, []);
+    // _threadChatLearningStore.setConversation(Conversation(
+    //     conversationId: "",
+    //     messages: [],
+    //     hasMore: false,
+    //     levelConversation: LevelConversation.UNIDENTIFIED,
+    //     dateConversation: DateTime.now(),
+    //     nameConversation: ""));
+    // //Push chat screen with transition
+    // Navigator.of(context).pushNamed(Routes.threadChatLearningScreen);
+    // _threadChatLearningStore.sendChatMessage(selectedText, []);
   }
 
   Future<bool?> showDialogGoToExercise() async {

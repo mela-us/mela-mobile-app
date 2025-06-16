@@ -108,6 +108,7 @@ abstract class _ThreadChatStore with Store {
       } else {
         await sendMessageNormal(message, images);
       }
+      await getTokenChat();
     } catch (e) {
       print("Error: $e");
       currentConversation.messages.last = NormalMessage(
@@ -167,6 +168,7 @@ abstract class _ThreadChatStore with Store {
       currentConversation.nameConversation = responseMessage.nameConversation;
       currentConversation.levelConversation = responseMessage.levelConversation;
       currentConversation = currentConversation.copyWith();
+      await getTokenChat();
     } catch (e) {
       print("Error: $e");
       currentConversation.messages.last = NormalMessage(
@@ -196,6 +198,7 @@ abstract class _ThreadChatStore with Store {
       currentConversation.nameConversation = responseMessage.nameConversation;
       currentConversation.levelConversation = responseMessage.levelConversation;
       currentConversation = currentConversation.copyWith();
+      await getTokenChat();
     } catch (e) {
       print("Error: $e");
       currentConversation.messages.last = NormalMessage(

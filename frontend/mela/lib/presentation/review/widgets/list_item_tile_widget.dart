@@ -51,7 +51,7 @@ class ListItemTile extends StatelessWidget {
         return Theme.of(context).colorScheme.buttonIncorrect;
       case AnswerStatus.noAnswer:
         return Theme.of(context).colorScheme.inputMutedText;
-      default: return Theme.of(context).colorScheme.inputMutedText;
+      // default: return Theme.of(context).colorScheme.inputMutedText;
     }
   }
 }

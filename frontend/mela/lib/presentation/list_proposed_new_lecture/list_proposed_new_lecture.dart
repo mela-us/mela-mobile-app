@@ -4,7 +4,6 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/suggestion/suggestion.dart';
 import 'package:mela/presentation/list_proposed_new_lecture/store/list_proposed_new_suggestion_store.dart';
-import 'package:mela/presentation/topic_lecture_in_level_screen/widgets/lecture_item.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 
 import 'widgets/section_item.dart';

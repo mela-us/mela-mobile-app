@@ -115,8 +115,9 @@ import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/assets.dart';
 import 'package:mela/di/service_locator.dart';
-import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
-import 'package:mela/presentation/thread_chat/thread_chat_screen.dart';
+import 'package:mela/domain/entity/question/question.dart';
+import 'package:mela/presentation/question/store/question_store.dart';
+import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
 import 'package:mela/presentation/thread_chat_learning/store/thread_chat_learning_store/thread_chat_learning_store.dart';
 import 'package:mela/presentation/thread_chat_learning/thread_chat_learning_screen.dart';
 import 'package:mela/utils/routes/routes.dart';
@@ -129,9 +130,18 @@ class DraggableAIButton extends StatefulWidget {
 class _DraggableAIButtonState extends State<DraggableAIButton> {
   final ThreadChatLearningStore _threadChatLearningStore =
       getIt.get<ThreadChatLearningStore>();
+  final QuestionStore _questionStore = getIt<QuestionStore>();
+  final SingleQuestionStore _singleQuestionStore = getIt<SingleQuestionStore>();
   double _topPosition = 60;
   final double _buttonSize = 80.0;
   final double _rightPosition = -2;
+  late List<Question> questions;
+  @override
+  void initState() {
+    super.initState();
+    questions = _questionStore.questionList!.questions!;
+    _threadChatLearningStore.getTokenChat();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -156,7 +166,14 @@ class _DraggableAIButtonState extends State<DraggableAIButton> {
               });
             },
             onTap: () {
-              _threadChatLearningStore.clearConversation();
+              //Nếu lần đầu mở qua hoặc là cùng câu hỏi cũ thì xóa conversation và set lại question mới
+              if (_threadChatLearningStore.currentQuestion.questionId == null ||
+                  _threadChatLearningStore.currentQuestion.questionId! !=
+                      questions[_singleQuestionStore.currentIndex].questionId) {
+                _threadChatLearningStore.clearConversation();
+                _threadChatLearningStore
+                    .setQuestion(questions[_singleQuestionStore.currentIndex]);
+              }
 
               Navigator.of(context).push(
                 PageRouteBuilder(
@@ -238,7 +255,7 @@ class RPSCustomPainter extends CustomPainter {
     // Layer 1
 
     Paint paint_stroke_0 = Paint()
-      ..color =  Theme.of(context).colorScheme.buttonYesBgOrText
+      ..color = Theme.of(context).colorScheme.buttonYesBgOrText
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.01
       ..strokeCap = StrokeCap.butt

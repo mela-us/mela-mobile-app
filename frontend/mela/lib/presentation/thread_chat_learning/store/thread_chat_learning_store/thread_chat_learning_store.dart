@@ -4,19 +4,26 @@ import 'package:mela/constants/enum.dart';
 import 'package:mela/domain/entity/image_origin/image_origin.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/domain/entity/message_chat/normal_message.dart';
+import 'package:mela/domain/entity/question/question.dart';
 import 'package:mela/domain/usecase/chat/create_new_conversation_usecase.dart';
+import 'package:mela/domain/usecase/chat/get_token_chat_usecase.dart';
+import 'package:mela/domain/usecase/chat_with_exercise/send_message_chat_exercise_usecase.dart';
 import 'package:mobx/mobx.dart';
-
 
 part 'thread_chat_learning_store.g.dart';
 
-class ThreadChatLearningStore = _ThreadChatLearningStore with _$ThreadChatLearningStore;
+class ThreadChatLearningStore = _ThreadChatLearningStore
+    with _$ThreadChatLearningStore;
 
 abstract class _ThreadChatLearningStore with Store {
-  CreateNewConversationUsecase createNewConversationUsecase;
+  SendMessageChatExerciseUsecase sendMessageChatExerciseUsecase;
+  GetTokenChatUsecase getTokenChatUsecase;
   _ThreadChatLearningStore(
-      this.createNewConversationUsecase,
-      );
+    this.getTokenChatUsecase,
+    this.sendMessageChatExerciseUsecase,
+  );
+  @observable
+  int tokenChat = 0;
 
   int limit = 5;
 
@@ -28,6 +35,17 @@ abstract class _ThreadChatLearningStore with Store {
       levelConversation: LevelConversation.UNIDENTIFIED,
       dateConversation: DateTime.now(),
       nameConversation: "Đoạn Chat Mới");
+  @observable
+  Question currentQuestion = Question(
+      questionId: null,
+      ordinalNumber: 1,
+      content: "",
+      questionType: "",
+      options: [],
+      blankAnswer: "",
+      solution: "",
+      guide: null,
+      term: null);
 
   @observable
   bool isLoading = false;
@@ -53,13 +71,18 @@ abstract class _ThreadChatLearningStore with Store {
   }
 
   @action
-  void setIsLoadingGetOlderMessages(bool value) {
-    isLoadingGetOlderMessages = value;
-  }
-
-  @action
-  void setConversation(Conversation conversation) {
-    this.currentConversation = conversation.copyWith();
+  void setQuestion(Question question) {
+    this.currentQuestion = Question(
+      questionId: question.questionId,
+      ordinalNumber: question.ordinalNumber,
+      content: question.content,
+      questionType: question.questionType,
+      options: question.options,
+      blankAnswer: question.blankAnswer,
+      solution: question.solution,
+      guide: question.guide,
+      term: question.term,
+    );
   }
 
   String getConversationName() {
@@ -69,7 +92,8 @@ abstract class _ThreadChatLearningStore with Store {
   }
 
   @action
-  Future<void> sendChatMessage(String message, List<File> images) async {
+  Future<void> sendChatMessage(String message, List<File> images,
+      {String typeMessage = "CUSTOM"}) async {
     try {
       List<ImageOrigin> imageSources = [];
       for (var item in images) {
@@ -81,11 +105,17 @@ abstract class _ThreadChatLearningStore with Store {
       //Copy with to trigger thread chat screen to update
       currentConversation = currentConversation.copyWith();
       setIsLoading(true);
-      if (currentConversation.conversationId.isEmpty) {
-        await createNewConversation(message, images);
-      } else {
-        // await sendMessageNormal(message, images);
-      }
+      Conversation responseMessage = await sendMessageChatExerciseUsecase.call(
+          params: ChatExerciseRequestParams(
+              message: message,
+              images: images,
+              typeMessage: typeMessage,
+              questionId: currentQuestion.questionId ?? "QuestionID null"));
+      currentConversation.messages.last = responseMessage.messages.last;
+      currentConversation.nameConversation = responseMessage.nameConversation;
+      currentConversation.levelConversation = responseMessage.levelConversation;
+      currentConversation = currentConversation.copyWith();
+      await getTokenChat();
     } catch (e) {
       print("Error: $e");
       currentConversation.messages.last = NormalMessage(
@@ -95,31 +125,6 @@ abstract class _ThreadChatLearningStore with Store {
       setIsLoading(false);
     }
   }
-
-  Future<void> createNewConversation(String message, List<File> images) async {
-    Conversation newConversation = await createNewConversationUsecase.call(
-        params: CreateNewConversationParams(
-            text: message, imageFile: images.isNotEmpty ? images[0] : null));
-    currentConversation.messages.last = newConversation.messages.last;
-    currentConversation.nameConversation = newConversation.nameConversation;
-    currentConversation.conversationId = newConversation.conversationId;
-    currentConversation.levelConversation = newConversation.levelConversation;
-    currentConversation = currentConversation.copyWith();
-  }
-
-  // Future<void> sendMessageNormal(String message, List<File> images) async {
-  //   Conversation responseMessage = await sendMessageChatUsecase.call(
-  //       params: ChatRequestParams(
-  //           message: message,
-  //           images: images,
-  //           conversationId: currentConversation.conversationId));
-  //   currentConversation.messages.last = responseMessage.messages.last;
-  //   currentConversation.nameConversation = responseMessage.nameConversation;
-  //   currentConversation.levelConversation = responseMessage.levelConversation;
-  //   currentConversation = currentConversation.copyWith();
-  // }
-
-  
 
   @action
   void clearConversation() {
@@ -134,44 +139,14 @@ abstract class _ThreadChatLearningStore with Store {
   }
 
   @action
-  Future<void> getConversation() async {
-    // //for new chat
-    // if (currentConversation.conversationId.isEmpty) {
-    //   return;
-    // }
-
-    // setIsLoadingConversation(true);
-    // Conversation conversation = await getConversationUsecase.call(
-    //     params: GetConversationRequestParams(
-    //         conversationId: currentConversation.conversationId, limit: limit));
-    // // print("Get conversation: ${conversation.nameConversation}");
-    // setConversation(Conversation(
-    //     conversationId: currentConversation.conversationId,
-    //     messages: conversation.messages,
-    //     hasMore: conversation.hasMore,
-    //     dateConversation: currentConversation.dateConversation,
-    //     nameConversation: currentConversation.nameConversation,
-    //     levelConversation: currentConversation.levelConversation));
-    // setIsLoadingConversation(false);
-  }
-
-  @action
-  Future<void> getOlderMessages() async {
-    // setIsLoadingGetOlderMessages(true);
-    // Conversation conversation = await getConversationUsecase.call(
-    //     params: GetConversationRequestParams(
-    //         conversationId: currentConversation.conversationId,
-    //         limit: limit,
-    //         beforeMessageId: currentConversation.messages.first.messageId));
-    // // print("Get conversation: ${conversation.nameConversation}");
-    // setConversation(Conversation(
-    //     conversationId: currentConversation.conversationId,
-    //     messages: [...conversation.messages, ...currentConversation.messages],
-    //     hasMore: conversation.hasMore,
-    //     dateConversation: currentConversation.dateConversation,
-    //     nameConversation: currentConversation.nameConversation,
-    //     levelConversation: currentConversation.levelConversation));
-    // setIsLoadingGetOlderMessages(false);
+  Future<void> getTokenChat() async {
+    try {
+      int token = await getTokenChatUsecase.call();
+      tokenChat = token;
+    } catch (e) {
+      print("Error when get token chat: $e");
+      tokenChat = 0;
+    }
   }
 
   void resetLimit() {

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:mela/domain/repository/chat/chat_repository.dart';
+import 'package:mela/domain/repository/chat_exercise/chat_exercise_repository.dart';
 import 'package:mela/domain/repository/lecture/lecture_repository.dart';
 import 'package:mela/domain/repository/level/level_repository.dart';
 import 'package:mela/domain/repository/presigned_image/presigned_image_repository.dart';
@@ -15,6 +16,7 @@ import 'package:mela/domain/usecase/chat/get_token_chat_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_chat_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_get_solution_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_review_submission_usecase.dart';
+import 'package:mela/domain/usecase/chat_with_exercise/send_message_chat_exercise_usecase.dart';
 
 import 'package:mela/domain/usecase/exercise/get_exercises_usecase.dart';
 import 'package:mela/domain/usecase/history/update_excercise_progress_usecase.dart';
@@ -300,6 +302,13 @@ class UseCaseModule {
     getIt.registerSingleton<UpdateRevisionUsecase>(
       UpdateRevisionUsecase(getIt<ReviseRepository>(),
           getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()),
+    );
+    getIt.registerSingleton<SendMessageChatExerciseUsecase>(
+      SendMessageChatExerciseUsecase(
+          getIt<ChatExerciseRepository>(),
+          getIt<RefreshAccessTokenUsecase>(),
+          getIt<LogoutUseCase>(),
+          getIt<GetPresignImageUsecase>()),
     );
   }
 }

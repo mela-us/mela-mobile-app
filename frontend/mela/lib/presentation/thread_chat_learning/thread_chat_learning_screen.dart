@@ -4,6 +4,8 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/assets.dart';
 import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/di/service_locator.dart';
+import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
+import 'package:mela/presentation/thread_chat/widgets/chat_token_widget.dart';
 import 'package:mela/presentation/thread_chat/widgets/list_skeleton.dart';
 import 'package:mela/presentation/thread_chat/widgets/message_chat_title.dart';
 import 'package:mobx/mobx.dart';
@@ -16,7 +18,8 @@ class ThreadChatLearningScreen extends StatefulWidget {
   ThreadChatLearningScreen({super.key});
 
   @override
-  State<ThreadChatLearningScreen> createState() => _ThreadChatLearningScreenState();
+  State<ThreadChatLearningScreen> createState() =>
+      _ThreadChatLearningScreenState();
 }
 
 class _ThreadChatLearningScreenState extends State<ThreadChatLearningScreen> {
@@ -30,6 +33,7 @@ class _ThreadChatLearningScreenState extends State<ThreadChatLearningScreen> {
   final ScrollController _scrollController = ScrollController();
   late ReactionDisposer disposerSendMessage;
   // late ReactionDisposer disposerGetConversation;
+    final SingleQuestionStore _singleQuestionStore = getIt<SingleQuestionStore>();
 
   @override
   void initState() {
@@ -78,8 +82,6 @@ class _ThreadChatLearningScreenState extends State<ThreadChatLearningScreen> {
         _threadChatLearningStore.currentConversation.hasMore) {
       double _currentPosition = _scrollController.position.maxScrollExtent;
       // print("=======================>1On Scroll At the top $_currentPosition");
-
-      await _threadChatLearningStore.getOlderMessages();
       if (_scrollController.position.pixels <= 0) {
         //Chờ loading xong thì mới scroll
         WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -115,13 +117,14 @@ class _ThreadChatLearningScreenState extends State<ThreadChatLearningScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            _threadChatLearningStore.clearConversation();
-
             _chatBoxLearningStore.setShowCameraIcon(true);
             Navigator.of(context).pop();
           },
         ),
         actions: [
+           Observer(builder: (context) {
+            return ChatTokenWidget(tokenChat: _threadChatLearningStore.tokenChat);
+          }),
           Observer(builder: (context) {
             return IconButton(
               onPressed: _threadChatLearningStore.isLoadingGetConversation ||
@@ -137,82 +140,50 @@ class _ThreadChatLearningScreenState extends State<ThreadChatLearningScreen> {
             );
           })
         ],
-        title: Observer(builder: (context) {
-          return Text(
-            _threadChatLearningStore.conversationName,
+        title: Text(
+            "Câu hỏi số ${_singleQuestionStore.currentIndex + 1}",
             style: Theme.of(context)
                 .textTheme
                 .heading
                 .copyWith(color: Theme.of(context).colorScheme.primary),
-          );
-        }),
+          ),
       ),
       body: Observer(builder: (context) {
-        return _threadChatLearningStore.isLoadingGetConversation
-            ? AbsorbPointer(
-                absorbing: true,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .surface
-                          .withOpacity(0.8),
+        return Column(
+          children: [
+            Expanded(
+              child: _threadChatLearningStore
+                      .currentConversation.messages.isEmpty
+                  ? _buildDefaultBodyInNewConversation()
+                  : ScrollbarTheme(
+                      data: ScrollbarThemeData(
+                        thumbColor: MaterialStateProperty.all(Colors.grey),
+                        trackColor: MaterialStateProperty.all(Colors.yellow),
+                        radius: const Radius.circular(20),
+                        thickness: MaterialStateProperty.all(4),
+                      ),
+                      child: Scrollbar(
+                        controller: _scrollController,
+                        child: SingleChildScrollView(
+                          //Must use SingleChildScrollView
+                          controller: _scrollController,
+                          child: Column(children: [
+                            ..._threadChatLearningStore
+                                .currentConversation.messages
+                                .map((message) =>
+                                    MessageChatTitle(currentMessage: message))
+                                .toList()
+                          ]),
+                        ),
+                      ),
                     ),
-                    const RotatingImageIndicator(),
-                  ],
-                ),
-              )
-            : Column(
-                children: [
-                  Expanded(
-                    child: _threadChatLearningStore
-                            .currentConversation.messages.isEmpty
-                        ? _buildDefaultBodyInNewConversation()
-                        : ScrollbarTheme(
-                            data: ScrollbarThemeData(
-                              thumbColor:
-                                  MaterialStateProperty.all(Colors.grey),
-                              trackColor:
-                                  MaterialStateProperty.all(Colors.yellow),
-                              radius: const Radius.circular(20),
-                              thickness: MaterialStateProperty.all(4),
-                            ),
-                            child: Scrollbar(
-                              controller: _scrollController,
-                              child: SingleChildScrollView(
-                                //Must use SingleChildScrollView
-                                controller: _scrollController,
-                                child: Column(children: [
-                                  if (_threadChatLearningStore
-                                      .isLoadingGetOlderMessages) ...[
-                                    Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10, horizontal: 8),
-                                        child: ListSkeleton(
-                                            isReverse: _threadChatLearningStore
-                                                .currentConversation
-                                                .messages
-                                                .first
-                                                .isAI))
-                                  ],
-                                  ..._threadChatLearningStore
-                                      .currentConversation.messages
-                                      .map((message) => MessageChatTitle(
-                                          currentMessage: message))
-                                      .toList()
-                                ]),
-                              ),
-                            ),
-                          ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: ChatBoxLearning(),
-                  )
-                ],
-              );
+            ),
+            const Padding(
+              padding: EdgeInsets.only(bottom: 10),
+              child: ChatBoxLearning(),
+            )
+          ],
+        );
       }),
     );
   }
@@ -255,18 +226,15 @@ class _ThreadChatLearningScreenState extends State<ThreadChatLearningScreen> {
               ],
             ),
             const SizedBox(height: 15),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // if (_threadChatLearningStore.isGoToFromReview)
-                  //   ..._buildAllItemQuestionDefaultForFromReview()
-                  // else
-                  //   ..._buildAllItemQuestionDefault(),
-                  ..._buildAllItemQuestionDefault()
-                ],
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // if (_threadChatLearningStore.isGoToFromReview)
+                //   ..._buildAllItemQuestionDefaultForFromReview()
+                // else
+                //   ..._buildAllItemQuestionDefault(),
+                ..._buildAllItemQuestionDefault()
+              ],
             )
           ]),
     );
@@ -274,10 +242,8 @@ class _ThreadChatLearningScreenState extends State<ThreadChatLearningScreen> {
 
   List<Widget> _buildAllItemQuestionDefault() {
     return [
-      _buildItemHintQuestion("Cách giải phương trình bậc 2 một ẩn?"),
-      _buildItemHintQuestion("Hệ thức Vi-et là gì?"),
-      _buildItemHintQuestion("Cách giải phương trình bậc 3 một ẩn?"),
-      _buildItemHintQuestion("Làm sao để tính số Fibonacci thứ n?"),
+      _buildItemHintQuestion("Giải thích câu hỏi", "CLARIFY_QUESTION"),
+      _buildItemHintQuestion("Giải thích đáp án", "EXPLAIN_SOLUTION"),
     ];
   }
 
@@ -291,10 +257,11 @@ class _ThreadChatLearningScreenState extends State<ThreadChatLearningScreen> {
   //   ];
   // }
 
-  Widget _buildItemHintQuestion(String title) {
+  Widget _buildItemHintQuestion(String title, String typeMessage) {
     return GestureDetector(
       onTap: () {
-        _threadChatLearningStore.sendChatMessage(title, []);
+        _threadChatLearningStore.sendChatMessage(title, [],
+            typeMessage: typeMessage);
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -346,5 +313,4 @@ class _ThreadChatLearningScreenState extends State<ThreadChatLearningScreen> {
   //     ),
   //   );
   // }
-
 }
