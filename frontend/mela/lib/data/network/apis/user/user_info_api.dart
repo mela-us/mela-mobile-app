@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:mela/data/network/constants/endpoints_const.dart';
 import 'package:mela/data/network/dio_client.dart';
 import 'package:mela/domain/entity/user/user.dart';

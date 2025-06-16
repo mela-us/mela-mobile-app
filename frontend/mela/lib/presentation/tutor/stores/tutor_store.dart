@@ -1,7 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:mela/domain/entity/level/level.dart';
 import 'package:mela/domain/entity/level/level_list.dart';
-import 'package:mela/domain/entity/topic/topic_list.dart';
 import 'package:mela/domain/usecase/level/get_level_list_usecase.dart';
 import 'package:mela/utils/dio/dio_error_util.dart';
 import 'package:mobx/mobx.dart';

@@ -1,8 +1,6 @@
 
 import 'package:flutter/material.dart';
 
-import '../../constants/dimens.dart';
-
 class ScreenWrapper extends StatelessWidget {
   final Widget child;
 

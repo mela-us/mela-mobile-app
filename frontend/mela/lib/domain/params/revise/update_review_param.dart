@@ -1,5 +1,4 @@
 import 'package:mela/constants/enum.dart';
-import 'package:mela/domain/entity/revise/revise.dart';
 
 class UpdateReviewParam {
   final String reviewId;

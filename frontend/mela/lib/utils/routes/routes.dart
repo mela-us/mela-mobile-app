@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mela/core/widgets/screen_wrapper.dart';
 import 'package:mela/presentation/chat/chat_screen.dart';
 import 'package:mela/presentation/forgot_password_screen/create_new_password_in_forgot_password_screen.dart';
 import 'package:mela/presentation/forgot_password_screen/enter_email_in_forgot_password_screen.dart';

@@ -141,7 +141,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildDefaultBody(BuildContext context) {
-    final double screenHeight = MediaQuery.of(context).size.height;
+    // final double screenHeight = MediaQuery.of(context).size.height;
     return Padding(
       // padding: EdgeInsets.fromLTRB(16.0, (screenHeight - 610) * 0.5, 16.0, 10),
       padding: const EdgeInsets.fromLTRB(16.0, 40, 16.0, 10),

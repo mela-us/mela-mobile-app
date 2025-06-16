@@ -4,8 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mela/presentation/question/store/timer/timer_store.dart';
 import 'package:mockito/annotations.dart';
 
-import 'timer_store_test.mocks.dart';
-
 @GenerateMocks([Timer])
 void main() {
   late TimerStore timerStore;

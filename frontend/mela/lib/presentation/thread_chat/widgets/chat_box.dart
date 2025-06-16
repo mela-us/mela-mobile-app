@@ -15,10 +15,9 @@ import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_cha
 import 'package:mela/presentation/thread_chat/thread_chat_screen.dart';
 import 'package:mela/utils/routes/routes.dart';
 import 'package:mobx/mobx.dart';
-import 'package:showcaseview/showcaseview.dart';
 
 class ChatBox extends StatefulWidget {
-  bool isFirstChatScreen;
+  final bool isFirstChatScreen;
   ChatBox({super.key, this.isFirstChatScreen = false});
 
   @override

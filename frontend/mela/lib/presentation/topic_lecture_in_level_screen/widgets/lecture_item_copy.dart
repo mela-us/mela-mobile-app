@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
-import 'package:mela/presentation/divided_lectures_and_exercises_screen/store/exercise_store.dart';
-import 'package:mela/presentation/filter_screen/store/filter_store.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
-import 'package:mela/presentation/search_screen/store/search_store.dart';
-import 'package:mela/presentation/topic_lecture_in_level_screen/widgets/timeline_indicator.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 import '../../../domain/entity/lecture/lecture.dart';
-import '../../../utils/routes/routes.dart';
 
 class LectureItemCopy extends StatelessWidget {
   final Lecture lecture;
@@ -17,9 +12,9 @@ class LectureItemCopy extends StatelessWidget {
   final bool isFirst;
   final bool isPursuing;
   final _levelStore = getIt<LevelStore>();
-  final _exerciseStore = getIt<ExerciseStore>();
-  final _searchStore = getIt<SearchStore>();
-  final _filterStore = getIt<FilterStore>();
+  // final _exerciseStore = getIt<ExerciseStore>();
+  // final _searchStore = getIt<SearchStore>();
+  // final _filterStore = getIt<FilterStore>();
   LectureItemCopy({
     super.key,
     required this.isLast,

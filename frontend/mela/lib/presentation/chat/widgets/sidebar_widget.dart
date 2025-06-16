@@ -5,12 +5,10 @@ import 'package:mela/constants/enum.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/chat/history_item.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
-import 'package:mela/domain/entity/message_chat/message_chat.dart';
 import 'package:mela/presentation/chat/store/history_store.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/thread_chat/thread_chat_screen.dart';
 import 'package:mela/utils/routes/routes.dart';
-import 'package:mobx/mobx.dart';
 
 class SidebarWidget extends StatefulWidget {
   const SidebarWidget({super.key});
@@ -138,7 +136,7 @@ class _SidebarWidgetState extends State<SidebarWidget> {
               child: CircularProgressIndicator(),
             );
           } else {
-            if (_historyStore.convs == null || _historyStore.convs!.isEmpty) {
+            if (_historyStore.convs == null || _historyStore.convs.isEmpty) {
               return const Center(
                 child: Text("Chưa có lịch sử nào"),
               );

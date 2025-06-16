@@ -1,33 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mela/constants/app_theme.dart';
-import 'package:mela/constants/assets.dart';
 import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/core/widgets/showcase_custom.dart';
 import 'package:mela/data/sharedpref/shared_preference_helper.dart';
-import 'package:mela/domain/entity/lecture/lecture.dart';
-import 'package:mela/domain/entity/revise/revise_item.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 import 'package:mela/presentation/home_screen/store/revise_store/revise_store.dart';
-import 'package:mela/presentation/home_screen/widgets/button_individual_exercise.dart';
 import 'package:mela/presentation/home_screen/widgets/level_item.dart';
-import 'package:mela/presentation/home_screen/widgets/review_item_widget.dart';
 import 'package:mela/presentation/home_screen/widgets/revise_view_widget.dart';
 import 'package:mela/presentation/list_proposed_new_lecture/list_proposed_new_lecture.dart';
 import 'package:mela/presentation/streak/streak_action_icon.dart';
-import 'package:mela/presentation/topic_lecture_in_level_screen/widgets/lecture_item_copy.dart';
 import 'package:mobx/mobx.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 import '../../di/service_locator.dart';
-import '../../themes/default/colors_standards.dart';
 import '../../utils/animation_helper/animation_helper.dart';
 import '../../utils/routes/routes.dart';
 import '../streak/store/streak_store.dart';
 import '../streak/streak_dialog.dart';
-import '../topic_lecture_in_level_screen/widgets/lecture_item.dart';
 import 'widgets/cover_image_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -45,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen>
   final ReviseStore _reviseStore = getIt<ReviseStore>();
 
   late final ReactionDisposer _unAuthorizedReactionDisposer;
-  final GlobalKey _buttonIndividualExerciseKey = GlobalKey();
+  // final GlobalKey _buttonIndividualExerciseKey = GlobalKey();
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
     final _sharedPrefsHelper = getIt.get<SharedPreferenceHelper>();

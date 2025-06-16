@@ -9,7 +9,6 @@ import 'package:mela/data/securestorage/secure_storage_helper.dart';
 import 'package:mela/domain/entity/chat/history_item.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/domain/entity/message_chat/message_chat.dart';
-import 'package:mela/domain/entity/message_chat/normal_message.dart';
 import 'package:mela/domain/usecase/chat/create_new_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/get_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_chat_usecase.dart';

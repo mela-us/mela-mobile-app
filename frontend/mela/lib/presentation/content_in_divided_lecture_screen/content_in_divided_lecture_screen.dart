@@ -16,8 +16,6 @@ import 'package:mela/presentation/divided_lectures_and_exercises_screen/divided_
 import 'package:mela/presentation/home_screen/store/revise_store/revise_store.dart';
 import 'package:mela/presentation/list_proposed_new_lecture/store/list_proposed_new_suggestion_store.dart';
 import 'package:mela/presentation/review/widgets/draggable_ai_button.dart';
-import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
-import 'package:mela/presentation/thread_chat/thread_chat_screen.dart';
 import 'package:mela/presentation/thread_chat_learning/store/thread_chat_learning_store/thread_chat_learning_store.dart';
 import 'package:mela/utils/routes/routes.dart';
 import 'package:showcaseview/showcaseview.dart';

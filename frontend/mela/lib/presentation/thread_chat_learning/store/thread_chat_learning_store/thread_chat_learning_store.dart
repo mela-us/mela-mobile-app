@@ -5,12 +5,8 @@ import 'package:mela/domain/entity/image_origin/image_origin.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/domain/entity/message_chat/normal_message.dart';
 import 'package:mela/domain/usecase/chat/create_new_conversation_usecase.dart';
-import 'package:mela/domain/usecase/chat/get_conversation_usecase.dart';
-import 'package:mela/domain/usecase/chat/send_message_chat_usecase.dart';
-import 'package:mela/domain/usecase/chat/send_message_get_solution_usecase.dart';
 import 'package:mobx/mobx.dart';
 
-import '../../../../domain/usecase/chat/send_message_review_submission_usecase.dart';
 
 part 'thread_chat_learning_store.g.dart';
 

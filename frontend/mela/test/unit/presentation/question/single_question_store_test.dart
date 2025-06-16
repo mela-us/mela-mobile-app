@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
 import 'package:mockito/annotations.dart';
 
-import 'single_question_store_test.mocks.dart';
 
 // Generate mock classes
 @GenerateMocks([SingleQuestionStore])

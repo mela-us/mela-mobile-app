@@ -1,7 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:mela/core/stores/error/error_store.dart';
-import 'package:mela/data/securestorage/secure_storage_helper.dart';
-import 'package:mela/data/sharedpref/shared_preference_helper.dart';
 import 'package:mela/domain/entity/chat/history_item.dart';
 import 'package:mela/domain/usecase/chat/get_history_chat_usecase.dart';
 import 'package:mela/utils/dio/dio_error_util.dart';

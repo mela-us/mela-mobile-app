@@ -25,7 +25,7 @@ class _AllScreensState extends State<AllScreens> {
   final _levelStore = getIt<LevelStore>();
   int _currentIndex = 2;
   int _previousIndex = -1;
-  late PageController _pageController;
+  // late PageController _pageController;
   // List of screens for each tab
   final List<Widget> _screens = [
     TutorScreen(),
@@ -40,7 +40,7 @@ class _AllScreensState extends State<AllScreens> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
+    // _pageController = PageController();
     _getNotificationPref();
   }
 

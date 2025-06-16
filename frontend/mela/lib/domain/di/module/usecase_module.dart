@@ -77,7 +77,6 @@ import '../../usecase/user_signup/signup_usecase.dart';
 
 import '../../repository/stat/stat_repository.dart';
 import 'package:mela/domain/usecase/stat/get_progress_usecase.dart';
-import 'package:mela/domain/usecase/stat/get_detailed_progress_usecase.dart';
 
 class UseCaseModule {
   static Future<void> configureUseCaseModuleInjection() async {

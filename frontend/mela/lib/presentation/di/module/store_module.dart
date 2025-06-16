@@ -76,7 +76,6 @@ import '../../signup_login_screen/store/user_login_store/user_login_store.dart';
 import '../../signup_login_screen/store/user_signup_store/user_signup_store.dart';
 
 import 'package:mela/domain/usecase/stat/get_progress_usecase.dart';
-import 'package:mela/domain/usecase/stat/get_detailed_progress_usecase.dart';
 
 import 'package:mela/presentation/stats/store/stats_store.dart';
 import 'package:mela/presentation/personal/store/personal_store.dart';

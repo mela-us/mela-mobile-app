@@ -62,7 +62,7 @@ class ReviewItemWidget extends StatelessWidget {
                   urlContentInDividedLecture: reviseItem.sectionUrl ?? '',
                   sectionType: "PDF");
 
-              final isGoToExercise =
+              // final isGoToExercise =
                   await Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ContentInDividedLectureScreen(
                     currentDividedLecture: lecture),

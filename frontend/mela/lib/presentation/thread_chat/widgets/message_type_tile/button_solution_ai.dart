@@ -5,8 +5,8 @@ import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_cha
 
 class ButtonSolutionAi extends StatelessWidget {
   final bool isEnabled;
-  ThreadChatStore _threadChatStore = getIt.get<ThreadChatStore>();
-  ChatBoxStore _chatBoxStore = getIt.get<ChatBoxStore>();
+  final ThreadChatStore _threadChatStore = getIt.get<ThreadChatStore>();
+  final ChatBoxStore _chatBoxStore = getIt.get<ChatBoxStore>();
   ButtonSolutionAi({
     super.key,
     required this.isEnabled,

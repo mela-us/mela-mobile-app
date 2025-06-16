@@ -13,7 +13,7 @@ class CoverImageWidget extends StatefulWidget {
 class _CoverImageWidgetState extends State<CoverImageWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<double> _animation;
+  // late Animation<double> _animation;
 
   @override
   void initState() {
@@ -23,7 +23,7 @@ class _CoverImageWidgetState extends State<CoverImageWidget>
       vsync: this,
     )..repeat(reverse: true);
 
-    _animation = Tween<double>(begin: 1.0, end: 0.9).animate(_controller);
+    // _animation = Tween<double>(begin: 1.0, end: 0.9).animate(_controller);
   }
 
   @override

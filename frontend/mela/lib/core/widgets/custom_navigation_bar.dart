@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vibration/vibration.dart';
 import '../../constants/app_theme.dart';
 import '../../constants/assets.dart';
 

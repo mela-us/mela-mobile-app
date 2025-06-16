@@ -4,16 +4,8 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/assets.dart';
 import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/di/service_locator.dart';
-import 'package:mela/domain/entity/message_chat/conversation.dart';
-import 'package:mela/domain/entity/message_chat/review_message.dart';
-import 'package:mela/presentation/question/store/question_store.dart';
-import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
-import 'package:mela/presentation/thread_chat/store/chat_box_store/chat_box_store.dart';
-import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
-import 'package:mela/presentation/thread_chat/widgets/chat_box.dart';
 import 'package:mela/presentation/thread_chat/widgets/list_skeleton.dart';
 import 'package:mela/presentation/thread_chat/widgets/message_chat_title.dart';
-import 'package:mela/presentation/thread_chat/widgets/message_type_tile/animation_review_tile.dart';
 import 'package:mobx/mobx.dart';
 
 import 'store/chat_box_learning_store/chat_box_learning_store.dart';

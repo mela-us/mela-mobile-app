@@ -10,9 +10,6 @@ import 'package:mela/constants/enum.dart';
 // import 'package:math_keyboard/math_keyboard.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
-import 'package:mela/presentation/thread_chat/store/chat_box_store/chat_box_store.dart';
-import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
-import 'package:mela/presentation/thread_chat/thread_chat_screen.dart';
 import 'package:mela/presentation/thread_chat_learning/store/chat_box_learning_store/chat_box_learning_store.dart';
 import 'package:mela/utils/routes/routes.dart';
 import 'package:mobx/mobx.dart';
@@ -21,7 +18,7 @@ import '../store/thread_chat_learning_store/thread_chat_learning_store.dart';
 import '../thread_chat_learning_screen.dart';
 
 class ChatBoxLearning extends StatefulWidget {
-  bool isFirstChatScreen;
+  final bool isFirstChatScreen;
   ChatBoxLearning({super.key, this.isFirstChatScreen = false});
 
   @override

@@ -7,7 +7,7 @@ class SupportIconInMessage extends StatelessWidget {
   final String textCopy;
   SupportIconInMessage({super.key, required this.textCopy});
 
-  ValueNotifier<bool?> isLikedNotifier = ValueNotifier(null);
+  final ValueNotifier<bool?> isLikedNotifier = ValueNotifier(null);
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:mela/constants/app_theme.dart';
-import 'package:mela/constants/assets.dart';
 import 'package:mela/domain/entity/message_chat/solution_message.dart';
 import 'package:mela/presentation/thread_chat/widgets/convert_string_to_latex.dart';
 import 'package:mela/presentation/thread_chat/widgets/message_type_tile/support_icon_in_message.dart';

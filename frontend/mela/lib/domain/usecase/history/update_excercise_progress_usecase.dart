@@ -3,13 +3,10 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:mela/core/domain/usecase/use_case.dart';
 import 'package:mela/data/network/apis/history/update_progress_api.dart';
-import 'package:mela/data/network/apis/questions/save_result_api.dart';
-import 'package:mela/data/network/constants/endpoints_const.dart';
 import 'package:mela/domain/usecase/user/logout_usecase.dart';
 import 'package:mela/domain/usecase/user_login/refresh_access_token_usecase.dart';
 
 import '../../params/history/exercise_progress_params.dart';
-import '../../params/question/submit_result_params.dart';
 
 class UpdateExcerciseProgressUsecase extends UseCase<int, ExerciseProgressParams>{
   final UpdateProgressApi _updateProgressApi;
