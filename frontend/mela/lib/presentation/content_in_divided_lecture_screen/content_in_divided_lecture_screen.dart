@@ -1,14 +1,13 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mela/constants/app_theme.dart';
-import 'package:mela/constants/enum.dart';
 import 'package:mela/core/widgets/showcase_custom.dart';
 import 'package:mela/data/sharedpref/shared_preference_helper.dart';
 import 'package:mela/domain/entity/divided_lecture/divided_lecture.dart';
 import 'package:mela/domain/entity/lecture/lecture.dart';
-import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/domain/params/history/section_progress_params.dart';
 import 'package:mela/domain/params/revise/update_review_param.dart';
 import 'package:mela/domain/usecase/history/update_section_progress_usecase.dart';
@@ -17,6 +16,8 @@ import 'package:mela/presentation/home_screen/store/revise_store/revise_store.da
 import 'package:mela/presentation/list_proposed_new_lecture/store/list_proposed_new_suggestion_store.dart';
 import 'package:mela/presentation/review/widgets/draggable_ai_button.dart';
 import 'package:mela/presentation/thread_chat_learning/store/thread_chat_learning_store/thread_chat_learning_store.dart';
+import 'package:mela/presentation/thread_chat_learning_pdf/store/thread_chat_learning_pdf_store/thread_chat_learning_pdf_store.dart';
+import 'package:mela/presentation/thread_chat_learning_pdf/thread_chat_learning_pdf_screen.dart';
 import 'package:mela/utils/routes/routes.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -43,9 +44,9 @@ class _ContentInDividedLectureScreenState
     extends State<ContentInDividedLectureScreen> {
   OverlayEntry? _overlayEntry;
   late PdfViewerController _pdfViewerController;
-  final _threadChatLearningStore = getIt.get<ThreadChatLearningStore>();
+  final _threadChatLearningPdfStore = getIt.get<ThreadChatLearningPdfStore>();
   int _totalPages = 0;
-  final ValueNotifier<int> _currentPage = ValueNotifier(0);
+  final ValueNotifier<int> _currentPage = ValueNotifier(1);
   final _sharedPrefsHelper = getIt.get<SharedPreferenceHelper>();
   BuildContext? showCaseContext;
 
@@ -167,6 +168,7 @@ class _ContentInDividedLectureScreenState
           onPressed: () {
             // print("------------->Back button pressed");
             // print(Navigator.of(context).widget.pages);
+            _threadChatLearningPdfStore.clearConversation();
 
             _reviseStore.setSelectedItem(null);
 
@@ -355,7 +357,7 @@ class _ContentInDividedLectureScreenState
                   return const SizedBox();
                 }),
           ),
-          DraggableAIButton(),
+          DraggableAIButton(isPdfScreen: true, onSetPdf: setPdfForStore),
         ],
       ),
     );
@@ -437,16 +439,32 @@ class _ContentInDividedLectureScreenState
   Future<void> _handleGoToChatFromSelection(
     String selectedText,
   ) async {
-    // _threadChatLearningStore.setConversation(Conversation(
-    //     conversationId: "",
-    //     messages: [],
-    //     hasMore: false,
-    //     levelConversation: LevelConversation.UNIDENTIFIED,
-    //     dateConversation: DateTime.now(),
-    //     nameConversation: ""));
-    // //Push chat screen with transition
-    // Navigator.of(context).pushNamed(Routes.threadChatLearningScreen);
-    // _threadChatLearningStore.sendChatMessage(selectedText, []);
+    //Push chat screen with transition
+    setPdfForStore();
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        settings: const RouteSettings(name: Routes.threadChatLearningPdfScreen),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            ThreadChatLearningPdfScreen(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOut;
+
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var offsetAnimation = animation.drive(tween);
+
+          return ClipRect(
+            child: SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            ),
+          );
+        },
+      ),
+    );
+    _threadChatLearningPdfStore.sendChatMessage(selectedText, []);
   }
 
   Future<bool?> showDialogGoToExercise() async {
@@ -572,5 +590,23 @@ class _ContentInDividedLectureScreenState
     );
 
     return result;
+  }
+
+  void setPdfForStore() {
+    final int cp = _currentPage.value;
+    final int tp = _totalPages;
+
+    int startPage = cp - 2;
+    int endPage = cp + 2;
+
+    if (startPage < 1) {
+      startPage = 1;
+      endPage = min(5, tp);
+    } else if (endPage > tp) {
+      endPage = tp;
+      startPage = max(1, tp - 4);
+    }
+    _threadChatLearningPdfStore.setPDF(
+        widget.currentDividedLecture, startPage, endPage, _currentPage.value);
   }
 }

@@ -47,6 +47,7 @@ class EndpointsConst {
       "/api/chatbot/conversations/:conversationId/messages";
   static const String sendMessageChatExercise =
       "/api/chatbot/questions/:questionId";
+  static const String sendMessageChatPdf = "/api/chatbot/lectures";
 
   static const String sendMessageReviewSubmission =
       "/api/chatbot/conversations/:conversationId/messages/review-submission";

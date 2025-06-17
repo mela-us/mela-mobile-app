@@ -18,6 +18,7 @@ import 'package:mela/domain/usecase/chat/send_message_chat_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_get_solution_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_review_submission_usecase.dart';
 import 'package:mela/domain/usecase/chat_with_exercise/send_message_chat_exercise_usecase.dart';
+import 'package:mela/domain/usecase/chat_with_exercise/send_message_chat_pdf_usecase.dart';
 
 import 'package:mela/domain/usecase/exercise/get_exercises_usecase.dart';
 import 'package:mela/domain/usecase/history/update_excercise_progress_usecase.dart';
@@ -310,6 +311,13 @@ class UseCaseModule {
     );
     getIt.registerSingleton<SendMessageChatExerciseUsecase>(
       SendMessageChatExerciseUsecase(
+          getIt<ChatExerciseRepository>(),
+          getIt<RefreshAccessTokenUsecase>(),
+          getIt<LogoutUseCase>(),
+          getIt<GetPresignImageUsecase>()),
+    );
+    getIt.registerSingleton<SendMessageChatPdfUsecase>(
+      SendMessageChatPdfUsecase(
           getIt<ChatExerciseRepository>(),
           getIt<RefreshAccessTokenUsecase>(),
           getIt<LogoutUseCase>(),

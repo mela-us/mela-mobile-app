@@ -11,6 +11,7 @@ import 'package:mela/presentation/question/store/question_store.dart';
 import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
 import 'package:mela/presentation/review/widgets/draggable_ai_button.dart';
 import 'package:mela/presentation/review/widgets/list_item_tile_widget.dart';
+import 'package:mela/presentation/thread_chat_learning/store/thread_chat_learning_store/thread_chat_learning_store.dart';
 import 'package:mela/utils/locale/app_localization.dart';
 
 import '../../constants/enum.dart';
@@ -27,6 +28,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
   final QuestionStore _questionStore = getIt<QuestionStore>();
   final SingleQuestionStore _singleQuestionStore = getIt<SingleQuestionStore>();
   late List<Question> questions;
+  final ThreadChatLearningStore _threadChatLearningStore =
+      getIt.get<ThreadChatLearningStore>();
 
   @override
   void initState() {
@@ -42,6 +45,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     return Scaffold(
       appBar: PracticeAppBar(
         pressedBack: () {
+          _threadChatLearningStore.clearConversation();
           Navigator.of(context).pop();
         },
       ),
