@@ -17,4 +17,5 @@ abstract class ChatRepository {
 
   Future<List<HistoryItem>> getHistoryChat();
   Future<int> getTokenChat();
+  Future<int> deleteConversationFromHistory(String conversationId);
 }

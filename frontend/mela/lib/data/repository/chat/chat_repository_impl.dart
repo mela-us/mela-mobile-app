@@ -39,9 +39,15 @@ class ChatRepositoryImpl extends ChatRepository {
   Future<List<HistoryItem>> getHistoryChat() {
     return _chatApi.getHistoryChat();
   }
-  
+
   @override
   Future<int> getTokenChat() {
     return _chatApi.getTokenChat();
+  }
+
+  @override
+  Future<int> deleteConversationFromHistory(String conversationId) {
+    // TODO: implement deleteConversationFromHistory
+    return _chatApi.deleteConversation(conversationId);
   }
 }

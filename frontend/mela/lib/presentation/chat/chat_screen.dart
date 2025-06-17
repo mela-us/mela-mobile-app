@@ -171,38 +171,6 @@ class _ChatScreenState extends State<ChatScreen> {
                   .aiExplainStyle
                   .copyWith(color: Theme.of(context).colorScheme.secondary)),
           const SizedBox(height: 15),
-          // Showcase.withWidget(
-          //     height: 80,
-          //     key: _key1,
-          //     width: 200,
-          //     container: Container(
-          //       decoration: BoxDecoration(
-          //         color: Colors.red,
-          //         borderRadius: BorderRadius.circular(15),
-          //       ),
-          //       child: const Column(
-          //         mainAxisSize: MainAxisSize.min,
-          //         children: [
-          //           Text(
-          //             "Gửi bài toán dễ dàng",
-          //             style: TextStyle(
-          //               color: Colors.white,
-          //               fontWeight: FontWeight.bold,
-          //               fontSize: 16,
-          //             ),
-          //             textAlign: TextAlign.center,
-          //           ),
-          //           SizedBox(height: 10),
-          //           Text(
-          //             "Chụp ảnh hoặc nhập bài toán vào ô chatbox, Mela sẽ hỗ trợ ngay!",
-          //             style: TextStyle(color: Colors.white, fontSize: 14),
-          //             textAlign: TextAlign.center,
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //     child: ChatBox(isFirstChatScreen: true)),
-
           ShowcaseCustom(
             keyWidget: _chatBoxKey,
             isHideActionWidget: true,
@@ -211,7 +179,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 "Chụp ảnh hoặc nhập bài toán vào ô chat, Mela sẽ hỗ trợ ngay!",
             child: ChatBox(isFirstChatScreen: true),
           ),
-
           const SizedBox(height: 15),
           ShowcaseCustom(
             keyWidget: _relativeTermKey,
@@ -228,22 +195,6 @@ class _ChatScreenState extends State<ChatScreen> {
               ],
             ),
           ),
-
-          // Showcase(
-          //   key: _key2,
-          //   description: "Những câu hỏi gợi ý cho bạn",
-          //   title: "Gợi ý câu hỏi",
-          //   child: ListView(
-          //     shrinkWrap: true,
-          //     physics: const NeverScrollableScrollPhysics(),
-          //     children: [
-          //       _buildListItem("Cách giải phương trình bậc 2 một ẩn"),
-          //       _buildListItem("Hệ thức Vi-et là gì?"),
-          //       _buildListItem("Hướng dẫn mình giải bài toán này"),
-          //       _buildListItem("Nhận xét bài làm của mình"),
-          //     ],
-          //   ),
-          // ),
         ],
       ),
     );

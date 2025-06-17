@@ -167,4 +167,10 @@ class ChatApi {
         levelConversation: LevelConversation.UNIDENTIFIED //Not important
         );
   }
+
+  Future<int> deleteConversation(String conversationId) async {
+    final responseData = await _dioClient
+        .delete(EndpointsConst.deleteConversation(conversationId));
+    return responseData.statusCode;
+  }
 }

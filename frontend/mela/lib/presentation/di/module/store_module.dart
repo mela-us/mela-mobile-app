@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:mela/core/stores/error/error_store.dart';
 import 'package:mela/core/stores/form/form_store.dart';
 import 'package:mela/domain/usecase/chat/create_new_conversation_usecase.dart';
+import 'package:mela/domain/usecase/chat/delete_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/get_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/get_history_chat_usecase.dart';
 import 'package:mela/domain/usecase/chat/get_token_chat_usecase.dart';
@@ -221,8 +222,10 @@ class StoreModule {
         HintStore(getIt<GenerateHintUseCase>(), getIt<GenerateTermUseCase>()));
 
     //History
-    getIt.registerSingleton<HistoryStore>(
-        HistoryStore(getIt<GetHistoryChatUsecase>(), getIt<ErrorStore>()));
+    getIt.registerSingleton<HistoryStore>(HistoryStore(
+        getIt<GetHistoryChatUsecase>(),
+        getIt<ErrorStore>(),
+        getIt<DeleteConversationUsecase>()));
 
     getIt.registerSingleton<TutorStore>(TutorStore(
       getIt<GetLevelListUsecase>(),

@@ -64,10 +64,13 @@ class EndpointsConst {
   static const String updateSectionProgress = "/api/lecture-histories";
   static const String updateExerciseProgress = "/api/exercise-histories";
 
+  //ai chat
   static const String getChatHistory = "/api/chatbot/conversations";
   static const String getMessageInConversation =
       "/api/chatbot/conversations/:conversationId/messages";
   static const String getTokenChat = "/api/tokens";
+  static String deleteConversation(String conversationId) =>
+      "/api/chatbot/conversations/$conversationId";
 
   //streak
   static const String streak = "/api/streak";

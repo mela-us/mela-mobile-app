@@ -10,6 +10,7 @@ import 'package:mela/domain/repository/topic_lecture/topic_lecture_repository.da
 import 'package:mela/domain/repository/user/user_repository.dart';
 import 'package:mela/domain/repository/user_register/user_signup_repostiory.dart';
 import 'package:mela/domain/usecase/chat/create_new_conversation_usecase.dart';
+import 'package:mela/domain/usecase/chat/delete_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/get_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/get_history_chat_usecase.dart';
 import 'package:mela/domain/usecase/chat/get_token_chat_usecase.dart';
@@ -263,6 +264,10 @@ class UseCaseModule {
       getIt<RefreshAccessTokenUsecase>(),
       getIt<LogoutUseCase>(),
     ));
+
+    getIt.registerSingleton<DeleteConversationUsecase>(
+        DeleteConversationUsecase(getIt<ChatRepository>(),
+            getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()));
 
     //Hint use-cases
     getIt.registerSingleton(GenerateHintUseCase(
