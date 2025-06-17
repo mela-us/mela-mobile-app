@@ -43,8 +43,15 @@ class _ListProposedNewLectureScreenState
                 .copyWith(color: Colors.red),
           ),
         );
+      } else if (_store.suggestionList!.suggestions.isEmpty) {
+        return const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Không có bài học đề xuất nào"),
+          ],
+        );
       }
-      
+
       List<List<Section>> value =
           _store.suggestionList!.suggestions.map((suggestion) {
         return suggestion.sectionList;

@@ -39,8 +39,8 @@ class _HomeScreenState extends State<HomeScreen>
   // final GlobalKey _buttonIndividualExerciseKey = GlobalKey();
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
-    final _sharedPrefsHelper = getIt.get<SharedPreferenceHelper>();
-      GlobalKey _streakKey = GlobalKey();
+  final _sharedPrefsHelper = getIt.get<SharedPreferenceHelper>();
+  GlobalKey _streakKey = GlobalKey();
   BuildContext? showCaseContext;
 
   // Add ScrollController
@@ -79,8 +79,7 @@ class _HomeScreenState extends State<HomeScreen>
         final isFirstTimeGoToChat =
             await _sharedPrefsHelper.isFirstTimeGoToChat;
         if (mounted && showCaseContext != null && isFirstTimeGoToChat) {
-          ShowCaseWidget.of(showCaseContext!)
-              .startShowCase([_streakKey]);
+          ShowCaseWidget.of(showCaseContext!).startShowCase([_streakKey]);
         }
       });
     });
@@ -160,290 +159,231 @@ class _HomeScreenState extends State<HomeScreen>
           print("Finish");
           _sharedPrefsHelper.saveIsFirstTimeSeeStreak(false);
         },
-      builder: (context) {
-        showCaseContext = context;
-        return Scaffold(
-          appBar: AppBar(
-            scrolledUnderElevation: 0,
-            title: Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Text("MELA",
-                  style: Theme.of(context)
-                      .textTheme
-                      .heading
-                      .copyWith(color: Theme.of(context).colorScheme.onPrimary)),
+        builder: (context) {
+          showCaseContext = context;
+          return Scaffold(
+            appBar: AppBar(
+              scrolledUnderElevation: 0,
+              title: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text("MELA",
+                    style: Theme.of(context).textTheme.heading.copyWith(
+                        color: Theme.of(context).colorScheme.onPrimary)),
+              ),
+              actions: [
+                Observer(builder: (context) {
+                  if (_levelStore.errorString.isNotEmpty ||
+                      _levelStore.lecturesAreLearningList == null ||
+                      _levelStore.topicList == null ||
+                      _levelStore.levelList == null) {
+                    return const SizedBox.shrink();
+                  }
+                  //Icon search
+                  return IconButton(
+                    onPressed: () {
+                      //eg: incourse no wifi, enter search, turnon wifi, back to app
+                      _levelStore.resetErrorString();
+                      Navigator.of(context).pushNamed(Routes.searchScreen);
+                    },
+                    icon: const Icon(Icons.search),
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  );
+                }),
+                ShowcaseCustom(
+                  keyWidget: _streakKey,
+                  isHideActionWidget: true,
+                  title: "Mela Streak",
+                  description:
+                      "Cố gắng làm bài tập hằng ngày để duy trì streak của bạn nhé!",
+                  child: InkWell(
+                      onTap: () {
+                        _showStreakDialog();
+                      },
+                      child: const StreakActionIcon()),
+                ),
+                const SizedBox(width: 24),
+              ],
             ),
-            actions: [
-              Observer(builder: (context) {
+            body: Observer(
+              builder: (context) {
+                //print("^^^^^^^^^^^^^^^^^^ErrorString in Courses_Screen2: ${_topicStore.errorString}");
+                if (_levelStore.loading) {
+                  return AbsorbPointer(
+                    absorbing: true,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .surface
+                              .withOpacity(0.8),
+                        ),
+                        const RotatingImageIndicator(),
+                      ],
+                    ),
+                  );
+                }
+                //print("^^^^^^^^^^^^^^^^^^ErrorString in Courses_Screen 3: ${_topicStore.errorString}");
                 if (_levelStore.errorString.isNotEmpty ||
                     _levelStore.lecturesAreLearningList == null ||
                     _levelStore.topicList == null ||
                     _levelStore.levelList == null) {
-                  return const SizedBox.shrink();
+                  return Center(
+                    child: Text(_levelStore.errorString,
+                        style: const TextStyle(color: Colors.red)),
+                  );
                 }
-                //Icon search
-                return IconButton(
-                  onPressed: () {
-                    //eg: incourse no wifi, enter search, turnon wifi, back to app
-                    _levelStore.resetErrorString();
-                    Navigator.of(context).pushNamed(Routes.searchScreen);
-                  },
-                  icon: const Icon(Icons.search),
-                  color: Theme.of(context).colorScheme.onPrimary,
-                );
-              }),
-              ShowcaseCustom(
-                keyWidget: _streakKey,
-                isHideActionWidget: true,
-                title: "Mela Streak",
-                description:
-                    "Cố gắng làm bài tập hằng ngày để duy trì streak của bạn nhé!",
-                child: InkWell(
-                    onTap: () {
-                      _showStreakDialog();
-                    },
-                    child: const StreakActionIcon()),
-              ),
-              const SizedBox(width: 24),
-            ],
-          ),
-          body: Observer(
-            builder: (context) {
-              //print("^^^^^^^^^^^^^^^^^^ErrorString in Courses_Screen2: ${_topicStore.errorString}");
-              if (_levelStore.loading) {
-                return AbsorbPointer(
-                  absorbing: true,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Container(
-                        color:
-                            Theme.of(context).colorScheme.surface.withOpacity(0.8),
-                      ),
-                      const RotatingImageIndicator(),
-                    ],
-                  ),
-                );
-              }
-              //print("^^^^^^^^^^^^^^^^^^ErrorString in Courses_Screen 3: ${_topicStore.errorString}");
-              if (_levelStore.errorString.isNotEmpty ||
-                  _levelStore.lecturesAreLearningList == null ||
-                  _levelStore.topicList == null ||
-                  _levelStore.levelList == null) {
-                return Center(
-                  child: Text(_levelStore.errorString,
-                      style: const TextStyle(color: Colors.red)),
-                );
-              }
-              //print("build In CoursesScreen+++++++++++++++++++++++++++++++");
-              return DefaultTabController(
-                length: 2,
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  physics: const ClampingScrollPhysics(),
-                  child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 8, 8, 8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          //Cover Image Introduction
-                          CoverImageWidget(
-                            onPressed: _scrollToEnd,
-                          ),
-                          const SizedBox(height: 15),
-                          //Levels Grid
-                          GridView.builder(
-                            padding: EdgeInsets.zero,
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              mainAxisSpacing: 8,
-                              crossAxisSpacing: 0,
-                              childAspectRatio: 1,
-                              mainAxisExtent: 80, // set the height of each item
+                //print("build In CoursesScreen+++++++++++++++++++++++++++++++");
+                return DefaultTabController(
+                  length: 2,
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    physics: const ClampingScrollPhysics(),
+                    child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 8, 8, 8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            //Cover Image Introduction
+                            CoverImageWidget(
+                              onPressed: _scrollToEnd,
                             ),
-                            itemCount: _levelStore.levelList!.levelList.length,
-                            itemBuilder: (context, index) {
-                              return Animate(
-                                onPlay: (controller) async {
-                                  await Future.delayed(
-                                      AnimationHelper.getAnimationDelayOfIndex(
-                                          index));
-                                  if (mounted) {
-                                    controller.repeat(
-                                      period: AnimationHelper
-                                          .getAnimationDurationOfIndex(index),
-                                    );
-                                  }
-                                },
-                                effects: [
-                                  MoveEffect(
-                                    begin: const Offset(0, 0),
-                                    end: const Offset(0, -11),
-                                    duration: 200.ms,
-                                    curve: Curves.elasticOut,
+                            const SizedBox(height: 15),
+                            //Levels Grid
+                            GridView.builder(
+                              padding: EdgeInsets.zero,
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                mainAxisSpacing: 8,
+                                crossAxisSpacing: 0,
+                                childAspectRatio: 1,
+                                mainAxisExtent:
+                                    80, // set the height of each item
+                              ),
+                              itemCount:
+                                  _levelStore.levelList!.levelList.length,
+                              itemBuilder: (context, index) {
+                                return Animate(
+                                  onPlay: (controller) async {
+                                    await Future.delayed(AnimationHelper
+                                        .getAnimationDelayOfIndex(index));
+                                    if (mounted) {
+                                      controller.repeat(
+                                        period: AnimationHelper
+                                            .getAnimationDurationOfIndex(index),
+                                      );
+                                    }
+                                  },
+                                  effects: [
+                                    MoveEffect(
+                                      begin: const Offset(0, 0),
+                                      end: const Offset(0, -11),
+                                      duration: 200.ms,
+                                      curve: Curves.elasticOut,
+                                    ),
+                                    MoveEffect(
+                                      begin: const Offset(0, -11),
+                                      end: const Offset(0, 0),
+                                      duration: 500.ms,
+                                      curve: Curves.elasticOut,
+                                    ),
+                                  ],
+                                  child: LevelItem(
+                                    level:
+                                        _levelStore.levelList!.levelList[index],
                                   ),
-                                  MoveEffect(
-                                    begin: const Offset(0, -11),
-                                    end: const Offset(0, 0),
-                                    duration: 500.ms,
-                                    curve: Curves.elasticOut,
+                                );
+                              },
+                            ),
+
+                            const SizedBox(height: 10),
+
+                            ScaleTransition(
+                              scale: _scaleAnimation,
+                              child: TabBar(
+                                // key: _buttonIndividualExerciseKey,
+                                labelColor:
+                                    Theme.of(context).colorScheme.tertiary,
+                                unselectedLabelColor:
+                                    Theme.of(context).colorScheme.onSecondary,
+                                dividerColor: Colors.transparent,
+                                overlayColor: MaterialStateProperty.all(
+                                    Colors.transparent),
+                                indicator: UnderlineTabIndicator(
+                                  insets: const EdgeInsets.symmetric(
+                                      horizontal: 30),
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
+                                      width: 2),
+                                ),
+                                tabs: [
+                                  Tab(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const Icon(Icons.school, size: 14),
+                                        const SizedBox(width: 12),
+                                        Text(
+                                          "Cùng ôn tập",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subTitle,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Tab(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const Icon(
+                                            Icons
+                                                .integration_instructions_outlined,
+                                            size: 14),
+                                        const SizedBox(width: 12),
+                                        Text(
+                                          "Hôm nay học gì?",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subTitle,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
-                                child: LevelItem(
-                                  level: _levelStore.levelList!.levelList[index],
-                                ),
-                              );
-                            },
-                          ),
-        
-                          const SizedBox(height: 10),
-        
-                          ScaleTransition(
-                            scale: _scaleAnimation,
-                            child: TabBar(
-                              // key: _buttonIndividualExerciseKey,
-                              labelColor: Theme.of(context).colorScheme.tertiary,
-                              unselectedLabelColor:
-                                  Theme.of(context).colorScheme.onSecondary,
-                              dividerColor: Colors.transparent,
-                              overlayColor:
-                                  MaterialStateProperty.all(Colors.transparent),
-                              indicator: UnderlineTabIndicator(
-                                insets: const EdgeInsets.symmetric(horizontal: 30),
-                                borderSide: BorderSide(
-                                    color: Theme.of(context).colorScheme.tertiary,
-                                    width: 2),
                               ),
-                              tabs: [
-                                Tab(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Icon(Icons.school, size: 14),
-                                      const SizedBox(width: 12),
-                                      Text(
-                                        "Cùng ôn tập",
-                                        style: Theme.of(context).textTheme.subTitle,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Tab(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Icon(
-                                          Icons.integration_instructions_outlined,
-                                          size: 14),
-                                      const SizedBox(width: 12),
-                                      Text(
-                                        "Hôm nay học gì?",
-                                        style: Theme.of(context).textTheme.subTitle,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
                             ),
-                          ),
-        
-                          SizedBox(
-                            height: 420,
-                            child: TabBarView(
-                              children: [
-                                // Tab 1: Revision List
-                                ReviseViewWidget(),
-        
-                                // Tab 2: Bài giảng đề xuất
-                                ListProposedNewLectureScreen()
-                              ],
+
+                            SizedBox(
+                              height: 420,
+                              child: TabBarView(
+                                children: [
+                                  // Tab 1: Revision List
+                                  ReviseViewWidget(),
+
+                                  // Tab 2: Bài giảng đề xuất
+                                  ListProposedNewLectureScreen()
+                                ],
+                              ),
                             ),
-                          ),
-        
-                          // Padding(
-                          //   padding: const EdgeInsets.symmetric(horizontal: 10),
-                          //   child: Row(
-                          //     mainAxisAlignment: MainAxisAlignment.start,
-                          //     children: [
-                          //       Image.asset(
-                          //         'assets/images/fire.png',
-                          //         width: 20,
-                          //         height: 28,
-                          //         fit: BoxFit.contain,
-                          //       ),
-                          //       const SizedBox(
-                          //         width: 10,
-                          //       ),
-                          //       Text(
-                          //         "Bài tập nhanh",
-                          //         style: Theme.of(context)
-                          //             .textTheme
-                          //             .subTitle
-                          //             .copyWith(
-                          //                 color: ColorsStandards
-                          //                     .textColorInBackground2),
-                          //       )
-                          //     ],
-                          //   ),
-                          // ),
-                          // const SizedBox(height: 10),
-        
-                          // AnimatedBuilder(
-                          //     animation: _scaleAnimation,
-                          //     builder: (context, child) {
-                          //       return Transform.scale(
-                          //         scale: _scaleAnimation.value,
-                          //         child: ButtonIndividualExercise(
-                          //             key: _buttonIndividualExerciseKey,
-                          //             leadingIcon: SvgPicture.asset(
-                          //               Assets.mela_think,
-                          //               width: 40,
-                          //             ),
-                          //             textButton: "Ôn tập nhanh cùng MELA",
-                          //             onPressed: () {}),
-                          //       );
-                          //     }),
-                          const SizedBox(height: 20),
-                        ],
-                      )),
-                ),
-              );
-            },
-          ),
-        );
-      }
-    );
+                            const SizedBox(height: 20),
+                          ],
+                        )),
+                  ),
+                );
+              },
+            ),
+          );
+        });
   }
-
-  // Widget _buildRoadList() {
-  //   return ListView.builder(
-  //     itemCount: _reviseStore.revisionItemList.length,
-  //     itemBuilder: (context, index) {
-  //       List<ReviseItem> items = _reviseStore.revisionItemList;
-  //       return ReviewItemWidget(
-  //         isFirst: index == 0,
-  //         isLast: index == items.length - 1,
-  //         reviseItem: _reviseStore.revisionItemList[index],
-  //         isPursuing: (index == 0 && !items[0].isDone) ||
-  //             (index != 0 &&
-  //                 !items[index].isDone &&
-  //                 items[index - 1]
-  //                     .isDone), // Check if the lecture is in progress
-  //       );
-  //     },
-  //   );
-  // }
-
-  // Widget _buildRevisionView() {
-  //   return _reviseStore.revisionItemList.isNotEmpty
-  //       ? _buildRoadList()
-  //       : const Center(
-  //           child: Text("Không có bài ôn tập nào"),
-  //         );
-  // }
 
   void _showStreakDialog() {
     if (_streakStore.isLoading) return;

@@ -159,13 +159,18 @@ class _ReviseViewWidgetState extends State<ReviseViewWidget> {
   }
 
   Widget _buildRevisionView() {
-    return _reviseStore.revisionItemList.isNotEmpty
+    if (_reviseStore.revisionItemList.length == 0) {
+      print(" Empty eeyyyy!");
+    } else {
+      print("not empty _${_reviseStore.revisionItemList.length}");
+    }
+    return _reviseStore.revisionItemList.length != 0
         ? _buildRoadList()
-        : Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Không có bài ôn tập nào"),
-          ],
-        );
+        : const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Không có bài ôn tập nào"),
+            ],
+          );
   } //comment
 }

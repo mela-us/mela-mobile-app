@@ -63,7 +63,7 @@ class ReviewItemWidget extends StatelessWidget {
                   sectionType: "PDF");
 
               // final isGoToExercise =
-                  await Navigator.of(context).push(MaterialPageRoute(
+              await Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ContentInDividedLectureScreen(
                     currentDividedLecture: lecture),
               ));
@@ -170,24 +170,6 @@ class ReviewItemWidget extends StatelessWidget {
               },
             );
           }
-          // _exerciseStore.setCurrentLecture(lecture);
-          // //Navigator.of(context).pushNamed(Routes.dividedLecturesAndExercisesScreen);
-          // Navigator.of(context).pushNamedAndRemoveUntil(
-          //   Routes.dividedLecturesAndExercisesScreen,
-          //   (route) {
-          //     final routeName = route.settings.name;
-          //     //if user at search screen, remove search, filter screen
-          //     //if user at lecture in topic screen, not remove this screen
-          //     // Return false to remove search and filter screens
-          //     // Return true to keep other screens
-          //     if(routeName == Routes.searchScreen || routeName == Routes.filterScreen){
-          //       _searchStore.resetAllInSearch();
-          //       _filterStore.resetFilter();
-          //       return false;
-          //     }
-          //     return true;
-          //   },
-          // );
         },
         child: TimelineTile(
             isFirst: isFirst,
