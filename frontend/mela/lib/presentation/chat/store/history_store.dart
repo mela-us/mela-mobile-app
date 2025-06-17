@@ -72,29 +72,29 @@ abstract class _HistoryStore with Store {
   Future<void> deleteConversation(String conversationId) async {
     isLoading = true;
 
-    try {
-      _deleteConversationUsecase.call(params: conversationId);
-    } catch (e, stackTrace) {
-      if (e is DioException) {
-        if (e.response?.statusCode == 401) {
-          isUnauthorized = true;
-          return;
-        } else {
-          //ss
-        }
-        _errorStore.errorMessage = DioExceptionUtil.handleError(e);
-      } else {
-        if (e == 401) {
-          isUnauthorized = true;
-          return;
-        }
-        print("Error: $e");
-      }
-      print("Error: $e, stackTrace: $stackTrace");
-    } finally {
-      isLoading = false;
-    }
-    isLoading = false;
+    // try {
+    //   _deleteConversationUsecase.call(params: conversationId);
+    // } catch (e, stackTrace) {
+    //   if (e is DioException) {
+    //     if (e.response?.statusCode == 401) {
+    //       isUnauthorized = true;
+    //       return;
+    //     } else {
+    //       //ss
+    //     }
+    //     _errorStore.errorMessage = DioExceptionUtil.handleError(e);
+    //   } else {
+    //     if (e == 401) {
+    //       isUnauthorized = true;
+    //       return;
+    //     }
+    //     print("Error: $e");
+    //   }
+    //   print("Error: $e, stackTrace: $stackTrace");
+    // } finally {
+    //   isLoading = false;
+    // }
+    // isLoading = false;
   }
 
   //Computed:-------------------------------------------------------------------
