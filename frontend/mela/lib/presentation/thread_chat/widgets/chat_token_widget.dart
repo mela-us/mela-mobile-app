@@ -20,7 +20,12 @@ class ChatTokenWidget extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset("assets/images/fire.png", width: 16.0, height: 16.0),
+          Image.asset(
+            "assets/icons/icon_token.png",
+            width: 16.0,
+            height: 16.0,
+            color: Colors.orangeAccent,
+          ),
           const SizedBox(width: 4.0),
           Text(
             '$tokenChat',
