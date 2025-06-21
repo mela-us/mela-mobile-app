@@ -48,6 +48,22 @@ mixin _$HistoryStore on _HistoryStore, Store {
     });
   }
 
+  late final _$isUnauthorizedAtom =
+      Atom(name: '_HistoryStore.isUnauthorized', context: context);
+
+  @override
+  bool get isUnauthorized {
+    _$isUnauthorizedAtom.reportRead();
+    return super.isUnauthorized;
+  }
+
+  @override
+  set isUnauthorized(bool value) {
+    _$isUnauthorizedAtom.reportWrite(value, super.isUnauthorized, () {
+      super.isUnauthorized = value;
+    });
+  }
+
   late final _$getConvHistoryAsyncAction =
       AsyncAction('_HistoryStore.getConvHistory', context: context);
 
@@ -56,11 +72,21 @@ mixin _$HistoryStore on _HistoryStore, Store {
     return _$getConvHistoryAsyncAction.run(() => super.getConvHistory());
   }
 
+  late final _$deleteConversationAsyncAction =
+      AsyncAction('_HistoryStore.deleteConversation', context: context);
+
+  @override
+  Future<void> deleteConversation(String conversationId) {
+    return _$deleteConversationAsyncAction
+        .run(() => super.deleteConversation(conversationId));
+  }
+
   @override
   String toString() {
     return '''
 convs: ${convs},
 isLoading: ${isLoading},
+isUnauthorized: ${isUnauthorized},
 iisLoading: ${iisLoading}
     ''';
   }

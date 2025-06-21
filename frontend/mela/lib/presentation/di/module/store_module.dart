@@ -10,6 +10,7 @@ import 'package:mela/domain/usecase/chat/send_message_chat_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_get_solution_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_review_submission_usecase.dart';
 import 'package:mela/domain/usecase/chat_with_exercise/send_message_chat_exercise_usecase.dart';
+import 'package:mela/domain/usecase/chat_with_exercise/send_message_chat_pdf_usecase.dart';
 import 'package:mela/domain/usecase/history/update_excercise_progress_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
 import 'package:mela/domain/usecase/suggestion/get_proposed_new_suggestion_usecase.dart';
@@ -36,6 +37,8 @@ import 'package:mela/presentation/question/store/timer/timer_store.dart';
 import 'package:mela/presentation/thread_chat/store/chat_box_store/chat_box_store.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/thread_chat_learning/store/thread_chat_learning_store/thread_chat_learning_store.dart';
+import 'package:mela/presentation/thread_chat_learning_pdf/store/chat_box_learning_pdf_store/chat_box_learning_pdf_store.dart';
+import 'package:mela/presentation/thread_chat_learning_pdf/store/thread_chat_learning_pdf_store/thread_chat_learning_pdf_store.dart';
 import 'package:mela/presentation/topic_lecture_in_level_screen/store/topic_lecture_store.dart';
 import 'package:mela/presentation/tutor/stores/tutor_store.dart';
 
@@ -245,6 +248,13 @@ class StoreModule {
       ),
     );
     getIt.registerSingleton<ChatBoxLearningStore>(ChatBoxLearningStore());
+    getIt.registerSingleton<ThreadChatLearningPdfStore>(
+      ThreadChatLearningPdfStore(
+        getIt<GetTokenChatUsecase>(),
+        getIt<SendMessageChatPdfUsecase>(),
+      ),
+    );
+    getIt.registerSingleton<ChatBoxLearningPdfStore>(ChatBoxLearningPdfStore());
     getIt.registerSingleton<ListProposedNewSuggestionStore>(
         ListProposedNewSuggestionStore(getIt<GetProposedNewSuggestionUsecase>(),
             getIt<UpdateSuggestionUsecase>()));

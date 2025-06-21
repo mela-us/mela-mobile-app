@@ -60,6 +60,7 @@ class Routes {
   static const String allScreens = '/all_screens';
   static const String threadChatScreen = '/thread_chat_screen';
   static const String threadChatLearningScreen = '/thread_chat_learning_screen';
+  static const String threadChatLearningPdfScreen = '/thread_chat_learning_pdf_screen';
 
   // static final routes = <String, WidgetBuilder>{
   //   loginScreen: (BuildContext context) => const ScreenWrapper(child:LoginScreen()),
