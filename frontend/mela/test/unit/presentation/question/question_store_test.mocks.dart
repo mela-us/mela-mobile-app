@@ -3,20 +3,19 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i5;
 
-import 'package:mela/core/stores/error/error_store.dart' as _i8;
-import 'package:mela/domain/entity/question/question_list.dart' as _i5;
-import 'package:mela/domain/params/history/exercise_progress_params.dart'
-    as _i11;
-import 'package:mela/domain/params/question/submit_result_params.dart' as _i7;
+import 'package:mela/core/stores/error/error_store.dart' as _i9;
+import 'package:mela/domain/entity/question/exercise_result.dart' as _i2;
+import 'package:mela/domain/entity/question/question_list.dart' as _i6;
+import 'package:mela/domain/params/question/submit_result_params.dart' as _i8;
 import 'package:mela/domain/usecase/history/update_excercise_progress_usecase.dart'
-    as _i10;
-import 'package:mela/domain/usecase/question/get_questions_usecase.dart' as _i3;
-import 'package:mela/domain/usecase/question/submit_result_usecase.dart' as _i6;
-import 'package:mobx/mobx.dart' as _i2;
+    as _i11;
+import 'package:mela/domain/usecase/question/get_questions_usecase.dart' as _i4;
+import 'package:mela/domain/usecase/question/submit_result_usecase.dart' as _i7;
+import 'package:mobx/mobx.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i9;
+import 'package:mockito/src/dummies.dart' as _i10;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -31,9 +30,20 @@ import 'package:mockito/src/dummies.dart' as _i9;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeReactiveContext_0 extends _i1.SmartFake
-    implements _i2.ReactiveContext {
-  _FakeReactiveContext_0(
+class _FakeExerciseResult_0 extends _i1.SmartFake
+    implements _i2.ExerciseResult {
+  _FakeExerciseResult_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeReactiveContext_1 extends _i1.SmartFake
+    implements _i3.ReactiveContext {
+  _FakeReactiveContext_1(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -46,48 +56,56 @@ class _FakeReactiveContext_0 extends _i1.SmartFake
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockGetQuestionsUseCase extends _i1.Mock
-    implements _i3.GetQuestionsUseCase {
+    implements _i4.GetQuestionsUseCase {
   MockGetQuestionsUseCase() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<_i5.QuestionList?> call({required String? params}) =>
+  _i5.Future<_i6.QuestionList?> call({required String? params}) =>
       (super.noSuchMethod(
         Invocation.method(
           #call,
           [],
           {#params: params},
         ),
-        returnValue: _i4.Future<_i5.QuestionList?>.value(),
-      ) as _i4.Future<_i5.QuestionList?>);
+        returnValue: _i5.Future<_i6.QuestionList?>.value(),
+      ) as _i5.Future<_i6.QuestionList?>);
 }
 
 /// A class which mocks [SubmitResultUseCase].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockSubmitResultUseCase extends _i1.Mock
-    implements _i6.SubmitResultUseCase {
+    implements _i7.SubmitResultUseCase {
   MockSubmitResultUseCase() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<int> call({required _i7.SubmitResultParams? params}) =>
+  _i5.Future<_i2.ExerciseResult> call(
+          {required _i8.SubmitResultParams? params}) =>
       (super.noSuchMethod(
         Invocation.method(
           #call,
           [],
           {#params: params},
         ),
-        returnValue: _i4.Future<int>.value(0),
-      ) as _i4.Future<int>);
+        returnValue: _i5.Future<_i2.ExerciseResult>.value(_FakeExerciseResult_0(
+          this,
+          Invocation.method(
+            #call,
+            [],
+            {#params: params},
+          ),
+        )),
+      ) as _i5.Future<_i2.ExerciseResult>);
 }
 
 /// A class which mocks [ErrorStore].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockErrorStore extends _i1.Mock implements _i8.ErrorStore {
+class MockErrorStore extends _i1.Mock implements _i9.ErrorStore {
   MockErrorStore() {
     _i1.throwOnMissingStub(this);
   }
@@ -95,7 +113,7 @@ class MockErrorStore extends _i1.Mock implements _i8.ErrorStore {
   @override
   String get errorMessage => (super.noSuchMethod(
         Invocation.getter(#errorMessage),
-        returnValue: _i9.dummyValue<String>(
+        returnValue: _i10.dummyValue<String>(
           this,
           Invocation.getter(#errorMessage),
         ),
@@ -111,13 +129,13 @@ class MockErrorStore extends _i1.Mock implements _i8.ErrorStore {
       );
 
   @override
-  _i2.ReactiveContext get context => (super.noSuchMethod(
+  _i3.ReactiveContext get context => (super.noSuchMethod(
         Invocation.getter(#context),
-        returnValue: _FakeReactiveContext_0(
+        returnValue: _FakeReactiveContext_1(
           this,
           Invocation.getter(#context),
         ),
-      ) as _i2.ReactiveContext);
+      ) as _i3.ReactiveContext);
 
   @override
   void setErrorMessage(String? message) => super.noSuchMethod(
@@ -142,19 +160,27 @@ class MockErrorStore extends _i1.Mock implements _i8.ErrorStore {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockUpdateExcerciseProgressUsecase extends _i1.Mock
-    implements _i10.UpdateExcerciseProgressUsecase {
+    implements _i11.UpdateExcerciseProgressUsecase {
   MockUpdateExcerciseProgressUsecase() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<int> call({required _i11.ExerciseProgressParams? params}) =>
+  _i5.Future<_i2.ExerciseResult> call(
+          {required _i8.SubmitResultParams? params}) =>
       (super.noSuchMethod(
         Invocation.method(
           #call,
           [],
           {#params: params},
         ),
-        returnValue: _i4.Future<int>.value(0),
-      ) as _i4.Future<int>);
+        returnValue: _i5.Future<_i2.ExerciseResult>.value(_FakeExerciseResult_0(
+          this,
+          Invocation.method(
+            #call,
+            [],
+            {#params: params},
+          ),
+        )),
+      ) as _i5.Future<_i2.ExerciseResult>);
 }

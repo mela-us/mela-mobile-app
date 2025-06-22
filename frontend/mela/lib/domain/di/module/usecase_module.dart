@@ -23,6 +23,7 @@ import 'package:mela/domain/usecase/exercise/get_exercises_usecase.dart';
 import 'package:mela/domain/usecase/history/update_excercise_progress_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_lectures_usecase.dart';
+import 'package:mela/domain/usecase/question/upload_images_usecase.dart';
 import 'package:mela/domain/usecase/suggestion/get_proposed_new_suggestion_usecase.dart';
 import 'package:mela/domain/usecase/level/get_level_list_usecase.dart';
 import 'package:mela/domain/usecase/presigned_image/get_presigned_image_usecase.dart';
@@ -180,7 +181,7 @@ class UseCaseModule {
 
     //stats:--------------------------------------------------------------------
     getIt.registerSingleton<UpdateExcerciseProgressUsecase>(
-      UpdateExcerciseProgressUsecase(getIt<UpdateProgressApi>(),
+      UpdateExcerciseProgressUsecase(getIt<SaveResultApi>(),
           getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()),
     );
     getIt.registerSingleton<UpdateSectionProgressUsecase>(
@@ -315,5 +316,11 @@ class UseCaseModule {
           getIt<LogoutUseCase>(),
           getIt<GetPresignImageUsecase>()),
     );
+
+    getIt.registerSingleton<UploadImagesUsecase>(UploadImagesUsecase(
+      getIt<QuestionRepository>(),
+      getIt<RefreshAccessTokenUsecase>(),
+      getIt<LogoutUseCase>(),
+    ));
   }
 }

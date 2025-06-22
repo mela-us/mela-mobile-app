@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
@@ -12,8 +14,10 @@ class QuestionListOverlay extends StatelessWidget {
   final QuestionStore _questionStore = getIt<QuestionStore>();
   final SingleQuestionStore _singleQuestionStore = getIt<SingleQuestionStore>();
   final Function(bool) isSubmitted;
+  final List<File> selectedImages;
 
-  QuestionListOverlay({super.key, required this.isSubmitted});
+  QuestionListOverlay(
+      {super.key, required this.isSubmitted, required this.selectedImages});
 
   @override
   Widget build(BuildContext context) {
@@ -105,6 +109,8 @@ class QuestionListOverlay extends StatelessWidget {
     return Observer(builder: (context) {
       return GestureDetector(
         onTap: () {
+          _singleQuestionStore.setImageAnswer(
+              _singleQuestionStore.currentIndex, selectedImages);
           _singleQuestionStore.changeQuestion(index);
           isSubmitted(false);
         },
@@ -112,7 +118,8 @@ class QuestionListOverlay extends StatelessWidget {
           width: 46,
           height: 46,
           decoration: BoxDecoration(
-            color: _singleQuestionStore.userAnswers[index].isEmpty
+            color: _singleQuestionStore.userAnswers[index].isEmpty &&
+                    _singleQuestionStore.userImage[index].isEmpty
                 ? Theme.of(context).colorScheme.inputMutedText
                 : Theme.of(context).colorScheme.buttonList,
             shape: BoxShape.circle,
