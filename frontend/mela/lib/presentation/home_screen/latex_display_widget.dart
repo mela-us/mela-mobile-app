@@ -1,43 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 // Mẫu để test, cái cuối là tự custom để test phần mixed_content. có thể coi để hiểu luồng.
-//  ConvertStringToLatex(
+//  LaTeXDisplayWidget(
 //   text:
 //       "Đây **là bài toán về tính** tích phân xác định của một hàm tổng: \\( \\tan x \\) và \\( e^{\\sin x} \\cos x \\). Yêu cầu của đề bài là tính giá trị của biểu thức này trên đoạn từ 0 đến \\( \\frac{\\pi}{4} \\). Ta phải xét từng phần riêng biệt: tích phân của \\( \\tan x \\) và tích phân của \\( e^{\\sin x} \\cos x \\). Công cụ có thể dùng gồm phân tích tổng thành hai tích phân nhỏ, sử dụng công thức tích phân cơ bản, nhận dạng hàm hợp và biến đổi vi phân.",
 // ),
-// ConvertStringToLatex(
+// LaTeXDisplayWidget(
 //   text:
 //       "Tính F(2): \n\n- \\( x^3 = 2^3 = 8 \\)\n- \\( -\\frac{7}{2}x^2 = -\\frac{7}{2} \\times 4 = -14 \\)\n- \\( \\ln|2+1| = \\ln 3 \\)\n\\( \\Rightarrow F(2) = 8 - 14 + \\ln 3 = -6 + \\ln 3 \\)\n\nTính F(0): \n- \\( x^3 = 0 \\)\n- \\( -\\frac{7}{2}x^2 = 0 \\)\n- \\( \\ln|0+1| = \\ln 1 = 0 \\)\n\\( \\Rightarrow F(0) = 0 \\)",
 // ),
 // SizedBox(height: 20),
-// ConvertStringToLatex(
+// LaTeXDisplayWidget(
 //     text:
 //         "\\[ \\int_{0}^{2} (3x^2 - 7x + \\frac{1}{x+1}) dx = F(2) - F(0) = (-6 + \\ln 3) - 0 = -6 + \\ln 3 \\]"),
 // SizedBox(height: 20),
-// ConvertStringToLatex(
+// LaTeXDisplayWidget(
 //   text:
 //       "Dĩ nhiên rồi!\n\n Mình sẽ chia lời giải thành hai phần rõ ràng với Heading 1 và Heading 2 để bạn dễ hiểu hơn nhé.\n\n# 1. Xác định nửa chu vi và lập phương trình\n\n- Chu vi hình chữ nhật là 190 m.\n- Gọi chiều dài là \\(d\\), chiều rộng là \\(r\\).\n- Ta biết chiều dài hơn chiều rộng 15 m, tức là: \\(d = r + 15\\).\n\nCông thức chu vi hình chữ nhật: \\(P = 2 \\times (d + r)\\).\n\nVậy ta có:\n\\[ \n2 \\times (d + r) = 190 \n\\]\nChia cả hai vế cho 2:\n\\[\nd + r = 95\n\\]\n\n# 2. Tính chiều rộng\n\nThay \\(d = r + 15\\) vào phương trình trên:\n\\[\n(r + 15) + r = 95\n\\]\n\\[\n2r + 15 = 95\n\\]\n\\[\n2r = 95 - 15\n\\]\n\\[\n2r = 80\n\\]\n\\[\nr = 40\n\\]\n\nVậy chiều rộng của hình chữ nhật là 40 m.\n\nNếu còn chỗ nào chưa rõ, bạn cứ hỏi thêm nhé!",
 // ),
-//  ConvertStringToLatex(
+//  LaTeXDisplayWidget(
 //   text:
 //       "Dĩ nhiên rồi!\n\n Mình sẽ chia lời giải thành hai phần rõ ràng với\nHeading 1 và Heading 2\n để bạn dễ hiểu hơn nhé.\n\n# 1. Xác định nửa chu vi và lập phương trình\n\n- Chu vi hình chữ nhật là 190 m.\n- abc\n\nNếu còn chỗ nào chưa rõ, bạn cứ hỏi thêm nhé!",
 // ),
 
-class ConvertStringToLatex extends StatefulWidget {
+class LaTeXDisplayWidget extends StatefulWidget {
   final String text;
   final bool isAI;
 
-  const ConvertStringToLatex({
+  const LaTeXDisplayWidget({
     super.key,
     required this.text,
     this.isAI = true,
   });
 
   @override
-  State<ConvertStringToLatex> createState() => _ConvertStringToLatexState();
+  State<LaTeXDisplayWidget> createState() => _LaTeXDisplayWidgetState();
 }
 
-class _ConvertStringToLatexState extends State<ConvertStringToLatex> {
+class _LaTeXDisplayWidgetState extends State<LaTeXDisplayWidget> {
   @override
   Widget build(BuildContext context) {
     final parsedContent = _parseContent(widget.text);
@@ -194,13 +194,13 @@ class _MarkdownWithInlineLatexState extends State<_MarkdownWithInlineLatex> {
   List<Map<String, dynamic>> _parseMarkdownSections(String content) {
     final lines = content.split('\n');
     print("Line=========> $lines");
-    //[, , ---, , **Bước 4: Tính diện tích mảnh đất hình chữ nhật**, , Diện tích hình chữ nhật bằng chiều dài nhân với chiều rộng:, ]
     List<Map<String, dynamic>> sections = [];
 
     String currentParagraph = '';
 
     for (String line in lines) {
       final trimmedLine = line.trim();
+
       // Headers
       if (trimmedLine.startsWith('#')) {
         // Flush current paragraph
@@ -236,7 +236,7 @@ class _MarkdownWithInlineLatexState extends State<_MarkdownWithInlineLatex> {
 
         sections.add({
           'type': 'list_item',
-          'content': trimmedLine.substring(0).trim(),
+          'content': trimmedLine.substring(1).trim(),
         });
       }
       // Empty lines
@@ -265,7 +265,6 @@ class _MarkdownWithInlineLatexState extends State<_MarkdownWithInlineLatex> {
         'content': currentParagraph.trim(),
       });
     }
-    print("=========>Sections after parsing: $sections");
 
     return sections;
   }
@@ -314,7 +313,6 @@ class _MarkdownWithInlineLatexState extends State<_MarkdownWithInlineLatex> {
                 fontSize: fontSize,
                 fontWeight: fontWeight,
                 height: 1.2,
-                color: widget.isAI ? Colors.black : Colors.white,
               )),
     );
   }
@@ -324,29 +322,31 @@ class _MarkdownWithInlineLatexState extends State<_MarkdownWithInlineLatex> {
       padding: const EdgeInsets.only(bottom: 12.0),
       child: _buildTextWithInlineLatex(
           content,
-          Theme.of(context).textTheme.bodyMedium!.copyWith(
-              height: 1.8,
-              fontSize: 17,
-              letterSpacing: 0.65,
-              color: widget.isAI ? Colors.black : Colors.white)),
+          Theme.of(context)
+              .textTheme
+              .bodyMedium!
+              .copyWith(height: 1.8, fontSize: 17, letterSpacing: 0.65)),
     );
   }
 
   Widget _buildListItem(String content) {
-    //print("Content List Item BUILD: $content");
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, bottom: 8.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text('• ',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(height: 1.8, fontSize: 17, letterSpacing: 0.65)),
           Expanded(
             child: _buildTextWithInlineLatex(
                 content,
-                Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    height: 1.8,
-                    fontSize: 17,
-                    letterSpacing: 0.65,
-                    color: widget.isAI ? Colors.black : Colors.white)),
+                Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(height: 1.8, fontSize: 17, letterSpacing: 0.65)),
           ),
         ],
       ),
@@ -355,13 +355,11 @@ class _MarkdownWithInlineLatexState extends State<_MarkdownWithInlineLatex> {
 
 // Xử lý inline LaTeX trong đoạn văn bản các hàm con
   Widget _buildTextWithInlineLatex(String text, TextStyle baseStyle) {
-    //print("Trimmed Line=========>${text}va trimline.length=========>${text.length}");
     final inlineLatexRegex = RegExp(r'\\\((.*?)\\\)');
     final matches = inlineLatexRegex.allMatches(text).toList();
 
     if (matches.isEmpty) {
       // Xử lý markdown formatting cho text thuần
-      //print("No inline LaTeX found, returning plain text.");
       return _buildFormattedText(text, baseStyle);
     }
 

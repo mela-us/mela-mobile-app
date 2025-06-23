@@ -77,7 +77,7 @@ class ExplainMessageTile extends StatelessWidget {
         ),
         child: currentMessage.explain == null
             ? const MessageLoadingResponse()
-            : ConvertStringToLatex(rawText: currentMessage.explain!),
+            : ConvertStringToLatex(text: currentMessage.explain!),
       ),
     );
   }
