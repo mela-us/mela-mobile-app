@@ -4,13 +4,14 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i4;
+import 'dart:io' as _i5;
 
 import 'package:mela/domain/entity/question/question_list.dart' as _i2;
 import 'package:mela/domain/repository/question/question_repository.dart'
     as _i3;
-import 'package:mela/domain/usecase/user/logout_usecase.dart' as _i6;
+import 'package:mela/domain/usecase/user/logout_usecase.dart' as _i7;
 import 'package:mela/domain/usecase/user_login/refresh_access_token_usecase.dart'
-    as _i5;
+    as _i6;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -77,13 +78,41 @@ class MockQuestionRepository extends _i1.Mock
           ),
         )),
       ) as _i4.Future<_i2.QuestionList>);
+
+  @override
+  _i4.Future<List<List<String>?>> uploadImages(List<List<_i5.File>>? images) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #uploadImages,
+          [images],
+        ),
+        returnValue: _i4.Future<List<List<String>?>>.value(<List<String>?>[]),
+      ) as _i4.Future<List<List<String>?>>);
+
+  @override
+  _i4.Future<int> submitQuestion(
+    String? exerciseUid,
+    String? questionText,
+    List<String>? imageUrls,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #submitQuestion,
+          [
+            exerciseUid,
+            questionText,
+            imageUrls,
+          ],
+        ),
+        returnValue: _i4.Future<int>.value(0),
+      ) as _i4.Future<int>);
 }
 
 /// A class which mocks [RefreshAccessTokenUsecase].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockRefreshAccessTokenUsecase extends _i1.Mock
-    implements _i5.RefreshAccessTokenUsecase {
+    implements _i6.RefreshAccessTokenUsecase {
   MockRefreshAccessTokenUsecase() {
     _i1.throwOnMissingStub(this);
   }
@@ -102,7 +131,7 @@ class MockRefreshAccessTokenUsecase extends _i1.Mock
 /// A class which mocks [LogoutUseCase].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockLogoutUseCase extends _i1.Mock implements _i6.LogoutUseCase {
+class MockLogoutUseCase extends _i1.Mock implements _i7.LogoutUseCase {
   MockLogoutUseCase() {
     _i1.throwOnMissingStub(this);
   }

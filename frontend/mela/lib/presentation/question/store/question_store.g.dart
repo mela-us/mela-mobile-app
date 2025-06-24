@@ -55,6 +55,39 @@ mixin _$QuestionStore on _QuestionStore, Store {
     });
   }
 
+  late final _$fetchExerciseAnswerFutureAtom =
+      Atom(name: '_QuestionStore.fetchExerciseAnswerFuture', context: context);
+
+  @override
+  ObservableFuture<ExerciseResult> get fetchExerciseAnswerFuture {
+    _$fetchExerciseAnswerFutureAtom.reportRead();
+    return super.fetchExerciseAnswerFuture;
+  }
+
+  @override
+  set fetchExerciseAnswerFuture(ObservableFuture<ExerciseResult> value) {
+    _$fetchExerciseAnswerFutureAtom
+        .reportWrite(value, super.fetchExerciseAnswerFuture, () {
+      super.fetchExerciseAnswerFuture = value;
+    });
+  }
+
+  late final _$uploadImagesFutureAtom =
+      Atom(name: '_QuestionStore.uploadImagesFuture', context: context);
+
+  @override
+  ObservableFuture<List<List<String>?>> get uploadImagesFuture {
+    _$uploadImagesFutureAtom.reportRead();
+    return super.uploadImagesFuture;
+  }
+
+  @override
+  set uploadImagesFuture(ObservableFuture<List<List<String>?>> value) {
+    _$uploadImagesFutureAtom.reportWrite(value, super.uploadImagesFuture, () {
+      super.uploadImagesFuture = value;
+    });
+  }
+
   late final _$questionListAtom =
       Atom(name: '_QuestionStore.questionList', context: context);
 
@@ -68,6 +101,38 @@ mixin _$QuestionStore on _QuestionStore, Store {
   set questionList(QuestionList? value) {
     _$questionListAtom.reportWrite(value, super.questionList, () {
       super.questionList = value;
+    });
+  }
+
+  late final _$exerciseResultAtom =
+      Atom(name: '_QuestionStore.exerciseResult', context: context);
+
+  @override
+  ExerciseResult? get exerciseResult {
+    _$exerciseResultAtom.reportRead();
+    return super.exerciseResult;
+  }
+
+  @override
+  set exerciseResult(ExerciseResult? value) {
+    _$exerciseResultAtom.reportWrite(value, super.exerciseResult, () {
+      super.exerciseResult = value;
+    });
+  }
+
+  late final _$isUploadingImagesAtom =
+      Atom(name: '_QuestionStore.isUploadingImages', context: context);
+
+  @override
+  bool get isUploadingImages {
+    _$isUploadingImagesAtom.reportRead();
+    return super.isUploadingImages;
+  }
+
+  @override
+  set isUploadingImages(bool value) {
+    _$isUploadingImagesAtom.reportWrite(value, super.isUploadingImages, () {
+      super.isUploadingImages = value;
     });
   }
 
@@ -156,14 +221,24 @@ mixin _$QuestionStore on _QuestionStore, Store {
       AsyncAction('_QuestionStore.updateProgress', context: context);
 
   @override
-  Future<dynamic> updateProgress(
-      List<ExerciseAnswer> exerciseAnswers, DateTime start, DateTime end) {
+  Future<dynamic> updateProgress(DateTime start, DateTime end) {
     return _$updateProgressAsyncAction
-        .run(() => super.updateProgress(exerciseAnswers, start, end));
+        .run(() => super.updateProgress(start, end));
   }
 
   late final _$_QuestionStoreActionController =
       ActionController(name: '_QuestionStore', context: context);
+
+  @override
+  ExerciseResult? getExerciseResult() {
+    final _$actionInfo = _$_QuestionStoreActionController.startAction(
+        name: '_QuestionStore.getExerciseResult');
+    try {
+      return super.getExerciseResult();
+    } finally {
+      _$_QuestionStoreActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void setQuit(QuitOverlayResponse value) {
@@ -203,7 +278,11 @@ mixin _$QuestionStore on _QuestionStore, Store {
     return '''
 fetchQuestionsFuture: ${fetchQuestionsFuture},
 saveUserResult: ${saveUserResult},
+fetchExerciseAnswerFuture: ${fetchExerciseAnswerFuture},
+uploadImagesFuture: ${uploadImagesFuture},
 questionList: ${questionList},
+exerciseResult: ${exerciseResult},
+isUploadingImages: ${isUploadingImages},
 success: ${success},
 isAuthorized: ${isAuthorized},
 questionsUid: ${questionsUid},

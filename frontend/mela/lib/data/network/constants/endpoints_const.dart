@@ -83,4 +83,8 @@ class EndpointsConst {
   //suggestion
   static const String getProposedNewSuggestion = "/api/suggestions";
   static const String updateSuggestion = "/api/suggestions/:suggestionId";
+
+  //question upload images
+  static const String getPresignUrlForQuestion =
+      "/api/exercise-histories/files/upload-url";
 }

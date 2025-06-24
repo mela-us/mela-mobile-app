@@ -6,6 +6,8 @@ import 'package:mela/constants/dimens.dart';
 import 'package:mela/constants/layout.dart';
 import 'package:mela/core/widgets/practice_app_bar_widget.dart';
 import 'package:mela/di/service_locator.dart';
+import 'package:mela/domain/entity/exercise/exercise.dart';
+import 'package:mela/domain/entity/question/exercise_result.dart';
 import 'package:mela/domain/entity/question/question.dart';
 import 'package:mela/presentation/question/store/question_store.dart';
 import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
@@ -75,7 +77,10 @@ class _ReviewScreenState extends State<ReviewScreen> {
               padding:
                   const EdgeInsets.only(left: Dimens.practiceLeftContainer),
               child: Text(
-                AppLocalizations.of(context).translate('review_ask'),
+                questions[_singleQuestionStore.currentIndex].questionType ==
+                        "ESSAY"
+                    ? "Nhận xét bài làm: "
+                    : AppLocalizations.of(context).translate('review_ask'),
                 style: Theme.of(context)
                     .textTheme
                     .subTitle
@@ -87,7 +92,10 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
             isQuizQuestion(questions[_singleQuestionStore.currentIndex])
                 ? _buildQuizAnswer()
-                : _buildFillAnswer(),
+                : questions[_singleQuestionStore.currentIndex].questionType ==
+                        "ESSAY"
+                    ? _buildSubjectiveAnswer()
+                    : _buildFillAnswer(),
 
             isQuizQuestion(questions[_singleQuestionStore.currentIndex])
                 ? const SizedBox(height: 15)
@@ -134,8 +142,14 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 _singleQuestionStore.changeQuestion(i);
               },
               child: ListItemTile(
-                status: getStatus(
-                    questions[i], _singleQuestionStore.userAnswers[i]),
+                status: questions[i].questionType == "ESSAY"
+                    ? (_questionStore.exerciseResult!.answers[i].isCorrect
+                        ? AnswerStatus.correct
+                        : AnswerStatus.incorrect)
+                    : getStatus(
+                        questions[i],
+                        _singleQuestionStore.userAnswers[i],
+                      ),
                 index: i,
               ),
             );
@@ -349,6 +363,55 @@ class _ReviewScreenState extends State<ReviewScreen> {
           Theme.of(context).colorScheme.buttonChooseBackground,
           Icons.check_circle),
     );
+  }
+
+  Widget _buildSubjectiveAnswer() {
+    Question question = questions[_singleQuestionStore.currentIndex];
+    String userAnswer =
+        _singleQuestionStore.userAnswers[_singleQuestionStore.currentIndex];
+    ExerciseResult? exerciseResult = _questionStore.exerciseResult;
+    String feedback = "Không có feedback cho bài làm của bạn.";
+    if (exerciseResult != null) {
+      feedback =
+          exerciseResult.answers[_singleQuestionStore.currentIndex].feedback;
+    }
+
+    //Build ESSAY question answer feedback
+
+    return Padding(
+        padding: const EdgeInsets.only(
+          left: Dimens.practiceLeftContainer,
+          right: Dimens.practiceRightContainer,
+        ),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(Dimens.answerTileRadius),
+            boxShadow: [
+              Layout.practiceBoxShadow,
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                  child: Text(
+                feedback,
+                softWrap: true,
+                style: Theme.of(context)
+                    .textTheme
+                    .normal
+                    .copyWith(color: Theme.of(context).colorScheme.inputText),
+              )),
+              const Icon(
+                Icons.feedback_outlined,
+                color: Colors.grey,
+                size: Dimens.answerTileIconSize,
+              ),
+            ],
+          ),
+        ));
   }
 
   Widget _buildIncorrectFill(String correctAnswer, String answer) {

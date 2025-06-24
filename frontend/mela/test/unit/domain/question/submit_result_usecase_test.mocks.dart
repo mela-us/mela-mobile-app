@@ -3,13 +3,14 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i3;
+import 'dart:async' as _i4;
 
-import 'package:mela/data/network/apis/questions/save_result_api.dart' as _i2;
-import 'package:mela/domain/params/question/submit_result_params.dart' as _i4;
-import 'package:mela/domain/usecase/user/logout_usecase.dart' as _i6;
+import 'package:mela/data/network/apis/questions/save_result_api.dart' as _i3;
+import 'package:mela/domain/entity/question/exercise_result.dart' as _i2;
+import 'package:mela/domain/params/question/submit_result_params.dart' as _i5;
+import 'package:mela/domain/usecase/user/logout_usecase.dart' as _i7;
 import 'package:mela/domain/usecase/user_login/refresh_access_token_usecase.dart'
-    as _i5;
+    as _i6;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -25,17 +26,28 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
+class _FakeExerciseResult_0 extends _i1.SmartFake
+    implements _i2.ExerciseResult {
+  _FakeExerciseResult_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [SaveResultApi].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockSaveResultApi extends _i1.Mock implements _i2.SaveResultApi {
+class MockSaveResultApi extends _i1.Mock implements _i3.SaveResultApi {
   MockSaveResultApi() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<int> saveResult(
-    _i4.SubmitResultParams? param,
+  _i4.Future<_i2.ExerciseResult> saveResult(
+    _i5.SubmitResultParams? param,
     String? endpoint,
   ) =>
       (super.noSuchMethod(
@@ -46,45 +58,54 @@ class MockSaveResultApi extends _i1.Mock implements _i2.SaveResultApi {
             endpoint,
           ],
         ),
-        returnValue: _i3.Future<int>.value(0),
-      ) as _i3.Future<int>);
+        returnValue: _i4.Future<_i2.ExerciseResult>.value(_FakeExerciseResult_0(
+          this,
+          Invocation.method(
+            #saveResult,
+            [
+              param,
+              endpoint,
+            ],
+          ),
+        )),
+      ) as _i4.Future<_i2.ExerciseResult>);
 }
 
 /// A class which mocks [RefreshAccessTokenUsecase].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockRefreshAccessTokenUsecase extends _i1.Mock
-    implements _i5.RefreshAccessTokenUsecase {
+    implements _i6.RefreshAccessTokenUsecase {
   MockRefreshAccessTokenUsecase() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<bool> call({required dynamic params}) => (super.noSuchMethod(
+  _i4.Future<bool> call({required dynamic params}) => (super.noSuchMethod(
         Invocation.method(
           #call,
           [],
           {#params: params},
         ),
-        returnValue: _i3.Future<bool>.value(false),
-      ) as _i3.Future<bool>);
+        returnValue: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
 }
 
 /// A class which mocks [LogoutUseCase].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockLogoutUseCase extends _i1.Mock implements _i6.LogoutUseCase {
+class MockLogoutUseCase extends _i1.Mock implements _i7.LogoutUseCase {
   MockLogoutUseCase() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<bool> call({required dynamic params}) => (super.noSuchMethod(
+  _i4.Future<bool> call({required dynamic params}) => (super.noSuchMethod(
         Invocation.method(
           #call,
           [],
           {#params: params},
         ),
-        returnValue: _i3.Future<bool>.value(false),
-      ) as _i3.Future<bool>);
+        returnValue: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
 }
