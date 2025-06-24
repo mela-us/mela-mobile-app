@@ -8,7 +8,7 @@ class Topic {
   factory Topic.fromJson(Map<String, dynamic> json) {
     return Topic(
       topicId: json['topicId'],
-      topicName: json['name'],
+      topicName: json['name']??"???",
       imageTopicPath: json['imageUrl'],
       descriptionTopic: json['description']??"",
     );

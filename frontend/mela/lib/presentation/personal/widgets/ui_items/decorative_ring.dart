@@ -61,7 +61,7 @@ class _DecorativeRingState extends State<DecorativeRing>
         child: ImageFiltered(
           imageFilter: ImageFilter.blur(sigmaX: widget.sigma, sigmaY: widget.sigma),
           child: Image.asset(
-            Assets.streak_ring,
+            Assets.loading_icon,
             width: widget.size,
             height: widget.size,
             fit: BoxFit.fill,
