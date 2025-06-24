@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mela/core/widgets/icon_widget/error_icon_widget.dart';
 import 'package:mela/presentation/personal/level_selector.dart';
 import 'package:mela/presentation/personal/notification_setting/notification_setting.dart';
 import 'package:mela/presentation/personal/widgets/ui_items/decorative_ring.dart';
@@ -56,24 +58,33 @@ class _PersonalScreenState extends State<PersonalScreen> {
         ),
         automaticallyImplyLeading: false,
       ),
-      body: Stack(alignment: Alignment.center, children: [
-        const Positioned(
-          top: 14,
-          right: -9,
-          child: DecorativeRing(size: 100, duration: 20, sigma: 1),
-        ),
-        const Positioned(
-          top: 100,
-          right: 220,
-          child: DecorativeRing(size: 300, clockwise: false),
-        ),
-        const Positioned(
-          top: 280,
-          right: -270,
-          child: DecorativeRing(),
-        ),
-        _buildBody(context),
-      ]),
+      body: Observer (
+          builder: (context) {
+            if (_store.errorGettingInfo) {
+              return const ErrorIconWidget(
+                message: "Đã có lỗi xảy ra. Vui lòng thử lại",
+              );
+            }
+            return Stack(alignment: Alignment.center, children: [
+              // const Positioned(
+              //   top: 44,
+              //   right: -9,
+              //   child: DecorativeRing(size: 100, duration: 20, sigma: 1),
+              // ),
+              const Positioned(
+                top: 100,
+                right: 220,
+                child: DecorativeRing(size: 300, clockwise: false),
+              ),
+              const Positioned(
+                top: 280,
+                right: -270,
+                child: DecorativeRing(),
+              ),
+              _buildBody(context),
+            ]);
+          }
+      )
     );
   }
 
@@ -284,7 +295,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
           );
         }
       }, false),
-      _buildListTile(context, Assets.personal_term, 'Thông báo', () {
+      _buildListTile(context, Assets.personal_notification, 'Thông báo', () {
         Navigator.push(
           context,
           PageRouteBuilder(

@@ -27,7 +27,7 @@ class _StreakActionIconState extends State<StreakActionIcon> {
 
     print("BUILD STREAK ACTION ICON");
 
-    final double size = 28;
+    const double size = 32;
 
     return Observer(builder: (context) {
       if (_store.isLoading) {
@@ -42,31 +42,13 @@ class _StreakActionIconState extends State<StreakActionIcon> {
           Stack(
             alignment: Alignment.center,
             children: [
-              ShaderMask(
-                shaderCallback: (Rect bounds) {
-                  return LinearGradient(
-                    colors: [Colors.orange.shade700, Colors.red.shade300],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ).createShader(bounds);
-                },
-                blendMode: BlendMode.srcIn,
-                child: Image.asset(
-                  Assets.streak_ring,
-                  width: size,
-                  height: size,
-                  fit: BoxFit.fill,
-                ).animate(onPlay: (controller) => controller.repeat(),)
-                    .rotate(duration: const Duration(seconds: 1), curve: Curves.linear, end: 1.0,)
-                    .rotate(duration: const Duration(seconds: 0), end: 1.0, delay: const Duration(seconds: 8),
-                ),
-              ),
+              Image.asset(Assets.mela_streak, height: size + 2, width: size),
               Text(
                 '$streak',
                 style: Theme.of(context).textTheme.subTitle.copyWith(
-                  fontSize: (streak / 100 >= 1)
-                      ? 14
-                      : 16,
+                  fontSize: (streak / 10 >= 1)
+                      ? ((streak / 100 >= 1) ? 14 : 20)
+                      : 26,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Asap',
                   foreground: Paint()
@@ -78,9 +60,9 @@ class _StreakActionIconState extends State<StreakActionIcon> {
               Text(
                 '$streak',
                 style: Theme.of(context).textTheme.subTitle.copyWith(
-                  fontSize: (streak / 100 >= 1)
-                      ? 14
-                      : 16,
+                  fontSize: (streak / 10 >= 1)
+                      ? ((streak / 100 >= 1) ? 14 : 20)
+                      : 26,
                   color: Theme.of(context).colorScheme.primary,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Asap',

@@ -44,11 +44,11 @@ class TileList extends StatelessWidget {
               );
             }
 
-            final stat = list![index - 1];
-            return Column(
+            //final stat = list![index - 1];
+            return const Column(
               children: [
-                ExpandableTile(detailedStat: stat),
-                const SizedBox(height: 3),
+                // ExpandableTile(detailedStat: stat),
+                // const SizedBox(height: 3),
               ],
             );
           },

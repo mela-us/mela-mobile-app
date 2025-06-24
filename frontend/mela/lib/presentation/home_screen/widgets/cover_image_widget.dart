@@ -36,7 +36,7 @@ class _CoverImageWidgetState extends State<CoverImageWidget>
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    final containerWidth = screenWidth * 0.85;
+    final containerWidth = screenWidth * 0.75;
     final containerHeight =
         containerWidth * (290 / 384); // Maintain aspect ratio
     final imageHeight = containerWidth * (257 / 384); // Scale image height

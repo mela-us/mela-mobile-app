@@ -50,6 +50,8 @@ abstract class _PersonalStore with Store {
 
   @observable
   bool isLoading = false;
+  @observable
+  bool errorGettingInfo = false;
   //
   @observable
   bool logout_success = false;
@@ -73,8 +75,10 @@ abstract class _PersonalStore with Store {
     future.then((temp) {
       user = temp;
     }).catchError((error) {
+      errorGettingInfo = true;
       _errorStore.errorMessage = DioExceptionUtil.handleError(error);
     });
+    errorGettingInfo = false;
     isLoading = false;
   }
 
