@@ -2,7 +2,7 @@
 // import 'package:flutter_mobx/flutter_mobx.dart';
 // import 'package:mela/constants/app_theme.dart';
 // import 'package:mela/constants/dimens.dart';
-// import 'package:mela/presentation/detailed_stats_and_comments/detailed_stats_and_comments.dart';
+// import 'package:mela/presentation/detailed_stats_and_comments/stats_topic_personal.dart';
 // import 'package:mela/di/service_locator.dart';
 // import 'package:mela/presentation/home_screen/widgets/level_item.dart';
 // import 'package:mela/presentation/tutor/stores/tutor_store.dart';

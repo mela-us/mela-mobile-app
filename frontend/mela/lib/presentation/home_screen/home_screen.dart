@@ -32,7 +32,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   //stores:---------------------------------------------------------------------
   final LevelStore _levelStore = getIt<LevelStore>();
   final StreakStore _streakStore = getIt<StreakStore>();
@@ -40,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen>
   final PersonalStore _personalStore = getIt<PersonalStore>();
 
   int _selectedTab = 0;
+  late TabController _tabController;
   int focusLevelIndex = 0;
 
   late final ReactionDisposer _unAuthorizedReactionDisposer;
@@ -90,6 +91,16 @@ class _HomeScreenState extends State<HomeScreen>
         }
       });
     });
+
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging == false) {
+        setState(() {
+          _selectedTab = _tabController.index;
+        });
+      }
+    });
+
   }
 
   Future<void> _initReviseData() async {
@@ -121,6 +132,7 @@ class _HomeScreenState extends State<HomeScreen>
 
     _unAuthorizedReactionDisposer();
     _scrollController.dispose();
+    _tabController.dispose();
 
     super.dispose();
   }
@@ -361,6 +373,7 @@ class _HomeScreenState extends State<HomeScreen>
       ScaleTransition(
         scale: _scaleAnimation,
         child: TabBar(
+          controller: _tabController,
           onTap: (index) {
             setState(() {
               _selectedTab = index;
@@ -426,6 +439,7 @@ class _HomeScreenState extends State<HomeScreen>
       SizedBox(
         height: 420,
         child: TabBarView(
+          controller: _tabController,
           children: [
             // Tab 1: Revision List
             ReviseViewWidget(onScrollToHead: _scrollToHead),

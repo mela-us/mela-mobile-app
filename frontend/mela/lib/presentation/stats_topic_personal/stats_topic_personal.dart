@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
-import 'package:mela/presentation/detailed_stats_and_comments/widgets/tile_list.dart';
+import 'package:mela/presentation/stats_topic_personal/widgets/radar_stat_chart.dart';
+import 'package:mela/presentation/stats_topic_personal/widgets/tile_list.dart';
 
 import '../../domain/entity/stat/detailed_stat.dart';
 
-class DetailedStatsAndComments extends StatefulWidget {
+class StatsTopicPersonal extends StatefulWidget {
 
-  const DetailedStatsAndComments({
+  const StatsTopicPersonal({
     super.key,
   });
 
   @override
-  _DetailedStatsAndCommentsState createState() =>
-      _DetailedStatsAndCommentsState();
+  _StatsTopicPersonalState createState() =>
+      _StatsTopicPersonalState();
 }
 
-class _DetailedStatsAndCommentsState
-    extends State<DetailedStatsAndComments> {
+class _StatsTopicPersonalState
+    extends State<StatsTopicPersonal> {
   late List<DetailedStat> list;
   late String url;
 
@@ -52,8 +53,29 @@ class _DetailedStatsAndCommentsState
                     ),
                   );
                 }
-                //return RadarStatChart(stats: list);
-                return TileList(list: list);
+                return Container(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8.0),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 4.0,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                      children: [
+                        const SizedBox(height: 12),
+                        RadarStatChart(stats: list),
+                        const SizedBox(height: 4),
+                      ]
+                  ),
+                );
+                //return TileList(list: list);
               },
             ),
           ],
@@ -65,43 +87,22 @@ List<DetailedStat> getMock() {
   return [
     DetailedStat(
       topic: 'Đại số',
-      comments: '''
-Bạn nắm khá tốt các phép biến đổi và giải phương trình.  
-- Cần luyện thêm các bài toán thực tế.  
-- Có tiềm năng đạt mức khá giỏi nếu duy trì phong độ.
-''',
       excellence: 82.5,
     ),
     DetailedStat(
       topic: 'Hình học',
-      comments: '''
-Khả năng tưởng tượng hình khối còn hạn chế. Cần rèn luyện thêm tư duy không gian.
-''',
       excellence: 68.0,
     ),
     DetailedStat(
       topic: 'Xác suất - Thống kê',
-      comments: '''
-Hiểu các khái niệm cơ bản nhưng áp dụng công thức còn chưa linh hoạt.  
-- Nên luyện các bài toán ứng dụng thực tế.  
-- Có thể học theo sơ đồ tư duy để dễ ghi nhớ.
-''',
       excellence: 57.0,
     ),
     DetailedStat(
       topic: 'Tư duy',
-      comments: '''
-Nắm chắc đạo hàm và tích phân.  
-- Khả năng giải quyết bài toán ở mức độ khá trở lên.  
-- Cần luyện thêm bài tích hợp kiến thức để nâng cao.
-''',
       excellence: 89.0,
     ),
     DetailedStat(
       topic: 'Số học',
-      comments: '''
-Cần phải thiện nhiều
-''',
       excellence: 40.5,
     ),
   ];

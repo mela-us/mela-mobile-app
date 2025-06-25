@@ -3,7 +3,7 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/home_screen/home_screen.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
-import 'package:mela/presentation/stats/stats.dart';
+import 'package:mela/presentation/stats_history/stats.dart';
 import 'package:mela/presentation/personal/personal.dart';
 import 'package:mela/presentation/tutor/exam_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';

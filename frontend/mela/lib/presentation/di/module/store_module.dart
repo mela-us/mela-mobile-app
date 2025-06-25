@@ -83,11 +83,12 @@ import '../../signup_login_screen/store/user_signup_store/user_signup_store.dart
 
 import 'package:mela/domain/usecase/stat/get_progress_usecase.dart';
 
-import 'package:mela/presentation/stats/store/stats_store.dart';
+import 'package:mela/presentation/stats_history/store/stats_store.dart';
 import 'package:mela/presentation/personal/store/personal_store.dart';
 
-import '../../stats/store/stat_filter_store.dart';
-import '../../stats/store/stat_search_store.dart';
+import '../../stats_history/store/stat_filter_store.dart';
+import '../../stats_history/store/stat_search_store.dart';
+
 import '../../streak/store/streak_store.dart';
 import '../../thread_chat_learning/store/chat_box_learning_store/chat_box_learning_store.dart';
 

@@ -3,8 +3,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/core/widgets/progress_indicator_widget.dart';
 import 'package:mela/di/service_locator.dart';
-import 'package:mela/presentation/stats/store/stats_store.dart';
-import 'package:mela/presentation/stats/widgets/expandable_list.dart';
+import 'package:mela/presentation/stats_history/store/stats_store.dart';
+import 'package:mela/presentation/stats_history/widgets/expandable_list.dart';
 
 import '../../domain/entity/stat/progress.dart';
 import 'widgets/search_bar.dart';

@@ -23,7 +23,7 @@ import 'package:mela/presentation/personal/personal.dart';
 import 'package:mela/presentation/personal/personal_info.dart';
 import 'package:mela/presentation/signup_login_screen/login_or_signup_screen.dart';
 import 'package:mela/presentation/splash/splash_screen.dart';
-import 'package:mela/presentation/stats/stats.dart';
+import 'package:mela/presentation/stats_history/stats.dart';
 import 'package:mela/utils/routes/routes.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';

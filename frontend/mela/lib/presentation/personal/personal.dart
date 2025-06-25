@@ -6,14 +6,14 @@ import 'package:mela/presentation/personal/notification_setting/notification_set
 import 'package:mela/presentation/personal/widgets/ui_items/decorative_ring.dart';
 import 'package:mela/presentation/personal/widgets/headings/personal_heading.dart';
 import 'package:mela/presentation/signup_login_screen/login_or_signup_screen.dart';
-import 'package:mela/presentation/stats/stats.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vibration/vibration.dart';
 import '../../constants/assets.dart';
 import '../../constants/app_theme.dart';
 import '../../di/service_locator.dart';
-import '../detailed_stats_and_comments/detailed_stats_and_comments.dart';
 import '../signup_login_screen/store/user_login_store/user_login_store.dart';
+import '../stats_history/stats.dart';
+import '../stats_topic_personal/stats_topic_personal.dart';
 import '../streak/store/streak_store.dart';
 import '../streak/streak_dialog.dart';
 import 'store/personal_store.dart';
@@ -27,15 +27,19 @@ class PersonalScreen extends StatefulWidget {
   _PersonalScreenState createState() => _PersonalScreenState();
 }
 
-class _PersonalScreenState extends State<PersonalScreen> {
+class _PersonalScreenState extends State<PersonalScreen> with SingleTickerProviderStateMixin {
   final PersonalStore _store = getIt<PersonalStore>();
   final UserLoginStore _loginStore = getIt<UserLoginStore>();
   final StreakStore _streakStore = getIt<StreakStore>();
+
+  late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
     _loadData();
+
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   Future<void> _loadData() async {
@@ -141,11 +145,13 @@ class _PersonalScreenState extends State<PersonalScreen> {
                 onLevelSelect: _navigateToLevelSelector,
                 onNavigateToStats: _navigateToDetailedStats,
                 onShowStreak: _showStreakDialog,
+                tabController: _tabController,
               ),
             ),
             const SizedBox(height: 10.0),
             Expanded(
               child: TabBarView(
+                controller: _tabController,
                 children: [
                   _buildDetailedStatsTab(context),
                   _buildOptionsTab(context),
@@ -261,7 +267,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
   }
 
   Widget _buildDetailedStatsTab(BuildContext context) {
-    return const DetailedStatsAndComments();
+    return const StatsTopicPersonal();
   }
 
   //OPTION LIST (info, signout...)

@@ -10,23 +10,47 @@ import '../../../../utils/animation_helper/animation_helper.dart';
 import '../../../streak/store/streak_store.dart';
 import '../../store/personal_store.dart';
 
-class PersonalHeading extends StatefulWidget {
-  const PersonalHeading({super.key, required this.onNavigateToStats, required this.onShowStreak, required this.onLevelSelect});
+class PersonalHeading extends StatefulWidget  {
+  const PersonalHeading({super.key, required this.onNavigateToStats, required this.onShowStreak, required this.onLevelSelect, required this.tabController});
 
   final VoidCallback onNavigateToStats;
   final VoidCallback onShowStreak;
   final VoidCallback onLevelSelect;
 
+  final TabController tabController;
+
   @override
   _PersonalHeadingState createState() => _PersonalHeadingState();
 }
 
-class _PersonalHeadingState extends State<PersonalHeading> {
+class _PersonalHeadingState extends State<PersonalHeading> with SingleTickerProviderStateMixin {
 
   final PersonalStore _store = getIt<PersonalStore>();
   final StreakStore _streakStore = getIt<StreakStore>();
 
   int _selectedTab = 0;
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _tabController = widget.tabController;
+
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging == false) {
+        setState(() {
+          _selectedTab = _tabController.index;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,6 +133,7 @@ class _PersonalHeadingState extends State<PersonalHeading> {
                         ],
                       ),
                       TabBar(
+                        controller: _tabController,
                         onTap: (index) {
                           setState(() {
                             _selectedTab = index;

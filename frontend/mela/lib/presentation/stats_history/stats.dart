@@ -6,14 +6,13 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/core/widgets/image_progress_indicator.dart';
 import '../../core/widgets/icon_widget/empty_icon_widget.dart';
 import '../../domain/entity/stat/progress_list.dart';
-import '../../utils/routes/routes.dart';
 import 'widgets/expandable_list.dart';
 
 import 'store/stats_store.dart';
 import '../../di/service_locator.dart';
 
 class StatisticsScreen extends StatefulWidget {
-  StatisticsScreen({super.key});
+  const StatisticsScreen({super.key});
 
   @override
   State<StatisticsScreen> createState() => _StatisticsScreenState();
@@ -72,8 +71,8 @@ class _StatisticsScreenState extends State<StatisticsScreen> with TickerProvider
   @override
   Widget build(BuildContext context) {
     if (_isLoadingLevels) {
-      return const Scaffold(
-        body: Center(child: RotatingImageIndicator()),
+      return Scaffold(
+        body: Center(child: Container()),
       );
     }
 
@@ -115,7 +114,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> with TickerProvider
       ),
       body: Observer(
         builder: (context) {
-          if (_store.progressLoading) {
+          if (_store.progressLoading || _store.levelLoading) {
             return const Center(child: RotatingImageIndicator());
           }
           if (!_store.success) {
