@@ -1,7 +1,9 @@
 // ignore_for_file: unused_import
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
@@ -11,6 +13,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/strings.dart';
+import 'package:mela/core/widgets/buid_no_internet_widget.dart';
 import 'package:mela/core/widgets/custom_scroll_behavior.dart';
 import 'package:mela/core/widgets/screen_wrapper.dart';
 import 'package:mela/data/securestorage/secure_storage_helper.dart';
@@ -48,6 +51,7 @@ class _MyAppState extends State<MyApp> {
   final SharedPreferenceHelper prefs = getIt<SharedPreferenceHelper>();
   final SecureStorageHelper secureStorageHelper = getIt<SecureStorageHelper>();
   bool isVersionCorrect = true;
+
   @override
   void initState() {
     // TODO: implement initState
