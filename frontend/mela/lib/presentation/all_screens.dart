@@ -56,10 +56,10 @@ class _AllScreensState extends State<AllScreens> {
             result.contains(ConnectivityResult.ethernet);
 
         if (!hasConnection) {
-          print("Không có internet khi thay đổi kết nối");
+          print("Sa ====> Không có internet khi thay đổi kết nố ở all Screens");
           showDialogNoInternet();
         } else {
-          print("Có internet quay trở lại");
+          print("Sa ====> Có internet quay trở lại ở all Screens");
         }
       });
     });
