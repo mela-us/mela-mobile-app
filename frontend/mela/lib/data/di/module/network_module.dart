@@ -64,7 +64,7 @@ class NetworkModule {
           [
             getIt<AuthInterceptor>(),
             getIt<ErrorInterceptor>(),
-            // getIt<LoggingInterceptor>(),
+            getIt<LoggingInterceptor>(),
           ],
         ),
     );
