@@ -157,17 +157,20 @@ abstract class _QuestionStore with Store {
 
     List<AnswerParams> exerciseAnswers = [];
     for (int i = 0; i < questionList!.questions!.length; i++) {
+      print("IN LOOP $i OF UPDATE PROGRESS");
+      print(_singleQuestionStore.userAnswers[i]);
       // Check if the quesiton is a multiple choice
       if (questionList!.questions![i].questionType == "MULTIPLE_CHOICE") {
         AnswerParams answer = AnswerParams(
           selectedOption: _singleQuestionStore.userAnswers[i].isNotEmpty
-              ? int.parse(_singleQuestionStore.userAnswers[i])
+              ? convertLetterToNumber(_singleQuestionStore.userAnswers[i])
               : null,
           blankAnswer: "",
           questionId: questionList!.questions![i].questionId!,
           imageUrls: [],
         );
         exerciseAnswers.add(answer);
+        print("Multiple choice $i ${_singleQuestionStore.userAnswers[i]}");
       }
       //Check if the question is a subjective question
       else if (questionList!.questions![i].questionType == "ESSAY") {
@@ -178,6 +181,7 @@ abstract class _QuestionStore with Store {
           imageUrls: imageUrls[i],
         );
         exerciseAnswers.add(answer);
+        print("Essay $i ");
       }
       // Check if the question is a fill in the blank
       else {
@@ -188,15 +192,20 @@ abstract class _QuestionStore with Store {
           imageUrls: null,
         );
         exerciseAnswers.add(answer);
+        print("Fill blank $i ${_singleQuestionStore.userAnswers[i]}");
       }
     }
-    final future = _updateExerciseProgressUseCase.call(
-        params: SubmitResultParams(
+
+    final params = SubmitResultParams(
       startAt: start,
       endAt: end,
       answers: exerciseAnswers,
       exerciseId: questionsUid,
-    ));
+    );
+
+    final future = _updateExerciseProgressUseCase.call(
+        params: params
+    );
     fetchExerciseAnswerFuture = ObservableFuture(future);
     future.then((result) {
       exerciseResult = result;
@@ -233,4 +242,19 @@ abstract class _QuestionStore with Store {
 
   @action
   void handleLogout() {}
+
+  int convertLetterToNumber(String letter) {
+    switch (letter.toUpperCase()) {
+      case 'A':
+        return 1;
+      case 'B':
+        return 2;
+      case 'C':
+        return 3;
+      case 'D':
+        return 4;
+      default:
+        return 0;
+    }
+  }
 }
