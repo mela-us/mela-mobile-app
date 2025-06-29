@@ -152,10 +152,10 @@ class _StreakDialogState extends State<StreakDialog> {
                         children: [
                           Image.asset(Assets.mela_streak, height: size/3 + 2, width: size/3),
                           Text(
-                            '$streak',
+                            '$longest',
                             style: Theme.of(context).textTheme.subTitle.copyWith(
-                              fontSize: (streak / 10 >= 1)
-                                  ? ((streak / 100 >= 1) ? 14 : 20)
+                              fontSize: (longest / 10 >= 1)
+                                  ? ((longest / 100 >= 1) ? 14 : 20)
                                   : 26,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Asap',
@@ -166,10 +166,10 @@ class _StreakDialogState extends State<StreakDialog> {
                             ),
                           ),
                           Text(
-                            '$streak',
+                            '$longest',
                             style: Theme.of(context).textTheme.subTitle.copyWith(
-                              fontSize: (streak / 10 >= 1)
-                                  ? ((streak / 100 >= 1) ? 14 : 20)
+                              fontSize: (longest / 10 >= 1)
+                                  ? ((longest / 100 >= 1) ? 14 : 20)
                                   : 26,
                               color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.bold,
