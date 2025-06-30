@@ -71,6 +71,22 @@ mixin _$PersonalStore on _PersonalStore, Store {
     });
   }
 
+  late final _$errorGettingInfoAtom =
+      Atom(name: '_PersonalStore.errorGettingInfo', context: context);
+
+  @override
+  bool get errorGettingInfo {
+    _$errorGettingInfoAtom.reportRead();
+    return super.errorGettingInfo;
+  }
+
+  @override
+  set errorGettingInfo(bool value) {
+    _$errorGettingInfoAtom.reportWrite(value, super.errorGettingInfo, () {
+      super.errorGettingInfo = value;
+    });
+  }
+
   late final _$logout_successAtom =
       Atom(name: '_PersonalStore.logout_success', context: context);
 
@@ -166,6 +182,7 @@ mixin _$PersonalStore on _PersonalStore, Store {
 fetchFuture: ${fetchFuture},
 user: ${user},
 isLoading: ${isLoading},
+errorGettingInfo: ${errorGettingInfo},
 logout_success: ${logout_success},
 isImageUpdating: ${isImageUpdating},
 progressLoading: ${progressLoading},

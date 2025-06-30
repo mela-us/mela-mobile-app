@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/presentation/stats_topic_personal/store/detailed_stats_store.dart';
 import 'package:mela/presentation/stats_topic_personal/widgets/radar_stat_chart.dart';
-import 'package:mela/presentation/stats_topic_personal/widgets/tile_list.dart';
 
+import '../../core/widgets/icon_widget/error_icon_widget.dart';
+import '../../core/widgets/image_progress_indicator.dart';
+import '../../di/service_locator.dart';
 import '../../domain/entity/stat/detailed_stat.dart';
 
 class StatsTopicPersonal extends StatefulWidget {
@@ -17,15 +20,24 @@ class StatsTopicPersonal extends StatefulWidget {
       _StatsTopicPersonalState();
 }
 
-class _StatsTopicPersonalState
-    extends State<StatsTopicPersonal> {
+class _StatsTopicPersonalState extends State<StatsTopicPersonal> {
+  final DetailedStatStore _store = getIt<DetailedStatStore>();
   late List<DetailedStat> list;
   late String url;
 
   @override
   Widget build(BuildContext context) {
-    list = getMock();
     return _buildBody(context);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeData();
+  }
+
+  Future<void> _initializeData() async {
+    await _store.getStats();
   }
 
   Widget _buildBody(BuildContext context) {
@@ -34,25 +46,24 @@ class _StatsTopicPersonalState
           children: [
             Observer(
               builder: (context) {
-                if (list.isEmpty) {
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Oops! Hành trình của bạn chưa bắt đầu\nHãy bắt đầu học!',
-                            style: Theme.of(context).textTheme.subTitle.copyWith(
-                                color: Theme.of(context).colorScheme.textInBg1),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
+                //
+                if (_store.loading) {
+                  return const Center(child: RotatingImageIndicator());
+                }
+                if (!_store.success && !_store.loading) {
+                  return const Center(
+                    child: ErrorIconWidget(message: "Đã có lỗi xảy ra. Vui lòng thử lại"),
                   );
                 }
+                //
+                list = _store.stats?.detailedStats ?? [];
+                //
+                if (list.isEmpty) {
+                  return const Center(
+                    child: ErrorIconWidget(message: "Đã có lỗi xảy ra. Vui lòng thử lại"),
+                  );
+                }
+                //
                 return Container(
                   alignment: Alignment.center,
                   margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),

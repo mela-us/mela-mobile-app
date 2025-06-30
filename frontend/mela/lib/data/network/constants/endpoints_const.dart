@@ -34,7 +34,8 @@ class EndpointsConst {
       "/api/forgot-password/validate-otp";
   static const String forgotPasswordCreateNewPassword =
       "/api/forgot-password/reset-password";
-  static const String getStats = "/api/statistics";
+  static const String getProgress = "/api/statistics";
+  static const String getDetailedStats = "/api/users/skills";
   static const String getUser = "/api/users/profile";
   static const String updateUser = "/api/users/profile";
   static const String getImageUpdatePresign =

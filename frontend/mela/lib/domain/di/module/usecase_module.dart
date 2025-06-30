@@ -69,6 +69,7 @@ import '../../usecase/search/delete_all_history_search_usecase.dart';
 import '../../usecase/search/delete_history_search_usecase.dart';
 import '../../usecase/search/get_history_search_list_usecase.dart';
 import '../../usecase/search/get_search_lectures_result_usecase.dart';
+import '../../usecase/stat/get_detailed_progress_usecase.dart';
 import '../../usecase/stat/get_stat_search_history_usecase.dart';
 import '../../usecase/stat/update_stat_search_history_usecase.dart';
 import '../../usecase/streak/get_streak_usecase.dart';
@@ -191,6 +192,10 @@ class UseCaseModule {
     );
     getIt.registerSingleton<GetProgressListUseCase>(
       GetProgressListUseCase(getIt<StatRepository>(),
+          getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()),
+    );
+    getIt.registerSingleton<GetDetailedStatsUseCase>(
+      GetDetailedStatsUseCase(getIt<StatRepository>(),
           getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()),
     );
     //stat search---------------------------------------------------------------

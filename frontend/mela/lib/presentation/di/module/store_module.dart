@@ -14,6 +14,7 @@ import 'package:mela/domain/usecase/chat_with_exercise/send_message_chat_pdf_use
 import 'package:mela/domain/usecase/history/update_excercise_progress_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
 import 'package:mela/domain/usecase/question/upload_images_usecase.dart';
+import 'package:mela/domain/usecase/stat/get_detailed_progress_usecase.dart';
 import 'package:mela/domain/usecase/suggestion/get_proposed_new_suggestion_usecase.dart';
 import 'package:mela/domain/usecase/level/get_level_list_usecase.dart';
 import 'package:mela/domain/usecase/question/generate_hint_usecase.dart';
@@ -35,6 +36,7 @@ import 'package:mela/presentation/question/store/hint_store/hint_store.dart';
 
 import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
 import 'package:mela/presentation/question/store/timer/timer_store.dart';
+import 'package:mela/presentation/stats_topic_personal/store/detailed_stats_store.dart';
 import 'package:mela/presentation/thread_chat/store/chat_box_store/chat_box_store.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/thread_chat_learning/store/thread_chat_learning_store/thread_chat_learning_store.dart';
@@ -176,6 +178,13 @@ class StoreModule {
       StatisticsStore(
         getIt<GetProgressListUseCase>(),
         getIt<GetLevelListUsecase>(),
+        getIt<ErrorStore>(),
+      ),
+    );
+
+    getIt.registerSingleton<DetailedStatStore>(
+      DetailedStatStore(
+        getIt<GetDetailedStatsUseCase>(),
         getIt<ErrorStore>(),
       ),
     );
