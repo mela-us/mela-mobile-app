@@ -17,10 +17,17 @@ class RadarStatChart extends StatelessWidget {
   late List<String> topics;
   late List<double> excellenceValues;
 
+  double getMaxExcellence() {
+    if (excellenceValues.isEmpty) return 0;
+    return excellenceValues.reduce((a, b) => a > b ? a : b);
+  }
+
 
   Widget build(BuildContext context) {
     topics = stats.map((e) => e.topic).toList();
     excellenceValues = stats.map((e) => e.excellence).toList();
+
+    final max = getMaxExcellence();
 
     chartSize = 200;
     labelRadius = chartSize / 2 + 21;
@@ -38,7 +45,9 @@ class RadarStatChart extends StatelessWidget {
               height: chartSize,
               width: chartSize,
               child: RadarChart(
-                ticks: const [20, 40, 60, 80, 100],
+                ticks: max > 20
+                    ? const [20, 40, 60, 80, 100]
+                    : const [5, 10, 15, 20],
                 features: List.filled(sides, ""),
                 data: [excellenceValues],
                 reverseAxis: false,

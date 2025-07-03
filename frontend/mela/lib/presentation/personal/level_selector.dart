@@ -5,6 +5,7 @@ import 'package:mela/constants/dimens.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/home_screen/widgets/level_item.dart';
 import 'package:mela/presentation/personal/store/personal_store.dart';
+import 'package:mela/presentation/stats_topic_personal/store/detailed_stats_store.dart';
 import 'package:mela/presentation/tutor/stores/tutor_store.dart';
 import 'package:mobx/mobx.dart';
 
@@ -24,6 +25,7 @@ class _LevelSelectorScreenState extends State<LevelSelectorScreen> {
 
   final TutorStore _tutorStore = getIt<TutorStore>();
   final PersonalStore _personalStore = getIt<PersonalStore>();
+  final DetailedStatStore _statStore = getIt<DetailedStatStore>();
 
   @override
   void initState() {
@@ -93,9 +95,9 @@ class _LevelSelectorScreenState extends State<LevelSelectorScreen> {
       itemBuilder: (context, index) {
         return GestureDetector(
           onTap: () async {
-            String levelName =
-                _tutorStore.levelList!.levelList[index].levelName;
-            _personalStore.updateLevel(levelName);
+            String levelName = _tutorStore.levelList!.levelList[index].levelName;
+            await _personalStore.updateLevel(levelName);
+            _statStore.getStats();
             Navigator.of(context).pop();
           },
           child: AbsorbPointer(

@@ -27,7 +27,57 @@ class _StatsTopicPersonalState extends State<StatsTopicPersonal> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildBody(context);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Observer(
+          builder: (context) {
+            //
+            if (_store.loading) {
+              return const Center(child: RotatingImageIndicator());
+            }
+            if (!_store.success && !_store.loading) {
+              return const Center(
+                child: ErrorIconWidget(message: "Đã có lỗi xảy ra. Vui lòng thử lại"),
+              );
+            }
+            //
+            list = _store.stats?.detailedStats ?? [];
+            //
+            if (list.isEmpty) {
+              return const Center(
+                child: ErrorIconWidget(message: "Đã có lỗi xảy ra. Vui lòng thử lại"),
+              );
+            }
+            //
+            return Container(
+              alignment: Alignment.center,
+              margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8.0),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 4.0,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                  children: [
+                    const SizedBox(height: 12),
+                    RadarStatChart(stats: list),
+                    const SizedBox(height: 4),
+                  ]
+              ),
+            );
+            //return TileList(list: list);
+          },
+        ),
+      ],
+    );
   }
 
   @override
@@ -38,59 +88,6 @@ class _StatsTopicPersonalState extends State<StatsTopicPersonal> {
 
   Future<void> _initializeData() async {
     await _store.getStats();
-  }
-
-  Widget _buildBody(BuildContext context) {
-    return SingleChildScrollView(
-        child: Column(
-          children: [
-            Observer(
-              builder: (context) {
-                //
-                if (_store.loading) {
-                  return const Center(child: RotatingImageIndicator());
-                }
-                if (!_store.success && !_store.loading) {
-                  return const Center(
-                    child: ErrorIconWidget(message: "Đã có lỗi xảy ra. Vui lòng thử lại"),
-                  );
-                }
-                //
-                list = _store.stats?.detailedStats ?? [];
-                //
-                if (list.isEmpty) {
-                  return const Center(
-                    child: ErrorIconWidget(message: "Đã có lỗi xảy ra. Vui lòng thử lại"),
-                  );
-                }
-                //
-                return Container(
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8.0),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 4.0,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                      children: [
-                        const SizedBox(height: 12),
-                        RadarStatChart(stats: list),
-                        const SizedBox(height: 4),
-                      ]
-                  ),
-                );
-                //return TileList(list: list);
-              },
-            ),
-          ],
-        ));
   }
 }
 
