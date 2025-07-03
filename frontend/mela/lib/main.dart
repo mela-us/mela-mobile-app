@@ -5,7 +5,6 @@ import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/my_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mela/utils/notifications/notification_permission_handler.dart';
 import 'package:mela/utils/notifications/notification_service.dart';
 
 Future<void> main() async {

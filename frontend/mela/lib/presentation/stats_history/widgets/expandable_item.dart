@@ -100,30 +100,16 @@ class _ExpandableItemState extends State<ExpandableItem> {
                                 style: Theme.of(context).textTheme.normal
                                     .copyWith(color: Theme.of(context).colorScheme.textInBg1),
                               ),
-                              if (type != 'SECTION' && (score < 50))
+                              if (type != 'SECTION')
                                 Text(//score
                                   "${formatScore(score)} Điểm",
                                   style:  Theme.of(context).textTheme.bigTitle
                                       .copyWith(
-                                      color:  Colors.red
+                                      color:  getColorForScore(score)
                                   ),
+                                  overflow: TextOverflow.fade,
+                                  maxLines: 1,
                                 )
-                              else if (type != 'SECTION' && score >= 80)
-                                Text(//score
-                                  "${formatScore(score)} Điểm",
-                                  style:  Theme.of(context).textTheme.bigTitle
-                                      .copyWith(
-                                      color:  Colors.green
-                                  ),
-                                )
-                              else if (type != 'SECTION')
-                                  Text(//score
-                                    "${formatScore(score)} Điểm",
-                                    style:  Theme.of(context).textTheme.bigTitle
-                                        .copyWith(
-                                        color:  Theme.of(context).colorScheme.onPrimary
-                                    ),
-                                  ),
                             ]
                         ),
                       ),
@@ -196,4 +182,13 @@ class _ExpandableItemState extends State<ExpandableItem> {
         : score.toStringAsFixed(1);
   }
 
+  Color getColorForScore(double score) {
+    if (score < 50) {
+      return Colors.red;
+    }
+    if (score >= 80) {
+      return Colors.green;
+    }
+    return Theme.of(context).colorScheme.onPrimary;
+  }
 }

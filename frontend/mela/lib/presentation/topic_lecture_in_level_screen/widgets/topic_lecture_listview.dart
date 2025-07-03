@@ -7,6 +7,8 @@ import 'package:mela/presentation/topic_lecture_in_level_screen/store/topic_lect
 import 'package:mela/presentation/topic_lecture_in_level_screen/widgets/lectures_in_topic.dart';
 import 'package:showcaseview/showcaseview.dart';
 
+import '../../../core/widgets/icon_widget/empty_icon_widget.dart';
+
 class TopicLectureListview extends StatefulWidget {
   TopicLectureListview({super.key});
 
@@ -40,14 +42,12 @@ class _TopicLectureListviewState extends State<TopicLectureListview> {
   Widget build(BuildContext context) {
     if (topicLectureStore
         .topicLectureInLevelList!.topicLectureInLevelList.isEmpty) {
-      return Center(
-        child: Text(
-          "Hiện tại chưa có dữ liệu cho khối lớp này",
-          style: Theme.of(context)
-              .textTheme
-              .subTitle
-              .copyWith(color: Theme.of(context).colorScheme.primary),
-        ),
+      return const Center(
+        child: EmptyIconWidget(
+          mainMessage: "Hiện tại chưa có bài học cho khối lớp này",
+          secondaryMessage: "Mela sẽ chuẩn bị bài học sớm thôi",
+          offset: 130,
+        )
       );
     }
 

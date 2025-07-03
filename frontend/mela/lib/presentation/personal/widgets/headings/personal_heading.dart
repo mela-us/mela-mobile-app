@@ -3,26 +3,54 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import '../../../../constants/assets.dart';
+import '../../../../core/stores/error/error_store.dart';
+import '../../../../core/widgets/underline_indicator.dart';
 import '../../../../di/service_locator.dart';
 import '../../../../utils/animation_helper/animation_helper.dart';
 import '../../../streak/store/streak_store.dart';
 import '../../store/personal_store.dart';
 
-class PersonalHeading extends StatefulWidget {
-  const PersonalHeading({super.key, required this.onNavigateToStats, required this.onShowStreak, required this.onLevelSelect});
+class PersonalHeading extends StatefulWidget  {
+  const PersonalHeading({super.key, required this.onNavigateToStats, required this.onShowStreak, required this.onLevelSelect, required this.tabController});
 
   final VoidCallback onNavigateToStats;
   final VoidCallback onShowStreak;
   final VoidCallback onLevelSelect;
 
+  final TabController tabController;
+
   @override
   _PersonalHeadingState createState() => _PersonalHeadingState();
 }
 
-class _PersonalHeadingState extends State<PersonalHeading> {
+class _PersonalHeadingState extends State<PersonalHeading> with SingleTickerProviderStateMixin {
 
   final PersonalStore _store = getIt<PersonalStore>();
   final StreakStore _streakStore = getIt<StreakStore>();
+
+  int _selectedTab = 0;
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _tabController = widget.tabController;
+
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging == false) {
+        setState(() {
+          _selectedTab = _tabController.index;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,46 +90,26 @@ class _PersonalHeadingState extends State<PersonalHeading> {
               ],
             ),
             child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                padding: const EdgeInsets.only(top: 16.0, bottom: 6.0),
                 child: Column(
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          const SizedBox(width: 12),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: Image.network(
-                              url,
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.cover,
-                              loadingBuilder: (context, child, loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return AnimationHelper.buildShimmerPlaceholder(context, 80, 80);
-                              },
-                              errorBuilder: (context, error, stackTrace) {
-                                return Image.asset(
-                                  Assets.default_profile_pic,
-                                  width: 80,
-                                  height: 80,
-                                  fit: BoxFit.cover,
-                                );
-                              },
-                            ),
-                          ).animate().fadeIn(duration: 300.ms),
+                          const SizedBox(width: 16),
+                          _buildProfileImage(url,90).animate().fadeIn(duration: 300.ms),
                           const SizedBox(width: 12),
                           Expanded(
-                            child: Column(
-                              //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            child: Row(
                               children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        _store.user?.name ?? "a",
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        _store.user?.name ?? "Học viên MELA",
                                         style: Theme.of(context).textTheme.bigTitle.copyWith(
                                           color: Theme.of(context).colorScheme.textInBg1,
                                         ),
@@ -109,95 +117,64 @@ class _PersonalHeadingState extends State<PersonalHeading> {
                                         overflow: TextOverflow.fade,
                                         maxLines: 1,
                                       ).animate().fadeIn(duration: 300.ms),
-                                    ),
-                                  ],
+                                      _buildLevelSelectButton().animate().fadeIn(duration: 300.ms),
+                                    ],
+                                  ),
                                 ),
-                                const SizedBox(height: 3),
-                                Row(
-                                    children: [
-                                      OutlinedButton(
-                                        onPressed: widget.onLevelSelect,
-                                        style: OutlinedButton.styleFrom(
-                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 1),
-                                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                          minimumSize: Size.zero,
-                                          side: BorderSide(color: Theme.of(context).colorScheme.tertiary),
-                                          visualDensity: VisualDensity.standard,
-                                        ),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              _store.user?.level ?? 'Lớp 1',
-                                              style: Theme.of(context).textTheme.buttonStyle.copyWith(
-                                                color: Theme.of(context).colorScheme.tertiary,
-                                                fontSize: 16,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 4),
-                                            Icon(Icons.edit_outlined, size: 18, color: Theme.of(context).colorScheme.tertiary),
-                                          ],
-                                        ),
-                                      ).animate().fadeIn(duration: 300.ms),
-                                    ]
-                                ),
-                                const SizedBox(height: 5),
-                                Row(
+                                Column(
                                   children: [
-                                    Expanded(
-                                      child: FilledButton(
-                                        onPressed: widget.onNavigateToStats,
-                                        style: FilledButton.styleFrom(
-                                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 5),
-                                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                          minimumSize: Size.zero,
-                                          backgroundColor: Theme.of(context).colorScheme.tertiary,
-                                          //visualDensity: VisualDensity.compact,
-                                          elevation: 1,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(20),
-                                          ),
-                                        ),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              'Xem lịch sử học tập',
-                                              style: Theme.of(context).textTheme.buttonStyle.copyWith(
-                                                color: Theme.of(context).colorScheme.appBackground,
-                                                fontSize: 16,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ).animate().fadeIn(duration: 300.ms),
-                                    ),
-                                    const SizedBox(width: 5),
-                                    _buildStreak(streak)
+                                    _buildStreak(streak),
                                   ],
                                 ),
                               ],
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: 16),
                         ],
                       ),
                       TabBar(
+                        controller: _tabController,
+                        onTap: (index) {
+                          setState(() {
+                            _selectedTab = index;
+                          });
+                        },
                         labelColor: Theme.of(context).colorScheme.tertiary,
-                        unselectedLabelColor: Theme.of(context).colorScheme.onSecondary,
+                        unselectedLabelColor: Theme.of(context).colorScheme.secondary,
                         dividerColor: Colors.transparent,
                         overlayColor: WidgetStateProperty.all(Colors.transparent),
-                        indicator: UnderlineTabIndicator(
-                          borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.tertiary,
-                            width: 2,
-                          ),
+                        indicator: UnderlineIndicator(
+                          width: 86,
+                          height: 2.5,
+                          color: Theme.of(context).colorScheme.tertiary,
                         ),
-                        tabs: const [
-                          Tab(text: 'Đánh giá học tập'),
-                          Tab(text: 'Tùy chọn'),
+                        tabs: [
+                          Tab(
+                            child: Text(
+                              "Đánh giá học tập",
+                              style: Theme.of(context).textTheme.subTitle.copyWith(
+                                color: _selectedTab == 0
+                                    ? Theme.of(context).colorScheme.tertiary
+                                    : Theme.of(context).colorScheme.secondary,
+                                fontSize: 16,
+                              ),
+                              maxLines: 1,
+                            ),
+                          ),
+                          Tab(
+                            child: Text(
+                              "Tùy chọn cá nhân",
+                              style: Theme.of(context).textTheme.subTitle.copyWith(
+                                color: _selectedTab == 1
+                                    ? Theme.of(context).colorScheme.tertiary
+                                    : Theme.of(context).colorScheme.secondary,
+                                fontSize: 16,
+                              ),
+                              maxLines: 1,
+                            ),
+                          ),
                         ],
-                      ),
+                      )
                     ]
                 )
             )
@@ -207,62 +184,126 @@ class _PersonalHeadingState extends State<PersonalHeading> {
   }
 
   Widget _buildStreak(int streak) {
-    const double size = 30.0;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        InkWell(
-          onTap: widget.onShowStreak,
-          borderRadius: BorderRadius.circular(size / 2),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              ShaderMask(
-                shaderCallback: (Rect bounds) {
-                  return LinearGradient(
-                    colors: [Colors.orange.shade700, Colors.red.shade300],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ).createShader(bounds);
-                },
-                blendMode: BlendMode.srcIn,
-                child: Image.asset(
-                  Assets.streak_ring,
-                  width: size,
-                  height: size,
-                  fit: BoxFit.fill,
-                ),
-              ),
-              Text(
-                '$streak',
-                style: Theme.of(context).textTheme.subTitle.copyWith(
-                  fontSize: (streak / 10 >= 1)
-                      ? ((streak / 100 >= 1) ? 13 : 16)
-                      : 21,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Asap',
-                  foreground: Paint()
-                    ..style = PaintingStyle.stroke
-                    ..strokeWidth = 2.8
-                    ..color = Theme.of(context).colorScheme.appBackground,
-                ),
-              ),
-              Text(
-                '$streak',
-                style: Theme.of(context).textTheme.subTitle.copyWith(
-                  fontSize: (streak / 10 >= 1)
-                      ? ((streak / 100 >= 1) ? 13 : 16)
-                      : 21,
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Asap',
-                ),
-              ),
-            ],
+    const double size = 36.0;
+    return InkWell(
+      onTap: widget.onShowStreak,
+      borderRadius: BorderRadius.circular(size / 2),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Column(
+              children: [
+                Image.asset(Assets.mela_streak, height: size + 2, width: size),
+                const SizedBox(height: 8),
+              ]
           ),
+          Text(
+            '$streak',
+            style: Theme.of(context).textTheme.subTitle.copyWith(
+              fontSize: (streak / 10 >= 1)
+                  ? ((streak / 100 >= 1) ? 18 : 24)
+                  : 30,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Asap',
+              foreground: Paint()
+                ..style = PaintingStyle.stroke
+                ..strokeWidth = 2
+                ..color = Theme.of(context).colorScheme.appBackground,
+            ),
+          ),
+          Text(
+            '$streak',
+            style: Theme.of(context).textTheme.subTitle.copyWith(
+              fontSize: (streak / 10 >= 1)
+                  ? ((streak / 100 >= 1) ? 18 : 24)
+                  : 30,
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Asap',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildProfileImage(String url, double size) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: Image.network(
+        url,
+        width: size,
+        height: size,
+        fit: BoxFit.cover,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return AnimationHelper.buildShimmerPlaceholder(context, size, size);
+        },
+        errorBuilder: (context, error, stackTrace) {
+          return Image.asset(
+            Assets.default_profile_pic,
+            width: size,
+            height: size,
+            fit: BoxFit.cover,
+          );
+        },
+      ),
+    );
+  }
+  
+  Widget _buildLevelSelectButton() {
+    return OutlinedButton(
+      onPressed: widget.onLevelSelect,
+      style: OutlinedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 1),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        minimumSize: Size.zero,
+        side: BorderSide(color: Theme.of(context).colorScheme.tertiary),
+        visualDensity: VisualDensity.standard,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            _store.user?.level ?? 'Lớp 1',
+            style: Theme.of(context).textTheme.buttonStyle.copyWith(
+              color: Theme.of(context).colorScheme.tertiary,
+              fontSize: 16,
+            ),
+          ),
+          const SizedBox(width: 4),
+          Icon(Icons.edit_outlined, size: 18, color: Theme.of(context).colorScheme.tertiary),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildNavigateToHistoryButton() {
+    return FilledButton(
+      onPressed: widget.onNavigateToStats,
+      style: FilledButton.styleFrom(
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 5),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        minimumSize: Size.zero,
+        backgroundColor: Theme.of(context).colorScheme.tertiary,
+        //visualDensity: VisualDensity.compact,
+        elevation: 1,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
         ),
-      ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Xem lịch sử học tập',
+            style: Theme.of(context).textTheme.buttonStyle.copyWith(
+              color: Theme.of(context).colorScheme.appBackground,
+              fontSize: 16,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

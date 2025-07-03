@@ -7,7 +7,6 @@ import 'package:mela/presentation/forgot_password_screen/store/enter_otp_store.d
 import 'package:mela/utils/routes/routes.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:mela/constants/app_theme.dart';
-import 'package:mela/core/widgets/progress_indicator_widget.dart';
 import 'package:mela/presentation/forgot_password_screen/widgets/button_in_forgot.dart';
 
 class EnterOTPInForgotPasswordScreen extends StatefulWidget {

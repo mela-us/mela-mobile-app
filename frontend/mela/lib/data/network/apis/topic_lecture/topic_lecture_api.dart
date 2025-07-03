@@ -1,8 +1,5 @@
 import 'package:mela/data/network/constants/endpoints_const.dart';
 import 'package:mela/data/network/dio_client.dart';
-import 'package:mela/domain/entity/lecture/lecture.dart';
-import 'package:mela/domain/entity/lecture/lecture_list.dart';
-import 'package:mela/domain/entity/topic_lecture_in_level/topic_lecture_in_level.dart';
 import 'package:mela/domain/entity/topic_lecture_in_level/topic_lecture_in_level_list.dart';
 
 class TopicLectureApi {

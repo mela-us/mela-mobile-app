@@ -1,7 +1,8 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mela/constants/app_theme.dart';
 import '../../../../constants/assets.dart';
 import '../../../../di/service_locator.dart';
 import '../../../../utils/animation_helper/animation_helper.dart';

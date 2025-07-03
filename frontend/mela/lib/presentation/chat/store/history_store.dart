@@ -1,8 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:mela/core/stores/error/error_store.dart';
-import 'package:mela/data/securestorage/secure_storage_helper.dart';
-import 'package:mela/data/sharedpref/shared_preference_helper.dart';
 import 'package:mela/domain/entity/chat/history_item.dart';
+import 'package:mela/domain/usecase/chat/delete_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/get_history_chat_usecase.dart';
 import 'package:mela/utils/dio/dio_error_util.dart';
 import 'package:mobx/mobx.dart';
@@ -15,6 +14,7 @@ abstract class _HistoryStore with Store {
 
   final GetHistoryChatUsecase _getHistoryChatUsecase;
   final ErrorStore _errorStore;
+  final DeleteConversationUsecase _deleteConversationUsecase;
 
   //Observable:-----------------------------------------------------------------
   @observable
@@ -23,8 +23,11 @@ abstract class _HistoryStore with Store {
   @observable
   bool isLoading = false;
 
-  _HistoryStore(this._getHistoryChatUsecase, this._errorStore);
+  @observable
+  bool isUnauthorized = false;
 
+  _HistoryStore(this._getHistoryChatUsecase, this._errorStore,
+      this._deleteConversationUsecase);
 
   @computed
   bool get iisLoading => isLoading;
@@ -44,15 +47,15 @@ abstract class _HistoryStore with Store {
     } catch (e, stackTrace) {
       if (e is DioException) {
         if (e.response?.statusCode == 401) {
-          // isAuthorized = false;
+          isUnauthorized = true;
           return;
         } else {
           //ss
         }
         _errorStore.errorMessage = DioExceptionUtil.handleError(e);
-      }
-      else {
+      } else {
         if (e == 401) {
+          isUnauthorized = true;
           return;
         }
         print("Error: $e");
@@ -63,6 +66,35 @@ abstract class _HistoryStore with Store {
     }
 
     isLoading = false;
+  }
+
+  @action
+  Future<void> deleteConversation(String conversationId) async {
+    isLoading = true;
+
+    // try {
+    //   _deleteConversationUsecase.call(params: conversationId);
+    // } catch (e, stackTrace) {
+    //   if (e is DioException) {
+    //     if (e.response?.statusCode == 401) {
+    //       isUnauthorized = true;
+    //       return;
+    //     } else {
+    //       //ss
+    //     }
+    //     _errorStore.errorMessage = DioExceptionUtil.handleError(e);
+    //   } else {
+    //     if (e == 401) {
+    //       isUnauthorized = true;
+    //       return;
+    //     }
+    //     print("Error: $e");
+    //   }
+    //   print("Error: $e, stackTrace: $stackTrace");
+    // } finally {
+    //   isLoading = false;
+    // }
+    // isLoading = false;
   }
 
   //Computed:-------------------------------------------------------------------

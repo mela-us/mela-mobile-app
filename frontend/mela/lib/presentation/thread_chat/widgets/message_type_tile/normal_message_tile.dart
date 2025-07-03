@@ -2,9 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:mela/constants/app_theme.dart';
-import 'package:mela/constants/assets.dart';
 import 'package:mela/domain/entity/image_origin/image_origin.dart';
 import 'package:mela/domain/entity/message_chat/normal_message.dart';
 import 'package:mela/presentation/thread_chat/widgets/convert_string_to_latex.dart';
@@ -172,7 +170,7 @@ class NormalMessageTile extends StatelessWidget {
         constraints:
             BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.85),
         // margin: const EdgeInsets.symmetric(vertical: 5),
-        padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 8),
+        padding: const EdgeInsets.fromLTRB(8, 7, 8, 0),
         decoration: BoxDecoration(
           gradient: isAI
               ? null
@@ -191,7 +189,7 @@ class NormalMessageTile extends StatelessWidget {
                     Theme.of(context)
                         .colorScheme
                         .buttonYesBgOrText
-                        .withOpacity(0.6),
+                        .withOpacity(0.75),
                     Theme.of(context)
                         .colorScheme
                         .buttonYesBgOrText
@@ -217,10 +215,10 @@ class NormalMessageTile extends StatelessWidget {
         child: (currentMessage.text == null && currentMessage.isAI)
             ? const MessageLoadingResponse()
             : isAI
-                ? ConvertStringToLatex(rawText: currentMessage.text ?? "")
+                ? ConvertStringToLatex(text: currentMessage.text ?? "")
                 : ConvertStringToLatex(
-                    rawText: currentMessage.text ?? "",
-                    isStep: false,
+                    text: currentMessage.text ?? "",
+                    // isStep: false,
                     isAI: false,
                   ),
         // : Text(

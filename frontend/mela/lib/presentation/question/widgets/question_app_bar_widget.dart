@@ -207,10 +207,8 @@ class _QuestionAppBarState extends State<QuestionAppBar> {
               Container(
                 color: Colors.black.withOpacity(0.53),
               ),
-              Positioned(
-                bottom: 34,
-                left: 19,
-                right: 19,
+              Align(
+                alignment: Alignment.center,
                 child: QuestionQuitOverlay(),
               )
             ],

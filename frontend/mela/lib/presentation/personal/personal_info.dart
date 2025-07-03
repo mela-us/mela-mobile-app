@@ -136,13 +136,6 @@ class _PersonalInfoState extends State<PersonalInfo> {
     }
   }
 
-  Future<void> _removeImage() async {
-    try {
-      await _personalStore.updateImage(File(""));
-    } catch (e) {
-      _showSnackBar("Không thể xóa ảnh của bạn!");
-    }
-  }
 
   void _showImagePickerOptions() {
     showModalBottomSheet(

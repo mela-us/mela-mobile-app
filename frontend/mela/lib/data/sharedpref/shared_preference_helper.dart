@@ -64,6 +64,16 @@ class SharedPreferenceHelper {
   }
 
   //Guidance learning for first time go to app.
+    Future<bool> get isFirstTimeSeeStreak async {
+    return _sharedPreference
+            .getBool(PreferencesConst.is_first_time_see_streak) ??
+        true;
+  }
+
+  Future<bool> saveIsFirstTimeSeeStreak(bool value) async {
+    return _sharedPreference.setBool(
+        PreferencesConst.is_first_time_see_streak, value);
+  }
   Future<bool> get isFirstTimeOpenLevel async {
     return _sharedPreference
             .getBool(PreferencesConst.is_first_time_open_level) ??

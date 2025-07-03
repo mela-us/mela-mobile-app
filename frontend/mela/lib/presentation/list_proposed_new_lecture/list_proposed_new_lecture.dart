@@ -4,13 +4,16 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/suggestion/suggestion.dart';
 import 'package:mela/presentation/list_proposed_new_lecture/store/list_proposed_new_suggestion_store.dart';
-import 'package:mela/presentation/topic_lecture_in_level_screen/widgets/lecture_item.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 
+import '../../core/widgets/icon_widget/empty_icon_widget.dart';
 import 'widgets/section_item.dart';
 
 class ListProposedNewLectureScreen extends StatefulWidget {
-  ListProposedNewLectureScreen({super.key});
+
+  final VoidCallback onScrollToHead;
+
+  const ListProposedNewLectureScreen({super.key, required this.onScrollToHead});
 
   @override
   State<ListProposedNewLectureScreen> createState() =>
@@ -44,8 +47,31 @@ class _ListProposedNewLectureScreenState
                 .copyWith(color: Colors.red),
           ),
         );
+      } else if (_store.suggestionList!.suggestions.isEmpty) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const EmptyIconWidget(
+              mainMessage: "Không có đề xuất cho hôm nay",
+              secondaryMessage: "Bạn có thể chọn \"Học tự do\"",
+              offset: 10,
+            ),
+            TextButton(
+              onPressed: widget.onScrollToHead,
+              child: Text(
+                "Học tự do",
+                style: Theme.of(context).textTheme.subHeading.copyWith(
+                  color: Theme.of(context).colorScheme.tertiary,
+                  decoration: TextDecoration.underline,
+                  decorationColor: Theme.of(context).colorScheme.tertiary,
+                  decorationThickness: 1.5,
+                ),
+              ),
+            )
+          ],
+        );
       }
-      
+
       List<List<Section>> value =
           _store.suggestionList!.suggestions.map((suggestion) {
         return suggestion.sectionList;

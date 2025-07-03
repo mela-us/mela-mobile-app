@@ -3,16 +3,17 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/core/widgets/icon_widget/error_icon_widget.dart';
 import 'package:mela/core/widgets/image_progress_indicator.dart';
+import '../../core/widgets/icon_widget/empty_icon_widget.dart';
 import '../../domain/entity/stat/progress_list.dart';
-import '../../utils/routes/routes.dart';
 import 'widgets/expandable_list.dart';
 
 import 'store/stats_store.dart';
 import '../../di/service_locator.dart';
 
 class StatisticsScreen extends StatefulWidget {
-  StatisticsScreen({super.key});
+  const StatisticsScreen({super.key});
 
   @override
   State<StatisticsScreen> createState() => _StatisticsScreenState();
@@ -28,7 +29,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> with TickerProvider
   void initState() {
     super.initState();
     _initializeData();
-    _store.success = true;
   }
 
   Future<void> _initializeData() async {
@@ -71,8 +71,8 @@ class _StatisticsScreenState extends State<StatisticsScreen> with TickerProvider
   @override
   Widget build(BuildContext context) {
     if (_isLoadingLevels) {
-      return const Scaffold(
-        body: Center(child: RotatingImageIndicator()),
+      return Scaffold(
+        body: Center(child: Container()),
       );
     }
 
@@ -114,40 +114,22 @@ class _StatisticsScreenState extends State<StatisticsScreen> with TickerProvider
       ),
       body: Observer(
         builder: (context) {
-          if (_store.progressLoading) {
+          if (_store.progressLoading || _store.levelLoading) {
             return const Center(child: RotatingImageIndicator());
           }
-          if (!_store.success) {
-            return Center(
-              child: Text(
-                "Đã có lỗi xảy ra. Vui lòng thử lại",
-                style: Theme.of(context)
-                    .textTheme
-                    .subHeading
-                    .copyWith(color: Theme.of(context).colorScheme.textInBg1),
-              ),
+          if (!_store.success && !_store.progressLoading && !_store.levelLoading) {
+            return const Center(
+              child: ErrorIconWidget(message: "Đã có lỗi xảy ra. Vui lòng thử lại"),
             );
           }
 
           final list = _store.progressList?.progressList ?? [];
           //final list = getMockStats().progressList ?? [];
           if (list.isEmpty) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Oops! Hành trình của bạn chưa bắt đầu với lớp này!\nVui lòng chuyển sang \"Chủ đề\" để học và làm bài tập!',
-                      style: Theme.of(context).textTheme.subHeading
-                          .copyWith(color: Theme.of(context).colorScheme.textInBg1),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
+            return const EmptyIconWidget(
+              mainMessage: "*Tiếng dế kêu*\nBạn chưa bắt đầu hành trình ở lớp này!",
+              secondaryMessage: "Bạn có thể bắt đầu ở Trang chủ.",
+              offset: 120,
             );
           }
           return ExpandableList(list: list);

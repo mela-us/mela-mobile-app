@@ -2,13 +2,19 @@ import 'dart:async';
 import 'package:mela/core/stores/error/error_store.dart';
 import 'package:mela/core/stores/form/form_store.dart';
 import 'package:mela/domain/usecase/chat/create_new_conversation_usecase.dart';
+import 'package:mela/domain/usecase/chat/delete_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/get_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/get_history_chat_usecase.dart';
+import 'package:mela/domain/usecase/chat/get_token_chat_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_chat_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_get_solution_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_review_submission_usecase.dart';
+import 'package:mela/domain/usecase/chat_with_exercise/send_message_chat_exercise_usecase.dart';
+import 'package:mela/domain/usecase/chat_with_exercise/send_message_chat_pdf_usecase.dart';
 import 'package:mela/domain/usecase/history/update_excercise_progress_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
+import 'package:mela/domain/usecase/question/upload_images_usecase.dart';
+import 'package:mela/domain/usecase/stat/get_detailed_progress_usecase.dart';
 import 'package:mela/domain/usecase/suggestion/get_proposed_new_suggestion_usecase.dart';
 import 'package:mela/domain/usecase/level/get_level_list_usecase.dart';
 import 'package:mela/domain/usecase/question/generate_hint_usecase.dart';
@@ -30,9 +36,12 @@ import 'package:mela/presentation/question/store/hint_store/hint_store.dart';
 
 import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
 import 'package:mela/presentation/question/store/timer/timer_store.dart';
+import 'package:mela/presentation/stats_topic_personal/store/detailed_stats_store.dart';
 import 'package:mela/presentation/thread_chat/store/chat_box_store/chat_box_store.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/thread_chat_learning/store/thread_chat_learning_store/thread_chat_learning_store.dart';
+import 'package:mela/presentation/thread_chat_learning_pdf/store/chat_box_learning_pdf_store/chat_box_learning_pdf_store.dart';
+import 'package:mela/presentation/thread_chat_learning_pdf/store/thread_chat_learning_pdf_store/thread_chat_learning_pdf_store.dart';
 import 'package:mela/presentation/topic_lecture_in_level_screen/store/topic_lecture_store.dart';
 import 'package:mela/presentation/tutor/stores/tutor_store.dart';
 
@@ -75,13 +84,13 @@ import '../../signup_login_screen/store/user_login_store/user_login_store.dart';
 import '../../signup_login_screen/store/user_signup_store/user_signup_store.dart';
 
 import 'package:mela/domain/usecase/stat/get_progress_usecase.dart';
-import 'package:mela/domain/usecase/stat/get_detailed_progress_usecase.dart';
 
-import 'package:mela/presentation/stats/store/stats_store.dart';
+import 'package:mela/presentation/stats_history/store/stats_store.dart';
 import 'package:mela/presentation/personal/store/personal_store.dart';
 
-import '../../stats/store/stat_filter_store.dart';
-import '../../stats/store/stat_search_store.dart';
+import '../../stats_history/store/stat_filter_store.dart';
+import '../../stats_history/store/stat_search_store.dart';
+
 import '../../streak/store/streak_store.dart';
 import '../../thread_chat_learning/store/chat_box_learning_store/chat_box_learning_store.dart';
 
@@ -158,6 +167,8 @@ class StoreModule {
       getIt<ErrorStore>(),
       getIt<SubmitResultUseCase>(),
       getIt<UpdateExcerciseProgressUsecase>(),
+      getIt<SingleQuestionStore>(),
+      getIt<UploadImagesUsecase>(),
     ));
 
     getIt.registerSingleton<TimerStore>(TimerStore());
@@ -167,6 +178,13 @@ class StoreModule {
       StatisticsStore(
         getIt<GetProgressListUseCase>(),
         getIt<GetLevelListUsecase>(),
+        getIt<ErrorStore>(),
+      ),
+    );
+
+    getIt.registerSingleton<DetailedStatStore>(
+      DetailedStatStore(
+        getIt<GetDetailedStatsUseCase>(),
         getIt<ErrorStore>(),
       ),
     );
@@ -212,6 +230,7 @@ class StoreModule {
       getIt<CreateNewConversationUsecase>(),
       getIt<SendMessageReviewSubmissionUsecase>(),
       getIt<SendMessageGetSolutionUsecase>(),
+      getIt<GetTokenChatUsecase>(),
     ));
 
     //Hint Store
@@ -219,8 +238,10 @@ class StoreModule {
         HintStore(getIt<GenerateHintUseCase>(), getIt<GenerateTermUseCase>()));
 
     //History
-    getIt.registerSingleton<HistoryStore>(
-        HistoryStore(getIt<GetHistoryChatUsecase>(), getIt<ErrorStore>()));
+    getIt.registerSingleton<HistoryStore>(HistoryStore(
+        getIt<GetHistoryChatUsecase>(),
+        getIt<ErrorStore>(),
+        getIt<DeleteConversationUsecase>()));
 
     getIt.registerSingleton<TutorStore>(TutorStore(
       getIt<GetLevelListUsecase>(),
@@ -235,10 +256,18 @@ class StoreModule {
 
     getIt.registerSingleton<ThreadChatLearningStore>(
       ThreadChatLearningStore(
-        getIt<CreateNewConversationUsecase>(),
+        getIt<GetTokenChatUsecase>(),
+        getIt<SendMessageChatExerciseUsecase>(),
       ),
     );
     getIt.registerSingleton<ChatBoxLearningStore>(ChatBoxLearningStore());
+    getIt.registerSingleton<ThreadChatLearningPdfStore>(
+      ThreadChatLearningPdfStore(
+        getIt<GetTokenChatUsecase>(),
+        getIt<SendMessageChatPdfUsecase>(),
+      ),
+    );
+    getIt.registerSingleton<ChatBoxLearningPdfStore>(ChatBoxLearningPdfStore());
     getIt.registerSingleton<ListProposedNewSuggestionStore>(
         ListProposedNewSuggestionStore(getIt<GetProposedNewSuggestionUsecase>(),
             getIt<UpdateSuggestionUsecase>()));

@@ -45,7 +45,7 @@ class TopicRepositoryImpl extends TopicRepository {
 
   @override
   Future<Topic> findTopicById(int id) async {
-    TopicList topicList = await getTopics() as TopicList;
+    TopicList topicList = await getTopics();
     return topicList.topics.firstWhere((topic) => topic.topicId == id);
   }
 }

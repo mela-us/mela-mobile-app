@@ -41,7 +41,7 @@ class _StreakScreenState extends State<StreakScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const imageSize = 220.0;
+    const imageSize = 140.0;
 
     return Scaffold(
       body: SafeArea(
@@ -69,31 +69,30 @@ class _StreakScreenState extends State<StreakScreen> {
                       Stack(
                         alignment: Alignment.center,
                         children: [
-                          ShaderMask(
-                            shaderCallback: (Rect bounds) {
-                              return LinearGradient(
-                                colors: [Colors.orange.shade700, Colors.red.shade300],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ).createShader(bounds);
-                            },
-                            blendMode: BlendMode.srcIn,
-                            child: Image.asset(
-                              Assets.streak_ring,
-                              width: imageSize,
-                              height: imageSize,
-                              fit: BoxFit.fill,
-                            ),
-                          ).animate().scale(duration: 1.5.seconds).rotate(),
+                          Image.asset(Assets.mela_streak, height: imageSize + 2, width: imageSize).animate().scale(duration: 1.5.seconds),
                           Text(
                             '$streak',
                             style: Theme.of(context).textTheme.heading.copyWith(
                               fontSize: (streak / 10 >= 1)
                                   ? ((streak / 100 >= 1)
-                                      ? 50
-                                      : 70)
-                                  : 88,
-                              color: Theme.of(context).colorScheme.tertiary,
+                                  ? 60
+                                  : 80)
+                                  : 100,
+                              foreground: Paint()
+                                ..style = PaintingStyle.stroke
+                                ..strokeWidth = 2.8
+                                ..color = Theme.of(context).colorScheme.appBackground,
+                            ),
+                          ).animate().scale(duration: 2.5.seconds),
+                          Text(
+                            '$streak',
+                            style: Theme.of(context).textTheme.heading.copyWith(
+                              fontSize: (streak / 10 >= 1)
+                                  ? ((streak / 100 >= 1)
+                                  ? 60
+                                  : 80)
+                                  : 100,
+                              color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Asap',
                             ),
@@ -102,7 +101,7 @@ class _StreakScreenState extends State<StreakScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 0),
                   Stack(
                     children: [
                       Text(

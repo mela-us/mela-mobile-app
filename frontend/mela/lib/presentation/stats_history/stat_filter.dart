@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
-import 'package:mela/presentation/stats/store/stat_filter_store.dart';
-import 'package:mela/presentation/stats/store/stat_search_store.dart';
+import 'package:mela/presentation/stats_history/store/stat_filter_store.dart';
+import 'package:mela/presentation/stats_history/store/stat_search_store.dart';
 
 import 'widgets/checkbox_row.dart';
 import 'widgets/filter_button.dart';

@@ -13,6 +13,8 @@ import 'package:mela/domain/entity/message_chat/normal_message.dart';
 import 'package:mela/domain/usecase/chat/create_new_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/get_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_chat_usecase.dart';
+import 'package:mela/domain/usecase/chat_with_exercise/send_message_chat_exercise_usecase.dart';
+import 'package:mela/domain/usecase/chat_with_exercise/send_message_chat_pdf_usecase.dart';
 
 class ChatApi {
   DioClient _dioClient;
@@ -20,11 +22,11 @@ class ChatApi {
   ChatApi(this._dioClient, this._store);
 
   //=======Test
-  Conversation _conversation = conversation1;
+  // Conversation _conversation = conversation1;
 
-  final List<List<MessageChat>> _additionalMessages = additionalMessages1;
+  // final List<List<MessageChat>> _additionalMessages = additionalMessages1;
 
-  int _currentIndex = 0;
+  // int _currentIndex = 0;
 
   //================================================================
 
@@ -141,5 +143,50 @@ class ChatApi {
     //   List<HistoryItem> temp =
     //       dataList.map((item) => HistoryItem.fromJson(item)).toList();
     //   return temp;
+  }
+
+  Future<int> getTokenChat() async {
+    final responseData = await _dioClient.get(EndpointsConst.getTokenChat);
+
+    return responseData['token'] ?? 0;
+  }
+
+  //Chat with exercise and pdf
+  Future<Conversation> sendMessageChatExercise(
+      ChatExerciseRequestParams params) async {
+    final responseData = await _dioClient.post(
+      EndpointsConst.sendMessageChatExercise
+          .replaceAll(':questionId', params.questionId!),
+      data: params.toJson(),
+    );
+    return Conversation(
+        conversationId: "",
+        messages: [NormalMessage(isAI: true, text: responseData['content'])],
+        hasMore: false,
+        dateConversation: DateTime.now(),
+        nameConversation: "", //Not important
+        levelConversation: LevelConversation.UNIDENTIFIED //Not important
+        );
+  }
+
+  Future<int> deleteConversation(String conversationId) async {
+    final responseData = await _dioClient
+        .delete(EndpointsConst.deleteConversation(conversationId));
+    return responseData.statusCode;
+  }
+
+  Future<Conversation> sendMessageChatPdf(ChatPdfRequestParams params) async {
+    final responseData = await _dioClient.post(
+      EndpointsConst.sendMessageChatPdf,
+      data: params.toJson(),
+    );
+    return Conversation(
+        conversationId: "",
+        messages: [NormalMessage(isAI: true, text: responseData['content'])],
+        hasMore: false,
+        dateConversation: DateTime.now(),
+        nameConversation: "", //Not important
+        levelConversation: LevelConversation.UNIDENTIFIED //Not important
+        );
   }
 }

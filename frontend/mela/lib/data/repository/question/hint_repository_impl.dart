@@ -1,5 +1,4 @@
 import 'package:mela/data/network/apis/questions/hint_api.dart';
-import 'package:mela/domain/entity/question/question_list.dart';
 import 'package:mela/domain/repository/question/hint_repository.dart';
 
 class HintRepositoryImpl implements HintRepository{

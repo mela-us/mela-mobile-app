@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/dimens.dart';
 import 'package:mela/constants/enum.dart';
@@ -10,6 +11,7 @@ import 'package:mela/presentation/chat/store/history_store.dart';
 import 'package:mela/presentation/chat/widgets/sidebar_widget.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/thread_chat/widgets/chat_box.dart';
+import 'package:mela/presentation/thread_chat/widgets/chat_token_widget.dart';
 import 'package:mela/utils/routes/routes.dart';
 import 'package:showcaseview/showcaseview.dart';
 
@@ -78,6 +80,12 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _threadChatStore.getTokenChat();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ShowCaseWidget(
         onComplete: (p0, p1) => print("===============>Complete $p0 $p1"),
@@ -95,6 +103,15 @@ class _ChatScreenState extends State<ChatScreen> {
                 backgroundColor: Theme.of(context).colorScheme.appBackground,
                 elevation: 0,
                 title: _buildTitle(context),
+                actions: [
+                  Observer(builder: (context) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: ChatTokenWidget(
+                          tokenChat: _threadChatStore.tokenChat),
+                    );
+                  })
+                ],
               ),
               backgroundColor: Theme.of(context).colorScheme.appBackground,
               body: SingleChildScrollView(
@@ -124,7 +141,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildDefaultBody(BuildContext context) {
-    final double screenHeight = MediaQuery.of(context).size.height;
+    // final double screenHeight = MediaQuery.of(context).size.height;
     return Padding(
       // padding: EdgeInsets.fromLTRB(16.0, (screenHeight - 610) * 0.5, 16.0, 10),
       padding: const EdgeInsets.fromLTRB(16.0, 40, 16.0, 10),
@@ -154,38 +171,6 @@ class _ChatScreenState extends State<ChatScreen> {
                   .aiExplainStyle
                   .copyWith(color: Theme.of(context).colorScheme.secondary)),
           const SizedBox(height: 15),
-          // Showcase.withWidget(
-          //     height: 80,
-          //     key: _key1,
-          //     width: 200,
-          //     container: Container(
-          //       decoration: BoxDecoration(
-          //         color: Colors.red,
-          //         borderRadius: BorderRadius.circular(15),
-          //       ),
-          //       child: const Column(
-          //         mainAxisSize: MainAxisSize.min,
-          //         children: [
-          //           Text(
-          //             "Gửi bài toán dễ dàng",
-          //             style: TextStyle(
-          //               color: Colors.white,
-          //               fontWeight: FontWeight.bold,
-          //               fontSize: 16,
-          //             ),
-          //             textAlign: TextAlign.center,
-          //           ),
-          //           SizedBox(height: 10),
-          //           Text(
-          //             "Chụp ảnh hoặc nhập bài toán vào ô chatbox, Mela sẽ hỗ trợ ngay!",
-          //             style: TextStyle(color: Colors.white, fontSize: 14),
-          //             textAlign: TextAlign.center,
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //     child: ChatBox(isFirstChatScreen: true)),
-
           ShowcaseCustom(
             keyWidget: _chatBoxKey,
             isHideActionWidget: true,
@@ -194,7 +179,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 "Chụp ảnh hoặc nhập bài toán vào ô chat, Mela sẽ hỗ trợ ngay!",
             child: ChatBox(isFirstChatScreen: true),
           ),
-
           const SizedBox(height: 15),
           ShowcaseCustom(
             keyWidget: _relativeTermKey,
@@ -211,22 +195,6 @@ class _ChatScreenState extends State<ChatScreen> {
               ],
             ),
           ),
-
-          // Showcase(
-          //   key: _key2,
-          //   description: "Những câu hỏi gợi ý cho bạn",
-          //   title: "Gợi ý câu hỏi",
-          //   child: ListView(
-          //     shrinkWrap: true,
-          //     physics: const NeverScrollableScrollPhysics(),
-          //     children: [
-          //       _buildListItem("Cách giải phương trình bậc 2 một ẩn"),
-          //       _buildListItem("Hệ thức Vi-et là gì?"),
-          //       _buildListItem("Hướng dẫn mình giải bài toán này"),
-          //       _buildListItem("Nhận xét bài làm của mình"),
-          //     ],
-          //   ),
-          // ),
         ],
       ),
     );

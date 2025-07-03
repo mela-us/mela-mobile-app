@@ -12,7 +12,9 @@ import '../../../utils/routes/routes.dart';
 
 class LevelItem extends StatelessWidget {
   final Level level;
-  LevelItem({super.key, required this.level});
+  bool focus;
+
+  LevelItem({super.key, required this.level, this.focus = false});
 
   final TopicLectureStore _topicLectureStore = getIt<TopicLectureStore>();
   final LevelStore _levelStore = getIt<LevelStore>();
@@ -36,19 +38,31 @@ class LevelItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             //Logo level
-            SizedBox(
-              width: 55,
-              height: 55,
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: focus
+                        ? Theme.of(context).colorScheme.tertiary.withOpacity(0.4)
+                        : Theme.of(context).colorScheme.appBackground,
+                    blurRadius: 6,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(14), // Bo góc tại đây
+              ),
+              clipBehavior: Clip.antiAlias, // Cắt ảnh theo bo góc
               child: Image(
                 image: level.levelImagePath.isEmpty
                     ? const AssetImage('assets/images/grades/default_level.png')
-                    : NetworkImage(level.levelImagePath)
-                        as ImageProvider<Object>,
-                fit: BoxFit.contain,
+                    : NetworkImage(level.levelImagePath) as ImageProvider<Object>,
+                fit: BoxFit.cover,
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress == null) return child;
                   return Center(
-                    child: AnimationHelper.buildShimmerPlaceholder(context,100,100),
+                    child: AnimationHelper.buildShimmerPlaceholder(context, 50, 50),
                   );
                 },
               ),
@@ -57,7 +71,7 @@ class LevelItem extends StatelessWidget {
 
             //Name topic
             SizedBox(
-              width: 75,
+              width: 60,
               child: Text(
                 level.levelName,
                 textAlign: TextAlign.center,

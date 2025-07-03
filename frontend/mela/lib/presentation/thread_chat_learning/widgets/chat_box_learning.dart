@@ -6,23 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mela/constants/app_theme.dart';
-import 'package:mela/constants/enum.dart';
-// import 'package:math_keyboard/math_keyboard.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
-import 'package:mela/presentation/thread_chat/store/chat_box_store/chat_box_store.dart';
-import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
-import 'package:mela/presentation/thread_chat/thread_chat_screen.dart';
 import 'package:mela/presentation/thread_chat_learning/store/chat_box_learning_store/chat_box_learning_store.dart';
-import 'package:mela/utils/routes/routes.dart';
 import 'package:mobx/mobx.dart';
 
 import '../store/thread_chat_learning_store/thread_chat_learning_store.dart';
-import '../thread_chat_learning_screen.dart';
 
 class ChatBoxLearning extends StatefulWidget {
-  bool isFirstChatScreen;
-  ChatBoxLearning({super.key, this.isFirstChatScreen = false});
+  const ChatBoxLearning({super.key});
 
   @override
   _ChatBoxLearningState createState() => _ChatBoxLearningState();
@@ -141,9 +133,7 @@ class _ChatBoxLearningState extends State<ChatBoxLearning> {
       child: Focus(
         focusNode: _focusNode,
         child: Container(
-          margin: widget.isFirstChatScreen
-              ? null
-              : const EdgeInsets.fromLTRB(5, 0, 5, 5),
+          margin: const EdgeInsets.fromLTRB(5, 0, 5, 5),
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -276,7 +266,7 @@ class _ChatBoxLearningState extends State<ChatBoxLearning> {
                         decoration: const InputDecoration(
                           // contentPadding: EdgeInsets.zero,
                           isDense: true,
-                          hintText: "Hãy cho Mela biết thắc mắc của bạn",
+                          hintText: "Đặt câu hỏi cho Mela về bài tập này nhé",
                           hintStyle: TextStyle(
                             color: Colors.grey,
                             fontSize: 16,
@@ -292,7 +282,7 @@ class _ChatBoxLearningState extends State<ChatBoxLearning> {
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             color: Colors.black, fontWeight: FontWeight.w600),
                         textAlignVertical: TextAlignVertical.bottom,
-                        placeholder: "Hãy cho Mela biết thắc mắc của bạn",
+                        placeholder: "Đặt câu hỏi cho Mela về bài tập này nhé",
                         placeholderStyle: const TextStyle(
                           color: Colors.grey,
                           fontSize: 16,
@@ -309,51 +299,16 @@ class _ChatBoxLearningState extends State<ChatBoxLearning> {
           _chatBoxLearningStore.showSendIcon
               ? GestureDetector(
                   onTap: () async {
-                    if (widget.isFirstChatScreen) {
-                      _threadChatLearningStore.setConversation(Conversation(
-                          conversationId: "",
-                          messages: [],
-                          hasMore: false,
-                          levelConversation: LevelConversation.UNIDENTIFIED,
-                          dateConversation: DateTime.now(),
-                          nameConversation: ""));
-                      //Push chat screen with transition
-                      Navigator.of(context).push(
-                        PageRouteBuilder(
-                          settings: const RouteSettings(
-                              name: Routes.threadChatLearningScreen),
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  ThreadChatLearningScreen(),
-                          transitionsBuilder:
-                              (context, animation, secondaryAnimation, child) {
-                            const begin = Offset(1.0, 0.0);
-                            const end = Offset.zero;
-                            const curve = Curves.easeInOut;
-
-                            var tween = Tween(begin: begin, end: end)
-                                .chain(CurveTween(curve: curve));
-                            var offsetAnimation = animation.drive(tween);
-
-                            return ClipRect(
-                              child: SlideTransition(
-                                position: offsetAnimation,
-                                child: child,
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                      // Navigator.of(context).pushNamed(Routes.threadChatScreen);
+                    if (_threadChatLearningStore.tokenChat == 0) {
+                      showBottomEmptyToken();
+                      return;
                     }
-
                     String message = _controller.text.trim();
                     _controller.clear();
                     _chatBoxLearningStore.setShowSendIcon(false);
 
                     // Hide keyboard
                     if (_focusNode.hasFocus) {
-                      print("==================> Hide keyboard");
                       _focusNode.unfocus();
                     }
 
@@ -380,5 +335,102 @@ class _ChatBoxLearningState extends State<ChatBoxLearning> {
         ],
       );
     });
+  }
+
+  void showBottomEmptyToken() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Center(
+          child: TapRegion(
+            onTapOutside: (event) {
+              Navigator.of(context).pop();
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.85,
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.4,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Title
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.tertiary,
+                      borderRadius:
+                          const BorderRadius.vertical(top: Radius.circular(16)),
+                    ),
+                    width: double.infinity,
+                    child: Text(
+                      'Lượt hỏi Mela AI',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ),
+                  // Description
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 24),
+                    child: Text(
+                      'Có vẻ như bạn đã hết lượt hỏi Mela AI. Vui lòng học bài tập hoặc đợi sang hôm sau để có thể hỏi nhé!',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                  // Buttons
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.tertiary,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                            ),
+                            child: Text(
+                              'Đóng',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onTertiary),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }

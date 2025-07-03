@@ -1,14 +1,12 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/testing.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:mela/core/data/network/constants/network_constants.dart';
 import 'package:mela/core/data/network/dio/configs/dio_configs.dart';
 import 'package:mela/data/network/apis/questions/questions_api.dart';
 import 'package:mela/data/network/constants/endpoints_const.dart';
 import 'package:mela/data/network/dio_client.dart';
-import 'package:mela/domain/entity/question/question.dart';
 import 'package:mela/domain/entity/question/question_list.dart';
 
 void main() {

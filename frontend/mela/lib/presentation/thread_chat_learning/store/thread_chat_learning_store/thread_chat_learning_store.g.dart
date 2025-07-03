@@ -17,6 +17,22 @@ mixin _$ThreadChatLearningStore on _ThreadChatLearningStore, Store {
               name: '_ThreadChatLearningStore.conversationName'))
       .value;
 
+  late final _$tokenChatAtom =
+      Atom(name: '_ThreadChatLearningStore.tokenChat', context: context);
+
+  @override
+  int get tokenChat {
+    _$tokenChatAtom.reportRead();
+    return super.tokenChat;
+  }
+
+  @override
+  set tokenChat(int value) {
+    _$tokenChatAtom.reportWrite(value, super.tokenChat, () {
+      super.tokenChat = value;
+    });
+  }
+
   late final _$currentConversationAtom = Atom(
       name: '_ThreadChatLearningStore.currentConversation', context: context);
 
@@ -30,6 +46,22 @@ mixin _$ThreadChatLearningStore on _ThreadChatLearningStore, Store {
   set currentConversation(Conversation value) {
     _$currentConversationAtom.reportWrite(value, super.currentConversation, () {
       super.currentConversation = value;
+    });
+  }
+
+  late final _$currentQuestionAtom =
+      Atom(name: '_ThreadChatLearningStore.currentQuestion', context: context);
+
+  @override
+  Question get currentQuestion {
+    _$currentQuestionAtom.reportRead();
+    return super.currentQuestion;
+  }
+
+  @override
+  set currentQuestion(Question value) {
+    _$currentQuestionAtom.reportWrite(value, super.currentQuestion, () {
+      super.currentQuestion = value;
     });
   }
 
@@ -89,26 +121,18 @@ mixin _$ThreadChatLearningStore on _ThreadChatLearningStore, Store {
       AsyncAction('_ThreadChatLearningStore.sendChatMessage', context: context);
 
   @override
-  Future<void> sendChatMessage(String message, List<File> images) {
-    return _$sendChatMessageAsyncAction
-        .run(() => super.sendChatMessage(message, images));
+  Future<void> sendChatMessage(String message, List<File> images,
+      {String typeMessage = "CUSTOM"}) {
+    return _$sendChatMessageAsyncAction.run(
+        () => super.sendChatMessage(message, images, typeMessage: typeMessage));
   }
 
-  late final _$getConversationAsyncAction =
-      AsyncAction('_ThreadChatLearningStore.getConversation', context: context);
+  late final _$getTokenChatAsyncAction =
+      AsyncAction('_ThreadChatLearningStore.getTokenChat', context: context);
 
   @override
-  Future<void> getConversation() {
-    return _$getConversationAsyncAction.run(() => super.getConversation());
-  }
-
-  late final _$getOlderMessagesAsyncAction = AsyncAction(
-      '_ThreadChatLearningStore.getOlderMessages',
-      context: context);
-
-  @override
-  Future<void> getOlderMessages() {
-    return _$getOlderMessagesAsyncAction.run(() => super.getOlderMessages());
+  Future<void> getTokenChat() {
+    return _$getTokenChatAsyncAction.run(() => super.getTokenChat());
   }
 
   late final _$_ThreadChatLearningStoreActionController =
@@ -137,22 +161,11 @@ mixin _$ThreadChatLearningStore on _ThreadChatLearningStore, Store {
   }
 
   @override
-  void setIsLoadingGetOlderMessages(bool value) {
+  void setQuestion(Question question) {
     final _$actionInfo = _$_ThreadChatLearningStoreActionController.startAction(
-        name: '_ThreadChatLearningStore.setIsLoadingGetOlderMessages');
+        name: '_ThreadChatLearningStore.setQuestion');
     try {
-      return super.setIsLoadingGetOlderMessages(value);
-    } finally {
-      _$_ThreadChatLearningStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setConversation(Conversation conversation) {
-    final _$actionInfo = _$_ThreadChatLearningStoreActionController.startAction(
-        name: '_ThreadChatLearningStore.setConversation');
-    try {
-      return super.setConversation(conversation);
+      return super.setQuestion(question);
     } finally {
       _$_ThreadChatLearningStoreActionController.endAction(_$actionInfo);
     }
@@ -172,7 +185,9 @@ mixin _$ThreadChatLearningStore on _ThreadChatLearningStore, Store {
   @override
   String toString() {
     return '''
+tokenChat: ${tokenChat},
 currentConversation: ${currentConversation},
+currentQuestion: ${currentQuestion},
 isLoading: ${isLoading},
 isLoadingGetConversation: ${isLoadingGetConversation},
 isLoadingGetOlderMessages: ${isLoadingGetOlderMessages},

@@ -155,7 +155,7 @@ class _InitialMessageTileState extends State<InitialMessageTile> {
                 ),
           ),
           const SizedBox(height: 5),
-          ConvertStringToLatex(rawText: widget.currentMessage.solutionMethod),
+          ConvertStringToLatex(text: widget.currentMessage.solutionMethod),
 
           // Text(
           //   currentMessage.solutionMethod,
@@ -232,7 +232,7 @@ class _InitialMessageTileState extends State<InitialMessageTile> {
                 ),
           ),
           const SizedBox(height: 5),
-          ConvertStringToLatex(rawText: widget.currentMessage.analysis),
+          ConvertStringToLatex(text: widget.currentMessage.analysis),
           // Text(
           //   currentMessage.analysis,
           //   style: Theme.of(context).textTheme.content.copyWith(
@@ -281,13 +281,13 @@ class _InitialMessageTileState extends State<InitialMessageTile> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ConvertStringToLatex(
-                    rawText: step.title,
-                    isStep: true,
+                    text: step.title,
+                    // isStep: true,
                   ),
                   const SizedBox(
                     height: 3,
                   ),
-                  ConvertStringToLatex(rawText: step.description),
+                  ConvertStringToLatex(text: step.description),
                   if (index != widget.currentMessage.steps.length - 1)
                     const Divider(
                       color: Colors.grey,
@@ -328,7 +328,7 @@ class _InitialMessageTileState extends State<InitialMessageTile> {
                 ),
           ),
           const SizedBox(height: 5),
-          ConvertStringToLatex(rawText: widget.currentMessage.advice),
+          ConvertStringToLatex(text: widget.currentMessage.advice),
           // Text(
           //   currentMessage.advice,
           //   style: Theme.of(context).textTheme.content.copyWith(
@@ -389,7 +389,7 @@ class _InitialMessageTileState extends State<InitialMessageTile> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: ConvertStringToLatex(rawText: term),
+                      child: ConvertStringToLatex(text: term),
                     ))
                 .toList(),
           ),

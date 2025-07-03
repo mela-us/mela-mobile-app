@@ -147,7 +147,7 @@ class _ReviewMessageTileState extends State<ReviewMessageTile> {
           ),
           const SizedBox(height: 5),
           ConvertStringToLatex(
-              rawText: widget.currentMessage.submissionSummary!),
+              text: widget.currentMessage.submissionSummary!),
           // Text(
           //   currentMessage.submissionSummary!,
           //   style: Theme.of(context).textTheme.content.copyWith(
@@ -187,7 +187,7 @@ class _ReviewMessageTileState extends State<ReviewMessageTile> {
                 ),
           ),
           const SizedBox(height: 5),
-          ConvertStringToLatex(rawText: widget.currentMessage.guidance!),
+          ConvertStringToLatex(text: widget.currentMessage.guidance!),
           // Text(
           //   currentMessage.guidance!,
           //   style: Theme.of(context).textTheme.content.copyWith(
@@ -227,7 +227,7 @@ class _ReviewMessageTileState extends State<ReviewMessageTile> {
                 ),
           ),
           const SizedBox(height: 5),
-          ConvertStringToLatex(rawText: widget.currentMessage.encouragement!),
+          ConvertStringToLatex(text: widget.currentMessage.encouragement!),
           // Text(
           //   currentMessage.encouragement!,
           //   style: Theme.of(context).textTheme.content.copyWith(
@@ -268,7 +268,7 @@ class _ReviewMessageTileState extends State<ReviewMessageTile> {
           ),
           const SizedBox(height: 5),
           ConvertStringToLatex(
-              rawText: widget.currentMessage.areasForImprovement!),
+              text: widget.currentMessage.areasForImprovement!),
           // Text(
           //   currentMessage.areasForImprovement!,
           //   style: Theme.of(context).textTheme.content.copyWith(

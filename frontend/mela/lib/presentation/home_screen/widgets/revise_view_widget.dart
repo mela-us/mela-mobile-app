@@ -7,8 +7,12 @@ import 'package:mela/presentation/home_screen/store/revise_store/revise_store.da
 import 'package:mela/presentation/home_screen/widgets/review_item_widget.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 
+import '../../../core/widgets/icon_widget/empty_icon_widget.dart';
+
 class ReviseViewWidget extends StatefulWidget {
-  ReviseViewWidget({super.key});
+  final VoidCallback onScrollToHead;
+
+  const ReviseViewWidget({super.key, required this.onScrollToHead});
 
   @override
   State<ReviseViewWidget> createState() => _ReviseViewWidgetState();
@@ -159,13 +163,34 @@ class _ReviseViewWidgetState extends State<ReviseViewWidget> {
   }
 
   Widget _buildRevisionView() {
-    return _reviseStore.revisionItemList.isNotEmpty
+    if (_reviseStore.revisionItemList.length == 0) {
+      print(" Empty eeyyyy!");
+    } else {
+      print("not empty _${_reviseStore.revisionItemList.length}");
+    }
+    return _reviseStore.revisionItemList.length != 0
         ? _buildRoadList()
-        : Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Không có bài ôn tập nào"),
-          ],
-        );
+        : Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              EmptyIconWidget(
+                mainMessage: "Không có bài ôn cho hôm nay",
+                secondaryMessage: "Hãy học thêm các chủ đề để hệ thống\nđề xuất bài ôn lại",
+                offset: 10,
+              ),
+              TextButton(
+                onPressed: widget.onScrollToHead,
+                child: Text(
+                  "Học tự do",
+                  style: Theme.of(context).textTheme.subHeading.copyWith(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    decoration: TextDecoration.underline,
+                    decorationColor: Theme.of(context).colorScheme.tertiary,
+                    decorationThickness: 1.5,
+                  ),
+                ),
+              )
+            ],
+          );
   } //comment
 }

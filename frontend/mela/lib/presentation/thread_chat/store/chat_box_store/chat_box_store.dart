@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mela/domain/entity/image_origin/image_origin.dart';
 import 'package:mela/utils/image_picker_helper/image_picker_helper.dart';
 import 'package:mobx/mobx.dart';
 

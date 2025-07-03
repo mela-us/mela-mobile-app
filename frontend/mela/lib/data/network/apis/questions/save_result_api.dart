@@ -1,27 +1,28 @@
 import 'package:dio/dio.dart';
-import 'package:mela/data/network/constants/endpoints_const.dart';
 import 'package:mela/data/network/dio_client.dart';
+import 'package:mela/domain/entity/question/exercise_result.dart';
+import 'package:mela/domain/entity/revise/revise.dart';
 import 'package:mela/domain/params/question/submit_result_params.dart';
 
-class SaveResultApi{
+class SaveResultApi {
   final DioClient _dioClient;
 
   SaveResultApi(this._dioClient);
-  Future<int> saveResult(SubmitResultParams param, String endpoint) async{
+  Future<ExerciseResult> saveResult(
+      SubmitResultParams param, String endpoint) async {
+    print("SaveResultApi: $endpoint");
     try {
-      final response = await _dioClient.post(
+      var res = await _dioClient.post(
         endpoint,
         options: Options(headers: {
           'Content-Type': 'application/json',
         }),
         data: param.toJson(),
       );
-      return 200;
-    }
-    catch (e){
+      return ExerciseResult.fromJson(res);
+    } catch (e) {
       print(e);
-      return 401;
+      rethrow;
     }
-
   }
 }

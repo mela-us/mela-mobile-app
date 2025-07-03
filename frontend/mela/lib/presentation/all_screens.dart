@@ -1,9 +1,13 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/core/widgets/buid_no_internet_widget.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/home_screen/home_screen.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
-import 'package:mela/presentation/stats/stats.dart';
+import 'package:mela/presentation/stats_history/stats.dart';
 import 'package:mela/presentation/personal/personal.dart';
 import 'package:mela/presentation/tutor/exam_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,7 +29,7 @@ class _AllScreensState extends State<AllScreens> {
   final _levelStore = getIt<LevelStore>();
   int _currentIndex = 2;
   int _previousIndex = -1;
-  late PageController _pageController;
+  // late PageController _pageController;
   // List of screens for each tab
   final List<Widget> _screens = [
     TutorScreen(),
@@ -36,12 +40,35 @@ class _AllScreensState extends State<AllScreens> {
     ChatScreen(),
     PersonalScreen(),
   ];
+  late final StreamSubscription<List<ConnectivityResult>> subscription;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
+    // _pageController = PageController();
     _getNotificationPref();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      subscription = Connectivity()
+          .onConnectivityChanged
+          .listen((List<ConnectivityResult> result) {
+        final hasConnection = result.contains(ConnectivityResult.mobile) ||
+            result.contains(ConnectivityResult.wifi) ||
+            result.contains(ConnectivityResult.ethernet);
+
+        if (!hasConnection) {
+          print("Sa ====> Không có internet khi thay đổi kết nố ở all Screens");
+          showDialogNoInternet();
+        } else {
+          print("Sa ====> Có internet quay trở lại ở all Screens");
+        }
+      });
+    });
+  }
+
+  @override
+  dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 
   void onTabTapped(int index) {
@@ -59,6 +86,17 @@ class _AllScreensState extends State<AllScreens> {
     Vibration.vibrate(duration: 60);
   }
 
+  void showDialogNoInternet() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return const BuidNoInternetWidget();
+      },
+    );
+  }
+
   Future<void> _getNotificationPref() async {
     await NotificationService().cancelAllNotifications();
 
@@ -66,8 +104,10 @@ class _AllScreensState extends State<AllScreens> {
     final isEnabled = prefs.getBool('streak_notifications_enabled') ?? true;
 
     if (isEnabled) {
-      NotificationService().scheduleNotification(hour: 6, minute: 0, notifyFromTomorrow: false);
-      NotificationService().scheduleNotification(hour: 19, minute: 30, notifyFromTomorrow: false);
+      NotificationService()
+          .scheduleNotification(hour: 6, minute: 0, notifyFromTomorrow: false);
+      NotificationService().scheduleNotification(
+          hour: 19, minute: 30, notifyFromTomorrow: false);
     }
   }
 

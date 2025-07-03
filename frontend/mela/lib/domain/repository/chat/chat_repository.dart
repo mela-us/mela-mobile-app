@@ -16,4 +16,6 @@ abstract class ChatRepository {
   Future<Conversation> sendMessageGetSolution(ChatRequestParams params);
 
   Future<List<HistoryItem>> getHistoryChat();
+  Future<int> getTokenChat();
+  Future<int> deleteConversationFromHistory(String conversationId);
 }

@@ -63,6 +63,22 @@ mixin _$SingleQuestionStore on _SingleQuestionStore, Store {
     });
   }
 
+  late final _$userImageAtom =
+      Atom(name: '_SingleQuestionStore.userImage', context: context);
+
+  @override
+  List<List<File>> get userImage {
+    _$userImageAtom.reportRead();
+    return super.userImage;
+  }
+
+  @override
+  set userImage(List<List<File>> value) {
+    _$userImageAtom.reportWrite(value, super.userImage, () {
+      super.userImage = value;
+    });
+  }
+
   late final _$currentQuizAnswerAtom =
       Atom(name: '_SingleQuestionStore.currentQuizAnswer', context: context);
 
@@ -76,6 +92,22 @@ mixin _$SingleQuestionStore on _SingleQuestionStore, Store {
   set currentQuizAnswer(String value) {
     _$currentQuizAnswerAtom.reportWrite(value, super.currentQuizAnswer, () {
       super.currentQuizAnswer = value;
+    });
+  }
+
+  late final _$currentImageAnswerAtom =
+      Atom(name: '_SingleQuestionStore.currentImageAnswer', context: context);
+
+  @override
+  List<String> get currentImageAnswer {
+    _$currentImageAnswerAtom.reportRead();
+    return super.currentImageAnswer;
+  }
+
+  @override
+  set currentImageAnswer(List<String> value) {
+    _$currentImageAnswerAtom.reportWrite(value, super.currentImageAnswer, () {
+      super.currentImageAnswer = value;
     });
   }
 
@@ -127,9 +159,22 @@ mixin _$SingleQuestionStore on _SingleQuestionStore, Store {
   }
 
   @override
+  void setImageAnswer(int index, List<File> images) {
+    final _$actionInfo = _$_SingleQuestionStoreActionController.startAction(
+        name: '_SingleQuestionStore.setImageAnswer');
+    try {
+      return super.setImageAnswer(index, images);
+    } finally {
+      _$_SingleQuestionStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
+userImage: ${userImage},
 currentQuizAnswer: ${currentQuizAnswer},
+currentImageAnswer: ${currentImageAnswer},
 currentAnswer: ${currentAnswer},
 userAnswers: ${userAnswers},
 currentIndex: ${currentIndex}

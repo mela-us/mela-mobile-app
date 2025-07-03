@@ -115,13 +115,20 @@ import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/assets.dart';
 import 'package:mela/di/service_locator.dart';
-import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
-import 'package:mela/presentation/thread_chat/thread_chat_screen.dart';
+import 'package:mela/domain/entity/question/question.dart';
+import 'package:mela/presentation/question/store/question_store.dart';
+import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
 import 'package:mela/presentation/thread_chat_learning/store/thread_chat_learning_store/thread_chat_learning_store.dart';
 import 'package:mela/presentation/thread_chat_learning/thread_chat_learning_screen.dart';
+import 'package:mela/presentation/thread_chat_learning_pdf/store/thread_chat_learning_pdf_store/thread_chat_learning_pdf_store.dart';
+import 'package:mela/presentation/thread_chat_learning_pdf/thread_chat_learning_pdf_screen.dart';
 import 'package:mela/utils/routes/routes.dart';
 
 class DraggableAIButton extends StatefulWidget {
+  final bool isPdfScreen;
+  final Function? onSetPdf;
+  const DraggableAIButton({Key? key, this.isPdfScreen = false, this.onSetPdf})
+      : super(key: key);
   @override
   _DraggableAIButtonState createState() => _DraggableAIButtonState();
 }
@@ -129,9 +136,24 @@ class DraggableAIButton extends StatefulWidget {
 class _DraggableAIButtonState extends State<DraggableAIButton> {
   final ThreadChatLearningStore _threadChatLearningStore =
       getIt.get<ThreadChatLearningStore>();
+  final ThreadChatLearningPdfStore _threadChatLearningPdfStore =
+      getIt.get<ThreadChatLearningPdfStore>();
+  final QuestionStore _questionStore = getIt<QuestionStore>();
+  final SingleQuestionStore _singleQuestionStore = getIt<SingleQuestionStore>();
   double _topPosition = 60;
   final double _buttonSize = 80.0;
   final double _rightPosition = -2;
+  late List<Question> questions;
+  @override
+  void initState() {
+    super.initState();
+    if (!widget.isPdfScreen) {
+      questions = _questionStore.questionList!.questions!;
+      _threadChatLearningStore.getTokenChat();
+    } else {
+      _threadChatLearningPdfStore.getTokenChat();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -156,33 +178,74 @@ class _DraggableAIButtonState extends State<DraggableAIButton> {
               });
             },
             onTap: () {
-              _threadChatLearningStore.clearConversation();
+              //Nếu là chat vs exercise
+              if (!widget.isPdfScreen) {
+                //Nếu lần đầu mở qua hoặc là cùng câu hỏi cũ thì xóa conversation và set lại question mới
+                if (_threadChatLearningStore.currentQuestion.questionId ==
+                        null ||
+                    _threadChatLearningStore.currentQuestion.questionId! !=
+                        questions[_singleQuestionStore.currentIndex]
+                            .questionId) {
+                  _threadChatLearningStore.clearConversation();
+                  _threadChatLearningStore.setQuestion(
+                      questions[_singleQuestionStore.currentIndex]);
+                }
 
-              Navigator.of(context).push(
-                PageRouteBuilder(
-                  settings: const RouteSettings(
-                      name: Routes.threadChatLearningScreen),
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      ThreadChatLearningScreen(),
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) {
-                    const begin = Offset(1.0, 0.0);
-                    const end = Offset.zero;
-                    const curve = Curves.easeInOut;
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    settings: const RouteSettings(
+                        name: Routes.threadChatLearningScreen),
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        ThreadChatLearningScreen(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      const begin = Offset(1.0, 0.0);
+                      const end = Offset.zero;
+                      const curve = Curves.easeInOut;
 
-                    var tween = Tween(begin: begin, end: end)
-                        .chain(CurveTween(curve: curve));
-                    var offsetAnimation = animation.drive(tween);
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      var offsetAnimation = animation.drive(tween);
 
-                    return ClipRect(
-                      child: SlideTransition(
-                        position: offsetAnimation,
-                        child: child,
-                      ),
-                    );
-                  },
-                ),
-              );
+                      return ClipRect(
+                        child: SlideTransition(
+                          position: offsetAnimation,
+                          child: child,
+                        ),
+                      );
+                    },
+                  ),
+                );
+              } else {
+                //Nếu là chat vs pdf
+                //Đã gán và xử lí ở trong Content_in_divided_lecture_screen.dart
+                widget.onSetPdf?.call();
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    settings: const RouteSettings(
+                        name: Routes.threadChatLearningPdfScreen),
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        ThreadChatLearningPdfScreen(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      const begin = Offset(1.0, 0.0);
+                      const end = Offset.zero;
+                      const curve = Curves.easeInOut;
+
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      var offsetAnimation = animation.drive(tween);
+
+                      return ClipRect(
+                        child: SlideTransition(
+                          position: offsetAnimation,
+                          child: child,
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }
             },
             child: Stack(
               children: [
@@ -238,7 +301,7 @@ class RPSCustomPainter extends CustomPainter {
     // Layer 1
 
     Paint paint_stroke_0 = Paint()
-      ..color =  Theme.of(context).colorScheme.buttonYesBgOrText
+      ..color = Theme.of(context).colorScheme.buttonYesBgOrText
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.01
       ..strokeCap = StrokeCap.butt

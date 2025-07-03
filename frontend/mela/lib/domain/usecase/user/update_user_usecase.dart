@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:intl/intl.dart';
 import 'package:mela/constants/enum.dart';
 import 'package:mela/core/domain/usecase/use_case.dart';
 import 'package:mela/domain/params/user/user_update_param.dart';
@@ -59,6 +58,6 @@ class UpdateUserUsecase extends UseCase<String, UserUpdateParam>{
       }
       rethrow;
     }
-    return "Error Occurred without DioException";
+    // return "Error Occurred without DioException";
   }
 }

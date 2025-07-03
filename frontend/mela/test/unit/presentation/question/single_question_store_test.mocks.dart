@@ -3,11 +3,13 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'dart:io' as _i4;
+
 import 'package:mela/presentation/question/store/single_question/single_question_store.dart'
     as _i3;
 import 'package:mobx/mobx.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i4;
+import 'package:mockito/src/dummies.dart' as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -43,9 +45,24 @@ class MockSingleQuestionStore extends _i1.Mock
   }
 
   @override
+  List<List<_i4.File>> get userImage => (super.noSuchMethod(
+        Invocation.getter(#userImage),
+        returnValue: <List<_i4.File>>[],
+      ) as List<List<_i4.File>>);
+
+  @override
+  set userImage(List<List<_i4.File>>? value) => super.noSuchMethod(
+        Invocation.setter(
+          #userImage,
+          value,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
   String get currentQuizAnswer => (super.noSuchMethod(
         Invocation.getter(#currentQuizAnswer),
-        returnValue: _i4.dummyValue<String>(
+        returnValue: _i5.dummyValue<String>(
           this,
           Invocation.getter(#currentQuizAnswer),
         ),
@@ -61,9 +78,24 @@ class MockSingleQuestionStore extends _i1.Mock
       );
 
   @override
+  List<String> get currentImageAnswer => (super.noSuchMethod(
+        Invocation.getter(#currentImageAnswer),
+        returnValue: <String>[],
+      ) as List<String>);
+
+  @override
+  set currentImageAnswer(List<String>? value) => super.noSuchMethod(
+        Invocation.setter(
+          #currentImageAnswer,
+          value,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
   String get currentAnswer => (super.noSuchMethod(
         Invocation.getter(#currentAnswer),
-        returnValue: _i4.dummyValue<String>(
+        returnValue: _i5.dummyValue<String>(
           this,
           Invocation.getter(#currentAnswer),
         ),
@@ -129,6 +161,22 @@ class MockSingleQuestionStore extends _i1.Mock
         Invocation.method(
           #setQuizAnswerValue,
           [value],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void setImageAnswer(
+    int? index,
+    List<_i4.File>? images,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #setImageAnswer,
+          [
+            index,
+            images,
+          ],
         ),
         returnValueForMissingStub: null,
       );
