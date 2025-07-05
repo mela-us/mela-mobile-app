@@ -78,6 +78,50 @@ class ExamQuestionModel {
       'guide': guide,
     };
   }
+
+  bool isCorrect(String userAnswer) {
+    if (options.isEmpty) {
+      if (userAnswer == blankAnswer) return true;
+      return false;
+    }
+    //option not empty
+    if (userAnswer.length == 1) {
+      int answerOrd = charToNumber(userAnswer);
+      if (options.elementAt(answerOrd - 1).isCorrect) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  int charToNumber(String char) {
+    if (char.length == 1 &&
+        char.codeUnitAt(0) >= 'A'.codeUnitAt(0) &&
+        char.codeUnitAt(0) <= 'Z'.codeUnitAt(0)) {
+      return char.codeUnitAt(0) - 'A'.codeUnitAt(0) + 1;
+    } else {
+      return 0;
+    }
+  }
+
+  String numberToChar(int number) {
+    if (number >= 1 && number <= 26) {
+      return String.fromCharCode('A'.codeUnitAt(0) + number - 1);
+    } else {
+      return '';
+    }
+  }
+
+  String correctQuizKey() {
+    for (QuizOptionModel o in options) {
+      if (o.isCorrect) {
+        return numberToChar(o.ordinalNumber);
+      }
+    }
+    return '';
+  }
 }
 
 class QuizOptionModel {

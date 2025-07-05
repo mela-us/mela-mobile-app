@@ -332,5 +332,21 @@ class UseCaseModule {
         getIt<LogoutUseCase>(),
       ),
     );
+
+    getIt.registerSingleton<SendMessageChatPdfUsecase>(
+      SendMessageChatPdfUsecase(
+        getIt<ChatExerciseRepository>(),
+        getIt<RefreshAccessTokenUsecase>(),
+        getIt<LogoutUseCase>(),
+        getIt<GetPresignImageUsecase>(),
+      ),
+    );
+    getIt.registerSingleton<GetExamUsecase>(
+      GetExamUsecase(
+        getIt<ExamRepository>(),
+        getIt<RefreshAccessTokenUsecase>(),
+        getIt<LogoutUseCase>(),
+      ),
+    );
   }
 }

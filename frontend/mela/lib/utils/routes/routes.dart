@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mela/presentation/chat/chat_screen.dart';
+import 'package:mela/presentation/exam_result/exam_result_screen.dart';
+import 'package:mela/presentation/exam_result/exam_review_screen.dart';
 import 'package:mela/presentation/forgot_password_screen/create_new_password_in_forgot_password_screen.dart';
 import 'package:mela/presentation/forgot_password_screen/enter_email_in_forgot_password_screen.dart';
 import 'package:mela/presentation/forgot_password_screen/enter_otp_in_forgot_password_screen.dart';
@@ -60,8 +62,10 @@ class Routes {
   static const String allScreens = '/all_screens';
   static const String threadChatScreen = '/thread_chat_screen';
   static const String threadChatLearningScreen = '/thread_chat_learning_screen';
-  static const String threadChatLearningPdfScreen = '/thread_chat_learning_pdf_screen';
-
+  static const String threadChatLearningPdfScreen =
+      '/thread_chat_learning_pdf_screen';
+  static const String examResultScreen = '/exam_result_screen';
+  static const String examReviewScreen = '/exam_review_screen';
   // static final routes = <String, WidgetBuilder>{
   //   loginScreen: (BuildContext context) => const ScreenWrapper(child:LoginScreen()),
   //   signupScreen: (BuildContext context) => const ScreenWrapper(child:SignUpScreen()),
@@ -177,5 +181,8 @@ class Routes {
     chat: (BuildContext context) => ChatScreen(),
 
     allScreens: (BuildContext context) => AllScreens(),
+
+    examResultScreen: (BuildContext context) => ExamResultScreen(),
+    examReviewScreen: (BuildContext context) => ExamReviewScreen(),
   };
 }

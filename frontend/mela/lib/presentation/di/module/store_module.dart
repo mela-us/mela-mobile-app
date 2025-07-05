@@ -32,7 +32,7 @@ import 'package:mela/domain/usecase/user_login/save_access_token_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_refresh_token_usecase.dart';
 import 'package:mela/presentation/chat/store/history_store.dart';
 import 'package:mela/presentation/examination/store/countdown_store.dart';
-import 'package:mela/presentation/examination/store/current_question_store.dart';
+import 'package:mela/presentation/examination/store/single_exam_store.dart';
 import 'package:mela/presentation/examination/store/exam_store.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 import 'package:mela/presentation/home_screen/store/revise_store/revise_store.dart';
@@ -286,8 +286,11 @@ class StoreModule {
 
     //test
     getIt.registerSingleton<CountdownStore>(CountdownStore());
-    getIt.registerSingleton<CurrentQuestionStore>(CurrentQuestionStore());
-    getIt.registerSingleton<ExamStore>(
-        ExamStore(getIt<GetExamUsecase>(), getIt<ErrorStore>()));
+    getIt.registerSingleton<SingleExamStore>(SingleExamStore());
+    getIt.registerSingleton<ExamStore>(ExamStore(
+        getIt<GetExamUsecase>(),
+        getIt<ErrorStore>(),
+        getIt<SingleExamStore>(),
+        getIt<UploadImagesUsecase>()));
   }
 }

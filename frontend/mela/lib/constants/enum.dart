@@ -37,3 +37,5 @@ enum ReviewItemType {
   EXERCISE,
   SECTION,
 }
+
+enum QuestionType { quiz, fill, subjective }

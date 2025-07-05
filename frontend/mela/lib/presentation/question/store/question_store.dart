@@ -4,6 +4,7 @@ import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/question/exercise_result.dart';
 import 'package:mela/domain/entity/question/question_list.dart';
 import 'package:mela/domain/params/question/submit_result_params.dart';
+import 'package:mela/domain/usecase/exam/get_exam_usecase.dart';
 import 'package:mela/domain/usecase/question/generate_hint_usecase.dart';
 import 'package:mela/domain/usecase/question/generate_term_usecase.dart';
 import 'package:mela/domain/usecase/question/submit_result_usecase.dart';
@@ -203,9 +204,7 @@ abstract class _QuestionStore with Store {
       exerciseId: questionsUid,
     );
 
-    final future = _updateExerciseProgressUseCase.call(
-        params: params
-    );
+    final future = _updateExerciseProgressUseCase.call(params: params);
     fetchExerciseAnswerFuture = ObservableFuture(future);
     future.then((result) {
       exerciseResult = result;

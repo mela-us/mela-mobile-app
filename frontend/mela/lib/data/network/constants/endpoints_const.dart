@@ -90,5 +90,5 @@ class EndpointsConst {
       "/api/exercise-histories/files/upload-url";
 
   //test
-  static const String getExam = "/api/test";
+  static const String getExam = "/api/tests";
 }
