@@ -32,9 +32,9 @@ class _ReviewMessageTileState extends State<ReviewMessageTile> {
         final isFirstTimeReviewMessage =
             await _sharedPreferenceHelper.isFirstTimeReviewMessage;
         if (mounted && showCaseContext != null && isFirstTimeReviewMessage) {
-          ShowCaseWidget.of(showCaseContext!).startShowCase([
-            _keySolutionAi,
-          ]);
+          // ShowCaseWidget.of(showCaseContext!).startShowCase([
+          //   _keySolutionAi,
+          // ]);
         }
       });
     });
@@ -146,8 +146,7 @@ class _ReviewMessageTileState extends State<ReviewMessageTile> {
                 ),
           ),
           const SizedBox(height: 5),
-          ConvertStringToLatex(
-              text: widget.currentMessage.submissionSummary!),
+          ConvertStringToLatex(text: widget.currentMessage.submissionSummary!),
           // Text(
           //   currentMessage.submissionSummary!,
           //   style: Theme.of(context).textTheme.content.copyWith(
@@ -248,7 +247,7 @@ class _ReviewMessageTileState extends State<ReviewMessageTile> {
       constraints: BoxConstraints(
         maxWidth: MediaQuery.of(context).size.width * 0.85,
       ),
-      padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 8),
+      padding: const EdgeInsets.only(top: 7, right: 8, left: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border:

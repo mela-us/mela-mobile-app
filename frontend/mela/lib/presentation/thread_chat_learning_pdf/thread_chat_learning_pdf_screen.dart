@@ -151,31 +151,34 @@ class _ThreadChatLearningPdfScreenState
               child: _threadChatLearningPdfStore
                       .currentConversation.messages.isEmpty
                   ? _buildDefaultBodyInNewConversation()
-                  : ScrollbarTheme(
-                      data: ScrollbarThemeData(
-                        thumbColor: MaterialStateProperty.all(Colors.grey),
-                        trackColor: MaterialStateProperty.all(Colors.yellow),
-                        radius: const Radius.circular(20),
-                        thickness: MaterialStateProperty.all(4),
-                      ),
-                      child: Scrollbar(
-                        controller: _scrollController,
-                        child: SingleChildScrollView(
-                          //Must use SingleChildScrollView
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: ScrollbarTheme(
+                        data: ScrollbarThemeData(
+                          thumbColor: MaterialStateProperty.all(Colors.grey),
+                          trackColor: MaterialStateProperty.all(Colors.yellow),
+                          radius: const Radius.circular(20),
+                          thickness: MaterialStateProperty.all(4),
+                        ),
+                        child: Scrollbar(
                           controller: _scrollController,
-                          child: Column(children: [
-                            ..._threadChatLearningPdfStore
-                                .currentConversation.messages
-                                .map((message) =>
-                                    MessageChatTitle(currentMessage: message))
-                                .toList()
-                          ]),
+                          child: SingleChildScrollView(
+                            //Must use SingleChildScrollView
+                            controller: _scrollController,
+                            child: Column(children: [
+                              ..._threadChatLearningPdfStore
+                                  .currentConversation.messages
+                                  .map((message) =>
+                                      MessageChatTitle(currentMessage: message))
+                                  .toList()
+                            ]),
+                          ),
                         ),
                       ),
                     ),
             ),
             const Padding(
-              padding: EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.only(bottom: 10, left: 8, right: 8),
               child: ChatBoxLearningPdf(),
             )
           ],

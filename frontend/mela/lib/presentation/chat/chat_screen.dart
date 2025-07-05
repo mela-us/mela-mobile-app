@@ -69,8 +69,9 @@ class _ChatScreenState extends State<ChatScreen> {
         final isFirstTimeGoToChat =
             await _sharedPrefsHelper.isFirstTimeGoToChat;
         if (mounted && showCaseContext != null && isFirstTimeGoToChat) {
-          ShowCaseWidget.of(showCaseContext!)
-              .startShowCase([_chatBoxKey, _relativeTermKey]);
+          // ShowCaseWidget.of(showCaseContext!)
+          //     .startShowCase([_chatBoxKey, _relativeTermKey]);
+          ShowCaseWidget.of(showCaseContext!).startShowCase([_chatBoxKey]);
         }
       });
     });
@@ -122,21 +123,16 @@ class _ChatScreenState extends State<ChatScreen> {
 
   //Build component:------------------------------------------------------------
   Widget _buildTitle(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: Dimens.horizontal_padding),
-      child: Row(
-        children: [
-          _buildHistoryButton(context),
-          Expanded(
-            child: Align(
-              alignment: Alignment.center,
-              child: Padding(
-                  padding: const EdgeInsets.only(right: 40),
-                  child: _buildTextTitle(context)),
-            ),
+    return Row(
+      children: [
+        _buildHistoryButton(context),
+        Expanded(
+          child: Align(
+            alignment: Alignment.center,
+            child: _buildTextTitle(context),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -179,22 +175,22 @@ class _ChatScreenState extends State<ChatScreen> {
                 "Chụp ảnh hoặc nhập bài toán vào ô chat, Mela sẽ hỗ trợ ngay!",
             child: ChatBox(isFirstChatScreen: true),
           ),
-          const SizedBox(height: 15),
-          ShowcaseCustom(
-            keyWidget: _relativeTermKey,
-            title: "Câu hỏi nhanh",
-            description: "Lựa chọn những câu hỏi gợi ý để bắt đầu",
-            child: ListView(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                _buildListItem("Cách giải phương trình bậc 2 một ẩn"),
-                _buildListItem("Hệ thức Vi-et là gì?"),
-                _buildListItem("Hướng dẫn mình giải bài toán này"),
-                _buildListItem("Nhận xét bài làm của mình"),
-              ],
-            ),
-          ),
+          // const SizedBox(height: 15),
+          // ShowcaseCustom(
+          //   keyWidget: _relativeTermKey,
+          //   title: "Câu hỏi nhanh",
+          //   description: "Lựa chọn những câu hỏi gợi ý để bắt đầu",
+          //   child: ListView(
+          //     shrinkWrap: true,
+          //     physics: const NeverScrollableScrollPhysics(),
+          //     children: [
+          //       _buildListItem("Cách giải phương trình bậc 2 một ẩn"),
+          //       _buildListItem("Hệ thức Vi-et là gì?"),
+          //       _buildListItem("Hướng dẫn mình giải bài toán này"),
+          //       _buildListItem("Nhận xét bài làm của mình"),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );

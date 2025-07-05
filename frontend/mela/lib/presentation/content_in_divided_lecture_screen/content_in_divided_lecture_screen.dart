@@ -196,167 +196,203 @@ class _ContentInDividedLectureScreenState
       ),
       body: Stack(
         children: [
+          //Pdf
           Center(
-            child: Container(
-              margin: const EdgeInsets.only(
-                  left: 16, right: 16, top: 8, bottom: 16),
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(6),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.18),
-                    spreadRadius: 2,
-                    blurRadius: 2,
-                    offset: const Offset(0, 0),
-                  ),
-                ],
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: SfPdfViewerTheme(
-                data: SfPdfViewerThemeData(
-                  backgroundColor: Theme.of(context).colorScheme.surface,
-                  progressBarColor: Theme.of(context).colorScheme.primary,
-                ),
-                child: ShowCaseWidget(onFinish: () {
-                  _sharedPrefsHelper.saveIsFirstTimeGoToPdf(false);
-                }, builder: (context) {
-                  showCaseContext = context;
-                  return ShowcaseCustom(
-                    keyWidget: _pdfKey,
-                    title: "Hoàn thành bài học",
-                    description:
-                        "Bạn hãy đọc đến trang cuối cùng để MELA xác nhận hoàn thành bài giảng này nhé!",
-                    child: SfPdfViewer.network(
-                      onTextSelectionChanged:
-                          (PdfTextSelectionChangedDetails details) {
-                        if (details.selectedText == null &&
-                            _overlayEntry != null) {
-                          _overlayEntry!.remove();
-                          _overlayEntry = null;
-                        } else if (details.selectedText != null &&
-                            _overlayEntry == null) {
-                          _showContextMenu(context, details);
-                        }
-                      },
-                      pageSpacing: 4,
-                      widget.currentDividedLecture.urlContentInDividedLecture,
-                      controller: _pdfViewerController,
-                      canShowScrollHead: false,
-                      canShowTextSelectionMenu: false,
-                      enableDoubleTapZooming: true,
-                      onDocumentLoaded: (PdfDocumentLoadedDetails details) {
-                        _totalPages = details.document.pages.count;
-                      },
-                      onPageChanged: (PdfPageChangedDetails details) async {
-                        _currentPage.value = details.newPageNumber;
-                      },
-                    ),
-                  );
-                }),
-              ),
-            ),
-          ),
-          Positioned(
-            left: 16,
-            bottom: 2,
-            right: 16,
-            child: ValueListenableBuilder(
-                valueListenable: _currentPage,
-                builder: (context, value, child) {
-                  if (_totalPages != 0 && value >= _totalPages - 3) {
-                    return SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.tertiary,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(
+                        left: 16, right: 16, top: 8, bottom: 16),
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(6),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.18),
+                          spreadRadius: 2,
+                          blurRadius: 2,
+                          offset: const Offset(0, 0),
                         ),
-                        onPressed: () async {
-                          if (_reviseStore.selectedItem != null) {
-                            // If the user is revising, update the review
-                            await _reviseStore.updateReview(UpdateReviewParam(
-                                reviewId: _reviseStore.selectedItem!.reviewId,
-                                itemId: _reviseStore.selectedItem!.itemId,
-                                ordinalNumber:
-                                    _reviseStore.selectedItem!.ordinalNumber,
-                                itemType: _reviseStore.selectedItem!.type,
-                                isDone: true));
-
-                            _reviseStore.setSelectedItem(null);
-                          }
-                          //if go to from suggestion, update section progress
-                          if (widget.suggestionId != null) {
-                            await _listProposedNewSuggestionStore
-                                .updateSuggestion(
-                                    widget.suggestionId!,
-                                    widget.currentDividedLecture.lectureId,
-                                    widget.currentDividedLecture.ordinalNumber,
-                                    true);
-                          } else {
-                            //call to update
-                            final sectionToUpdate =
-                                widget.currentDividedLecture;
-                            final params = SectionProgressParams(
-                                lectureId: sectionToUpdate.lectureId,
-                                ordinalNumber: sectionToUpdate.ordinalNumber,
-                                completedAt: DateTime.now());
-                            _updateUsecase.call(params: params);
-                          }
-
-                          final result = await showDialogGoToExercise();
-                          if (result == null) return;
-                          if (mounted) {
-                            if (result && widget.suggestionId != null) {
-                              _exerciseStore.setCurrentLecture(Lecture(
-                                lectureId: widget.currentDividedLecture
-                                    .lectureId, //only parameter is important
-                                levelId: widget.currentDividedLecture.levelId,
-                                topicId: widget.currentDividedLecture.topicId,
-                                lectureDescription: "",
-                                ordinalNumber:
-                                    widget.currentDividedLecture.ordinalNumber,
-                                lectureName: widget
-                                    .currentDividedLecture.dividedLectureName,
-                                totalExercises: 0,
-                                totalPassExercises: 0,
-                              ));
-                              isBackFromDividedLectureAndExercise = await Navigator
-                                      .of(context)
-                                  .push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          DividedLecturesAndExercisesScreen()));
-                            } else if (!result && widget.suggestionId != null) {
-                              Navigator.of(context)
-                                  .pop(true); //true to update suggestion
-                            } else {
-                              Navigator.of(context).pop(result);
-                            }
+                      ],
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: SfPdfViewerTheme(
+                      data: SfPdfViewerThemeData(
+                        backgroundColor: Theme.of(context).colorScheme.surface,
+                        progressBarColor: Theme.of(context).colorScheme.primary,
+                      ),
+                      child: SfPdfViewer.network(
+                        onTextSelectionChanged:
+                            (PdfTextSelectionChangedDetails details) {
+                          if (details.selectedText == null &&
+                              _overlayEntry != null) {
+                            _overlayEntry!.remove();
+                            _overlayEntry = null;
+                          } else if (details.selectedText != null &&
+                              _overlayEntry == null) {
+                            _showContextMenu(context, details);
                           }
                         },
-                        child: Center(
-                          child: Text(
-                            "Đã học xong",
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontFamily: 'Asap',
-                                fontWeight: FontWeight.bold,
-                                color:
-                                    Theme.of(context).colorScheme.onTertiary),
-                          ),
-                        ),
+                        pageSpacing: 4,
+                        widget.currentDividedLecture.urlContentInDividedLecture,
+                        controller: _pdfViewerController,
+                        canShowScrollHead: false,
+                        canShowTextSelectionMenu: false,
+                        enableDoubleTapZooming: true,
+                        onDocumentLoaded: (PdfDocumentLoadedDetails details) {
+                          _totalPages = details.document.pages.count;
+                        },
+                        onPageChanged: (PdfPageChangedDetails details) async {
+                          _currentPage.value = details.newPageNumber;
+                        },
                       ),
-                    );
-                  }
-                  return const SizedBox();
-                }),
+                    ),
+                  ),
+                ),
+
+                //Nút học xong ở cuối:
+                ValueListenableBuilder(
+                    valueListenable: _currentPage,
+                    builder: (context, value, child) {
+                      if (_totalPages != 0 && value >= _totalPages - 3) {
+                        return Container(
+                          margin: const EdgeInsets.only(
+                              left: 16, right: 16, bottom: 16),
+                          height: 50,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.tertiary,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                            ),
+                            onPressed: () async {
+                              if (_reviseStore.selectedItem != null) {
+                                // If the user is revising, update the review
+                                await _reviseStore.updateReview(
+                                    UpdateReviewParam(
+                                        reviewId:
+                                            _reviseStore.selectedItem!.reviewId,
+                                        itemId:
+                                            _reviseStore.selectedItem!.itemId,
+                                        ordinalNumber: _reviseStore
+                                            .selectedItem!.ordinalNumber,
+                                        itemType:
+                                            _reviseStore.selectedItem!.type,
+                                        isDone: true));
+
+                                _reviseStore.setSelectedItem(null);
+                              }
+                              //if go to from suggestion, update section progress
+                              if (widget.suggestionId != null) {
+                                await _listProposedNewSuggestionStore
+                                    .updateSuggestion(
+                                        widget.suggestionId!,
+                                        widget.currentDividedLecture.lectureId,
+                                        widget.currentDividedLecture
+                                            .ordinalNumber,
+                                        true);
+                              }
+                              //call to update
+                              final sectionToUpdate =
+                                  widget.currentDividedLecture;
+                              final params = SectionProgressParams(
+                                  lectureId: sectionToUpdate.lectureId,
+                                  ordinalNumber: sectionToUpdate.ordinalNumber,
+                                  completedAt: DateTime.now());
+                              await _updateUsecase.call(params: params);
+
+                              final result = await showDialogGoToExercise();
+                              if (result == null) return;
+                              if (mounted) {
+                                if (result && widget.suggestionId != null) {
+                                  _exerciseStore.setCurrentLecture(Lecture(
+                                    lectureId: widget.currentDividedLecture
+                                        .lectureId, //only parameter is important
+                                    levelId:
+                                        widget.currentDividedLecture.levelId,
+                                    topicId:
+                                        widget.currentDividedLecture.topicId,
+                                    lectureDescription: "",
+                                    ordinalNumber: widget
+                                        .currentDividedLecture.ordinalNumber,
+                                    lectureName: widget.currentDividedLecture
+                                        .dividedLectureName,
+                                    totalExercises: 0,
+                                    totalPassExercises: 0,
+                                  ));
+                                  isBackFromDividedLectureAndExercise =
+                                      await Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  DividedLecturesAndExercisesScreen(
+                                                      initialTabIndex: 1)));
+                                } else if (!result &&
+                                    widget.suggestionId != null) {
+                                  Navigator.of(context)
+                                      .pop(true); //true to update suggestion
+                                } else {
+                                  Navigator.of(context).pop(result);
+                                }
+                              }
+                            },
+                            child: Center(
+                              child: Text(
+                                "Đã học xong",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: 'Asap',
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onTertiary),
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                      return const SizedBox();
+                    }),
+              ],
+            ),
           ),
+
+          //Showcase for pdf
+          Positioned(
+            top: 200,
+            right: 20,
+            child: ShowCaseWidget(onFinish: () {
+              _sharedPrefsHelper.saveIsFirstTimeGoToPdf(false);
+            }, builder: (context) {
+              showCaseContext = context;
+
+              return ShowcaseCustom(
+                keyWidget: _pdfKey,
+                title: "Hoàn thành bài học",
+                isHideActionWidget: true,
+                description:
+                    "Bạn hãy đọc đến trang cuối cùng để MELA xác nhận hoàn thành bài giảng này nhé!",
+                child: Container(
+                  width: 0,
+                  height: 0,
+                  decoration: const BoxDecoration(
+                    color: Colors.transparent,
+                  ),
+                  child: const Icon(
+                    Icons.info_outline,
+                    color: Colors.transparent,
+                    size: 0,
+                  ),
+                ),
+              );
+            }),
+          ),
+          //Button học AI
           DraggableAIButton(isPdfScreen: true, onSetPdf: setPdfForStore),
         ],
       ),

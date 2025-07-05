@@ -32,7 +32,7 @@ abstract class _ThreadChatStore with Store {
       this.sendMessageGetSolutionUsecase,
       this.getTokenChatUsecase);
 
-  int limit = 5;
+  int limit = 15;
 
   @observable
   Conversation currentConversation = Conversation(
@@ -211,7 +211,7 @@ abstract class _ThreadChatStore with Store {
 
   @action
   void clearConversation() {
-    limit = 5;
+    limit = 15;
     currentConversation = Conversation(
         conversationId: "",
         messages: [],
@@ -274,7 +274,7 @@ abstract class _ThreadChatStore with Store {
   }
 
   void resetLimit() {
-    limit = 5;
+    limit = 15;
   }
 }
   // constructor:--------------------------------
