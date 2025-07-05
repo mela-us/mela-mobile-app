@@ -143,7 +143,7 @@ class _ResultScreenState extends State<ResultScreen> {
               if (_exerciseStore.currentLecture != null) {
                 await _exerciseStore.getExercisesByLectureId();
               }
-              await _levelStore.getAreLearningLectures();
+              //await _levelStore.getAreLearningLectures();
               if (mounted) {
                 Navigator.of(context).pop();
               }

@@ -146,15 +146,6 @@ mixin _$LevelStore on _LevelStore, Store {
     });
   }
 
-  late final _$getAreLearningLecturesAsyncAction =
-      AsyncAction('_LevelStore.getAreLearningLectures', context: context);
-
-  @override
-  Future<dynamic> getAreLearningLectures() {
-    return _$getAreLearningLecturesAsyncAction
-        .run(() => super.getAreLearningLectures());
-  }
-
   late final _$getLevelsAsyncAction =
       AsyncAction('_LevelStore.getLevels', context: context);
 

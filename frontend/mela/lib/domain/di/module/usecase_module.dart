@@ -150,9 +150,9 @@ class UseCaseModule {
         getIt<RefreshAccessTokenUsecase>(),
         getIt<LogoutUseCase>()));
 
-    getIt.registerSingleton<GetLecturesAreLearningUsecase>(
-        GetLecturesAreLearningUsecase(getIt<LectureRepository>(),
-            getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()));
+    // getIt.registerSingleton<GetLecturesAreLearningUsecase>(
+    //     GetLecturesAreLearningUsecase(getIt<LectureRepository>(),
+    //         getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()));
 
     getIt.registerSingleton<GetDividedLectureUsecase>(GetDividedLectureUsecase(
         getIt<LectureRepository>(),

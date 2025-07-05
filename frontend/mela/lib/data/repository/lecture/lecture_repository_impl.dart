@@ -37,10 +37,10 @@ class LectureRepositoryImpl extends LectureRepository {
     return _lectureApi.getDividedLectures(lectureId);
   }
 
-  @override
-  Future<LectureList> getLecturesAreLearning() {
-    return _lectureApi.getLecturesAreLearning();
-  }
+  // @override
+  // Future<LectureList> getLecturesAreLearning() {
+  //   return _lectureApi.getLecturesAreLearning();
+  // }
 
   @override
   Future<ListSuggestion> getProposedNewSuggestion() {
