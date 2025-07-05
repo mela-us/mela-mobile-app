@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
-import 'package:mela/constants/enum.dart';
 import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/core/widgets/practice_app_bar_widget.dart';
 import 'package:mela/domain/entity/exam/exam.dart';
-import 'package:mela/domain/params/revise/update_review_param.dart';
-import 'package:mela/presentation/divided_lectures_and_exercises_screen/store/exercise_store.dart';
 import 'package:mela/presentation/examination/store/exam_store.dart';
 import 'package:mela/presentation/examination/store/single_exam_store.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
@@ -21,13 +18,11 @@ import 'package:mobx/mobx.dart';
 
 import '../../constants/assets.dart';
 import '../../di/service_locator.dart';
-import '../../domain/entity/question/question.dart';
+
 import '../../domain/params/history/exercise_progress_params.dart';
-import '../streak/store/streak_store.dart';
-import '../streak/streak_gain_screen.dart';
 
 class ExamResultScreen extends StatefulWidget {
-  ExamResultScreen({super.key});
+  const ExamResultScreen({super.key});
 
   @override
   State<ExamResultScreen> createState() => _ExamResultScreenState();
@@ -49,22 +44,6 @@ class _ExamResultScreenState extends State<ExamResultScreen> {
   @override
   void initState() {
     super.initState();
-
-    _checkAndUpdateStreak();
-
-    // _disposer = reaction<bool>(
-    //   (_) => _streakStore.updateSuccess ?? false,
-    //   (updateSuccess) {
-    //     if (updateSuccess) {
-    //       int streak = _streakStore.streak?.current ?? 0;
-    //       Navigator.push(
-    //         context,
-    //         MaterialPageRoute(
-    //             builder: (context) => StreakScreen(streak: streak)),
-    //       );
-    //     }
-    //   },
-    // );
   }
 
   @override
@@ -83,43 +62,11 @@ class _ExamResultScreenState extends State<ExamResultScreen> {
       // );
 
       //calculaate point here
-      // _questionStore.updateProgress(
-      //     DateTime.now().subtract(_timerStore.elapsedTime), DateTime.now());
-
-      // if (calculatePoint() >= 8 && _reviseStore.selectedItem != null) {
-      //   if (_reviseStore.selectedItem!.type == ReviewItemType.EXERCISE) {
-      //     //Update exercise progress
-      //     _updateExerciseProgress();
-      //   }
-      // }
+      _questionStore.updateProgress(
+          DateTime.now().subtract(_timerStore.elapsedTime), DateTime.now());
     }
     super.didChangeDependencies();
   }
-
-  // Future<void> _updateExerciseProgress() async {
-  //   try {
-  //     await _reviseStore.updateReview(
-  //       UpdateReviewParam(
-  //         isDone: true,
-  //         reviewId: _reviseStore.selectedItem!.reviewId,
-  //         itemId: _reviseStore.selectedItem!.itemId,
-  //         ordinalNumber: _reviseStore.selectedItem!.ordinalNumber,
-  //         itemType: _reviseStore.selectedItem!.type,
-  //       ),
-  //     );
-
-  //     _reviseStore.setSelectedItem(null);
-  //   } catch (e) {
-  //     // ignore: use_build_context_synchronously
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(
-  //         content: Text(
-  //           "Lỗi không xác định, hãy thử lại.",
-  //         ),
-  //       ),
-  //     );
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -130,26 +77,11 @@ class _ExamResultScreenState extends State<ExamResultScreen> {
             backgroundColor: Theme.of(context).colorScheme.appBackground,
             body: const Center(child: RotatingImageIndicator()),
           );
-          // } else if (_levelStore.loading ||
-          //     _topicLectureStore.isGetTopicLectureLoading ||
-          //     _exerciseStore.isGetExercisesLoading) {
-          //   return Scaffold(
-          //     backgroundColor: Theme.of(context).colorScheme.appBackground,
-          //     body: const Center(child: RotatingImageIndicator()),
-          //   );
         }
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.appBackground,
           appBar: PracticeAppBar(
             pressedBack: () async {
-              // //await _topicStore.getAreLearningLectures();
-              // if (_topicLectureStore.currentLevel != null) {
-              //   await _topicLectureStore.getListTopicLectureInLevel();
-              // }
-              // if (_exerciseStore.currentLecture != null) {
-              //   await _exerciseStore.getExercisesByLectureId();
-              // }
-              // await _levelStore.getAreLearningLectures();
               if (mounted) {
                 Navigator.of(context).pushNamedAndRemoveUntil(
                     Routes.allScreens, (route) => false);
@@ -203,12 +135,6 @@ class _ExamResultScreenState extends State<ExamResultScreen> {
         ),
       ],
     );
-  }
-
-  void _checkAndUpdateStreak() {
-    if (calculatePoint() >= 8) {
-      // _streakStore.updateStreak();
-    }
   }
 
   //Build items:----------------------------------------------------------------

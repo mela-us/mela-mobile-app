@@ -97,7 +97,10 @@ class _ExamScreenState extends State<ExamScreen> {
             _selectedImages.addAll(
                 _singleExamStore.userImage[_singleExamStore.currentIndex]);
           });
-        } else {}
+        } else {
+          _controller.text = "";
+          _selectedImages.clear(); // Clear selected images for FITB
+        }
         _controller.text = userAnswer;
       }
     });
@@ -132,7 +135,8 @@ class _ExamScreenState extends State<ExamScreen> {
     //Reaction to quit
     reaction((_) => _questionStore.isQuit, (quit) {
       if (quit == QuitOverlayResponse.quit) {
-        Navigator.of(context).pop();
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil(Routes.allScreens, (route) => false);
       }
     }, fireImmediately: true);
 
@@ -725,7 +729,8 @@ class _ExamScreenState extends State<ExamScreen> {
                       _singleExamStore.currentIndex, _selectedImages);
                   _singleExamStore.printAllAnswer();
                   questionListOverlay.remove();
-                  Navigator.of(context).pushReplacementNamed(Routes.examResultScreen);
+                  Navigator.of(context)
+                      .pushReplacementNamed(Routes.examResultScreen);
                 }
               },
               selectedImages: _selectedImages,

@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/dimens.dart';
 import 'package:mela/constants/enum.dart';
-import 'package:mela/presentation/question/store/question_store.dart';
+import 'package:mela/presentation/examination/store/exam_store.dart';
 import 'package:mela/utils/locale/app_localization.dart';
 
 import '../../../constants/assets.dart';
 import '../../../di/service_locator.dart';
 
-class QuestionQuitOverlay extends StatelessWidget {
-  final QuestionStore questionStore = getIt<QuestionStore>();
+class ExamQuitOverlayWidget extends StatelessWidget {
+  final ExamStore questionStore = getIt<ExamStore>();
 
-  QuestionQuitOverlay({super.key});
+  ExamQuitOverlayWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

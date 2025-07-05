@@ -5,6 +5,7 @@ import 'package:mela/constants/dimens.dart';
 import 'package:mela/constants/enum.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/examination/store/exam_store.dart';
+import 'package:mela/presentation/examination/widgets/exam_quit_overlay_widget.dart';
 import 'package:mela/presentation/question/store/timer/timer_store.dart';
 import 'package:mela/presentation/question/widgets/question_quit_overlay_widget.dart';
 import 'package:mobx/mobx.dart';
@@ -196,7 +197,7 @@ class _ExamAppBarState extends State<ExamAppBar> {
           ),
           Align(
             alignment: Alignment.center,
-            child: QuestionQuitOverlay(),
+            child: ExamQuitOverlayWidget(),
           )
         ],
       );

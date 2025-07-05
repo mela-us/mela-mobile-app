@@ -1,24 +1,18 @@
 import 'package:dio/dio.dart';
 import 'package:mela/constants/enum.dart';
-import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/exam/exam.dart';
 import 'package:mela/domain/entity/question/exercise_result.dart';
-import 'package:mela/domain/entity/question/question_list.dart';
 import 'package:mela/domain/params/question/submit_result_params.dart';
 import 'package:mela/domain/usecase/exam/get_exam_usecase.dart';
-import 'package:mela/domain/usecase/question/generate_hint_usecase.dart';
-import 'package:mela/domain/usecase/question/generate_term_usecase.dart';
-import 'package:mela/domain/usecase/question/submit_result_usecase.dart';
+import 'package:mela/domain/usecase/exam/submit_exam_usecase.dart';
+import 'package:mela/domain/usecase/exam/upload_image_exam_usecase.dart';
+
 import 'package:mela/domain/usecase/question/upload_images_usecase.dart';
 import 'package:mela/presentation/examination/store/single_exam_store.dart';
-import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
-import 'package:mela/presentation/result/result.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../core/stores/error/error_store.dart';
-import '../../../domain/params/history/exercise_progress_params.dart';
-import '../../../domain/usecase/history/update_excercise_progress_usecase.dart';
-import '../../../domain/usecase/question/get_questions_usecase.dart';
+
 import '../../../utils/dio/dio_error_util.dart';
 part 'exam_store.g.dart';
 
@@ -27,11 +21,12 @@ class ExamStore = _ExamStore with _$ExamStore;
 abstract class _ExamStore with Store {
   //Constructor:----------------------------------------------------------------
   _ExamStore(this._getExamUsecase, this._errorStore, this._singleExamStore,
-      this._uploadImagesUsecase);
+      this._uploadImagesUsecase, this._submitExamUsecase);
 
   //UseCase:--------------------------------------------------------------------
   final GetExamUsecase _getExamUsecase;
-  final UploadImagesUsecase _uploadImagesUsecase;
+  final UploadImageExamUsecase _uploadImagesUsecase;
+  final SubmitExamUsecase _submitExamUsecase;
 
   //Store:----------------------------------------------------------------------
   final ErrorStore _errorStore;
@@ -123,7 +118,7 @@ abstract class _ExamStore with Store {
 
   // @action
   // Future submitAnswer(int correct, DateTime start, DateTime end) async {
-  //   questionList ??= QuestionList(message: '', size: 0, questions: []);
+  //   exam ??= ExamModel(message: '', size: 0, questions: []);
   //   final future = _submitResultUseCase.call(
   //       params: SubmitResultParams(
   //           exerciseId: questionsUid, startAt: start, endAt: end, answers: []));
@@ -138,73 +133,72 @@ abstract class _ExamStore with Store {
   //   });
   // }
 
-  // @action
-  // Future updateProgress(DateTime start, DateTime end) async {
-  //   isUploadingImages = true;
-  //   List<List<String>?> imageUrls =
-  //       await _uploadImagesUsecase.call(params: _singleExamStore.userImage);
+  @action
+  Future updateProgress(DateTime start, DateTime end) async {
+    isUploadingImages = true;
+    List<List<String>?> imageUrls =
+        await _uploadImagesUsecase.call(params: _singleExamStore.userImage);
 
-  //   isUploadingImages = false;
+    isUploadingImages = false;
 
-  //   List<AnswerParams> exerciseAnswers = [];
-  //   for (int i = 0; i < questionList!.questions!.length; i++) {
-  //     print("IN LOOP $i OF UPDATE PROGRESS");
-  //     print(_singleExamStore.userAnswers[i]);
-  //     // Check if the quesiton is a multiple choice
-  //     if (questionList!.questions![i].questionType == "MULTIPLE_CHOICE") {
-  //       AnswerParams answer = AnswerParams(
-  //         selectedOption: _singleExamStore.userAnswers[i].isNotEmpty
-  //             ? convertLetterToNumber(_singleExamStore.userAnswers[i])
-  //             : null,
-  //         blankAnswer: "",
-  //         questionId: questionList!.questions![i].questionId!,
-  //         imageUrls: [],
-  //       );
-  //       exerciseAnswers.add(answer);
-  //       print("Multiple choice $i ${_singleExamStore.userAnswers[i]}");
-  //     }
-  //     //Check if the question is a subjective question
-  //     else if (questionList!.questions![i].questionType == "ESSAY") {
-  //       AnswerParams answer = AnswerParams(
-  //         selectedOption: null,
-  //         blankAnswer: _singleExamStore.userAnswers[i],
-  //         questionId: questionList!.questions![i].questionId!,
-  //         imageUrls: imageUrls[i],
-  //       );
-  //       exerciseAnswers.add(answer);
-  //       print("Essay $i ");
-  //     }
-  //     // Check if the question is a fill in the blank
-  //     else {
-  //       AnswerParams answer = AnswerParams(
-  //         selectedOption: null,
-  //         blankAnswer: _singleExamStore.userAnswers[i],
-  //         questionId: questionList!.questions![i].questionId!,
-  //         imageUrls: null,
-  //       );
-  //       exerciseAnswers.add(answer);
-  //       print("Fill blank $i ${_singleExamStore.userAnswers[i]}");
-  //     }
-  //   }
+    List<AnswerParams> exerciseAnswers = [];
+    for (int i = 0; i < exam!.total; i++) {
+      print("IN LOOP $i OF UPDATE PROGRESS");
+      print(_singleExamStore.userAnswers[i]);
+      // Check if the quesiton is a multiple choice
+      if (exam!.questions![i].questionType == "MULTIPLE_CHOICE") {
+        AnswerParams answer = AnswerParams(
+          selectedOption: _singleExamStore.userAnswers[i].isNotEmpty
+              ? convertLetterToNumber(_singleExamStore.userAnswers[i])
+              : null,
+          blankAnswer: "",
+          questionId: exam!.questions![i].questionId!,
+          imageUrls: [],
+        );
+        exerciseAnswers.add(answer);
+        print("Multiple choice $i ${_singleExamStore.userAnswers[i]}");
+      }
+      //Check if the question is a subjective question
+      else if (exam!.questions![i].questionType == "ESSAY") {
+        AnswerParams answer = AnswerParams(
+          selectedOption: null,
+          blankAnswer: _singleExamStore.userAnswers[i],
+          questionId: exam!.questions![i].questionId!,
+          imageUrls: imageUrls[i],
+        );
+        exerciseAnswers.add(answer);
+        print("Essay $i ");
+      }
+      // Check if the question is a fill in the blank
+      else {
+        AnswerParams answer = AnswerParams(
+          selectedOption: null,
+          blankAnswer: _singleExamStore.userAnswers[i],
+          questionId: exam!.questions![i].questionId!,
+          imageUrls: null,
+        );
+        exerciseAnswers.add(answer);
+        print("Fill blank $i ${_singleExamStore.userAnswers[i]}");
+      }
+    }
 
-  //   final params = SubmitResultParams(
-  //     startAt: start,
-  //     endAt: end,
-  //     answers: exerciseAnswers,
-  //     exerciseId: questionsUid,
-  //   );
+    final params = SubmitResultParams(
+      startAt: start,
+      endAt: end,
+      answers: exerciseAnswers,
+      exerciseId: questionsUid,
+    );
 
-  //   final future = _updateExerciseProgressUseCase.call(params: params);
-  //   fetchExerciseAnswerFuture = ObservableFuture(future);
-  //   future.then((result) {
-  //     exerciseResult = result;
-  //     print('Exercise result: ${exerciseResult?.message}');
-  //   }).catchError((error) {
-  //     print("Store: $error");
-  //     _errorStore.errorMessage = DioExceptionUtil.handleError(error);
-  //   });
-
-  // }
+    final future = _submitExamUsecase.call(params: params);
+    fetchExerciseAnswerFuture = ObservableFuture(future);
+    future.then((result) {
+      exerciseResult = result;
+      print('Exercise result: ${exerciseResult?.message}');
+    }).catchError((error) {
+      print("Store: $error");
+      _errorStore.errorMessage = DioExceptionUtil.handleError(error);
+    });
+  }
 
   //action
   @action

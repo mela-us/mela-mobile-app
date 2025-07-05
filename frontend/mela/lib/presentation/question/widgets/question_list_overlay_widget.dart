@@ -24,8 +24,8 @@ class QuestionListOverlay extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: Container(
-        width: 390,
-        height: 280 + 34,
+        // width: 390,
+        // height: 280 + 34,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20.0),
@@ -38,7 +38,10 @@ class QuestionListOverlay extends StatelessWidget {
             _buildFirstLine(context),
             // const SizedBox(height: 0),
             _buildQuestionList(),
-            _buildSubmitButton(context),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: _buildSubmitButton(context),
+            ),
           ],
         ),
       ),
@@ -49,7 +52,7 @@ class QuestionListOverlay extends StatelessWidget {
 
   Widget _buildFirstLine(BuildContext context) {
     return SizedBox(
-      height: 50,
+      // height: 30,
       child: Stack(
         children: [
           Center(
@@ -79,28 +82,25 @@ class QuestionListOverlay extends StatelessWidget {
 
   Widget _buildQuestionList() {
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: Dimens.practiceHorizontalText,
-        vertical: 10,
+      padding: const EdgeInsets.only(
+        left: Dimens.practiceHorizontalText,
+        right: Dimens.practiceHorizontalText,
+        top: 0,
+        bottom: 10,
       ),
-      height: 130,
+      // height: 130,
       child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            GridView.builder(
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 7,
-                  mainAxisSpacing: 6,
-                  crossAxisSpacing: 6,
-                ),
-                itemCount: _questionStore.questionList!.questions!.length,
-                itemBuilder: (context, index) {
-                  return _buildListItem(index);
-                }),
-          ],
-        ),
+        child: GridView.builder(
+            shrinkWrap: true,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 7,
+              mainAxisSpacing: 6,
+              crossAxisSpacing: 6,
+            ),
+            itemCount: _questionStore.questionList!.questions!.length,
+            itemBuilder: (context, index) {
+              return _buildListItem(index);
+            }),
       ),
     );
   }
@@ -140,8 +140,8 @@ class QuestionListOverlay extends StatelessWidget {
 
   Widget _buildSubmitButton(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.fromLTRB(Dimens.practiceHorizontalText, 30,
-            Dimens.practiceHorizontalText, 0),
+        padding: const EdgeInsets.fromLTRB(
+            Dimens.practiceHorizontalText, 0, Dimens.practiceHorizontalText, 0),
         child: GestureDetector(
           onTap: () => isSubmitted(true),
           child: Container(

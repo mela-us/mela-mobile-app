@@ -13,6 +13,8 @@ import 'package:mela/domain/usecase/chat/send_message_review_submission_usecase.
 import 'package:mela/domain/usecase/chat_with_exercise/send_message_chat_exercise_usecase.dart';
 import 'package:mela/domain/usecase/chat_with_exercise/send_message_chat_pdf_usecase.dart';
 import 'package:mela/domain/usecase/exam/get_exam_usecase.dart';
+import 'package:mela/domain/usecase/exam/submit_exam_usecase.dart';
+import 'package:mela/domain/usecase/exam/upload_image_exam_usecase.dart';
 import 'package:mela/domain/usecase/history/update_excercise_progress_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
 import 'package:mela/domain/usecase/question/upload_images_usecase.dart';
@@ -291,6 +293,7 @@ class StoreModule {
         getIt<GetExamUsecase>(),
         getIt<ErrorStore>(),
         getIt<SingleExamStore>(),
-        getIt<UploadImagesUsecase>()));
+        getIt<UploadImageExamUsecase>(),
+        getIt<SubmitExamUsecase>()));
   }
 }

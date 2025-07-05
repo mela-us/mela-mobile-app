@@ -91,4 +91,7 @@ class EndpointsConst {
 
   //test
   static const String getExam = "/api/tests";
+  //test upload images
+  static const String getPresignUrlForExam =
+      "/api/test-histories/files/upload-url";
 }

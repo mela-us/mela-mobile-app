@@ -21,6 +21,8 @@ import 'package:mela/domain/usecase/chat/send_message_review_submission_usecase.
 import 'package:mela/domain/usecase/chat_with_exercise/send_message_chat_exercise_usecase.dart';
 import 'package:mela/domain/usecase/chat_with_exercise/send_message_chat_pdf_usecase.dart';
 import 'package:mela/domain/usecase/exam/get_exam_usecase.dart';
+import 'package:mela/domain/usecase/exam/submit_exam_usecase.dart';
+import 'package:mela/domain/usecase/exam/upload_image_exam_usecase.dart';
 
 import 'package:mela/domain/usecase/exercise/get_exercises_usecase.dart';
 import 'package:mela/domain/usecase/history/update_excercise_progress_usecase.dart';
@@ -344,6 +346,22 @@ class UseCaseModule {
     getIt.registerSingleton<GetExamUsecase>(
       GetExamUsecase(
         getIt<ExamRepository>(),
+        getIt<RefreshAccessTokenUsecase>(),
+        getIt<LogoutUseCase>(),
+      ),
+    );
+
+    getIt.registerSingleton<UploadImageExamUsecase>(
+      UploadImageExamUsecase(
+        getIt<ExamRepository>(),
+        getIt<RefreshAccessTokenUsecase>(),
+        getIt<LogoutUseCase>(),
+      ),
+    );
+
+    getIt.registerSingleton<SubmitExamUsecase>(
+      SubmitExamUsecase(
+        getIt<SaveResultApi>(),
         getIt<RefreshAccessTokenUsecase>(),
         getIt<LogoutUseCase>(),
       ),

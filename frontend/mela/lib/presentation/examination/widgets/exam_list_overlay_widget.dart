@@ -6,7 +6,6 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/dimens.dart';
 import 'package:mela/presentation/examination/store/exam_store.dart';
 import 'package:mela/presentation/examination/store/single_exam_store.dart';
-import 'package:mela/presentation/question/store/question_store.dart';
 import 'package:mela/utils/locale/app_localization.dart';
 
 import '../../../di/service_locator.dart';
@@ -25,21 +24,24 @@ class ExamListOverlayWidget extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: Container(
-        width: 390,
-        height: 280 + 34,
+        // width: 390,
+        // height: 280 + 34,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          // mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             //firstLine
             _buildFirstLine(context),
             // const SizedBox(height: 0),
-            _buildQuestionList(),
-            _buildSubmitButton(context),
+            _buildQuestionList(context),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: _buildSubmitButton(context),
+            ),
           ],
         ),
       ),
@@ -49,59 +51,52 @@ class ExamListOverlayWidget extends StatelessWidget {
   //Build items:----------------------------------------------------------------
 
   Widget _buildFirstLine(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: Stack(
-        children: [
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 23),
-              child: Text(
-                AppLocalizations.of(context)
-                    .translate('question_title_question_list'),
-                style: Theme.of(context)
-                    .textTheme
-                    .title
-                    .copyWith(color: Theme.of(context).colorScheme.textInBg1),
-              ),
+    return Stack(
+      children: [
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 23),
+            child: Text(
+              AppLocalizations.of(context)
+                  .translate('question_title_question_list'),
+              style: Theme.of(context)
+                  .textTheme
+                  .title
+                  .copyWith(color: Theme.of(context).colorScheme.textInBg1),
             ),
           ),
-          Positioned(
-            right: 15,
-            top: 15,
-            child: IconButton(
-                onPressed: () => isSubmitted(false),
-                icon: const Icon(Icons.close)),
-          ),
-        ],
-      ),
+        ),
+        Positioned(
+          right: 15,
+          top: 15,
+          child: IconButton(
+              onPressed: () => isSubmitted(false),
+              icon: const Icon(Icons.close)),
+        ),
+      ],
     );
   }
 
-  Widget _buildQuestionList() {
+  Widget _buildQuestionList(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: Dimens.practiceHorizontalText,
-        vertical: 10,
-      ),
-      height: 130,
+      padding: const EdgeInsets.only(
+          left: Dimens.practiceHorizontalText,
+          right: Dimens.practiceHorizontalText,
+          top: 0,
+          bottom: 10),
+      // height: 130,
       child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            GridView.builder(
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 7,
-                  mainAxisSpacing: 6,
-                  crossAxisSpacing: 6,
-                ),
-                itemCount: _questionStore.exam!.questions!.length,
-                itemBuilder: (context, index) {
-                  return _buildListItem(index);
-                }),
-          ],
-        ),
+        child: GridView.builder(
+            shrinkWrap: true,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 7,
+              mainAxisSpacing: 6,
+              crossAxisSpacing: 6,
+            ),
+            itemCount: _questionStore.exam!.questions!.length,
+            itemBuilder: (context, index) {
+              return _buildListItem(index);
+            }),
       ),
     );
   }
@@ -141,8 +136,8 @@ class ExamListOverlayWidget extends StatelessWidget {
 
   Widget _buildSubmitButton(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.fromLTRB(Dimens.practiceHorizontalText, 30,
-            Dimens.practiceHorizontalText, 0),
+        padding: const EdgeInsets.fromLTRB(
+            Dimens.practiceHorizontalText, 0, Dimens.practiceHorizontalText, 0),
         child: GestureDetector(
           onTap: () => isSubmitted(true),
           child: Container(

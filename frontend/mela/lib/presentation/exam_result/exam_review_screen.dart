@@ -187,9 +187,7 @@ class _ReviewScreenState extends State<ExamReviewScreen> {
                           .subTitle
                           .copyWith(color: const Color(0xFFFF6B00)),
                     ),
-
                     const SizedBox(height: 3.0),
-
                     Flexible(
                       child: Html(
                         shrinkWrap: true,
@@ -231,29 +229,6 @@ class _ReviewScreenState extends State<ExamReviewScreen> {
                         },
                       ),
                     ),
-
-                    // Text(
-                    //   questions[_singleQuestionStore.currentIndex].content,
-                    //   style: Theme.of(context).textTheme.questionStyle
-                    //       .copyWith(color: Theme.of(context)
-                    //       .colorScheme.inputTitleText),
-                    // ),
-
-                    // Html(
-                    //   data:questions[_singleQuestionStore.currentIndex].content,
-                    //   style: {
-                    //     "*": Style.fromTextStyle(
-                    //         Theme.of(context).textTheme.questionStyle
-                    //             .copyWith(color: Theme.of(context)
-                    //             .colorScheme.inputTitleText),
-                    //     ).merge(
-                    //      Style(
-                    //
-                    //        display: Display.inline,
-                    //      )
-                    //     )
-                    //   },
-                    // ),
                   ],
                 ),
               ),
@@ -511,12 +486,6 @@ class _ReviewScreenState extends State<ExamReviewScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Flexible(
-            // child: Text(
-            //   text,
-            //   softWrap: true,
-            //   style: Theme.of(context).textTheme.normal
-            //       .copyWith(color: textColor),
-            // ),
             child: Html(
               shrinkWrap: true,
               data: "<html>$text</html>",
