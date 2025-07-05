@@ -324,5 +324,13 @@ class UseCaseModule {
           getIt<LogoutUseCase>(),
           getIt<GetPresignImageUsecase>()),
     );
+
+    getIt.registerSingleton<UploadImagesUsecase>(
+      UploadImagesUsecase(
+        getIt<QuestionRepository>(),
+        getIt<RefreshAccessTokenUsecase>(),
+        getIt<LogoutUseCase>(),
+      ),
+    );
   }
 }
