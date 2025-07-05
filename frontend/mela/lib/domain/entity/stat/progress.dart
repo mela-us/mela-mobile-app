@@ -7,13 +7,14 @@ class Progress {
   String? lectureName;
   ProgressExercise? exercise;
   ProgressSection? section;
+  ProgressExam? exam;
 
   bool get isGain {
-    return exercise?.isGain ?? false;
+    return exercise?.isGain ?? exam?.isGain ?? false;
   }
 
   bool get isDrop {
-    return exercise?.isDrop ?? false;
+    return exercise?.isDrop ?? exam?.isDrop ?? false;
   }
 
   Progress({
@@ -96,6 +97,41 @@ class ProgressSection {
     return {
       'sectionName': sectionName,
       'date': date,
+    };
+  }
+}
+
+class ProgressExam {
+  double latestScore;
+  List<ScoreRecord> scoreRecords;
+
+  bool get isGain {
+    return scoreRecords.length > 1 && scoreRecords[0].score > scoreRecords[1].score;
+  }
+
+  bool get isDrop {
+    return scoreRecords.length > 1 && scoreRecords[0].score < scoreRecords[1].score;
+  }
+
+  ProgressExam({
+    required this.latestScore,
+    required this.scoreRecords,
+  });
+
+  factory ProgressExam.fromJson(Map<String, dynamic> json) {
+    var scoreRecordsFromJson = json['scoreRecords'] as List;
+    List<ScoreRecord> scoreRecordsList = scoreRecordsFromJson.map((i) => ScoreRecord.fromJson(i)).toList();
+
+    return ProgressExam(
+      latestScore: json['latestScore'],
+      scoreRecords: scoreRecordsList,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'latestScore': latestScore,
+      'scoreRecords': scoreRecords.map((e) => e.toJson()).toList(),
     };
   }
 }

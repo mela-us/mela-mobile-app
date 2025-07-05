@@ -69,24 +69,7 @@ class _PersonalScreenState extends State<PersonalScreen> with SingleTickerProvid
                 message: "Đã có lỗi xảy ra. Vui lòng thử lại",
               );
             }
-            return Stack(alignment: Alignment.center, children: [
-              // const Positioned(
-              //   top: 44,
-              //   right: -9,
-              //   child: DecorativeRing(size: 100, duration: 20, sigma: 1),
-              // ),
-              const Positioned(
-                top: 100,
-                right: 220,
-                child: DecorativeRing(size: 300, clockwise: false),
-              ),
-              const Positioned(
-                top: 280,
-                right: -270,
-                child: DecorativeRing(),
-              ),
-              _buildBody(context),
-            ]);
+            return _buildBody(context);
           }
       )
     );

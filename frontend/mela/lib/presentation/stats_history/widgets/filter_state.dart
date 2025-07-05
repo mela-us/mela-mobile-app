@@ -1,5 +1,5 @@
 enum DateFilter { today, all, last7Days, last30Days }
-enum TypeFilter { all, exercise, section }
+enum TypeFilter { all, exercise, section, test }
 enum ProgressStatus { all, gain, drop, unchanged }
 enum SortOrder { asc, desc }
 
@@ -45,6 +45,8 @@ extension TypeFilterExt on TypeFilter {
         return 'Hoạt động bài tập';
       case TypeFilter.section:
         return 'Hoạt động bài học';
+      case TypeFilter.test:
+        return 'Hoạt động kiểm tra';
     }
   }
 }

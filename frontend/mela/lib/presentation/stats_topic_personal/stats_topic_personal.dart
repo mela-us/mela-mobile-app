@@ -8,6 +8,7 @@ import '../../core/widgets/icon_widget/error_icon_widget.dart';
 import '../../core/widgets/image_progress_indicator.dart';
 import '../../di/service_locator.dart';
 import '../../domain/entity/stat/detailed_stat.dart';
+import '../personal/store/personal_store.dart';
 
 class StatsTopicPersonal extends StatefulWidget {
 
@@ -22,36 +23,44 @@ class StatsTopicPersonal extends StatefulWidget {
 
 class _StatsTopicPersonalState extends State<StatsTopicPersonal> {
   final DetailedStatStore _store = getIt<DetailedStatStore>();
+  final PersonalStore _personalStore = getIt<PersonalStore>();
   late List<DetailedStat> list;
   late String url;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Observer(
-          builder: (context) {
-            //
-            if (_store.loading) {
-              return const Center(child: RotatingImageIndicator());
-            }
-            if (!_store.success && !_store.loading) {
-              return const Center(
-                child: ErrorIconWidget(message: "Đã có lỗi xảy ra. Vui lòng thử lại"),
-              );
-            }
-            //
-            list = _store.stats?.detailedStats ?? [];
-            //
-            if (list.isEmpty) {
-              return const Center(
-                child: ErrorIconWidget(message: "Đã có lỗi xảy ra. Vui lòng thử lại"),
-              );
-            }
-            //
-            return Container(
+    return Observer(
+      builder: (context) {
+        //
+        if (_store.loading || _personalStore.isLoading) {
+          return const Center(
+              child: RotatingImageIndicator()
+          );
+        }
+        if (!_store.success && !_store.loading && !_personalStore.isLoading) {
+          return const Center(
+            child: ErrorIconWidget(message: "Đã có lỗi xảy ra. Vui lòng thử lại"),
+          );
+        }
+        if (_personalStore.user?.level == null) {
+          return const Center(
+            child: ErrorIconWidget(message: "Bạn hãy chọn lớp để xem đánh giá!"),
+          );
+        }
+        //
+        list = _store.stats?.detailedStats ?? [];
+        //
+        if (list.isEmpty) {
+          return const Center(
+            child: ErrorIconWidget(message: "Đã có lỗi xảy ra. Vui lòng thử lại"),
+          );
+        }
+        //
+        return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
               alignment: Alignment.center,
               margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
               decoration: BoxDecoration(
@@ -69,14 +78,13 @@ class _StatsTopicPersonalState extends State<StatsTopicPersonal> {
                   children: [
                     const SizedBox(height: 12),
                     RadarStatChart(stats: list),
-                    const SizedBox(height: 4),
                   ]
               ),
-            );
-            //return TileList(list: list);
-          },
-        ),
-      ],
+            )
+            ]
+        );
+        //return TileList(list: list);
+      },
     );
   }
 

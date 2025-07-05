@@ -22,19 +22,34 @@ class RadarStatChart extends StatelessWidget {
     return excellenceValues.reduce((a, b) => a > b ? a : b);
   }
 
+  void sortExcellenceValues() {
+    stats.sort((a, b) {
+      if (a.excellence > 0 && b.excellence <= 0) return -1;
+      if (a.excellence <= 0 && b.excellence > 0) return 1;
+      return 0;
+    });
+  }
+
+  List<double> getPositiveValues() {
+    return excellenceValues.where((value) => value > 0).toList();
+  }
+
 
   Widget build(BuildContext context) {
+
+    sortExcellenceValues();
+
     topics = stats.map((e) => e.topic).toList();
     excellenceValues = stats.map((e) => e.excellence).toList();
+    sides = stats.length;
 
     final max = getMaxExcellence();
 
-    chartSize = 200;
-    labelRadius = chartSize / 2 + 21;
-    sides = stats.length;
+    chartSize = 300;
+    labelRadius = chartSize / 2 - 22;
 
     return SizedBox(
-      height: 350,
+      height: 300,
       width: 250,
       child: Stack(
         alignment: Alignment.center,
@@ -53,7 +68,7 @@ class RadarStatChart extends StatelessWidget {
                 reverseAxis: false,
                 sides: sides,
                 ticksTextStyle: Theme.of(context).textTheme.miniCaption.copyWith(
-                  color: Theme.of(context).colorScheme.onPrimary,
+                  color: Colors.white,
                   fontSize: 9,
                 ),
                 outlineColor: Theme.of(context).colorScheme.tertiary,
@@ -72,57 +87,65 @@ class RadarStatChart extends StatelessWidget {
   }
 
   Widget _buildLabel(int i, BuildContext context) {
+    final angle = 2 * pi * i / sides - pi / 2;
+    final x = labelRadius * cos(angle);
+    final y = labelRadius * sin(angle);
+
+    print ("${topics[i]} (${angle})");
+
     return Transform.translate(
-      offset: Offset(
-        labelRadius * cos(2 * pi * i / sides - pi / 2),
-        labelRadius * sin(2 * pi * i / sides - pi / 2),
-      ),
-      child: Container(
-        width: 80,
-        height: 70,
-        alignment: Alignment.center,
-        padding: const EdgeInsets.all(2),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.appBackground,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).colorScheme.tertiary,
-              blurRadius: 1,
-            ),
-          ],
-        ),
+      offset: Offset(x, y),
+      child: SizedBox(
+        width: 64,
         child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              topics[i],
-              style:  Theme.of(context).textTheme.subTitle
-                  .copyWith(
-                  color:  Theme.of(context).colorScheme.tertiary
-              ),
-              textAlign: TextAlign.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            trimTopic(topics[i]),
+            style:  Theme.of(context).textTheme.subTitle.copyWith(
+                color: Theme.of(context).colorScheme.tertiary,
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
             ),
-            Text(
-              excellenceValues[i].toStringAsFixed(0),
-              style:  Theme.of(context).textTheme.bigTitle
-                  .copyWith(
-                  color:  getColorForScore(excellenceValues[i],context)
-              ),
-            ),
-          ],
-        ),
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.fade,
+            maxLines: 2,
+          ),
+          _buildAnimatedNumberWithIndex(i),
+        ],
       ),
-    );
+    ));
   }
 
   Color getColorForScore(double score, BuildContext context) {
     if (score < 50) {
-      return Colors.red;
+      return Theme.of(context).colorScheme.secondary;
     }
     if (score >= 80) {
       return Colors.green;
     }
     return Theme.of(context).colorScheme.onPrimary;
+  }
+
+  String trimTopic(String input) {
+    return input.replaceAll('và', '&');
+  }
+
+  Widget _buildAnimatedNumberWithIndex(int i) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: 0, end: excellenceValues[i]),
+      duration: const Duration(milliseconds: 800),
+      curve: Curves.easeOutCubic,
+      builder: (BuildContext context, double animatedValue, Widget? child) {
+        return Text(
+          // ép thành số nguyên
+          animatedValue.toStringAsFixed(0),
+          style: Theme.of(context).textTheme.bigTitle!.copyWith(
+            color: getColorForScore(excellenceValues[i], context),
+            fontSize: 26,
+          ),
+        );
+      },
+    );
   }
 }

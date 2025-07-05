@@ -23,19 +23,28 @@ class _ExpandableItemState extends State<ExpandableItem> {
   late String type;
   late ProgressExercise? progressExercise;
   late ProgressSection? progressSection;
+  late ProgressExam? progressExam;
   late List<ScoreRecord> scores;
   late double score;
 
   @override
   Widget build(BuildContext context) {
+    //type
     type = widget.item.type;
+    //
     progressExercise = widget.item.exercise;
     progressSection = widget.item.section;
-    scores = progressExercise?.scoreRecords ?? [];
-    score = widget.item.exercise?.latestScore ?? 0;
+    progressExam = widget.item.exam;
+    //if exercise or exam
+    scores = (type == 'EXERCISE')
+        ? progressExercise?.scoreRecords ?? []
+        : progressExam?.scoreRecords ?? [];
+    score = (type == 'EXERCISE')
+        ? progressExercise?.latestScore ?? 0
+        : progressExam?.latestScore ?? 0;
 
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 22),
       elevation: 5.0,
       color: !_isExpanded ? Colors.white : Theme.of(context).colorScheme.appBackground,
       child: Column(
@@ -47,7 +56,7 @@ class _ExpandableItemState extends State<ExpandableItem> {
               });
             },
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 14.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -58,12 +67,12 @@ class _ExpandableItemState extends State<ExpandableItem> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text( //Tên bài tập hoặc section
-                              (type == 'SECTION')
-                                  ? progressSection?.sectionName ?? ""
-                                  : progressExercise?.exerciseName ?? "",
-                              style: Theme.of(context).textTheme.title
-                                  .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+                            Text( //Tên bài tập hoặc section hoặc test
+                              getItemName(),
+                              style: Theme.of(context).textTheme.title.copyWith(
+                                  color: Theme.of(context).colorScheme.onPrimary,
+                                  fontSize: 17,
+                              ),
                               maxLines: (_isExpanded) ? 3 : 1, // Giới hạn 1 dòng
                               overflow: (_isExpanded) ? TextOverflow.visible : TextOverflow.ellipsis, // Thêm "..." nếu quá dài
                             ),
@@ -91,7 +100,7 @@ class _ExpandableItemState extends State<ExpandableItem> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(//học bài hay làm bài?
-                                (type == 'SECTION') ? "Đã học" : "Đã làm bài",
+                                getItemTypeInText(),
                                 style: Theme.of(context).textTheme.normal
                                     .copyWith(color: Theme.of(context).colorScheme.tertiary),
                               ),
@@ -121,27 +130,9 @@ class _ExpandableItemState extends State<ExpandableItem> {
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              if (type != 'SECTION' && scores.length > 1 && scores[0].score > scores[1].score)
-                                Image.asset(
-                                  Assets.stats_gain,
-                                  width: 21,
-                                  height: 21,
-                                )
-                              else if (type != 'SECTION' && scores.length > 1 && scores[0].score < scores[1].score)
-                                Image.asset(
-                                  Assets.stats_drop,
-                                  width: 21,
-                                  height: 21,
-                                )
-                              else const SizedBox(width: 21, height: 21),
+                              _buildProgressStatus(),
                               const SizedBox(width: 5),
-                              if (type != 'SECTION' && scores.length > 1)
-                                Image.asset(
-                                  _isExpanded ? Assets.stats_hide : Assets.stats_show,
-                                  width: 16,
-                                  height: 16,
-                                )
-                              else const SizedBox(width: 16, height: 16),
+                              _buildExpandCollapseButton(),
                             ]
                         ),
                       ),
@@ -190,5 +181,49 @@ class _ExpandableItemState extends State<ExpandableItem> {
       return Colors.green;
     }
     return Theme.of(context).colorScheme.onPrimary;
+  }
+
+  String getItemName() {
+    if (type == 'SECTION') return progressSection?.sectionName ?? "";
+    if (type == 'EXERCISE') return progressExercise?.exerciseName ?? "";
+    return "KIỂM TRA";
+  }
+
+  String getItemTypeInText() {
+    if (type == 'SECTION') return "Đã học";
+    if (type == 'EXERCISE') return "Đã làm bài";
+    return "Đã kiểm tra";
+  }
+
+  Widget _buildProgressStatus() {
+    //
+    if (type == 'SECTION') return const SizedBox(width: 21, height: 21);
+    //
+    if (scores.length > 1 && scores[0].score > scores[1].score) {
+      return Image.asset(
+        Assets.stats_gain,
+        width: 21,
+        height: 21,
+      );
+    }
+    if (scores.length > 1 && scores[0].score < scores[1].score) {
+      return Image.asset(
+        Assets.stats_drop,
+        width: 21,
+        height: 21,
+      );
+    }
+    return const SizedBox(width: 21, height: 21);
+  }
+
+  Widget _buildExpandCollapseButton() {
+    if (type != 'SECTION' && scores.length > 1) {
+      return Image.asset(
+        _isExpanded ? Assets.stats_hide : Assets.stats_show,
+        width: 16,
+        height: 16,
+      );
+    }
+    return const SizedBox(width: 16, height: 16);
   }
 }

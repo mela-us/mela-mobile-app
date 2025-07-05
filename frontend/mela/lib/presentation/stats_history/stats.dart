@@ -97,6 +97,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> with TickerProvider
         //   ),
         // ],
         bottom: TabBar(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           controller: _tabController,
           isScrollable: levelNames.length > 3,
           labelColor: Theme.of(context).colorScheme.tertiary,

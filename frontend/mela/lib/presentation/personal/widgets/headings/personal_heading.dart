@@ -3,7 +3,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import '../../../../constants/assets.dart';
-import '../../../../core/stores/error/error_store.dart';
 import '../../../../core/widgets/underline_indicator.dart';
 import '../../../../di/service_locator.dart';
 import '../../../../utils/animation_helper/animation_helper.dart';
@@ -117,19 +116,21 @@ class _PersonalHeadingState extends State<PersonalHeading> with SingleTickerProv
                                         overflow: TextOverflow.fade,
                                         maxLines: 1,
                                       ).animate().fadeIn(duration: 300.ms),
+                                      const SizedBox(height: 4),
                                       _buildLevelSelectButton().animate().fadeIn(duration: 300.ms),
                                     ],
                                   ),
                                 ),
-                                Column(
-                                  children: [
-                                    _buildStreak(streak),
-                                  ],
-                                ),
                               ],
                             ),
                           ),
-                          const SizedBox(width: 16),
+                          Column(
+                              children: [
+                                const SizedBox(height: 0.8),
+                                _buildStreak(streak),
+                              ]
+                          ),
+                          const SizedBox(width: 10),
                         ],
                       ),
                       TabBar(
@@ -184,7 +185,10 @@ class _PersonalHeadingState extends State<PersonalHeading> with SingleTickerProv
   }
 
   Widget _buildStreak(int streak) {
-    const double size = 36.0;
+    const double size = 32.0;
+    double size1 = 28;
+    double size10 = 22;
+    double size100 = 16;
     return InkWell(
       onTap: widget.onShowStreak,
       borderRadius: BorderRadius.circular(size / 2),
@@ -201,8 +205,8 @@ class _PersonalHeadingState extends State<PersonalHeading> with SingleTickerProv
             '$streak',
             style: Theme.of(context).textTheme.subTitle.copyWith(
               fontSize: (streak / 10 >= 1)
-                  ? ((streak / 100 >= 1) ? 18 : 24)
-                  : 30,
+                  ? ((streak / 100 >= 1) ? size100 : size10)
+                  : size1,
               fontWeight: FontWeight.bold,
               fontFamily: 'Asap',
               foreground: Paint()
@@ -215,8 +219,8 @@ class _PersonalHeadingState extends State<PersonalHeading> with SingleTickerProv
             '$streak',
             style: Theme.of(context).textTheme.subTitle.copyWith(
               fontSize: (streak / 10 >= 1)
-                  ? ((streak / 100 >= 1) ? 18 : 24)
-                  : 30,
+                  ? ((streak / 100 >= 1) ? size100 : size10)
+                  : size1,
               color: Theme.of(context).colorScheme.primary,
               fontWeight: FontWeight.bold,
               fontFamily: 'Asap',
@@ -255,7 +259,7 @@ class _PersonalHeadingState extends State<PersonalHeading> with SingleTickerProv
     return OutlinedButton(
       onPressed: widget.onLevelSelect,
       style: OutlinedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 1),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 1.5),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         minimumSize: Size.zero,
         side: BorderSide(color: Theme.of(context).colorScheme.tertiary),
@@ -265,7 +269,7 @@ class _PersonalHeadingState extends State<PersonalHeading> with SingleTickerProv
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            _store.user?.level ?? 'Lớp 1',
+            _store.user?.level ?? 'Chưa chọn lớp',
             style: Theme.of(context).textTheme.buttonStyle.copyWith(
               color: Theme.of(context).colorScheme.tertiary,
               fontSize: 16,
