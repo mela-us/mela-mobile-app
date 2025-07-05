@@ -34,7 +34,8 @@ class EndpointsConst {
       "/api/forgot-password/validate-otp";
   static const String forgotPasswordCreateNewPassword =
       "/api/forgot-password/reset-password";
-  static const String getStats = "/api/statistics";
+  static const String getProgress = "/api/statistics";
+  static const String getDetailedStats = "/api/users/skills";
   static const String getUser = "/api/users/profile";
   static const String updateUser = "/api/users/profile";
   static const String getImageUpdatePresign =
@@ -47,6 +48,7 @@ class EndpointsConst {
       "/api/chatbot/conversations/:conversationId/messages";
   static const String sendMessageChatExercise =
       "/api/chatbot/questions/:questionId";
+  static const String sendMessageChatPdf = "/api/chatbot/lectures";
 
   static const String sendMessageReviewSubmission =
       "/api/chatbot/conversations/:conversationId/messages/review-submission";
@@ -82,6 +84,10 @@ class EndpointsConst {
   //suggestion
   static const String getProposedNewSuggestion = "/api/suggestions";
   static const String updateSuggestion = "/api/suggestions/:suggestionId";
+
+  //question upload images
+  static const String getPresignUrlForQuestion =
+      "/api/exercise-histories/files/upload-url";
 
   //test
   static const String getExam = "/api/test";

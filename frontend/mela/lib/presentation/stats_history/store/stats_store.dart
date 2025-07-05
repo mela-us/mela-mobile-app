@@ -45,6 +45,9 @@ abstract class _StatisticsStore with Store {
   //
   @observable
   bool success = false;
+
+  @observable
+  bool levelLoading = false;
   //loading
   @computed
   bool get progressLoading =>
@@ -66,6 +69,7 @@ abstract class _StatisticsStore with Store {
   }
   @action
   Future getLevels() async {
+    levelLoading = true;
     final future = _getLevelListUsecase.call(params: null);
     fetchLevelsFuture = ObservableFuture(future);
     await future.then((value) {
@@ -76,5 +80,6 @@ abstract class _StatisticsStore with Store {
       _errorStore.errorMessage = DioExceptionUtil.handleError(error);
       success = false;
     });
+    levelLoading = false;
   }
 }

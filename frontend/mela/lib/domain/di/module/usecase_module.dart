@@ -19,12 +19,14 @@ import 'package:mela/domain/usecase/chat/send_message_chat_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_get_solution_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_review_submission_usecase.dart';
 import 'package:mela/domain/usecase/chat_with_exercise/send_message_chat_exercise_usecase.dart';
+import 'package:mela/domain/usecase/chat_with_exercise/send_message_chat_pdf_usecase.dart';
 import 'package:mela/domain/usecase/exam/get_exam_usecase.dart';
 
 import 'package:mela/domain/usecase/exercise/get_exercises_usecase.dart';
 import 'package:mela/domain/usecase/history/update_excercise_progress_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_lectures_usecase.dart';
+import 'package:mela/domain/usecase/question/upload_images_usecase.dart';
 import 'package:mela/domain/usecase/suggestion/get_proposed_new_suggestion_usecase.dart';
 import 'package:mela/domain/usecase/level/get_level_list_usecase.dart';
 import 'package:mela/domain/usecase/presigned_image/get_presigned_image_usecase.dart';
@@ -69,6 +71,7 @@ import '../../usecase/search/delete_all_history_search_usecase.dart';
 import '../../usecase/search/delete_history_search_usecase.dart';
 import '../../usecase/search/get_history_search_list_usecase.dart';
 import '../../usecase/search/get_search_lectures_result_usecase.dart';
+import '../../usecase/stat/get_detailed_progress_usecase.dart';
 import '../../usecase/stat/get_stat_search_history_usecase.dart';
 import '../../usecase/stat/update_stat_search_history_usecase.dart';
 import '../../usecase/streak/get_streak_usecase.dart';
@@ -182,7 +185,7 @@ class UseCaseModule {
 
     //stats:--------------------------------------------------------------------
     getIt.registerSingleton<UpdateExcerciseProgressUsecase>(
-      UpdateExcerciseProgressUsecase(getIt<UpdateProgressApi>(),
+      UpdateExcerciseProgressUsecase(getIt<SaveResultApi>(),
           getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()),
     );
     getIt.registerSingleton<UpdateSectionProgressUsecase>(
@@ -191,6 +194,10 @@ class UseCaseModule {
     );
     getIt.registerSingleton<GetProgressListUseCase>(
       GetProgressListUseCase(getIt<StatRepository>(),
+          getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()),
+    );
+    getIt.registerSingleton<GetDetailedStatsUseCase>(
+      GetDetailedStatsUseCase(getIt<StatRepository>(),
           getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()),
     );
     //stat search---------------------------------------------------------------
@@ -316,12 +323,6 @@ class UseCaseModule {
           getIt<RefreshAccessTokenUsecase>(),
           getIt<LogoutUseCase>(),
           getIt<GetPresignImageUsecase>()),
-    );
-
-    //Test
-    getIt.registerSingleton<GetExamUsecase>(
-      GetExamUsecase(getIt<ExamRepository>(),
-          getIt<RefreshAccessTokenUsecase>(), getIt<LogoutUseCase>()),
     );
   }
 }

@@ -20,9 +20,9 @@ import '../../presentation/signup_login_screen/login_screen.dart';
 import '../../presentation/signup_login_screen/signup_screen.dart';
 
 import '../../presentation/personal/personal.dart';
-import '../../presentation/stats/stat_filter.dart';
-import '../../presentation/stats/stat_search.dart';
-import '../../presentation/stats/stats.dart';
+import '../../presentation/stats_history/stat_filter.dart';
+import '../../presentation/stats_history/stat_search.dart';
+import '../../presentation/stats_history/stats.dart';
 import '../../presentation/thread_chat_learning/thread_chat_learning_screen.dart';
 
 class Routes {
@@ -60,6 +60,7 @@ class Routes {
   static const String allScreens = '/all_screens';
   static const String threadChatScreen = '/thread_chat_screen';
   static const String threadChatLearningScreen = '/thread_chat_learning_screen';
+  static const String threadChatLearningPdfScreen = '/thread_chat_learning_pdf_screen';
 
   // static final routes = <String, WidgetBuilder>{
   //   loginScreen: (BuildContext context) => const ScreenWrapper(child:LoginScreen()),

@@ -6,6 +6,7 @@ import 'package:mela/domain/usecase/chat/create_new_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/get_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_chat_usecase.dart';
 import 'package:mela/domain/usecase/chat_with_exercise/send_message_chat_exercise_usecase.dart';
+import 'package:mela/domain/usecase/chat_with_exercise/send_message_chat_pdf_usecase.dart';
 
 class ChatExerciseRepositoryImpl extends ChatExerciseRepository {
   ChatApi _chatApi;
@@ -14,5 +15,10 @@ class ChatExerciseRepositoryImpl extends ChatExerciseRepository {
   @override
   Future<Conversation> sendMessageExercise(ChatExerciseRequestParams params) {
     return _chatApi.sendMessageChatExercise(params);
+  }
+
+  @override
+  Future<Conversation> sendMessagePdf(ChatPdfRequestParams params) {
+    return _chatApi.sendMessageChatPdf(params);
   }
 }

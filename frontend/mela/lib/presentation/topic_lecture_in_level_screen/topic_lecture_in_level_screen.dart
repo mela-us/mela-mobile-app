@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/core/widgets/icon_widget/error_icon_widget.dart';
 import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/topic_lecture_in_level_screen/store/topic_lecture_store.dart';
@@ -122,9 +123,7 @@ class _TopicLectureInLevelScreenState extends State<TopicLectureInLevelScreen> {
                     alignment: Alignment.center,
                     children: [
                       Container(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .surface,
+                        color: Theme.of(context).colorScheme.surface,
                       ),
                       const RotatingImageIndicator(),
                     ],
@@ -136,15 +135,13 @@ class _TopicLectureInLevelScreenState extends State<TopicLectureInLevelScreen> {
                       ? [GeneralInfor(), TopicLectureListview()]
                       : [
                           Center(
-                            child: Text(
-                              _topicLectureStore.errorString,
-                              style: const TextStyle(color: Colors.red),
+                            child: ErrorIconWidget(
+                              message: _topicLectureStore.errorString,
                             ),
                           ),
                           Center(
-                            child: Text(
-                              _topicLectureStore.errorString,
-                              style: const TextStyle(color: Colors.red),
+                            child: ErrorIconWidget(
+                              message: _topicLectureStore.errorString,
                             ),
                           ),
                         ],

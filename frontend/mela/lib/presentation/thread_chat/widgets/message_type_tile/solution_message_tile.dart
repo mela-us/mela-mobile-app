@@ -76,7 +76,7 @@ class SolutionMessageTile extends StatelessWidget {
                 ),
           ),
           const SizedBox(height: 5),
-          ConvertStringToLatex(rawText: currentMessage.problemSummary!),
+          ConvertStringToLatex(text: currentMessage.problemSummary!),
           // Text(
           //   currentMessage.problemSummary!,
           //   style: Theme.of(context).textTheme.content.copyWith(
@@ -124,11 +124,12 @@ class SolutionMessageTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ConvertStringToLatex(rawText: step.title, isStep: true),
+                  // ConvertStringToLatex(text: step.title, isStep: true),
+                  ConvertStringToLatex(text: step.title),
                   const SizedBox(height: 3),
-                  ConvertStringToLatex(rawText: step.explanation),
+                  ConvertStringToLatex(text: step.explanation),
                   const SizedBox(height: 3),
-                  ConvertStringToLatex(rawText: step.calculation),
+                  ConvertStringToLatex(text: step.calculation),
                   if (index != currentMessage.steps.length - 1)
                     const Divider(
                       color: Colors.grey,
@@ -169,7 +170,7 @@ class SolutionMessageTile extends StatelessWidget {
                 ),
           ),
           const SizedBox(height: 5),
-          ConvertStringToLatex(rawText: currentMessage.finalAnswer!),
+          ConvertStringToLatex(text: currentMessage.finalAnswer!),
           // Text(
           //   currentMessage.finalAnswer!,
           //   style: Theme.of(context).textTheme.content.copyWith(
@@ -209,7 +210,7 @@ class SolutionMessageTile extends StatelessWidget {
                 ),
           ),
           const SizedBox(height: 5),
-          ConvertStringToLatex(rawText: currentMessage.advice!),
+          ConvertStringToLatex(text: currentMessage.advice!),
           // Text(
           //   currentMessage.advice!,
           //   style: Theme.of(context).textTheme.content.copyWith(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
-import 'package:mela/presentation/detailed_stats_and_comments/widgets/markdown_content_converter.dart';
+import 'package:mela/presentation/stats_topic_personal/widgets/markdown_content_converter.dart';
 
 import '../../../constants/assets.dart';
 import '../../../domain/entity/stat/detailed_stat.dart';
@@ -25,7 +25,6 @@ class _ExpandableTileState extends State<ExpandableTile> {
   Widget build(BuildContext context) {
     final double excellence = widget.detailedStat.excellence;
     final String title = widget.detailedStat.topic;
-    final String content = widget.detailedStat.comments;
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
@@ -73,7 +72,7 @@ class _ExpandableTileState extends State<ExpandableTile> {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-            child: MarkdownContentConverter(rawText: content),
+            child: MarkdownContentConverter(rawText: "ộ i i"),
           ),
         ],
       ),

@@ -120,9 +120,15 @@ import 'package:mela/presentation/question/store/question_store.dart';
 import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
 import 'package:mela/presentation/thread_chat_learning/store/thread_chat_learning_store/thread_chat_learning_store.dart';
 import 'package:mela/presentation/thread_chat_learning/thread_chat_learning_screen.dart';
+import 'package:mela/presentation/thread_chat_learning_pdf/store/thread_chat_learning_pdf_store/thread_chat_learning_pdf_store.dart';
+import 'package:mela/presentation/thread_chat_learning_pdf/thread_chat_learning_pdf_screen.dart';
 import 'package:mela/utils/routes/routes.dart';
 
 class DraggableAIButton extends StatefulWidget {
+  final bool isPdfScreen;
+  final Function? onSetPdf;
+  const DraggableAIButton({Key? key, this.isPdfScreen = false, this.onSetPdf})
+      : super(key: key);
   @override
   _DraggableAIButtonState createState() => _DraggableAIButtonState();
 }
@@ -130,6 +136,8 @@ class DraggableAIButton extends StatefulWidget {
 class _DraggableAIButtonState extends State<DraggableAIButton> {
   final ThreadChatLearningStore _threadChatLearningStore =
       getIt.get<ThreadChatLearningStore>();
+  final ThreadChatLearningPdfStore _threadChatLearningPdfStore =
+      getIt.get<ThreadChatLearningPdfStore>();
   final QuestionStore _questionStore = getIt<QuestionStore>();
   final SingleQuestionStore _singleQuestionStore = getIt<SingleQuestionStore>();
   double _topPosition = 60;
@@ -139,8 +147,12 @@ class _DraggableAIButtonState extends State<DraggableAIButton> {
   @override
   void initState() {
     super.initState();
-    questions = _questionStore.questionList!.questions!;
-    _threadChatLearningStore.getTokenChat();
+    if (!widget.isPdfScreen) {
+      questions = _questionStore.questionList!.questions!;
+      _threadChatLearningStore.getTokenChat();
+    } else {
+      _threadChatLearningPdfStore.getTokenChat();
+    }
   }
 
   @override
@@ -166,40 +178,74 @@ class _DraggableAIButtonState extends State<DraggableAIButton> {
               });
             },
             onTap: () {
-              //Nếu lần đầu mở qua hoặc là cùng câu hỏi cũ thì xóa conversation và set lại question mới
-              if (_threadChatLearningStore.currentQuestion.questionId == null ||
-                  _threadChatLearningStore.currentQuestion.questionId! !=
-                      questions[_singleQuestionStore.currentIndex].questionId) {
-                _threadChatLearningStore.clearConversation();
-                _threadChatLearningStore
-                    .setQuestion(questions[_singleQuestionStore.currentIndex]);
+              //Nếu là chat vs exercise
+              if (!widget.isPdfScreen) {
+                //Nếu lần đầu mở qua hoặc là cùng câu hỏi cũ thì xóa conversation và set lại question mới
+                if (_threadChatLearningStore.currentQuestion.questionId ==
+                        null ||
+                    _threadChatLearningStore.currentQuestion.questionId! !=
+                        questions[_singleQuestionStore.currentIndex]
+                            .questionId) {
+                  _threadChatLearningStore.clearConversation();
+                  _threadChatLearningStore.setQuestion(
+                      questions[_singleQuestionStore.currentIndex]);
+                }
+
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    settings: const RouteSettings(
+                        name: Routes.threadChatLearningScreen),
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        ThreadChatLearningScreen(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      const begin = Offset(1.0, 0.0);
+                      const end = Offset.zero;
+                      const curve = Curves.easeInOut;
+
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      var offsetAnimation = animation.drive(tween);
+
+                      return ClipRect(
+                        child: SlideTransition(
+                          position: offsetAnimation,
+                          child: child,
+                        ),
+                      );
+                    },
+                  ),
+                );
+              } else {
+                //Nếu là chat vs pdf
+                //Đã gán và xử lí ở trong Content_in_divided_lecture_screen.dart
+                widget.onSetPdf?.call();
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    settings: const RouteSettings(
+                        name: Routes.threadChatLearningPdfScreen),
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        ThreadChatLearningPdfScreen(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      const begin = Offset(1.0, 0.0);
+                      const end = Offset.zero;
+                      const curve = Curves.easeInOut;
+
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      var offsetAnimation = animation.drive(tween);
+
+                      return ClipRect(
+                        child: SlideTransition(
+                          position: offsetAnimation,
+                          child: child,
+                        ),
+                      );
+                    },
+                  ),
+                );
               }
-
-              Navigator.of(context).push(
-                PageRouteBuilder(
-                  settings: const RouteSettings(
-                      name: Routes.threadChatLearningScreen),
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      ThreadChatLearningScreen(),
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) {
-                    const begin = Offset(1.0, 0.0);
-                    const end = Offset.zero;
-                    const curve = Curves.easeInOut;
-
-                    var tween = Tween(begin: begin, end: end)
-                        .chain(CurveTween(curve: curve));
-                    var offsetAnimation = animation.drive(tween);
-
-                    return ClipRect(
-                      child: SlideTransition(
-                        position: offsetAnimation,
-                        child: child,
-                      ),
-                    );
-                  },
-                ),
-              );
             },
             child: Stack(
               children: [

@@ -14,6 +14,7 @@ import 'package:mela/domain/usecase/chat/create_new_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/get_conversation_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_chat_usecase.dart';
 import 'package:mela/domain/usecase/chat_with_exercise/send_message_chat_exercise_usecase.dart';
+import 'package:mela/domain/usecase/chat_with_exercise/send_message_chat_pdf_usecase.dart';
 
 class ChatApi {
   DioClient _dioClient;
@@ -172,5 +173,20 @@ class ChatApi {
     final responseData = await _dioClient
         .delete(EndpointsConst.deleteConversation(conversationId));
     return responseData.statusCode;
+  }
+
+  Future<Conversation> sendMessageChatPdf(ChatPdfRequestParams params) async {
+    final responseData = await _dioClient.post(
+      EndpointsConst.sendMessageChatPdf,
+      data: params.toJson(),
+    );
+    return Conversation(
+        conversationId: "",
+        messages: [NormalMessage(isAI: true, text: responseData['content'])],
+        hasMore: false,
+        dateConversation: DateTime.now(),
+        nameConversation: "", //Not important
+        levelConversation: LevelConversation.UNIDENTIFIED //Not important
+        );
   }
 }

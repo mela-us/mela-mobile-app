@@ -97,6 +97,22 @@ mixin _$StatisticsStore on _StatisticsStore, Store {
     });
   }
 
+  late final _$levelLoadingAtom =
+      Atom(name: '_StatisticsStore.levelLoading', context: context);
+
+  @override
+  bool get levelLoading {
+    _$levelLoadingAtom.reportRead();
+    return super.levelLoading;
+  }
+
+  @override
+  set levelLoading(bool value) {
+    _$levelLoadingAtom.reportWrite(value, super.levelLoading, () {
+      super.levelLoading = value;
+    });
+  }
+
   late final _$getProgressListAsyncAction =
       AsyncAction('_StatisticsStore.getProgressList', context: context);
 
@@ -121,6 +137,7 @@ fetchLevelsFuture: ${fetchLevelsFuture},
 progressList: ${progressList},
 levelList: ${levelList},
 success: ${success},
+levelLoading: ${levelLoading},
 progressLoading: ${progressLoading}
     ''';
   }

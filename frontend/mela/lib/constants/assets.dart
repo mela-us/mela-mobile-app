@@ -39,6 +39,7 @@ class Assets {
   static String personal_signout = 'assets/icons/personal_signout.png';
   static String personal_darkmode = 'assets/icons/personal_darkmode.png';
   static String personal_support = 'assets/icons/personal_support.png';
+  static String personal_notification = 'assets/icons/personal_notification.png';
   static String upload_profile_pic = 'assets/icons/upload_profile_pic.png';
   static String default_profile_pic = "assets/icons/default_prof.png";
 
@@ -63,5 +64,14 @@ class Assets {
   static String loading_icon = "assets/icons/mela_load.png";
 
   //Streak
-  static String streak_ring = "assets/icons/mela_streak.png";
+  static String mela_streak = "assets/icons/mela_streak.png";
+
+  //Empty
+  static String empty_icon = "assets/icons/mela_empty.png";
+
+  //Error
+  static String error_icon = "assets/icons/mela_error.png";
+
+  //MELA
+  static String mela_small_icon = "assets/icons/mela_bullet.png";
 }

@@ -100,6 +100,15 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
         _singleQuestionStore.setQuizAnswerValue(choiceValue);
       } else {
+        //For fill in the blank or subjective question
+        if (question.questionType == "ESSAY") {
+          setState(() {
+            print("Selected images: ${_singleQuestionStore.userImage[index]}");
+            _selectedImages.clear(); // Set current image answer
+            _selectedImages.addAll(_singleQuestionStore
+                .userImage[_singleQuestionStore.currentIndex]);
+          });
+        } else {}
         _controller.text = userAnswer;
       }
     });
@@ -281,7 +290,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
             ?
             //quiz view      :      fill view
             _buildQuizView(questions[index])
-            : _buildSubjectiveView(questions[index]),
+            : (questions[index].questionType == "ESSAY"
+                ? _buildSubjectiveView(questions[index])
+                : _buildFillView(questions[index])),
 
         //spacing
         const SizedBox(height: 30),
@@ -603,6 +614,19 @@ class _QuestionScreenState extends State<QuestionScreen> {
     }
   }
 
+  Future<void> _pickImageForWeb() async {
+    final XFile? image =
+        await _imagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      if (image != null) {
+        _selectedImages.add(File(image.path));
+      } else {
+        // Handle case when no image is selected
+        print("No image selected");
+      }
+    });
+  }
+
   Future<void> _takePhoto() async {
     final image = await _imagePicker.pickImage(source: ImageSource.camera);
     if (image != null) {
@@ -708,6 +732,11 @@ class _QuestionScreenState extends State<QuestionScreen> {
         Overlay.of(context).insert(questionListOverlay);
         return;
       }
+
+      print('Size of selected images: ${_selectedImages.length}');
+      _singleQuestionStore.setImageAnswer(
+          _singleQuestionStore.currentIndex, _selectedImages);
+
       _singleQuestionStore.changeQuestion(index);
       _hintStore.reset();
       _hintStore.setHint(_questionStore.questionList!.questions![index].guide);
@@ -770,16 +799,22 @@ class _QuestionScreenState extends State<QuestionScreen> {
             bottom: 34,
             left: 19,
             right: 19,
-            child: QuestionListOverlay(isSubmitted: (bool submit) {
-              //TODO: Handle submit
-              if (!submit) {
-                questionListOverlay.remove();
-              } else {
-                _singleQuestionStore.printAllAnswer();
-                questionListOverlay.remove();
-                Navigator.of(context).pushReplacementNamed(Routes.result);
-              }
-            }),
+            child: QuestionListOverlay(
+              isSubmitted: (bool submit) {
+                //TODO: Handle submit
+
+                if (!submit) {
+                  questionListOverlay.remove();
+                } else {
+                  _singleQuestionStore.setImageAnswer(
+                      _singleQuestionStore.currentIndex, _selectedImages);
+                  _singleQuestionStore.printAllAnswer();
+                  questionListOverlay.remove();
+                  Navigator.of(context).pushReplacementNamed(Routes.result);
+                }
+              },
+              selectedImages: _selectedImages,
+            ),
           )
         ],
       );

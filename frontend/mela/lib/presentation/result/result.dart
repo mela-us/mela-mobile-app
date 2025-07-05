@@ -77,7 +77,7 @@ class _ResultScreenState extends State<ResultScreen> {
       //     DateTime.now().subtract(_timerStore.elapsedTime),
       //     DateTime.now()
       // );
-      _questionStore.updateProgress(getAnswerResultList(),
+      _questionStore.updateProgress(
           DateTime.now().subtract(_timerStore.elapsedTime), DateTime.now());
 
       if (calculatePoint() >= 8 && _reviseStore.selectedItem != null) {
