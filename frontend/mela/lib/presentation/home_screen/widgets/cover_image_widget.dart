@@ -75,7 +75,6 @@ class _CoverImageWidgetState extends State<CoverImageWidget>
         Positioned(
           bottom: containerHeight * (10 / 290),
           child: SizedBox(
-            width: buttonWidth,
             height: buttonHeight,
             child: ElevatedButton(
               onPressed: widget.onPressed,
@@ -84,7 +83,9 @@ class _CoverImageWidgetState extends State<CoverImageWidget>
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
-                padding: EdgeInsets.zero,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                ),
               ),
               child: Text(
                 'Học toán hàng ngày với Mela',

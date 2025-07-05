@@ -191,8 +191,7 @@ class QuestionQuitOverlay extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: Container(
-        width: 390,
-        height: 400,
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20.0),
