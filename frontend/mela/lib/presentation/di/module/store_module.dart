@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:get_it/get_it.dart';
 import 'package:mela/core/stores/error/error_store.dart';
 import 'package:mela/core/stores/form/form_store.dart';
 import 'package:mela/domain/usecase/chat/create_new_conversation_usecase.dart';
@@ -10,6 +11,7 @@ import 'package:mela/domain/usecase/chat/send_message_chat_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_get_solution_usecase.dart';
 import 'package:mela/domain/usecase/chat/send_message_review_submission_usecase.dart';
 import 'package:mela/domain/usecase/chat_with_exercise/send_message_chat_exercise_usecase.dart';
+import 'package:mela/domain/usecase/exam/get_exam_usecase.dart';
 import 'package:mela/domain/usecase/history/update_excercise_progress_usecase.dart';
 import 'package:mela/domain/usecase/lecture/get_divided_lecture_usecase.dart';
 import 'package:mela/domain/usecase/suggestion/get_proposed_new_suggestion_usecase.dart';
@@ -26,6 +28,9 @@ import 'package:mela/domain/usecase/user_login/login_with_google_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_access_token_usecase.dart';
 import 'package:mela/domain/usecase/user_login/save_refresh_token_usecase.dart';
 import 'package:mela/presentation/chat/store/history_store.dart';
+import 'package:mela/presentation/examination/store/countdown_store.dart';
+import 'package:mela/presentation/examination/store/current_question_store.dart';
+import 'package:mela/presentation/examination/store/exam_store.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 import 'package:mela/presentation/home_screen/store/revise_store/revise_store.dart';
 import 'package:mela/presentation/list_proposed_new_lecture/store/list_proposed_new_suggestion_store.dart';
@@ -255,5 +260,11 @@ class StoreModule {
         getIt<UpdateRevisionUsecase>(),
       ),
     );
+
+    //test
+    getIt.registerSingleton<CountdownStore>(CountdownStore());
+    getIt.registerSingleton<CurrentQuestionStore>(CurrentQuestionStore());
+    getIt.registerSingleton<ExamStore>(
+        ExamStore(getIt<GetExamUsecase>(), getIt<ErrorStore>()));
   }
 }

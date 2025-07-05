@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:mela/data/local/datasources/history_search/history_search_datasource.dart';
 import 'package:mela/data/network/apis/chat/chat_api.dart';
+import 'package:mela/data/network/apis/exam/exam_api.dart';
 import 'package:mela/data/network/apis/level/level_api.dart';
 import 'package:mela/data/network/apis/presigned_image/presigned_image_api.dart';
 import 'package:mela/data/network/apis/presigned_image/presigned_image_upload_api.dart';
@@ -22,6 +23,7 @@ import 'package:mela/data/network/apis/user/logout_api.dart';
 import 'package:mela/data/network/apis/user/user_info_api.dart';
 import 'package:mela/data/repository/chat/chat_repository_impl.dart';
 import 'package:mela/data/repository/chat_exercise/chat_exercise_repository_impl.dart';
+import 'package:mela/data/repository/exam/exam_repository_impl.dart';
 import 'package:mela/data/repository/level/level_repository_impl.dart';
 import 'package:mela/data/repository/presigned_image/presigned_image_repository_impl.dart';
 import 'package:mela/data/repository/question/hint_repository_impl.dart';
@@ -34,6 +36,7 @@ import 'package:mela/data/securestorage/secure_storage_helper.dart';
 import 'package:mela/data/sharedpref/shared_preference_helper.dart';
 import 'package:mela/domain/repository/chat/chat_repository.dart';
 import 'package:mela/domain/repository/chat_exercise/chat_exercise_repository.dart';
+import 'package:mela/domain/repository/exam/exam_repository.dart';
 import 'package:mela/domain/repository/forgot_password/forgot_password_repository.dart';
 import 'package:mela/domain/repository/level/level_repository.dart';
 import 'package:mela/domain/repository/presigned_image/presigned_image_repository.dart';
@@ -152,5 +155,9 @@ class RepositoryModule {
     //Revise
     getIt.registerSingleton<ReviseRepository>(
         ReviseRepositoryImpl(getIt<ReviseApi>()) as ReviseRepository);
+
+    //Test
+    getIt.registerSingleton<ExamRepository>(
+        ExamRepositoryImpl(getIt<ExamApi>()) as ExamRepository);
   }
 }

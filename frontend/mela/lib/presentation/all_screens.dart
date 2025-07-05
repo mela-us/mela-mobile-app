@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/di/service_locator.dart';
+import 'package:mela/presentation/examination/exam_screen.dart';
 import 'package:mela/presentation/home_screen/home_screen.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 import 'package:mela/presentation/stats/stats.dart';
@@ -28,7 +29,8 @@ class _AllScreensState extends State<AllScreens> {
   // late PageController _pageController;
   // List of screens for each tab
   final List<Widget> _screens = [
-    TutorScreen(),
+    // TutorScreen(),
+    ExamScreen(),
     //tạm thời để Tutor Screen đây thôi, tutor screen chắc không phải sử dụng,
     // dự kiến chỉ còn 3 screen vì bỏ Statistics vào Personal
     StatisticsScreen(),
@@ -66,8 +68,10 @@ class _AllScreensState extends State<AllScreens> {
     final isEnabled = prefs.getBool('streak_notifications_enabled') ?? true;
 
     if (isEnabled) {
-      NotificationService().scheduleNotification(hour: 6, minute: 0, notifyFromTomorrow: false);
-      NotificationService().scheduleNotification(hour: 19, minute: 30, notifyFromTomorrow: false);
+      NotificationService()
+          .scheduleNotification(hour: 6, minute: 0, notifyFromTomorrow: false);
+      NotificationService().scheduleNotification(
+          hour: 19, minute: 30, notifyFromTomorrow: false);
     }
   }
 

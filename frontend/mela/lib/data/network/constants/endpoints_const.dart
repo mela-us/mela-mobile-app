@@ -82,4 +82,7 @@ class EndpointsConst {
   //suggestion
   static const String getProposedNewSuggestion = "/api/suggestions";
   static const String updateSuggestion = "/api/suggestions/:suggestionId";
+
+  //test
+  static const String getExam = "/api/test";
 }

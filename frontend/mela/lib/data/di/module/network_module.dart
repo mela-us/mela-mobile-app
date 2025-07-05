@@ -1,5 +1,6 @@
 import 'package:event_bus/event_bus.dart';
 import 'package:mela/data/network/apis/chat/chat_api.dart';
+import 'package:mela/data/network/apis/exam/exam_api.dart';
 import 'package:mela/data/network/apis/exercises/exercise_api.dart';
 import 'package:mela/data/network/apis/history/update_progress_api.dart';
 import 'package:mela/data/network/apis/level/level_api.dart';
@@ -101,7 +102,8 @@ class NetworkModule {
         UpdateProgressApi(getIt<DioClient>()));
 
     getIt.registerSingleton<StreakApi>(StreakApi(getIt<DioClient>()));
-
     getIt.registerSingleton<ReviseApi>(ReviseApi(getIt<DioClient>()));
+
+    getIt.registerSingleton<ExamApi>(ExamApi(getIt<DioClient>()));
   }
 }
