@@ -182,7 +182,7 @@ class Routes {
 
     allScreens: (BuildContext context) => AllScreens(),
 
-    examResultScreen: (BuildContext context) => ExamResultScreen(),
+    examResultScreen: (BuildContext context) => const ExamResultScreen(),
     examReviewScreen: (BuildContext context) => ExamReviewScreen(),
   };
 }
