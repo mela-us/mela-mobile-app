@@ -1,59 +1,45 @@
 import 'package:dio/dio.dart';
 import 'package:mela/constants/enum.dart';
-import 'package:mela/di/service_locator.dart';
+import 'package:mela/domain/entity/exam/exam.dart';
 import 'package:mela/domain/entity/question/exercise_result.dart';
-import 'package:mela/domain/entity/question/question_list.dart';
 import 'package:mela/domain/params/question/submit_result_params.dart';
 import 'package:mela/domain/usecase/exam/get_exam_usecase.dart';
-import 'package:mela/domain/usecase/question/generate_hint_usecase.dart';
-import 'package:mela/domain/usecase/question/generate_term_usecase.dart';
-import 'package:mela/domain/usecase/question/submit_result_usecase.dart';
+import 'package:mela/domain/usecase/exam/submit_exam_usecase.dart';
+import 'package:mela/domain/usecase/exam/upload_image_exam_usecase.dart';
+
 import 'package:mela/domain/usecase/question/upload_images_usecase.dart';
-import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
-import 'package:mela/presentation/result/result.dart';
+import 'package:mela/presentation/examination/store/single_exam_store.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../core/stores/error/error_store.dart';
-import '../../../domain/params/history/exercise_progress_params.dart';
-import '../../../domain/usecase/history/update_excercise_progress_usecase.dart';
-import '../../../domain/usecase/question/get_questions_usecase.dart';
+
 import '../../../utils/dio/dio_error_util.dart';
-part 'question_store.g.dart';
+part 'exam_store.g.dart';
 
-class QuestionStore = _QuestionStore with _$QuestionStore;
+class ExamStore = _ExamStore with _$ExamStore;
 
-abstract class _QuestionStore with Store {
+abstract class _ExamStore with Store {
   //Constructor:----------------------------------------------------------------
-  _QuestionStore(
-      this._getQuestionsUseCase,
-      this._errorStore,
-      this._submitResultUseCase,
-      this._updateExerciseProgressUseCase,
-      this._singleQuestionStore,
-      this._uploadImagesUsecase);
+  _ExamStore(this._getExamUsecase, this._errorStore, this._singleExamStore,
+      this._uploadImagesUsecase, this._submitExamUsecase);
 
   //UseCase:--------------------------------------------------------------------
-  final GetQuestionsUseCase _getQuestionsUseCase;
-  final SubmitResultUseCase _submitResultUseCase;
-  final UpdateExcerciseProgressUsecase _updateExerciseProgressUseCase;
-  final UploadImagesUsecase _uploadImagesUsecase;
+  final GetExamUsecase _getExamUsecase;
+  final UploadImageExamUsecase _uploadImagesUsecase;
+  final SubmitExamUsecase _submitExamUsecase;
 
   //Store:----------------------------------------------------------------------
   final ErrorStore _errorStore;
-  final SingleQuestionStore _singleQuestionStore;
+  final SingleExamStore _singleExamStore;
   // store variables:-----------------------------------------------------------
-  static ObservableFuture<QuestionList?> emptyQuestionResponse =
-      ObservableFuture.value(null);
-  static ObservableFuture<int?> emptySaveResponse =
-      ObservableFuture.value(null);
 
   @observable
-  ObservableFuture<QuestionList?> fetchQuestionsFuture =
-      ObservableFuture<QuestionList?>(emptyQuestionResponse);
+  ObservableFuture<ExamModel?> fetchQuestionsFuture =
+      ObservableFuture<ExamModel?>(ObservableFuture.value(null));
 
   @observable
   ObservableFuture<int?> saveUserResult =
-      ObservableFuture<int?>(emptySaveResponse);
+      ObservableFuture<int?>(ObservableFuture.value(null));
 
   @observable
   ObservableFuture<ExerciseResult> fetchExerciseAnswerFuture =
@@ -65,7 +51,7 @@ abstract class _QuestionStore with Store {
       ObservableFuture<List<List<String>?>>(Future.value([]));
 
   @observable
-  QuestionList? questionList;
+  ExamModel? exam;
 
   @observable
   ExerciseResult? exerciseResult;
@@ -95,15 +81,14 @@ abstract class _QuestionStore with Store {
 
   //action:---------------------------------------------------------------------
   @action
-  Future getQuestions() async {
+  Future getExam() async {
     print(questionsUid);
-    final future = _getQuestionsUseCase.call(params: questionsUid);
+    final future = _getExamUsecase.call(params: questionsUid);
     fetchQuestionsFuture = ObservableFuture(future);
 
-    future.then((questions) {
-      questionList = questions;
+    future.then((exam) {
+      this.exam = exam;
       //Default set
-      questionList ??= QuestionList(message: '', size: 0, questions: []);
     }).catchError((error) {
       if (error is DioException) {
         if (error.response?.statusCode == 401) {
@@ -117,7 +102,7 @@ abstract class _QuestionStore with Store {
         }
       }
       print("Error: $error");
-      questionList = QuestionList(message: '', size: 0, questions: []);
+      exam = ExamModel(total: 0, questions: []);
       _errorStore.errorMessage = DioExceptionUtil.handleError(error);
     });
   }
@@ -131,54 +116,54 @@ abstract class _QuestionStore with Store {
     }
   }
 
-  @action
-  Future submitAnswer(int correct, DateTime start, DateTime end) async {
-    questionList ??= QuestionList(message: '', size: 0, questions: []);
-    final future = _submitResultUseCase.call(
-        params: SubmitResultParams(
-            exerciseId: questionsUid, startAt: start, endAt: end, answers: []));
-    fetchExerciseAnswerFuture = ObservableFuture(future);
-    future.then((statusCode) {
-      if (statusCode == 200) {
-        print('Saving done');
-      }
-    }).catchError((error) {
-      print("Store: $error");
-      _errorStore.errorMessage = DioExceptionUtil.handleError(error);
-    });
-  }
+  // @action
+  // Future submitAnswer(int correct, DateTime start, DateTime end) async {
+  //   exam ??= ExamModel(message: '', size: 0, questions: []);
+  //   final future = _submitResultUseCase.call(
+  //       params: SubmitResultParams(
+  //           exerciseId: questionsUid, startAt: start, endAt: end, answers: []));
+  //   fetchExerciseAnswerFuture = ObservableFuture(future);
+  //   future.then((statusCode) {
+  //     if (statusCode == 200) {
+  //       print('Saving done');
+  //     }
+  //   }).catchError((error) {
+  //     print("Store: $error");
+  //     _errorStore.errorMessage = DioExceptionUtil.handleError(error);
+  //   });
+  // }
 
   @action
   Future updateProgress(DateTime start, DateTime end) async {
     isUploadingImages = true;
     List<List<String>?> imageUrls =
-        await _uploadImagesUsecase.call(params: _singleQuestionStore.userImage);
+        await _uploadImagesUsecase.call(params: _singleExamStore.userImage);
 
     isUploadingImages = false;
 
     List<AnswerParams> exerciseAnswers = [];
-    for (int i = 0; i < questionList!.questions!.length; i++) {
+    for (int i = 0; i < exam!.total; i++) {
       print("IN LOOP $i OF UPDATE PROGRESS");
-      print(_singleQuestionStore.userAnswers[i]);
+      print(_singleExamStore.userAnswers[i]);
       // Check if the quesiton is a multiple choice
-      if (questionList!.questions![i].questionType == "MULTIPLE_CHOICE") {
+      if (exam!.questions![i].questionType == "MULTIPLE_CHOICE") {
         AnswerParams answer = AnswerParams(
-          selectedOption: _singleQuestionStore.userAnswers[i].isNotEmpty
-              ? convertLetterToNumber(_singleQuestionStore.userAnswers[i])
+          selectedOption: _singleExamStore.userAnswers[i].isNotEmpty
+              ? convertLetterToNumber(_singleExamStore.userAnswers[i])
               : null,
           blankAnswer: "",
-          questionId: questionList!.questions![i].questionId!,
+          questionId: exam!.questions![i].questionId!,
           imageUrls: [],
         );
         exerciseAnswers.add(answer);
-        print("Multiple choice $i ${_singleQuestionStore.userAnswers[i]}");
+        print("Multiple choice $i ${_singleExamStore.userAnswers[i]}");
       }
       //Check if the question is a subjective question
-      else if (questionList!.questions![i].questionType == "ESSAY") {
+      else if (exam!.questions![i].questionType == "ESSAY") {
         AnswerParams answer = AnswerParams(
           selectedOption: null,
-          blankAnswer: _singleQuestionStore.userAnswers[i],
-          questionId: questionList!.questions![i].questionId!,
+          blankAnswer: _singleExamStore.userAnswers[i],
+          questionId: exam!.questions![i].questionId!,
           imageUrls: imageUrls[i],
         );
         exerciseAnswers.add(answer);
@@ -188,12 +173,12 @@ abstract class _QuestionStore with Store {
       else {
         AnswerParams answer = AnswerParams(
           selectedOption: null,
-          blankAnswer: _singleQuestionStore.userAnswers[i],
-          questionId: questionList!.questions![i].questionId!,
+          blankAnswer: _singleExamStore.userAnswers[i],
+          questionId: exam!.questions![i].questionId!,
           imageUrls: null,
         );
         exerciseAnswers.add(answer);
-        print("Fill blank $i ${_singleQuestionStore.userAnswers[i]}");
+        print("Fill blank $i ${_singleExamStore.userAnswers[i]}");
       }
     }
 
@@ -204,7 +189,7 @@ abstract class _QuestionStore with Store {
       exerciseId: questionsUid,
     );
 
-    final future = _updateExerciseProgressUseCase.call(params: params);
+    final future = _submitExamUsecase.call(params: params);
     fetchExerciseAnswerFuture = ObservableFuture(future);
     future.then((result) {
       exerciseResult = result;
@@ -213,18 +198,6 @@ abstract class _QuestionStore with Store {
       print("Store: $error");
       _errorStore.errorMessage = DioExceptionUtil.handleError(error);
     });
-
-    // isUploadingImages = true;
-    // exerciseResult = await _updateExerciseProgressUseCase.call(
-    //   params: SubmitResultParams(
-    //     startAt: start,
-    //     endAt: end,
-    //     answers: exerciseAnswers,
-    //     exerciseId: questionsUid,
-    //   ),
-    // );
-
-    // isUploadingImages = false;
   }
 
   //action

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/core/widgets/buid_no_internet_widget.dart';
 import 'package:mela/di/service_locator.dart';
+import 'package:mela/presentation/examination/exam_screen.dart';
 import 'package:mela/presentation/home_screen/home_screen.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 import 'package:mela/presentation/stats_history/stats.dart';
@@ -32,7 +33,8 @@ class _AllScreensState extends State<AllScreens> {
   // late PageController _pageController;
   // List of screens for each tab
   final List<Widget> _screens = [
-    TutorScreen(),
+    // TutorScreen(),
+    ExamScreen(),
     //tạm thời để Tutor Screen đây thôi, tutor screen chắc không phải sử dụng,
     // dự kiến chỉ còn 3 screen vì bỏ Statistics vào Personal
     StatisticsScreen(),

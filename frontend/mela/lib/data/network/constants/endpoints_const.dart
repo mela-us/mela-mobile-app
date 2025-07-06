@@ -88,4 +88,10 @@ class EndpointsConst {
   //question upload images
   static const String getPresignUrlForQuestion =
       "/api/exercise-histories/files/upload-url";
+
+  //test
+  static const String getExam = "/api/tests";
+  //test upload images
+  static const String getPresignUrlForExam =
+      "/api/test-histories/files/upload-url";
 }

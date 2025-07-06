@@ -4,19 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/dimens.dart';
-import 'package:mela/presentation/question/store/question_store.dart';
+import 'package:mela/presentation/examination/store/exam_store.dart';
+import 'package:mela/presentation/examination/store/single_exam_store.dart';
 import 'package:mela/utils/locale/app_localization.dart';
 
 import '../../../di/service_locator.dart';
-import '../store/single_question/single_question_store.dart';
 
-class QuestionListOverlay extends StatelessWidget {
-  final QuestionStore _questionStore = getIt<QuestionStore>();
-  final SingleQuestionStore _singleQuestionStore = getIt<SingleQuestionStore>();
+class ExamListOverlayWidget extends StatelessWidget {
+  final ExamStore _questionStore = getIt<ExamStore>();
+  final SingleExamStore _singleQuestionStore = getIt<SingleExamStore>();
   final Function(bool) isSubmitted;
   final List<File> selectedImages;
 
-  QuestionListOverlay(
+  ExamListOverlayWidget(
       {super.key, required this.isSubmitted, required this.selectedImages});
 
   @override
@@ -31,15 +31,15 @@ class QuestionListOverlay extends StatelessWidget {
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          // mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             //firstLine
             _buildFirstLine(context),
             // const SizedBox(height: 0),
-            _buildQuestionList(),
+            _buildQuestionList(context),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: EdgeInsets.symmetric(vertical: 10),
               child: _buildSubmitButton(context),
             ),
           ],
@@ -51,43 +51,39 @@ class QuestionListOverlay extends StatelessWidget {
   //Build items:----------------------------------------------------------------
 
   Widget _buildFirstLine(BuildContext context) {
-    return SizedBox(
-      // height: 30,
-      child: Stack(
-        children: [
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 23),
-              child: Text(
-                AppLocalizations.of(context)
-                    .translate('question_title_question_list'),
-                style: Theme.of(context)
-                    .textTheme
-                    .title
-                    .copyWith(color: Theme.of(context).colorScheme.textInBg1),
-              ),
+    return Stack(
+      children: [
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 23),
+            child: Text(
+              AppLocalizations.of(context)
+                  .translate('question_title_question_list'),
+              style: Theme.of(context)
+                  .textTheme
+                  .title
+                  .copyWith(color: Theme.of(context).colorScheme.textInBg1),
             ),
           ),
-          Positioned(
-            right: 15,
-            top: 15,
-            child: IconButton(
-                onPressed: () => isSubmitted(false),
-                icon: const Icon(Icons.close)),
-          ),
-        ],
-      ),
+        ),
+        Positioned(
+          right: 15,
+          top: 15,
+          child: IconButton(
+              onPressed: () => isSubmitted(false),
+              icon: const Icon(Icons.close)),
+        ),
+      ],
     );
   }
 
-  Widget _buildQuestionList() {
+  Widget _buildQuestionList(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(
-        left: Dimens.practiceHorizontalText,
-        right: Dimens.practiceHorizontalText,
-        top: 0,
-        bottom: 10,
-      ),
+          left: Dimens.practiceHorizontalText,
+          right: Dimens.practiceHorizontalText,
+          top: 0,
+          bottom: 10),
       // height: 130,
       child: SingleChildScrollView(
         child: GridView.builder(
@@ -97,7 +93,7 @@ class QuestionListOverlay extends StatelessWidget {
               mainAxisSpacing: 6,
               crossAxisSpacing: 6,
             ),
-            itemCount: _questionStore.questionList!.questions!.length,
+            itemCount: _questionStore.exam!.questions!.length,
             itemBuilder: (context, index) {
               return _buildListItem(index);
             }),
