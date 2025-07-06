@@ -120,7 +120,6 @@ class _HomeScreenState extends State<HomeScreen>
     if (!_levelStore.loading) {
       _levelStore.getLevels();
       _levelStore.getTopics();
-      // _levelStore.getAreLearningLectures();
     }
 
     _initReviseData();

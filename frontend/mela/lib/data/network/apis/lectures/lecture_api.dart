@@ -37,13 +37,13 @@ class LectureApi {
     return DividedLectureList.fromJson(json);
   }
 
-  Future<LectureList> getLecturesAreLearning() async {
-    // print("================================ở getLectureAreLearning API");
-    final responseData = await _dioClient.get(
-        EndpointsConst.getLecturesAreLearning,
-        queryParameters: {'size': 3});
-    return LectureList.fromJson(responseData['data']);
-  }
+  // Future<LectureList> getLecturesAreLearning() async {
+  //   // print("================================ở getLectureAreLearning API");
+  //   final responseData = await _dioClient.get(
+  //       EndpointsConst.getLecturesAreLearning,
+  //       queryParameters: {'size': 3});
+  //   return LectureList.fromJson(responseData['data']);
+  // }
 
   Future<ListSuggestion> getProposedNewSuggestion() async {
     // print("================================ở getLectureAreLearning API");

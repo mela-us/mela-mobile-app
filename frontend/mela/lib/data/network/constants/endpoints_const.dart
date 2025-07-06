@@ -24,7 +24,7 @@ class EndpointsConst {
   static const String getTopicLectureInLevel = "/api/lectures";
   static const String getTopics = "/api/topics";
   static const String getLectures = "/api/lectures";
-  static const String getLecturesAreLearning = "/api/lectures/recent";
+  //static const String getLecturesAreLearning = "/api/lectures/recent";
   static const String getLevels = "/api/levels";
   static const String getDividedLectures = "/api/lectures/:lectureId/sections";
   static const String getExercises = "/api/lectures/:lectureId/exercises";

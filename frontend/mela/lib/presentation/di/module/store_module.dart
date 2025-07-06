@@ -137,7 +137,6 @@ class StoreModule {
     getIt.registerSingleton<LevelStore>(
       LevelStore(
         getIt<GetLevelListUsecase>(),
-        getIt<GetLecturesAreLearningUsecase>(),
         getIt<GetTopicsUsecase>(),
       ),
     );
