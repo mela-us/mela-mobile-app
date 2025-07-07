@@ -18,6 +18,20 @@ class ExpandableList extends StatefulWidget {
 class _ExpandableListState extends State<ExpandableList> {
   FilterState filter = FilterState();
 
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   List<Progress> get filteredList {
     var filtered = widget.list ?? [];
 
@@ -135,13 +149,14 @@ class _ExpandableListState extends State<ExpandableList> {
       padding: const EdgeInsets.only(top: 8, bottom: 8, left: 22, right: 0),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
+        controller: _scrollController,
         child: Row(
           children: [
             // Sort order
             IntrinsicWidth(
               child: DropdownButtonFormField<SortOrder>(
                 icon: Padding(
-                  padding: const EdgeInsets.only(left: 4.0, right: 1.0), // 8 là khoảng trống hai bên
+                  padding: const EdgeInsets.only(left: 4.0, right: 1.0),
                   child: Image.asset(
                     Assets.stats_show,
                     width: 10,
@@ -206,13 +221,18 @@ class _ExpandableListState extends State<ExpandableList> {
                   ),
                 ),
                 value: filter.typeFilter,
-                onChanged: (val) => setState(() => filter.typeFilter = val!),
+                onChanged: (val) => setState(() {
+                  filter.typeFilter = val!;
+                  if (val == TypeFilter.exercise) {
+                    scrollToRightEnd();
+                  }
+                }),
                 decoration: buildDropdownDecoration(),
                 items: TypeFilter.values
                     .map((e) => DropdownMenuItem(
                   value: e,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 0.0), // Giảm vertical padding
+                    padding: const EdgeInsets.symmetric(vertical: 0.0),
                     child: buildText(e.label),
                   ),
                 ))
@@ -239,7 +259,7 @@ class _ExpandableListState extends State<ExpandableList> {
                     .map((e) => DropdownMenuItem(
                   value: e,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 0.0), // Giảm vertical padding
+                    padding: const EdgeInsets.symmetric(vertical: 0.0),
                     child: buildText(e.label),
                   ),
                 ))
@@ -252,4 +272,13 @@ class _ExpandableListState extends State<ExpandableList> {
     );
   }
 
+  void scrollToRightEnd() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    });
+  }
 }

@@ -1,31 +1,20 @@
 import 'dart:io';
-
-import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mela/constants/app_theme.dart';
-import 'package:mela/constants/assets.dart';
 import 'package:mela/constants/dimens.dart';
 import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/domain/entity/exam/exam.dart';
-import 'package:mela/domain/entity/question/guide_controller.dart';
-import 'package:mela/domain/entity/question/question.dart';
 import 'package:mela/presentation/examination/store/exam_store.dart';
 import 'package:mela/presentation/examination/store/single_exam_store.dart';
 import 'package:mela/presentation/examination/widgets/exam_appbar.dart';
+import 'package:mela/presentation/examination/widgets/exam_change_tab_overlay_widget.dart';
 import 'package:mela/presentation/examination/widgets/exam_list_overlay_widget.dart';
-import 'package:mela/presentation/home_screen/store/revise_store/revise_store.dart';
-import 'package:mela/presentation/question/store/question_store.dart';
-import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
 import 'package:mela/presentation/question/store/timer/timer_store.dart';
-import 'package:mela/presentation/question/widgets/guide_bottom_sheet.dart';
-import 'package:mela/presentation/question/widgets/question_app_bar_widget.dart';
-import 'package:mela/presentation/question/widgets/question_list_overlay_widget.dart';
 import 'package:mela/utils/locale/app_localization.dart';
 import 'package:mela/utils/routes/routes.dart';
 import 'package:mobx/mobx.dart';
@@ -35,9 +24,12 @@ import '../../constants/layout.dart';
 import '../../di/service_locator.dart';
 
 import '../../../utils/animation_helper/animation_helper.dart';
+import 'controller/exam_screen_controller.dart';
 
 class ExamScreen extends StatefulWidget {
-  const ExamScreen({super.key});
+  final ExamScreenController controller;
+
+  const ExamScreen({super.key, required this.controller});
 
   @override
   State<ExamScreen> createState() => _ExamScreenState();
@@ -62,6 +54,22 @@ class _ExamScreenState extends State<ExamScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    //reaction on tab changed
+    widget.controller.showExitOverlay = (VoidCallback onConfirm) {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) => ExamChangeTabOverlayWidget(
+          onConfirm: () {
+            Navigator.pop(context);
+            onConfirm();
+          },
+          onCancel: () => Navigator.pop(context),
+        ),
+      );
+    };
 
     //Reaction to questions status.
     reaction((_) => _questionStore.loading, (loading) {

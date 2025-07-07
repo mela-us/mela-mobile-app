@@ -21,9 +21,11 @@ class ExpandableItem extends StatefulWidget {
 class _ExpandableItemState extends State<ExpandableItem> {
   bool _isExpanded = false;
   late String type;
+  //
   late ProgressExercise? progressExercise;
   late ProgressSection? progressSection;
   late ProgressExam? progressExam;
+  //
   late List<ScoreRecord> scores;
   late double score;
 
@@ -46,7 +48,9 @@ class _ExpandableItemState extends State<ExpandableItem> {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 22),
       elevation: 5.0,
-      color: !_isExpanded ? Colors.white : Theme.of(context).colorScheme.appBackground,
+      color: (_isExpanded && type != 'SECTION' && scores.length > 1)
+          ? Theme.of(context).colorScheme.appBackground
+          : Colors.white,
       child: Column(
         children: [
           InkWell(
@@ -71,22 +75,26 @@ class _ExpandableItemState extends State<ExpandableItem> {
                               getItemName(),
                               style: Theme.of(context).textTheme.title.copyWith(
                                   color: Theme.of(context).colorScheme.onPrimary,
-                                  fontSize: 17,
+                                  fontSize: 16,
                               ),
                               maxLines: (_isExpanded) ? 3 : 1, // Giới hạn 1 dòng
                               overflow: (_isExpanded) ? TextOverflow.visible : TextOverflow.ellipsis, // Thêm "..." nếu quá dài
                             ),
                             Text( //Tên bài học
                               widget.item.lectureName ?? "",
-                              style: Theme.of(context).textTheme.normal
-                                  .copyWith(color: Theme.of(context).colorScheme.textInBg1),
+                              style: Theme.of(context).textTheme.normal.copyWith(
+                                  color: Theme.of(context).colorScheme.textInBg1,
+                                  fontSize: 12,
+                              ),
                               maxLines: (_isExpanded) ? 3 : 1, // Giới hạn 1 dòng
                               overflow: (_isExpanded) ? TextOverflow.visible : TextOverflow.ellipsis, // Thêm "..." nếu quá dài
                             ),
                             Text( //Tên chủ đề
                               widget.item.topicName ?? "",
-                              style: Theme.of(context).textTheme.normal
-                                  .copyWith(color: Theme.of(context).colorScheme.textInBg2),
+                              style: Theme.of(context).textTheme.normal.copyWith(
+                                color: Theme.of(context).colorScheme.textInBg1,
+                                fontSize: 12,
+                              ),
                             ),
                           ],
                         ),
@@ -132,7 +140,7 @@ class _ExpandableItemState extends State<ExpandableItem> {
                             children: [
                               _buildProgressStatus(),
                               const SizedBox(width: 5),
-                              _buildExpandCollapseButton(),
+                              _buildExpandCollapseButton(context),
                             ]
                         ),
                       ),
@@ -190,9 +198,9 @@ class _ExpandableItemState extends State<ExpandableItem> {
   }
 
   String getItemTypeInText() {
-    if (type == 'SECTION') return "Đã học";
-    if (type == 'EXERCISE') return "Đã làm bài";
-    return "Đã kiểm tra";
+    if (type == 'SECTION') return "Bài học";
+    if (type == 'EXERCISE') return "Luyện tập";
+    return "Kiểm tra";
   }
 
   Widget _buildProgressStatus() {
@@ -216,14 +224,20 @@ class _ExpandableItemState extends State<ExpandableItem> {
     return const SizedBox(width: 21, height: 21);
   }
 
-  Widget _buildExpandCollapseButton() {
+  Widget _buildExpandCollapseButton(BuildContext context) {
     if (type != 'SECTION' && scores.length > 1) {
       return Image.asset(
         _isExpanded ? Assets.stats_hide : Assets.stats_show,
         width: 16,
         height: 16,
+        color: Theme.of(context).colorScheme.primary,
       );
     }
-    return const SizedBox(width: 16, height: 16);
+    return Image.asset(
+      Assets.stats_show,
+      width: 16,
+      height: 16,
+      color: Theme.of(context).colorScheme.onSecondary,
+    );
   }
 }

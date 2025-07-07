@@ -7,11 +7,9 @@ import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/examination/store/exam_store.dart';
 import 'package:mela/presentation/examination/widgets/exam_quit_overlay_widget.dart';
 import 'package:mela/presentation/question/store/timer/timer_store.dart';
-import 'package:mela/presentation/question/widgets/question_quit_overlay_widget.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../constants/assets.dart';
-import '../../../utils/locale/app_localization.dart';
 
 class ExamAppBar extends StatefulWidget implements PreferredSizeWidget {
   final OverlayEntry questionListOverlay;
@@ -100,7 +98,7 @@ class _ExamAppBarState extends State<ExamAppBar> {
     return Padding(
       padding: const EdgeInsets.only(left: 11.79),
       child: Text(
-        "Bài thi",
+        "Bài kiểm tra",
         style: Theme.of(context)
             .textTheme
             .heading

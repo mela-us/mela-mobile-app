@@ -290,27 +290,10 @@ class _HomeScreenState extends State<HomeScreen>
                               onPressed: _scrollToEnd,
                             ),
                             const SizedBox(height: 5),
-                            Text(
-                              "Chào ${_personalStore.user?.name ?? "bạn"} trở lại, học cùng Mela nhé!",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subTitle
-                                  .copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.tertiary,
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 14,
-                                  ),
-                              textAlign: TextAlign.start,
-                              overflow: TextOverflow.fade,
-                              maxLines: 2,
-                            ),
-                            const SizedBox(height: 5),
                             //Levels Grid
                             _buildSubHeading("Học tự do"),
                             const SizedBox(height: 20),
                             _buildLevelGridView(),
-
                             const SizedBox(height: 8),
 
                             //Study Tab View

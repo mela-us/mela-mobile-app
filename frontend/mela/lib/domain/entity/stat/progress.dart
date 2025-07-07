@@ -24,6 +24,7 @@ class Progress {
     this.lectureName,
     this.exercise,
     this.section,
+    this.exam,
   });
 
   factory Progress.fromJson(Map<String, dynamic> json) {
@@ -34,6 +35,7 @@ class Progress {
       lectureName: json['lectureName'],
       exercise: json['exercise'] != null ? ProgressExercise.fromJson(json['exercise']) : null,
       section: json['section'] != null ? ProgressSection.fromJson(json['section']) : null,
+      exam: json['test'] != null ? ProgressExam.fromJson(json['test']) : null,
     );
   }
 }

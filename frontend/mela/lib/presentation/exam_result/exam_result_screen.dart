@@ -6,12 +6,7 @@ import 'package:mela/core/widgets/practice_app_bar_widget.dart';
 import 'package:mela/domain/entity/exam/exam.dart';
 import 'package:mela/presentation/examination/store/exam_store.dart';
 import 'package:mela/presentation/examination/store/single_exam_store.dart';
-import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
-import 'package:mela/presentation/home_screen/store/revise_store/revise_store.dart';
-import 'package:mela/presentation/question/store/question_store.dart';
-import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
 import 'package:mela/presentation/question/store/timer/timer_store.dart';
-import 'package:mela/presentation/topic_lecture_in_level_screen/store/topic_lecture_store.dart';
 import 'package:mela/utils/locale/app_localization.dart';
 import 'package:mela/utils/routes/routes.dart';
 import 'package:mobx/mobx.dart';
@@ -32,12 +27,6 @@ class _ExamResultScreenState extends State<ExamResultScreen> {
   final ExamStore _questionStore = getIt<ExamStore>();
   final SingleExamStore _singleQuestionStore = getIt<SingleExamStore>();
   final TimerStore _timerStore = getIt<TimerStore>();
-
-  // final TopicLectureStore _topicLectureStore = getIt<TopicLectureStore>();
-  // final LevelStore _levelStore = getIt<LevelStore>();
-  // final ExerciseStore _exerciseStore = getIt<ExerciseStore>();
-  // final ReviseStore _reviseStore = getIt<ReviseStore>();
-  // final StreakStore _streakStore = getIt<StreakStore>();
 
   late ReactionDisposer _disposer;
 
@@ -139,7 +128,7 @@ class _ExamResultScreenState extends State<ExamResultScreen> {
 
   //Build items:----------------------------------------------------------------
   Widget _buildResultImage() {
-    if (calculatePoint() >= 8) {
+    if (calculatePoint() >= 6) {
       return Padding(
           padding: const EdgeInsets.only(top: 60),
           child: Center(
@@ -165,9 +154,7 @@ class _ExamResultScreenState extends State<ExamResultScreen> {
   Widget _buildTitle(BuildContext context) {
     return Center(
       child: Text(
-        calculatePoint() >= 8
-            ? AppLocalizations.of(context).translate('result_title')
-            : "Bài tập chưa đạt!!!",
+        getTitleText(),
         style: Theme.of(context)
             .textTheme
             .title
@@ -176,12 +163,19 @@ class _ExamResultScreenState extends State<ExamResultScreen> {
     );
   }
 
+  String getTitleText() {
+    final score = calculatePoint();
+    if (score == 10) return "Hoàn hảo!! Đỉnh nóc kịch trần";
+    if (score >= 9) return "Xuất sắc!";
+    if (score >= 8) return "Bạn đã hoàn thành tốt bài kiểm tra";
+    if (score >= 6) return "Bạn đã hoàn thành bài kiểm tra!";
+    return "Chưa như mong đợi";
+  }
+
   Widget _buildDescription(BuildContext context) {
     return Center(
       child: Text(
-        calculatePoint() >= 8
-            ? AppLocalizations.of(context).translate('result_description')
-            : "Cần đúng tối thiểu 80% số câu.",
+        getDescriptionText(),
         style: Theme.of(context)
             .textTheme
             .normal
@@ -190,11 +184,18 @@ class _ExamResultScreenState extends State<ExamResultScreen> {
     );
   }
 
+  String getDescriptionText() {
+    final score = calculatePoint();
+    if (score >= 9) return "Hãy giữ vững phong độ này nhé";
+    if (score >= 6) return "Hãy cố gắng hơn nữa nhé, bạn có thể làm tốt hơn";
+    return "Bạn hãy cố gắng trau dồi thêm nhé. Đừng nản chí!";
+  }
+
   Widget _buildPointContainer(BuildContext context) {
     return _buildValueContainer(
       context,
       AppLocalizations.of(context).translate('result_point_title'),
-      "${getCorrect()}/${_questionStore.exam!.questions!.length}",
+      "${getCorrect()}/${_questionStore.exam!.questions.length}",
       calculatePoint() >= 8
           ? Theme.of(context).colorScheme.buttonChooseBackground
           : Colors.redAccent,
@@ -306,7 +307,7 @@ class _ExamResultScreenState extends State<ExamResultScreen> {
   double calculatePoint() {
     int correct = 0;
     //Can't be null
-    List<ExamQuestionModel> questions = _questionStore.exam!.questions!;
+    List<ExamQuestionModel> questions = _questionStore.exam!.questions;
     List<String> userAnswers = _singleQuestionStore.userAnswers;
 
     correct = getCorrect();
@@ -322,7 +323,7 @@ class _ExamResultScreenState extends State<ExamResultScreen> {
   }
 
   int getCorrect() {
-    List<ExamQuestionModel> questions = _questionStore.exam!.questions!;
+    List<ExamQuestionModel> questions = _questionStore.exam!.questions;
     List<String> userAnswers = _singleQuestionStore.userAnswers;
     int correct = 0;
     for (int i = 0; i < questions.length; i++) {
@@ -338,7 +339,7 @@ class _ExamResultScreenState extends State<ExamResultScreen> {
   }
 
   List<ExerciseAnswer> getAnswerResultList() {
-    List<ExamQuestionModel> questions = _questionStore.exam!.questions!;
+    List<ExamQuestionModel> questions = _questionStore.exam!.questions;
     List<String> userAnswers = _singleQuestionStore.userAnswers;
     final List<ExerciseAnswer> answerList = [];
 

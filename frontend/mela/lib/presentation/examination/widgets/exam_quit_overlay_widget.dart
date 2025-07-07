@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mela/constants/app_theme.dart';
-import 'package:mela/constants/dimens.dart';
 import 'package:mela/constants/enum.dart';
 import 'package:mela/presentation/examination/store/exam_store.dart';
-import 'package:mela/utils/locale/app_localization.dart';
 
 import '../../../constants/assets.dart';
 import '../../../di/service_locator.dart';
@@ -18,8 +15,8 @@ class ExamQuitOverlayWidget extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
         width: 390,
-        height: 400,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20.0),
@@ -37,8 +34,7 @@ class ExamQuitOverlayWidget extends StatelessWidget {
               ),
               width: double.infinity,
               child: Text(
-                AppLocalizations.of(context)
-                    .translate('question_title_question_dialog'),
+                "Xác nhận thoát?",
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Colors.white,
@@ -53,8 +49,7 @@ class ExamQuitOverlayWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
               child: Text(
-                AppLocalizations.of(context)
-                    .translate('question_title_question_detail'),
+                "Quá trình và điểm số khi làm kiểm tra sẽ không được lưu lại khi bạn thoát.",
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
@@ -133,8 +128,8 @@ class ExamQuitOverlayWidget extends StatelessWidget {
             padding: const EdgeInsets.only(right: 25),
             child: Image.asset(
               Assets.exit_image,
-              width: 242 * 0.8,
-              height: 170.85 * 0.8,
+              width: 200 * 0.8,
+              height: 150 * 0.8,
             ),
           ),
         ],
@@ -142,75 +137,4 @@ class ExamQuitOverlayWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildStayButton(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-        child: GestureDetector(
-          onTap: () {
-            questionStore.setQuit(QuitOverlayResponse.stay);
-          },
-          child: _buildContinueButtonMain(context),
-        ));
-  }
-
-  Widget _buildQuitButton(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        questionStore.setQuit(QuitOverlayResponse.quit);
-      },
-      child: Text(
-        AppLocalizations.of(context)
-            .translate('question_btn_question_dialog_quit'),
-        style: Theme.of(context)
-            .textTheme
-            .buttonStyle
-            .copyWith(color: Theme.of(context).colorScheme.inputText),
-      ),
-    );
-  }
-
-  Widget _buildContinueButtonMain(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.buttonYesBgOrText,
-        borderRadius: BorderRadius.circular(Dimens.bigButtonRadius),
-      ),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 19),
-            //Text
-            child: Text(
-              AppLocalizations.of(context)
-                  .translate('question_btn_question_dialog_continue'),
-              style: Theme.of(context).textTheme.buttonStyle.copyWith(
-                  color: Theme.of(context).colorScheme.buttonYesTextOrBg),
-            ),
-          ),
-
-          //Icon 'next ->'
-          Positioned(
-            right: 10,
-            child: Container(
-              height: 48,
-              width: 48,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-              ),
-              child: const Padding(
-                padding: EdgeInsets.all(0),
-                child: Icon(
-                  Icons.arrow_forward,
-                  color: Color(0xFF0961F5),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
