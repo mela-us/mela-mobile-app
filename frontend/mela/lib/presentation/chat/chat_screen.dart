@@ -115,9 +115,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 ],
               ),
               backgroundColor: Theme.of(context).colorScheme.appBackground,
-              body: SingleChildScrollView(
-                child: _buildDefaultBody(context),
-              ));
+              body: _buildDefaultBody(context));
         });
   }
 
@@ -126,6 +124,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return Row(
       children: [
         _buildHistoryButton(context),
+        const SizedBox(width: 20),
         Expanded(
           child: Align(
             alignment: Alignment.center,
@@ -140,10 +139,10 @@ class _ChatScreenState extends State<ChatScreen> {
     // final double screenHeight = MediaQuery.of(context).size.height;
     return Padding(
       // padding: EdgeInsets.fromLTRB(16.0, (screenHeight - 610) * 0.5, 16.0, 10),
-      padding: const EdgeInsets.fromLTRB(16.0, 40, 16.0, 10),
+      padding: const EdgeInsets.fromLTRB(16.0, 16, 16.0, 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.waving_hand,
               color: Theme.of(context).colorScheme.buttonYesBgOrText, size: 48),
@@ -166,7 +165,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   .textTheme
                   .aiExplainStyle
                   .copyWith(color: Theme.of(context).colorScheme.secondary)),
-          const SizedBox(height: 15),
+          const SizedBox(height: 30),
           ShowcaseCustom(
             keyWidget: _chatBoxKey,
             isHideActionWidget: true,
@@ -175,6 +174,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 "Chụp ảnh hoặc nhập bài toán vào ô chat, Mela sẽ hỗ trợ ngay!",
             child: ChatBox(isFirstChatScreen: true),
           ),
+          const SizedBox(height: 80),
           // const SizedBox(height: 15),
           // ShowcaseCustom(
           //   keyWidget: _relativeTermKey,

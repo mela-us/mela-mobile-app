@@ -8,7 +8,6 @@ import '../../../constants/app_theme.dart';
 import '../../../domain/entity/stat/score_record.dart';
 import 'line_chart_widget.dart';
 
-
 class ExpandableItem extends StatefulWidget {
   final Progress item;
 
@@ -47,9 +46,8 @@ class _ExpandableItemState extends State<ExpandableItem> {
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 22),
-      elevation: (_isExpanded && type != 'SECTION' && scores.length > 1)
-          ? 0.1
-          : 0.0,
+      elevation:
+          (_isExpanded && type != 'SECTION' && scores.length > 1) ? 0.1 : 0.0,
       color: (_isExpanded && type != 'SECTION' && scores.length > 1)
           ? Theme.of(context).colorScheme.appBackground
           : Colors.white,
@@ -62,7 +60,8 @@ class _ExpandableItemState extends State<ExpandableItem> {
               });
             },
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 14.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 14.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -73,32 +72,52 @@ class _ExpandableItemState extends State<ExpandableItem> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text( //Tên bài tập hoặc section hoặc test
+                            Text(
+                              //Tên bài tập hoặc section hoặc test
                               getItemName(),
                               style: Theme.of(context).textTheme.title.copyWith(
-                                  color: Theme.of(context).colorScheme.onPrimary,
-                                  fontSize: 16,
-                              ),
-                              maxLines: (_isExpanded) ? 3 : 1, // Giới hạn 1 dòng
-                              overflow: (_isExpanded) ? TextOverflow.visible : TextOverflow.ellipsis, // Thêm "..." nếu quá dài
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                    fontSize: 16,
+                                  ),
+                              maxLines:
+                                  (_isExpanded) ? 3 : 1, // Giới hạn 1 dòng
+                              overflow: (_isExpanded)
+                                  ? TextOverflow.visible
+                                  : TextOverflow
+                                      .ellipsis, // Thêm "..." nếu quá dài
                             ),
                             const SizedBox(height: 4.0),
-                            Text( //Tên bài học
+                            Text(
+                              //Tên bài học
                               widget.item.lectureName ?? "",
-                              style: Theme.of(context).textTheme.normal.copyWith(
-                                  color: Theme.of(context).colorScheme.textInBg1,
-                                  fontSize: 12,
-                              ),
-                              maxLines: (_isExpanded) ? 3 : 1, // Giới hạn 1 dòng
-                              overflow: (_isExpanded) ? TextOverflow.visible : TextOverflow.ellipsis, // Thêm "..." nếu quá dài
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .normal
+                                  .copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.textInBg1,
+                                    fontSize: 12,
+                                  ),
+                              maxLines:
+                                  (_isExpanded) ? 3 : 1, // Giới hạn 1 dòng
+                              overflow: (_isExpanded)
+                                  ? TextOverflow.visible
+                                  : TextOverflow
+                                      .ellipsis, // Thêm "..." nếu quá dài
                             ),
                             const SizedBox(height: 4.0),
-                            Text( //Tên chủ đề
+                            Text(
+                              //Tên chủ đề
                               widget.item.topicName ?? "",
-                              style: Theme.of(context).textTheme.normal.copyWith(
-                                color: Theme.of(context).colorScheme.textInBg1,
-                                fontSize: 12,
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .normal
+                                  .copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.textInBg1,
+                                    fontSize: 12,
+                                  ),
                             ),
                           ],
                         ),
@@ -111,28 +130,43 @@ class _ExpandableItemState extends State<ExpandableItem> {
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(//học bài hay làm bài?
+                              Text(
+                                //học bài hay làm bài?
                                 getItemTypeInText(),
-                                style: Theme.of(context).textTheme.normal
-                                    .copyWith(color: Theme.of(context).colorScheme.tertiary),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .normal
+                                    .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .tertiary),
                               ),
-                              Text(//date
+                              Text(
+                                //date
                                 parseDate(widget.item.latestDate),
-                                style: Theme.of(context).textTheme.normal
-                                    .copyWith(color: Theme.of(context).colorScheme.textInBg1),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .normal
+                                    .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .textInBg1),
                               ),
                               if (type != 'SECTION')
-                                Text(//score
+                                Text(
+                                  //score
                                   "${formatScore(score)} Điểm",
-                                  style:  Theme.of(context).textTheme.bigTitle
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bigTitle
                                       .copyWith(
-                                      color:  getColorForScore(score)
-                                  ),
-                                  overflow: TextOverflow.fade,
+                                        color: getColorForScore(score),
+                                        fontSize: 16,
+                                      ),
+                                  overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                 )
-                            ]
-                        ),
+                            ]),
                       ),
                       ConstrainedBox(
                         constraints: const BoxConstraints(
@@ -145,8 +179,7 @@ class _ExpandableItemState extends State<ExpandableItem> {
                               _buildProgressStatus(),
                               const SizedBox(width: 5),
                               _buildExpandCollapseButton(context),
-                            ]
-                        ),
+                            ]),
                       ),
                     ],
                   ),
@@ -161,9 +194,7 @@ class _ExpandableItemState extends State<ExpandableItem> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 1),
-                  LineChartWidget(scores: scores)
-                    .animate()
-                      .fadeIn(
+                  LineChartWidget(scores: scores).animate().fadeIn(
                         duration: 0.8.seconds,
                         curve: Curves.easeIn,
                       ),
@@ -175,14 +206,14 @@ class _ExpandableItemState extends State<ExpandableItem> {
       ),
     );
   }
+
   String parseDate(String inputDate) {
     DateTime parsedDate = DateTime.parse(inputDate);
-    return  DateFormat('dd-MM-yyyy').format(parsedDate);
+    return DateFormat('dd-MM-yyyy').format(parsedDate);
   }
+
   String formatScore(double score) {
-    return score % 1 == 0
-        ? score.toStringAsFixed(0)
-        : score.toStringAsFixed(1);
+    return score % 1 == 0 ? score.toStringAsFixed(0) : score.toStringAsFixed(1);
   }
 
   Color getColorForScore(double score) {
@@ -230,9 +261,7 @@ class _ExpandableItemState extends State<ExpandableItem> {
 
   Widget _buildExpandCollapseButton(BuildContext context) {
     return Image.asset(
-      _isExpanded
-          ? Assets.stats_hide
-          : Assets.stats_show,
+      _isExpanded ? Assets.stats_hide : Assets.stats_show,
       width: 16,
       height: 16,
       color: (type != 'SECTION' && scores.length > 1)

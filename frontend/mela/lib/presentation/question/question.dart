@@ -221,9 +221,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
   BoxDecoration decorationWithShadow = BoxDecoration(
     color: Colors.white,
     borderRadius: BorderRadius.circular(Dimens.textContainerRadius),
-    boxShadow: [
-      Layout.practiceBoxShadow,
-    ],
+    // boxShadow: [
+    //   Layout.practiceBoxShadow,
+    // ],
   );
 
   Widget _buildFAB(BuildContext context) {

@@ -499,9 +499,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(Dimens.answerTileRadius),
-        boxShadow: [
-          Layout.practiceBoxShadow,
-        ],
+        // boxShadow: [
+        //   Layout.practiceBoxShadow,
+        // ],
       ),
       height: Dimens.answerTileHeight,
       child: Row(
@@ -558,9 +558,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
   BoxDecoration decorationWithShadow = BoxDecoration(
     color: Colors.white,
     borderRadius: BorderRadius.circular(Dimens.textContainerRadius),
-    boxShadow: [
-      Layout.practiceBoxShadow,
-    ],
+    // boxShadow: [
+    //   Layout.practiceBoxShadow,
+    // ],
   );
 
   //Others:---------------------------------------------------------------------

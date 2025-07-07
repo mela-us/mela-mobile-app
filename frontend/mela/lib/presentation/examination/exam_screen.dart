@@ -204,9 +204,9 @@ class _ExamScreenState extends State<ExamScreen> {
   BoxDecoration decorationWithShadow = BoxDecoration(
     color: Colors.white,
     borderRadius: BorderRadius.circular(Dimens.textContainerRadius),
-    boxShadow: [
-      Layout.practiceBoxShadow,
-    ],
+    // boxShadow: [
+    //   Layout.practiceBoxShadow,
+    // ],
   );
 
   Widget _buildBodyContent(BuildContext context) {
