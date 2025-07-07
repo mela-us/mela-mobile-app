@@ -78,6 +78,7 @@ class _StatsTopicPersonalState extends State<StatsTopicPersonal> {
                   children: [
                     const SizedBox(height: 12),
                     RadarStatChart(stats: list),
+                    const SizedBox(height: 12),
                   ]
               ),
             )

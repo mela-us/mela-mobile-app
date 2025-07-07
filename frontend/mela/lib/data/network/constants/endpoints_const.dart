@@ -10,10 +10,10 @@ class EndpointsConst {
   static const String baseUrl = "https://api.uat.mela.guru";
 
   // receiveTimeout
-  static const int receiveTimeout = 30000;
+  static const int receiveTimeout = 60000;
 
   // connectTimeout
-  static const int connectionTimeout = 30000;
+  static const int connectionTimeout = 60000;
 
   // booking endpoints
   static const String getPosts = "/posts";

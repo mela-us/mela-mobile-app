@@ -47,7 +47,9 @@ class _ExpandableItemState extends State<ExpandableItem> {
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 22),
-      elevation: 5.0,
+      elevation: (_isExpanded && type != 'SECTION' && scores.length > 1)
+          ? 0.1
+          : 0.0,
       color: (_isExpanded && type != 'SECTION' && scores.length > 1)
           ? Theme.of(context).colorScheme.appBackground
           : Colors.white,
@@ -80,6 +82,7 @@ class _ExpandableItemState extends State<ExpandableItem> {
                               maxLines: (_isExpanded) ? 3 : 1, // Giới hạn 1 dòng
                               overflow: (_isExpanded) ? TextOverflow.visible : TextOverflow.ellipsis, // Thêm "..." nếu quá dài
                             ),
+                            const SizedBox(height: 4.0),
                             Text( //Tên bài học
                               widget.item.lectureName ?? "",
                               style: Theme.of(context).textTheme.normal.copyWith(
@@ -89,6 +92,7 @@ class _ExpandableItemState extends State<ExpandableItem> {
                               maxLines: (_isExpanded) ? 3 : 1, // Giới hạn 1 dòng
                               overflow: (_isExpanded) ? TextOverflow.visible : TextOverflow.ellipsis, // Thêm "..." nếu quá dài
                             ),
+                            const SizedBox(height: 4.0),
                             Text( //Tên chủ đề
                               widget.item.topicName ?? "",
                               style: Theme.of(context).textTheme.normal.copyWith(
@@ -225,19 +229,15 @@ class _ExpandableItemState extends State<ExpandableItem> {
   }
 
   Widget _buildExpandCollapseButton(BuildContext context) {
-    if (type != 'SECTION' && scores.length > 1) {
-      return Image.asset(
-        _isExpanded ? Assets.stats_hide : Assets.stats_show,
-        width: 16,
-        height: 16,
-        color: Theme.of(context).colorScheme.primary,
-      );
-    }
     return Image.asset(
-      Assets.stats_show,
+      _isExpanded
+          ? Assets.stats_hide
+          : Assets.stats_show,
       width: 16,
       height: 16,
-      color: Theme.of(context).colorScheme.onSecondary,
+      color: (type != 'SECTION' && scores.length > 1)
+          ? Theme.of(context).colorScheme.primary
+          : Theme.of(context).colorScheme.onSecondary,
     );
   }
 }

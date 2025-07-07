@@ -43,7 +43,7 @@ class RadarStatChart extends StatelessWidget {
     excellenceValues = stats.map((e) => e.excellence).toList();
     sides = stats.length;
 
-    final max = getMaxExcellence();
+    final max = getMaxExcellence().toInt();
 
     chartSize = 300;
     labelRadius = chartSize / 2 - 22;
@@ -60,9 +60,9 @@ class RadarStatChart extends StatelessWidget {
               height: chartSize,
               width: chartSize,
               child: RadarChart(
-                ticks: max > 20
-                    ? const [20, 40, 60, 80, 100]
-                    : const [5, 10, 15, 20],
+                ticks: max > 50
+                    ? const [0, 25, 50, 75, 100]
+                    : [0, (max*0.5).toInt(), max, (max*1.5).toInt(), (max*2).toInt()],
                 features: List.filled(sides, ""),
                 data: [excellenceValues],
                 reverseAxis: false,
@@ -108,7 +108,7 @@ class RadarStatChart extends StatelessWidget {
                 fontWeight: FontWeight.w700,
             ),
             textAlign: TextAlign.center,
-            overflow: TextOverflow.fade,
+            overflow: TextOverflow.ellipsis,
             maxLines: 2,
           ),
           _buildAnimatedNumberWithIndex(i),

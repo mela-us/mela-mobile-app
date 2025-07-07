@@ -3,7 +3,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/core/widgets/icon_widget/error_icon_widget.dart';
 import 'package:mela/presentation/personal/level_selector.dart';
 import 'package:mela/presentation/personal/notification_setting/notification_setting.dart';
-import 'package:mela/presentation/personal/widgets/ui_items/decorative_ring.dart';
 import 'package:mela/presentation/personal/widgets/headings/personal_heading.dart';
 import 'package:mela/presentation/signup_login_screen/login_or_signup_screen.dart';
 import 'package:url_launcher/url_launcher.dart';

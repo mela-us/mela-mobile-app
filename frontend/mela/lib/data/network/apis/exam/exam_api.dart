@@ -14,6 +14,7 @@ class ExamApi {
   ExamApi(this._dioClient);
 
   Future<ExamModel> getExam() async {
+    await Future.delayed(const Duration(seconds: 1));
     final res = await _dioClient.dio.get(
       EndpointsConst.getExam,
     );

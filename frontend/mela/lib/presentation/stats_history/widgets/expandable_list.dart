@@ -107,7 +107,7 @@ class _ExpandableListState extends State<ExpandableList> {
               return Column(
                 children: [
                   ExpandableItem(item: filteredList[index]),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 4),
                 ],
               );
             },

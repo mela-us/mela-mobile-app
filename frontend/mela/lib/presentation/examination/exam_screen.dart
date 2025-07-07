@@ -87,7 +87,7 @@ class _ExamScreenState extends State<ExamScreen> {
     //Reaction to question index change.
     reaction((_) => _singleExamStore.currentIndex, (index) {
       String userAnswer = _singleExamStore.userAnswers[index];
-      ExamQuestionModel question = _questionStore.exam!.questions![index];
+      ExamQuestionModel question = _questionStore.exam!.questions[index];
       if (isQuizQuestion(question)) {
         if (userAnswer.isEmpty) {
           _singleExamStore.setQuizAnswerValue(userAnswer);
@@ -132,13 +132,11 @@ class _ExamScreenState extends State<ExamScreen> {
     });
 
     reaction((_) => _questionStore.exam!.questions, (questions) {
-      if (questions != null) {
-        //can't be null here
-        _singleExamStore
-            .generateAnswerList(_questionStore.exam!.questions.length);
-        _initListOverlay(context);
-      }
-    }, fireImmediately: true);
+      //can't be null here
+      _singleExamStore
+          .generateAnswerList(_questionStore.exam!.questions.length);
+      _initListOverlay(context);
+        }, fireImmediately: true);
 
     //Reaction to quit
     reaction((_) => _questionStore.isQuit, (quit) {
@@ -165,10 +163,21 @@ class _ExamScreenState extends State<ExamScreen> {
     return Observer(
       builder: (context) {
         if (_questionStore.loading) {
-          // return const RotatingImageIndicator();
           return Scaffold(
             backgroundColor: Theme.of(context).colorScheme.appBackground,
-            body: const Center(child: RotatingImageIndicator()),
+            body: Center(child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const RotatingImageIndicator(),
+                const SizedBox(height: 12),
+                Text(
+                  "Đang thiết lập 20 câu hỏi kiểm tra...",
+                  style: Theme.of(context).textTheme.subTitle.copyWith(
+                    fontSize: 18,
+                  ),
+                )
+              ]
+            )),
           );
         } else {
           return Scaffold(
@@ -213,7 +222,7 @@ class _ExamScreenState extends State<ExamScreen> {
         //spacing
         const SizedBox(height: 27),
 
-        _buildQuestionSubTitle(context, questions![index]),
+        _buildQuestionSubTitle(context, questions[index]),
 
         const SizedBox(height: 17),
         //Answer View

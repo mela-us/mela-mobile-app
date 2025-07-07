@@ -86,15 +86,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> with TickerProvider
                   .heading
                   .copyWith(color: Theme.of(context).colorScheme.onPrimary)),
         ),
-        // actions: [
-        //   IconButton(
-        //     onPressed: () {
-        //       Navigator.of(context).pushNamed(Routes.searchStats);
-        //     },
-        //     icon: const Icon(Icons.search),
-        //     color: Theme.of(context).colorScheme.onPrimary,
-        //   ),
-        // ],
         bottom: TabBar(
           tabAlignment: TabAlignment.start,
           padding: const EdgeInsets.symmetric(horizontal: 10),
