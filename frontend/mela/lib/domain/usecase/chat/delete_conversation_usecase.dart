@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:mela/core/domain/usecase/use_case.dart';
-import 'package:mela/domain/entity/chat/history_item.dart';
 import 'package:mela/domain/repository/chat/chat_repository.dart';
 import 'package:mela/domain/usecase/user/logout_usecase.dart';
 import 'package:mela/domain/usecase/user_login/refresh_access_token_usecase.dart';

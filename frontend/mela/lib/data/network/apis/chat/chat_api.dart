@@ -31,12 +31,6 @@ class ChatApi {
   //================================================================
 
   Future<Conversation> sendMessageChat(ChatRequestParams params) async {
-    // print("================================ ở sendMessageAI API");
-    // await Future.delayed(const Duration(seconds: 4));
-    // return NormalMessage(
-    //     text:
-    //         """This is answer from AI Mela.\nPhân tích đề bài:\nĐề bài yêu cầu điền các số còn thiếu vào dãy số:\n5, 10, 15, ..., 25, ..., 35, ..., 45, 505, 10, 15.\nHướng làm:\n• Xác định công sai hoặc quy luật giữa các số.\n• Tìm công thức tổng quát nếu có.\n• Điền các số còn thiếu dựa trên quy luật.\n• Kiểm tra lại xem dãy số có lặp lại hoặc có phần riêng biệt không.\n• Xác định ý nghĩa của số 505 và số lặp lại ở cuối dãy.""",
-    //     isAI: true);
     final responseData = await _dioClient.post(
       EndpointsConst.sendMessageChat
           .replaceAll(':conversationId', params.conversationId!),
@@ -172,6 +166,7 @@ class ChatApi {
   Future<int> deleteConversation(String conversationId) async {
     final responseData = await _dioClient
         .delete(EndpointsConst.deleteConversation(conversationId));
+    print("Deleting $conversationId");
     return responseData.statusCode;
   }
 
