@@ -165,6 +165,7 @@ class _SidebarWidgetState extends State<SidebarWidget> {
               _scrollController.addListener(() async {
                 if (_scrollController.position.pixels ==
                     _scrollController.position.maxScrollExtent) {
+                  if (_historyStore.isLoadMore) return;
                   if (_historyStore.hasMore) {
                     DateTime timestamp = (_historyStore.timestamp!
                         .add(const Duration(seconds: 1)));
