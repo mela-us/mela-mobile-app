@@ -16,6 +16,19 @@ mixin _$HistoryStore on _HistoryStore, Store {
       (_$iisLoadingComputed ??= Computed<bool>(() => super.iisLoading,
               name: '_HistoryStore.iisLoading'))
           .value;
+  Computed<DateTime?>? _$timestampComputed;
+
+  @override
+  DateTime? get timestamp =>
+      (_$timestampComputed ??= Computed<DateTime?>(() => super.timestamp,
+              name: '_HistoryStore.timestamp'))
+          .value;
+  Computed<bool>? _$hasMoreComputed;
+
+  @override
+  bool get hasMore => (_$hasMoreComputed ??=
+          Computed<bool>(() => super.hasMore, name: '_HistoryStore.hasMore'))
+      .value;
 
   late final _$convsAtom = Atom(name: '_HistoryStore.convs', context: context);
 
@@ -29,6 +42,22 @@ mixin _$HistoryStore on _HistoryStore, Store {
   set convs(ObservableList<HistoryItem> value) {
     _$convsAtom.reportWrite(value, super.convs, () {
       super.convs = value;
+    });
+  }
+
+  late final _$responseAtom =
+      Atom(name: '_HistoryStore.response', context: context);
+
+  @override
+  HistoryResponse? get response {
+    _$responseAtom.reportRead();
+    return super.response;
+  }
+
+  @override
+  set response(HistoryResponse? value) {
+    _$responseAtom.reportWrite(value, super.response, () {
+      super.response = value;
     });
   }
 
@@ -48,6 +77,22 @@ mixin _$HistoryStore on _HistoryStore, Store {
     });
   }
 
+  late final _$isLoadMoreAtom =
+      Atom(name: '_HistoryStore.isLoadMore', context: context);
+
+  @override
+  bool get isLoadMore {
+    _$isLoadMoreAtom.reportRead();
+    return super.isLoadMore;
+  }
+
+  @override
+  set isLoadMore(bool value) {
+    _$isLoadMoreAtom.reportWrite(value, super.isLoadMore, () {
+      super.isLoadMore = value;
+    });
+  }
+
   late final _$isUnauthorizedAtom =
       Atom(name: '_HistoryStore.isUnauthorized', context: context);
 
@@ -64,12 +109,22 @@ mixin _$HistoryStore on _HistoryStore, Store {
     });
   }
 
-  late final _$getConvHistoryAsyncAction =
-      AsyncAction('_HistoryStore.getConvHistory', context: context);
+  late final _$firstTimeGetHistoryAsyncAction =
+      AsyncAction('_HistoryStore.firstTimeGetHistory', context: context);
 
   @override
-  Future<void> getConvHistory() {
-    return _$getConvHistoryAsyncAction.run(() => super.getConvHistory());
+  Future<void> firstTimeGetHistory() {
+    return _$firstTimeGetHistoryAsyncAction
+        .run(() => super.firstTimeGetHistory());
+  }
+
+  late final _$getMoreHistoryAsyncAction =
+      AsyncAction('_HistoryStore.getMoreHistory', context: context);
+
+  @override
+  Future<void> getMoreHistory(DateTime timestamp) {
+    return _$getMoreHistoryAsyncAction
+        .run(() => super.getMoreHistory(timestamp));
   }
 
   late final _$deleteConversationAsyncAction =
@@ -85,9 +140,13 @@ mixin _$HistoryStore on _HistoryStore, Store {
   String toString() {
     return '''
 convs: ${convs},
+response: ${response},
 isLoading: ${isLoading},
+isLoadMore: ${isLoadMore},
 isUnauthorized: ${isUnauthorized},
-iisLoading: ${iisLoading}
+iisLoading: ${iisLoading},
+timestamp: ${timestamp},
+hasMore: ${hasMore}
     ''';
   }
 }

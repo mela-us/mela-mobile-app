@@ -205,6 +205,15 @@ mixin _$ExamStore on _ExamStore, Store {
     return _$getExamAsyncAction.run(() => super.getExam());
   }
 
+  late final _$updateProgressAsyncAction =
+      AsyncAction('_ExamStore.updateProgress', context: context);
+
+  @override
+  Future<dynamic> updateProgress(DateTime start, DateTime end) {
+    return _$updateProgressAsyncAction
+        .run(() => super.updateProgress(start, end));
+  }
+
   late final _$_ExamStoreActionController =
       ActionController(name: '_ExamStore', context: context);
 

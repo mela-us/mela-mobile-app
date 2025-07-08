@@ -7,6 +7,7 @@ import 'package:mela/data/network/constants/endpoints_const.dart';
 import 'package:mela/data/network/dio_client.dart';
 import 'package:mela/data/securestorage/secure_storage_helper.dart';
 import 'package:mela/domain/entity/chat/history_item.dart';
+import 'package:mela/domain/entity/chat/history_response.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/domain/entity/message_chat/message_chat.dart';
 import 'package:mela/domain/entity/message_chat/normal_message.dart';
@@ -94,13 +95,20 @@ class ChatApi {
     return Conversation.fromJson(responseData);
   }
 
-  Future<List<HistoryItem>> getHistoryChat() async {
-    final data = {'order': 'desc', 'limit': '20'};
-    // final response = await _dioClient.get(EndpointsConst.getChatHistory,
-    //     queryParameters: data);
+  Future<HistoryResponse> getHistoryChat(DateTime? timestamp) async {
+    var data;
 
-    // final response = await _dioClient.getWithBody(EndpointsConst.getChatHistory,
-    //     data: data);
+    if (timestamp == null) {
+      data = {'order': 'desc', 'limit': '20'};
+    } else {
+      data = {
+        'order': 'desc',
+        'limit': '20',
+        'updatedAtBefore': timestamp.toIso8601String()
+      };
+      print("Data: ${data.toString()}");
+    }
+
     String? token = await _store.accessToken;
     if (token == null) {
       throw 401;
@@ -118,25 +126,23 @@ class ChatApi {
     try {
       HttpClientResponse response = await request.close();
       String responseBody = await utf8.decodeStream(response);
-      List<dynamic> dataList = jsonDecode(responseBody)["data"];
-      List<HistoryItem> temp =
-          dataList.map((item) => HistoryItem.fromJson(item)).toList();
       print("--API GET HISTORY--");
       print("Response: $responseBody");
+      var jsonResponse = await jsonDecode(responseBody);
+      HistoryResponse temp = HistoryResponse.fromJson(jsonResponse);
+
       return temp;
     } catch (e) {
       print("Error: $e");
     } finally {
       client.close();
     }
-    return [];
-    // if (response.statusCode == 200) {
-    //   print("--API GET HISTORY--");
-    //   print(response.data);
-    //   List<dynamic> dataList = response.data["data"];
-    //   List<HistoryItem> temp =
-    //       dataList.map((item) => HistoryItem.fromJson(item)).toList();
-    //   return temp;
+    return HistoryResponse(
+        object: '',
+        firstUpdateAt: DateTime.now(),
+        lastUpdateAt: DateTime.now(),
+        hasMore: false,
+        data: []);
   }
 
   Future<int> getTokenChat() async {

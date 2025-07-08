@@ -3,11 +3,12 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:mela/core/domain/usecase/use_case.dart';
 import 'package:mela/domain/entity/chat/history_item.dart';
+import 'package:mela/domain/entity/chat/history_response.dart';
 import 'package:mela/domain/repository/chat/chat_repository.dart';
 import 'package:mela/domain/usecase/user/logout_usecase.dart';
 import 'package:mela/domain/usecase/user_login/refresh_access_token_usecase.dart';
 
-class GetHistoryChatUsecase extends UseCase<List<HistoryItem>, void> {
+class GetHistoryChatUsecase extends UseCase<HistoryResponse, DateTime?> {
   final ChatRepository _chatRepository;
   final RefreshAccessTokenUsecase _refreshAccessTokenUsecase;
   final LogoutUseCase _logoutUseCase;
@@ -16,9 +17,9 @@ class GetHistoryChatUsecase extends UseCase<List<HistoryItem>, void> {
       this._logoutUseCase);
 
   @override
-  Future<List<HistoryItem>> call({required void params}) async {
+  Future<HistoryResponse> call({required DateTime? params}) async {
     try {
-      return _chatRepository.getHistoryChat();
+      return _chatRepository.getHistoryChat(params);
     } catch (e) {
       if (e is DioException) {
         if (e.response?.statusCode == 401) {

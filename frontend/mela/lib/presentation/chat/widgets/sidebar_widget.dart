@@ -48,10 +48,6 @@ class _SidebarWidgetState extends State<SidebarWidget> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    // if (!_historyStore.isLoading) {
-    //   _historyStore.getConvHistory();
-    // }
   }
 
   @override
@@ -165,11 +161,36 @@ class _SidebarWidgetState extends State<SidebarWidget> {
                 child: Text("Chưa có lịch sử nào"),
               );
             } else {
+              final ScrollController _scrollController = ScrollController();
+              _scrollController.addListener(() async {
+                if (_scrollController.position.pixels ==
+                    _scrollController.position.maxScrollExtent) {
+                  if (_historyStore.hasMore) {
+                    DateTime timestamp = (_historyStore.timestamp!
+                        .add(const Duration(seconds: 1)));
+
+                    await _historyStore.getMoreHistory(timestamp);
+                  }
+                }
+              });
               return ListView.builder(
-                itemCount: _historyStore.convs.length,
+                controller: _scrollController,
+                itemCount: _historyStore.convs.length +
+                    (_historyStore.isLoadMore ? 1 : 0),
                 itemBuilder: (context, index) {
-                  final item = _historyStore.convs[index];
-                  return _buildChatHistory(item);
+                  if (index == _historyStore.convs.length &&
+                      _historyStore.isLoadMore) {
+                    return const Padding(
+                        padding: EdgeInsets.only(bottom: 10),
+                        child: Center(
+                          child: LinearProgressIndicator(),
+                        ));
+                  }
+                  if (index < _historyStore.convs.length) {
+                    final item = _historyStore.convs[index];
+                    return _buildChatHistory(item);
+                  }
+                  return const SizedBox.shrink();
                 },
               );
             }
@@ -252,7 +273,7 @@ class _SidebarWidgetState extends State<SidebarWidget> {
                           bottom: 20, left: 20, right: 20),
                     ));
                   }
-                  await _historyStore.getConvHistory();
+                  await _historyStore.firstTimeGetHistory();
                 },
                 icon: const Icon(
                   Icons.delete,

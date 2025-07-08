@@ -230,7 +230,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         )); // Sidebar
                   }),
               // Call api
-              await _historyStore.getConvHistory()
+              await _historyStore.firstTimeGetHistory()
             },
         child: SizedBox(
           width: 30,
