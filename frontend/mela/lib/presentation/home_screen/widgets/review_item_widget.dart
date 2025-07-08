@@ -44,9 +44,8 @@ class ReviewItemWidget extends StatelessWidget {
                 reviseItem.itemId,
               );
               // Navigate to exercise screen
-              Navigator.of(context).pushNamed(
-                Routes.question,
-              );
+              Navigator.of(context)
+                  .pushNamed(Routes.question, arguments: {'main': true});
             }
 
             //Lecture navigating

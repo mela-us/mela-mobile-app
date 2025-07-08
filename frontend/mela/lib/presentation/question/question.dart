@@ -63,6 +63,8 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
   List<File> _selectedImages = [];
   final ImagePicker _imagePicker = ImagePicker();
+
+  bool? isFromMain;
   //----------------------------------------------------------------------------
   final TextEditingController _controller = TextEditingController();
 
@@ -73,6 +75,12 @@ class _QuestionScreenState extends State<QuestionScreen> {
     // TODO: implement initState
     super.initState();
     fabPos = Offset(50, screenHeight - 80);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final args =
+          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+      isFromMain = args?['main'];
+    });
 
     //Reaction to questions status.
     reaction((_) => _questionStore.loading, (loading) {
@@ -789,6 +797,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
   //Initialize overlay:---------------------------------------------------------
   void _initListOverlay(BuildContext context) async {
+    print('from main $isFromMain');
     questionListOverlay = OverlayEntry(builder: (BuildContext overlayContext) {
       return Stack(
         children: [
@@ -810,7 +819,12 @@ class _QuestionScreenState extends State<QuestionScreen> {
                       _singleQuestionStore.currentIndex, _selectedImages);
                   _singleQuestionStore.printAllAnswer();
                   questionListOverlay.remove();
-                  Navigator.of(context).pushReplacementNamed(Routes.result);
+                  Navigator.of(context).pushReplacementNamed(Routes.result,
+                      arguments: isFromMain != null
+                          ? {
+                              'main': true,
+                            }
+                          : null);
                 }
               },
               selectedImages: _selectedImages,
