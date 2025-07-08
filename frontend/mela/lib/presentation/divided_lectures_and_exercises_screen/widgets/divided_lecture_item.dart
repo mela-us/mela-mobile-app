@@ -30,13 +30,13 @@ class DividedLectureItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(3, 5),
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
+        //     blurRadius: 8,
+        //     offset: const Offset(3, 5),
+        //   ),
+        // ],
       ),
       child: GestureDetector(
         onTap: () async {

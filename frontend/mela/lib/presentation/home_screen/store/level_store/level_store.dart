@@ -17,7 +17,7 @@ class LevelStore = _LevelStore with _$LevelStore;
 abstract class _LevelStore with Store {
   //UseCase
   GetLevelListUsecase _getLevelListUsecase;
-  GetLecturesAreLearningUsecase _getLecturesAreLearningUsecase;
+  // GetLecturesAreLearningUsecase _getLecturesAreLearningUsecase;
   GetTopicsUsecase _getTopicsUsecase;
 
   @observable
@@ -43,8 +43,7 @@ abstract class _LevelStore with Store {
       fetchLevelsFuture.status == FutureStatus.pending;
 
   //Constructor
-  _LevelStore(this._getLevelListUsecase, this._getLecturesAreLearningUsecase,
-      this._getTopicsUsecase);
+  _LevelStore(this._getLevelListUsecase, this._getTopicsUsecase);
 
   @observable
   ObservableFuture<LectureList?> fetchLecturesAreLearningFuture =
@@ -59,26 +58,26 @@ abstract class _LevelStore with Store {
       ObservableFuture<TopicList?>(ObservableFuture.value(null));
 
   //Actions: -----------------------------------------------------------------------------------------------------------
-  @action
-  Future getAreLearningLectures() async {
-    final future = _getLecturesAreLearningUsecase.call(params: null);
-    fetchLecturesAreLearningFuture = ObservableFuture(future);
-    try {
-      lecturesAreLearningList = await future;
-      //this.errorString = '';
-    } catch (onError) {
-      lecturesAreLearningList = null;
-      if (onError is DioException) {
-        if (onError.response?.statusCode == 401) {
-          isUnAuthorized = true;
-          return;
-        }
-        errorString = DioExceptionUtil.handleError(onError);
-      } else {
-        errorString = "Có lỗi, thử lại sau";
-      }
-    }
-  }
+  // @action
+  // Future getAreLearningLectures() async {
+  //   final future = _getLecturesAreLearningUsecase.call(params: null);
+  //   fetchLecturesAreLearningFuture = ObservableFuture(future);
+  //   try {
+  //     lecturesAreLearningList = await future;
+  //     //this.errorString = '';
+  //   } catch (onError) {
+  //     lecturesAreLearningList = null;
+  //     if (onError is DioException) {
+  //       if (onError.response?.statusCode == 401) {
+  //         isUnAuthorized = true;
+  //         return;
+  //       }
+  //       errorString = DioExceptionUtil.handleError(onError);
+  //     } else {
+  //       errorString = "Có lỗi, thử lại sau";
+  //     }
+  //   }
+  // }
 
   @action
   Future getLevels() async {

@@ -7,7 +7,7 @@ import 'package:mela/domain/usecase/suggestion/update_suggestion_usecase.dart';
 abstract class LectureRepository {
   Future<LectureList> getLectures(String topicId);
   Future<Lecture> getLectureById(int id);
-  Future<LectureList> getLecturesAreLearning();
+  // Future<LectureList> getLecturesAreLearning();
   Future<ListSuggestion> getProposedNewSuggestion();
   Future<DividedLectureList> getDividedLectureList(String lectureId);
   Future<void> updateSuggestion(

@@ -7,6 +7,7 @@ import 'package:mela/data/network/constants/endpoints_const.dart';
 import 'package:mela/data/network/dio_client.dart';
 import 'package:mela/data/securestorage/secure_storage_helper.dart';
 import 'package:mela/domain/entity/chat/history_item.dart';
+import 'package:mela/domain/entity/chat/history_response.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
 import 'package:mela/domain/entity/message_chat/message_chat.dart';
 import 'package:mela/domain/entity/message_chat/normal_message.dart';
@@ -31,12 +32,6 @@ class ChatApi {
   //================================================================
 
   Future<Conversation> sendMessageChat(ChatRequestParams params) async {
-    // print("================================ ở sendMessageAI API");
-    // await Future.delayed(const Duration(seconds: 4));
-    // return NormalMessage(
-    //     text:
-    //         """This is answer from AI Mela.\nPhân tích đề bài:\nĐề bài yêu cầu điền các số còn thiếu vào dãy số:\n5, 10, 15, ..., 25, ..., 35, ..., 45, 505, 10, 15.\nHướng làm:\n• Xác định công sai hoặc quy luật giữa các số.\n• Tìm công thức tổng quát nếu có.\n• Điền các số còn thiếu dựa trên quy luật.\n• Kiểm tra lại xem dãy số có lặp lại hoặc có phần riêng biệt không.\n• Xác định ý nghĩa của số 505 và số lặp lại ở cuối dãy.""",
-    //     isAI: true);
     final responseData = await _dioClient.post(
       EndpointsConst.sendMessageChat
           .replaceAll(':conversationId', params.conversationId!),
@@ -100,13 +95,20 @@ class ChatApi {
     return Conversation.fromJson(responseData);
   }
 
-  Future<List<HistoryItem>> getHistoryChat() async {
-    final data = {'order': 'desc', 'limit': '20'};
-    // final response = await _dioClient.get(EndpointsConst.getChatHistory,
-    //     queryParameters: data);
+  Future<HistoryResponse> getHistoryChat(DateTime? timestamp) async {
+    var data;
 
-    // final response = await _dioClient.getWithBody(EndpointsConst.getChatHistory,
-    //     data: data);
+    if (timestamp == null) {
+      data = {'order': 'desc', 'limit': '20'};
+    } else {
+      data = {
+        'order': 'desc',
+        'limit': '20',
+        'updatedAtBefore': timestamp.toIso8601String()
+      };
+      print("Data: ${data.toString()}");
+    }
+
     String? token = await _store.accessToken;
     if (token == null) {
       throw 401;
@@ -124,25 +126,23 @@ class ChatApi {
     try {
       HttpClientResponse response = await request.close();
       String responseBody = await utf8.decodeStream(response);
-      List<dynamic> dataList = jsonDecode(responseBody)["data"];
-      List<HistoryItem> temp =
-          dataList.map((item) => HistoryItem.fromJson(item)).toList();
       print("--API GET HISTORY--");
       print("Response: $responseBody");
+      var jsonResponse = await jsonDecode(responseBody);
+      HistoryResponse temp = HistoryResponse.fromJson(jsonResponse);
+
       return temp;
     } catch (e) {
       print("Error: $e");
     } finally {
       client.close();
     }
-    return [];
-    // if (response.statusCode == 200) {
-    //   print("--API GET HISTORY--");
-    //   print(response.data);
-    //   List<dynamic> dataList = response.data["data"];
-    //   List<HistoryItem> temp =
-    //       dataList.map((item) => HistoryItem.fromJson(item)).toList();
-    //   return temp;
+    return HistoryResponse(
+        object: '',
+        firstUpdateAt: DateTime.now(),
+        lastUpdateAt: DateTime.now(),
+        hasMore: false,
+        data: []);
   }
 
   Future<int> getTokenChat() async {
@@ -172,6 +172,7 @@ class ChatApi {
   Future<int> deleteConversation(String conversationId) async {
     final responseData = await _dioClient
         .delete(EndpointsConst.deleteConversation(conversationId));
+    print("Deleting $conversationId");
     return responseData.statusCode;
   }
 

@@ -39,10 +39,10 @@ class _InitialMessageTileState extends State<InitialMessageTile> {
         final isFirstTimeIntitialMessage =
             await _sharedPreferenceHelper.isFirstTimeIntitialMessage;
         if (mounted && showCaseContext != null && isFirstTimeIntitialMessage) {
-          ShowCaseWidget.of(showCaseContext!).startShowCase([
-            _keyRelativeTerm,
-            _keySubmitAnswer,
-          ]);
+          // ShowCaseWidget.of(showCaseContext!).startShowCase([
+          //   _keyRelativeTerm,
+          //   _keySubmitAnswer,
+          // ]);
         }
       });
     });
@@ -383,8 +383,8 @@ class _InitialMessageTileState extends State<InitialMessageTile> {
                         backgroundColor: Theme.of(context)
                             .colorScheme
                             .secondaryContainer, // Màu nền khác với background
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
+                        padding:
+                            const EdgeInsets.only(left: 8, right: 8, top: 4),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),

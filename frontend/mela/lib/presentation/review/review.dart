@@ -15,6 +15,7 @@ import 'package:mela/presentation/review/widgets/draggable_ai_button.dart';
 import 'package:mela/presentation/review/widgets/list_item_tile_widget.dart';
 import 'package:mela/presentation/thread_chat_learning/store/thread_chat_learning_store/thread_chat_learning_store.dart';
 import 'package:mela/utils/locale/app_localization.dart';
+import 'package:mela/utils/routes/routes.dart';
 
 import '../../constants/enum.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -499,9 +500,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(Dimens.answerTileRadius),
-        boxShadow: [
-          Layout.practiceBoxShadow,
-        ],
+        // boxShadow: [
+        //   Layout.practiceBoxShadow,
+        // ],
       ),
       height: Dimens.answerTileHeight,
       child: Row(
@@ -558,9 +559,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
   BoxDecoration decorationWithShadow = BoxDecoration(
     color: Colors.white,
     borderRadius: BorderRadius.circular(Dimens.textContainerRadius),
-    boxShadow: [
-      Layout.practiceBoxShadow,
-    ],
+    // boxShadow: [
+    //   Layout.practiceBoxShadow,
+    // ],
   );
 
   //Others:---------------------------------------------------------------------

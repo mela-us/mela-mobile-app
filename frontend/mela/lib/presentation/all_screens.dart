@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/core/widgets/buid_no_internet_widget.dart';
 import 'package:mela/di/service_locator.dart';
+import 'package:mela/presentation/examination/exam_screen.dart';
 import 'package:mela/presentation/home_screen/home_screen.dart';
 import 'package:mela/presentation/home_screen/store/level_store/level_store.dart';
 import 'package:mela/presentation/stats_history/stats.dart';
 import 'package:mela/presentation/personal/personal.dart';
-import 'package:mela/presentation/tutor/exam_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vibration/vibration.dart';
 
@@ -17,6 +17,8 @@ import '../constants/assets.dart';
 import '../core/widgets/custom_navigation_bar.dart';
 import '../utils/notifications/notification_service.dart';
 import 'chat/chat_screen.dart';
+import 'examination/controller/exam_screen_controller.dart';
+import 'examination/widgets/exam_change_tab_overlay_widget.dart';
 
 class AllScreens extends StatefulWidget {
   @override
@@ -31,20 +33,23 @@ class _AllScreensState extends State<AllScreens> {
   int _previousIndex = -1;
   // late PageController _pageController;
   // List of screens for each tab
-  final List<Widget> _screens = [
-    TutorScreen(),
-    //tạm thời để Tutor Screen đây thôi, tutor screen chắc không phải sử dụng,
-    // dự kiến chỉ còn 3 screen vì bỏ Statistics vào Personal
-    StatisticsScreen(),
-    HomeScreen(),
-    ChatScreen(),
-    PersonalScreen(),
-  ];
+  final ExamScreenController _examScreenController = ExamScreenController();
+
+  late List<Widget> _screens = [];
   late final StreamSubscription<List<ConnectivityResult>> subscription;
 
   @override
   void initState() {
     super.initState();
+    //
+    _screens = [
+      ExamScreen(controller: _examScreenController),
+      const StatisticsScreen(),
+      const HomeScreen(),
+      ChatScreen(),
+      const PersonalScreen(),
+    ];
+    //
     // _pageController = PageController();
     _getNotificationPref();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -72,19 +77,32 @@ class _AllScreensState extends State<AllScreens> {
   }
 
   void onTabTapped(int index) {
+    final isLeavingExam = _currentIndex == 0 && index != 0;
+
+    if (isLeavingExam) {
+      _examScreenController.showExitOverlay?.call(() {
+        setState(() {
+          _levelStore.resetErrorString();
+          _previousIndex = _currentIndex;
+          _currentIndex = index;
+          middle_tab_chosen = index == 2;
+        });
+        Vibration.vibrate(duration: 60);
+      });
+
+      return;
+    }
+
     setState(() {
-      //eg: turnoff wifi,have errorString in _topicStore, change other tab, then turn on wifi, go back coureses screen, it will need to set errorString to empty
       _levelStore.resetErrorString();
       _previousIndex = _currentIndex;
       _currentIndex = index;
-      if (index != 2) {
-        middle_tab_chosen = false;
-      } else {
-        middle_tab_chosen = true;
-      }
+      middle_tab_chosen = index == 2;
     });
+
     Vibration.vibrate(duration: 60);
   }
+
 
   void showDialogNoInternet() {
     showModalBottomSheet(
@@ -165,20 +183,6 @@ class _AllScreensState extends State<AllScreens> {
           },
           child: _screens[_currentIndex], // Load trực tiếp màn hình đích
         ),
-        // bottomNavigationBar: BottomAppBar(
-        //   shape: CircularNotchedRectangle(),
-        //   notchMargin: 6,
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-        //     children: [
-        //       IconButton(onPressed: () {}, icon: Icon(Icons.home)),
-        //       IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
-        //       SizedBox(width: 48), // chừa chỗ cho FAB
-        //       IconButton(onPressed: () {}, icon: Icon(Icons.person)),
-        //       IconButton(onPressed: () {}, icon: Icon(Icons.info)),
-        //     ],
-        //   ),
-        // ),
         bottomNavigationBar: CustomNavigationBar(
             currentIndex: _currentIndex,
             screens: _screens,

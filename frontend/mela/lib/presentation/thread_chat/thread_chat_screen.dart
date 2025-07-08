@@ -147,11 +147,18 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
 
   void _scrollToBottom() {
     if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.fastEaseInToSlowEaseOut,
-      );
+      // Kiểm tra xem có cần scroll không
+      double currentPosition = _scrollController.position.pixels;
+      double maxPosition = _scrollController.position.maxScrollExtent;
+
+      // Chỉ scroll nếu không ở bottom
+      if (currentPosition < maxPosition - 50) {
+        _scrollController.animateTo(
+          maxPosition,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOutCubic,
+        );
+      }
     }
   }
 
@@ -224,45 +231,49 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
                   Expanded(
                     child: _threadChatStore.currentConversation.messages.isEmpty
                         ? _buildDefaultBodyInNewConversation()
-                        : ScrollbarTheme(
-                            data: ScrollbarThemeData(
-                              thumbColor:
-                                  MaterialStateProperty.all(Colors.grey),
-                              trackColor:
-                                  MaterialStateProperty.all(Colors.yellow),
-                              radius: const Radius.circular(20),
-                              thickness: MaterialStateProperty.all(4),
-                            ),
-                            child: Scrollbar(
-                              controller: _scrollController,
-                              child: SingleChildScrollView(
-                                //Must use SingleChildScrollView
+                        : Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: ScrollbarTheme(
+                              data: ScrollbarThemeData(
+                                thumbColor:
+                                    MaterialStateProperty.all(Colors.grey),
+                                trackColor:
+                                    MaterialStateProperty.all(Colors.yellow),
+                                radius: const Radius.circular(20),
+                                thickness: MaterialStateProperty.all(4),
+                              ),
+                              child: Scrollbar(
                                 controller: _scrollController,
-                                child: Column(children: [
-                                  if (_threadChatStore
-                                      .isLoadingGetOlderMessages) ...[
-                                    Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10, horizontal: 8),
-                                        child: ListSkeleton(
-                                            isReverse: _threadChatStore
-                                                .currentConversation
-                                                .messages
-                                                .first
-                                                .isAI))
-                                  ],
-                                  ..._threadChatStore
-                                      .currentConversation.messages
-                                      .map((message) => MessageChatTitle(
-                                          currentMessage: message))
-                                      .toList()
-                                ]),
+                                child: SingleChildScrollView(
+                                  //Must use SingleChildScrollView
+                                  controller: _scrollController,
+                                  child: Column(children: [
+                                    if (_threadChatStore
+                                        .isLoadingGetOlderMessages) ...[
+                                      Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 8),
+                                          child: ListSkeleton(
+                                              isReverse: _threadChatStore
+                                                  .currentConversation
+                                                  .messages
+                                                  .first
+                                                  .isAI))
+                                    ],
+                                    ..._threadChatStore
+                                        .currentConversation.messages
+                                        .map((message) => MessageChatTitle(
+                                            currentMessage: message))
+                                        .toList()
+                                  ]),
+                                ),
                               ),
                             ),
                           ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
+                    padding:
+                        const EdgeInsets.only(bottom: 10, left: 8, right: 8),
                     child: ChatBox(),
                   )
                 ],

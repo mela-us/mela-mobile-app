@@ -6,14 +6,14 @@ class EndpointsConst {
   static const String saveResult = "/api/exercises/save";
   // base url
   //static const String baseUrl = "http://jsonplaceholder.typicode.com";
-  // static const String baseUrl = "https://api.mela.guru";
-  static const String baseUrl = "https://api.uat.mela.guru";
+  static const String baseUrl = "https://api.mela.guru";
+  // static const String baseUrl = "https://api.uat.mela.guru";
 
   // receiveTimeout
-  static const int receiveTimeout = 30000;
+  static const int receiveTimeout = 60000;
 
   // connectTimeout
-  static const int connectionTimeout = 30000;
+  static const int connectionTimeout = 60000;
 
   // booking endpoints
   static const String getPosts = "/posts";
@@ -24,7 +24,7 @@ class EndpointsConst {
   static const String getTopicLectureInLevel = "/api/lectures";
   static const String getTopics = "/api/topics";
   static const String getLectures = "/api/lectures";
-  static const String getLecturesAreLearning = "/api/lectures/recent";
+  //static const String getLecturesAreLearning = "/api/lectures/recent";
   static const String getLevels = "/api/levels";
   static const String getDividedLectures = "/api/lectures/:lectureId/sections";
   static const String getExercises = "/api/lectures/:lectureId/exercises";
@@ -88,4 +88,10 @@ class EndpointsConst {
   //question upload images
   static const String getPresignUrlForQuestion =
       "/api/exercise-histories/files/upload-url";
+
+  //test
+  static const String getExam = "/api/tests";
+  //test upload images
+  static const String getPresignUrlForExam =
+      "/api/test-histories/files/upload-url";
 }

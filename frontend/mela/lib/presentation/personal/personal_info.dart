@@ -286,13 +286,13 @@ class _PersonalInfoState extends State<PersonalInfo> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8.0),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 4.0,
-            offset: Offset(0, 2),
-          ),
-        ],
+        // boxShadow: const [
+        //   BoxShadow(
+        //     color: Colors.black26,
+        //     blurRadius: 4.0,
+        //     offset: Offset(0, 2),
+        //   ),
+        // ],
       ),
       child: Padding(
         padding: const EdgeInsets.only(right: 0.0, left: 1.0),

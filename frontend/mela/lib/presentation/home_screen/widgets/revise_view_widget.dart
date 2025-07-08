@@ -163,19 +163,15 @@ class _ReviseViewWidgetState extends State<ReviseViewWidget> {
   }
 
   Widget _buildRevisionView() {
-    if (_reviseStore.revisionItemList.length == 0) {
-      print(" Empty eeyyyy!");
-    } else {
-      print("not empty _${_reviseStore.revisionItemList.length}");
-    }
     return _reviseStore.revisionItemList.length != 0
         ? _buildRoadList()
         : Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              EmptyIconWidget(
+              const EmptyIconWidget(
                 mainMessage: "Không có bài ôn cho hôm nay",
-                secondaryMessage: "Hãy học thêm các chủ đề để hệ thống\nđề xuất bài ôn lại",
+                secondaryMessage:
+                    "Hãy học thêm các chủ đề để hệ thống\nđề xuất bài ôn lại",
                 offset: 10,
               ),
               TextButton(
@@ -183,11 +179,11 @@ class _ReviseViewWidgetState extends State<ReviseViewWidget> {
                 child: Text(
                   "Học tự do",
                   style: Theme.of(context).textTheme.subHeading.copyWith(
-                    color: Theme.of(context).colorScheme.tertiary,
-                    decoration: TextDecoration.underline,
-                    decorationColor: Theme.of(context).colorScheme.tertiary,
-                    decorationThickness: 1.5,
-                  ),
+                        color: Theme.of(context).colorScheme.tertiary,
+                        decoration: TextDecoration.underline,
+                        decorationColor: Theme.of(context).colorScheme.tertiary,
+                        decorationThickness: 1.5,
+                      ),
                 ),
               )
             ],

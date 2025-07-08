@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
+import 'package:mela/core/widgets/icon_widget/error_icon_widget.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/presentation/divided_lectures_and_exercises_screen/store/exercise_store.dart';
 import 'package:mela/presentation/divided_lectures_and_exercises_screen/widgets/exercise_list_item.dart';
@@ -10,7 +11,8 @@ import '../../core/widgets/image_progress_indicator.dart';
 import 'widgets/divided_lecture_list_item.dart';
 
 class DividedLecturesAndExercisesScreen extends StatefulWidget {
-  DividedLecturesAndExercisesScreen({super.key});
+  int initialTabIndex; // Default to the first tab displayed
+  DividedLecturesAndExercisesScreen({super.key, this.initialTabIndex = 0});
   @override
   _DividedLecturesAndExercisesScreenState createState() =>
       _DividedLecturesAndExercisesScreenState();
@@ -43,6 +45,10 @@ class _DividedLecturesAndExercisesScreenState
         }
       },
     );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Set the initial tab index after the first frame is rendered
+      _tabController.animateTo(widget.initialTabIndex);
+    });
   }
 
   @override
@@ -177,17 +183,13 @@ class _DividedLecturesAndExercisesScreenState
                               ExerciseListItem(),
                             ]
                           : [
-                              Center(
-                                child: Text(
-                                  _exerciseStore.errorString,
-                                  style: const TextStyle(color: Colors.red),
-                                ),
+                              const ErrorIconWidget(
+                                message:
+                                    "Đang có lỗi. Bạn chờ Mela một chút nhé!",
                               ),
-                              Center(
-                                child: Text(
-                                  _exerciseStore.errorString,
-                                  style: const TextStyle(color: Colors.red),
-                                ),
+                              const ErrorIconWidget(
+                                message:
+                                    "Đang có lỗi. Bạn chờ Mela một chút nhé!",
                               ),
                             ],
                     );

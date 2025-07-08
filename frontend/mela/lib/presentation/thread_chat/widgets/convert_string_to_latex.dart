@@ -60,7 +60,7 @@ class _ConvertStringToLatexState extends State<ConvertStringToLatex> {
   List<Map<String, String>> _parseContent(String content) {
     List<Map<String, String>> result = [];
 
-    // Tìm tất cả LaTeX blocks \[...\]
+    // Tìm tất cả LaTeX blocks \[...\], tức \\ là = \, và \[ = [, tìm \\\[  là tìm \[
     final blockLatexRegex = RegExp(r'\\\[(.*?)\\\]', dotAll: true);
 
     List<_LatexMatch> blockMatches = [];
@@ -124,6 +124,12 @@ class _ConvertStringToLatexState extends State<ConvertStringToLatex> {
   }
 
   Widget _buildLatexBlock(String latex) {
+    // Làm sạch chuỗi LaTeX: loại bỏ \n và khoảng trắng thừa
+    String cleanedLatex = latex
+        .replaceAll('\\n', ' ') // Thay thế \n bằng space
+        .replaceAll(
+            RegExp(r'\s+'), ' ') // Thay thế nhiều space liên tiếp bằng 1 space
+        .trim(); // Loại bỏ khoảng trắng đầu/cuối
     return Center(
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 2),
@@ -153,7 +159,7 @@ class _ConvertStringToLatexState extends State<ConvertStringToLatex> {
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Math.tex(
-            latex,
+            cleanedLatex,
             textStyle: Theme.of(context).textTheme.displaySmall!,
             mathStyle: MathStyle.display,
           ),
@@ -290,20 +296,20 @@ class _MarkdownWithInlineLatexState extends State<_MarkdownWithInlineLatex> {
 
     switch (level) {
       case 1:
-        fontSize = 18.0;
+        fontSize = 22.0;
         fontWeight = FontWeight.bold;
         break;
       case 2:
-        fontSize = 16.0;
+        fontSize = 10.0;
         fontWeight = FontWeight.bold;
         break;
       case 3:
-        fontSize = 14.0;
-        fontWeight = FontWeight.w600;
+        fontSize = 18.0;
+        fontWeight = FontWeight.bold;
         break;
       default:
-        fontSize = 12.0;
-        fontWeight = FontWeight.w600;
+        fontSize = 16.0;
+        fontWeight = FontWeight.bold;
     }
 
     return Padding(

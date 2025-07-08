@@ -16,8 +16,8 @@ class SubmitResultParams {
   Map<String, dynamic> toJson() {
     return {
       'exerciseId': exerciseId,
-      'startAt': startAt.toIso8601String(),
-      'endAt': endAt.toIso8601String(),
+      'startedAt': startAt.toIso8601String(),
+      'completedAt': endAt.toIso8601String(),
       'answers': answers.map((answer) => answer.toJson()).toList(),
     };
   }

@@ -117,6 +117,9 @@ class _ResultScreenState extends State<ResultScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+    final bool? isFromMain = args?['main'];
     return Observer(
       builder: (context) {
         if (_questionStore.saving) {
@@ -143,9 +146,14 @@ class _ResultScreenState extends State<ResultScreen> {
               if (_exerciseStore.currentLecture != null) {
                 await _exerciseStore.getExercisesByLectureId();
               }
-              await _levelStore.getAreLearningLectures();
-              if (mounted) {
-                Navigator.of(context).pop();
+              //await _levelStore.getAreLearningLectures();
+              if (context.mounted) {
+                if (isFromMain != null && isFromMain) {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, Routes.allScreens, (route) => false);
+                } else {
+                  Navigator.of(context).pop();
+                }
               }
             },
           ),

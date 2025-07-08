@@ -6,7 +6,6 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/core/widgets/icon_widget/error_icon_widget.dart';
 import 'package:mela/core/widgets/image_progress_indicator.dart';
 import '../../core/widgets/icon_widget/empty_icon_widget.dart';
-import '../../domain/entity/stat/progress_list.dart';
 import 'widgets/expandable_list.dart';
 
 import 'store/stats_store.dart';
@@ -81,22 +80,15 @@ class _StatisticsScreenState extends State<StatisticsScreen> with TickerProvider
         scrolledUnderElevation: 0,
         title: Padding(
           padding: const EdgeInsets.only(left: 10),
-          child: Text("Thống kê",
+          child: Text("Lịch sử",
               style: Theme.of(context)
                   .textTheme
                   .heading
                   .copyWith(color: Theme.of(context).colorScheme.onPrimary)),
         ),
-        // actions: [
-        //   IconButton(
-        //     onPressed: () {
-        //       Navigator.of(context).pushNamed(Routes.searchStats);
-        //     },
-        //     icon: const Icon(Icons.search),
-        //     color: Theme.of(context).colorScheme.onPrimary,
-        //   ),
-        // ],
         bottom: TabBar(
+          tabAlignment: TabAlignment.start,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           controller: _tabController,
           isScrollable: levelNames.length > 3,
           labelColor: Theme.of(context).colorScheme.tertiary,
@@ -138,119 +130,4 @@ class _StatisticsScreenState extends State<StatisticsScreen> with TickerProvider
       backgroundColor: Theme.of(context).colorScheme.appBackground,
     );
   }
-}
-
-ProgressList getMockStats() {
-  const responseData ={
-    "message": "Get statistic successfully!",
-    "total": 1,
-    "data": [
-      {
-        "type": "EXCERCISE",
-        "latestDate": "2025-03-26T07:56:49.512",
-        "topicName": "Hình học",
-        "lectureName": "Vị trí và hình khối",
-        "exercise": {
-          "exerciseName": "Vị trí và hình khối",
-          "latestScore": 80,
-          "scoreRecords": [
-            {
-              "date": "2025-03-26T07:52:29.918",
-              "score": 80
-            },
-            {
-              "date": "2025-03-26T06:51:43.987",
-              "score": 60
-            },
-            {
-              "date": "2025-03-26T06:51:43.987",
-              "score": 50
-            },
-            {
-              "date": "2025-03-26T06:51:43.987",
-              "score": 70
-            },
-          ]
-        },
-        "section": null,
-      },
-      {
-        "type": "SECTION",
-        "latestDate": "2025-03-26T07:56:49.512",
-        "topicName": "Hình học",
-        "lectureName": "Vị trí và hình khối",
-        "exercise": null,
-        "section": {
-          "sectionName": "Vị trí và hình khối",
-          "date": "2025-03-26T07:56:49.512"
-        }
-      },
-      {
-        "type": "SECTION",
-        "latestDate": "2025-03-26T07:56:49.512",
-        "topicName": "Số học",
-        "lectureName": "Số và phép cộng, trừ trong phạm vi 10",
-        "exercise": null,
-        "section": {
-          "sectionName": "Số và phép cộng, trừ trong phạm vi 10",
-          "date": "2025-03-26T07:56:49.512"
-        }
-      },
-      {
-        "type": "EXERCISE",
-        "latestDate": "2025-03-26T07:52:29.918",
-        "topicName": "Hình học",
-        "lectureName": "Hình học và đo lường",
-        "exercise": {
-          "exerciseName": "Hình học và Đo lường",
-          "latestScore": 80,
-          "scoreRecords": [
-            {
-              "date": "2025-03-26T07:52:29.918",
-              "score": 80
-            },
-            {
-              "date": "2025-03-26T06:51:43.987",
-              "score": 90
-            },
-            {
-              "date": "2025-03-26T06:51:43.987",
-              "score": 80
-            },
-            {
-              "date": "2025-03-26T06:51:43.987",
-              "score": 70
-            },
-            {
-              "date": "2025-03-26T06:51:43.987",
-              "score": 60
-            },
-            {
-              "date": "2025-03-26T06:51:43.987",
-              "score": 40
-            },
-            {
-              "date": "2025-03-26T06:51:43.987",
-              "score": 50
-            },
-          ]
-        },
-        "section": null
-      },
-      {
-        "type": "SECTION",
-        "latestDate": "2025-03-25T13:47:57.723",
-        "topicName": "Hình học",
-        "lectureName": "Vị trí và hình khối",
-        "exercise": null,
-        "section": {
-          "sectionName": "Hình khối nâng cao",
-          "date": "2025-03-25T13:47:57.723"
-        }
-      },
-    ]
-  };
-  print("================================MockStats");
-  print(responseData);
-  return ProgressList.fromJson(responseData);
 }

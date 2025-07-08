@@ -14,10 +14,13 @@ class GeneralInfor extends StatelessWidget {
     if (inforList.isEmpty) {
       return "Chưa có dữ liệu";
     }
-    String result = "- Các chủ đề:";
+    String result = "";
     for (int i = 0; i < inforList.length; i++) {
       result +=
-          "\n${i + 1}. ${inforList[i].topicName}: ${inforList[i].lectureList.lectures.length} bài học.";
+          "${i + 1}. ${inforList[i].topicName}: ${inforList[i].lectureList.lectures.length} bài học.";
+      if (i < inforList.length - 1) {
+        result += "\n";
+      }
     }
     return result;
   }

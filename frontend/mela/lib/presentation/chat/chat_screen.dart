@@ -69,8 +69,9 @@ class _ChatScreenState extends State<ChatScreen> {
         final isFirstTimeGoToChat =
             await _sharedPrefsHelper.isFirstTimeGoToChat;
         if (mounted && showCaseContext != null && isFirstTimeGoToChat) {
-          ShowCaseWidget.of(showCaseContext!)
-              .startShowCase([_chatBoxKey, _relativeTermKey]);
+          // ShowCaseWidget.of(showCaseContext!)
+          //     .startShowCase([_chatBoxKey, _relativeTermKey]);
+          ShowCaseWidget.of(showCaseContext!).startShowCase([_chatBoxKey]);
         }
       });
     });
@@ -114,29 +115,23 @@ class _ChatScreenState extends State<ChatScreen> {
                 ],
               ),
               backgroundColor: Theme.of(context).colorScheme.appBackground,
-              body: SingleChildScrollView(
-                child: _buildDefaultBody(context),
-              ));
+              body: _buildDefaultBody(context));
         });
   }
 
   //Build component:------------------------------------------------------------
   Widget _buildTitle(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: Dimens.horizontal_padding),
-      child: Row(
-        children: [
-          _buildHistoryButton(context),
-          Expanded(
-            child: Align(
-              alignment: Alignment.center,
-              child: Padding(
-                  padding: const EdgeInsets.only(right: 40),
-                  child: _buildTextTitle(context)),
-            ),
+    return Row(
+      children: [
+        _buildHistoryButton(context),
+        const SizedBox(width: 20),
+        Expanded(
+          child: Align(
+            alignment: Alignment.center,
+            child: _buildTextTitle(context),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -144,10 +139,10 @@ class _ChatScreenState extends State<ChatScreen> {
     // final double screenHeight = MediaQuery.of(context).size.height;
     return Padding(
       // padding: EdgeInsets.fromLTRB(16.0, (screenHeight - 610) * 0.5, 16.0, 10),
-      padding: const EdgeInsets.fromLTRB(16.0, 40, 16.0, 10),
+      padding: const EdgeInsets.fromLTRB(16.0, 16, 16.0, 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.waving_hand,
               color: Theme.of(context).colorScheme.buttonYesBgOrText, size: 48),
@@ -170,7 +165,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   .textTheme
                   .aiExplainStyle
                   .copyWith(color: Theme.of(context).colorScheme.secondary)),
-          const SizedBox(height: 15),
+          const SizedBox(height: 30),
           ShowcaseCustom(
             keyWidget: _chatBoxKey,
             isHideActionWidget: true,
@@ -179,22 +174,23 @@ class _ChatScreenState extends State<ChatScreen> {
                 "Chụp ảnh hoặc nhập bài toán vào ô chat, Mela sẽ hỗ trợ ngay!",
             child: ChatBox(isFirstChatScreen: true),
           ),
-          const SizedBox(height: 15),
-          ShowcaseCustom(
-            keyWidget: _relativeTermKey,
-            title: "Câu hỏi nhanh",
-            description: "Lựa chọn những câu hỏi gợi ý để bắt đầu",
-            child: ListView(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                _buildListItem("Cách giải phương trình bậc 2 một ẩn"),
-                _buildListItem("Hệ thức Vi-et là gì?"),
-                _buildListItem("Hướng dẫn mình giải bài toán này"),
-                _buildListItem("Nhận xét bài làm của mình"),
-              ],
-            ),
-          ),
+          const SizedBox(height: 80),
+          // const SizedBox(height: 15),
+          // ShowcaseCustom(
+          //   keyWidget: _relativeTermKey,
+          //   title: "Câu hỏi nhanh",
+          //   description: "Lựa chọn những câu hỏi gợi ý để bắt đầu",
+          //   child: ListView(
+          //     shrinkWrap: true,
+          //     physics: const NeverScrollableScrollPhysics(),
+          //     children: [
+          //       _buildListItem("Cách giải phương trình bậc 2 một ẩn"),
+          //       _buildListItem("Hệ thức Vi-et là gì?"),
+          //       _buildListItem("Hướng dẫn mình giải bài toán này"),
+          //       _buildListItem("Nhận xét bài làm của mình"),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );
@@ -234,7 +230,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         )); // Sidebar
                   }),
               // Call api
-              await _historyStore.getConvHistory()
+              await _historyStore.firstTimeGetHistory()
             },
         child: SizedBox(
           width: 30,

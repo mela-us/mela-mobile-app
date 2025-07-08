@@ -44,9 +44,8 @@ class ReviewItemWidget extends StatelessWidget {
                 reviseItem.itemId,
               );
               // Navigate to exercise screen
-              Navigator.of(context).pushNamed(
-                Routes.question,
-              );
+              Navigator.of(context)
+                  .pushNamed(Routes.question, arguments: {'main': true});
             }
 
             //Lecture navigating
@@ -245,13 +244,13 @@ class ReviewItemWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.onTertiary,
           borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
-              blurRadius: 6,
-              offset: const Offset(3, 5),
-            ),
-          ],
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
+          //     blurRadius: 6,
+          //     offset: const Offset(3, 5),
+          //   ),
+          // ],
         ),
         child: _buildItemCard(context, name, topicName, levelName, itemType));
   }

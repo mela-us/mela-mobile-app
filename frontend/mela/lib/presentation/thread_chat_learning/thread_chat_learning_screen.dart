@@ -33,7 +33,7 @@ class _ThreadChatLearningScreenState extends State<ThreadChatLearningScreen> {
   final ScrollController _scrollController = ScrollController();
   late ReactionDisposer disposerSendMessage;
   // late ReactionDisposer disposerGetConversation;
-    final SingleQuestionStore _singleQuestionStore = getIt<SingleQuestionStore>();
+  final SingleQuestionStore _singleQuestionStore = getIt<SingleQuestionStore>();
 
   @override
   void initState() {
@@ -122,8 +122,9 @@ class _ThreadChatLearningScreenState extends State<ThreadChatLearningScreen> {
           },
         ),
         actions: [
-           Observer(builder: (context) {
-            return ChatTokenWidget(tokenChat: _threadChatLearningStore.tokenChat);
+          Observer(builder: (context) {
+            return ChatTokenWidget(
+                tokenChat: _threadChatLearningStore.tokenChat);
           }),
           Observer(builder: (context) {
             return IconButton(
@@ -141,12 +142,12 @@ class _ThreadChatLearningScreenState extends State<ThreadChatLearningScreen> {
           })
         ],
         title: Text(
-            "Câu hỏi số ${_singleQuestionStore.currentIndex + 1}",
-            style: Theme.of(context)
-                .textTheme
-                .heading
-                .copyWith(color: Theme.of(context).colorScheme.primary),
-          ),
+          "Câu hỏi số ${_singleQuestionStore.currentIndex + 1}",
+          style: Theme.of(context)
+              .textTheme
+              .heading
+              .copyWith(color: Theme.of(context).colorScheme.primary),
+        ),
       ),
       body: Observer(builder: (context) {
         return Column(
@@ -155,31 +156,34 @@ class _ThreadChatLearningScreenState extends State<ThreadChatLearningScreen> {
               child: _threadChatLearningStore
                       .currentConversation.messages.isEmpty
                   ? _buildDefaultBodyInNewConversation()
-                  : ScrollbarTheme(
-                      data: ScrollbarThemeData(
-                        thumbColor: MaterialStateProperty.all(Colors.grey),
-                        trackColor: MaterialStateProperty.all(Colors.yellow),
-                        radius: const Radius.circular(20),
-                        thickness: MaterialStateProperty.all(4),
-                      ),
-                      child: Scrollbar(
-                        controller: _scrollController,
-                        child: SingleChildScrollView(
-                          //Must use SingleChildScrollView
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: ScrollbarTheme(
+                        data: ScrollbarThemeData(
+                          thumbColor: MaterialStateProperty.all(Colors.grey),
+                          trackColor: MaterialStateProperty.all(Colors.yellow),
+                          radius: const Radius.circular(20),
+                          thickness: MaterialStateProperty.all(4),
+                        ),
+                        child: Scrollbar(
                           controller: _scrollController,
-                          child: Column(children: [
-                            ..._threadChatLearningStore
-                                .currentConversation.messages
-                                .map((message) =>
-                                    MessageChatTitle(currentMessage: message))
-                                .toList()
-                          ]),
+                          child: SingleChildScrollView(
+                            //Must use SingleChildScrollView
+                            controller: _scrollController,
+                            child: Column(children: [
+                              ..._threadChatLearningStore
+                                  .currentConversation.messages
+                                  .map((message) =>
+                                      MessageChatTitle(currentMessage: message))
+                                  .toList()
+                            ]),
+                          ),
                         ),
                       ),
                     ),
             ),
             const Padding(
-              padding: EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.only(bottom: 10, left: 8, right: 8),
               child: ChatBoxLearning(),
             )
           ],

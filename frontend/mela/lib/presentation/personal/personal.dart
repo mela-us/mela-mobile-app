@@ -3,7 +3,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/core/widgets/icon_widget/error_icon_widget.dart';
 import 'package:mela/presentation/personal/level_selector.dart';
 import 'package:mela/presentation/personal/notification_setting/notification_setting.dart';
-import 'package:mela/presentation/personal/widgets/ui_items/decorative_ring.dart';
 import 'package:mela/presentation/personal/widgets/headings/personal_heading.dart';
 import 'package:mela/presentation/signup_login_screen/login_or_signup_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -69,24 +68,7 @@ class _PersonalScreenState extends State<PersonalScreen> with SingleTickerProvid
                 message: "Đã có lỗi xảy ra. Vui lòng thử lại",
               );
             }
-            return Stack(alignment: Alignment.center, children: [
-              // const Positioned(
-              //   top: 44,
-              //   right: -9,
-              //   child: DecorativeRing(size: 100, duration: 20, sigma: 1),
-              // ),
-              const Positioned(
-                top: 100,
-                right: 220,
-                child: DecorativeRing(size: 300, clockwise: false),
-              ),
-              const Positioned(
-                top: 280,
-                right: -270,
-                child: DecorativeRing(),
-              ),
-              _buildBody(context),
-            ]);
+            return _buildBody(context);
           }
       )
     );
@@ -99,13 +81,13 @@ class _PersonalScreenState extends State<PersonalScreen> with SingleTickerProvid
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8.0),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 4.0,
-            offset: Offset(0, 2),
-          ),
-        ],
+        // boxShadow: const [
+        //   BoxShadow(
+        //     color: Colors.black26,
+        //     blurRadius: 4.0,
+        //     offset: Offset(0, 2),
+        //   ),
+        // ],
       ),
       child: Padding(
         padding: const EdgeInsets.only(top: 0.0, bottom: 0.0),
