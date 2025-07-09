@@ -109,7 +109,7 @@ class RadarStatChart extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
-            maxLines: 2,
+            maxLines: 3,
           ),
           _buildAnimatedNumberWithIndex(i),
         ],
@@ -128,7 +128,7 @@ class RadarStatChart extends StatelessWidget {
   }
 
   String trimTopic(String input) {
-    return input.replaceAll('và', '&');
+    return input.replaceAll('và', '');
   }
 
   Widget _buildAnimatedNumberWithIndex(int i) {

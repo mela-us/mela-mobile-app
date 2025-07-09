@@ -1,7 +1,7 @@
 name: mela
 description: "A new Flutter project."
 publish_to: 'none'
-version: 2.0.2+6
+version: 2.1.0+7
 
 environment:
   sdk: ^3.5.3
@@ -90,6 +90,7 @@ dependencies:
   lottie: ^3.3.1
   showcaseview: ^4.0.1
   connectivity_plus: ^6.1.4
+  flutter_math_fork: 0.7.3
   # Y
   # Z
 
