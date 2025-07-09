@@ -28,15 +28,15 @@ class _GuideBottomSheetState extends State<GuideBottomSheet> {
 
   final List<GuideController> guides = [
     GuideController(
-        guide: "Hãy tưởng tượng trong buổi tiệc, mỗi người sẽ lần lượt bắt tay với tất cả những người khác. \n\n"
+        guide:
+            "Hãy tưởng tượng trong buổi tiệc, mỗi người sẽ lần lượt bắt tay với tất cả những người khác. \n\n"
             "Nếu ta đếm từng cái bắt tay theo cách này, một cái bắt tay giữa hai người sẽ bị đếm hai lần (ví dụ, nếu A bắt tay với B thì cũng tính B bắt tay với A).",
-        title: "Phương pháp chính áp dụng cho câu hỏi này?"
-    ),
+        title: "Phương pháp chính áp dụng cho câu hỏi này?"),
     GuideController(
         title: "Các khái niệm và thuật ngữ trong câu hỏi này?",
-        guide: "Số người tham gia: Là số đối tượng trong sự kiện, ở đây là 12, tương ứng số phần tử của một tập hợp. \n\n"
-            "Toán tổ hợp: Ngành toán học nghiên cứu cách đếm và sắp xếp. Bài toán yêu cầu tìm số cách chọn 2 người từ 12 mà không xét thứ tự."
-    ),
+        guide:
+            "Số người tham gia: Là số đối tượng trong sự kiện, ở đây là 12, tương ứng số phần tử của một tập hợp. \n\n"
+            "Toán tổ hợp: Ngành toán học nghiên cứu cách đếm và sắp xếp. Bài toán yêu cầu tìm số cách chọn 2 người từ 12 mà không xét thứ tự."),
   ];
 
   @override
@@ -45,12 +45,13 @@ class _GuideBottomSheetState extends State<GuideBottomSheet> {
     super.initState();
     _screenHeight = widget.screenHeight;
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(top: 80),
       padding: const EdgeInsets.all(16),
-      height: _screenHeight/2 + 100,
+      height: _screenHeight / 2 + 100,
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -64,10 +65,11 @@ class _GuideBottomSheetState extends State<GuideBottomSheet> {
               Container(
                 width: 27,
               ),
-
               Text(
                 "Các gợi ý",
-                style: Theme.of(context).textTheme.heading
+                style: Theme.of(context)
+                    .textTheme
+                    .heading
                     .copyWith(color: Theme.of(context).colorScheme.textInBg1),
               ),
               IconButton(
@@ -80,19 +82,20 @@ class _GuideBottomSheetState extends State<GuideBottomSheet> {
             ],
           ),
           const SizedBox(height: 8),
-          Expanded( child: SingleChildScrollView(
+          Expanded(
+              child: SingleChildScrollView(
             child: Column(
               children: [
                 _buildSuggestionItem(GenerateType.HINT, guides[0]),
                 _buildSuggestionItem(GenerateType.TERM, guides[1]),
               ],
             ),
-          )
-          )
+          ))
         ],
       ),
     );
   }
+
   Widget _buildSuggestionItem(GenerateType type, GuideController g) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -110,56 +113,42 @@ class _GuideBottomSheetState extends State<GuideBottomSheet> {
               Icon(
                 Icons.lightbulb_outline,
                 size: 24,
-                color: Theme
-                    .of(context)
-                    .colorScheme
-                    .buttonYesBgOrText,
+                color: Theme.of(context).colorScheme.buttonYesBgOrText,
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   g.title,
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .subTitle
-                      .copyWith(
-                      color: Theme
-                          .of(context)
-                          .colorScheme
-                          .buttonYesBgOrText),
+                  style: Theme.of(context).textTheme.subTitle.copyWith(
+                      color: Theme.of(context).colorScheme.buttonYesBgOrText),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 8),
-
-          type == GenerateType.HINT ?
-          Observer(builder: (context) {
-            if (!_hintStore.pressHint) {
-              if (_hintStore.isHintLoading) {
-                return const Center(
-                    child: RotatingImageIndicator(size: 30.0)
-                );
-              }
-              return _buildGuideButton(GenerateType.HINT);
-            }
-            else {
-              return _buildGuideView(_hintStore.hint!);
-            }
-          }) : Observer(builder: (context) {
-            if (!_hintStore.pressTerm) {
-              if (_hintStore.isTermLoading) {
-                return const Center(
-                    child: RotatingImageIndicator(size: 30.0)
-                );
-              }
-              return _buildGuideButton(GenerateType.TERM);
-            }
-            else {
-              return _buildGuideView(_hintStore.term!);
-            }
-          }),
+          type == GenerateType.HINT
+              ? Observer(builder: (context) {
+                  if (!_hintStore.pressHint) {
+                    if (_hintStore.isHintLoading) {
+                      return const Center(
+                          child: RotatingImageIndicator(size: 30.0));
+                    }
+                    return _buildGuideButton(GenerateType.HINT);
+                  } else {
+                    return _buildGuideView(_hintStore.hint!);
+                  }
+                })
+              : Observer(builder: (context) {
+                  if (!_hintStore.pressTerm) {
+                    if (_hintStore.isTermLoading) {
+                      return const Center(
+                          child: RotatingImageIndicator(size: 30.0));
+                    }
+                    return _buildGuideButton(GenerateType.TERM);
+                  } else {
+                    return _buildGuideView(_hintStore.term!);
+                  }
+                }),
         ],
       ),
     );
@@ -185,24 +174,20 @@ class _GuideBottomSheetState extends State<GuideBottomSheet> {
           //   ),
           // ),
         ),
-
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             IconButton(
-                onPressed: (){},
-                icon: const Icon(Icons.comment_outlined, size: 16)
-            ),
+                onPressed: () {},
+                icon: const Icon(Icons.comment_outlined, size: 16)),
             const SizedBox(width: 7),
             IconButton(
-                onPressed: (){},
-                icon: const Icon(Icons.thumb_up_alt_outlined, size: 16)
-            ),
+                onPressed: () {},
+                icon: const Icon(Icons.thumb_up_alt_outlined, size: 16)),
             const SizedBox(width: 7),
             IconButton(
-                onPressed: (){},
-                icon: const Icon(Icons.thumb_down_alt_outlined, size: 16)
-            ),
+                onPressed: () {},
+                icon: const Icon(Icons.thumb_down_alt_outlined, size: 16)),
           ],
         )
       ],
@@ -228,46 +213,34 @@ class _GuideBottomSheetState extends State<GuideBottomSheet> {
             backgroundColor: Colors.white,
             foregroundColor: Colors.blue,
             side: BorderSide(
-                color: Theme
-                    .of(context)
-                    .colorScheme
-                    .buttonYesBgOrText),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18)),
+                color: Theme.of(context).colorScheme.buttonYesBgOrText),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ShaderMask(
-                shaderCallback: (bounds) =>
-                    const LinearGradient(
-                      colors: [
-                        Color(0xFF31BCFF),
-                        Color(0xFF9676FF),
-                        Color(0xFFBE64FE),
-                        Color(0xFFE157CB),
-                        Color(0xFFEF5794),
-                        Color(0xFFFD683F),
-                        Color(0xFFFE7C2B),
-                        Color(0xFFFFA10B),
-                      ],
-                    ).createShader(bounds),
+                shaderCallback: (bounds) => const LinearGradient(
+                  colors: [
+                    Color(0xFF31BCFF),
+                    Color(0xFF9676FF),
+                    Color(0xFFBE64FE),
+                    Color(0xFFE157CB),
+                    Color(0xFFEF5794),
+                    Color(0xFFFD683F),
+                    Color(0xFFFE7C2B),
+                    Color(0xFFFFA10B),
+                  ],
+                ).createShader(bounds),
                 blendMode: BlendMode.srcIn, // Áp dụng gradient lên icon
                 child: const Icon(Icons.auto_awesome, size: 20),
               ),
               const SizedBox(width: 4),
               Text(
                 "Khởi tạo gợi ý",
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .normal
-                    .copyWith(
-                    color: Theme
-                        .of(context)
-                        .colorScheme
-                        .buttonYesBgOrText
-                ),
+                style: Theme.of(context).textTheme.normal.copyWith(
+                    color: Theme.of(context).colorScheme.buttonYesBgOrText),
               ),
             ],
           ),
@@ -277,14 +250,11 @@ class _GuideBottomSheetState extends State<GuideBottomSheet> {
   }
 
   Future<void> generateDataHandler(GenerateType type) async {
-    String id =
-    _questionStore.questionList!.questions![
-    _singleQuestionStore.currentIndex
-    ].questionId!;
+    String id = _questionStore.questionList!
+        .questions![_singleQuestionStore.currentIndex].questionId!;
 
-    String? content = type == GenerateType.HINT
-        ? _hintStore.hint
-        : _hintStore.term;
+    String? content =
+        type == GenerateType.HINT ? _hintStore.hint : _hintStore.term;
 
     if (content == null) {
       print("Reached!");
@@ -295,12 +265,9 @@ class _GuideBottomSheetState extends State<GuideBottomSheet> {
         } else if (type == GenerateType.TERM) {
           await _hintStore.generateTerm(id);
         }
-      } catch (e){
+      } catch (e) {
         if (e == ResponseStatus.UNAUTHORIZED) {
-
-        }
-        else {
-        }
+        } else {}
       }
     } else {
       print(content);
@@ -308,8 +275,4 @@ class _GuideBottomSheetState extends State<GuideBottomSheet> {
   }
 }
 
-enum GenerateType{
-  HINT,
-  TERM,
-  NONE
-}
+enum GenerateType { HINT, TERM, NONE }

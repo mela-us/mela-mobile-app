@@ -96,7 +96,6 @@ abstract class _QuestionStore with Store {
   //action:---------------------------------------------------------------------
   @action
   Future getQuestions() async {
-    print(questionsUid);
     final future = _getQuestionsUseCase.call(params: questionsUid);
     fetchQuestionsFuture = ObservableFuture(future);
 
