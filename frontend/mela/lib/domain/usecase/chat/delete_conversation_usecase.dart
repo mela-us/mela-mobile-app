@@ -15,10 +15,10 @@ class DeleteConversationUsecase extends UseCase<int, String> {
       this._refreshAccessTokenUsecase, this._logoutUseCase);
 
   @override
-  FutureOr<int> call({required String params}) async {
+  Future<int> call({required String params}) async {
     // TODO: implement call
     try {
-      return _chatRepository.deleteConversationFromHistory(params);
+      return await _chatRepository.deleteConversationFromHistory(params);
     } catch (e) {
       if (e is DioException) {
         if (e.response?.statusCode == 401) {

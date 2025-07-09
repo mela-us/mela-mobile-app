@@ -109,15 +109,13 @@ abstract class _HistoryStore with Store {
     isLoading = true;
 
     try {
-      _deleteConversationUsecase.call(params: conversationId);
+      await _deleteConversationUsecase.call(params: conversationId);
     } catch (e, stackTrace) {
       if (e is DioException) {
         if (e.response?.statusCode == 401) {
           isUnauthorized = true;
           return;
-        } else {
-          //ss
-        }
+        } else {}
         _errorStore.errorMessage = DioExceptionUtil.handleError(e);
       } else {
         if (e == 401) {
