@@ -69,22 +69,22 @@ class _SidebarWidgetState extends State<SidebarWidget> {
               automaticallyImplyLeading: false,
             ),
             // const SizedBox(height: 30),
-            _buildSearchBar(context), // Tìm kiếm
+            // _buildSearchBar(context), // Tìm kiếm
             const SizedBox(height: 10),
-            _historyStore.convs.isNotEmpty
-                ? Padding(
-                    padding: const EdgeInsets.only(left: 18),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      widthFactor: double.infinity,
-                      child: Text(
-                        "Gần đây",
-                        style: Theme.of(context).textTheme.subHeading.copyWith(
-                            color: Theme.of(context).colorScheme.primary),
-                      ),
-                    ),
-                  )
-                : Container(),
+            Padding(
+              padding: const EdgeInsets.only(left: 18),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                widthFactor: double.infinity,
+                child: Text(
+                  "Gần đây",
+                  style: Theme.of(context)
+                      .textTheme
+                      .subHeading
+                      .copyWith(color: Theme.of(context).colorScheme.primary),
+                ),
+              ),
+            ),
 
             _buildHistoryList(context),
           ],
