@@ -171,10 +171,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
-
     super.dispose();
-
     _timerStore.stopTimer();
   }
 

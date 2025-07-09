@@ -90,7 +90,6 @@ dependencies:
   lottie: ^3.3.1
   showcaseview: ^4.0.1
   connectivity_plus: ^6.1.4
-  flutter_math_fork: 0.7.3
   # Y
   # Z
 

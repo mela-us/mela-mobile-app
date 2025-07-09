@@ -36,27 +36,27 @@ class ConvertStringHintToLatex extends StatelessWidget {
             data: line,
             softLineBreak: false, // Ngăn tự động xuống dòng
             styleSheet:
-            MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
+                MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
               p: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                fontSize: 17,
-                letterSpacing: 0.65,
-                color: const Color(0xff5D3891),
-                height: 1.8,
-              ),
+                    fontSize: 12,
+                    letterSpacing: 0.65,
+                    color: const Color(0xff5D3891),
+                    height: 1.8,
+                  ),
               strong: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                fontSize: 17,
-                letterSpacing: 0.65,
-                height: 1.8,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xff5D3891),
-              ),
+                    fontSize: 12,
+                    letterSpacing: 0.65,
+                    height: 1.8,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xff5D3891),
+                  ),
               em: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                fontSize: 17,
-                letterSpacing: 0.65,
-                height: 1.8,
-                fontStyle: FontStyle.italic,
-                color: const Color(0xff5D3891),
-              ),
+                    fontSize: 12,
+                    letterSpacing: 0.65,
+                    height: 1.8,
+                    fontStyle: FontStyle.italic,
+                    color: const Color(0xff5D3891),
+                  ),
             ),
             builders: {
               'math': MathBuilder(),
@@ -104,7 +104,7 @@ class MathBuilder extends MarkdownElementBuilder {
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           physics:
-          const ClampingScrollPhysics(), // Ngăn bouncing không cần thiết
+              const ClampingScrollPhysics(), // Ngăn bouncing không cần thiết
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -113,11 +113,11 @@ class MathBuilder extends MarkdownElementBuilder {
                 mathStyle: MathStyle.text,
                 textScaleFactor: 1.1,
                 textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  fontSize: 17,
-                  letterSpacing: 0.65,
-                  height: 1.8,
-                  color: const Color(0xff5D3891),
-                ),
+                      fontSize: 12,
+                      letterSpacing: 0.65,
+                      height: 1.8,
+                      color: const Color(0xff5D3891),
+                    ),
               ),
             ],
           ),
