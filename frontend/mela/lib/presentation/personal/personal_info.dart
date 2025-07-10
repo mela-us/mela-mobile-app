@@ -98,6 +98,8 @@ class _PersonalInfoState extends State<PersonalInfo> {
         return DeleteAccountConfirmationDialog(
           onDelete: () async {
             try {
+              print("Call delete account");
+              Navigator.of(context).pop();
               final success = await _personalStore.deleteAccount();
               if (success) {
                 Navigator.of(context).pushNamedAndRemoveUntil(

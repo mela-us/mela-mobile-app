@@ -47,8 +47,8 @@ class ChatRepositoryImpl extends ChatRepository {
   }
 
   @override
-  Future<int> deleteConversationFromHistory(String conversationId) {
+  Future<int> deleteConversationFromHistory(String conversationId) async {
     // TODO: implement deleteConversationFromHistory
-    return _chatApi.deleteConversation(conversationId);
+    return await _chatApi.deleteConversation(conversationId);
   }
 }

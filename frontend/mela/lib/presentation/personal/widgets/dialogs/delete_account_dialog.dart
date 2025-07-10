@@ -116,7 +116,7 @@ class _DeleteAccountConfirmationDialogState
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
-                      _isChecked ? widget.onDelete : null;
+                      if (_isChecked) { widget.onDelete(); }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
@@ -136,43 +136,6 @@ class _DeleteAccountConfirmationDialogState
             ),
           ),
           const SizedBox(height: 16),
-          // Column(
-          //   crossAxisAlignment: CrossAxisAlignment.stretch,
-          //   children: [
-          //     ElevatedButton(
-          //       onPressed: _isChecked ? widget.onDelete : null,
-          //       style: ElevatedButton.styleFrom(
-          //         backgroundColor: Colors.red, // Đổi màu nút thành đỏ
-          //         shape: RoundedRectangleBorder(
-          //           borderRadius: BorderRadius.circular(30.0),
-          //         ),
-          //       ),
-          //       child: Padding(
-          //         padding: const EdgeInsets.symmetric(vertical: 6.0),
-          //         child: Text(
-          //           'Xóa tài khoản',
-          //           style: Theme.of(context).textTheme.subHeading.copyWith(color: Colors.white),
-          //         ),
-          //       ),
-          //     ),
-          //     OutlinedButton(
-          //       onPressed: widget.onCancel,
-          //       style: OutlinedButton.styleFrom(
-          //         side: const BorderSide(color: Colors.white), // Set border color
-          //         shape: RoundedRectangleBorder(
-          //           borderRadius: BorderRadius.circular(30.0),
-          //         ),
-          //       ),
-          //       child: Padding(
-          //         padding: const EdgeInsets.symmetric(vertical: 6.0),
-          //         child: Text(
-          //           'Hủy',
-          //           style: Theme.of(context).textTheme.subHeading.copyWith(color: Theme.of(context).colorScheme.tertiary),
-          //         ),
-          //       ),
-          //     ),
-          //   ],
-          // ),
         ],
       ),
     ).animate().fadeIn(duration: 300.ms).slideY(begin: 1, end: 0);

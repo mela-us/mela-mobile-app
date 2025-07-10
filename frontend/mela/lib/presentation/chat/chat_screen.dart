@@ -88,6 +88,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQueryData = MediaQuery.of(context);
+    final keyboardHeight = mediaQueryData.viewInsets.bottom;
     return ShowCaseWidget(
         onComplete: (p0, p1) => print("===============>Complete $p0 $p1"),
         onStart: (p0, p1) => print("================>Start $p0 $p1"),
@@ -115,7 +117,9 @@ class _ChatScreenState extends State<ChatScreen> {
                 ],
               ),
               backgroundColor: Theme.of(context).colorScheme.appBackground,
-              body: _buildDefaultBody(context));
+              body: keyboardHeight > 0
+                  ? SingleChildScrollView(child: _buildDefaultBody(context))
+                  : _buildDefaultBody(context));
         });
   }
 

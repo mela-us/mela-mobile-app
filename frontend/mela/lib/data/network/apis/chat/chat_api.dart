@@ -172,8 +172,9 @@ class ChatApi {
   Future<int> deleteConversation(String conversationId) async {
     final responseData = await _dioClient
         .delete(EndpointsConst.deleteConversation(conversationId));
-    print("Deleting $conversationId");
-    return responseData.statusCode;
+    print("Deleting $responseData");
+
+    return 0;
   }
 
   Future<Conversation> sendMessageChatPdf(ChatPdfRequestParams params) async {

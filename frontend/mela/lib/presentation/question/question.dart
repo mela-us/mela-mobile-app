@@ -65,6 +65,8 @@ class _QuestionScreenState extends State<QuestionScreen> {
   final ImagePicker _imagePicker = ImagePicker();
 
   bool? isFromMain;
+  int resetCounter = 0;
+  int loadCounter = 0;
   //----------------------------------------------------------------------------
   final TextEditingController _controller = TextEditingController();
 
@@ -85,6 +87,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
     //Reaction to questions status.
     reaction((_) => _questionStore.loading, (loading) {
       if (!loading) {
+        if (resetCounter > 0) return;
         //can't be null here
         _singleQuestionStore
             .generateAnswerList(_questionStore.questionList!.questions!.length);
@@ -92,8 +95,11 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
         _timerStore.resetTimer();
         _timerStore.startTimer();
+        resetCounter++;
       }
     }, fireImmediately: true);
+
+    _singleQuestionStore.changeQuestion(0);
 
     //Reaction to question index change.
     reaction((_) => _singleQuestionStore.currentIndex, (index) {
@@ -129,7 +135,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
     // check to see if already called api
     if (!_questionStore.loading) {
+      if (loadCounter > 0) return;
       _questionStore.getQuestions();
+      loadCounter++;
     }
 
     reaction((_) => _questionStore.isAuthorized, (flag) {
@@ -159,16 +167,11 @@ class _QuestionScreenState extends State<QuestionScreen> {
         Navigator.of(context).pop();
       }
     }, fireImmediately: true);
-
-    _singleQuestionStore.changeQuestion(0);
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
-
     super.dispose();
-
     _timerStore.stopTimer();
   }
 
@@ -797,7 +800,6 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
   //Initialize overlay:---------------------------------------------------------
   void _initListOverlay(BuildContext context) async {
-    print('from main $isFromMain');
     questionListOverlay = OverlayEntry(builder: (BuildContext overlayContext) {
       return Stack(
         children: [
