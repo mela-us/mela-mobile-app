@@ -6,8 +6,8 @@ class EndpointsConst {
   static const String saveResult = "/api/exercises/save";
   // base url
   //static const String baseUrl = "http://jsonplaceholder.typicode.com";
-  // static const String baseUrl = "https://api.mela.guru";
-  static const String baseUrl = "https://api.uat.mela.guru";
+  static const String baseUrl = "https://api.mela.guru";
+  // static const String baseUrl = "https://api.uat.mela.guru";
 
   // receiveTimeout
   static const int receiveTimeout = 60000;
