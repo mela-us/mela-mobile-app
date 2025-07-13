@@ -72,11 +72,6 @@ class _ResultScreenState extends State<ResultScreen> {
   @override
   void didChangeDependencies() {
     if (!_questionStore.saving) {
-      // _questionStore.submitAnswer(
-      //     getCorrect(),
-      //     DateTime.now().subtract(_timerStore.elapsedTime),
-      //     DateTime.now()
-      // );
       _questionStore.updateProgress(
           DateTime.now().subtract(_timerStore.elapsedTime), DateTime.now());
 
@@ -125,7 +120,26 @@ class _ResultScreenState extends State<ResultScreen> {
         if (_questionStore.saving) {
           return Scaffold(
             backgroundColor: Theme.of(context).colorScheme.appBackground,
-            body: const Center(child: RotatingImageIndicator()),
+            body: Center(child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const RotatingImageIndicator(),
+                  const SizedBox(height: 12),
+                  Text(
+                    "Đang chấm bài...",
+                    style: Theme.of(context).textTheme.subTitle.copyWith(
+                      fontSize: 18,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    "Bạn đợi một chút nhé!",
+                    style: Theme.of(context).textTheme.subTitle.copyWith(
+                      fontSize: 18,
+                    ),
+                  )
+                ]
+            )),
           );
         } else if (_levelStore.loading ||
             _topicLectureStore.isGetTopicLectureLoading ||
@@ -382,7 +396,6 @@ class _ResultScreenState extends State<ResultScreen> {
     int correct = 0;
     //Can't be null
     List<Question> questions = _questionStore.questionList!.questions!;
-    List<String> userAnswers = _singleQuestionStore.userAnswers;
 
     correct = getCorrect();
     return correct / questions.length * 10.0;
@@ -397,15 +410,10 @@ class _ResultScreenState extends State<ResultScreen> {
   }
 
   int getCorrect() {
-    List<Question> questions = _questionStore.questionList!.questions!;
-    List<String> userAnswers = _singleQuestionStore.userAnswers;
+    final results = _questionStore.exerciseResult?.answers ?? [];
     int correct = 0;
-    for (int i = 0; i < questions.length; i++) {
-      if (userAnswers[i].isEmpty) {
-        print("Empty $i");
-        continue;
-      }
-      if (questions[i].isCorrect(userAnswers[i])) {
+    for (int i = 0; i < results.length; i++) {
+      if (results[i].isCorrect) {
         correct++;
       }
     }

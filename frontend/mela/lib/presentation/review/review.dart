@@ -6,7 +6,6 @@ import 'package:mela/constants/dimens.dart';
 import 'package:mela/constants/layout.dart';
 import 'package:mela/core/widgets/practice_app_bar_widget.dart';
 import 'package:mela/di/service_locator.dart';
-import 'package:mela/domain/entity/exercise/exercise.dart';
 import 'package:mela/domain/entity/question/exercise_result.dart';
 import 'package:mela/domain/entity/question/question.dart';
 import 'package:mela/presentation/question/store/question_store.dart';
@@ -15,7 +14,6 @@ import 'package:mela/presentation/review/widgets/draggable_ai_button.dart';
 import 'package:mela/presentation/review/widgets/list_item_tile_widget.dart';
 import 'package:mela/presentation/thread_chat_learning/store/thread_chat_learning_store/thread_chat_learning_store.dart';
 import 'package:mela/utils/locale/app_localization.dart';
-import 'package:mela/utils/routes/routes.dart';
 
 import '../../constants/enum.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -198,7 +196,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                               tagsToExtend: {"latex"},
                               builder: (extensionContext) {
                                 String latexCode =
-                                    extensionContext.innerHtml ?? "";
+                                    extensionContext.innerHtml;
                                 print("Latex: $latexCode");
                                 return SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
@@ -367,11 +365,11 @@ class _ReviewScreenState extends State<ReviewScreen> {
   }
 
   Widget _buildSubjectiveAnswer() {
-    Question question = questions[_singleQuestionStore.currentIndex];
-    String userAnswer =
-        _singleQuestionStore.userAnswers[_singleQuestionStore.currentIndex];
+    // Question question = questions[_singleQuestionStore.currentIndex];
+    // String userAnswer =
+    //     _singleQuestionStore.userAnswers[_singleQuestionStore.currentIndex];
     ExerciseResult? exerciseResult = _questionStore.exerciseResult;
-    String feedback = "Không có feedback cho bài làm của bạn.";
+    String feedback = "Không có nhận xét nào cho bài làm của bạn.";
     if (exerciseResult != null) {
       feedback =
           exerciseResult.answers[_singleQuestionStore.currentIndex].feedback;
@@ -405,11 +403,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
                     .normal
                     .copyWith(color: Theme.of(context).colorScheme.inputText),
               )),
-              const Icon(
-                Icons.feedback_outlined,
-                color: Colors.grey,
-                size: Dimens.answerTileIconSize,
-              ),
             ],
           ),
         ));
@@ -500,21 +493,12 @@ class _ReviewScreenState extends State<ReviewScreen> {
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(Dimens.answerTileRadius),
-        // boxShadow: [
-        //   Layout.practiceBoxShadow,
-        // ],
       ),
       height: Dimens.answerTileHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Flexible(
-            // child: Text(
-            //   text,
-            //   softWrap: true,
-            //   style: Theme.of(context).textTheme.normal
-            //       .copyWith(color: textColor),
-            // ),
             child: Html(
               shrinkWrap: true,
               data: "<html>$text</html>",
@@ -522,7 +506,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 TagExtension(
                     tagsToExtend: {"latex"},
                     builder: (extensionContext) {
-                      String latexCode = extensionContext.innerHtml ?? "";
+                      String latexCode = extensionContext.innerHtml;
                       print("Latex: $latexCode");
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,

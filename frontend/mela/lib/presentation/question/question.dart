@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -12,7 +11,6 @@ import 'package:mela/constants/app_theme.dart';
 import 'package:mela/constants/assets.dart';
 import 'package:mela/constants/dimens.dart';
 import 'package:mela/core/widgets/image_progress_indicator.dart';
-import 'package:mela/domain/entity/question/guide_controller.dart';
 import 'package:mela/domain/entity/question/question.dart';
 import 'package:mela/presentation/home_screen/store/revise_store/revise_store.dart';
 import 'package:mela/presentation/question/store/question_store.dart';
@@ -369,7 +367,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
                               tagsToExtend: {"latex"},
                               builder: (extensionContext) {
                                 String latexCode =
-                                    extensionContext.innerHtml ?? "";
+                                    extensionContext.innerHtml;
                                 print("Latex: $latexCode");
                                 return SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
@@ -512,7 +510,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
                     controller: _controller,
                     focusNode: _focusNode,
                     decoration: InputDecoration(
-                      hintText: "Điền đáp án hoặc chọn ảnh tại đây.",
+                      hintText: "Viết câu trả lời hoặc chọn ảnh tại đây.",
                       hintStyle: Theme.of(context).textTheme.subTitle.copyWith(
                           color: Theme.of(context).colorScheme.inputHintText),
                       border: InputBorder.none,
@@ -618,25 +616,24 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
   Future<void> _pickImages() async {
     final images = await _imagePicker.pickMultiImage();
-    if (images != null) {
+    //if (images != null) { }
       setState(() {
         _selectedImages.addAll(images.map((x) => File(x.path)));
       });
-    }
   }
 
-  Future<void> _pickImageForWeb() async {
-    final XFile? image =
-        await _imagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      if (image != null) {
-        _selectedImages.add(File(image.path));
-      } else {
-        // Handle case when no image is selected
-        print("No image selected");
-      }
-    });
-  }
+  // Future<void> _pickImageForWeb() async {
+  //   final XFile? image =
+  //       await _imagePicker.pickImage(source: ImageSource.gallery);
+  //   setState(() {
+  //     if (image != null) {
+  //       _selectedImages.add(File(image.path));
+  //     } else {
+  //       // Handle case when no image is selected
+  //       print("No image selected");
+  //     }
+  //   });
+  // }
 
   Future<void> _takePhoto() async {
     final image = await _imagePicker.pickImage(source: ImageSource.camera);
@@ -687,7 +684,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
                     TagExtension(
                         tagsToExtend: {"latex"},
                         builder: (extensionContext) {
-                          String latexCode = extensionContext.innerHtml ?? "";
+                          String latexCode = extensionContext.innerHtml;
                           return Math.tex(
                             latexCode,
                             mathStyle: MathStyle.display,
@@ -730,9 +727,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
   }
 
   //Event handlers:-------------------------------------------------------------
-  void _listButtonPressedEvent() {
-    Overlay.of(context).insert(questionListOverlay);
-  }
+  // void _listButtonPressedEvent() {
+  //   Overlay.of(context).insert(questionListOverlay);
+  // }
 
   void _continueButtonPressedEvent() {
     _focusNode.unfocus();
@@ -812,7 +809,6 @@ class _QuestionScreenState extends State<QuestionScreen> {
             right: 19,
             child: QuestionListOverlay(
               isSubmitted: (bool submit) {
-                //TODO: Handle submit
 
                 if (!submit) {
                   questionListOverlay.remove();

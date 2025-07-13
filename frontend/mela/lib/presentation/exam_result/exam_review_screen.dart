@@ -7,17 +7,10 @@ import 'package:mela/constants/layout.dart';
 import 'package:mela/core/widgets/practice_app_bar_widget.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/exam/exam.dart';
-import 'package:mela/domain/entity/exercise/exercise.dart';
 import 'package:mela/domain/entity/question/exercise_result.dart';
-import 'package:mela/domain/entity/question/question.dart';
 import 'package:mela/presentation/exam_result/widgets/exam_tile.dart';
 import 'package:mela/presentation/examination/store/exam_store.dart';
 import 'package:mela/presentation/examination/store/single_exam_store.dart';
-import 'package:mela/presentation/question/store/question_store.dart';
-import 'package:mela/presentation/question/store/single_question/single_question_store.dart';
-import 'package:mela/presentation/review/widgets/draggable_ai_button.dart';
-import 'package:mela/presentation/review/widgets/list_item_tile_widget.dart';
-import 'package:mela/presentation/thread_chat_learning/store/thread_chat_learning_store/thread_chat_learning_store.dart';
 import 'package:mela/utils/locale/app_localization.dart';
 import 'package:mela/utils/routes/routes.dart';
 
@@ -41,7 +34,7 @@ class _ReviewScreenState extends State<ExamReviewScreen> {
     // TODO: implement initState
     super.initState();
 
-    questions = _questionStore.exam!.questions!;
+    questions = _questionStore.exam!.questions;
     _singleQuestionStore.changeQuestion(0); //reset to 0.
   }
 
@@ -198,7 +191,7 @@ class _ReviewScreenState extends State<ExamReviewScreen> {
                               tagsToExtend: {"latex"},
                               builder: (extensionContext) {
                                 String latexCode =
-                                    extensionContext.innerHtml ?? "";
+                                    extensionContext.innerHtml;
                                 print("Latex: $latexCode");
                                 return SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
@@ -344,11 +337,11 @@ class _ReviewScreenState extends State<ExamReviewScreen> {
   }
 
   Widget _buildSubjectiveAnswer() {
-    ExamQuestionModel question = questions[_singleQuestionStore.currentIndex];
-    String userAnswer =
-        _singleQuestionStore.userAnswers[_singleQuestionStore.currentIndex];
+    // ExamQuestionModel question = questions[_singleQuestionStore.currentIndex];
+    // String userAnswer =
+    //     _singleQuestionStore.userAnswers[_singleQuestionStore.currentIndex];
     ExerciseResult? exerciseResult = _questionStore.exerciseResult;
-    String feedback = "Không có feedback cho bài làm của bạn.";
+    String feedback = "Không có nhận xét nào cho bài làm của bạn.";
     if (exerciseResult != null) {
       feedback =
           exerciseResult.answers[_singleQuestionStore.currentIndex].feedback;
@@ -382,11 +375,6 @@ class _ReviewScreenState extends State<ExamReviewScreen> {
                     .normal
                     .copyWith(color: Theme.of(context).colorScheme.inputText),
               )),
-              const Icon(
-                Icons.feedback_outlined,
-                color: Colors.grey,
-                size: Dimens.answerTileIconSize,
-              ),
             ],
           ),
         ));
@@ -493,7 +481,7 @@ class _ReviewScreenState extends State<ExamReviewScreen> {
                 TagExtension(
                     tagsToExtend: {"latex"},
                     builder: (extensionContext) {
-                      String latexCode = extensionContext.innerHtml ?? "";
+                      String latexCode = extensionContext.innerHtml;
                       print("Latex: $latexCode");
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
