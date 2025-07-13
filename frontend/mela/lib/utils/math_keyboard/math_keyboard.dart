@@ -1,5 +1,5 @@
 // import 'package:flutter/material.dart';
-// import 'package:math_keyboard/math_keyboard.dart';
+// import 'package:math_keyboard/board.dart';
 //
 // class MathKeyboardScreen extends StatefulWidget {
 //   @override
