@@ -157,11 +157,14 @@ abstract class _UserLoginStore with Store {
       // print(e.toString());
       if (e is DioException) {
         if (e.response?.statusCode == 400) {
-          throw "Mật khẩu hoặc tài khoản không hợp lệ";
+          throw "Mật khẩu hoặc tài khoản không đúng";
+        }
+        if (e.response?.statusCode == 401) {
+          throw "Tài khoản không tồn tại";
         }
         throw DioExceptionUtil.handleError(e);
       } else {
-        throw "Có lỗi, thử lại sau";
+        throw "Đã có lỗi xảy ra, thử lại sau";
       }
     });
   }
@@ -172,18 +175,11 @@ abstract class _UserLoginStore with Store {
         LoginWithGoogleParams(idToken: idToken, accessToken: accessToken);
     final future = _loginWithGoogleUseCase.call(params: loginParams);
     loginFuture = ObservableFuture(future);
-    // print("-----********* Email password");
-    // print(email);
-    // print(password);
-    //print("FlutterSa: loginFuture: ${isLoggedIn ? "true" : "false"}");
     await future.then((value) async {
       if (value != null) {
         await _saveLoginStatusUseCase.call(params: true);
         await _saveAccessTokenUsecase.call(params: value.accessToken);
         await _saveRefreshTokenUsecase.call(params: value.refreshToken);
-        // print("-----********* Sau khi login thanh cong in UserLoginStore");
-        // print(value.accessToken);
-        // print(value.refreshToken);
         this.isLoggedIn = true;
       }
     }).catchError((e) {
@@ -192,11 +188,14 @@ abstract class _UserLoginStore with Store {
       // print(e.toString());
       if (e is DioException) {
         if (e.response?.statusCode == 400) {
-          throw "Mật khẩu hoặc tài khoản không hợp lệ";
+          throw "Mật khẩu hoặc tài khoản không đúng";
+        }
+        if (e.response?.statusCode == 401) {
+          throw "Tài khoản không tồn tại";
         }
         throw DioExceptionUtil.handleError(e);
       } else {
-        throw "Có lỗi, thử lại sau";
+        throw "Đã có lỗi xảy ra, thử lại sau";
       }
     });
   }

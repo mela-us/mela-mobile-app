@@ -2,8 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mela/constants/app_theme.dart';
-import 'package:mela/constants/dimens.dart';
 import 'package:mela/constants/enum.dart';
+import 'package:mela/core/widgets/icon_widget/empty_icon_widget.dart';
+import 'package:mela/core/widgets/image_progress_indicator.dart';
 import 'package:mela/di/service_locator.dart';
 import 'package:mela/domain/entity/chat/history_item.dart';
 import 'package:mela/domain/entity/message_chat/conversation.dart';
@@ -11,6 +12,8 @@ import 'package:mela/presentation/chat/store/history_store.dart';
 import 'package:mela/presentation/thread_chat/store/thread_chat_store/thread_chat_store.dart';
 import 'package:mela/presentation/thread_chat/thread_chat_screen.dart';
 import 'package:mela/utils/routes/routes.dart';
+
+import 'delete_chat_dialog.dart';
 
 class SidebarWidget extends StatefulWidget {
   const SidebarWidget({super.key});
@@ -146,7 +149,7 @@ class _SidebarWidgetState extends State<SidebarWidget> {
         child: Observer(builder: (_) {
           if (_historyStore.isLoading) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: RotatingImageIndicator(size: 60.0),
             );
           } else {
             if (_historyStore.convs == null || _historyStore.convs.isEmpty) {
@@ -158,7 +161,11 @@ class _SidebarWidgetState extends State<SidebarWidget> {
                 ));
               }
               return const Center(
-                child: Text("Chưa có lịch sử nào"),
+                child: EmptyIconWidget(
+                    mainMessage: "Không có gì ở đây",
+                    secondaryMessage: "Bạn hãy quay lại và hỏi gì đó đi.",
+                    offset: 0,
+                ),
               );
             } else {
               final ScrollController _scrollController = ScrollController();
@@ -263,25 +270,45 @@ class _SidebarWidgetState extends State<SidebarWidget> {
 
             IconButton(
                 onPressed: () async {
-                  //Delete the conversation
-                  await _historyStore.deleteConversation(item.conversationId);
-                  if (!_historyStore.isUnauthorized) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text('Đã xóa thành công'),
-                      duration: Duration(milliseconds: 500),
-                      behavior: SnackBarBehavior.floating,
-                      margin: const EdgeInsets.only(
-                          bottom: 20, left: 20, right: 20),
-                    ));
-                  }
-                  await _historyStore.firstTimeGetHistory();
+                  _showDeleteChatDialog(context, item);
                 },
                 icon: const Icon(
-                  Icons.delete,
+                  Icons.delete_forever_outlined,
                   size: 20,
                   color: Colors.grey,
                 ))
           ],
         ));
   }
+
+  void _showDeleteChatDialog(BuildContext context, HistoryItem item) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return DeleteChatDialog(
+          onDelete: () async {
+            //Delete the conversation
+            await _historyStore.deleteConversation(item.conversationId);
+            if (!_historyStore.isUnauthorized) {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text('Đã xóa đoạn chat thành công'),
+                duration: Duration(milliseconds: 500),
+                behavior: SnackBarBehavior.floating,
+                margin: const EdgeInsets.only(
+                    bottom: 20, left: 20, right: 20),
+              ));
+              //_historyStore.convs.remove(item);
+            }
+            await _historyStore.firstTimeGetHistory();
+            Navigator.of(context).pop();
+          },
+          onCancel: () {
+            Navigator.of(context).pop();
+          },
+        );
+      },
+    );
+  }
+
 }
