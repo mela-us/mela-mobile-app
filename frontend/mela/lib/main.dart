@@ -1,20 +1,27 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
 
-void main() {
-  runApp(const MainApp());
+import 'package:flutter/foundation.dart';
+import 'package:mela/di/service_locator.dart';
+import 'package:mela/presentation/my_app.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:mela/utils/notifications/notification_service.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await setPreferredOrientations();
+  await ServiceLocator.configureDependencies();
+  if (!kIsWeb) {
+    NotificationService().initNotification();
+  }
+  runApp(const MyApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
-    );
-  }
+Future<void> setPreferredOrientations() {
+  return SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+    DeviceOrientation.landscapeRight,
+    DeviceOrientation.landscapeLeft,
+  ]);
 }
