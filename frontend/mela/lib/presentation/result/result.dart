@@ -61,16 +61,7 @@ class _ResultScreenState extends State<ResultScreen> {
         }
       },
     );
-  }
 
-  @override
-  void dispose() {
-    _disposer();
-    super.dispose();
-  }
-
-  @override
-  void didChangeDependencies() {
     if (!_questionStore.saving) {
       _questionStore.updateProgress(
           DateTime.now().subtract(_timerStore.elapsedTime), DateTime.now());
@@ -82,6 +73,16 @@ class _ResultScreenState extends State<ResultScreen> {
         }
       }
     }
+  }
+
+  @override
+  void dispose() {
+    _disposer();
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
     super.didChangeDependencies();
   }
 
@@ -120,26 +121,26 @@ class _ResultScreenState extends State<ResultScreen> {
         if (_questionStore.saving) {
           return Scaffold(
             backgroundColor: Theme.of(context).colorScheme.appBackground,
-            body: Center(child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+            body: Center(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
                   const RotatingImageIndicator(),
                   const SizedBox(height: 12),
                   Text(
                     "Đang chấm bài...",
                     style: Theme.of(context).textTheme.subTitle.copyWith(
-                      fontSize: 18,
-                    ),
+                          fontSize: 18,
+                        ),
                   ),
                   const SizedBox(height: 6),
                   Text(
                     "Bạn đợi một chút nhé!",
                     style: Theme.of(context).textTheme.subTitle.copyWith(
-                      fontSize: 18,
-                    ),
+                          fontSize: 18,
+                        ),
                   )
-                ]
-            )),
+                ])),
           );
         } else if (_levelStore.loading ||
             _topicLectureStore.isGetTopicLectureLoading ||
@@ -302,7 +303,7 @@ class _ResultScreenState extends State<ResultScreen> {
   Widget _buildReviewButton(BuildContext context) {
     return GestureDetector(
       onTap: () => {
-        Navigator.of(context).pushNamed(Routes.review),
+        Navigator.of(context).pushReplacementNamed(Routes.review),
       },
       child: Container(
         width: double.infinity,
