@@ -32,17 +32,6 @@ class _ExamResultScreenState extends State<ExamResultScreen> {
 
   @override
   void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _disposer();
-    super.dispose();
-  }
-
-  @override
-  void didChangeDependencies() {
     if (!_questionStore.saving) {
       // _questionStore.submitAnswer(
       //     getCorrect(),
@@ -54,6 +43,17 @@ class _ExamResultScreenState extends State<ExamResultScreen> {
       _questionStore.updateProgress(
           DateTime.now().subtract(_timerStore.elapsedTime), DateTime.now());
     }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _disposer();
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
     super.didChangeDependencies();
   }
 
@@ -64,7 +64,26 @@ class _ExamResultScreenState extends State<ExamResultScreen> {
         if (_questionStore.saving) {
           return Scaffold(
             backgroundColor: Theme.of(context).colorScheme.appBackground,
-            body: const Center(child: RotatingImageIndicator()),
+            body: Center(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                  const RotatingImageIndicator(),
+                  const SizedBox(height: 12),
+                  Text(
+                    "Đang chấm bài...",
+                    style: Theme.of(context).textTheme.subTitle.copyWith(
+                          fontSize: 18,
+                        ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    "Bạn đợi một chút nhé!",
+                    style: Theme.of(context).textTheme.subTitle.copyWith(
+                          fontSize: 18,
+                        ),
+                  )
+                ])),
           );
         }
         return Scaffold(
@@ -323,15 +342,10 @@ class _ExamResultScreenState extends State<ExamResultScreen> {
   }
 
   int getCorrect() {
-    List<ExamQuestionModel> questions = _questionStore.exam!.questions;
-    List<String> userAnswers = _singleQuestionStore.userAnswers;
+    final results = _questionStore.exerciseResult?.answers ?? [];
     int correct = 0;
-    for (int i = 0; i < questions.length; i++) {
-      if (userAnswers[i].isEmpty) {
-        print("Empty $i");
-        continue;
-      }
-      if (questions[i].isCorrect(userAnswers[i])) {
+    for (int i = 0; i < results.length; i++) {
+      if (results[i].isCorrect) {
         correct++;
       }
     }

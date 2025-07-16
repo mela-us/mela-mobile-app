@@ -10,7 +10,6 @@ class SaveResultApi {
   SaveResultApi(this._dioClient);
   Future<ExerciseResult> saveResult(
       SubmitResultParams param, String endpoint) async {
-    print("SaveResultApi: $endpoint");
     try {
       var res = await _dioClient.post(
         endpoint,

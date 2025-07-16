@@ -63,13 +63,6 @@ class __FormContentState extends State<_FormContent> {
             "---------------------------------------->LoginScreen2 ${_userLoginStore.isLoggedIn ? "true" : "false"}");
       }
     });
-    // _errorLoginReactionDisposer = reaction(
-    //     (_) => _userLoginStore.errorStore.errorMessage, (String errorMessage) {
-    //   if (errorMessage.isNotEmpty) {
-    //     ScaffoldMessenger.of(context)
-    //         .showSnackBar(SnackBar(content: Text(errorMessage)));
-    //   }
-    // });
   }
 
   @override
@@ -284,6 +277,7 @@ class __FormContentState extends State<_FormContent> {
                       }
                     }
                   } catch (e) {
+                    print(e.hashCode);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(e.toString()),
@@ -295,82 +289,6 @@ class __FormContentState extends State<_FormContent> {
                   }
                 }
               }),
-
-          // const SizedBox(height: 16),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   children: [
-          //     Text('Hoặc tiếp tục với',
-          //         style: Theme.of(context).textTheme.normal.copyWith(
-          //             color: Theme.of(context).colorScheme.secondary)),
-          //   ],
-          // ),
-          // const SizedBox(height: 16),
-          // //Sign Up by Third Party
-          // // Row(
-          // //   mainAxisAlignment: MainAxisAlignment.center,
-          // //   children: [
-          // //     ThirdPartyButton(
-          // //         pathLogo: Assets.googleIcon,
-          // //         onPressed: () async {
-          // //           final googleSignInService = GoogleSignInService();
-          // //           await googleSignInService.handleSignIn();
-          // //           print("Google Sign In Thanh Cong");
-          // //         }),
-          // //     const SizedBox(width: 20),
-          // //     ThirdPartyButton(pathLogo: Assets.facebookIcon, onPressed: () {}),
-          // //   ],
-          // // ),
-          // ThirdPartyLoginWidget(
-          //     pathLogo: Assets.googleIcon,
-          //     onPressed: () async {
-          //       final googleSignInService = GoogleSignInService();
-          //       try {
-          //         final googleLoginRequest =
-          //             await googleSignInService.handleSignIn();
-          //         if (googleLoginRequest?.idToken == null ||
-          //             googleLoginRequest?.accessToken == null) {
-          //           return;
-          //         }
-          //         _userLoginStore.setLoadingLogin(true);
-          //         await _userLoginStore.loginWithGoogle(
-          //             googleLoginRequest?.idToken,
-          //             googleLoginRequest?.accessToken);
-
-          //         if (_userLoginStore.isLoggedIn) {
-          //           // Clean up after successful login
-          //           _userLoginStore.resetSettingForLogin();
-          //           _emailController.clear();
-          //           _passwordController.clear();
-
-          //           // Add a small delay before navigation
-          //           await Future.delayed(const Duration(milliseconds: 300));
-
-          //           if (mounted) {
-          //             ScaffoldMessenger.of(context).showSnackBar(
-          //               const SnackBar(
-          //                 content: Text("Đăng nhập thành công với Google"),
-          //                 duration: const Duration(milliseconds: 800),
-          //               ),
-          //             );
-          //             // Navigator.of(context).pushNamedAndRemoveUntil(
-          //             //   Routes.allScreens,
-          //             //   (Route<dynamic> route) => false,
-          //             // );
-          //           }
-          //         }
-          //       } catch (e) {
-          //         ScaffoldMessenger.of(context).showSnackBar(
-          //           SnackBar(
-          //             content: Text(e.toString()),
-          //             duration: const Duration(milliseconds: 800),
-          //           ),
-          //         );
-          //       } finally {
-          //         _userLoginStore.setLoadingLogin(false);
-          //       }
-          //     },
-          //     title: "Đăng nhập với Google"),
           const SizedBox(height: 30),
 
           //Return sign up
