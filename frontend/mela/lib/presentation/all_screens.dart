@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:mela/constants/app_theme.dart';
 import 'package:mela/core/widgets/buid_no_internet_widget.dart';
@@ -18,7 +16,6 @@ import '../core/widgets/custom_navigation_bar.dart';
 import '../utils/notifications/notification_service.dart';
 import 'chat/chat_screen.dart';
 import 'examination/controller/exam_screen_controller.dart';
-import 'examination/widgets/exam_change_tab_overlay_widget.dart';
 
 class AllScreens extends StatefulWidget {
   @override
@@ -36,7 +33,7 @@ class _AllScreensState extends State<AllScreens> {
   final ExamScreenController _examScreenController = ExamScreenController();
 
   late List<Widget> _screens = [];
-  late final StreamSubscription<List<ConnectivityResult>> subscription;
+  // late final StreamSubscription<List<ConnectivityResult>> subscription;
 
   @override
   void initState() {
@@ -52,27 +49,27 @@ class _AllScreensState extends State<AllScreens> {
     //
     // _pageController = PageController();
     _getNotificationPref();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      subscription = Connectivity()
-          .onConnectivityChanged
-          .listen((List<ConnectivityResult> result) {
-        final hasConnection = result.contains(ConnectivityResult.mobile) ||
-            result.contains(ConnectivityResult.wifi) ||
-            result.contains(ConnectivityResult.ethernet);
+    // WidgetsBinding.instance.addPostFrameCallback((_) async {
+    //   subscription = Connectivity()
+    //       .onConnectivityChanged
+    //       .listen((List<ConnectivityResult> result) {
+    //     final hasConnection = result.contains(ConnectivityResult.mobile) ||
+    //         result.contains(ConnectivityResult.wifi) ||
+    //         result.contains(ConnectivityResult.ethernet);
 
-        if (!hasConnection) {
-          print("Sa ====> Không có internet khi thay đổi kết nố ở all Screens");
-          showDialogNoInternet();
-        } else {
-          print("Sa ====> Có internet quay trở lại ở all Screens");
-        }
-      });
-    });
+    //     if (!hasConnection) {
+    //       print("Sa ====> Không có internet khi thay đổi kết nố ở all Screens");
+    //       showDialogNoInternet();
+    //     } else {
+    //       print("Sa ====> Có internet quay trở lại ở all Screens");
+    //     }
+    //   });
+    // });
   }
 
   @override
   dispose() {
-    subscription.cancel();
+    // subscription.cancel();
     super.dispose();
   }
 
