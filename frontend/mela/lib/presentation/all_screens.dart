@@ -100,7 +100,6 @@ class _AllScreensState extends State<AllScreens> {
     Vibration.vibrate(duration: 60);
   }
 
-
   void showDialogNoInternet() {
     showModalBottomSheet(
       context: context,
