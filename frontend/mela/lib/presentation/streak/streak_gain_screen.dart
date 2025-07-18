@@ -173,7 +173,7 @@ class _StreakScreenState extends State<StreakScreen> {
 
     int type = widget.streak % 4;
 
-    if (widget.streak == 1) {
+    if (widget.streak == 0) {
       txt = 'Một cuộc hành trình mới bắt đầu!!!';
     } else {
       if (type == 0) {
