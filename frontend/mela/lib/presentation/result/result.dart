@@ -46,8 +46,6 @@ class _ResultScreenState extends State<ResultScreen> {
   void initState() {
     super.initState();
 
-    _checkAndUpdateStreak();
-
     _disposer = reaction<bool>(
       (_) => _streakStore.updateSuccess ?? false,
       (updateSuccess) {
@@ -150,6 +148,7 @@ class _ResultScreenState extends State<ResultScreen> {
             body: const Center(child: RotatingImageIndicator()),
           );
         }
+        _checkAndUpdateStreak();
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.appBackground,
           appBar: PracticeAppBar(
@@ -222,7 +221,10 @@ class _ResultScreenState extends State<ResultScreen> {
   }
 
   void _checkAndUpdateStreak() {
-    if (calculatePoint() >= 8) {
+    final point = calculatePoint();
+    print("Point: $point");
+    if (point >= 8) {
+      print("----Update Streak----");
       _streakStore.updateStreak();
     }
   }

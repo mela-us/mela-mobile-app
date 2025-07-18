@@ -15,6 +15,8 @@ import '../../constants/assets.dart';
 import '../../di/service_locator.dart';
 
 import '../../domain/params/history/exercise_progress_params.dart';
+import '../streak/store/streak_store.dart';
+import '../streak/streak_gain_screen.dart';
 
 class ExamResultScreen extends StatefulWidget {
   const ExamResultScreen({super.key});
@@ -27,22 +29,33 @@ class _ExamResultScreenState extends State<ExamResultScreen> {
   final ExamStore _questionStore = getIt<ExamStore>();
   final SingleExamStore _singleQuestionStore = getIt<SingleExamStore>();
   final TimerStore _timerStore = getIt<TimerStore>();
+  final StreakStore _streakStore = getIt<StreakStore>();
 
   late ReactionDisposer _disposer;
 
   @override
   void initState() {
     if (!_questionStore.saving) {
-      // _questionStore.submitAnswer(
-      //     getCorrect(),
-      //     DateTime.now().subtract(_timerStore.elapsedTime),
-      //     DateTime.now()
-      // );
-
-      //calculaate point here
+      //calculate point here
       _questionStore.updateProgress(
           DateTime.now().subtract(_timerStore.elapsedTime), DateTime.now());
     }
+
+    //build streak screen
+    _disposer = reaction<bool>(
+          (_) => _streakStore.updateSuccess ?? false,
+          (updateSuccess) {
+        if (updateSuccess) {
+          int streak = _streakStore.streak?.current ?? 0;
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => StreakScreen(streak: streak)),
+          );
+        }
+      },
+    );
+
     super.initState();
   }
 
@@ -86,6 +99,7 @@ class _ExamResultScreenState extends State<ExamResultScreen> {
                 ])),
           );
         }
+        _checkAndUpdateStreak();
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.appBackground,
           appBar: PracticeAppBar(
@@ -100,6 +114,15 @@ class _ExamResultScreenState extends State<ExamResultScreen> {
         );
       },
     );
+  }
+
+  void _checkAndUpdateStreak() {
+    final point = calculatePoint();
+    print("Point: $point");
+    if (point >= 8) {
+      print("----Update Streak----");
+      _streakStore.updateStreak();
+    }
   }
 
   //Build components:-----------------------------------------------------------
