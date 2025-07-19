@@ -104,7 +104,11 @@ abstract class _UserLoginStore with Store {
   @action
   void setPassword(String value) {
     password = value;
-    passwordError = CheckInput.validatePassword(value) ?? '';
+    if (value.isEmpty) {
+      passwordError = 'Vui lòng nhập dữ liệu';
+    } else {
+      passwordError = '';
+    }
   }
 
   // actions:-------------------------------------------------------------------
